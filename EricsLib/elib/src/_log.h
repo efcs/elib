@@ -30,11 +30,12 @@ public:
 	
 	virtual ~LogImpl() { } 
 	
-	inline void set_level(int new_level) { 
+	inline void set_level(int new_level) {
+		std::lock_guard<std::mutex> lock(m_lock);
 		m_level = new_level; 
 	}
 	
-	inline int get_level() const { 
+	inline int get_level() const {
 		return m_level; 
 	}	
 	
@@ -49,8 +50,10 @@ public:
 	
 	inline void print(std::ostream &out, const char *fmt, 
 			   const char *prompt, const char *msg) {
+		
 		char buff[PRINT_BUFF_MAX];
 		snprintf(buff, PRINT_BUFF_MAX, fmt, prompt, msg);
+		buff[PRINT_BUFF_MAX-1] = '\0';
 		/* get lock and write */
 		std::lock_guard<std::mutex> lock(m_lock);
 		out << buff << std::endl;

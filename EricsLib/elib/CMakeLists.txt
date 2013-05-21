@@ -18,14 +18,14 @@ add_definitions(-imacros include/elib/commondef.h)
 #turn assertions on/off
 #add_definitions(-D NDEBUG)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY /home/eric/lib/)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY /home/eric/lib/)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY $ENV{HOME}/lib/)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $ENV{HOME}/lib/)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ..) 
 
 find_package( Threads REQUIRED )
 
 include_directories(. ${CMAKE_CURRENT_BINARY_DIR})
-include_directories("./include") 
+include_directories(include) 
 
 aux_source_directory(src Sources)
 aux_source_directory(tests Tests)

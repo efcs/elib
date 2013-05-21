@@ -22,8 +22,8 @@ typedef struct rw_lock {
 class RWLockImpl 
 {
 public:
-	RWLockImpl();
-	~RWLockImpl();
+	RWLockImpl() { }
+	~RWLockImpl() { }
 	
 	inline void read_lock() {
 		lock_guard lock(m_lock);
@@ -73,6 +73,7 @@ public:
 	}
 	
 	inline void write_unlock() {
+		lock_guard lock(m_lock);
 		this->_unlock();
 	}
 	
@@ -99,6 +100,7 @@ private:
 			if (ptr->lock_depth == 0) {
 				delete ptr;
 			} else {
+				assert(m_curr_locks.count(ptr->thread_id) == 0);
 				m_curr_locks[ptr->thread_id] = ptr;
 				/* if we chose a writer, break */
 				if (ptr->write_lock)
@@ -113,7 +115,7 @@ private:
 		auto found = m_curr_locks.find(thread_id);
 		if (found != m_curr_locks.end()) {
 			rw_lock_t *item = found->second;
-			if (!write_lock || item->write_lock == write_lock)
+			if (item->write_lock == write_lock)
 				return item;
 		}
 		
@@ -141,10 +143,12 @@ private:
 		auto thread_id = std::this_thread::get_id();
 		auto found = m_curr_locks.find(thread_id);
 		assert(found != m_curr_locks.end());
-	
+		assert(m_curr_locks.count(thread_id) == 1);
+		
 		rw_lock_t *item = found->second;
 		assert(item->lock_depth > 0);
 		item->lock_depth--;
+		
 		if (item->lock_depth == 0) {
 			m_curr_locks.erase(found);
 			delete item;
@@ -160,7 +164,6 @@ private:
 	std::mutex m_lock;
 	std::queue<rw_lock_t*> m_requests;
 	std::map<std::thread::id, rw_lock_t*> m_curr_locks;
-	bool m_curr_write_lock;
 };
 
 

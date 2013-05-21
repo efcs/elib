@@ -15,7 +15,6 @@ class RWLock
 {
 public:
 	RWLock();
-	RWLock(unsigned int reader_size);
 	~RWLock();
 	
 	void read_lock();
@@ -27,7 +26,8 @@ public:
 	void write_unlock();
 private:
 	std::shared_ptr<_elib::RWLockImpl> m_impl;
-}
+};
+
 	
 } /* namespace elib */
 #endif /* ELIB_RWLOCK_H */

@@ -1,0 +1,1 @@
+/usr/bin/c++   -O3    CMakeFiles/elib_test.dir/tests/lock_test.cpp.o  -o ../elib_test -rdynamic -lpthread /home/eric/lib/libelib.a -lpthread 

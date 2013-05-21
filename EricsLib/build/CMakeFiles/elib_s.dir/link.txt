@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -O3   -shared -Wl,-soname,libelib_s.so -o /home/eric/lib/libelib_s.so CMakeFiles/elib_s.dir/src/lock.cpp.o CMakeFiles/elib_s.dir/src/log.cpp.o -lpthread 

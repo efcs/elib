@@ -1,0 +1,2 @@
+/usr/bin/ar cr /home/eric/lib/libelib.a  CMakeFiles/elib.dir/src/lock.cpp.o CMakeFiles/elib.dir/src/log.cpp.o
+/usr/bin/ranlib /home/eric/lib/libelib.a

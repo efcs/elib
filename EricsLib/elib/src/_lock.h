@@ -1,42 +1,81 @@
 #ifndef _LOCK_H
 #define _LOCK_H
 
-#include <atomic>
-#include <thread>
+#include "elib/lock.h"
+#include <system_error>
+
+#define OP_NOT_PERMIT std::errc::operation_not_permitted
+
+#define VERIFY_LOCK() do { \
+	if (m_released) \
+		throw new std::system_error(std::make_error_code(OP_NOT_PERMIT)); \
+	} while(false) 
 
 namespace elib {
 namespace _elib {
 
-template <bool sleep>
-class _LockImpl
+	
+template <typename LockT>
+class UniqueLockImpl 
 {
 public:
-	_LockImpl() : m_atomic(ATOMIC_FLAG_INIT) { }
+	explicit UniqueLockImpl(LockT &lock) : m_lock(lock), m_released(false) {
+		m_lock.lock();
+		m_owns_lock = true;
+	}
 	
-	~_LockImpl() { }
+	UniqueLockImpl(LockT &lock, defer_lock_t t) : m_lock(lock), 
+					m_released(false), m_owns_lock(false) { } 
+					
+	UniqueLockImpl(LockT &lock, try_lock_t t) : m_lock(lock), m_released(false) {
+		m_owns_lock = m_lock.try_lock();
+	}
+	
+	~UniqueLockImpl() {
+		if (m_owns_lock)
+			m_lock.unlock();
+	}
 	
 	void lock() {
-		while (m_atomic.test_and_set()) {
-			if (sleep) std::this_thread::yield();
-		}
+		VERIFY_LOCK();
+		m_lock.lock();
+		m_owns_lock = true;
 	}
 	
 	bool try_lock() {
-		return (! m_atomic.test_and_set());
+		VERIFY_LOCK();
+		m_owns_lock = m_lock.try_lock();
+		return m_owns_lock;
 	}
 	
 	void unlock() {
-		m_atomic.clear();
+		VERIFY_LOCK();
+		if (!m_owns_lock) {
+			throw new std::system_error(std::make_error_code(OP_NOT_PERMIT));			
+		} else {
+			m_owns_lock = false;
+			m_lock.unlock();
+		}
 	}
 	
+	void release() {
+		m_released = true;
+		m_owns_lock = false;
+	}
+	
+	bool owns_lock() const { 
+		return m_owns_lock;
+	}
+	
+	LockT *get_lock() const {
+		VERIFY_LOCK();
+		return &m_lock;
+	}
 private:
-	std::atomic_flag m_atomic;
-	DISALLOW_COPY_AND_ASSIGN(_LockImpl);
+	bool m_owns_lock, m_released;
+	LockT m_lock;
+	DISALLOW_COPY_AND_ASSIGN(UniqueLockImpl);
 };
-
-/* force compilation */
-template class _LockImpl<true>;
-template class _LockImpl<false>;
 
 
 } /* namespace _elib */

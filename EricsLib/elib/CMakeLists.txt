@@ -39,10 +39,10 @@ add_library(elib_s SHARED ${Sources})
 target_link_libraries(elib_s ${CMAKE_THREAD_LIBS_INIT})
 
 # create test executable 
-add_executable(elib_test ${Tests})
-add_dependencies(elib_test elib)
-add_dependencies(elib_test elib_s)
-target_link_libraries(elib_test ${CMAKE_THREAD_LIBS_INIT} elib)
+add_executable(test_elib ${Tests})
+add_dependencies(test_elib elib)
+add_dependencies(test_elib elib_s)
+target_link_libraries(test_elib ${CMAKE_THREAD_LIBS_INIT} elib)
 
 
 

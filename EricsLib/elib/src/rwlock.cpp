@@ -1,5 +1,6 @@
 #include "elib/rwlock.h"
 #include "_rwlock.h"
+#include "elib/lock.h"
 
 namespace elib {
 	
@@ -42,5 +43,20 @@ void RWLock::write_unlock()
 	m_impl->write_unlock();
 }
 
+ReadLock RWLock::as_read_lock() 
+{
+	return ReadLock(*this);
+}
+
+WriteLock RWLock::as_write_lock() 
+{
+	return WriteLock(*this);
+}
+
+
+/* force instantiation of UniqueLock for ReadLock && WriteLock */
+template class UniqueLock<ReadLock>;
+template class UniqueLock<WriteLock>;
 	
+
 } /* namespace elib */

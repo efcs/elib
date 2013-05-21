@@ -2,7 +2,7 @@
 #define ELIB_LOCK_H
 
 #include "commondef.h"
-
+#include <mutex>
 #include <memory>
 
 namespace elib {
@@ -31,11 +31,29 @@ public:
 };
 
 
+/* why not have my own mutex class that is really just a wrapper */
+class SharedMutex : public LockInterface
+{
+public:
+	SharedMutex() : m_lock(new std::mutex()) { }
+	
+	~SharedMutex() { }
+	
+	void lock() { m_lock->lock(); }
+	
+	bool try_lock() { return m_lock->try_lock();}
+	
+	void unlock() { m_lock->unlock(); }
+private:
+	std::shared_ptr<std::mutex> m_lock;
+};
+
+
 template <typename LockT>
 class LockGuard
 {
 public:
-	explicit LockGuard(LockT lock) : m_lock(lock) { }
+	explicit LockGuard(LockT &lock) : m_lock(lock) { }
 	~LockGuard() { m_lock.unlock(); }
 private:
 	LockT &m_lock;
@@ -47,8 +65,9 @@ template <typename LockT>
 class UniqueLock
 {
 public:
-	explicit UniqueLock(LockT lock);
-	UniqueLock(LockT lock, lock_op_t lock_op);
+	explicit UniqueLock(LockT &lock);
+	UniqueLock(LockT &lock, try_lock_t &t);
+	UniqueLock(LockT &lock, defer_lock_t &t);
 	
 	~UniqueLock();
 	

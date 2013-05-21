@@ -14,7 +14,7 @@
 namespace elib {
 namespace _elib {
 
-	
+
 template <typename LockT>
 class UniqueLockImpl 
 {
@@ -24,10 +24,13 @@ public:
 		m_owns_lock = true;
 	}
 	
-	UniqueLockImpl(LockT &lock, defer_lock_t t) : m_lock(lock), 
-					m_released(false), m_owns_lock(false) { } 
+	UniqueLockImpl(LockT &lock, defer_lock_t &t) : m_lock(lock), 
+					m_released(false), m_owns_lock(false) {
+		UNUSED(t);				
+	} 
 					
-	UniqueLockImpl(LockT &lock, try_lock_t t) : m_lock(lock), m_released(false) {
+	UniqueLockImpl(LockT &lock, try_lock_t &t) : m_lock(lock), m_released(false) {
+		UNUSED(t);
 		m_owns_lock = m_lock.try_lock();
 	}
 	
@@ -36,19 +39,19 @@ public:
 			m_lock.unlock();
 	}
 	
-	void lock() {
+	inline void lock() {
 		VERIFY_LOCK();
 		m_lock.lock();
 		m_owns_lock = true;
 	}
 	
-	bool try_lock() {
+	inline bool try_lock() {
 		VERIFY_LOCK();
 		m_owns_lock = m_lock.try_lock();
 		return m_owns_lock;
 	}
 	
-	void unlock() {
+	inline void unlock() {
 		VERIFY_LOCK();
 		if (!m_owns_lock) {
 			throw new std::system_error(std::make_error_code(OP_NOT_PERMIT));			
@@ -58,22 +61,22 @@ public:
 		}
 	}
 	
-	void release() {
+	inline void release() {
 		m_released = true;
 		m_owns_lock = false;
 	}
 	
-	bool owns_lock() const { 
+	inline bool owns_lock() const { 
 		return m_owns_lock;
 	}
 	
-	LockT *get_lock() const {
+	inline LockT *get_lock() const {
 		VERIFY_LOCK();
 		return &m_lock;
 	}
 private:
-	bool m_owns_lock, m_released;
-	LockT m_lock;
+	LockT &m_lock;
+	bool m_released, m_owns_lock;
 	DISALLOW_COPY_AND_ASSIGN(UniqueLockImpl);
 };
 

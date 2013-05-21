@@ -3,5 +3,6 @@
 
 void log_test(void);
 void rwlock_test(void);
+void semaphore_test(void);
 
 #endif /* TESTING_ALLTESTS_H */

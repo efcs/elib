@@ -30,11 +30,11 @@ public:
 	
 	virtual ~LogImpl() { } 
 	
-	void set_level(int new_level) { 
+	inline void set_level(int new_level) { 
 		m_level = new_level; 
 	}
 	
-	int get_level() const { 
+	inline int get_level() const { 
 		return m_level; 
 	}	
 	
@@ -57,7 +57,7 @@ public:
 		out.flush();
 	}
 	
-	void panic(int exit_code) {
+	inline void panic(int exit_code) {
 		exit(exit_code);
 	}
 	

@@ -4,12 +4,17 @@
 namespace elib {
 	
 template <typename LockT>
-UniqueLock<LockT>::UniqueLock(LockT lock) 
+UniqueLock<LockT>::UniqueLock(LockT &lock) 
 					: m_impl(new _elib::UniqueLockImpl<LockT>(lock))
 { }
 					
 template <typename LockT>
-UniqueLock<LockT>::UniqueLock(LockT lock, lock_op_t t)
+UniqueLock<LockT>::UniqueLock(LockT &lock, try_lock_t& t)
+					: m_impl(new _elib::UniqueLockImpl<LockT>(lock, t)) 
+{ }
+
+template <typename LockT>
+UniqueLock<LockT>::UniqueLock(LockT &lock, defer_lock_t& t)
 					: m_impl(new _elib::UniqueLockImpl<LockT>(lock, t)) 
 { }
 
@@ -51,6 +56,11 @@ LockT *UniqueLock<LockT>::get_lock() const
 {
 	return m_impl->get_lock();
 }
+
+
+/* force templates instant's into the library */
+template class LockGuard<std::mutex>;
+template class UniqueLock<std::mutex>;
 	
-	
+
 } /* namespace elib */

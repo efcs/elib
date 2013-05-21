@@ -14,7 +14,7 @@ public:
 	SemaphoreImpl(unsigned int size) : m_size(size), m_count(size)
 	{ }
 	
-	unsigned int down() {
+	inline unsigned int down() {
 		lock_guard nlock(m_next_lock);
 		/* spin */
 		while (m_count == 0)
@@ -24,7 +24,7 @@ public:
 		return (m_count + 1);
 	}
 	
-	bool try_down(unsigned int &resource) {
+	inline bool try_down(unsigned int &resource) {
 		lock_guard nlock(m_next_lock, std::try_to_lock);
 		if (nlock && m_count > 0) {
 			lock_guard obj_lock(m_lock);
@@ -35,20 +35,20 @@ public:
 		return false;
 	}
 	
-	void up() {
+	inline void up() {
 		lock_guard lock(m_lock);
 		++m_count;
 	}
 	
-	unsigned int size() const { 
+	inline unsigned int size() const { 
 		return m_size; 
 	}
 	
-	unsigned int available() const {
+	inline unsigned int available() const {
 		return m_count;
 	}
 	
-	unsigned int taken() const { 
+	inline unsigned int taken() const { 
 		return m_size - m_count;
 	}
 

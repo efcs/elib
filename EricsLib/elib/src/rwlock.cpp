@@ -55,6 +55,8 @@ WriteLock RWLock::as_write_lock()
 
 
 /* force instantiation of UniqueLock for ReadLock && WriteLock */
+template class LockGuard<ReadLock>;
+template class LockGuard<WriteLock>;
 template class UniqueLock<ReadLock>;
 template class UniqueLock<WriteLock>;
 	

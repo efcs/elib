@@ -1,3 +1,0 @@
-/home/eric/workspace/elib/EricsLib/build/CMakeFiles/elib.dir
-/home/eric/workspace/elib/EricsLib/build/CMakeFiles/elib_s.dir
-/home/eric/workspace/elib/EricsLib/build/CMakeFiles/elib_test.dir

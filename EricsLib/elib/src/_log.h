@@ -31,7 +31,7 @@ public:
 	virtual ~LogImpl() { } 
 	
 	inline void set_level(int new_level) {
-		std::lock_guard<std::mutex> lock(m_lock);
+		//std::lock_guard<std::mutex> lock(m_lock);
 		m_level = new_level; 
 	}
 	

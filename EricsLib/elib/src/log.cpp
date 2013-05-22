@@ -15,10 +15,13 @@
 #define LOGFILE_FUNC_HANDLER(level) __FMT_ARGS(); \
 	m_impl->_log(level, __fmt_buff) 
 
+	
 namespace elib {
 
+	
 /* for static Log */
 _elib::LogImpl g_log;
+
 
 /* helper for static log */
 inline void _static_log(int level, const char* msg) 

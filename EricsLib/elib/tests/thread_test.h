@@ -11,10 +11,8 @@ public:
 	virtual void run(void) = 0;
 };
 
-void run_thread_tests()
-{
-	return;
-}
+/* empty version of template */
+void run_thread_tests();
 
 template <typename FirstT, typename ...RestT>
 void run_thread_tests(std::vector<FirstT> first, 

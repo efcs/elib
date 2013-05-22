@@ -1,11 +1,14 @@
-#include "alltests.h"
+
+
+extern void sharedlock_test();
+extern void semaphore_test();
 
 int main(int argc, const char* argv[]) 
 {
 	UNUSED(argc); UNUSED(argv);
 	
-	rwlock_test();
-	log_test();
+	sharedlock_test();
+	semaphore_test();
 	
 	return 0;
 }

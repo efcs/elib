@@ -9,6 +9,7 @@ namespace elib {
 	
 namespace _elib { class SharedLockImpl; }
 
+
 class SharedOnlyLock;
 
 class SharedLock : public LockInterface

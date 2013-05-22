@@ -131,7 +131,7 @@ private:
 
 
 
-void rwlock_test()
+void sharedlock_test()
 {
 	std::cout << "Running sharedlock_tests" << std::endl;
 	

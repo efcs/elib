@@ -12,6 +12,11 @@
 namespace elib {
 namespace _elib {
 	
+
+using lock_guard = std::lock_guard<std::mutex>;
+using rec_lock_guard = std::lock_guard<std::recursive_mutex>;
+
+
 /* RAW levels */
 constexpr int RAW_OUT_L = FATAL_L + 1;
 constexpr int RAW_ERR_L = RAW_OUT_L + 1;
@@ -28,10 +33,12 @@ public:
 		m_prompts[FATAL_L] = "FATAL:";
 	}
 	
-	virtual ~LogImpl() { } 
+	virtual ~LogImpl() {
+		
+	}
 	
 	inline void set_level(int new_level) {
-		//std::lock_guard<std::mutex> lock(m_lock);
+		lock_guard lock(m_lock);
 		m_level = new_level; 
 	}
 	
@@ -42,6 +49,7 @@ public:
 	/* do not use with raw levels */
 	inline void log(int level, const char *msg, 
 					std::ostream &out, std::ostream &err) {
+		lock_guard lock(m_lock);
 		if (m_level >= level && level <= STEP_L)
 			print(out, "%s %s", m_prompts[level], msg);
 		else if (m_level >= level && level >= WARNING_L)
@@ -55,7 +63,7 @@ public:
 		snprintf(buff, PRINT_BUFF_MAX, fmt, prompt, msg);
 		buff[PRINT_BUFF_MAX-1] = '\0';
 		/* get lock and write */
-		std::lock_guard<std::mutex> lock(m_lock);
+		lock_guard lock(m_write_lock);
 		out << buff << std::endl;
 		out.flush();
 	}
@@ -66,7 +74,7 @@ public:
 	
 private:
 	int m_level;
-	std::mutex m_lock;
+	std::mutex m_lock, m_write_lock;
 	std::map<int, const char*> m_prompts;
 	DISALLOW_COPY_AND_ASSIGN(LogImpl);
 };
@@ -75,7 +83,7 @@ private:
 class LogFileImpl : public LogImpl {
 public:
 	explicit LogFileImpl(const char* filename) 
-			: m_filename(filename), m_log(new LogImpl()) {
+					: LogImpl(), m_filename(filename) {
 		m_file.open(filename);
 	}
 	
@@ -84,35 +92,39 @@ public:
 	}
 	
 	void set_file(const char* filename) {
+		rec_lock_guard lock(m_file_lock);
 		this->close_file();
 		m_filename = filename;
 		m_file.open(filename);
 	}
 	
 	void close_file() {
+		rec_lock_guard lock(m_file_lock);
 		if (m_file.is_open())
 			m_file.close();
 	}
 	
 	std::string filename() const {
+		rec_lock_guard lock(m_file_lock);
 		return m_filename;
 	}
 	
 	bool good() const { 
+		rec_lock_guard lock(m_file_lock);
 		return m_file.good();
 	} 
 	
 	void _log(int level, const char *msg) {
 		if (level == RAW_OUT_L) 
-			m_log->print(m_file, "%s%s", "", msg);
+			this->print(m_file, "%s%s", "", msg);
 		else
-			m_log->log(level, msg, m_file, m_file);
+			this->log(level, msg, m_file, m_file);
 	}
 	
 private:
 	std::string m_filename;
+	mutable std::recursive_mutex m_file_lock;
 	std::ofstream m_file;
-	std::unique_ptr<LogImpl> m_log;
 	DISALLOW_COPY_AND_ASSIGN(LogFileImpl);
 };
 

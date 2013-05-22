@@ -31,10 +31,7 @@ public:
 	Semaphore();
 	explicit Semaphore(unsigned int size);
 	~Semaphore();
-	/* lock interface */
-	void lock();
-	bool try_lock();
-	void unlock();
+	
 	/* semaphore interface */
 	unsigned int down();
 	bool try_down(unsigned int &resource);
@@ -43,6 +40,11 @@ public:
 	unsigned int size() const;
 	unsigned int available() const;
 	unsigned int taken() const;
+	
+	/* lock interface */
+	void lock();
+	bool try_lock();
+	void unlock();
 private:
 	std::shared_ptr<_elib::SemaphoreImpl> m_impl;
 };

@@ -4,42 +4,43 @@
 #include "elib/semaphore.h"
 
 #include <mutex>
+#include <atomic>
+#include <condition_variable>
+#include <cassert>
 
 namespace elib {
 namespace _elib {
 	
-using lock_guard = std::unique_lock<std::mutex>;
+using unique_lock = std::unique_lock<std::mutex>;
 
 class SemaphoreImpl 
 {
 public:
-	SemaphoreImpl(unsigned int size) : m_size(size), m_count(size)
+	SemaphoreImpl(unsigned int size) : m_size(size), m_count(ATOMIC_VAR_INIT(size))
 	{ }
 	
 	inline unsigned int down() {
-		lock_guard nlock(m_next_lock);
-		/* spin */
-		while (m_count == 0)
-			;
-		lock_guard obj_lock(m_lock);
-		--m_count;
-		return (m_count + 1);
+		unique_lock lock(m_lock);
+		m_nempty_cv.wait(lock, [this]{ return this->m_count.load() > 0; });
+		unsigned int val = m_count.fetch_sub(1);
+		assert(val > 0 && val <= m_size);
+		return val;
 	}
 	
 	inline bool try_down(unsigned int &resource) {
-		lock_guard nlock(m_next_lock, std::try_to_lock);
-		if (nlock && m_count > 0) {
-			lock_guard obj_lock(m_lock);
-			resource = m_count;
-			--m_count;
+		unique_lock lock(m_lock, std::try_to_lock);
+		if (lock.owns_lock() && m_count.load() > 0) {
+			resource = m_count.fetch_sub(1);
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
 	inline void up() {
-		lock_guard lock(m_lock);
-		++m_count;
+		m_count.fetch_add(1);
+		assert(m_count.load() <= m_size);
+		m_nempty_cv.notify_one();
 	}
 	
 	inline unsigned int size() const { 
@@ -47,16 +48,19 @@ public:
 	}
 	
 	inline unsigned int available() const {
-		return m_count;
+		return m_count.load();
 	}
 	
 	inline unsigned int taken() const { 
-		return m_size - m_count;
+		return m_size - m_count.load();
 	}
 
 private:
-	std::mutex m_lock, m_next_lock;
-	unsigned int m_size, m_count;
+	unsigned int m_size;
+	std::atomic_uint m_count;
+	std::mutex m_lock;
+	std::condition_variable m_nempty_cv;
+	DISALLOW_COPY_AND_ASSIGN(SemaphoreImpl);
 };
 
 

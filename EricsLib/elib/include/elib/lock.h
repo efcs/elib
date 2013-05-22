@@ -52,7 +52,7 @@ template <typename LockT>
 class LockGuard
 {
 public:
-	explicit LockGuard(LockT &lock) : m_lock(lock) { }
+	explicit LockGuard(LockT &lock) : m_lock(lock) { m_lock.lock(); }
 	~LockGuard() { m_lock.unlock(); }
 private:
 	LockT &m_lock;

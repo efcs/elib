@@ -21,7 +21,7 @@
 #define LOCK	 false
 
 
-namespace elib {
+namespace elib {	
 namespace _elib { 
 	
 	
@@ -151,7 +151,7 @@ public:
 		return *m_shared_only_lock;
 	}
 	
-	
+
 private:
 	void _unlock(std::thread::id &t_id, bool shared) {
 		auto it=m_lock_queue.begin();
@@ -284,11 +284,10 @@ private:
 private:
 	std::mutex m_lock;
 	std::vector<shared_lock_t*> m_lock_queue;
+	SharedOnlyLock *m_shared_only_lock;
+	friend class elib::SharedLock;
 	DISALLOW_COPY_AND_ASSIGN(SharedLockImpl);
 	
-	
-public:
-	SharedOnlyLock *m_shared_only_lock;
 	
 	void verify() {
 		lock_guard lock(m_lock);
@@ -362,6 +361,7 @@ public:
 		unsigned int total = num_rest + num_allowed;
 		assert(total == m_lock_queue.size());
 	}
+
 };
 
 

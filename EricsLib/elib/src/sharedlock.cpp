@@ -1,6 +1,5 @@
-#include "elib/sharedlock.h"
 #include "_sharedlock.h"
-#include "elib/lock.h"
+#include "_lock.h"
 
 #include <iostream>
 
@@ -98,12 +97,8 @@ void SharedOnlyLock::unlock()
 	m_lock.unlock_shared();
 }
 
-
 /* force template creation */
-template class LockGuard<SharedLock>;
-template class LockGuard<SharedOnlyLock>;
 template class UniqueLock<SharedLock>;
 template class UniqueLock<SharedOnlyLock>;
-
 
 } /* namespace elib */

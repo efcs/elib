@@ -1,5 +1,6 @@
-#include "elib/semaphore.h"
 #include "_semaphore.h"
+#include "_lock.h"
+
 #include <climits>
 
 namespace elib {
@@ -60,6 +61,9 @@ unsigned int Semaphore::taken() const
 	return m_impl->taken();
 }
 
+
+/* forced instantiation */
+template class UniqueLock<Semaphore>;
 
 	
 } /* namespace elib */

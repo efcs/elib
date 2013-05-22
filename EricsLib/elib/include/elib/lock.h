@@ -14,9 +14,8 @@ template <typename T> class UniqueLockImpl;
 
 
 /* for UniqueLock */
-struct lock_op_t  { };
-struct try_lock_t : lock_op_t { };
-struct defer_lock_t : lock_op_t { };
+struct try_lock_t { };
+struct defer_lock_t { };
 constexpr try_lock_t try_to_lock = try_lock_t();
 constexpr defer_lock_t defer_lock = defer_lock_t();
 

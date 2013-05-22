@@ -39,6 +39,7 @@ private:
 	SharedOnlyLock(SharedLock &lock);
 public:
 	~SharedOnlyLock();
+	/* this just maps to the shared versions of the function */
 	void lock();
 	bool try_lock();
 	void unlock();
@@ -46,6 +47,6 @@ private:
 	SharedLock &m_lock;
 };
 
-	
+
 } /* namespace elib */
 #endif /* ELIB_SHAREDLOCK_H */

@@ -1,6 +1,8 @@
 #ifndef _SEMAPHORE_H
 #define _SEMAPHORE_H
 
+#include "elib/semaphore.h"
+
 #include <mutex>
 
 namespace elib {

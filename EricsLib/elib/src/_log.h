@@ -68,13 +68,10 @@ public:
 		out.flush();
 	}
 	
-	inline void panic(int exit_code) {
-		exit(exit_code);
-	}
 	
 private:
 	int m_level;
-	std::mutex m_lock, m_write_lock;
+	mutable std::mutex m_lock, m_write_lock;
 	std::map<int, const char*> m_prompts;
 	DISALLOW_COPY_AND_ASSIGN(LogImpl);
 };

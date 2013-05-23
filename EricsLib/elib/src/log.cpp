@@ -85,11 +85,6 @@ void Log::raw_err(const char *msg, ... )
 	STATIC_FUNC_HANDLER(_elib::RAW_ERR_L);
 }
 
-void Log::panic(int exit_code) 
-{
-	g_log.panic(exit_code);
-}
-
 
 LogFile::LogFile(const char *filename) : m_impl(new _elib::LogFileImpl(filename)) 
 {

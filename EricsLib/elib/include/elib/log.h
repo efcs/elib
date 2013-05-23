@@ -21,7 +21,6 @@ class Log
 {
 public:
 	/* default log values */
-	static constexpr int default_exit_code = 1;
 	static constexpr int default_log_level = STEP_L;
 	
 	/* static interface uses std::cout and std::cerr */
@@ -39,10 +38,8 @@ public:
 	/* raw methods are always on */
 	static void raw_out(const char *msg, ... );
 	static void raw_err(const char *msg, ... );
-	
-	/* quit quickly, not part of filelog */
-	static void panic(int exit_code=default_exit_code);
 };
+
 
 namespace _elib { class LogFileImpl; }
 class LogFile 

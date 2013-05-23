@@ -20,6 +20,9 @@
 #define TRY_TO_LOCK true
 #define LOCK	 false
 
+#define MEM_ORD_ACQ std::memory_order_acquire
+#define MEM_ORD_REL std::memory_order_release
+
 
 namespace elib {	
 namespace _elib { 
@@ -38,19 +41,19 @@ typedef struct shared_lock_struct {
 } shared_lock_t;
 	
 
-bool is_allowed(const shared_lock_t* item) { return item->allowed.load(); }
+bool is_allowed(const shared_lock_t* item) { return item->allowed.load(MEM_ORD_ACQ); }
 
-bool is_exclusive(const shared_lock_t* item) { return !item->shared.load(); } 
+bool is_exclusive(const shared_lock_t* item) { return !item->shared.load(MEM_ORD_ACQ); } 
 
 void verify_shared_lock_type(const shared_lock_t *item) 
 {
 		assert(item);
 		assert(item->thread_id != std::thread::id());
-		assert(item->depth.load() <= 10000);
-		if (item->allowed.load()) {
-			assert(item->depth.load() > 0);
+		assert(item->depth.load(MEM_ORD_ACQ) <= 10000);
+		if (item->allowed.load(MEM_ORD_ACQ)) {
+			assert(item->depth.load(MEM_ORD_ACQ) > 0);
 		} else {
-			assert(item->depth.load() == 1);
+			assert(item->depth.load(MEM_ORD_ACQ) == 1);
 		}
 }
 
@@ -69,15 +72,15 @@ public:
 		
 		assert(lock_item);
 		assert(lock_item->thread_id == t_id);
-		assert(lock_item->shared.load() == EXCLUSIVE);
-		assert(lock_item->depth.load() > 0);
+		assert(lock_item->shared.load(MEM_ORD_ACQ) == EXCLUSIVE);
+		assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);
 		
-		lock_item->allowed_cv.wait(lock, [=]{ return lock_item->allowed.load(); });
+		lock_item->allowed_cv.wait(lock, [=]{ return lock_item->allowed.load(MEM_ORD_ACQ); });
 		
-		assert(lock_item->allowed.load());
+		assert(lock_item->allowed.load(MEM_ORD_ACQ));
 		assert(lock_item->thread_id == t_id);
-		assert(lock_item->shared.load() == EXCLUSIVE);
-		assert(lock_item->depth.load() > 0);	
+		assert(lock_item->shared.load(MEM_ORD_ACQ) == EXCLUSIVE);
+		assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);	
 	}
 	
 	bool try_lock() {
@@ -87,10 +90,10 @@ public:
 		auto lock_item = this->process_request(t_id, EXCLUSIVE, TRY_TO_LOCK);
 		
 		if (lock_item) {
-			assert(lock_item->allowed.load());
+			assert(lock_item->allowed.load(MEM_ORD_ACQ));
 			assert(lock_item->thread_id == t_id);
-			assert(lock_item->shared.load() == EXCLUSIVE);
-			assert(lock_item->depth.load() > 0);
+			assert(lock_item->shared.load(MEM_ORD_ACQ) == EXCLUSIVE);
+			assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);
 			
 			return true;
 		} else {
@@ -113,15 +116,15 @@ public:
 		
 		assert(lock_item);
 		assert(lock_item->thread_id == t_id);
-		assert(lock_item->shared.load() == SHARED);
-		assert(lock_item->depth.load() > 0);
+		assert(lock_item->shared.load(MEM_ORD_ACQ) == SHARED);
+		assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);
 		
-		lock_item->allowed_cv.wait(lock, [=]{ return lock_item->allowed.load(); });
+		lock_item->allowed_cv.wait(lock, [=]{ return lock_item->allowed.load(MEM_ORD_ACQ); });
 		
 		assert(lock_item);
 		assert(lock_item->thread_id == t_id);
-		assert(lock_item->shared.load() == SHARED);
-		assert(lock_item->depth.load() > 0);
+		assert(lock_item->shared.load(MEM_ORD_ACQ) == SHARED);
+		assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);
 	}
 	
 	bool try_lock_shared() {
@@ -129,10 +132,10 @@ public:
 		auto t_id = std::this_thread::get_id();
 		auto lock_item = this->process_request(t_id, SHARED, TRY_TO_LOCK);
 		if (lock_item) {
-			assert(lock_item->allowed.load());
+			assert(lock_item->allowed.load(MEM_ORD_ACQ));
 			assert(lock_item->thread_id == t_id);
-			assert(lock_item->shared.load() == SHARED);
-			assert(lock_item->depth.load() > 0);
+			assert(lock_item->shared.load(MEM_ORD_ACQ) == SHARED);
+			assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);
 			return true;
 		} else {
 			assert(!m_lock_queue.empty());
@@ -158,18 +161,18 @@ private:
 		while(it != m_lock_queue.end()) {
 			auto item = (*it);
 			
-			assert(item->allowed.load() == true);
-			assert(item->depth.load() > 0);
+			assert(item->allowed.load(MEM_ORD_ACQ) == true);
+			assert(item->depth.load(MEM_ORD_ACQ) > 0);
 			
 			if (item->thread_id == t_id) {
-				assert(item->shared.load() == shared);
+				assert(item->shared.load(MEM_ORD_ACQ) == shared);
 				item->depth.fetch_sub(1);
 				
-				if (item->depth.load() == 0) {
+				if (item->depth.load(MEM_ORD_ACQ) == 0) {
 					m_lock_queue.erase(it++);
 					delete item;
 					if (! m_lock_queue.empty() && 
-						! m_lock_queue.front()->allowed.load()) {
+						! m_lock_queue.front()->allowed.load(MEM_ORD_ACQ)) {
 						this->reschedule();
 					}
 				}
@@ -186,13 +189,13 @@ private:
 		for (auto item : m_lock_queue) {
 			/* if the item is not currently allowed,
 			 * then it is not a req lock request */
-			if (item->allowed.load() == false)
+			if (item->allowed.load(MEM_ORD_ACQ) == false)
 				return nullptr;
 			
 			if (item->thread_id == t_id) {
 				/* if they are the same lock type it is a recursive lock on item,
 				 * otherwise we cannot recursively lock different lock types */
-				if (item->shared.load() == shared)
+				if (item->shared.load(MEM_ORD_ACQ) == shared)
 					return item;
 				else
 					return nullptr;
@@ -222,8 +225,8 @@ private:
 		
 		/* if the front is a write lock, 
 		 * or the back is not allowed return false */
-		return (m_lock_queue.front()->shared.load() == SHARED &&
-				m_lock_queue.back()->allowed.load() == true);
+		return (m_lock_queue.front()->shared.load(MEM_ORD_ACQ) == SHARED &&
+				m_lock_queue.back()->allowed.load(MEM_ORD_ACQ) == true);
 	}
 
 	
@@ -246,7 +249,7 @@ private:
 		
 		/* if it is a recursive lock */
 		if (imm_sched && lock_item) {
-			assert(lock_item->depth.load() > 0);
+			assert(lock_item->depth.load(MEM_ORD_ACQ) > 0);
 			lock_item->depth.fetch_add(1);
 			return lock_item;
 		}
@@ -254,8 +257,8 @@ private:
 		/* otherwise, create a new lock item */
 		lock_item = new shared_lock_t;
 		lock_item->thread_id = t_id;
-		lock_item->shared.store(shared);
-		lock_item->allowed.store(imm_sched);
+		lock_item->shared.store(shared, MEM_ORD_REL);
+		lock_item->allowed.store(imm_sched, MEM_ORD_REL);
 		
 		m_lock_queue.push_back(lock_item);
 		return lock_item;
@@ -265,17 +268,17 @@ private:
 		int new_allowed = 0;
 		for (auto &item : m_lock_queue) {
 			assert(item->thread_id != std::thread::id());
-			assert(item->allowed.load() == false);
-			assert(item->depth.load() == 1);
+			assert(item->allowed.load(MEM_ORD_ACQ) == false);
+			assert(item->depth.load(MEM_ORD_ACQ) == 1);
 			
-			if (new_allowed != 0 && item->shared.load() == EXCLUSIVE)
+			if (new_allowed != 0 && item->shared.load(MEM_ORD_ACQ) == EXCLUSIVE)
 				break;
 			
-			item->allowed.store(true);
+			item->allowed.store(true, MEM_ORD_REL);
 			item->allowed_cv.notify_all();
 			++new_allowed;
 			
-			if (item->shared.load() == EXCLUSIVE)
+			if (item->shared.load(MEM_ORD_ACQ) == EXCLUSIVE)
 				break;
 		}
 	}
@@ -312,9 +315,9 @@ private:
 		std::thread::id t_id;
 		for (auto it=m_lock_queue.begin(); it != waiting_begin; ++it) {
 			auto item = (*it);
-			assert(item->allowed.load());
+			assert(item->allowed.load(MEM_ORD_ACQ));
 			t_id = item->thread_id;
-			shared = item->shared.load();
+			shared = item->shared.load(MEM_ORD_ACQ);
 			
 			if (num_allowed == 0)
 				last_shared = shared;
@@ -337,10 +340,10 @@ private:
 		int num_rest = 0;
 		for (auto it=waiting_begin; it != m_lock_queue.end(); ++it) {
 			auto item = (*it);
-			assert(item->allowed.load() == false);
+			assert(item->allowed.load(MEM_ORD_ACQ) == false);
 			
 			t_id = item->thread_id;
-			shared = item->shared.load();
+			shared = item->shared.load(MEM_ORD_ACQ);
 			
 			if (num_rest == 0 && last_shared == SHARED)
 				assert(shared == EXCLUSIVE);
@@ -351,7 +354,7 @@ private:
 			auto found = allowed_seen.find(t_id);
 			if (found != allowed_seen.end()) {
 				auto tmp = found->second;
-				assert(tmp->shared.load() != shared);
+				assert(tmp->shared.load(MEM_ORD_ACQ) != shared);
 			}
 			
 			other_seen[t_id] = item;

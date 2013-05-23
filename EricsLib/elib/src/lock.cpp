@@ -1,6 +1,6 @@
 #include "elib/lock.h"
 #include "_lock.h"
-#include "_lockguard.h"
+
 
 namespace elib {
 	

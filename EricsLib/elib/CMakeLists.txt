@@ -5,7 +5,7 @@
 # but the project configurations in this make file DO NOT WORK and they 
 # must be commented out.
 
-set( CMAKE_BUILD_TYPE distribution )
+set( CMAKE_BUILD_TYPE debug )
 set( CMAKE_CXX_FLAGS_DISTRIBUTION "-O3" )
 set( CMAKE_C_FLAGS_DISTRIBUTION "-O3" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )

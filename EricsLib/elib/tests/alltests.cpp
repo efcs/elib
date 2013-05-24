@@ -1,7 +1,4 @@
-
-
-extern void sharedlock_test();
-extern void semaphore_test();
+#include "alltests.h"
 
 int main(int argc, const char* argv[]) 
 {

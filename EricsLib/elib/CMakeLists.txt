@@ -10,7 +10,7 @@ set( CMAKE_CXX_FLAGS_DISTRIBUTION "-O3" )
 set( CMAKE_C_FLAGS_DISTRIBUTION "-O3" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )
 set( CMAKE_CXX_FLAGS_DEBUG "-g -O0" )
-add_definitions(-std=c++11 -Wall -Wextra -pedantic)
+add_definitions(-std=c++11 -Wall -Wextra -pedantic -fPIC)
 
 # commondef.h always needs to be included 
 add_definitions(-imacros include/elib/commondef.h)
@@ -30,19 +30,22 @@ include_directories(include)
 aux_source_directory(src Sources)
 aux_source_directory(tests Tests)
 
-#create static library 
-add_library(elib STATIC ${Sources})
-target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT})
+# compile into objects
+add_library(ObjLib OBJECT ${Sources})
 
-#create shared library 
-add_library(elib_s SHARED ${Sources})
+#create static & shared libraries
+add_library(elib STATIC $<TARGET_OBJECTS:ObjLib>)
+add_library(elib_s SHARED $<TARGET_OBJECTS:ObjLib>)
+target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(elib_s ${CMAKE_THREAD_LIBS_INIT})
 
 # create test executable 
 add_executable(test_elib ${Tests})
 add_dependencies(test_elib elib)
-#add_dependencies(test_elib elib_s)
-target_link_libraries(test_elib ${CMAKE_THREAD_LIBS_INIT} elib)
+add_dependencies(test_elib elib_s)
+
+
+target_link_libraries(test_elib ${CMAKE_THREAD_LIBS_INIT} elib_s)
 
 
 

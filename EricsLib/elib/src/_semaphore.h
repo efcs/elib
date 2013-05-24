@@ -8,6 +8,10 @@
 #include <condition_variable>
 #include <cassert>
 
+#define MEM_ORD_ACQ std::memory_order_acquire
+#define MEM_ORD_REL std::memory_order_release
+#define MEM_ORD_ACQ_REL std::memory_order_acq_rel
+
 namespace elib {
 namespace _elib {
 	
@@ -22,7 +26,7 @@ public:
 	inline unsigned int down() {
 		unique_lock lock(m_lock);
 		m_nempty_cv.wait(lock, [this]{ return this->m_count.load() > 0; });
-		unsigned int val = m_count.fetch_sub(1);
+		unsigned int val = m_count.fetch_sub(1, MEM_ORD_ACQ_REL);
 		assert(val > 0 && val <= m_size);
 		return val;
 	}
@@ -30,7 +34,7 @@ public:
 	inline bool try_down(unsigned int &resource) {
 		unique_lock lock(m_lock, std::try_to_lock);
 		if (lock.owns_lock() && m_count.load() > 0) {
-			resource = m_count.fetch_sub(1);
+			resource = m_count.fetch_sub(1, MEM_ORD_ACQ_REL);
 			return true;
 		} else {
 			return false;
@@ -38,8 +42,8 @@ public:
 	}
 	
 	inline void up() {
-		m_count.fetch_add(1);
-		assert(m_count.load() <= m_size);
+		m_count.fetch_add(1, MEM_ORD_ACQ_REL);
+		assert(m_count.load(MEM_ORD_ACQ) <= m_size);
 		m_nempty_cv.notify_one();
 	}
 	
@@ -48,11 +52,11 @@ public:
 	}
 	
 	inline unsigned int available() const {
-		return m_count.load();
+		return m_count.load(MEM_ORD_ACQ);
 	}
 	
 	inline unsigned int taken() const { 
-		return m_size - m_count.load();
+		return m_size - m_count.load(MEM_ORD_ACQ);
 	}
 
 private:

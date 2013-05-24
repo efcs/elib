@@ -30,13 +30,14 @@ public:
 };
 
 
-/* why not have my own mutex class that is really just a wrapper */
-class SharedMutex : public LockInterface
+/* why not have my own mutex class that is really just a wrapper 
+ * at least it is copyable */
+class Mutex : public LockInterface
 {
 public:
-	SharedMutex() : m_lock(new std::mutex()) { }
+	Mutex() : m_lock(new std::mutex()) { }
 	
-	~SharedMutex() { }
+	~Mutex() { }
 	
 	void lock() { m_lock->lock(); }
 	
@@ -75,7 +76,10 @@ public:
 	void unlock();
 	
 	void release();
+	
 	bool owns_lock() const;
+	operator bool() const; //same as owns_lock 
+	
 	LockT *get_lock() const;
 private:
 	std::unique_ptr<_elib::UniqueLockImpl<LockT>> m_impl;

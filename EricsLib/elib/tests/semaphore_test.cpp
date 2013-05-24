@@ -1,7 +1,6 @@
 #include <elib/semaphore.h>
 #include <elib/log.h>
 #include "thread_test.h"
-
 #include <iostream>
 #include <mutex>
 #include <atomic>

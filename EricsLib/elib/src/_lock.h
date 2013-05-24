@@ -133,6 +133,12 @@ bool UniqueLock<LockT>::owns_lock() const
 }
 
 template <typename LockT>
+UniqueLock<LockT>::operator bool() const
+{
+	return m_impl->owns_lock();
+}
+
+template <typename LockT>
 LockT *UniqueLock<LockT>::get_lock() const 
 {
 	return m_impl->get_lock();

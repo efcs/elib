@@ -11,6 +11,7 @@
 #define NUM_THREADS 15
 #define SEM_MAX 5
 #define NUM_ITERS 100
+#define SLEEP_MILI 20
 
 using unique_lock = std::unique_lock<std::mutex>;
 using Log = elib::Log;
@@ -30,11 +31,14 @@ public:
 	~SemThread() { }
 	
 	void run() {
-		unsigned int val;
+		
 		for (int i=0; i < NUM_ITERS; ++i) {
-			val = m_shared.sem.down();
+/* when assertions are off, val is unused, so dont define it */
+#ifndef NDEBUG
+			unsigned int val = m_shared.sem.down();
+#endif 
 			assert(val > 0 && val <= SEM_MAX);
-			std::chrono::milliseconds dur(20);
+			std::chrono::milliseconds dur(SLEEP_MILI);
 			std::this_thread::sleep_for(dur);
 			m_shared.sem.up();
 		}

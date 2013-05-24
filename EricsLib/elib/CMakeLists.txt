@@ -5,7 +5,7 @@
 # but the project configurations in this make file DO NOT WORK and they 
 # must be commented out.
 
-set( CMAKE_BUILD_TYPE debug )
+set( CMAKE_BUILD_TYPE distribution )
 set( CMAKE_CXX_FLAGS_DISTRIBUTION "-O3" )
 set( CMAKE_C_FLAGS_DISTRIBUTION "-O3" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )
@@ -16,7 +16,7 @@ add_definitions(-std=c++11 -Wall -Wextra -pedantic -fPIC)
 add_definitions(-imacros include/elib/commondef.h)
 
 #turn assertions on/off
-#add_definitions(-D NDEBUG)
+add_definitions(-D NDEBUG)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY $ENV{HOME}/lib/)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $ENV{HOME}/lib/)

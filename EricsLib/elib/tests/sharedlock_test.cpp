@@ -47,6 +47,8 @@ private:
 	inline void verify() {
 		int i=0;
 		char last = m_shared_str[0];
+		/* last is unused when assertions are off */
+		UNUSED(last);
 		while (m_shared_str[i] != '\0') {
 			assert(m_shared_str[i] == last);
 			++i;

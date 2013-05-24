@@ -105,6 +105,7 @@ public:
 	void unlock() {
 		auto t_id = std::this_thread::get_id();
 		lock_guard lock(m_lock);
+
 		this->_unlock(t_id, EXCLUSIVE);
 	}
 	
@@ -156,8 +157,13 @@ public:
 	
 
 private:
+	
 	void _unlock(std::thread::id &t_id, bool shared) {
-		auto it=m_lock_queue.begin();
+/* without assertions shared is unused */
+#if defined(NDEBUG)
+		UNUSED(shared);
+#endif 
+		auto it = m_lock_queue.begin();
 		while(it != m_lock_queue.end()) {
 			auto item = (*it);
 			
@@ -290,8 +296,9 @@ private:
 	SharedOnlyLock *m_shared_only_lock;
 	friend class elib::SharedLock;
 	DISALLOW_COPY_AND_ASSIGN(SharedLockImpl);
-	
-	
+
+/* this method is only allowed when assertions are on */
+#ifndef NDEBUG
 	void verify() {
 		lock_guard lock(m_lock);
 		
@@ -364,6 +371,7 @@ private:
 		unsigned int total = num_rest + num_allowed;
 		assert(total == m_lock_queue.size());
 	}
+#endif /* NDEBUG */
 
 };
 

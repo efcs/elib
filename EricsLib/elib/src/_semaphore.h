@@ -33,7 +33,7 @@ public:
 	
 	inline bool try_down(unsigned int &resource) {
 		unique_lock lock(m_lock, std::try_to_lock);
-		if (lock.owns_lock() && m_count.load() > 0) {
+		if (lock.owns_lock() && m_count.load(MEM_ORD_ACQ) > 0) {
 			resource = m_count.fetch_sub(1, MEM_ORD_ACQ_REL);
 			return true;
 		} else {

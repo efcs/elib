@@ -2,10 +2,11 @@
 
 #include <chrono>
 #include <iostream>
+#include <cstdint>
 
 #define INIT_TIMED() \
 	std::chrono::time_point<std::chrono::high_resolution_clock> start, end; \
-	long total_sec, f_sec; \
+	int64_t total_sec, f_sec; \
 	total_sec = 0
 
 #define RUN_TIMED(func) start = std::chrono::high_resolution_clock::now(); \

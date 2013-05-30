@@ -8,7 +8,7 @@
 add_definitions(-fPIC)
 
 #turn assertions on/off
-#add_definitions(-D NDEBUG)
+add_definitions(-D NDEBUG)
 
 find_package( Threads REQUIRED )
 

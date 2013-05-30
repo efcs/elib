@@ -13,7 +13,7 @@
 	func(); \
 	end = std::chrono::high_resolution_clock::now(); \
 	f_sec = std::chrono::duration_cast<std::chrono::milliseconds> \
-											(end-start).count(); \
+		(end-start).count(); \
 	std::cout << "elapsed time: " << f_sec << "ms" << std::endl; \
 	std::cout << std::endl; \
 	total_sec += f_sec

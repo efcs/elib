@@ -8,7 +8,7 @@ all: | silent
 e: | silent
 	$(MAKE) -s distclean
 	$(MAKE) -s redep
-	$(MAKE) -C build
+	$(MAKE) -C build -j
 	$(MAKE) -s install
 
 .PHONY: clean

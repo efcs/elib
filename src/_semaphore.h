@@ -8,9 +8,9 @@
 #include <condition_variable>
 #include <cassert>
 
-#define MEM_ORD_ACQ std::memory_order_acquire
-#define MEM_ORD_REL std::memory_order_release
-#define MEM_ORD_ACQ_REL std::memory_order_acq_rel
+#define MEM_ORD_ACQ std::memory_order_seq_cst
+#define MEM_ORD_REL std::memory_order_seq_cst
+#define MEM_ORD_ACQ_REL std::memory_order_seq_cst
 
 namespace elib {
 namespace _elib {

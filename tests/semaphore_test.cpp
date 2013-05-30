@@ -34,8 +34,9 @@ public:
 		
 		for (int i=0; i < NUM_ITERS; ++i) {
 /* when assertions are off, val is unused, so dont define it */
-#ifndef NDEBUG
 			unsigned int val = m_shared.sem.down();
+#ifdef NDEBUG
+			UNUSED(val);
 #endif 
 			assert(val > 0 && val <= SEM_MAX);
 			std::chrono::milliseconds dur(SLEEP_MILI);

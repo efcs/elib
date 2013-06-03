@@ -1,40 +1,36 @@
 SHELL := /bin/bash
 
 .PHONY: all
-all: | silent
-	$(MAKE) -C build
+all: 
+	@ $(MAKE) --no-print-directory -C build
 	
 .PHONY: e
-e: | silent
-	$(MAKE) -s distclean
-	$(MAKE) -s redep
-	$(MAKE) -C build -j
-	$(MAKE) -s install
+e:
+	@ $(MAKE) --no-print-directory distclean
+	@ $(MAKE) --no-print-directory redep
+	@ $(MAKE) --no-print-directory -C build -j
+	@ $(MAKE) --no-print-directory install
 
 .PHONY: clean
-clean: | silent
-	if [ -d build ] && [ -f build/Makefile ]; then $(MAKE) -C build clean; fi
-	
-.PHONY: install
-install: | silent
-	if [ -d ${HOME}/lib/include ]; then mkdir -p ${HOME}/lib/include/elib; fi
-	$(MAKE) -C build install
-	
-.PHONY: uninstall
-uninstall: | silent
-	if [ -d ${HOME}/lib ]; then rm -f libelib.a libelib_s.so; fi
-	if [ -d ${HOME}/lib/include/elib ]; then rm -rf ${HOME}/lib/include/elib; fi
+clean:
+	@ if [ -f build/Makefile ]; then $(MAKE) --no-print-directory -C build clean; fi
 	
 .PHONY: redep
 redep: 
-	mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
+	@ mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
 	
 .PHONY: distclean
-distclean: |silent
-	if [ -d build ] && [ -f build/Makefile ]; then $(MAKE) -s -C build clean; fi
-	rm -rf build/ 
+distclean: 
+	@ $(MAKE) --no-print-directory clean
+	@ rm -rf build/ 
 	
-silent:
-	@:
+.PHONY: install
+install:
+	@ if [ -d ${HOME}/lib/include ]; then mkdir -p ${HOME}/lib/include/elib; fi
+	@ $(MAKE) --no-print-directory -C build install
 	
+.PHONY: uninstall
+uninstall: | silent
+	@ if [ -d ${HOME}/lib ]; then rm -f libelib.a libelib_s.so; fi
+	@ if [ -d ${HOME}/lib/include/elib ]; then rm -rf ${HOME}/lib/include/elib; fi
 

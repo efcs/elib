@@ -8,156 +8,228 @@
 	va_start(__args, msg); \
 	vsnprintf(__fmt_buff, BUFF_MAX, msg, __args); \
 	va_end(__args)
-
-#define STATIC_FUNC_HANDLER(level) __FMT_ARGS(); \
-	_static_log(level, __fmt_buff) 
 	
-#define LOGFILE_FUNC_HANDLER(level) __FMT_ARGS(); \
-	m_impl->_log(level, __fmt_buff) 
+	
+#define LOG_FUNC_HANDLER(level) __FMT_ARGS(); \
+	m_impl->log(level, __fmt_buff) 
 
 	
 namespace elib {
 
-	
-/* for static Log */
-_elib::LogImpl g_log;
 
-
-/* helper for static log */
-inline void _static_log(int level, const char* msg) 
+Log::Log() : m_impl(new _elib::LogImpl(LDEFAULT))
 {
-	/* special case for raw */
-	if (level == _elib::RAW_OUT_L)
-		g_log.print(std::cout, "%s%s", "", msg);
-	else if (level == _elib::RAW_ERR_L)
-		g_log.print(std::cerr, "%s%s", "", msg);
-	else
-		g_log.log(level, msg, std::cout, std::cerr);
 }
 
-void Log::set_level(int new_level) 
+Log::Log(int level) : m_impl(new _elib::LogImpl(level))
 {
-	g_log.set_level(new_level);
 }
 
-int Log::get_level() 
+Log::~Log()
 {
-	return g_log.get_level();
 }
 
-void Log::debug(const char *msg, ... ) 
+std::string Log::get_prompt(int level) const
 {
-	STATIC_FUNC_HANDLER(DEBUG_L);
+	return m_impl->get_prompt(level);
 }
 
-void Log::info(const char *msg, ... )
+bool Log::set_prompt(int level, const std::string &prompt)
 {
-	STATIC_FUNC_HANDLER(INFO_L);
+	return m_impl->set_prompt(level, prompt);
 }
 
-void Log::step(const char *msg, ... )
+void Log::set_level(int level)
 {
-	STATIC_FUNC_HANDLER(STEP_L);
+	m_impl->set_level(level);
 }
 
-void Log::warning(const char *msg, ... )
+int Log::modify_level(int delta)
 {
-	STATIC_FUNC_HANDLER(WARNING_L);
+	return m_impl->modify_level(delta);
 }
 
-void Log::error(const char *msg, ... )
-{
-	STATIC_FUNC_HANDLER(ERROR_L);
-}
-
-void Log::fatal(const char *msg, ... )
-{
-	STATIC_FUNC_HANDLER(FATAL_L);
-}
-
-void Log::raw_out(const char *msg, ... )
-{
-	STATIC_FUNC_HANDLER(_elib::RAW_OUT_L);
-}
-
-void Log::raw_err(const char *msg, ... )
-{
-	STATIC_FUNC_HANDLER(_elib::RAW_ERR_L);
-}
-
-
-LogFile::LogFile(const char *filename) : m_impl(new _elib::LogFileImpl(filename)) 
-{
-} 
-
-LogFile::~LogFile() 
-{ 
-}
-
-void LogFile::set_file(const char *filename) 
-{
-	m_impl->set_file(filename);
-}
-
-void LogFile::close_file()
-{
-	m_impl->close_file();
-}
-
-std::string LogFile::filename() const
-{
-	return m_impl->filename();
-}
-
-bool LogFile::good() const
-{
-	return m_impl->good();
-}
-
-void LogFile::set_level(int new_level) 
-{
-	m_impl->set_level(new_level);
-}
-
-int LogFile::get_level() const
+int Log::get_level() const
 {
 	return m_impl->get_level();
 }
 
-void LogFile::debug(const char *msg, ...) 
+void Log::log(int level, const char *msg, ... ) 
 {
-	LOGFILE_FUNC_HANDLER(DEBUG_L);
+	LOG_FUNC_HANDLER(level);
 }
 
-void LogFile::info(const char *msg, ...) 
+void Log::log(int level, const std::string &msg)
 {
-	LOGFILE_FUNC_HANDLER(INFO_L);
+	m_impl->log(level, msg.c_str());
 }
-
-void LogFile::step(const char *msg, ...) 
-{
-	LOGFILE_FUNC_HANDLER(STEP_L);
-}
-
-void LogFile::warning(const char *msg, ...) 
-{
-	LOGFILE_FUNC_HANDLER(WARNING_L);
-}
-
-void LogFile::error(const char *msg, ...) 
-{
-	LOGFILE_FUNC_HANDLER(ERROR_L);
-}
-
-void LogFile::fatal(const char *msg, ...) 
-{
-	LOGFILE_FUNC_HANDLER(FATAL_L);
-}
-
-void LogFile::raw_out(const char *msg, ...)
-{
-	LOGFILE_FUNC_HANDLER(_elib::RAW_OUT_L);
-}
-
 	
+void Log::debug(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LDEBUG);
+}
+
+void Log::info(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LINFO);
+}
+
+void Log::step(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LSTEP);
+}
+
+void Log::warning(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LWARNING);
+}
+
+void Log::error(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LERROR);
+}
+
+void Log::fatal(const char *msg, ...)
+{
+	LOG_FUNC_HANDLER(LFATAL);
+}
+	
+void Log::raw_out(const char *msg, ...)
+{
+	LOG_FUNC_HANDLER(LRAW_OUT);
+}
+
+void Log::raw_out(const std::string &msg)
+{
+	m_impl->log(LRAW_OUT, msg.c_str());
+}
+
+void Log::raw_err(const char *msg, ...)
+{
+	LOG_FUNC_HANDLER(LRAW_ERR);
+}
+
+void Log::raw_err(const std::string &msg)
+{
+	m_impl->log(LRAW_ERR, msg.c_str());
+}
+
+
+/* --------------- FILE LOG ---------------------- */
+FileLog::FileLog(const char* filename) 
+			: m_impl(new _elib::FileLogImpl(LDEFAULT, filename))
+{
+}
+
+
+FileLog::FileLog(int level, const char *filename) 
+			: m_impl(new _elib::FileLogImpl(level, filename))
+{
+}
+
+FileLog::~FileLog()
+{
+}
+
+void FileLog::set_file(const char* filename)
+{
+	m_impl->set_file(filename);
+}
+
+std::string FileLog::filename() const
+{
+	return m_impl->filename();
+}
+
+void FileLog::close()
+{
+	m_impl->close();
+}
+
+std::string FileLog::get_prompt(int level) const
+{
+	return m_impl->get_prompt(level);
+}
+
+bool FileLog::set_prompt(int level, const std::string &prompt)
+{
+	return m_impl->set_prompt(level, prompt);
+}
+
+void FileLog::set_level(int level)
+{
+	m_impl->set_level(level);
+}
+
+int FileLog::modify_level(int delta)
+{
+	return m_impl->modify_level(delta);
+}
+
+int FileLog::get_level() const
+{
+	return m_impl->get_level();
+}
+
+void FileLog::log(int level, const char *msg, ... ) 
+{
+	LOG_FUNC_HANDLER(level);
+}
+
+void FileLog::log(int level, const std::string &msg)
+{
+	m_impl->log(level, msg.c_str());
+}
+	
+void FileLog::debug(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LDEBUG);
+}
+
+void FileLog::info(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LINFO);
+}
+
+void FileLog::step(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LSTEP);
+}
+
+void FileLog::warning(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LWARNING);
+}
+
+void FileLog::error(const char *msg, ... )
+{
+	LOG_FUNC_HANDLER(LERROR);
+}
+
+void FileLog::fatal(const char *msg, ...)
+{
+	LOG_FUNC_HANDLER(LFATAL);
+}
+	
+void FileLog::raw_out(const char *msg, ...)
+{
+	LOG_FUNC_HANDLER(LRAW_OUT);
+}
+
+void FileLog::raw_out(const std::string &msg)
+{
+	m_impl->log(LRAW_OUT, msg.c_str());
+}
+
+void FileLog::raw_err(const char *msg, ...)
+{
+	LOG_FUNC_HANDLER(LRAW_ERR);
+}
+
+void FileLog::raw_err(const std::string &msg)
+{
+	m_impl->log(LRAW_ERR, msg.c_str());
+}
+
+
 } /* namespace elib */

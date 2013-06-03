@@ -1,5 +1,4 @@
 #include <elib/semaphore.h>
-#include <elib/log.h>
 #include "thread_test.h"
 #include <iostream>
 #include <mutex>
@@ -14,7 +13,6 @@
 #define SLEEP_MILI 20
 
 using unique_lock = std::unique_lock<std::mutex>;
-using Log = elib::Log;
 
 typedef struct shared_state_struct {
 	elib::Semaphore sem;
@@ -54,7 +52,6 @@ private:
 void semaphore_test(void) 
 {
 	std::cout << "Running semaphore_test" << std::endl;
-	std::cout.flush();
 	
 	shared_t shared;
 	elib::Semaphore sem(SEM_MAX);

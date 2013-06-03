@@ -1,5 +1,5 @@
-#ifndef ELIB_LOG_H
-#define ELIB_LOG_H
+#ifndef ELIBOG_H
+#define ELIBOG_H
 
 #include <cstdarg>
 #include <string>
@@ -10,64 +10,95 @@ namespace elib {
 	
 namespace _elib {
 	class LogImpl;
-	class LogFileImpl;
+	class FileLogImpl;
 }
 
-	
-enum LevelEnum { DEBUG_L, INFO_L, STEP_L, WARNING_L, ERROR_L, FATAL_L };
-	
+/* RAW levels are always on, and the logging level cannot effect that */
+enum LevelEnum { LDEBUG, LINFO, LSTEP, LWARNING, LERROR, LFATAL,
+				LRAW_OUT, LRAW_ERR };
+				
+constexpr int LDEFAULT = LSTEP;
 
-class Log 
-{
+	
+/* global logging class */
+class Log
+{ 
 public:
-	/* default log values */
-	static constexpr int default_log_level = STEP_L;
+	Log(); // sets to default level 
+	explicit Log(int level);
 	
-	/* static interface uses std::cout and std::cerr */
-	static void set_level(int new_level);
-	static int get_level();
-	
-	/* logging methods */
-	static void debug(const char *msg, ... );
-	static void info(const char *msg, ... );
-	static void step(const char *msg, ... );
-	static void warning(const char *msg, ... );
-	static void error(const char *msg, ... );
-	static void fatal(const char *msg, ... ); 
-	
-	/* raw methods are always on */
-	static void raw_out(const char *msg, ... );
-	static void raw_err(const char *msg, ... );
-};
-
-
-namespace _elib { class LogFileImpl; }
-class LogFile 
-{
-public:
-	LogFile(const char *filename);
-	~LogFile();
-	
-	/* extra file interface */
-	void set_file(const char *filename);
-	void close_file();
-	std::string filename() const;
-	bool good() const;
+	virtual ~Log();
 	
 	/* same as static log interface */
+	std::string get_prompt(int level) const;
+	bool set_prompt(int level, const std::string &prompt);
+	
 	void set_level(int new_level);
+	int modify_level(int delta);
 	int get_level() const;
+	
+	void log(int level, const char *msg, ... );
+	void log(int level, const std::string &msg);
+	
 	void debug(const char *msg, ... );
 	void info(const char *msg, ... );
 	void step(const char *msg, ... );
 	void warning(const char *msg, ... );
 	void error(const char *msg, ... );
-	void fatal(const char *msg, ... ); 
+	void fatal(const char *msg, ...);
+	
 	void raw_out(const char *msg, ...);
+	void raw_out(const std::string &msg);
+	
+	void raw_err(const char *msg, ...);
+	void raw_err(const std::string &msg);
+	
 private:
-	std::shared_ptr<_elib::LogFileImpl> m_impl;
+	std::shared_ptr<_elib::LogImpl> m_impl;
 };
 
 
+class FileLog : public Log
+{
+public:
+	explicit FileLog(const char *filename);
+	FileLog(int level, const char *filename);
+	~FileLog();
+	
+	/* extra file interface */
+	void set_file(const char *filename);
+	void close();
+	std::string filename() const;
+	bool good() const;
+	
+	/* same as static log interface */
+	std::string get_prompt(int level) const;
+	bool set_prompt(int level, const std::string &n_prompt);
+	
+	void set_level(int new_level);
+	int modify_level(int delta);
+	int get_level() const;
+	
+	void log(int level, const char *msg, ... );
+	void log(int level, const std::string &msg);
+	
+	void debug(const char *msg, ... );
+	void info(const char *msg, ... );
+	void step(const char *msg, ... );
+	void warning(const char *msg, ... );
+	void error(const char *msg, ... );
+	void fatal(const char *msg, ...);
+	
+	void raw_out(const char *msg, ...);
+	void raw_out(const std::string &msg);
+	/* same as raw_out */
+	void raw_err(const char *msg, ...);
+	void raw_err(const std::string &msg);
+private:
+	std::shared_ptr<_elib::FileLogImpl> m_impl;
+};
+
+
+
 } /* namespace elib */
-#endif /* ELIB_LOG_H */
+#endif /* ELIBOG_H */

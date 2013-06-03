@@ -17,86 +17,134 @@ using lock_guard = std::lock_guard<std::mutex>;
 using rec_lock_guard = std::lock_guard<std::recursive_mutex>;
 
 
-/* RAW levels */
-constexpr int RAW_OUT_L = FATAL_L + 1;
-constexpr int RAW_ERR_L = RAW_OUT_L + 1;
-	
+inline bool is_raw_level(int level)
+{
+	return (level == LRAW_OUT || level == LRAW_ERR);
+}
+
+inline bool is_basic_level(int level)
+{
+	return (level >= LDEBUG && level <= LFATAL);
+}
+
+inline bool is_valid_level(int level) 
+{ 
+	return (is_raw_level(level) || is_basic_level(level));
+}
+
+
 class LogImpl
 {
+private:
+	friend class FileLogImpl;
+protected:
+	LogImpl() { }
 public:
-	LogImpl() : m_level(Log::default_log_level) {
-		m_prompts[DEBUG_L] = "DEBUG:";
-		m_prompts[INFO_L] = "Info:";
-		m_prompts[STEP_L] = "-->";
-		m_prompts[WARNING_L] = "Warning:";
-		m_prompts[ERROR_L] = "Error:";
-		m_prompts[FATAL_L] = "FATAL:";
-	}
+	explicit LogImpl(int level) : m_level(level), 
+				m_out(&std::cout), m_err(&std::cerr) { }
 	
-	virtual ~LogImpl() {
+	virtual ~LogImpl() { }
+	
+	inline std::string get_prompt(int level) const {
+		if (! is_valid_level(level))
+			return std::string("");
 		
+		lock_guard lock(m_lock);
+		return m_prompts.at(level);
 	}
 	
-	inline void set_level(int new_level) {
+	inline bool set_prompt(int level, const std::string &prompt){
+		if (! is_basic_level(level))
+			return false;
+		
 		lock_guard lock(m_lock);
-		m_level = new_level; 
+		m_prompts[level] = prompt;
+		return true;
+	}
+	
+	inline void set_level(int n_level) {
+		lock_guard lock(m_lock);
+		m_level = n_level;
+	}
+	
+	inline int modify_level(int delta) {
+		lock_guard lock(m_lock);
+		m_level += delta;
+		return m_level;
 	}
 	
 	inline int get_level() const {
-		return m_level; 
-	}	
+		return m_level;
+	}
 	
-	/* do not use with raw levels */
-	inline void log(int level, const char *msg, 
-					std::ostream &out, std::ostream &err) {
+	inline void log(int level, const char *msg) {
+		if (! _should_print(level))
+			return;
+	
 		lock_guard lock(m_lock);
-		if (m_level >= level && level <= STEP_L)
-			print(out, "%s %s", m_prompts[level], msg);
-		else if (m_level >= level && level >= WARNING_L)
-			print(err, "%s %s", m_prompts[level], msg);
+		_get_stream(level) << m_prompts[level] << msg << std::endl;
 	}
 	
-	inline void print(std::ostream &out, const char *fmt, 
-			   const char *prompt, const char *msg) {
-		
-		char buff[PRINT_BUFF_MAX];
-		snprintf(buff, PRINT_BUFF_MAX, fmt, prompt, msg);
-		buff[PRINT_BUFF_MAX-1] = '\0';
-		/* get lock and write */
-		lock_guard lock(m_write_lock);
-		out << buff << std::endl;
-		out.flush();
+private:
+	virtual std::ostream& _get_stream(int level) {
+		if (level == LRAW_OUT || (level >= LDEBUG && level <= LSTEP)) 
+			return *m_out;
+		 else 
+			return *m_err;
 	}
 	
+	inline bool _should_print(int level) const {
+		return (is_raw_level(level) || 
+				(is_basic_level(level) && m_level <= level));
+	}
 	
 private:
 	int m_level;
-	mutable std::mutex m_lock, m_write_lock;
-	std::map<int, const char*> m_prompts;
+	mutable std::mutex m_lock;
+	std::ostream *m_out, *m_err;
+	std::map<int, std::string> m_prompts = {
+								{LDEBUG, "Debug: "},
+								{LINFO, "Info: "},
+								{LSTEP, "--> "},
+								{LWARNING, "Warning: "},
+								{LERROR, "ERROR: "},
+								{LFATAL, "FATAL: "},
+								{LRAW_OUT, ""},
+								{LRAW_ERR, ""} };
+								
 	DISALLOW_COPY_AND_ASSIGN(LogImpl);
 };
 
 
-class LogFileImpl : public LogImpl {
+class FileLogImpl : public LogImpl {
 public:
-	explicit LogFileImpl(const char* filename) 
-					: LogImpl(), m_filename(filename) {
-		m_file.open(filename);
+	FileLogImpl(int level, const char* filename) : LogImpl() {
+		m_level = level;
+		set_file(filename);
+		m_out = &m_file;
+		m_err = &m_file;
 	}
 	
-	~LogFileImpl() { 
-		this->close_file();
+	~FileLogImpl() { 
+		if (m_file.is_open())
+			m_file.close();
 	}
 	
 	void set_file(const char* filename) {
-		rec_lock_guard lock(m_file_lock);
-		this->close_file();
+		lock_guard lock(m_lock);
+		rec_lock_guard flock(m_file_lock);
+		
+		if (m_file.is_open())
+			m_file.close();
+		
 		m_filename = filename;
 		m_file.open(filename);
 	}
 	
-	void close_file() {
-		rec_lock_guard lock(m_file_lock);
+	void close() {
+		lock_guard lock(m_lock);
+		rec_lock_guard flock(m_file_lock);
+		
 		if (m_file.is_open())
 			m_file.close();
 	}
@@ -110,19 +158,12 @@ public:
 		rec_lock_guard lock(m_file_lock);
 		return m_file.good();
 	} 
-	
-	void _log(int level, const char *msg) {
-		if (level == RAW_OUT_L) 
-			this->print(m_file, "%s%s", "", msg);
-		else
-			this->log(level, msg, m_file, m_file);
-	}
-	
+		
 private:
 	std::string m_filename;
-	mutable std::recursive_mutex m_file_lock;
 	std::ofstream m_file;
-	DISALLOW_COPY_AND_ASSIGN(LogFileImpl);
+	mutable std::recursive_mutex m_file_lock;
+	DISALLOW_COPY_AND_ASSIGN(FileLogImpl);
 };
 
 	

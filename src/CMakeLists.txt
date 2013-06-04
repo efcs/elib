@@ -34,5 +34,3 @@ file(GLOB lib_headers "${CMAKE_CURRENT_LIST_DIR}/include/elib/*.h" )
 install(FILES ${lib_headers} DESTINATION $ENV{HOME}/lib/include/elib/)
 				
 
-
-

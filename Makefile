@@ -8,7 +8,7 @@ all:
 e:
 	@ $(MAKE) --no-print-directory distclean
 	@ $(MAKE) --no-print-directory redep
-	@ $(MAKE) --no-print-directory -C build -j
+	@ $(MAKE) --no-print-directory -C build
 	
 .PHONY: clean
 clean:
@@ -25,11 +25,18 @@ distclean:
 	
 .PHONY: install
 install:
-	@ if [ -d ${HOME}/lib/include ]; then mkdir -p ${HOME}/lib/include/elib; fi
 	@ $(MAKE) --no-print-directory -C build install
 	
 .PHONY: uninstall
 uninstall:
 	@ if [ -d ${HOME}/lib ]; then rm -f libelib.a libelib_s.so; fi
 	@ if [ -d ${HOME}/lib/include/elib ]; then rm -rf ${HOME}/lib/include/elib; fi
+	
+.PHONY: check
+check:
+	@ ./build/elib_test_static
+	@ echo "Static Library tests passed"
+	@ echo ""
+	@ ./build/elib_test_shared
+	@ echo "Shared Library tests passed"
 

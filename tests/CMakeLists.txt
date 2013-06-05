@@ -8,6 +8,7 @@
 #turn assertions on/off
 add_definitions(-D NDEBUG)
 
+
 find_package( Threads REQUIRED )
 
 set(dotSrc alltests.cpp semaphore_test.cpp sharedlock_test.cpp thread_test.cpp)
@@ -17,9 +18,13 @@ add_library(TestObjLib OBJECT ${dotSrc})
 add_executable(elib_test_static $<TARGET_OBJECTS:TestObjLib>)
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObjLib>)
 
+
+
 #create static & shared libraries
-target_link_libraries(elib_test_static ${CMAKE_THREAD_LIBS_INIT} elib)
-target_link_libraries(elib_test_shared ${CMAKE_THREAD_LIBS_INIT} elib_s)
+target_link_libraries(elib_test_static  elib   ${LD_FLAGS}
+					 ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(elib_test_shared  elib_s ${LD_FLAGS} 
+						${CMAKE_THREAD_LIBS_INIT})
 
 
 

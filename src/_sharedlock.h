@@ -319,6 +319,7 @@ private:
 		
 		int num_allowed = 0;
 		bool last_shared, shared;
+		last_shared = false;
 		std::thread::id t_id;
 		for (auto it=m_lock_queue.begin(); it != waiting_begin; ++it) {
 			auto item = (*it);

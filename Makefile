@@ -29,8 +29,8 @@ install:
 	
 .PHONY: uninstall
 uninstall:
-	@ if [ -d ${HOME}/lib ]; then rm -f libelib.a libelib_s.so; fi
-	@ if [ -d ${HOME}/lib/include/elib ]; then rm -rf ${HOME}/lib/include/elib; fi
+	@ $(error no such rule uninstall)
+	
 	
 .PHONY: check
 check:

@@ -8,7 +8,7 @@
 #include <set>
 #include <cassert>
 
-#define NUM_THREADS 15
+#define NUM_THREADS 4
 #define SEM_MAX 5
 #define NUM_ITERS 100
 #define SLEEP_MILI 20

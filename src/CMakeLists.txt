@@ -12,7 +12,6 @@ add_definitions(-D NDEBUG)
 
 find_package( Threads REQUIRED )
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/include) 
 set(dotSrc lock.cpp log.cpp semaphore.cpp sharedlock.cpp)
 
 # compile into objects
@@ -25,12 +24,15 @@ add_library(elib_s SHARED $<TARGET_OBJECTS:ObjLib>)
 target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(elib_s ${CMAKE_THREAD_LIBS_INIT})
 
+
+if (IS_DIRECTORY "$ENV{HOME}/lib" AND IS_DIRECTORY "$ENV{HOME}/lib/include")
 install(TARGETS elib elib_s
 		LIBRARY DESTINATION $ENV{HOME}/lib
 		ARCHIVE DESTINATION $ENV{HOME}/lib
 )
-		
+
 file(GLOB lib_headers "${CMAKE_CURRENT_LIST_DIR}/include/elib/*.h" )
 install(FILES ${lib_headers} DESTINATION $ENV{HOME}/lib/include/elib/)
+endif()
 				
 

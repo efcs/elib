@@ -1,4 +1,4 @@
-#include <elib/sharedlock.h>
+#include "elib/sharedlock.h"
 
 #include "thread_test.h"
 
@@ -135,7 +135,7 @@ private:
 
 void sharedlock_test()
 {
-	std::cout << "Running sharedlock_tests" << std::endl;
+	std::cout << "Running sharedlock_tests";
 	
 	elib::SharedLock shared_lock;
 	std::mutex io_lock;

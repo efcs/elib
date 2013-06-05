@@ -9,8 +9,7 @@ e:
 	@ $(MAKE) --no-print-directory distclean
 	@ $(MAKE) --no-print-directory redep
 	@ $(MAKE) --no-print-directory -C build -j
-	@ $(MAKE) --no-print-directory install
-
+	
 .PHONY: clean
 clean:
 	@ if [ -f build/Makefile ]; then $(MAKE) --no-print-directory -C build clean; fi
@@ -30,7 +29,7 @@ install:
 	@ $(MAKE) --no-print-directory -C build install
 	
 .PHONY: uninstall
-uninstall: | silent
+uninstall:
 	@ if [ -d ${HOME}/lib ]; then rm -f libelib.a libelib_s.so; fi
 	@ if [ -d ${HOME}/lib/include/elib ]; then rm -rf ${HOME}/lib/include/elib; fi
 

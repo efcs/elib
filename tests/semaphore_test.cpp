@@ -1,5 +1,6 @@
-#include <elib/semaphore.h>
+#include "elib/semaphore.h"
 #include "thread_test.h"
+
 #include <iostream>
 #include <mutex>
 #include <atomic>
@@ -51,7 +52,7 @@ private:
 
 void semaphore_test(void) 
 {
-	std::cout << "Running semaphore_test" << std::endl;
+	std::cout << "Running semaphore_test";
 	
 	shared_t shared;
 	elib::Semaphore sem(SEM_MAX);

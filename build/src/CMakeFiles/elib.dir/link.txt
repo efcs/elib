@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC -O3  -D NDEBUG   -shared -Wl,-soname,libelib.so -o ../libelib.so CMakeFiles/ObjLib.dir/lock.cpp.o CMakeFiles/ObjLib.dir/log.cpp.o CMakeFiles/ObjLib.dir/semaphore.cpp.o CMakeFiles/ObjLib.dir/sharedlock.cpp.o -lpthread 

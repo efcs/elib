@@ -1,0 +1,2 @@
+/usr/bin/ar cr ../libelib_static.a  CMakeFiles/ObjLib.dir/lock.cpp.o CMakeFiles/ObjLib.dir/log.cpp.o CMakeFiles/ObjLib.dir/semaphore.cpp.o CMakeFiles/ObjLib.dir/sharedlock.cpp.o
+/usr/bin/ranlib ../libelib_static.a

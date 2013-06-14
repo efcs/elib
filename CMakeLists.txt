@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 2.8)
 
 option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 
+# These options need to go before project declaration
 if (CONFIG_MY_BUILD)
 	option(CONFIG_OPT_GCC "Use /opt/gnu/bin/* and /opt/gnu/lib64" OFF)
 	
@@ -16,6 +17,7 @@ endif()
 project(EricsLibrary CXX C)
 
 if (CONFIG_MY_BUILD)
+	# I like to install in weird places 
 	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 		set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/usr" 
 			CACHE PATH "library install prefix" FORCE)

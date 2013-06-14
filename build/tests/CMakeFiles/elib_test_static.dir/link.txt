@@ -1,1 +1,0 @@
-/usr/bin/c++   -O3  -D NDEBUG    CMakeFiles/TestObjLib.dir/alltests.cpp.o CMakeFiles/TestObjLib.dir/thread_test.cpp.o CMakeFiles/TestObjLib.dir/sharedlock_test.cpp.o CMakeFiles/TestObjLib.dir/semaphore_test.cpp.o  -o ../elib_test_static -rdynamic ../libelib_static.a -lpthread 

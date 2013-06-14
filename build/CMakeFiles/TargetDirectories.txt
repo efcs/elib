@@ -1,6 +1,0 @@
-/home/eric/workspace/elib/build/src/CMakeFiles/ObjLib.dir
-/home/eric/workspace/elib/build/tests/CMakeFiles/TestObjLib.dir
-/home/eric/workspace/elib/build/src/CMakeFiles/elib.dir
-/home/eric/workspace/elib/build/src/CMakeFiles/elib_static.dir
-/home/eric/workspace/elib/build/tests/CMakeFiles/elib_test_shared.dir
-/home/eric/workspace/elib/build/tests/CMakeFiles/elib_test_static.dir

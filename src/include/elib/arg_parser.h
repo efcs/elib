@@ -32,7 +32,6 @@ public:
 	argp() { }
 	~argp() { }
 	
-	
 	template <typename T, typename Func, typename... Args>
 	void add_arg(const std::string &cmd_line_flag, const std::string description, 
 				bool optional, T &val, Func&& f, Args&&... args) {
@@ -48,7 +47,6 @@ public:
 			arg->set_func = [&] () { (void)val = func(); }
 			m_arg_list.push_back(arg);
 	}
-	
 	
 	void process_args(int argc, const char *argv[], 
 					  std::vector<std::string>& unused) {

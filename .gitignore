@@ -1,9 +1,6 @@
 #start by ignoring all files in EricsLib
 
-EricsLib/*
-#except a couple of items
-!EricsLib/elib
-!EricsLib/CMakeLists.txt
+build/
 
 #all kate temp files
 *.kate-swp

@@ -234,8 +234,8 @@ clean: tests/CMakeFiles/TestObjLib.dir/clean
 # Target rules for target tests/CMakeFiles/elib_test_shared.dir
 
 # All Build rule for target.
-tests/CMakeFiles/elib_test_shared.dir/all: src/CMakeFiles/elib.dir/all
 tests/CMakeFiles/elib_test_shared.dir/all: tests/CMakeFiles/TestObjLib.dir/all
+tests/CMakeFiles/elib_test_shared.dir/all: src/CMakeFiles/elib.dir/all
 	$(MAKE) -f tests/CMakeFiles/elib_test_shared.dir/build.make tests/CMakeFiles/elib_test_shared.dir/depend
 	$(MAKE) -f tests/CMakeFiles/elib_test_shared.dir/build.make tests/CMakeFiles/elib_test_shared.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/eric/workspace/elib/build/CMakeFiles 

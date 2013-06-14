@@ -55,6 +55,7 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unsp
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/elib" TYPE FILE FILES
     "/home/eric/workspace/elib/src/include/elib/semaphore.h"
+    "/home/eric/workspace/elib/src/include/elib/arg_parser.h"
     "/home/eric/workspace/elib/src/include/elib/sharedlock.h"
     "/home/eric/workspace/elib/src/include/elib/lock.h"
     "/home/eric/workspace/elib/src/include/elib/commondef.h"

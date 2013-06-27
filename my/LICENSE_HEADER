@@ -16,13 +16,3 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "elib/lock.h"
-#include "_lock.h"
-
-namespace elib {
-	
-/* force templates instant's into the library */
-template class UniqueLock<std::mutex>;
-template class UniqueLock<Mutex>;
-
-} /* namespace elib */

@@ -24,16 +24,16 @@
 namespace elib {
 	
 	
-SharedLock::SharedLock() : m_impl(new _elib::SharedLockImpl())
+shared_lock::shared_lock() : m_impl(new _elib::shared_lock_impl())
 {
 	this->init();
 }
 
-SharedLock::~SharedLock()
+shared_lock::~shared_lock()
 {
 }
 
-void SharedLock::lock()
+void shared_lock::lock()
 {
 	m_impl->lock();
 #ifndef NDEBUG
@@ -41,7 +41,7 @@ void SharedLock::lock()
 #endif
 }
 
-bool SharedLock::try_lock()
+bool shared_lock::try_lock()
 {
 	return m_impl->try_lock();
 #ifndef NDEBUG
@@ -49,7 +49,7 @@ bool SharedLock::try_lock()
 #endif
 }
 
-void SharedLock::unlock()
+void shared_lock::unlock()
 {
 	m_impl->unlock();
 #ifndef NDEBUG
@@ -57,7 +57,7 @@ void SharedLock::unlock()
 #endif
 }
 
-void SharedLock::lock_shared()
+void shared_lock::lock_shared()
 {
 	m_impl->lock_shared();
 #ifndef NDEBUG
@@ -65,7 +65,7 @@ void SharedLock::lock_shared()
 #endif
 }
 
-bool SharedLock::try_lock_shared()
+bool shared_lock::try_lock_shared()
 {
 	return m_impl->try_lock_shared();
 #ifndef NDEBUG
@@ -73,7 +73,7 @@ bool SharedLock::try_lock_shared()
 #endif
 }
 
-void SharedLock::unlock_shared()
+void shared_lock::unlock_shared()
 {
 	m_impl->unlock_shared();
 #ifndef NDEBUG
@@ -81,42 +81,42 @@ void SharedLock::unlock_shared()
 #endif
 }
 
-SharedOnlyLock &SharedLock::as_shared_only_lock() 
+shared_only_lock &shared_lock::as_shared_only_lock() 
 {
 	return m_impl->as_shared_only_lock();
 }
 
 
-void SharedLock::init()
+void shared_lock::init()
 {
-	m_impl->m_shared_only_lock = new SharedOnlyLock(*this);
+	m_impl->m_shared_only_lock = new shared_only_lock(*this);
 }
 
-SharedOnlyLock::SharedOnlyLock(SharedLock &s_lock) : m_lock(s_lock) 
+shared_only_lock::shared_only_lock(shared_lock &s_lock) : m_lock(s_lock) 
 { 
 }
 
-SharedOnlyLock::~SharedOnlyLock() 
+shared_only_lock::~shared_only_lock() 
 { 
 }
 
-void SharedOnlyLock::lock() 
+void shared_only_lock::lock() 
 {
 	m_lock.lock_shared();
 }
 
-bool SharedOnlyLock::try_lock() 
+bool shared_only_lock::try_lock() 
 {
 	return m_lock.try_lock_shared();
 }
 
-void SharedOnlyLock::unlock() 
+void shared_only_lock::unlock() 
 {
 	m_lock.unlock_shared();
 }
 
 /* force template creation */
-template class UniqueLock<SharedLock>;
-template class UniqueLock<SharedOnlyLock>;
+template class unique_lock<shared_lock>;
+template class unique_lock<shared_only_lock>;
 
 } /* namespace elib */

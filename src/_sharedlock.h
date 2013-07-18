@@ -76,11 +76,11 @@ void verify_shared_lock_type(const shared_lock_t *item)
 }
 
 
-class SharedLockImpl 
+class shared_lock_impl 
 {
 public:
-	SharedLockImpl() { }
-	~SharedLockImpl() { }
+	shared_lock_impl() { }
+	~shared_lock_impl() { }
 	
 	/* mutualy exclusive locking */
 	void lock() {
@@ -169,7 +169,7 @@ public:
 		this->_unlock(t_id, SHARED);
 	}
 	
-	SharedOnlyLock &as_shared_only_lock() {
+	shared_only_lock &as_shared_only_lock() {
 		return *m_shared_only_lock;
 	}
 	
@@ -311,9 +311,9 @@ private:
 private:
 	std::mutex m_lock;
 	std::vector<shared_lock_t*> m_lock_queue;
-	SharedOnlyLock *m_shared_only_lock;
-	friend class elib::SharedLock;
-	DISALLOW_COPY_AND_ASSIGN(SharedLockImpl);
+	shared_only_lock *m_shared_only_lock;
+	friend class elib::shared_lock;
+	DISALLOW_COPY_AND_ASSIGN(shared_lock_impl);
 
 /* this method is only allowed when assertions are on */
 #ifndef NDEBUG

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIBOG_H
-#define ELIBOG_H
+#ifndef ELIB_LOG_H
+#define ELIB_LOG_H
 
 #include <cstdarg>
 #include <string>
@@ -119,4 +119,4 @@ private:
 
 
 } /* namespace elib */
-#endif /* ELIBOG_H */
+#endif /* ELIB_LOG_H */

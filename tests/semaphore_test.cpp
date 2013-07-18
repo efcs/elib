@@ -16,7 +16,7 @@
 using unique_lock = std::unique_lock<std::mutex>;
 
 typedef struct shared_state_struct {
-	elib::Semaphore sem;
+	elib::semaphore sem;
 	std::mutex lock;
 	std::condition_variable full_cv;
 	std::set<unsigned int> taken;
@@ -55,7 +55,7 @@ void semaphore_test(void)
 	std::cout << "Running semaphore_test";
 	
 	shared_t shared;
-	elib::Semaphore sem(SEM_MAX);
+	elib::semaphore sem(SEM_MAX);
 	shared.sem = sem;
 	
 	std::vector<SemThread*> threads(NUM_THREADS);

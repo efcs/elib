@@ -1,6 +1,8 @@
 #start by ignoring all files in EricsLib
 
 build/
+bin/
 
-#all kate temp files
+#all kate & gedit temp files
 *.kate-swp
+*~

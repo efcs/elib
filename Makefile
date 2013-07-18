@@ -2,6 +2,7 @@ SHELL := /bin/bash
 
 .PHONY: all
 all: 
+	@ mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
 	@ $(MAKE) --no-print-directory -C build
 	
 .PHONY: e
@@ -16,12 +17,12 @@ clean:
 	
 .PHONY: redep
 redep: 
-	@ mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
+	@ rm -rf ./build ; mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
 	
 .PHONY: distclean
 distclean: 
 	@ $(MAKE) --no-print-directory clean
-	@ rm -rf build/ 
+	@ rm -rf ./build ./bin
 	
 .PHONY: install
 install:
@@ -34,9 +35,9 @@ uninstall:
 	
 .PHONY: check
 check:
-	@ ./build/elib_test_static
+	@ ./bin/elib_test_static
 	@ echo "Static Library tests passed"
 	@ echo ""
-	@ ./build/elib_test_shared
+	@ ./bin/elib_test_shared
 	@ echo "Shared Library tests passed"
 

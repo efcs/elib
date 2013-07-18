@@ -18,13 +18,13 @@
 
 //#define PRINT_DEBUG
 
-using lock_guard_shared = elib::LockGuard<elib::SharedOnlyLock>;
-using lock_guard = elib::LockGuard<elib::SharedLock>;
+using lock_guard_shared = elib::lock_guard<elib::shared_only_lock>;
+using lock_guard = elib::lock_guard<elib::shared_lock>;
 
 class ReaderThread : public RunInterface
 {
 public:
-	ReaderThread(int id, std::mutex &io_lock, elib::SharedLock &shared_lock, 
+	ReaderThread(int id, std::mutex &io_lock, elib::shared_lock &shared_lock, 
 				 const char *shared_str) : m_id(id), m_io_lock(io_lock), 
 				 m_shared_lock(shared_lock),  m_shared_str(shared_str)
 	{ }
@@ -32,7 +32,7 @@ public:
 	~ReaderThread() { }
 	
 	void run() {
-		elib::SharedOnlyLock &s_lock(m_shared_lock.as_shared_only_lock());
+		elib::shared_only_lock &s_lock(m_shared_lock.as_shared_only_lock());
 		for (int i=0; i < NUM_READS; ++i) {
 			{
 				lock_guard_shared lock(s_lock);
@@ -68,7 +68,7 @@ private:
 	
 	int m_id;
 	std::mutex &m_io_lock;
-	elib::SharedLock &m_shared_lock;
+	elib::shared_lock &m_shared_lock;
 	const char *m_shared_str;
 };
 
@@ -76,7 +76,7 @@ private:
 class WriterThread : public RunInterface
 {
 public:
-	WriterThread(int id, std::mutex &io_lock, elib::SharedLock &shared_lock, 
+	WriterThread(int id, std::mutex &io_lock, elib::shared_lock &shared_lock, 
 				char* shared_str, char value) : m_id(id), m_io_lock(io_lock), 
 				m_shared_lock(shared_lock), m_shared_str(shared_str), m_val(value)
 	{ }
@@ -126,7 +126,7 @@ private:
 	
 	int m_id;
 	std::mutex &m_io_lock;
-	elib::SharedLock &m_shared_lock;
+	elib::shared_lock &m_shared_lock;
 	char *m_shared_str;
 	char m_val;
 };
@@ -137,7 +137,7 @@ void sharedlock_test()
 {
 	std::cout << "Running sharedlock_tests";
 	
-	elib::SharedLock shared_lock;
+	elib::shared_lock shared_lock;
 	std::mutex io_lock;
 	
 	char *str = new char[BUFF_LEN];

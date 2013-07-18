@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef COMMONDEF_H
-#define COMMONDEF_H
+#ifndef ELIB_COMMONDEF_H
+#define ELIB_COMMONDEF_H
 
 /* A nice macro to get rid of unused parameters */
 #define UNUSED(x) (void)(x)

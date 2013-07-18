@@ -19,7 +19,6 @@
 #ifndef ELIB_LOCK_H
 #define ELIB_LOCK_H
 
-#include "commondef.h"
 #include <mutex>
 #include <memory>
 
@@ -27,21 +26,22 @@ namespace elib {
 
 /* forward declarations */
 namespace _elib {
-template <typename T> class UniqueLockImpl;
+    template <typename T> 
+    class unique_lock_impl;
 }
 
 
-/* for UniqueLock */
+/* for unique_lock */
 struct try_lock_t { };
 struct defer_lock_t { };
 constexpr try_lock_t try_to_lock = try_lock_t();
 constexpr defer_lock_t defer_lock = defer_lock_t();
 
 
-class LockInterface 
+class lock_interface 
 {
 public:
-	virtual ~LockInterface() { }
+	virtual ~lock_interface() { }
 	virtual void lock() = 0;
 	virtual bool try_lock() = 0;
 	virtual void unlock() = 0;
@@ -50,12 +50,12 @@ public:
 
 /* why not have my own mutex class that is really just a wrapper 
  * at least it is copyable */
-class Mutex : public LockInterface
+class mutex : public lock_interface
 {
 public:
-	Mutex() : m_lock(new std::mutex()) { }
+	mutex() : m_lock(new std::mutex()) { }
 	
-	~Mutex() { }
+	~mutex() { }
 	
 	void lock() { m_lock->lock(); }
 	
@@ -68,26 +68,27 @@ private:
 
 
 template <typename LockT>
-class LockGuard
+class lock_guard
 {
 public:
-	explicit LockGuard(LockT &lock) : m_lock(lock) { m_lock.lock(); }
-	~LockGuard() { m_lock.unlock(); }
+	explicit lock_guard(LockT &lock) : m_lock(lock) { m_lock.lock(); }
+	~lock_guard() { m_lock.unlock(); }
 private:
 	LockT &m_lock;
-	DISALLOW_COPY_AND_ASSIGN(LockGuard);
+	lock_guard(const lock_guard &);
+    lock_guard & operator=(const lock_guard &);
 };
 
 
 template <typename LockT>
-class UniqueLock
+class unique_lock
 {
 public:
-	explicit UniqueLock(LockT &lock);
-	UniqueLock(LockT &lock, try_lock_t &t);
-	UniqueLock(LockT &lock, defer_lock_t &t);
+	explicit unique_lock(LockT &lock);
+	unique_lock(LockT &lock, try_lock_t &t);
+	unique_lock(LockT &lock, defer_lock_t &t);
 	
-	~UniqueLock();
+	~unique_lock();
 	
 	void lock();
 	bool try_lock();
@@ -100,8 +101,9 @@ public:
 	
 	LockT *get_lock() const;
 private:
-	std::unique_ptr<_elib::UniqueLockImpl<LockT>> m_impl;
-	DISALLOW_COPY_AND_ASSIGN(UniqueLock);
+	std::unique_ptr<_elib::unique_lock_impl<LockT>> m_impl;
+	unique_lock(const unique_lock &);
+    unique_lock & operator=(const unique_lock &);
 };
 	
 

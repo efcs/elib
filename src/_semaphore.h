@@ -35,10 +35,10 @@ namespace _elib {
 	
 using unique_lock = std::unique_lock<std::mutex>;
 
-class SemaphoreImpl 
+class semaphore_impl 
 {
 public:
-	SemaphoreImpl(unsigned int size) : m_size(size), m_count(ATOMIC_VAR_INIT(size))
+	semaphore_impl(unsigned int size) : m_size(size), m_count(ATOMIC_VAR_INIT(size))
 	{ }
 	
 	inline unsigned int down() {
@@ -82,7 +82,7 @@ private:
 	std::atomic_uint m_count;
 	std::mutex m_lock;
 	std::condition_variable m_nempty_cv;
-	DISALLOW_COPY_AND_ASSIGN(SemaphoreImpl);
+	DISALLOW_COPY_AND_ASSIGN(semaphore_impl);
 };
 
 

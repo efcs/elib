@@ -23,65 +23,65 @@
 
 namespace elib {
 	
-Semaphore::Semaphore() : m_impl(new _elib::SemaphoreImpl(UINT_MAX))
+semaphore::semaphore() : m_impl(new _elib::semaphore_impl(UINT_MAX))
 {
 }
 
-Semaphore::Semaphore(unsigned int size) : m_impl(new _elib::SemaphoreImpl(size))
+semaphore::semaphore(unsigned int size) : m_impl(new _elib::semaphore_impl(size))
 {
 }
 
-Semaphore::~Semaphore() { }
+semaphore::~semaphore() { }
 
-void Semaphore::lock() 
+void semaphore::lock() 
 { 
 	m_impl->down();
 }
 
-bool Semaphore::try_lock()
+bool semaphore::try_lock()
 {
 	unsigned int tmp;
 	return m_impl->try_down(tmp);
 }
 
-void Semaphore::unlock()
+void semaphore::unlock()
 {
 	m_impl->up();
 }
 
-unsigned int Semaphore::down()
+unsigned int semaphore::down()
 {
 	return m_impl->down();
 }
 
-bool Semaphore::try_down(unsigned int &resource)
+bool semaphore::try_down(unsigned int &resource)
 {
 	return m_impl->try_down(resource);
 }
 
-void Semaphore::up()
+void semaphore::up()
 {
 	m_impl->up();
 }
 
-unsigned int Semaphore::size() const
+unsigned int semaphore::size() const
 {
 	return m_impl->size();
 }
 
-unsigned int Semaphore::available() const
+unsigned int semaphore::available() const
 {
 	return m_impl->available();
 }
 
-unsigned int Semaphore::taken() const 
+unsigned int semaphore::taken() const 
 {
 	return m_impl->taken();
 }
 
 
 /* forced instantiation */
-template class UniqueLock<Semaphore>;
+template class unique_lock<semaphore>;
 
 	
 } /* namespace elib */

@@ -34,25 +34,25 @@ namespace _elib {
 
 
 template <typename LockT>
-class UniqueLockImpl 
+class unique_lock_impl 
 {
 public:
-	explicit UniqueLockImpl(LockT &lock) : m_lock(lock), m_released(false) {
+	explicit unique_lock_impl(LockT &lock) : m_lock(lock), m_released(false) {
 		m_lock.lock();
 		m_owns_lock = true;
 	}
 	
-	UniqueLockImpl(LockT &lock, defer_lock_t &t) : m_lock(lock), 
+	unique_lock_impl(LockT &lock, defer_lock_t &t) : m_lock(lock), 
 					m_released(false), m_owns_lock(false) {
 		UNUSED(t);				
 	} 
 					
-	UniqueLockImpl(LockT &lock, try_lock_t &t) : m_lock(lock), m_released(false) {
+	unique_lock_impl(LockT &lock, try_lock_t &t) : m_lock(lock), m_released(false) {
 		UNUSED(t);
 		m_owns_lock = m_lock.try_lock();
 	}
 	
-	~UniqueLockImpl() {
+	~unique_lock_impl() {
 		if (m_owns_lock)
 			m_lock.unlock();
 	}
@@ -95,7 +95,7 @@ public:
 private:
 	LockT &m_lock;
 	bool m_released, m_owns_lock;
-	DISALLOW_COPY_AND_ASSIGN(UniqueLockImpl);
+	DISALLOW_COPY_AND_ASSIGN(unique_lock_impl);
 };
 
 
@@ -103,61 +103,61 @@ private:
 
 
 template <typename LockT>
-UniqueLock<LockT>::UniqueLock(LockT &lock) 
-					: m_impl(new _elib::UniqueLockImpl<LockT>(lock))
+unique_lock<LockT>::unique_lock(LockT &lock) 
+					: m_impl(new _elib::unique_lock_impl<LockT>(lock))
 { }
 					
 template <typename LockT>
-UniqueLock<LockT>::UniqueLock(LockT &lock, try_lock_t& t)
-					: m_impl(new _elib::UniqueLockImpl<LockT>(lock, t)) 
+unique_lock<LockT>::unique_lock(LockT &lock, try_lock_t& t)
+					: m_impl(new _elib::unique_lock_impl<LockT>(lock, t)) 
 { }
 
 template <typename LockT>
-UniqueLock<LockT>::UniqueLock(LockT &lock, defer_lock_t& t)
-					: m_impl(new _elib::UniqueLockImpl<LockT>(lock, t)) 
+unique_lock<LockT>::unique_lock(LockT &lock, defer_lock_t& t)
+					: m_impl(new _elib::unique_lock_impl<LockT>(lock, t)) 
 { }
 
 template <typename LockT>
-UniqueLock<LockT>::~UniqueLock() { }
+unique_lock<LockT>::~unique_lock() { }
 
 template <typename LockT>
-void UniqueLock<LockT>::lock()
+void unique_lock<LockT>::lock()
 {
 	m_impl->lock();
 }
 
 template <typename LockT>
-bool UniqueLock<LockT>::try_lock()
+bool unique_lock<LockT>::try_lock()
 {
 	return m_impl->try_lock();
 }
 
 template <typename LockT>
-void UniqueLock<LockT>::unlock()
+void unique_lock<LockT>::unlock()
 {
 	m_impl->unlock();
 }
 
 template <typename LockT>
-void UniqueLock<LockT>::release()
+void unique_lock<LockT>::release()
 {
 	m_impl->release();
 }
 
 template <typename LockT>
-bool UniqueLock<LockT>::owns_lock() const
+bool unique_lock<LockT>::owns_lock() const
 {
 	return m_impl->owns_lock();
 }
 
 template <typename LockT>
-UniqueLock<LockT>::operator bool() const
+unique_lock<LockT>::operator bool() const
 {
 	return m_impl->owns_lock();
 }
 
 template <typename LockT>
-LockT *UniqueLock<LockT>::get_lock() const 
+LockT *unique_lock<LockT>::get_lock() const 
 {
 	return m_impl->get_lock();
 }

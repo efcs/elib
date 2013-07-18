@@ -22,7 +22,7 @@
 namespace elib {
 	
 /* force templates instant's into the library */
-template class UniqueLock<std::mutex>;
-template class UniqueLock<Mutex>;
+template class unique_lock<std::mutex>;
+template class unique_lock<mutex>;
 
 } /* namespace elib */

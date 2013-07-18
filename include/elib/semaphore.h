@@ -16,56 +16,57 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_SHAREDLOCK_H
-#define ELIB_SHAREDLOCK_H
+#ifndef ELIB_SEMAPHORE_H
+#define ELIB_SEMAPHORE_H
 
 #include "lock.h"
 #include <memory>
 
 namespace elib {
-
 	
-namespace _elib { class SharedLockImpl; }
 
+namespace _elib {
+class semaphore_impl;	
+}
 
-class SharedOnlyLock;
-
-class SharedLock : public LockInterface
+class semaphore_interface 
 {
 public:
-	SharedLock();
-	~SharedLock();
+	virtual ~semaphore_interface() { }
+	virtual unsigned int down() = 0;
+	virtual bool try_down(unsigned int &resource) = 0;
+	virtual void up() = 0;
 	
-	void lock();
-	bool try_lock();
-	void unlock();
-	
-	void lock_shared();
-	bool try_lock_shared();
-	void unlock_shared();
-	
-	SharedOnlyLock &as_shared_only_lock();
-private:
-	void init();
-	std::shared_ptr<_elib::SharedLockImpl> m_impl;
+	virtual unsigned int size() const = 0;
+	virtual unsigned int available() const = 0;
+	virtual unsigned int taken() const = 0;
 };
 
 
-class SharedOnlyLock : public LockInterface
+class semaphore : public semaphore_interface, public lock_interface
 {
-private:
-	friend class SharedLock;
-	SharedOnlyLock(SharedLock &lock);
 public:
-	~SharedOnlyLock();
-	/* this just maps to the shared versions of the function */
+	semaphore();
+	explicit semaphore(unsigned int size);
+	~semaphore();
+	
+	/* semaphore interface */
+	unsigned int down();
+	bool try_down(unsigned int &resource);
+	void up();
+	
+	unsigned int size() const;
+	unsigned int available() const;
+	unsigned int taken() const;
+	
+	/* lock interface */
 	void lock();
 	bool try_lock();
 	void unlock();
 private:
-	SharedLock &m_lock;
+	std::shared_ptr<_elib::semaphore_impl> m_impl;
 };
 
 
 } /* namespace elib */
-#endif /* ELIB_SHAREDLOCK_H */
+#endif /* ELIB_SEMAPHORE_H */

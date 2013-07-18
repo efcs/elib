@@ -26,20 +26,20 @@ if (CONFIG_MY_BUILD)
 endif()
 	
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
 set( CMAKE_BUILD_TYPE RELEASE )
-set( CMAKE_CXX_FLAGS_RELEASE "-O3  -D NDEBUG" )
-set( CMAKE_C_FLAGS_RELEASE "-O3  -D NDEBUG" )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG" )
+set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )
 set( CMAKE_CXX_FLAGS_DEBUG "-g -O0" )
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/src/include)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 find_package( Threads REQUIRED )
 add_definitions(-std=c++11 -Wall -Wextra -pedantic)
-add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/src/include/elib/commondef.h)
+add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/src/commondef.h)
 
 add_subdirectory(src)
 add_subdirectory(tests)

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "_sharedlock.h"
-#include "_lock.h"
+#include "./detail/_sharedlock.h"
+#include "./detail/_lock.h"
 
 #include <iostream>
 

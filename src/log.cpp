@@ -1,23 +1,7 @@
-/* 
- * Copyright (C) 2013  Eric Fiselier
- * 
- * This file is part of elib.
- *
- * elib is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * elib is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with elib.  If not, see <http://www.gnu.org/licenses/>.
- */
 #include "elib/log.h"
-#include "_log.h"
+#include "./detail/_log.h"
+
+#include <sstream>
 
 #define BUFF_MAX 1024
 
@@ -33,221 +17,169 @@
 
 	
 namespace elib {
+    
 
-
-Log::Log() : m_impl(new _elib::LogImpl(LDEFAULT))
+enum_traits<level_e>::map_type enum_traits<level_e>::name_map =
+    { {level_e::none, "none"},
+      {level_e::debug, "debug"},
+      {level_e::info, "info"},
+      {level_e::step, "step"},
+      {level_e::warn, "warn"},
+      {level_e::err, "err"},
+      {level_e::fatal, "fatal"},
+      {level_e::raw_out, "raw_out"},
+      {level_e::raw_err, "raw_err"}
+    };
+    
+    
+	
+log::log()
+    : m_impl(new log_impl)
 {
 }
 
-Log::Log(int level) : m_impl(new _elib::LogImpl(level))
+const std::string &
+log::prompt(level_e level) const
 {
+	return m_impl->prompt(level);
 }
 
-Log::~Log()
+void 
+log::prompt(level_e level, const std::string &prompt)
 {
+	m_impl->prompt(level, prompt);
 }
 
-std::string Log::get_prompt(int level) const
+void 
+log::level(level_e level)
 {
-	return m_impl->get_prompt(level);
+	m_impl->level(level);
 }
 
-bool Log::set_prompt(int level, const std::string &prompt)
+level_e 
+log::level()
 {
-	return m_impl->set_prompt(level, prompt);
+	return m_impl->level();
 }
 
-void Log::set_level(int level)
-{
-	m_impl->set_level(level);
-}
-
-int Log::modify_level(int delta)
-{
-	return m_impl->modify_level(delta);
-}
-
-int Log::get_level() const
-{
-	return m_impl->get_level();
-}
-
-void Log::log(int level, const char *msg, ... ) 
+void 
+log::print(level_e level, const char *msg, ... ) 
 {
 	LOG_FUNC_HANDLER(level);
 }
 
-void Log::log(int level, const std::string &msg)
+void 
+log::print(level_e level, const std::string &msg)
 {
 	m_impl->log(level, msg.c_str());
 }
 	
-void Log::debug(const char *msg, ... )
+void 
+log::debug(const char *msg, ... )
 {
-	LOG_FUNC_HANDLER(LDEBUG);
+	LOG_FUNC_HANDLER(level_e::debug);
 }
 
-void Log::info(const char *msg, ... )
+void 
+log::debug(const std::string & s)
 {
-	LOG_FUNC_HANDLER(LINFO);
+    m_impl->log(level_e::debug, s.c_str());
 }
 
-void Log::step(const char *msg, ... )
+void 
+log::info(const char *msg, ... )
 {
-	LOG_FUNC_HANDLER(LSTEP);
+	LOG_FUNC_HANDLER(level_e::info);
 }
 
-void Log::warning(const char *msg, ... )
+void 
+log::info(const std::string & s)
 {
-	LOG_FUNC_HANDLER(LWARNING);
+    m_impl->log(level_e::info, s.c_str());
 }
 
-void Log::error(const char *msg, ... )
+void 
+log::step(const char *msg, ... )
 {
-	LOG_FUNC_HANDLER(LERROR);
+	LOG_FUNC_HANDLER(level_e::step);
 }
 
-void Log::fatal(const char *msg, ...)
+void 
+log::step(const std::string & s)
 {
-	LOG_FUNC_HANDLER(LFATAL);
-}
-	
-void Log::raw_out(const char *msg, ...)
-{
-	LOG_FUNC_HANDLER(LRAW_OUT);
+    m_impl->log(level_e::step, s.c_str());
 }
 
-void Log::raw_out(const std::string &msg)
+void 
+log::warn(const char *msg, ... )
 {
-	m_impl->log(LRAW_OUT, msg.c_str());
+	LOG_FUNC_HANDLER(level_e::warn);
 }
 
-void Log::raw_err(const char *msg, ...)
+void 
+log::warn(const std::string & s)
 {
-	LOG_FUNC_HANDLER(LRAW_ERR);
+    m_impl->log(level_e::warn, s.c_str());
 }
 
-void Log::raw_err(const std::string &msg)
+void 
+log::err(const char *msg, ... )
 {
-	m_impl->log(LRAW_ERR, msg.c_str());
+	LOG_FUNC_HANDLER(level_e::err);
 }
 
-
-/* --------------- FILE LOG ---------------------- */
-FileLog::FileLog(const char* filename) 
-			: m_impl(new _elib::FileLogImpl(LDEFAULT, filename))
+void 
+log::err(const std::string & s)
 {
+    m_impl->log(level_e::err, s.c_str());
 }
 
-
-FileLog::FileLog(int level, const char *filename) 
-			: m_impl(new _elib::FileLogImpl(level, filename))
+void 
+log::fatal(const char *msg, ...)
 {
+	LOG_FUNC_HANDLER(level_e::fatal);
 }
 
-FileLog::~FileLog()
+void 
+log::fatal(const std::string & s)
 {
+    m_impl->log(level_e::fatal, s.c_str());
 }
 
-void FileLog::set_file(const char* filename)
+void 
+log::raw_out(const char *msg, ...)
 {
-	m_impl->set_file(filename);
+	LOG_FUNC_HANDLER(level_e::raw_out);
 }
 
-std::string FileLog::filename() const
+void 
+log::raw_out(const std::string &msg)
 {
-	return m_impl->filename();
+	m_impl->log(level_e::raw_out, msg.c_str());
 }
 
-void FileLog::close()
+void 
+log::raw_err(const char *msg, ...)
 {
-	m_impl->close();
+	LOG_FUNC_HANDLER(level_e::raw_err);
 }
 
-std::string FileLog::get_prompt(int level) const
+void
+log::raw_err(const std::string & msg)
 {
-	return m_impl->get_prompt(level);
+	m_impl->log(level_e::raw_err, msg.c_str());
 }
 
-bool FileLog::set_prompt(int level, const std::string &prompt)
+void
+log::on(bool p) 
 {
-	return m_impl->set_prompt(level, prompt);
+    m_impl->on(p);
 }
 
-void FileLog::set_level(int level)
+bool
+log::on() const
 {
-	m_impl->set_level(level);
+    return m_impl->on();
 }
-
-int FileLog::modify_level(int delta)
-{
-	return m_impl->modify_level(delta);
-}
-
-int FileLog::get_level() const
-{
-	return m_impl->get_level();
-}
-
-void FileLog::log(int level, const char *msg, ... ) 
-{
-	LOG_FUNC_HANDLER(level);
-}
-
-void FileLog::log(int level, const std::string &msg)
-{
-	m_impl->log(level, msg.c_str());
-}
-	
-void FileLog::debug(const char *msg, ... )
-{
-	LOG_FUNC_HANDLER(LDEBUG);
-}
-
-void FileLog::info(const char *msg, ... )
-{
-	LOG_FUNC_HANDLER(LINFO);
-}
-
-void FileLog::step(const char *msg, ... )
-{
-	LOG_FUNC_HANDLER(LSTEP);
-}
-
-void FileLog::warning(const char *msg, ... )
-{
-	LOG_FUNC_HANDLER(LWARNING);
-}
-
-void FileLog::error(const char *msg, ... )
-{
-	LOG_FUNC_HANDLER(LERROR);
-}
-
-void FileLog::fatal(const char *msg, ...)
-{
-	LOG_FUNC_HANDLER(LFATAL);
-}
-	
-void FileLog::raw_out(const char *msg, ...)
-{
-	LOG_FUNC_HANDLER(LRAW_OUT);
-}
-
-void FileLog::raw_out(const std::string &msg)
-{
-	m_impl->log(LRAW_OUT, msg.c_str());
-}
-
-void FileLog::raw_err(const char *msg, ...)
-{
-	LOG_FUNC_HANDLER(LRAW_ERR);
-}
-
-void FileLog::raw_err(const std::string &msg)
-{
-	m_impl->log(LRAW_ERR, msg.c_str());
-}
-
 
 } /* namespace elib */

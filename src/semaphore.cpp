@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "_semaphore.h"
-#include "_lock.h"
+#include "./detail/_semaphore.h"
+#include "./detail/_lock.h"
 
 #include <climits>
 

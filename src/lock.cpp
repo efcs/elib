@@ -17,7 +17,7 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/lock.h"
-#include "_lock.h"
+#include "./detail/_lock.h"
 
 namespace elib {
 	

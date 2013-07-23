@@ -7,7 +7,8 @@
 
 add_definitions(-fPIC)
 
-set(dotSrc lock.cpp log.cpp semaphore.cpp sharedlock.cpp)
+set(dotDir ${CMAKE_CURRENT_LIST_DIR})
+aux_source_directory(${dotDir} dotSrc)
 
 # compile into objects
 add_library(ObjLib OBJECT ${dotSrc})

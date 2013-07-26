@@ -1,5 +1,5 @@
-#ifndef ELIB_FILELOG_H
-#define ELIB_FILELOG_H
+#ifndef ELIB_FILE_LOG_H
+#define ELIB_FILE_LOG_H
 
 #include <elib/log.h>
 
@@ -17,7 +17,10 @@ public:
     ~file_log();
     
     const std::string & filename() const;
-    bool open(const std::string & s);
+    
+    bool open(const std::string & s,
+              std::ios_base::openmode mode=std::ios_base::app);
+    
     bool good() const;
     void close();
     
@@ -63,4 +66,4 @@ private:
     
 
 } /* namespace elib */
-#endif /* ELIB_FILELOG_H */
+#endif /* ELIB_FILE_LOG_H */

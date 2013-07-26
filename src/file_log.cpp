@@ -1,16 +1,34 @@
+/* 
+ * Copyright (C) 2013  Eric Fiselier
+ * 
+ * This file is part of elib.
+ *
+ * elib is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * elib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with elib.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include "elib/file_log.h"
-#include "./detail/_file_log.h"
+#include "_file_log.h"
 
 #define BUFF_MAX 1024
 
-#define __FMT_ARGS() char __fmt_buff[BUFF_MAX]; \
+#define _FMT_ARGS() char __fmt_buff[BUFF_MAX]; \
     va_list __args; \
     va_start(__args, msg); \
     vsnprintf(__fmt_buff, BUFF_MAX, msg, __args); \
     va_end(__args)
     
     
-#define LOG_FUNC_HANDLER(level) __FMT_ARGS(); \
+#define LOG_FUNC_HANDLER(level) _FMT_ARGS(); \
     m_impl->log(level, __fmt_buff) 
 
 namespace elib {
@@ -23,7 +41,7 @@ file_log::file_log()
 file_log::file_log(const std::string & filename)
     : m_impl(new file_log_impl)
 {
-    m_impl->open(filename);
+    m_impl->open(filename, std::ios_base::app);
 }
 
 file_log::~file_log()
@@ -37,9 +55,9 @@ file_log::filename() const
 }
 
 bool
-file_log::open(const std::string & filename)
+file_log::open(const std::string & filename, std::ios_base::openmode mode)
 {
-    return m_impl->open(filename);
+    return m_impl->open(filename, mode);
 }
 
 bool

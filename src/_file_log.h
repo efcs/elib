@@ -14,7 +14,7 @@ public:
     file_log_impl();
     ~file_log_impl();
     
-    bool open(const std::string & filename);
+    bool open(const std::string & filename, std::ios_base::openmode mode);
     const std::string & filename() const;
     bool good() const;
     void close();
@@ -40,17 +40,16 @@ file_log_impl::~file_log_impl()
 }
 
 inline bool
-file_log_impl::open(const std::string & filename)
+file_log_impl::open(const std::string & filename,
+                    std::ios_base::openmode mode)
 {
     lock_guard lock(_lock());
     
     m_filename = filename;
     m_out.clear();
-    m_out.open(filename);
-    if (m_out.good())
-        m_out.seekp(0, std::ios_base::end);
+    m_out.open(filename, mode);
 
-    return m_out.good();
+    return good();
 }
 
 inline const std::string &
@@ -62,7 +61,7 @@ file_log_impl::filename() const
 inline bool
 file_log_impl::good() const
 {
-    return m_out.good();
+    return m_out.is_open() && m_out.good();
 }
 
 inline void
@@ -76,9 +75,10 @@ file_log_impl::close()
 inline std::ostream & 
 file_log_impl::_get_stream(level_e l)
 {
-    ((void)l); //UNUSED
+    UNUSED(l);
     return m_out;
 }
+
 
 } /* namespace elib */
 #endif /* ELIB__FILELOG_H */

@@ -1,19 +1,19 @@
 /* Copyright (C) 2013  Eric Fiselier
  * 
- * This file is part of ecc.
+ * This file is part of elib.
  *
- * ecc is free software: you can redistribute it and/or modify
+ * elib is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * ecc is distributed in the hope that it will be useful,
+ * elib is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with ecc.  If not, see <http://www.gnu.org/licenses/>.
+ * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #ifndef ELIB__LOG_H
 #define ELIB__LOG_H
@@ -28,6 +28,7 @@
 
 namespace elib {
 	
+    
 using lock_guard = std::lock_guard<std::mutex>;
 
 
@@ -37,43 +38,45 @@ public:
     static bool is_raw_level(level_e e);
     static bool is_basic_level(level_e e);
     static bool is_valid_level(level_e e);
-public:	
-	const std::string & prompt(level_e l) const;
-	void prompt(level_e l, const std::string & p);
-	
-	void level(level_e l);
-	level_e level() const;
-	
-	void log(level_e l, const char *msg);
+public: 
+    const std::string & prompt(level_e l) const;
+    void prompt(level_e l, const std::string & p);
     
-	void on(bool b);
+    void level(level_e l);
+    level_e level() const;
+    
+    void log(level_e l, const char *msg);
+    
+    void on(bool b);
     bool on() const;
 protected:
-	virtual std::ostream & 
-	_get_stream(level_e l) = 0;
-	
-	bool 
-	_should_print(level_e l) const;
+    virtual std::ostream & 
+    _get_stream(level_e l) = 0;
+    
+    bool 
+    _should_print(level_e l) const;
     
     std::mutex & 
     _lock() const;
 private:
-	level_e m_level = basic_log::default_level;
+    level_e m_level = basic_log::default_level;
     bool m_on = true;
 
-	std::map<level_e, std::string> m_prompts = {
-								{level_e::debug, "Debug: "},
-								{level_e::info, "Info: "},
-								{level_e::step, "--> "},
-								{level_e::warn, "Warning: "},
-								{level_e::err, "ERROR: "},
-								{level_e::fatal, "FATAL: "},
-								{level_e::raw_out, ""},
-								{level_e::raw_err, ""} };
+    std::map<level_e, std::string> m_prompts = {
+                                {level_e::debug, "Debug: "},
+                                {level_e::info, "Info: "},
+                                {level_e::step, "--> "},
+                                {level_e::warn, "Warning: "},
+                                {level_e::err, "ERROR: "},
+                                {level_e::fatal, "FATAL: "},
+                                {level_e::raw_out, ""},
+                                {level_e::raw_err, ""} };
                                 
     mutable std::mutex m_lock;
-    
+
 };
+
+
 
 
 inline const std::string &
@@ -118,7 +121,7 @@ basic_log_impl::log(level_e l, const char *msg)
     if (! is_valid_level(l))
         throw std::logic_error("not a valid level");
     
-    if (! _should_print(l) || ! m_on)
+    if (! _should_print(l))
         return;
 
     lock_guard lock(m_lock);
@@ -145,8 +148,9 @@ basic_log_impl::on() const
 inline bool 
 basic_log_impl::_should_print(level_e l) const 
 {
-    return (is_raw_level(l) || 
-            (is_basic_level(l) && m_level <= l));
+    return (m_on && 
+            (is_raw_level(l) || 
+            (is_basic_level(l) && m_level <= l)));
 }
 
 inline bool 

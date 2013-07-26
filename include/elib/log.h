@@ -15,17 +15,16 @@ class log_impl;
 
 
 /* RAW levels are not affected by the level */
-enum class level_e : BASE_ENUM
-{ 	
-   none = 0,
-	debug,
-	info,
-	step,
-	warn,
-	err,
-	fatal,
-	raw_out,
-	raw_err
+enum class level_e : BASE_ENUM {
+    none = 0,
+    debug,
+    info,
+    step,
+    warn,
+    err,
+    fatal,
+    raw_out,
+    raw_err
 };
 
 
@@ -120,17 +119,15 @@ private:
 
 
 template <>
-struct enum_traits<level_e> {
+struct basic_enum_traits<level_e> {
     static constexpr level_e none_value = level_e::none;
     static constexpr level_e default_value = log::default_level;
     static constexpr level_e first_value = level_e::none;
     static constexpr level_e last_value = level_e::raw_err;
-    static constexpr unsigned size = enum_size(first_value, last_value);
     
     typedef const std::map<level_e, std::string> map_type;
     static map_type name_map;
 };
-
 
 
 } /* namespace elib */

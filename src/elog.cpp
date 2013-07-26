@@ -1,16 +1,18 @@
 #include "elib/elog.h"
-#include "./detail/_log.h"
+#include "_log.h"
+
 
 #define BUFF_MAX 1024
 
-#define __FMT_ARGS() char __fmt_buff[BUFF_MAX]; \
+
+#define _FMT_ARGS() char __fmt_buff[BUFF_MAX]; \
     va_list __args; \
     va_start(__args, msg); \
     vsnprintf(__fmt_buff, BUFF_MAX, msg, __args); \
     va_end(__args)
     
     
-#define LOG_FUNC_HANDLER(level) __FMT_ARGS(); \
+#define LOG_FUNC_HANDLER(level) _FMT_ARGS(); \
     elog::m_impl->log(level, __fmt_buff) 
 
     

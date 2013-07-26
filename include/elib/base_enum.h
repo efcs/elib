@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_UTIL_BASEENUM_H
-#define ELIB_UTIL_BASEENUM_H
+#ifndef ELIB_BASE_ENUM_H
+#define ELIB_BASE_ENUM_H
 
 #include <stdexcept>
+#include <iterator>
 #include <string>
 #include <map>
 
@@ -29,15 +30,22 @@
 
 namespace elib {
 
+    
+/* Another way to define a enumeration class,
+ * this macro ensures proper subclassing of BASE_ENUM */
+#define ELIB_ENUM(TypeName) \
+    enum class TypeName : BASE_ENUM
+
+    
 /* all enum classes should derived from BASE_ENUM
- * so that they can be forward declared properly */ 
+ * so that they can be be used with casting functions and iterators */
 typedef unsigned BASE_ENUM;
 
 
 class bad_enum_cast : public std::logic_error {
 public:
     bad_enum_cast()
-        : std::logic_error("bad_enum_cast")
+        : std::logic_error("bad enum cast")
     { }
     
     bad_enum_cast(const std::string & what)
@@ -46,117 +54,121 @@ public:
 };
 
 
-
 /* get the size of an enum, for use in defining size in enum_traits */
 template <typename Enum>
-inline constexpr unsigned
-enum_size(Enum f, Enum l)
-{
-    return static_cast<BASE_ENUM>(l) - static_cast<BASE_ENUM>(f) + 1;
-}
+constexpr unsigned
+enum_size(Enum first, Enum last);
+
+
+template <typename Enum>
+unsigned
+enum_size();
+
+
+/* cast strings and BASE_ENUM to Enum values */
+template <typename Enum>
+Enum
+enum_cast(const std::string & s);
+
+
+template <typename Enum>
+Enum
+enum_cast(BASE_ENUM x);
+
+
+/* Cast Enum values to an std::string or to
+ * BASE_ENUM */
+template <typename Ret, typename Enum>
+Ret
+lexical_enum_cast(Enum e);
+
+
+/* A iterator class for enumerations */
+template <typename Enum>
+class enum_iterator {
+public:
+    typedef Enum value_type;
+    typedef Enum& reference;
+    typedef Enum* pointer;
+    typedef std::forward_iterator_tag iterator_category;
+    typedef unsigned difference_type;
+    
+    constexpr
+    enum_iterator(Enum e);
+    
+    enum_iterator
+    operator++();
+    
+    enum_iterator
+    operator++(int);
+    
+    reference operator*();
+    pointer operator->();
+    
+    bool operator==(const enum_iterator & other);
+    bool operator!=(const enum_iterator & other);
+private:
+    Enum m_e;
+};
 
 
 /* each enumeration must implement this in order
  * to use enum_cast and lexical_enum_cast */
 template <typename Enum>
-struct enum_traits {
-    static constexpr Enum none_value = 0;
-    static constexpr Enum default_value = 0;
-    static constexpr Enum first_value = 0;
-    static constexpr Enum last_value = 0;
-    static constexpr unsigned size = 0;
+struct basic_enum_traits {
+    static constexpr const Enum none_value = 0;
+    static constexpr const Enum default_value = 0;
+    static constexpr const Enum first_value = 0;
+    static constexpr const Enum last_value = 0;
     
     typedef const std::map<Enum, std::string> map_type;
     static map_type name_map;
 };
 
 
-template <typename Ret, typename Enum>
-struct lexical_cast_helper {
-    static Ret
-    cast(Enum e);
-};
-
-
+/* Allow for static access to begin and end iterator objects 
+ * for an enumeration, as well as its size. This struct should be used
+ * to access values in basic_enum_traits */
 template <typename Enum>
-struct lexical_cast_helper<std::string, Enum> {
-    static std::string
-    cast(Enum e)
-    {
-        typedef enum_traits<Enum> traits;
-        
-        if (traits::name_map.count(e))
-            return traits::name_map.at(e);
-        
-        throw bad_enum_cast();
-    }
-};
-
-
-template <typename Enum>
-struct lexical_cast_helper<BASE_ENUM, Enum> {
-    static BASE_ENUM
-    cast(Enum e)
-    {
-        try {
-            return static_cast<BASE_ENUM>(e);
-        } catch (...) {
-            throw bad_enum_cast();
-        }
-    }
-};
-
-
-template <typename Enum>
-inline unsigned
-enum_size()
-{
-    return enum_traits<Enum>::size;
-}
+struct enum_traits : public basic_enum_traits<Enum> {
+    typedef basic_enum_traits<Enum> basic_traits;
     
+    static constexpr const unsigned
+    size = enum_size(basic_traits::first_value, basic_traits::last_value);
     
+    typedef enum_iterator<Enum> iterator;
+    typedef enum_iterator<Enum> const_iterator;
+    
+    static const iterator begin;
+    static const iterator end;
+    
+    static const const_iterator cbegin;
+    static const const_iterator cend;
+};
+
+
+/* Allow for enums to be iterated over using for each loops
+ *     for (auto i : enum_iter<Enum>())  */
 template <typename Enum>
-inline Enum
-enum_cast(const std::string & s)
-{
+class enum_iter {
+public:
+    typedef enum_iterator<Enum> iterator;
+    typedef enum_iterator<Enum> const_iterator;
     typedef enum_traits<Enum> traits;
     
-    for (auto it=traits::name_map.begin(); 
-         it != traits::name_map.end(); ++it) {
-        
-        if (it->second == s)
-            return it->first;
-    }
+    iterator begin();
+    iterator end();
     
-    throw bad_enum_cast(s);
-}
-
-
-template <typename Enum>
-inline Enum
-enum_cast(BASE_ENUM x)
-{
-    typedef enum_traits<Enum> traits;
-    
-    Enum test = static_cast<Enum>(x);
-    if (test >= traits::first_value && test <= traits::last_value)
-        return test;
-    
-    throw bad_enum_cast();
-}
-
-
-/* Ret is one of BASE_ENUM, std::string */
-template <typename Ret, typename Enum>
-inline Ret
-lexical_enum_cast(Enum e)
-{
-    return lexical_cast_helper<Ret, Enum>::cast(e);
-}
-
-
-
+    const_iterator cbegin() const;
+    const_iterator cend() const;
+};
 
 
 } /* namespace elib */
-#endif /* UTIL_BASEENUM_H */
+
+
+/* Include the inline definitions */
+#include <elib/detail/_base_enum.h>
+
+
+#endif /*ELIB_BASE_ENUM_H */

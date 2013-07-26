@@ -6,7 +6,15 @@
 # must be commented out.
 
 
-set(dotSrc alltests.cpp  thread_test.cpp sharedlock_test.cpp semaphore_test.cpp)
+set(dotSrc alltests.cpp sharedlock_test.cpp semaphore_test.cpp)
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED OFF)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(Boost 1.49.0 COMPONENTS unit_test_framework REQUIRED)
+
+include_directories(${Boost_INCLUDE_DIRS})
 
 add_library(TestObjLib OBJECT ${dotSrc})
 
@@ -14,8 +22,10 @@ add_executable(elib_test_static $<TARGET_OBJECTS:TestObjLib>)
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObjLib>)
 
 
-target_link_libraries(elib_test_static elib_static ${LD_FLAGS} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(elib_test_shared elib ${LD_FLAGS})
+target_link_libraries(elib_test_static elib_static ${LD_FLAGS} 
+                      ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+                      
+target_link_libraries(elib_test_shared elib ${LD_FLAGS} ${Boost_LIBRARIES})
 
 
 

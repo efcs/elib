@@ -28,16 +28,12 @@ distclean:
 install:
 	@ $(MAKE) --no-print-directory -C build install
 	
-.PHONY: uninstall
-uninstall:
-	@ $(error no such rule uninstall)
-	
 	
 .PHONY: check
 check:
+	@ echo === Running static tests ===
 	@ ./bin/elib_test_static
-	@ echo "Static Library tests passed"
 	@ echo ""
+	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared
-	@ echo "Shared Library tests passed"
 

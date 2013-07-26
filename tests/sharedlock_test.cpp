@@ -1,3 +1,6 @@
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 #include "elib/sharedlock.h"
 
 #include "thread_test.h"
@@ -16,7 +19,6 @@
 
 #define BUFF_LEN 1000000
 
-//#define PRINT_DEBUG
 
 using lock_guard_shared = elib::lock_guard<elib::shared_only_lock>;
 using lock_guard = elib::lock_guard<elib::shared_lock>;
@@ -36,9 +38,7 @@ public:
 		for (int i=0; i < NUM_READS; ++i) {
 			{
 				lock_guard_shared lock(s_lock);
-				this->print(std::string("start " + std::to_string(i)).c_str());
 				this->verify();
-				this->print("end");
 			}
 		}
 	}
@@ -55,16 +55,6 @@ private:
 		}
 	}
 	
-	inline void print(const char *msg) {
-#if		defined(PRINT_DEBUG)
-		std::lock_guard<std::mutex> lock(m_io_lock);
-		std::cout << "Reader:" << m_id;
-		std::cout << " " << msg << std::endl;
-		std::cout.flush();
-#else
-		UNUSED(msg);
-#endif
-	}
 	
 	int m_id;
 	std::mutex &m_io_lock;
@@ -87,10 +77,8 @@ public:
 		for (int i=0; i < NUM_WRITES; ++i) {
 			{
 				lock_guard lock(m_shared_lock);
-				this->print(std::string("start " + std::to_string(i)).c_str());
 				this->write();
 				this->verify();
-				this->print(std::string("end " + std::to_string(i)).c_str());
 			}
 		}
 	}
@@ -113,17 +101,6 @@ private:
 		}
 	}
 	
-	inline void print(const char *msg) {
-#if		defined(PRINT_DEBUG)
-		std::lock_guard<std::mutex> lock(m_io_lock);
-		std::cout << "Writer:" << m_id;
-		std::cout << " " << msg << std::endl;
-		std::cout.flush();
-#else
-		UNUSED(msg);
-#endif 
-	}
-	
 	int m_id;
 	std::mutex &m_io_lock;
 	elib::shared_lock &m_shared_lock;
@@ -131,12 +108,10 @@ private:
 	char m_val;
 };
 
+BOOST_AUTO_TEST_SUITE(sharedlock_test_suite)
 
-
-void sharedlock_test()
-{
-	std::cout << "Running sharedlock_tests";
-	
+BOOST_AUTO_TEST_CASE(test_sharedlock)
+{	
 	elib::shared_lock shared_lock;
 	std::mutex io_lock;
 	
@@ -159,4 +134,7 @@ void sharedlock_test()
 		w = new WriterThread(uid++, std::ref(io_lock), std::ref(shared_lock), str, curr_val++);
 	
 	run_thread_tests(readers, writers);
+    BOOST_CHECK(true);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

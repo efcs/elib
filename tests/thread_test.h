@@ -12,11 +12,15 @@ public:
 };
 
 /* empty version of template */
-void run_thread_tests();
+inline void 
+run_thread_tests()
+{ 
+}
 
 template <typename FirstT, typename ...RestT>
-void run_thread_tests(std::vector<FirstT> first, 
-			   std::vector<RestT>... rest)
+inline void 
+run_thread_tests(std::vector<FirstT> first, 
+			     std::vector<RestT>... rest)
 {
 	std::vector<std::thread*> threads;
 	

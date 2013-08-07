@@ -21,6 +21,7 @@
 
 #include <stdexcept>
 #include <iterator>
+#include <limits>
 #include <string>
 #include <map>
 
@@ -29,17 +30,6 @@
  * enum class */
 
 namespace elib {
-
-    
-/* Another way to define a enumeration class,
- * this macro ensures proper subclassing of BASE_ENUM */
-#define ELIB_ENUM(TypeName) \
-    enum class TypeName : BASE_ENUM
-
-    
-/* all enum classes should derived from BASE_ENUM
- * so that they can be be used with casting functions and iterators */
-typedef unsigned BASE_ENUM;
 
 
 class bad_enum_cast : public std::logic_error {
@@ -54,34 +44,25 @@ public:
 };
 
 
-/* get the size of an enum, for use in defining size in enum_traits */
+/* each enumeration must implement this in order
+ * to use enum_cast and lexical_enum_cast */
 template <typename Enum>
-constexpr unsigned
-enum_size(Enum first, Enum last);
+struct basic_enum_traits {
+    static constexpr const bool contiguous = false;
+    
+    static constexpr const Enum default_value = 0;
+    static constexpr const Enum first_value = 0;
+    static constexpr const Enum last_value = 0;
+    
+    typedef const std::map<Enum, std::string> map_type;
+    static map_type name_map;
+};
 
 
-template <typename Enum>
-unsigned
-enum_size();
-
-
-/* cast strings and BASE_ENUM to Enum values */
-template <typename Enum>
-Enum
-enum_cast(const std::string & s);
-
-
-template <typename Enum>
-Enum
-enum_cast(BASE_ENUM x);
-
-
-/* Cast Enum values to an std::string or to
- * BASE_ENUM */
-template <typename Ret, typename Enum>
-Ret
-lexical_enum_cast(Enum e);
-
+enum class iter_pos_e {
+    begin,
+    end
+};
 
 /* A iterator class for enumerations */
 template <typename Enum>
@@ -93,36 +74,26 @@ public:
     typedef std::forward_iterator_tag iterator_category;
     typedef unsigned difference_type;
     
-    constexpr
     enum_iterator(Enum e);
+    enum_iterator(iter_pos_e place = iter_pos_e::begin);
     
-    enum_iterator
+    enum_iterator &
     operator++();
     
     enum_iterator
     operator++(int);
     
-    reference operator*();
-    pointer operator->();
+    Enum operator*();
     
     bool operator==(const enum_iterator & other);
     bool operator!=(const enum_iterator & other);
 private:
-    Enum m_e;
-};
-
-
-/* each enumeration must implement this in order
- * to use enum_cast and lexical_enum_cast */
-template <typename Enum>
-struct basic_enum_traits {
-    static constexpr const Enum none_value = 0;
-    static constexpr const Enum default_value = 0;
-    static constexpr const Enum first_value = 0;
-    static constexpr const Enum last_value = 0;
-    
-    typedef const std::map<Enum, std::string> map_type;
-    static map_type name_map;
+    typedef basic_enum_traits<Enum> basic_traits;
+    typedef typename basic_traits::map_type map_type;
+    typedef typename map_type::iterator map_iterator;
+    typedef typename map_type::const_iterator map_const_iterator;
+private:
+    map_const_iterator m_iter;
 };
 
 
@@ -131,30 +102,47 @@ struct basic_enum_traits {
  * to access values in basic_enum_traits */
 template <typename Enum>
 struct enum_traits : public basic_enum_traits<Enum> {
+    static_assert(std::is_enum<Enum>::value, "Enum must be an enumeration");
+    
     typedef basic_enum_traits<Enum> basic_traits;
-    
-    static constexpr const unsigned
-    size = enum_size(basic_traits::first_value, basic_traits::last_value);
-    
     typedef enum_iterator<Enum> iterator;
     typedef enum_iterator<Enum> const_iterator;
     
-    static const iterator begin;
-    static const iterator end;
+    typedef typename std::underlying_type<Enum>::type underlying_type;
     
-    static const const_iterator cbegin;
-    static const const_iterator cend;
-};
-
-
-/* Allow for enums to be iterated over using for each loops
- *     for (auto i : enum_iter<Enum>())  */
-template <typename Enum>
-class enum_iter {
-public:
-    typedef enum_iterator<Enum> iterator;
-    typedef enum_iterator<Enum> const_iterator;
-    typedef enum_traits<Enum> traits;
+    static_assert(std::is_integral<underlying_type>::value,
+                  "underlying type must be integral");
+    
+    static constexpr const Enum
+    BAD_ENUM = static_cast<Enum>(std::numeric_limits<underlying_type>::max());
+    
+    
+    static_assert(basic_traits::first_value <= basic_traits::last_value, 
+                  "first_value must be <= last_value");
+    
+    static_assert(basic_traits::last_value != BAD_ENUM,
+                  "last value cannot be BAD_ENUM");
+    
+    static_assert((basic_traits::default_value >= basic_traits::first_value && 
+                   basic_traits::default_value <= basic_traits::last_value) || 
+                   basic_traits::default_value == BAD_ENUM,
+                  "default value must be >= first_value && <= last_value"
+                  "or BAD_ENUM");
+    
+    static unsigned
+    size();
+    
+    static bool
+    good(underlying_type val);
+    
+    static bool
+    good(Enum e);
+    
+    static iterator
+    iterator_at(Enum e);
+    
+    static iterator
+    iterator_at(iter_pos_e pos);
     
     iterator begin();
     iterator end();
@@ -162,6 +150,42 @@ public:
     const_iterator cbegin() const;
     const_iterator cend() const;
 };
+
+template <typename Enum>
+bool
+bad_enum(Enum e);
+
+/* cast strings and underlying_types to Enum values */
+template <typename Enum>
+Enum
+enum_cast(const std::string & s);
+
+template <typename Enum>
+Enum
+enum_cast(typename enum_traits<Enum>::underlying_type x);
+
+template <typename Enum>
+Enum
+safe_enum_cast(const std::string & s);
+
+template <typename Enum>
+Enum
+safe_enum_cast(typename enum_traits<Enum>::underlying_type x);
+
+template <typename Enum>
+bool
+safe_cast_failed(Enum e);
+
+/* Cast Enum values to an std::string or to
+ * BASE_ENUM */
+template <typename Ret, typename Enum>
+Ret
+lexical_enum_cast(Enum e);
+
+/* cast to base type */
+template <typename Enum>
+typename enum_traits<Enum>::underlying_type
+base_enum_cast(Enum e);
 
 
 } /* namespace elib */

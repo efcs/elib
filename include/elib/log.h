@@ -15,7 +15,7 @@ class log_impl;
 
 
 /* RAW levels are not affected by the level */
-enum class level_e : BASE_ENUM {
+enum class level_e {
     none = 0,
     debug,
     info,
@@ -120,7 +120,8 @@ private:
 
 template <>
 struct basic_enum_traits<level_e> {
-    static constexpr level_e none_value = level_e::none;
+    static constexpr const bool contiguous = true;
+    
     static constexpr level_e default_value = log::default_level;
     static constexpr level_e first_value = level_e::none;
     static constexpr level_e last_value = level_e::raw_err;

@@ -7,7 +7,7 @@
 #endif
 
 namespace elib {
-    
+      
     
 ////////////////////////////////////////////////////////////////////////////////
 //                      lexical cast helper declarations                                                                       
@@ -23,7 +23,7 @@ struct lexical_cast_helper<std::string, Enum>;
 
 
 template <typename Enum>
-struct lexical_cast_helper<BASE_ENUM, Enum>;
+struct lexical_cast_helper<typename enum_traits<Enum>::underlying_type, Enum>;
   
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -32,58 +32,64 @@ struct lexical_cast_helper<BASE_ENUM, Enum>;
 
 
 template <typename Enum>
-inline constexpr
+inline
 enum_iterator<Enum>::enum_iterator(Enum e)
-    : m_e(e)
-{ }
+{
+    m_iter = basic_traits::name_map.begin();
+    while (m_iter != basic_traits::name_map.end() &&
+           m_iter->first != e) {
+        ++m_iter;
+    }
+}
+
+template <typename Enum>
+inline
+enum_iterator<Enum>::enum_iterator(iter_pos_e pos)
+{
+    if (pos == iter_pos_e::begin) 
+        m_iter = basic_traits::name_map.begin();
+    else
+        m_iter = basic_traits::name_map.end();
+}
+
     
 template <typename Enum>
-inline enum_iterator<Enum>
+inline enum_iterator<Enum> &
 enum_iterator<Enum>::operator++()
 {
-    enum_iterator curr = *this;
-    BASE_ENUM e = static_cast<BASE_ENUM>(m_e);
-    ++e;
-    m_e = static_cast<Enum>(e);
-    return curr;
+    ++m_iter;
+    return *this;
 }
     
 template <typename Enum>
 inline enum_iterator<Enum>
 enum_iterator<Enum>::operator++(int junk)
 {
-    BASE_ENUM e = static_cast<BASE_ENUM>(m_e);
-    ++e;
-    m_e = static_cast<Enum>(e);
-    return *this;
+    UNUSED(junk);
+    enum_iterator curr = *this;
+    ++m_iter;
+    return curr;
 }
     
 template <typename Enum>
-inline typename enum_iterator<Enum>::reference 
+inline Enum
 enum_iterator<Enum>::operator*()
 { 
-    return m_e; 
-}
-    
-template <typename Enum>
-inline typename enum_iterator<Enum>::pointer 
-enum_iterator<Enum>::operator->()
-{ 
-    return &m_e;
+    return m_iter->first;
 }
     
 template <typename Enum>
 inline bool 
 enum_iterator<Enum>::operator==(const enum_iterator & other)
 { 
-    return m_e == other.m_e; 
+    return m_iter == other.m_iter; 
 }
 
 template <typename Enum>
 inline bool 
 enum_iterator<Enum>::operator!=(const enum_iterator & other)
 { 
-    return m_e != other.m_e; 
+    return m_iter != other.m_iter;
 }
 
 
@@ -91,15 +97,13 @@ enum_iterator<Enum>::operator!=(const enum_iterator & other)
 //                          enum function definitions & helpers
 ////////////////////////////////////////////////////////////////////////////////
 
-
-/* get the size of an enum, for use in defining size in enum_traits */
 template <typename Enum>
-inline constexpr unsigned
-enum_size(Enum f, Enum l)
+inline bool
+bad_enum(Enum e)
 {
-    return static_cast<BASE_ENUM>(l) - static_cast<BASE_ENUM>(f) + 1;
+    typedef enum_traits<Enum> traits;
+    return (! traits::good(e));
 }
-
 
 template <typename Ret, typename Enum>
 struct lexical_cast_helper {
@@ -124,20 +128,41 @@ struct lexical_cast_helper<std::string, Enum> {
 
 
 template <typename Enum>
-struct lexical_cast_helper<BASE_ENUM, Enum> {
-    inline static BASE_ENUM
+struct lexical_cast_helper<typename enum_traits<Enum>::underlying_type, Enum> {
+    inline static typename enum_traits<Enum>::underlying_type
     cast(Enum e)
     {
-        return static_cast<BASE_ENUM>(e);
+        return static_cast<typename enum_traits<Enum>::underlying_type>(e);
     }
 };
 
 
 template <typename Enum>
-inline unsigned
-enum_size()
+inline Enum
+safe_enum_cast(const std::string & s)
 {
-    return enum_traits<Enum>::size;
+    typedef enum_traits<Enum> traits;
+    
+    for (auto & kv : traits::name_map) {
+        if (kv.second == s)
+            return kv.first;
+    }
+    
+    return traits::BAD_ENUM;
+}
+
+
+template <typename Enum>
+inline Enum
+safe_enum_cast(typename enum_traits<Enum>::underlying_type x)
+{
+    typedef enum_traits<Enum> traits;
+    
+    Enum e = static_cast<Enum>(x);
+    if (traits::good(e))
+        return e;
+    
+    return traits::BAD_ENUM;
 }
     
     
@@ -147,8 +172,7 @@ enum_cast(const std::string & s)
 {
     typedef enum_traits<Enum> traits;
     
-    for (auto & kv : traits::name_map ) {
-        
+    for (auto & kv : traits::name_map) {
         if (kv.second == s)
             return kv.first;
     }
@@ -159,21 +183,18 @@ enum_cast(const std::string & s)
 
 template <typename Enum>
 inline Enum
-enum_cast(BASE_ENUM x)
+enum_cast(typename enum_traits<Enum>::underlying_type x)
 {
     typedef enum_traits<Enum> traits;
     
     Enum test = static_cast<Enum>(x);
-    /* BASE_ENUM should be unsigned, 
-     * so you only need to test one boundry */
-    if (test <= traits::last_value)
+    if (traits::good(test))
         return test;
     
     throw bad_enum_cast();
 }
 
-
-/* Ret is one of BASE_ENUM, std::string */
+/* Ret is one of std::string, or the underlying_type */
 template <typename Ret, typename Enum>
 inline Ret
 lexical_enum_cast(Enum e)
@@ -181,42 +202,13 @@ lexical_enum_cast(Enum e)
     return lexical_cast_helper<Ret, Enum>::cast(e);
 }
 
-
-////////////////////////////////////////////////////////////////////////////////
-//                      enum_iter definition                                                    
-////////////////////////////////////////////////////////////////////////////////
-
-
 template <typename Enum>
-inline typename enum_iter<Enum>::iterator 
-enum_iter<Enum>::begin() 
-{ 
-    return iterator(traits::first_value); 
-}
-   
-template <typename Enum>
-inline typename enum_iter<Enum>::iterator 
-enum_iter<Enum>::end()
-{ 
-    BASE_ENUM tmp = static_cast<BASE_ENUM>(traits::last_value);
-    ++tmp;
-    return iterator(static_cast<Enum>(tmp));
-}
+typename enum_traits<Enum>::underlying_type
+base_enum_cast(Enum e)
+{
+    typedef enum_traits<Enum> traits;
     
-template <typename Enum>
-inline typename enum_iter<Enum>::const_iterator 
-enum_iter<Enum>::cbegin() const
-{ 
-    return const_iterator(traits::first_value); 
-}
-    
-template <typename Enum>
-inline typename enum_iter<Enum>::const_iterator 
-enum_iter<Enum>::cend() const
-{ 
-    BASE_ENUM tmp = static_cast<BASE_ENUM>(traits::last_value);
-    ++tmp;
-    return const_iterator(static_cast<Enum>(tmp));
+    return static_cast<typename traits::underlying_type>(e);
 }
 
 
@@ -224,25 +216,63 @@ enum_iter<Enum>::cend() const
 //                          enum_traits definition
 ////////////////////////////////////////////////////////////////////////////////
 
+template <typename Enum>
+unsigned
+enum_traits<Enum>::size()
+{ return basic_traits::name_map.size(); }
 
 template <typename Enum>
-const typename enum_traits<Enum>::iterator
-enum_traits<Enum>::begin = iterator(basic_traits::first_value);
+bool
+enum_traits<Enum>::good(underlying_type val)
+{
+    Enum e = static_cast<Enum>(val);
+    return good(e);
+}
+
+template <typename Enum>
+bool
+enum_traits<Enum>::good(Enum e)
+{
+    return (basic_traits::name_map.count(e) == 1);
+}
+
+template <typename Enum>
+typename enum_traits<Enum>::iterator
+enum_traits<Enum>::iterator_at(Enum e) 
+{ return iterator(e); }
+
+template <typename Enum>
+typename enum_traits<Enum>::iterator
+enum_traits<Enum>::iterator_at(iter_pos_e pos)
+{ return iterator(pos); }
+
+template <typename Enum>
+typename enum_traits<Enum>::iterator
+enum_traits<Enum>::begin()
+{
+    return iterator(iter_pos_e::begin);
+}
 
 template <typename Enum>    
-const typename enum_traits<Enum>::iterator 
-enum_traits<Enum>::end = iterator(static_cast<Enum>(
-                   static_cast<BASE_ENUM>(basic_traits::last_value) + 1));
+typename enum_traits<Enum>::iterator 
+enum_traits<Enum>::end()
+{
+    return iterator(iter_pos_e::end);
+}
     
 template <typename Enum>    
-const typename enum_traits<Enum>::const_iterator
-enum_traits<Enum>::cbegin = const_iterator(basic_traits::first_value);
+typename enum_traits<Enum>::const_iterator
+enum_traits<Enum>::cbegin() const
+{
+    return const_iterator(basic_traits::first_value);
+}
     
 template <typename Enum>
-const typename enum_traits<Enum>::const_iterator
-enum_traits<Enum>::cend = const_iterator(static_cast<Enum>(
-                          static_cast<BASE_ENUM>(basic_traits::last_value) + 1));
-    
+typename enum_traits<Enum>::const_iterator
+enum_traits<Enum>::cend() const
+{
+    return const_iterator(iter_pos_e::end);
+}
     
 } /* namespace elib */
 #endif /* ELIB__BASE_ENUM_H */

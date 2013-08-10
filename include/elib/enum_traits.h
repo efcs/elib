@@ -49,6 +49,11 @@ template <typename Enum>
 constexpr Enum
 bad_enum();
 
+/* default value is retured as specified in basic_enum_traits */
+template <typename Enum>
+constexpr Enum
+default_enum();
+
 /* used to construct iterators for an enum class at a givin position 
  * enum_traits not provided for this */
 enum class iter_pos_e {

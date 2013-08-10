@@ -20,14 +20,14 @@
 #define ELIB_ELOG_H
 
 #include "log_level.h"
+#include "log.h"
 
 #include <string>
 #include <memory>
 
 
 namespace elib {
-    
-namespace detail { class log_impl; }
+
   
 /* global logging class, it logs to std::cout and std::cerr,
  * while it does not inherit from basic_log it implements
@@ -36,7 +36,7 @@ class elog {
 private:
     /* only a single instance of elog is allowed */
     elog();
-    static std::unique_ptr<detail::log_impl> m_impl;
+    static std::unique_ptr<log> m_impl;
 public:
     
     static const std::string & prompt(level_e l);

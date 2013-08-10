@@ -126,6 +126,14 @@ bad_enum()
     return static_cast<Enum>(limits::max());
 }
 
+template <typename Enum>
+inline constexpr Enum
+default_enum()
+{
+    typedef enum_traits<Enum> traits;
+    return traits::default_value;
+}
+
 template <typename Ret, typename Enum>
 struct lexical_cast_helper {
     static Ret

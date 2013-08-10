@@ -3,8 +3,10 @@
 
 #include "log_level.h"
 
-
+#include <map>
+#include <mutex>
 #include <string>
+#include <iosfwd>
 
 
 namespace elib {
@@ -15,50 +17,90 @@ namespace elib {
  * classes log, file_log, and elog (static) */
 class basic_log {
 public:
+    basic_log() = default;
+    basic_log(level_e l);
+    
     /* set & get the prompt for each log level,
      * the prompt is printed before the message for that level 
      * valid levels: debug-fatal */
-    virtual const std::string & prompt(level_e l) const = 0;
-    virtual void prompt(level_e l, const std::string &prompt) = 0;
+    const std::string & prompt(level_e l) const;
+    void prompt(level_e l, const std::string &prompt);
     
     /* set & get the current logging level
      * valid levels: debug-fatal */
-    virtual void level(level_e l) = 0;
-    virtual level_e level() = 0;
+    void level(level_e l);
+    level_e level();
     
     /* print a message to a given log level,
      * valid levels: all */
-    virtual void print(level_e l, const char *msg, ... ) = 0;
-    virtual void print(level_e l, const std::string &msg) = 0;
+    void print(level_e l, const char *msg, ... );
+    void print(level_e l, const std::string &msg);
     
     /* a method for each log level */
-    virtual void debug(const char *msg, ... ) = 0;
-    virtual void debug(const std::string & s) = 0;
+    void debug(const char *msg, ... );
+    void debug(const std::string & s);
     
-    virtual void info(const char *msg, ... ) = 0;
-    virtual void info(const std::string & s) = 0;
+    void info(const char *msg, ... );
+    void info(const std::string & s);
     
-    virtual void step(const char *msg, ... ) = 0;
-    virtual void step(const std::string & s) = 0;
+    void step(const char *msg, ... );
+    void step(const std::string & s);
     
-    virtual void warn(const char *msg, ... ) = 0;
-    virtual void warn(const std::string & s) = 0;
+    void warn(const char *msg, ... );
+    void warn(const std::string & s);
     
-    virtual void err(const char *msg, ... ) = 0;
-    virtual void err(const std::string & s) = 0;
+    void err(const char *msg, ... );
+    void err(const std::string & s);
     
-    virtual void fatal(const char *msg, ...) = 0;
-    virtual void fatal(const std::string & s) = 0;
+    void fatal(const char *msg, ...);
+    void fatal(const std::string & s);
     
-    virtual void raw_out(const char *msg, ...) = 0;
-    virtual void raw_out(const std::string & s) = 0;
+    void raw_out(const char *msg, ...);
+    void raw_out(const std::string & s);
     
-    virtual void raw_err(const char *msg, ...) = 0;
-    virtual void raw_err(const std::string & s) = 0;
+    void raw_err(const char *msg, ...);
+    void raw_err(const std::string & s);
     
     /* Turn ALL OUTPUT from log on/off */
-    virtual void on(bool p) = 0;
-    virtual bool on() const = 0;
+    void on(bool p);
+    bool on() const;
+    
+public:
+     /* check properties about a member of level_e 
+     * raw_levels: raw_out, raw_err
+     * basic_levels: debug-fatal */
+    static bool is_raw_level(level_e e);
+    static bool is_basic_level(level_e e);  
+protected:
+    typedef std::lock_guard<std::mutex> lock_guard;
+    
+    bool _should_print(level_e l) const;
+    
+    void _log(level_e l, const std::string & s);
+    
+    std::mutex & _lock() const;
+    
+    virtual std::ostream & _get_stream(level_e l) = 0;
+
+private:
+    level_e m_level{default_log_level};
+    bool m_on{false};
+    mutable std::mutex m_lock{};
+     /* prompt maps: level -> prompt */
+    std::map<level_e, std::string> m_prompts = 
+        {
+          {level_e::debug, "Debug: "}, 
+          {level_e::info, "Info: "},
+          {level_e::step, "--> "},
+          {level_e::warn, "Warning: "},
+          {level_e::err, "ERROR: "},
+          {level_e::fatal, "FATAL: "},
+          {level_e::raw_out, ""},
+          {level_e::raw_err, ""} 
+        };
+    
+private:
+    friend class elog;
 };
 
 

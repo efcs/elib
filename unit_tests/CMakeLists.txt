@@ -8,7 +8,8 @@
 set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 aux_source_directory(${dotDir} dotSrc)
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/../src)
+include_directories(${dotDir}/../src)
+include_directories(${dotDir})
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED OFF)

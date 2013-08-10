@@ -32,8 +32,8 @@ install:
 .PHONY: check
 check:
 	@ echo === Running static tests ===
-	@ ./bin/elib_test_static
+	@ ./bin/elib_test_static --log_level=message --report_level=short
 	@ echo ""
 	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
 

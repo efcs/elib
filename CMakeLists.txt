@@ -31,7 +31,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
 
-set( CMAKE_BUILD_TYPE RELEASE )
+set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG" )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )
@@ -40,7 +40,6 @@ set( CMAKE_CXX_FLAGS_DEBUG "-g -O0" )
 set(includeDir ${CMAKE_CURRENT_LIST_DIR}/include)
 set(headerDir ${includeDir}/elib)
 include_directories(${includeDir})
-
 
 find_package( Threads REQUIRED )
 add_definitions(-std=c++11 -Wall -Wextra -pedantic)

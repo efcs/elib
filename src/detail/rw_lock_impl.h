@@ -5,7 +5,7 @@
 #include <condition_variable>
 #include <list>
 
-static_assert(ATOMIC_INT_LOCK_FREE == 2, "");
+static_assert(ATOMIC_INT_LOCK_FREE == 2, "rw_lock is not lock free");
 
 namespace elib {
     
@@ -31,12 +31,6 @@ public:
     enum class lock_type_e {
         read,
         write
-    };
-    
-    enum class request_e {
-        lock,
-        unlock,
-        try_lock
     };
     
     class request_group {

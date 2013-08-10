@@ -23,7 +23,7 @@ enum class level_e {
     raw_err
 };
 
-
+/* the default logging level */
 constexpr level_e default_log_level = level_e::step;
 
 

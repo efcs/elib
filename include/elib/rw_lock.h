@@ -11,6 +11,13 @@ class rw_read_lock;
 class rw_write_lock;
 
 
+/* a typical RW lock
+ * 1 writer per write_lock 
+ * unlimited readers per read_lock
+ * 
+ * locking is first come, first serve
+ * all read requests between two write requests
+ * are granted the lock at the same time */
 class rw_lock {
 public:
     rw_lock();

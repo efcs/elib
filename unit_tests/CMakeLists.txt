@@ -5,8 +5,10 @@
 # but the project configurations in this make file DO NOT WORK and they 
 # must be commented out.
 
+set(dotDir ${CMAKE_CURRENT_LIST_DIR})
+aux_source_directory(${dotDir} dotSrc)
 
-set(dotSrc alltests.cpp sharedlock_test.cpp semaphore_test.cpp)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../src)
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED OFF)

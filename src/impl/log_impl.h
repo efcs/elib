@@ -15,73 +15,100 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB__LOG_H
-#define ELIB__LOG_H
+#ifndef ELIB_LOG_IMPL_H
+#define ELIB_LOG_IMPL_H
 
 #include "elib/log.h"
 
+#include <stdexcept>
 #include <iostream>
 #include <mutex>
 #include <map>
-#include <stdexcept>
+
+#define PRINT_BUFF_MAX 1024
 
 
 namespace elib {
-	
     
-using lock_guard = std::lock_guard<std::mutex>;
-
+namespace unit_test { class test_basic_log_impl; }
+    
+namespace detail {
+    
 
 class basic_log_impl
 {
-public:
-    static bool is_raw_level(level_e e);
-    static bool is_basic_level(level_e e);
-    static bool is_valid_level(level_e e);
-public: 
-    const std::string & prompt(level_e l) const;
-    void prompt(level_e l, const std::string & p);
+public:	
+    /* get & set the prompts as described in basic_log */
+	const std::string & prompt(level_e l) const;
+	void prompt(level_e l, const std::string & p);
+	
+    /* get & set the level as described in basic_log */
+	void level(level_e l);
+	level_e level() const;
+	
+    /* log a (already formatted) message to a given log level */
+	void log(level_e l, const char *msg);
     
-    void level(level_e l);
-    level_e level() const;
-    
-    void log(level_e l, const char *msg);
-    
-    void on(bool b);
+    /* same as in basic_log */
+	void on(bool b);
     bool on() const;
+    
+    /* check properties about a member of level_e 
+     * raw_levels: raw_out, raw_err
+     * basic_levels: debug-fatal */
+    static bool is_raw_level(level_e e);
+    static bool is_basic_level(level_e e);    
+    
 protected:
-    virtual std::ostream & 
-    _get_stream(level_e l) = 0;
     
-    bool 
-    _should_print(level_e l) const;
+    typedef std::lock_guard<std::mutex> lock_guard;
     
+    /* return the stream that should be written to for a given
+     * level, the stream is assumed to be good */
+	virtual std::ostream & 
+	_get_stream(level_e l) = 0;
+	
+    /* return true if we should log the message,
+     * to log a message we must be:
+     *   a) on.
+     *   b) a raw level or a basic level >= current level */ 
+	bool 
+	_should_print(level_e l) const;
+    
+    /* return the lock object, so derived methods can be thread-safe */
     std::mutex & 
     _lock() const;
+    
 private:
-    level_e m_level = basic_log::default_level;
+    /* the current logging level */
+	level_e m_level = default_log_level;
+    
+    /* on/off switch for ALL logging */
     bool m_on = true;
-
-    std::map<level_e, std::string> m_prompts = {
-                                {level_e::debug, "Debug: "},
-                                {level_e::info, "Info: "},
-                                {level_e::step, "--> "},
-                                {level_e::warn, "Warning: "},
-                                {level_e::err, "ERROR: "},
-                                {level_e::fatal, "FATAL: "},
-                                {level_e::raw_out, ""},
-                                {level_e::raw_err, ""} };
-                                
+    
+    /* prompt maps: level -> prompt */
+	std::map<level_e, std::string> m_prompts = 
+        {
+          {level_e::debug, "Debug: "}, 
+          {level_e::info, "Info: "},
+          {level_e::step, "--> "},
+          {level_e::warn, "Warning: "},
+          {level_e::err, "ERROR: "},
+          {level_e::fatal, "FATAL: "},
+          {level_e::raw_out, ""},
+          {level_e::raw_err, ""} 
+        };
+                            
+    /* use the mutex to be thread-safe */
     mutable std::mutex m_lock;
-
+    friend unit_test::test_basic_log_impl;
 };
-
-
 
 
 inline const std::string &
 basic_log_impl::prompt(level_e l) const 
 {
+    /* throw if getting non-basic level */
     if (! is_basic_level(l))
         throw std::logic_error("not a valid basic level");
     
@@ -118,9 +145,6 @@ basic_log_impl::level() const
 inline void 
 basic_log_impl::log(level_e l, const char *msg) 
 {
-    if (! is_valid_level(l))
-        throw std::logic_error("not a valid level");
-    
     if (! _should_print(l))
         return;
 
@@ -165,11 +189,6 @@ basic_log_impl::is_basic_level(level_e l)
     return (l >= level_e::debug && l <= level_e::fatal);
 }
 
-inline bool 
-basic_log_impl::is_valid_level(level_e l) 
-{ 
-    return (is_raw_level(l) || is_basic_level(l));
-}
 
 inline std::mutex & 
 basic_log_impl::_lock() const
@@ -181,11 +200,14 @@ basic_log_impl::_lock() const
 //                          log_impl                                                                          
 ////////////////////////////////////////////////////////////////////////////////
 
+/* log_impl implements _get_stream so that seperate 
+ * out & err streams can be kept (unlike file_log) */
 class log_impl : public basic_log_impl {
 public:
     log_impl();
     
 protected:
+    /* return m_out for debug-step and m_err for warn-fatal */
     std::ostream & 
     _get_stream(level_e e);
     
@@ -210,6 +232,6 @@ log_impl::_get_stream(level_e e)
 }
 
 
-
+} /* namespace detail */
 } /* namespace elib */
-#endif /* ELIB__LOG_H */
+#endif /* ELIB_LOG_IMPL_H */

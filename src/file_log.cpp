@@ -17,7 +17,7 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/file_log.h"
-#include "_file_log.h"
+#include "impl/file_log_impl.h"
 
 #define BUFF_MAX 1024
 
@@ -34,12 +34,12 @@
 namespace elib {
     
 file_log::file_log()
-    : m_impl(new file_log_impl)
+    : m_impl(new detail::file_log_impl)
 {
 }
 
 file_log::file_log(const std::string & filename)
-    : m_impl(new file_log_impl)
+    : m_impl(new detail::file_log_impl)
 {
     m_impl->open(filename, std::ios_base::app);
 }
@@ -52,6 +52,12 @@ const std::string &
 file_log::filename() const
 {
     return m_impl->filename();
+}
+
+bool
+file_log::open(const std::string & filename)
+{
+    return m_impl->open(filename, std::ios_base::app);
 }
 
 bool

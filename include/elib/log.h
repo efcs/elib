@@ -1,77 +1,35 @@
+/* 
+ * Copyright (C) 2013  Eric Fiselier
+ * 
+ * This file is part of elib.
+ *
+ * elib is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * elib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with elib.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #ifndef ELIB_LOG_H
 #define ELIB_LOG_H
 
-#include <elib/base_enum.h>
+#include "basic_log.h"
+#include "log_level.h"
 
-#include <cstdarg>
-#include <string>
 #include <memory>
 
-
 namespace elib {
+    
 
-	
-class log_impl;
-
-
-/* RAW levels are not affected by the level */
-enum class level_e {
-    none = 0,
-    debug,
-    info,
-    step,
-    warn,
-    err,
-    fatal,
-    raw_out,
-    raw_err
-};
-
-
-class basic_log {
-public:
-    static constexpr level_e default_level = level_e::step;
-public:
-    /* same as static log interface */
-    virtual const std::string & prompt(level_e l) const = 0;
-    virtual void prompt(level_e l, const std::string &prompt) = 0;
+namespace detail { class log_impl; }
     
-    virtual void level(level_e l) = 0;
-    virtual level_e level() = 0;
-    
-    virtual void print(level_e l, const char *msg, ... ) = 0;
-    virtual void print(level_e l, const std::string &msg) = 0;
-    
-    virtual void debug(const char *msg, ... ) = 0;
-    virtual void debug(const std::string & s) = 0;
-    
-    virtual void info(const char *msg, ... ) = 0;
-    virtual void info(const std::string & s) = 0;
-    
-    virtual void step(const char *msg, ... ) = 0;
-    virtual void step(const std::string & s) = 0;
-    
-    virtual void warn(const char *msg, ... ) = 0;
-    virtual void warn(const std::string & s) = 0;
-    
-    virtual void err(const char *msg, ... ) = 0;
-    virtual void err(const std::string & s) = 0;
-    
-    virtual void fatal(const char *msg, ...) = 0;
-    virtual void fatal(const std::string & s) = 0;
-    
-    virtual void raw_out(const char *msg, ...) = 0;
-    virtual void raw_out(const std::string & s) = 0;
-    
-    virtual void raw_err(const char *msg, ...) = 0;
-    virtual void raw_err(const std::string & s) = 0;
-    
-    /* Turn ALL OUTPUT from log on/off */
-    virtual void on(bool p) = 0;
-    virtual bool on() const = 0;
-};
-
-
+/* Actual logging class, implements the basic_log iterface */
 class log : public basic_log {
 public:
     log();
@@ -114,21 +72,10 @@ public:
     void on(bool p);
     bool on() const;
 private:
-    std::shared_ptr<log_impl> m_impl;
+    /* pimpl is useful for some reason */
+    std::shared_ptr<detail::log_impl> m_impl;
 };
-
-
-template <>
-struct basic_enum_traits<level_e> {
-    static constexpr const bool contiguous = true;
-    
-    static constexpr level_e default_value = log::default_level;
-    static constexpr level_e first_value = level_e::none;
-    static constexpr level_e last_value = level_e::raw_err;
-    
-    typedef const std::map<level_e, std::string> map_type;
-    static map_type name_map;
-};
+ 
 
 
 } /* namespace elib */

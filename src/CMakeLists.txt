@@ -22,10 +22,9 @@ target_link_libraries(elib_static)
 
 
 if(CMAKE_BUILD_TYPE MATCHES RELEASE)
-	file(GLOB lib_headers "${CMAKE_CURRENT_LIST_DIR}/include/elib/*.h" )
 	install(TARGETS elib LIBRARY DESTINATION lib)
 	install(TARGETS elib_static ARCHIVE DESTINATION lib)
-	install(FILES ${lib_headers} DESTINATION include/elib)
+	install(DIRECTORY ${headerDir} DESTINATION include)
 endif()
 
 				

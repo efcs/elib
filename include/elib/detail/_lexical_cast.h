@@ -1,0 +1,43 @@
+#ifndef ELIB__LEXICAL_CAST_H
+#define ELIB__LEXICAL_CAST_H
+
+
+#ifndef ELIB_LEXICAL_CAST_H
+#   error do not include this file directly
+#endif
+
+
+#include <sstream>
+
+
+namespace elib {
+    
+
+template <typename ToType, typename FromType>
+inline ToType
+lexical_cast(const FromType & from)
+{
+    std::stringstream ss;
+    ToType val;
+    /* here is the trick, we basically write to
+     * and extract from a stringstream to do the cast,
+     * for booleans, we set std::boolalpha */
+    ss << from;
+    ss >> val;
+    if (! ss)
+        throw bad_lexical_cast();
+    
+    return val;
+}
+
+/* A wrapper to invoke the function via const char* */
+template <typename ToType>
+inline ToType
+lexical_cast(const char* from)
+{
+    return lexical_cast<ToType>(std::string(from));
+}
+
+    
+} /* namespace elib */
+#endif /* ELIB__LEXICAL_CAST_H */

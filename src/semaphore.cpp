@@ -1,87 +1,46 @@
-/* 
- * Copyright (C) 2013  Eric Fiselier
- * 
- * This file is part of elib.
- *
- * elib is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * elib is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with elib.  If not, see <http://www.gnu.org/licenses/>.
- */
-#include "_semaphore.h"
-#include "_lock.h"
-
-#include <climits>
+#include "elib/lock.h"
+#include "impl/semaphore_impl.h"
 
 namespace elib {
-	
-semaphore::semaphore() : m_impl(new _elib::semaphore_impl(UINT_MAX))
-{
-}
 
-semaphore::semaphore(unsigned int size) : m_impl(new _elib::semaphore_impl(size))
-{
-}
-
-semaphore::~semaphore() { }
-
-void semaphore::lock() 
+semaphore::semaphore(unsigned count)
+    : m_impl(new detail::semaphore_impl(count))    
 { 
-	m_impl->down();
 }
 
-bool semaphore::try_lock()
+semaphore::~semaphore()
 {
-	unsigned int tmp;
-	return m_impl->try_down(tmp);
+    delete m_impl;
 }
 
-void semaphore::unlock()
+void
+semaphore::lock()
 {
-	m_impl->up();
+    m_impl->lock();
 }
 
-unsigned int semaphore::down()
+void
+semaphore::unlock()
 {
-	return m_impl->down();
+    m_impl->unlock();
 }
 
-bool semaphore::try_down(unsigned int &resource)
+bool
+semaphore::try_lock()
 {
-	return m_impl->try_down(resource);
+    return m_impl->try_lock();
 }
 
-void semaphore::up()
+unsigned
+semaphore::count() const
 {
-	m_impl->up();
+    return m_impl->count();
 }
 
-unsigned int semaphore::size() const
+unsigned
+semaphore::max() const
 {
-	return m_impl->size();
+    return m_impl->max();
 }
-
-unsigned int semaphore::available() const
-{
-	return m_impl->available();
-}
-
-unsigned int semaphore::taken() const 
-{
-	return m_impl->taken();
-}
-
-
-/* forced instantiation */
-template class unique_lock<semaphore>;
-
-	
+    
 } /* namespace elib */

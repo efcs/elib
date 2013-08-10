@@ -20,7 +20,7 @@
 
 namespace elib {
    
-    
+/* see lexical_cast.h for a description of casting */
 template <>
 bool
 lexical_cast(const std::string & from)

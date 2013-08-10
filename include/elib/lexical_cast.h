@@ -1,14 +1,31 @@
-#ifndef ELIB_LEXICALCAST_H
-#define ELIB_LEXICALCAST_H
-
+/* 
+ * Copyright (C) 2013  Eric Fiselier
+ * 
+ * This file is part of elib.
+ *
+ * elib is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * elib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with elib.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#ifndef ELIB_LEXICAL_CAST_H
+#define ELIB_LEXICAL_CAST_H
 
 #include <stdexcept>
-#include <sstream>
 #include <string>
 
 namespace elib {
     
     
+/* bad_cast error for lexical casts */
 class bad_lexical_cast : public std::runtime_error {
 public:
     bad_lexical_cast()
@@ -16,7 +33,11 @@ public:
     { }
 };
 
-
+/* cast one lexical type to another, generally either to or from a string 
+ * ex: string -> float
+ *     bool -> string
+ *     int -> string
+ *     string -> bool */
 template <typename ToType, typename FromType>
 ToType
 lexical_cast(const FromType & from);
@@ -33,30 +54,9 @@ std::string
 lexical_cast(const bool & b);
 
     
-template <typename ToType, typename FromType>
-inline ToType
-lexical_cast(const FromType & from)
-{
-    std::stringstream ss;
-    ToType val;
-    
-    ss << from;
-    ss >> val;
-    if (! ss)
-        throw bad_lexical_cast();
-    
-    return val;
-}
-
-/* A wrapper to invoke the function via const char* */
-template <typename ToType>
-inline ToType
-lexical_cast(const char* from)
-{
-    return lexical_cast<ToType>(std::string(from));
-}
-
-
-    
 } /* namespace elib */
-#endif /* ELIB_LEXICALCAST_H */
+
+
+#include "detail/_lexical_cast.h"
+
+#endif /* ELIB_LEXICAL_CAST_H */

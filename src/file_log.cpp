@@ -17,7 +17,7 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/file_log.h"
-#include "impl/file_log_impl.h"
+#include "detail/file_log_impl.h"
 
 #define BUFF_MAX 1024
 

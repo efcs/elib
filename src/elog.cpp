@@ -17,7 +17,7 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/elog.h"
-#include "impl/log_impl.h"
+#include "detail/log_impl.h"
 
 #include <cstdarg>
 

@@ -1,32 +1,14 @@
-#ifndef ELIB_LOCK_H
-#define ELIB_LOCK_H
-
-#include "lock_fwd.h"
-
-#include <mutex>
+#ifndef ELIB_RW_LOCK_H
+#define ELIB_RW_LOCK_H
 
 namespace elib {
     
- 
-class semaphore {
-public:
-    semaphore(unsigned count);
-    ~semaphore();
-    
-    /* lock interface */
-    void lock();
-    void unlock();
-    bool try_lock();
-    
-    unsigned count() const;
-    unsigned max() const;
-private:
-    detail::semaphore_impl* m_impl;
-private:
-    semaphore(const semaphore&);
-    semaphore& operator=(const semaphore&);
-};
 
+namespace detail { class rw_lock_impl; }
+
+
+class rw_read_lock;
+class rw_write_lock;
 
 
 class rw_lock {
@@ -80,6 +62,6 @@ private:
     rw_lock & m_lock;
 };
 
-
+    
 } /* namespace elib */
-#endif /* ELIB_LOCK_H */
+#endif /* ELIB_RW_LOCK_H */

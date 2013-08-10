@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "elib/log.h"
-#include "impl/log_impl.h"
+#include "detail/log_impl.h"
 #include "elib/enum_traits.h"
 
 #include <string>

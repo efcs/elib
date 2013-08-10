@@ -1,5 +1,5 @@
-#include "elib/lock.h"
-#include "impl/rw_lock_impl.h"
+#include "elib/rw_lock.h"
+#include "detail/rw_lock_impl.h"
 
 namespace elib {
     

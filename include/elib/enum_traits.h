@@ -19,7 +19,6 @@
 #ifndef ELIB_ENUM_TRAITS_H
 #define ELIB_ENUM_TRAITS_H
 
-#include "fwd/enum_traits_fwd.h"
 #include "basic_enum_traits.h"
 
 #include <stdexcept>

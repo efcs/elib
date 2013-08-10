@@ -1,5 +1,5 @@
-#include "elib/lock.h"
-#include "impl/semaphore_impl.h"
+#include "elib/semaphore.h"
+#include "detail/semaphore_impl.h"
 
 namespace elib {
 

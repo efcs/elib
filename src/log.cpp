@@ -18,7 +18,7 @@
  */
 #include "elib/log.h"
 
-#include "impl/log_impl.h"
+#include "detail/log_impl.h"
 
 #include <sstream>
 #include <cstdarg>

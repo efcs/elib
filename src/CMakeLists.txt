@@ -17,7 +17,18 @@ add_library(ObjLib OBJECT ${dotSrc})
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
 add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)
 
-target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT})
+################################################################################
+##                      BOOST library configuration                           ##
+################################################################################
+
+find_package(Boost ${CONFIG_BOOST_VERSION}
+             COMPONENTS system filesystem REQUIRED)
+
+include_directories(${Boost_INCLUDE_DIRS})
+
+
+
+target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_link_libraries(elib_static)
 
 

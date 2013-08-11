@@ -19,8 +19,6 @@
 #include "elib/basic_log.h"
 
 #include <ostream>
-
-
 #include <cstdarg>
 
 #define _FMT_ARGS()  \

@@ -14,10 +14,10 @@ namespace elib {
  * for basic_log method documentation see log.h */
 class file_log : public basic_log {
 public:
-    file_log();
+    file_log() = default;
     /* open file for output */
     file_log(const std::string & filename);
-    ~file_log();
+    ~file_log() = default;
     
     /* return the path to the current file */
     const std::string & filename() const;
@@ -33,8 +33,6 @@ public:
     
     /* close the output file */
     void close();
-    
-    
 private:
     std::string m_filename;
     std::ofstream m_out;

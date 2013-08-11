@@ -28,6 +28,7 @@ namespace elib {
 /* bad_cast error for lexical casts */
 class bad_lexical_cast : public std::runtime_error {
 public:
+    inline
     bad_lexical_cast()
         : std::runtime_error("bad lexical cast")
     { }

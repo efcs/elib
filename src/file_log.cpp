@@ -20,9 +20,6 @@
 
 namespace elib {
     
-file_log::file_log()
-{
-}
 
 file_log::file_log(const std::string & filename)
     : m_filename(filename)
@@ -30,9 +27,6 @@ file_log::file_log(const std::string & filename)
     open(filename);
 }
 
-file_log::~file_log()
-{
-}
 
 const std::string &
 file_log::filename() const

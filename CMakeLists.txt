@@ -4,7 +4,7 @@ option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 
 # These options need to go before project declaration
 if (CONFIG_MY_BUILD)
-	option(CONFIG_OPT_GCC "Use /opt/gnu/bin/* and /opt/gnu/lib64" OFF)
+	option(CONFIG_OPT_GCC "Use /opt/gnu/bin/* and /opt/gnu/lib64" ON)
 	
 	if (CONFIG_OPT_GCC)
 		set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)

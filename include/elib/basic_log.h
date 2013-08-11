@@ -84,7 +84,7 @@ protected:
 
 private:
     level_e m_level{default_log_level};
-    bool m_on{false};
+    bool m_on{true};
     mutable std::mutex m_lock{};
      /* prompt maps: level -> prompt */
     std::map<level_e, std::string> m_prompts = 

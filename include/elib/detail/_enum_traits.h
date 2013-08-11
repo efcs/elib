@@ -24,107 +24,21 @@
 #endif
 
 namespace elib {
-    
-    
-////////////////////////////////////////////////////////////////////////////////
-//                      lexical cast helper declarations                                                                       
-////////////////////////////////////////////////////////////////////////////////
-    
-    
-template <typename Ret, typename Enum>
-struct lexical_cast_helper;
-
-
-template <typename Enum>
-struct lexical_cast_helper<std::string, Enum>;
-
-
-template <typename Enum>
-struct lexical_cast_helper<typename enum_traits<Enum>::underlying_type, Enum>;
-  
-
-////////////////////////////////////////////////////////////////////////////////
-//                              enum iterator definition                                                                          
-////////////////////////////////////////////////////////////////////////////////
-
-
-template <typename Enum>
-inline
-enum_iterator<Enum>::enum_iterator(Enum e)
-{
-    m_iter = basic_traits::name_map.begin();
-    while (m_iter != basic_traits::name_map.end() &&
-           m_iter->first != e) {
-        ++m_iter;
-    }
-}
-
-template <typename Enum>
-inline
-enum_iterator<Enum>::enum_iterator(iter_pos_e pos)
-{
-    if (pos == iter_pos_e::begin) 
-        m_iter = basic_traits::name_map.begin();
-    else
-        m_iter = basic_traits::name_map.end();
-}
-
-    
-template <typename Enum>
-inline enum_iterator<Enum> &
-enum_iterator<Enum>::operator++()
-{
-    ++m_iter;
-    return *this;
-}
-    
-template <typename Enum>
-inline enum_iterator<Enum>
-enum_iterator<Enum>::operator++(int junk)
-{
-    //UNUSED
-    ((void)junk); 
-    
-    enum_iterator curr = *this;
-    ++m_iter;
-    return curr;
-}
-    
-template <typename Enum>
-inline typename enum_iterator<Enum>::const_reference
-enum_iterator<Enum>::operator*() const
-{ 
-    return m_iter->first;
-}
-    
-template <typename Enum>
-inline bool 
-enum_iterator<Enum>::operator==(const enum_iterator & other)
-{ 
-    return m_iter == other.m_iter; 
-}
-
-template <typename Enum>
-inline bool 
-enum_iterator<Enum>::operator!=(const enum_iterator & other)
-{ 
-    return m_iter != other.m_iter;
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //                          enum function definitions & helpers
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename Enum>
-inline constexpr Enum
-bad_enum()
-{
-    typedef typename std::underlying_type<Enum>::type underlying_type;
-    typedef std::numeric_limits<underlying_type> limits;
+template <typename T>
+struct has_enum_traits {
+    typedef basic_enum_traits<T> traits;
     
-    return static_cast<Enum>(limits::max());
-}
+    static constexpr bool value = 
+        ! std::is_same<
+                decltype(basic_enum_traits<T>::default_value), 
+                detail::BAD_ENUM_TYPE>::value;
+};
+
 
 template <typename Enum>
 inline constexpr Enum
@@ -134,100 +48,15 @@ default_enum()
     return traits::default_value;
 }
 
-template <typename Ret, typename Enum>
-struct lexical_cast_helper {
-    static Ret
-    cast(Enum e);
-};
-
-
+    
 template <typename Enum>
-struct lexical_cast_helper<std::string, Enum> {
-    inline static std::string
-    cast(Enum e)
-    {
-        typedef enum_traits<Enum> traits;
-        
-        if (traits::name_map.count(e))
-            return traits::name_map.at(e);
-        
-        throw bad_enum_cast();
-    }
-};
-
-
-template <typename Enum>
-struct lexical_cast_helper<typename enum_traits<Enum>::underlying_type, Enum> {
-    inline static typename enum_traits<Enum>::underlying_type
-    cast(Enum e)
-    {
-        return static_cast<typename enum_traits<Enum>::underlying_type>(e);
-    }
-};
-
-
-
-template <typename Enum>
-inline Enum
-enum_cast(const std::string & s)
+inline constexpr Enum
+bad_enum()
 {
-    typedef enum_traits<Enum> traits;
+    typedef typename std::underlying_type<Enum>::type underlying_type;
+    typedef std::numeric_limits<underlying_type> limits;
     
-    for (auto & kv : traits::name_map) {
-        if (kv.second == s)
-            return kv.first;
-    }
-    
-    throw bad_enum_cast(s);
-}
-
-
-template <typename Enum>
-inline Enum
-enum_cast(typename enum_traits<Enum>::underlying_type x)
-{
-    typedef enum_traits<Enum> traits;
-    
-    Enum test = static_cast<Enum>(x);
-    if (traits::good(test))
-        return test;
-    
-    throw bad_enum_cast();
-}
-
-
-template <typename Enum>
-inline Enum
-safe_enum_cast(const std::string & s)
-{
-    typedef enum_traits<Enum> traits;
-    static_assert(traits::last_value != traits::BAD_ENUM,
-                  "safe_enum_cast cannot be called when "
-                  "basic_traits<Enum>::BAD_ENUM == enum_traits<Enum>::last_value");
-    
-    for (auto & kv : traits::name_map) {
-        if (kv.second == s)
-            return kv.first;
-    }
-    
-    return traits::BAD_ENUM;
-}
-
-
-template <typename Enum>
-inline Enum
-safe_enum_cast(typename enum_traits<Enum>::underlying_type x)
-{
-    typedef enum_traits<Enum> traits;
-    static_assert(traits::last_value != traits::BAD_ENUM,
-                  "safe_enum_cast cannot be called when "
-                  "basic_traits<Enum>::BAD_ENUM == enum_traits<Enum>::last_value");
-    
-    Enum e = static_cast<Enum>(x);
-    if (traits::good(e))
-        return e;
-    
-    return traits::BAD_ENUM;
+    return static_cast<Enum>(limits::max());
 }
 
 
@@ -244,22 +73,6 @@ is_bad_enum(Enum e)
     return (traits::BAD_ENUM == e);
 }
 
-/* Ret is one of std::string, or the underlying_type */
-template <typename Ret, typename Enum>
-inline Ret
-lexical_enum_cast(Enum e)
-{
-    return lexical_cast_helper<Ret, Enum>::cast(e);
-}
-
-template <typename Enum>
-inline constexpr typename enum_traits<Enum>::underlying_type
-base_enum_cast(Enum e) noexcept
-{
-    typedef enum_traits<Enum> traits;
-    
-    return static_cast<typename traits::underlying_type>(e);
-}
 
 
 ////////////////////////////////////////////////////////////////////////////////

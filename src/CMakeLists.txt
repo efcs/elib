@@ -9,9 +9,10 @@ add_definitions(-fPIC)
 
 set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 aux_source_directory(${dotDir} dotSrc)
+aux_source_directory(${dotDir}/argp argpSrc)
 
 # compile into objects
-add_library(ObjLib OBJECT ${dotSrc})
+add_library(ObjLib OBJECT ${dotSrc} ${argpSrc})
 
 #create static & shared libraries
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)

@@ -3,7 +3,6 @@
 
 #include "elib/enum_traits.h"
 
-
 namespace elib {
     
 enum class test_e {
@@ -43,6 +42,10 @@ basic_enum_traits<test_e>::name_map =
 
 
 using namespace elib;
+
+
+static_assert(has_enum_traits<std::string>::value == false, "");
+static_assert(has_enum_traits<test_e>::value, "");
 
 /* all test cases use these typedefs */
 typedef basic_enum_traits<test_e> basic_traits;
@@ -181,27 +184,30 @@ BOOST_AUTO_TEST_CASE(test_safe_enum_cast)
 {
     std::string str_val;
     underlying_type val;
-    test_e other_e;
+    test_e dest;
+    
     for (auto e : traits()) {
         str_val = lexical_enum_cast<std::string>(e);
         val = lexical_enum_cast<underlying_type>(e);
+        dest = bad_enum<test_e>();
         
-        other_e = safe_enum_cast<test_e>(val);
-        BOOST_CHECK(other_e == e && other_e != traits::BAD_ENUM);
+        BOOST_CHECK(enum_cast(val, dest));
+        BOOST_CHECK(dest == e);
         
-        other_e = safe_enum_cast<test_e>(str_val);
-        BOOST_CHECK(other_e == e && other_e != traits::BAD_ENUM);
+        BOOST_CHECK(enum_cast(str_val, dest));
+        BOOST_CHECK(dest == e);
     }
     
     str_val = "three";
     val = 3;
     
-    other_e = safe_enum_cast<test_e>(val);
-    BOOST_CHECK(other_e == traits::BAD_ENUM);
+    dest = test_e::none;
+    BOOST_CHECK(enum_cast(val, dest) == false);
+    BOOST_CHECK(dest == test_e::none);
     
-    other_e = safe_enum_cast<test_e>(str_val);
-    BOOST_CHECK(other_e == traits::BAD_ENUM);
-    
+    dest = test_e::none;
+    BOOST_CHECK(enum_cast(str_val, dest) == false);
+    BOOST_CHECK(dest == test_e::none);
 }
 
 

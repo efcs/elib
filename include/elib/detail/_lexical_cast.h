@@ -40,7 +40,7 @@ lexical_cast(const char* from)
 
 /* see lexical_cast.h for a description of casting */
 template <>
-bool
+inline bool
 lexical_cast(const std::string & from)
 {
     std::stringstream ss;
@@ -59,7 +59,7 @@ lexical_cast(const std::string & from)
 
 
 template <>
-std::string
+inline std::string
 lexical_cast(const bool & b)
 {
     std::stringstream ss;

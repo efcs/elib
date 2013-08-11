@@ -27,36 +27,34 @@
 namespace elib {
 namespace argp {
     
-
-////////////////////////////////////////////////////////////////////////////////
-//                            basic_option                                    //
-////////////////////////////////////////////////////////////////////////////////
     
-basic_option::basic_option(const std::string & cmd_desc,
-                           const std::string & desc,
-                           std::function<void(const arg_token&)> callback)
-    : m_cmd_desc(cmd_desc)
-    , m_desc(desc)
-    , m_callback(callback)
+
+
+arg_option::arg_option(arg_type_e arg_type,
+               const std::string & name,
+               const std::string & cmd_desc,
+               const std::string & desc)
+    : m_arg_type(arg_type), m_cmd_desc(cmd_desc), m_desc(desc)
 {
+    if (name != "")
+        parse_name_and_set(name);
 }
 
-basic_option::~basic_option() { }
 
 const std::string &
-basic_option::command_description() const
+arg_option::command_description() const
 {
     return m_cmd_desc;
 }
 
 const std::string &
-basic_option::description() const
+arg_option::description() const
 {
     return m_desc;
 }
 
 std::string
-basic_option::fmt_description() const
+arg_option::fmt_description() const
 {
     std::stringstream ss;
     ss << m_cmd_desc << "    " << m_desc << std::endl;
@@ -64,34 +62,9 @@ basic_option::fmt_description() const
 }
 
 void
-basic_option::notify(const arg_token &tk) const
+arg_option::notify(const arg_token & tk)
 {
-    m_callback(tk);
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-//                            positional_option                               //
-////////////////////////////////////////////////////////////////////////////////
-
-positional_option::positional_option(const std::string & cmd_desc,
-                                     const std::string & desc,
-                                     std::function<void(const arg_token&)> call)
-    : basic_option(cmd_desc, desc, call)
-{
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//                            arg_option                                      //
-////////////////////////////////////////////////////////////////////////////////
-
-arg_option::arg_option(const std::string & name,
-               const std::string & cmd_desc,
-               const std::string & desc,
-               std::function<void(const arg_token&)> callback)
-    : basic_option(cmd_desc, desc, callback)
-{
-    parse_name_and_set(name);
+    throw 1;
 }
 
 bool 

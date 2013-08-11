@@ -25,8 +25,28 @@
 namespace elib {
     
     
+namespace detail {
+    constexpr decltype(nullptr) BAD_ENUM_VALUE = nullptr;
+    typedef decltype(BAD_ENUM_VALUE) BAD_ENUM_TYPE;
+    
+} /* namespace detail */
+    
+    
 /* each enumeration must implement this in order
- * to use anything in the enum_traits header */
+ * to use anything in the enum_traits header 
+ * 
+ * NOTE: for this definition BAD_ENUM_TYPE has
+ *       been substituted wherever Enum should occur,
+ *       this is done so we can use BAD_ENUM_TYPE to see
+ *       if there is a definition for basic_enum_traits<Type>
+ * 
+ * the required fields for use of enum_traits are:
+ *     static constexpr Enum default_value;
+ *     static constexpr Enum first_value;
+ *     static constexpr Enum last_value;
+ * 
+ *      typedef const std::map<Enum, std::string> map_type;
+ *      static map_type name_map */
 template <typename Enum>
 struct basic_enum_traits {
     /* Currently unused, definition not required */
@@ -34,18 +54,22 @@ struct basic_enum_traits {
     
     /* default_value may be a valid member of Enum
      * or it may be the value of bad_enum<Enum>() */
-    static constexpr Enum default_value = 0;
+    static constexpr detail::BAD_ENUM_TYPE default_value = 
+                                    detail::BAD_ENUM_VALUE;
     
     /* the lowest value member of Enum */
-    static constexpr Enum first_value = 0;
+    static constexpr detail::BAD_ENUM_TYPE first_value =
+                                    detail::BAD_ENUM_VALUE;
     
+                                    
     /* the highest value member of Enum */
-    static constexpr Enum last_value = 0;
+    static constexpr detail::BAD_ENUM_TYPE last_value =
+                                        detail::BAD_ENUM_VALUE;
     
     /* name_map is used for checking the validity of casts
      * iterating over keys (enum_iterator<Enum>) and
      * casting to and from std::string */
-    typedef const std::map<Enum, std::string> map_type;
+    typedef const std::map<detail::BAD_ENUM_TYPE, std::string> map_type;
     static map_type name_map;
 };
     

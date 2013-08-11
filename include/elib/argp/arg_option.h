@@ -28,41 +28,45 @@ namespace elib {
 namespace argp {
     
 typedef std::function<void(const arg_token&)> option_callback;
- 
-class basic_option {
-public:
-    basic_option(const std::string & cmd_desc,
-                 const std::string & desc,
-                  option_callback callback);
-    
-    virtual ~basic_option();
-    
-    const std::string & command_description() const;
-    const std::string & description() const;
-    
-    std::string fmt_description() const;
-    
-    void notify(const arg_token &tk) const;
-private:
-     std::string m_cmd_desc, m_desc;
-     option_callback m_callback;
+
+/* the type of arg,
+ * flags: [-c|--STRING]
+ * option: [-cArg|--STRING=ARG] (flag syntax is allowed 
+ *                               when there is an implicit value)
+ * option_list: [-cArg1,...,Argn|--STRING=Arg1,...,Argn]
+ * positional: an non-option argument */
+enum class arg_type_e {
+    positional,
+    flag,
+    option,
+    option_list
 };
 
 
-class positional_option : public basic_option {
+class arg_option {
 public:
-    positional_option(const std::string & cmd_desc,
-                      const std::string & desc,
-                       option_callback callback);
-};
-
-
-class arg_option : public basic_option {
-public:
-    arg_option(const std::string & name,
+    arg_option(arg_type_e arg_type,
+               const std::string & name,
                const std::string & cmd_desc,
-               const std::string & desc,
-                option_callback callback);
+               const std::string & desc);
+    
+    inline arg_type_e
+    arg_type() const
+    {return m_arg_type; }
+    
+    const std::string & 
+    command_description() const;
+    
+    const std::string & 
+    description() const;
+    
+    std::string 
+    fmt_description() const;
+    
+    virtual void 
+    notify(const arg_token &tk);
+
+public:
     
     bool has_short_name() const;
     bool has_long_name() const;
@@ -79,7 +83,9 @@ private:
     void parse_name_and_set(const std::string & s);
     void handle_name_part(std::string s);
 private:
-    std::string m_short_name, m_long_name;
+    arg_type_e m_arg_type;
+    std::string m_cmd_desc, m_desc;
+    std::string m_short_name{}, m_long_name{};
 };
 
 bool prefix_is_long_name(const std::string & s);
@@ -88,6 +94,7 @@ bool prefix_is_short_name(const std::string & s);
 bool is_valid_arg_name(const std::string &s);
 bool is_valid_short_name(const std::string & s);
 bool is_valid_long_name(const std::string & s);
+
   
 
 } /* namespace argp */

@@ -22,13 +22,12 @@
 #include "arg_option.h"
 #include "arg_token.h"
 #include "arg_errors.h"
+#include "arg.h"
 
 #include <string>
 #include <vector>
 #include <memory>
 #include <sstream>
-
-UNIT_TEST_FRIEND_DECL(argp, arg_parser);
 
 namespace elib {
 namespace argp {
@@ -39,12 +38,9 @@ public:
         
     std::string description() const;
     
-    void add_option(const positional_option & opt);
-    
-    bool try_add_option(const arg_option &opt);
+    bool try_add_option(const arg_option & opt);
     void add_option(const arg_option & opt);
     
-    void add_options(const std::vector<arg_option> &opts);
     
     bool contains_option(const std::string &s) const;
     bool contains_option(const arg_option & opt) const;
@@ -84,7 +80,7 @@ private:
                             
 private:
     std::string m_program_name;
-    std::shared_ptr<positional_option> m_pos_option;
+    std::shared_ptr<arg_option> m_pos_option;
     std::vector<arg_option> m_options;
     std::vector<arg_token> m_tokens;
     DISALLOW_COPY_AND_ASSIGN(arg_parser);

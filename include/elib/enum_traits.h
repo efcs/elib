@@ -20,27 +20,22 @@
 #define ELIB_ENUM_TRAITS_H
 
 #include "basic_enum_traits.h"
+#include "enum_iterator.h"
+#include "enum_cast.h"
 
-#include <stdexcept>
-#include <iterator>
 #include <limits>
 #include <string>
-#include <map>
+#include <type_traits>
 
 
 namespace elib {
 
-/* the exception thrown when any of the non-safe casts fail */
-class bad_enum_cast : public std::logic_error {
-public:
-    bad_enum_cast()
-        : std::logic_error("bad enum cast")
-    { }
-    
-    bad_enum_cast(const std::string & what)
-        : std::logic_error("bad enum cast: " + what)
-    { }
-};
+/* has_enum_traits<T>::value is set to true,
+ * if basic_enum_traits have been defined for type T,
+ * false otherwise */
+template <typename T>
+struct has_enum_traits;
+
 
 /* bad_enum is a value that:
  *   a) is the numeric max for Enum's underlying type
@@ -49,59 +44,19 @@ template <typename Enum>
 constexpr Enum
 bad_enum();
 
+
 /* default value is retured as specified in basic_enum_traits */
 template <typename Enum>
 constexpr Enum
 default_enum();
 
-/* used to construct iterators for an enum class at a givin position 
- * enum_traits not provided for this */
-enum class iter_pos_e {
-    begin,
-    end
-};
 
-/* A iterator class for enumerations */
+/* return (e == enum_traits<Enum>::BAD_ENUM) 
+ * note: this function may only be used with Enum classes
+ * that do not contain a member that is equal to BAD_ENUM */
 template <typename Enum>
-class enum_iterator {
-public:
-    /* required typedefs for iterator_traits */
-    typedef Enum value_type;
-    typedef Enum& reference;
-    typedef const Enum& const_reference;
-    typedef Enum* pointer;
-    typedef std::forward_iterator_tag iterator_category;
-    typedef unsigned difference_type;
-    
-    /* construct an iterator with the current position at e */
-    enum_iterator(Enum e);
-    /* construct an iterator with the current position at the
-     * begining or end */
-    enum_iterator(iter_pos_e place = iter_pos_e::begin);
-    
-    enum_iterator &
-    operator++();
-    
-    enum_iterator
-    operator++(int);
-    
-    const_reference
-    operator*() const;
-    
-    bool operator==(const enum_iterator & other);
-    bool operator!=(const enum_iterator & other);
-    
-private:
-    /* various typedefs used in implementation */
-    typedef basic_enum_traits<Enum> basic_traits;
-    typedef typename basic_traits::map_type map_type;
-    typedef typename map_type::iterator map_iterator;
-    typedef typename map_type::const_iterator map_const_iterator;
-private:
-    /* really we just adapt the maps key-value iterator,
-     * so we just implement it using a map iterator */
-    map_const_iterator m_iter;
-};
+constexpr bool
+is_bad_enum(Enum e);
 
 
 /* Allow for static access to begin and end iterator objects 
@@ -169,44 +124,6 @@ struct enum_traits : public basic_enum_traits<Enum> {
     static bool
     verify_enum_traits();
 };
-
-
-/* cast strings and underlying_types to Enum values */
-template <typename Enum>
-Enum
-enum_cast(const std::string & s);
-
-template <typename Enum>
-Enum
-enum_cast(typename enum_traits<Enum>::underlying_type x);
-
-/* attempt to cast to Enum, 
- * return BAD_ENUM if casting fails */
-template <typename Enum>
-Enum
-safe_enum_cast(const std::string & s);
-
-template <typename Enum>
-Enum
-safe_enum_cast(typename enum_traits<Enum>::underlying_type x);
-
-/* return (e == enum_traits<Enum>::BAD_ENUM) 
- * note: this function may only be used with Enum classes
- * that do not contain a member that is equal to BAD_ENUM */
-template <typename Enum>
-constexpr bool
-is_bad_enum(Enum e);
-
-/* Cast Enum values to an std::string or to
- * BASE_ENUM */
-template <typename Ret, typename Enum>
-Ret
-lexical_enum_cast(Enum e);
-
-/* cast to base type */
-template <typename Enum>
-constexpr typename enum_traits<Enum>::underlying_type
-base_enum_cast(Enum e) noexcept;
 
 
 } /* namespace elib */

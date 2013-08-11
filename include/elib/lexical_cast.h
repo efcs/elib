@@ -21,6 +21,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 
 namespace elib {
     
@@ -32,6 +33,25 @@ public:
     bad_lexical_cast()
         : std::runtime_error("bad lexical cast")
     { }
+};
+
+
+/* static type-traits style struct to
+ * check if a type is convertible using a lexical cast */
+template <typename T>
+struct is_lexical {
+    static constexpr bool value = 
+        std::is_integral<T>::value ||
+        std::is_floating_point<T>::value;
+};
+
+/* specializations needed for strings
+ *  C strings can only be used as the source type
+ * in a lexical cast, so is_lexical is allowed to fail */
+template <>
+struct is_lexical<std::string>
+{
+    static constexpr bool value = true;
 };
 
 /* cast one lexical type to another, generally either to or from a string 

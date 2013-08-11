@@ -151,15 +151,17 @@ arg_parser::format_description(std::stringstream & ss,
 }
 
 
-void
-arg_parser::add_option(const positional_option & opt)
-{
-    m_pos_option = std::make_shared<positional_option>(opt);
-}
 
 bool 
 arg_parser::try_add_option(const arg_option & opt)
 {
+    if (opt.arg_type() == arg_type_e::positional) {
+        if (m_pos_option)
+            return false;
+        m_pos_option = std::make_shared<arg_option>(opt);
+        return true;
+    }
+    
     if (contains_option(opt))
         return false;
     
@@ -170,21 +172,10 @@ arg_parser::try_add_option(const arg_option & opt)
 void 
 arg_parser::add_option(const arg_option & opt)
 {
-    std::string match_name;
-    for (auto &option : m_options) {
-        if (option.match(opt, match_name))
-            throw name_conflict_error(match_name);
-    }
-    
-    m_options.push_back(opt);
+    if (! try_add_option(opt))
+        throw name_conflict_error();
 }
 
-void 
-arg_parser::add_options(const std::vector<arg_option> &opts)
-{
-    for (auto & item : opts)
-        add_option(item);
-}
 
 bool
 arg_parser::contains_option(const std::string &s) const

@@ -34,6 +34,10 @@ public:
 
 class name_conflict_error : public std::logic_error {
 public:
+    name_conflict_error()
+        : std::logic_error("name conflict error")
+        { }
+        
     name_conflict_error(const std::string & what_arg)
         : std::logic_error("name conflict error: " + what_arg) 
     { }

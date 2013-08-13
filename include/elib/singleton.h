@@ -21,6 +21,9 @@ public:
     
     static T & 
     get();
+    
+    static bool
+    good();
 private:
     static std::unique_ptr<T> m_ptr;
 private:

@@ -34,6 +34,13 @@ singleton<T>::get()
 {
     return *m_ptr;
 }
+
+template <typename T>
+bool
+singleton<T>::good()
+{
+    return ((bool)m_ptr);
+}
     
     
 } /* namespace elib */

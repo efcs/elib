@@ -97,8 +97,10 @@ private:
     sptr_type m_pos_option;
     std::vector<sptr_type> m_options;
     std::vector<arg_token> m_tokens;
-    DISALLOW_COPY_AND_ASSIGN(arg_parser);
-
+private:
+    /* DISALLOW COPY AND ASSIGN */
+    arg_parser(const arg_parser&);
+    arg_parser& operator=(const arg_parser&);
 };
 
 

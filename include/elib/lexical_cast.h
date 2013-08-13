@@ -63,21 +63,11 @@ template <typename ToType, typename FromType>
 ToType
 lexical_cast(const FromType & from);
 
-
-/* specializations for booleans
- * attempt to use std::boolalpha when appropriate */
-template <>
-bool
-lexical_cast(const std::string & from);
-
-template <>
-std::string
-lexical_cast(const bool & b);
-
     
 } /* namespace elib */
 
 
 #include "detail/_lexical_cast.h"
+
 
 #endif /* ELIB_LEXICAL_CAST_H */

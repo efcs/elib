@@ -128,7 +128,7 @@ public:
               const std::string desc,
               storage_type & store);
     
-    virtual ~basic_arg() = default;
+    virtual ~basic_arg() { }
     
     /* change the transformer */
     void
@@ -191,7 +191,7 @@ public:
               const std::string & desc,
               Args&&... args);
     
-    ~typed_arg() = default;
+    ~typed_arg() { }
     
     storage_type value;
 };
@@ -227,7 +227,7 @@ public:
     typedef basic_arg<decltype(tag_type::value)> basic_arg_type;
     
     tagged_arg();
-    ~tagged_arg() = default;
+    ~tagged_arg() { }
 };
 
 

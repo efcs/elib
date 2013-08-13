@@ -21,7 +21,7 @@ public:
                const std::string & cmd_desc,
                const std::string & desc);
     
-    virtual ~arg_option() = default;
+    virtual ~arg_option() { }
     
     inline arg_type_e
     arg_type() const

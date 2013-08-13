@@ -2,16 +2,23 @@ cmake_minimum_required (VERSION 2.8)
 
 option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 
-# These options need to go before project declaration
-if (CONFIG_MY_BUILD)
-	option(CONFIG_OPT_GCC "Use /opt/gnu/bin/* and /opt/gnu/lib64" ON)
-	
-	if (CONFIG_OPT_GCC)
-		set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)
-		set(CMAKE_CXX_COMPILER /opt/gnu/bin/g++)
-		set(LD_FLAGS -Wl,-rpath -Wl,/opt/gnu/lib64)
-	endif()	
+################################################################################
+#                     Personal build enviroment configurations                           
+################################################################################
+if (CONFIG_OPT_GCC MATCHES 4.8.1)
+    set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)
+    set(CMAKE_CXX_COMPILER /opt/gnu/bin/g++)
+    set(LD_FLAGS -Wl,-rpath -Wl,/opt/gnu/lib64)
+elseif(CONFIG_OPT_GCC MATCHES 4.9.0)
+    set(CMAKE_C_COMPILER /opt/gcc/4.9.0/bin/gcc)
+    set(CMAKE_CXX_COMPILER /opt/gcc/4.9.0/bin/g++)
+    set(LD_FLAGS -Wl,-rpath -Wl,/opt/gcc/4.9.0/lib64)
+elseif(CONFIG_OPT_GCC MATCHES 4.7.3)
+# default compiler 
+elseif(CONFIG_OPT_GCC)
+    message(FATAL_ERROR "${CONFIG_OPT_GCC} is not a valid value for CONFIG_OPT_GCC")
 endif()
+
 
 # we need C to get the pthreads library 
 project(EricsLibrary CXX C)

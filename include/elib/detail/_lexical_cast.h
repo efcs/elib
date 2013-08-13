@@ -12,11 +12,21 @@
 
 namespace elib {
     
+namespace detail {
+    
+
+} /* namespace detail */
+    
 
 template <typename ToType, typename FromType>
 inline ToType
 lexical_cast(const FromType & from)
 {
+    static_assert(is_lexical<ToType>::value, 
+                  "cannot lexical cast to type");
+    static_assert(is_lexical<FromType>::value,
+                  "cannot lexical cast from type");
+    
     std::stringstream ss;
     ToType val;
     /* here is the trick, we basically write to

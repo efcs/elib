@@ -28,12 +28,13 @@ namespace argp {
 arg_token::arg_token(unsigned pos, 
                      const std::string & raw_arg,
                      const std::string name,
-                     const std::string value)
-    : m_pos(pos)
-    , m_raw(raw_arg)
-    , m_name(name)
-    , m_value(value)
-    , m_matched(false)
+                     const std::string value,
+                     bool xhas_assign)
+    : m_pos{pos}
+    , m_raw{raw_arg}
+    , m_name{name}
+    , m_value{value}
+    , m_assign{xhas_assign}
 {
 } 
 
@@ -84,6 +85,12 @@ bool
 arg_token::has_value() const
 {
     return (m_value != "");
+}
+
+bool
+arg_token::has_assign() const
+{
+    return m_assign;
 }
 
 

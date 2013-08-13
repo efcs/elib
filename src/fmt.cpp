@@ -1,6 +1,8 @@
 #include "elib/fmt.h"
 
-#include <cstdarg>
+
+
+#define BUFF_MAX 10000
 
 namespace elib {
     
@@ -10,15 +12,20 @@ fmt(const std::string & msg, ...)
     va_list args;
     va_start(args, msg);
     
-    /* get the size that is needed, then allocate a buffer for it*/
-    unsigned n = vsnprintf(nullptr, 0, msg.c_str(), args);
-    char *buff = new char[n + 10];
+    char buff[BUFF_MAX];
+    vsnprintf(buff, BUFF_MAX-1, msg.c_str(), args);
     
-    vsnprintf(buff, n + 10, msg.c_str(), args);
+    va_end(args);
     
-    std::string tmp(buff);
-    delete [] buff;
-    return tmp;
+    return std::string(buff);
+}
+
+std::string
+fmt(const std::string & msg, va_list & vl)
+{
+    char buff[BUFF_MAX];
+    vsnprintf(buff, BUFF_MAX-1, msg.c_str(), vl);
+    return std::string(buff);
 }
     
 } /* namespace elib */

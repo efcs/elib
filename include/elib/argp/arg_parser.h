@@ -19,7 +19,7 @@
 #ifndef ELIB_ARGP_ARG_PARSER_H
 #define ELIB_ARGP_ARG_PARSER_H
 
-#include "arg_option.h"
+
 #include "arg_token.h"
 #include "arg_errors.h"
 #include "arg.h"
@@ -34,7 +34,7 @@ namespace argp {
 
 class arg_parser {
 public:
-    typedef std::shared_ptr<arg_option> sptr_type;
+    typedef std::shared_ptr<detail::arg_option> sptr_type;
     
     arg_parser(const std::string & program_name);
         
@@ -48,7 +48,7 @@ public:
     
     
     bool contains_option(const std::string &s) const;
-    bool contains_option(const arg_option & opt) const;
+    bool contains_option(const detail::arg_option & opt) const;
     
     void run(unsigned argc, const char* argv[]); 
     void run(const std::vector<std::string> & args);
@@ -65,9 +65,15 @@ private:
     arg_token create_and_match_positional(const std::string &tk, unsigned pos);
     arg_token create_and_match_arg(const std::string &tk, unsigned pos);
     
+    /* throw invalid arg err on failure */
+    void check_token_semantics(const detail::arg_option & opt,
+                               const arg_token & tk) const;
+    
     void infer_token_split(const std::string & s,
                            std::string & name,
-                           std::string & value) const;
+                           std::string & value,
+                           bool & has_assign) const;
+                        
                                
     void infer_short_name_split(const std::string & tk,
                                 std::string & name_dest,
@@ -75,7 +81,8 @@ private:
                                
     void infer_long_name_split(const std::string & tk,
                                std::string & name,
-                               std::string & value) const;
+                               std::string & value,
+                               bool & has_assign) const;
                                
     void format_command(std::stringstream & ss) const;
     void format_description(std::stringstream & ss) const;
@@ -104,7 +111,7 @@ arg_parser::try_add_option(const basic_arg<T> & opt)
         if (m_pos_option)
             return false;
         auto sptr = std::make_shared<basic_arg<T>>(opt);
-        m_pos_option = std::static_pointer_cast<arg_option>(sptr);
+        m_pos_option = std::static_pointer_cast<detail::arg_option>(sptr);
         return true;
     }
     
@@ -112,7 +119,7 @@ arg_parser::try_add_option(const basic_arg<T> & opt)
         return false;
     
     auto sptr = std::make_shared<basic_arg<T>>(opt);
-    auto base_ptr = std::static_pointer_cast<arg_option>(sptr);
+    auto base_ptr = std::static_pointer_cast<detail::arg_option>(sptr);
     m_options.push_back(base_ptr);
     return true;
 }

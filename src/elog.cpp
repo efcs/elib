@@ -17,21 +17,19 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/elog.h"
+#include "elib/fmt.h"
 
 #include <cstdarg>
 
 #define _FMT_ARGS()  \
     va_list __args; \
     va_start(__args, msg); \
-    unsigned __ret = vsnprintf(NULL, 0, msg, __args); \
-    char *__buff = new char[__ret + 10]; \
-    vsnprintf(__buff, __ret + 10, msg, __args); \
+    std::string __str = fmt(msg, __args); \
     va_end(__args)
     
     
 #define LOG_FUNC_HANDLER(level) _FMT_ARGS(); \
-    m_impl->_log(level, __buff); \
-    delete [] __buff
+    m_impl->_log(level, __str)
 
     
 namespace elib {

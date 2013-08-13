@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "elib/argp/arg_option.h"
+#include "elib/argp/arg.h"
 #include "elib/argp/arg_errors.h"
 
 #include <algorithm>
@@ -26,10 +26,9 @@
 
 namespace elib {
 namespace argp {
+namespace detail {
     
     
-
-
 arg_option::arg_option(arg_type_e arg_type,
                const std::string & name,
                const std::string & cmd_desc,
@@ -61,11 +60,6 @@ arg_option::fmt_description() const
     return ss.str();
 }
 
-void
-arg_option::notify(const arg_token & tk)
-{
-    
-}
 
 bool 
 arg_option::has_short_name() const
@@ -181,79 +175,7 @@ arg_option::handle_name_part(std::string s)
     }
 }
 
-
-
-////////////////////////////////////////////////////////////////////////////////
-//                            functions                                       //
-////////////////////////////////////////////////////////////////////////////////
-
-
-bool
-prefix_is_long_name(const std::string & name)
-{
-    if (name.size() < 3)
-        return false;
-    
-    return (name[0] == '-' && name[1] == '-' && isalpha(name[2]));
-}
-
-bool
-prefix_is_short_name(const std::string & name)
-{
-    if (name.size() < 2)
-        return false;
-    
-    return (name[0] == '-' && isalpha(name[1]));
-}
-
-bool
-is_valid_arg_name(const std::string & name)
-{
-    
-    if (prefix_is_long_name(name)) {
-        return is_valid_long_name(name);
-    }
-    else if (prefix_is_short_name(name)) {
-        return is_valid_short_name(name);
-    }
-    
-    return false;
-}
-
-bool
-is_valid_short_name(const std::string & name)
-{
-    if (name.size() != 2)
-        return false;
-    
-    return (name[0] == '-' && isalpha(name[1]));
-}
-
-bool
-is_valid_long_name(const std::string & name)
-{
-    if (name.size() < 3)
-        return false;
-    
-    if (name[0] != '-' || name[1] != '-' || ! isalpha(name[2]))
-        return false;
-    
-    if (name[name.size()-1] == '-')
-        return false;
-    
-    for (unsigned i=3; i < name.size(); ++i) {
-        char c = name[i];
-        if (c == '-') {
-            if (i + 1 == name.size() || ! isalpha(name[i+1]))
-                return false;
-        }
-        else if (! isalpha(c)) {
-            return false;
-        }
-    }
-    
-    return true;
-}
  
+} /* namespace detail */
 } /* namespace argp */
 } /* namespace elib */

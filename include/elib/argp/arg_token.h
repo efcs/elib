@@ -30,7 +30,8 @@ public:
     arg_token(unsigned pos, 
               const std::string & raw_arg,
               const std::string name = "", 
-              const std::string value = "");
+              const std::string value = "",
+              bool xhas_assign = false);
     
     unsigned position() const;
     
@@ -42,13 +43,15 @@ public:
     bool positional() const;
     bool has_name() const;
     bool has_value() const;
+    bool has_assign() const;
     
     bool matched() const;
     void matched(bool);
 private:
     unsigned m_pos;
     std::string m_raw, m_name, m_value;
-    bool m_matched;
+    bool m_assign;
+    bool m_matched{false};
 };
 
 

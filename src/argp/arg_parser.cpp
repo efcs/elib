@@ -17,6 +17,7 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/argp/arg_parser.h"
+#include "elib/fmt.h"
 
 #include <cctype>
 #include <sstream>
@@ -24,6 +25,8 @@
 
 namespace elib {
 namespace argp {
+    
+using namespace ::elib::argp::detail;
     
  
 ////////////////////////////////////////////////////////////////////////////////
@@ -272,9 +275,10 @@ arg_token
 arg_parser::create_and_match_arg(const std::string &tk, unsigned pos)
 {
     std::string name, value;
+    bool has_assign = false;
     std::shared_ptr<arg_option> opt = nullptr;
    
-    infer_token_split(tk, name, value);
+    infer_token_split(tk, name, value, has_assign);
     
     assert(name.size() >= 2);
     
@@ -285,9 +289,12 @@ arg_parser::create_and_match_arg(const std::string &tk, unsigned pos)
         }
     }
     
-    arg_token arg_tk(pos, tk, name, value);
+
+    arg_token arg_tk(pos, tk, name, value, has_assign);
+    
     
     if (opt != nullptr) {
+        check_token_semantics(*opt, arg_tk);
         opt->notify(arg_tk);
         arg_tk.matched(true);
     }
@@ -295,18 +302,43 @@ arg_parser::create_and_match_arg(const std::string &tk, unsigned pos)
     return arg_tk;
 }
 
+
+void
+arg_parser::check_token_semantics(const arg_option & opt,
+                                  const arg_token & tk) const
+{
+    
+    
+    
+    if (opt.arg_type() == arg_type_e::flag && tk.has_value()) {
+        throw invalid_arg_error(fmt("flag %s does not take any value (near %s)",
+                                tk.name().c_str(), tk.raw_arg().c_str()));
+    }
+    
+    if (opt.arg_type() == arg_type_e::option && 
+        tk.has_assign() == false &&
+        opt.has_implicit_value() == false) {
+        throw invalid_arg_error(fmt("option %s requires a value (near %s)",
+                                tk.name().c_str(), tk.raw_arg().c_str()));
+    }
+    
+    
+}
+
 void
 arg_parser::infer_token_split(const std::string &tk,
                               std::string & name,
-                              std::string & value) const
+                              std::string & value,
+                              bool & has_assign) const
 {
     if (prefix_is_long_name(tk)) {
-        infer_long_name_split(tk, name, value);
+        infer_long_name_split(tk, name, value, has_assign);
         return;
     }
    
     if (prefix_is_short_name(tk)) {
         infer_short_name_split(tk, name, value);
+        has_assign = (value.size() != 0);
         return;
     }
     
@@ -329,12 +361,13 @@ arg_parser::infer_short_name_split(const std::string &tk,
 void
 arg_parser::infer_long_name_split(const std::string &tk,
                                   std::string &name,
-                                  std::string &value) const
+                                  std::string &value,
+                                  bool & has_assign) const
 {
     assert(prefix_is_long_name(tk));
     
     unsigned name_len = 3;
-    
+    has_assign = false;
     while(name_len < tk.size()) {
         char c = tk[name_len];
         if (isalpha(c)) {
@@ -349,6 +382,7 @@ arg_parser::infer_long_name_split(const std::string &tk,
             ++name_len;
         }
         else if (c == '=') {
+            has_assign = true;
             break;
         }
         else {

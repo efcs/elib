@@ -5,7 +5,6 @@
 #   error do not include this file directly
 #endif 
 
-#include "../../elog.h"
 
 namespace elib {
 namespace argp {
@@ -34,6 +33,20 @@ struct assigner <FromT, std::vector<DestT>> {
     { dest.push_back(std::forward<FromT>(from)); }
 }; 
 
+/* for when an implicit value is a vector */
+template <typename FromT, typename DestT>
+struct assigner<std::vector<FromT>, std::vector<DestT>>
+{
+    inline static void
+    assign(const std::vector<FromT> from, std::vector<DestT> & dest)
+    { dest = from; }
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                      transformer_helper                                                    
+////////////////////////////////////////////////////////////////////////////////
+
 inline bool
 flag_transformer(const std::string & s)
 {
@@ -42,10 +55,6 @@ flag_transformer(const std::string & s)
     return true;
 }
 
-
-////////////////////////////////////////////////////////////////////////////////
-//                      transformer_helper                                                    
-////////////////////////////////////////////////////////////////////////////////
 
 template <typename T, arg_type_e e, 
           bool is_lex, bool is_enum>
@@ -125,7 +134,7 @@ basic_arg<T>::basic_arg(arg_type_e arg_type,
       m_val(store)
       
 {
-   m_transformer = detail::get_tranformer<T>(arg_type);
+   m_transformer = detail::get_tranformer<value_type>(arg_type);
 }
 
 template <typename T>
@@ -142,11 +151,12 @@ basic_arg<T>::implicit_value(const storage_type & v)
 {
     m_implicit = std::make_shared<storage_type>(
                     std::forward<storage_type>(v));
+
 }
 
 template <typename T>
 bool
-basic_arg<T>::has_implicit_value()
+basic_arg<T>::has_implicit_value() const
 {
     return ((bool)m_implicit);
 }
@@ -155,14 +165,16 @@ template <typename T>
 void
 basic_arg<T>::apply_implicit_value()
 {
-    detail::assigner<value_type, storage_type>::assign(*m_implicit, m_val);
+    detail::assigner<storage_type, storage_type>::assign(*m_implicit, m_val);
 }
     
 template <typename T>
 void 
 basic_arg<T>::apply_value(const std::string & s)
 {
-    detail::assigner<value_type, storage_type>::assign(m_transformer(s), m_val);
+    detail::assigner<value_type, storage_type>::
+        assign(m_transformer(s), m_val);
+
 }
     
 /* error checking should be done in parser,
@@ -172,22 +184,32 @@ template <typename T>
 void
 basic_arg<T>::notify(const arg_token & tk)
 {
-    if (arg_type() == arg_type_e::positional) {
-        apply_value(tk.value());
-    }
-    else if (arg_type() == arg_type_e::option) {
-        if (tk.has_value())
+    try {
+        if (arg_type() == arg_type_e::positional) {
             apply_value(tk.value());
-        else
-            apply_implicit_value();
-    } else if (arg_type() == arg_type_e::flag) {
-        if (has_implicit_value())
-            apply_implicit_value();
-        else
-            apply_value("");
+        }
+        else if (arg_type() == arg_type_e::option) {
+            if (tk.has_assign())
+                apply_value(tk.value());
+            else
+                apply_implicit_value();
+        } 
+        else if (arg_type() == arg_type_e::flag) {
+            if (has_implicit_value())
+                apply_implicit_value();
+            else
+                apply_value("");
+        }
+    /* transformation exceptions could occur, including 
+     * lexical_cast_exception and enum_cast_exception,
+     * rethrow as a invalid_arg_error */
+    } catch (...) {
+        std::string msg = "transformation failed for token '";
+        msg += tk.raw_arg() + "'";
+        throw invalid_arg_error(msg);
     }
-    
-    m_count++;
+        
+        m_count++;
 }
 
 

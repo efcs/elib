@@ -30,6 +30,7 @@ namespace detail {
     typedef decltype(BAD_ENUM_VALUE) BAD_ENUM_TYPE;
     
 } /* namespace detail */
+
     
     
 /* each enumeration must implement this in order
@@ -68,7 +69,9 @@ struct basic_enum_traits {
     
     /* name_map is used for checking the validity of casts
      * iterating over keys (enum_iterator<Enum>) and
-     * casting to and from std::string */
+     * casting to and from std::string 
+     * 
+     * NOTE: the typedef is unneeded, and so is the const */
     typedef const std::map<detail::BAD_ENUM_TYPE, std::string> map_type;
     static map_type name_map;
 };

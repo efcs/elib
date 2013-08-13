@@ -1,21 +1,46 @@
 #ifndef ELIB_ARGP_ARG_H
 #define ELIB_ARGP_ARG_H
 
+#include "detail/_arg_option.h"
+#include "arg_token.h"
+#include "arg_errors.h"
+
+#include "../lexical_cast.h"
+#include "../enum_traits.h"
+#include "../enum_cast.h"
+#include "../fmt.h"
+
 #include <vector>
 #include <string>
 #include <functional>
 #include <type_traits>
 #include <memory>
 
-#include "arg_token.h"
-#include "arg_option.h"
-
-#include "../lexical_cast.h"
-#include "../enum_traits.h"
-#include "../enum_cast.h"
-
 namespace elib {
 namespace argp {
+    
+    
+typedef std::function<void(const arg_token&)> option_callback;
+
+
+/* the type of arg,
+ * flags: [-c|--STRING]
+ * option: [-cArg|--STRING=ARG] (flag syntax is allowed 
+ *                               when there is an implicit value)
+ * positional: an non-option argument */
+enum class arg_type_e {
+    positional,
+    flag,
+    option,
+};
+
+
+bool prefix_is_long_name(const std::string & s);
+bool prefix_is_short_name(const std::string & s);
+
+bool is_valid_arg_name(const std::string &s);
+bool is_valid_short_name(const std::string & s);
+bool is_valid_long_name(const std::string & s);
     
 
 /* arg_value_traits deduces if an argument is a list, or another type */
@@ -41,7 +66,7 @@ struct arg_value_traits<std::vector<T>> {
  * to generate rules to parse the options, create a help message,
  * and link the options to their storage */
 template <typename ArgT>
-class basic_arg : public arg_option {
+class basic_arg : public detail::arg_option {
 public:
     /* use traits to seperate value_type and containor
      * information */
@@ -76,8 +101,8 @@ public:
      *      short-name:
      *          -[a-Z] a '-' sign followed by one alphabetic character
      *      long-name:
-     *          --[a-Z][a-Z0-9_] two '--' signs followed by an identifier
-     *          the identifier cannot start in a number or underscore.
+     *          --[a-Z][a-Z0-9_\-] two '--' signs followed by an identifier,
+     *          the identifier must start with a digit 
      *      raw formatted name:
      *          a raw formatted can be "" if and only if arg_type is positional
      *          examples "-c,--C", "--warning,-W", "-v", "--help"
@@ -117,9 +142,8 @@ public:
     void
     implicit_value(const storage_type & v);
     
-    /* m_implicit != nullptr */
     bool
-    has_implicit_value();
+    has_implicit_value() const;
     
     /* apply implicit_value to the variable */
     void

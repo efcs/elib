@@ -2,7 +2,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include "elib/argp/arg_parser.h"
-#include "elib/argp/arg_option.h"
 #include "elib/argp/arg.h"
 
 #include "elib/elog.h"
@@ -54,11 +53,11 @@ struct basic_enum_traits<unit_test::test_arg_e> {
     static constexpr unit_test::test_arg_e three_value = 
         unit_test::test_arg_e::three;
         
-    typedef const std::map<unit_test::test_arg_e, std::string> map_type;
-    static map_type name_map;
+
+    static const std::map<unit_test::test_arg_e, std::string> name_map;
 };
 
-basic_enum_traits<unit_test::test_arg_e>::map_type
+decltype(basic_enum_traits<unit_test::test_arg_e>::name_map)
 basic_enum_traits<unit_test::test_arg_e>::name_map = 
 {
     {unit_test::test_arg_e::one, "one"},
@@ -87,6 +86,10 @@ BOOST_AUTO_TEST_CASE(arg_test)
                                "-e,--enum",
                                "", "", e_val);
     
+    std::vector<int> int_val;
+    basic_arg<std::vector<int>> o5(arg_type_e::option,
+                             "-I,--INT", "", "", int_val);
+    
     tagged_arg<flag1> t;
     tagged_arg<opt1> o;
     
@@ -95,22 +98,34 @@ BOOST_AUTO_TEST_CASE(arg_test)
                                 "[-a=val,--Arg=val]", 
                                 "");
     
+    typed_arg<int> o4(arg_type_e::option,
+                      "-i,--int", "", "");
+    
     arg_parser par("hello");
     
     vector<std::string> args = {"invoke", "-f", "-ofilename", 
-                                "--output=filename2", "-etwo", "--Arg=val"};
+                                "--output=filename2", "-etwo", "--Arg=val",
+                                "-i4", "-I1", "-I2", "-D"};
     
     par.add_option(t);
     par.add_option(o);
     par.add_option(o2);
     par.add_option(o3);
+    par.add_option(o4);
+    par.add_option(o5);
+
     
+   
     par.run(args);
+
     
     BOOST_CHECK(flag1::value == true);
     BOOST_CHECK(opt1::value == "filename2");
     BOOST_CHECK(o2.value == "val");
     BOOST_CHECK(e_val == test_arg_e::two);
+    BOOST_CHECK(o4.value = 4);
+    BOOST_CHECK(int_val.size() == 2);
+    BOOST_CHECK(int_val[0] == 1 && int_val[1] == 2);
 
 }
 

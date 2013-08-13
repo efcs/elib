@@ -11,6 +11,8 @@
 #include "arg_option.h"
 
 #include "../lexical_cast.h"
+#include "../enum_traits.h"
+#include "../enum_cast.h"
 
 namespace elib {
 namespace argp {
@@ -35,9 +37,6 @@ struct arg_value_traits<std::vector<T>> {
 
 
 
-
- 
-
 /* user-front end: create arguments and add them to a parser
  * to generate rules to parse the options, create a help message,
  * and link the options to their storage */
@@ -57,6 +56,7 @@ public:
      *    value_type
      *    std::vector<value_type> */
     typedef typename traits::storage_type storage_type;
+    
     /* this is called to transform s -> value_type */
     typedef std::function<value_type(const std::string&)> transformer_type;
     
@@ -98,17 +98,16 @@ public:
      *                     
      */
     basic_arg(arg_type_e arg_type,
-              const std::string & name,
-              const std::string & cmd_desc,
-              const std::string & desc,
+              const std::string name,
+              const std::string cmd_desc,
+              const std::string desc,
               storage_type & store);
     
-    basic_arg(arg_type_e arg_type,
-              const std::string & name,
-              const std::string & cmd_desc,
-              const std::string & desc,
-              storage_type & store,
-              transformer_type & transformer);
+    virtual ~basic_arg() = default;
+    
+    /* change the transformer */
+    void
+    transformer(transformer_type & t);
     
     
     /* give the arguement an implicit value,
@@ -145,6 +144,68 @@ private:
     transformer_type m_transformer;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+//                           typed arg                                               
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+class typed_arg : public basic_arg<T> {
+public:
+    typedef basic_arg<T> basic_arg_type;
+    typedef typename basic_arg_type::value_type value_type;
+    typedef typename basic_arg_type::storage_type storage_type;
+    
+    typed_arg(arg_type_e arg_type,
+              const std::string & name,
+              const std::string & cmd_desc,
+              const std::string & desc);
+
+    template <typename... Args>
+    typed_arg(arg_type_e arg_type,
+              const std::string & name,
+              const std::string & cmd_desc,
+              const std::string & desc,
+              Args&&... args);
+    
+    ~typed_arg() = default;
+    
+    storage_type value;
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                           tagged arg                                                
+////////////////////////////////////////////////////////////////////////////////
+
+
+/* don't polute namespace with example */
+namespace detail {
+    
+/* this is an example template for an arg tag */
+struct arg_tag {    
+    static decltype(nullptr) value;
+    
+    /* can be const, or constexpr */
+    static constexpr arg_type_e arg_type = arg_type_e::flag;
+    static constexpr char cmd[] = "";
+    static constexpr char cmd_desc[] = "";
+    static constexpr char desc[] = "";
+};
+
+} /* namespace detail */
+
+
+/* this is what uses struct tags */
+template <typename Tag>
+class tagged_arg : public basic_arg<decltype(Tag::value)> {
+public:
+    typedef Tag tag_type;
+    typedef basic_arg<decltype(tag_type::value)> basic_arg_type;
+    
+    tagged_arg();
+    ~tagged_arg() = default;
+};
+
 
     
 } /* namespace argp */
@@ -152,5 +213,6 @@ private:
 
 
 #include "detail/_arg.h"
+
 
 #endif /* ELIB_ARGP_ARG_H */

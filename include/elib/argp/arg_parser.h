@@ -34,12 +34,17 @@ namespace argp {
 
 class arg_parser {
 public:
+    typedef std::shared_ptr<arg_option> sptr_type;
+    
     arg_parser(const std::string & program_name);
         
     std::string description() const;
     
-    bool try_add_option(const arg_option & opt);
-    void add_option(const arg_option & opt);
+    template <typename T>
+    bool try_add_option(const basic_arg<T> & opt);
+    
+    template <typename T>
+    void add_option(const basic_arg<T> & opt);
     
     
     bool contains_option(const std::string &s) const;
@@ -48,7 +53,8 @@ public:
     void run(unsigned argc, const char* argv[]); 
     void run(const std::vector<std::string> & args);
     
-    const std::vector<arg_token> & token_list() const;
+    const std::vector<arg_token> & 
+    token_list() const;
     
     std::string invocation() const;
     std::vector<arg_token> collect_unrecognized() const;
@@ -77,17 +83,47 @@ private:
     void format_description(std::stringstream & ss,
                             const std::string & cmd_desc,
                             const std::string & desc) const;
-                            
+        
+    
 private:
     std::string m_program_name;
-    std::shared_ptr<arg_option> m_pos_option;
-    std::vector<arg_option> m_options;
+    sptr_type m_pos_option;
+    std::vector<sptr_type> m_options;
     std::vector<arg_token> m_tokens;
     DISALLOW_COPY_AND_ASSIGN(arg_parser);
 
 };
 
 
+
+template <typename T>
+bool 
+arg_parser::try_add_option(const basic_arg<T> & opt)
+{
+    if (opt.arg_type() == arg_type_e::positional) {
+        if (m_pos_option)
+            return false;
+        auto sptr = std::make_shared<basic_arg<T>>(opt);
+        m_pos_option = std::static_pointer_cast<arg_option>(sptr);
+        return true;
+    }
+    
+    if (contains_option(opt))
+        return false;
+    
+    auto sptr = std::make_shared<basic_arg<T>>(opt);
+    auto base_ptr = std::static_pointer_cast<arg_option>(sptr);
+    m_options.push_back(base_ptr);
+    return true;
+}
+
+template <typename T>
+void 
+arg_parser::add_option(const basic_arg<T> & opt)
+{
+    if (! try_add_option(opt))
+        throw name_conflict_error();
+}
 
 
 } /* namespace argp */

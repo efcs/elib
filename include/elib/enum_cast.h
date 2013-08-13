@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <type_traits>
+#include <functional>
 
 namespace elib {
     
@@ -24,24 +25,26 @@ public:
 
 
 /* cast strings and underlying_types to Enum values */
-template <typename Enum>
+template <typename Enum, typename From>
 Enum
-enum_cast(const std::string & s);
-
-template <typename Enum>
-Enum
-enum_cast(typename std::underlying_type<Enum>::type x);
+enum_cast(const From f);
 
 /* these versions are nothrow
  * on success they return true, and write to dest,
  * otherwise dest is ignored and false is return */
-template <typename Enum>
+template <typename Enum, typename From>
 bool
-enum_cast(const std::string & s, Enum & dest);
+enum_cast(const From f, Enum & dest);
+
+/* since enum cast is overloaded, use this to access enum_cast 
+ * via non-overloaded methods */
+template <typename Enum>
+Enum
+enum_cast_string(const std::string & s);
 
 template <typename Enum>
-bool
-enum_cast(typename std::underlying_type<Enum>::type x, Enum & dest);
+Enum
+enum_cast_base(typename std::underlying_type<Enum>::type v);
 
 
 /* Cast Enum values to std::string or the underlying_type */

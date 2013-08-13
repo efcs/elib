@@ -10,7 +10,7 @@
 namespace elib {
 namespace detail {
 ////////////////////////////////////////////////////////////////////////////////
-//                      lexical cast helpers                                                                  
+//                     lexical cast helpers                                                                  
 ////////////////////////////////////////////////////////////////////////////////
 
     
@@ -58,72 +58,97 @@ struct lexical_cast_helper<typename std::underlying_type<Enum>::type, Enum> {
     }
 };
 
+
+////////////////////////////////////////////////////////////////////////////////
+//                         enum_cast helpers                                                 
+////////////////////////////////////////////////////////////////////////////////
+
+
+template <typename Enum, typename From>
+struct enum_cast_helper;
+
+template <typename Enum>
+struct enum_cast_helper<Enum, std::string>;
+
+template <typename Enum>
+struct enum_cast_helper<Enum, typename std::underlying_type<Enum>::type>;
+
+template <typename Enum>
+struct enum_cast_helper<Enum, std::string> {
+    inline static bool
+    cast(const std::string & s, Enum & dest)
+    {
+        typedef basic_enum_traits<Enum> traits;
+    
+        for (auto & kv : traits::name_map) {
+            if (kv.second == s) {
+                dest = kv.first;
+                return true;
+            }
+        }
+    
+        return false;
+    }
+};
+
+template <typename Enum>
+struct enum_cast_helper<Enum, typename std::underlying_type<Enum>::type> {
+    typedef typename std::underlying_type<Enum>::type underlying_type;
+    
+    inline static bool
+    cast(underlying_type v, Enum & dest)
+    {
+        typedef basic_enum_traits<Enum> traits;
+    
+        Enum test = static_cast<Enum>(v);
+        if (traits::name_map.count(test)) {
+            dest = test;
+            return true;
+        }
+    
+        return false;
+    }
+};
+
 } /* namespace detail */
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              enum_cast definitions                                             
 ////////////////////////////////////////////////////////////////////////////////
 
+
+template <typename Enum, typename From>
+inline Enum
+enum_cast(const From f)
+{
+    Enum dest;
+    if (! detail::enum_cast_helper<Enum, From>::cast(f, dest)) {
+        throw bad_enum_cast();
+    }
+    return dest;
+}
+
+template <typename Enum, typename From>
+inline bool
+enum_cast(const From f, Enum & dest)
+{
+    return detail::enum_cast_helper<Enum, From>::cast(f, dest);
+}
+
+
 template <typename Enum>
 inline Enum
-enum_cast(const std::string & s)
+enum_cast_string(const std::string & s)
 {
-    typedef basic_enum_traits<Enum> traits;
-    
-    for (auto & kv : traits::name_map) {
-        if (kv.second == s)
-            return kv.first;
-    }
-    
-    throw bad_enum_cast(s);
+    return enum_cast<Enum>(s);
 }
-
 
 template <typename Enum>
 inline Enum
-enum_cast(typename std::underlying_type<Enum>::type x)
+enum_cast_base(typename std::underlying_type<Enum>::type v)
 {
-    typedef basic_enum_traits<Enum> traits;
-    
-    Enum test = static_cast<Enum>(x);
-    if (traits::name_map.count(test))
-        return test;
-    
-    throw bad_enum_cast();
+    return enum_cast<Enum>(v);
 }
-
-
-template <typename Enum>
-bool
-enum_cast(const std::string & s, Enum & dest)
-{
-    typedef basic_enum_traits<Enum> traits;
-    
-    for (auto & kv : traits::name_map) {
-        if (kv.second == s) {
-            dest = kv.first;
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-template <typename Enum>
-bool
-enum_cast(typename std::underlying_type<Enum>::type x, Enum & dest)
-{
-    typedef basic_enum_traits<Enum> traits;
-    
-    Enum test = static_cast<Enum>(x);
-    if (traits::name_map.count(test)) {
-        dest = test;
-        return true;
-    }
-    
-    return false;
-}
-
 
 /* Ret is one of std::string, or the underlying_type */
 template <typename Ret, typename Enum>

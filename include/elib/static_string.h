@@ -43,6 +43,9 @@ struct basic_static_string {
     char &
     operator[](unsigned i);
     
+    /*  for passing as std::string */
+    operator std::string() const;
+    
     std::string
     str() const;
 };

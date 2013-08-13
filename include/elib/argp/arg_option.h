@@ -33,13 +33,11 @@ typedef std::function<void(const arg_token&)> option_callback;
  * flags: [-c|--STRING]
  * option: [-cArg|--STRING=ARG] (flag syntax is allowed 
  *                               when there is an implicit value)
- * option_list: [-cArg1,...,Argn|--STRING=Arg1,...,Argn]
  * positional: an non-option argument */
 enum class arg_type_e {
     positional,
     flag,
     option,
-    option_list
 };
 
 
@@ -49,6 +47,8 @@ public:
                const std::string & name,
                const std::string & cmd_desc,
                const std::string & desc);
+    
+    virtual ~arg_option() = default;
     
     inline arg_type_e
     arg_type() const

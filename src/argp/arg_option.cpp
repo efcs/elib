@@ -64,7 +64,7 @@ arg_option::fmt_description() const
 void
 arg_option::notify(const arg_token & tk)
 {
-    throw 1;
+    
 }
 
 bool 

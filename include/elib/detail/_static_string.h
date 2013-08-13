@@ -56,6 +56,13 @@ basic_static_string<N>::operator[](unsigned i)
 }
 
 template <unsigned N>
+inline 
+basic_static_string<N>::operator std::string() const
+{
+    return std::string(string_value);
+}
+
+template <unsigned N>
 inline std::string 
 basic_static_string<N>::str() const
 {

@@ -5,6 +5,8 @@
 #   error do not include this file directly
 #endif 
 
+#include "../../elog.h"
+
 namespace elib {
 namespace argp {
     
@@ -32,31 +34,105 @@ struct assigner <FromT, std::vector<DestT>> {
     { dest.push_back(std::forward<FromT>(from)); }
 }; 
 
+inline bool
+flag_transformer(const std::string & s)
+{
+    /* unused */
+    ((void)s);
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                      transformer_helper                                                    
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename T, arg_type_e e, 
+          bool is_lex, bool is_enum>
+struct _transformer_helper {};
+
+template <>
+struct _transformer_helper<bool, arg_type_e::flag, true, false> {
+    static inline typename basic_arg<bool>::transformer_type 
+    transformer() 
+    { 
+        return flag_transformer; 
+    }
+};
+
+template <typename T, arg_type_e e>
+struct _transformer_helper<T, e, true, false> {
+    static inline typename basic_arg<T>::transformer_type 
+    transformer() 
+    { 
+        return lexical_cast<T, std::string>; 
+    }
+};
+
+template <typename T, arg_type_e e>
+struct _transformer_helper<T, e, false, true> {
+    static inline typename basic_arg<T>::transformer_type
+    transformer() 
+    { 
+        return enum_cast_string<T>; 
+    }
+};
+
+
+template <typename T, arg_type_e e>
+struct transformer_helper {
+    static inline typename basic_arg<T>::transformer_type
+    transformer() 
+    {
+        return _transformer_helper<T, e, is_lexical<T>::value, 
+                                   std::is_enum<T>::value>::transformer();
+    }
+};
+
+
+/* turn arg_type_e into compile-time info */
+template <typename T>
+typename basic_arg<T>::transformer_type
+get_tranformer(arg_type_e e)
+{  
+    switch (e) {
+        case arg_type_e::flag:
+            return transformer_helper<T, arg_type_e::flag>::transformer();
+        case arg_type_e::option:
+            return transformer_helper<T, arg_type_e::option>::transformer();
+        case arg_type_e::positional:
+            return transformer_helper<T, arg_type_e::positional>::transformer();
+    }
+    throw 1;
+}
+
+
+
 } /* namespace detail */
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                          basic_arg<T>                                                
+////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
 basic_arg<T>::basic_arg(arg_type_e arg_type,
-                    const std::string & name,
-                    const std::string & cmd_desc,
-                    const std::string & desc,
+                    const std::string name,
+                    const std::string cmd_desc,
+                    const std::string desc,
                     storage_type & store)
     : arg_option(arg_type, name, cmd_desc, desc),
       m_val(store)
       
 {
-    m_transformer = lexical_cast<value_type, std::string>;
+   m_transformer = detail::get_tranformer<T>(arg_type);
 }
 
 template <typename T>
-basic_arg<T>::basic_arg(arg_type_e arg_type,
-              const std::string & name,
-              const std::string & cmd_desc,
-              const std::string & desc,
-              storage_type & store,
-              transformer_type & transformer)
-    : arg_option(arg_type, name, cmd_desc, desc),
-      m_val(store), m_transformer(transformer)
+void
+basic_arg<T>::transformer(transformer_type & t)
 {
+    m_transformer = t;
 }
 
     
@@ -104,13 +180,59 @@ basic_arg<T>::notify(const arg_token & tk)
             apply_value(tk.value());
         else
             apply_implicit_value();
-    } else if (arg_type() == arg_type_e::flag && has_implicit_value()) {
-        apply_implicit_value();
+    } else if (arg_type() == arg_type_e::flag) {
+        if (has_implicit_value())
+            apply_implicit_value();
+        else
+            apply_value("");
     }
     
     m_count++;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+//                            typed_arg                                              
+////////////////////////////////////////////////////////////////////////////////
+    
+    
+template <typename T>
+typed_arg<T>::typed_arg(arg_type_e arg_type,
+              const std::string & name,
+              const std::string & cmd_desc,
+              const std::string & desc)
+    : basic_arg_type(arg_type, name, cmd_desc, desc, value), 
+      value{}
+{
+}
+
+template <typename T>
+template <typename... Args>
+typed_arg<T>::typed_arg(arg_type_e arg_type,
+                const std::string & name,
+                const std::string & cmd_desc,
+                const std::string & desc,
+                Args&&... args)
+    : basic_arg_type(arg_type, name, cmd_desc, desc, value), 
+      value{args...}
+{
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                             tagged_arg                                           
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename Tag>
+tagged_arg<Tag>::tagged_arg()
+    : basic_arg_type(tag_type::arg_type,
+                     tag_type::cmd,
+                     tag_type::cmd_desc,
+                     tag_type::desc,
+                     tag_type::value)
+    
+{
+}
 
     
     

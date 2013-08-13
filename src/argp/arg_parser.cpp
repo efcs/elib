@@ -66,12 +66,12 @@ arg_parser::format_command(std::stringstream & ss) const
     col_count += indent.size() + m_program_name.size() + 1;
     
     for (auto & o : m_options) {
-        if (o.command_description().size() + col_count >= col_max) {
+        if (o->command_description().size() + col_count >= col_max) {
             ss << "\n" << indent << offset;
             col_count = indent.size() + offset.size();
         }
-        ss << o.command_description() << " ";
-        col_count += o.command_description().size() + 1;
+        ss << o->command_description() << " ";
+        col_count += o->command_description().size() + 1;
     }
     
     if (m_pos_option) {
@@ -95,7 +95,7 @@ arg_parser::format_description(std::stringstream & ss) const
     }
     
     for (auto & o : m_options)
-        format_description(ss, o.command_description(), o.description());
+        format_description(ss, o->command_description(), o->description());
 }
 
 void
@@ -152,36 +152,13 @@ arg_parser::format_description(std::stringstream & ss,
 
 
 
-bool 
-arg_parser::try_add_option(const arg_option & opt)
-{
-    if (opt.arg_type() == arg_type_e::positional) {
-        if (m_pos_option)
-            return false;
-        m_pos_option = std::make_shared<arg_option>(opt);
-        return true;
-    }
-    
-    if (contains_option(opt))
-        return false;
-    
-    m_options.push_back(opt);
-    return true;
-}
-
-void 
-arg_parser::add_option(const arg_option & opt)
-{
-    if (! try_add_option(opt))
-        throw name_conflict_error();
-}
 
 
 bool
 arg_parser::contains_option(const std::string &s) const
 {
     for (auto &opt : m_options) {
-        if (opt.match(s))
+        if (opt->match(s))
             return true;
     }
     
@@ -192,7 +169,7 @@ bool
 arg_parser::contains_option(const arg_option &o) const
 {
     for (auto & opt : m_options) {
-        if (opt.match(o))
+        if (opt->match(o))
             return true;
     }
     
@@ -295,15 +272,15 @@ arg_token
 arg_parser::create_and_match_arg(const std::string &tk, unsigned pos)
 {
     std::string name, value;
-    arg_option *opt = nullptr;
+    std::shared_ptr<arg_option> opt = nullptr;
    
     infer_token_split(tk, name, value);
     
     assert(name.size() >= 2);
     
     for (auto &option : m_options) {
-        if (option.match(name)) {
-            opt = &option;
+        if (option->match(name)) {
+            opt = option;
             break;
         }
     }

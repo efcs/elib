@@ -104,8 +104,5 @@ private:
 };
 
 
-
-
-
 } /* namespace elib */
 #endif /* ELIB_BASIC_LOG_H */

@@ -15,9 +15,11 @@ namespace elib {
 template <unsigned N=1024>
 struct basic_static_string {
     
+    static constexpr unsigned container_size = N;
+    
     /* the actual value, uniform initalization of 
      * this basic_static_string can be used in a constexpr */
-    char string_value[N];
+    char string_value[container_size];
     
     /* returns the actual size of the string (not N)
      * ie strlen(string_value) */

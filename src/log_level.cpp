@@ -3,7 +3,8 @@
 namespace elib {
     
     
-basic_enum_traits<level_e>::map_type basic_enum_traits<level_e>::name_map =
+basic_enum_traits<level_e>::map_type 
+basic_enum_traits<level_e>::name_map =
     { {level_e::debug, "debug"},
       {level_e::info, "info"},
       {level_e::step, "step"},

@@ -38,12 +38,11 @@ public:
     rw_write_lock 
     as_write_lock();
 private:
-    /* PIMPL */
     detail::rw_lock_impl* m_impl;
 private:
     /* NO COPY & ASSIGN */
     rw_lock(const rw_lock&);
-    rw_lock& operator=(const rw_lock&);
+    rw_lock & operator=(const rw_lock&);
 };
 
 

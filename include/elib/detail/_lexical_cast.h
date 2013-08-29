@@ -12,11 +12,6 @@
 
 namespace elib {
     
-namespace detail {
-    
-
-} /* namespace detail */
-    
 
 template <typename ToType, typename FromType>
 inline ToType

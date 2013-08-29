@@ -10,7 +10,7 @@ namespace detail { class rw_lock_impl; }
 class rw_read_lock;
 class rw_write_lock;
 
-
+// rw_lock IS UNTESTED
 /* a typical RW lock
  * 1 writer per write_lock 
  * unlimited readers per read_lock

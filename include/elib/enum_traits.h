@@ -45,7 +45,9 @@ constexpr Enum
 bad_enum();
 
 
-/* default value is retured as specified in basic_enum_traits */
+/* default value is retured as specified in basic_enum_traits
+ * this is the only method that uses basic_enum_traits<T>::default_value,
+ * if you do not want to use default_enum, then it can be left undefined */
 template <typename Enum>
 constexpr Enum
 default_enum();

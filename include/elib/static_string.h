@@ -8,7 +8,7 @@
 namespace elib {
     
     
-/* this class is a usefull abstraction. 
+/* this class is a useful abstraction. 
  * brace initalization allows for 
  * compile-time evaluation of this class 
  * basic_static_string<> s{"abc"} */

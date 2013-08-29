@@ -114,7 +114,6 @@ BOOST_AUTO_TEST_CASE(arg_test)
     par.add_option(o4);
     par.add_option(o5);
 
-    
    
     par.run(args);
 

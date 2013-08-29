@@ -41,20 +41,19 @@ namespace detail {
  *       this is done so we can use BAD_ENUM_TYPE to see
  *       if there is a definition for basic_enum_traits<Type>
  * 
- * the required fields for use of enum_traits are:
- *     static constexpr Enum default_value;
+ * the fields for use of enum_traits are:
+ *     static constexpr Enum default_value [optional]
  *     static constexpr Enum first_value;
  *     static constexpr Enum last_value;
  * 
- *      typedef const std::map<Enum, std::string> map_type;
+ *      typedef const std::map<Enum, std::string> map_type [typedef optional]
  *      static map_type name_map */
 template <typename Enum>
 struct basic_enum_traits {
-    /* Currently unused, definition not required */
-    static constexpr bool contiguous = false;
-    
     /* default_value may be a valid member of Enum
-     * or it may be the value of bad_enum<Enum>() */
+     * or it may be the value of bad_enum<Enum>() 
+     * or it may be left undefined if default_enum() is not going
+     * to be used */
     static constexpr detail::BAD_ENUM_TYPE default_value = 
                                     detail::BAD_ENUM_VALUE;
     
@@ -71,7 +70,7 @@ struct basic_enum_traits {
      * iterating over keys (enum_iterator<Enum>) and
      * casting to and from std::string 
      * 
-     * NOTE: the typedef is unneeded, and so is the const */
+     * NOTE: the typedef is not required, and so is the const */
     typedef const std::map<detail::BAD_ENUM_TYPE, std::string> map_type;
     static map_type name_map;
 };

@@ -21,16 +21,16 @@ struct test_struct {
 
 int test_struct::count = 0;
 
-typedef singleton<test_struct> stest;
+typedef static_singleton<test_struct> stest;
 
 BOOST_AUTO_TEST_SUITE(test_singleton)
 
 BOOST_AUTO_TEST_CASE(singleton_test1)
 {
     BOOST_CHECK(COUNT == 0);
-    stest::create_singleton();
+    stest::construct();
     BOOST_CHECK(COUNT == 1);
-    stest::create_singleton(3);
+    stest::construct(3);
     BOOST_CHECK(COUNT == 4);
 }
 

@@ -15,6 +15,7 @@
 #include <functional>
 #include <type_traits>
 #include <memory>
+#include <stdexcept>
 
 namespace elib {
 namespace argp {
@@ -37,6 +38,7 @@ enum class arg_type_e {
 
 bool prefix_is_long_name(const std::string & s);
 bool prefix_is_short_name(const std::string & s);
+
 
 bool is_valid_arg_name(const std::string &s);
 bool is_valid_short_name(const std::string & s);
@@ -134,7 +136,6 @@ public:
     void
     transformer(transformer_type & t);
     
-    
     /* give the arguement an implicit value,
      * arg_type cannot be positional,
      * if arg_type is flag then the implicit value will
@@ -163,14 +164,21 @@ private:
     storage_type & m_val;
     /* the number of times a value has been applied */
     unsigned m_count{0};
-    
+    /* storage for implicit value, no implicit value if nullptr */
     std::shared_ptr<storage_type> m_implicit{nullptr};
+    /* a function to tranform a string, into the value that we are storing,
+     * when not specified it defaults to a 
+     * special flag tranformer when we are a flag, and storing a bool.
+     * enum_cast_string<value_type> when e is type is an enum 
+     * otherwise it is a lexical_cast to value_type */
     transformer_type m_transformer;
 };
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //                           typed arg                                               
 ////////////////////////////////////////////////////////////////////////////////
+
 
 template <typename T>
 class typed_arg : public basic_arg<T> {
@@ -205,7 +213,9 @@ public:
 /* don't polute namespace with example */
 namespace detail {
     
-/* this is an example template for an arg tag */
+    
+/* this is an example template for an arg tag
+ * the type of value may be anything */
 struct arg_tag {    
     static decltype(nullptr) value;
     
@@ -229,7 +239,6 @@ public:
     tagged_arg();
     ~tagged_arg() { }
 };
-
 
     
 } /* namespace argp */

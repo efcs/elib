@@ -56,9 +56,17 @@ flag_transformer(const std::string & s)
 }
 
 
+/* initalize the pointer to nullptr, in this case, it must be set
+ * by the function call */
 template <typename T, arg_type_e e, 
           bool is_lex, bool is_enum>
-struct _transformer_helper {};
+struct _transformer_helper {
+    static inline typename basic_arg<T>::transformer_type
+    transformer()
+    {
+        return nullptr;
+    }
+};
 
 template <>
 struct _transformer_helper<bool, arg_type_e::flag, true, false> {
@@ -114,7 +122,6 @@ get_tranformer(arg_type_e e)
     }
     throw 1;
 }
-
 
 
 } /* namespace detail */

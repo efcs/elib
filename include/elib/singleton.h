@@ -2,8 +2,12 @@
 #define ELIB_SINGLETON_H
 
 
+#include "detail/_default_constructor.h"
+
 #include <memory>
-#include <functional> 
+#include <functional>
+#include <type_traits>
+#include <stdexcept>
 
 
 namespace elib {
@@ -12,12 +16,56 @@ namespace elib {
 template <typename T>
 class singleton {
 public:
-    template <typename... Args>
-    static void
-    create_singleton(Args&&... args);
+    typedef T type;
     
-    static void 
-    create_singleton();
+    singleton();
+    
+    template <typename... Args>
+    singleton(Args&&... args);
+    
+    ~singleton() = default;
+    
+    type &
+    construct();
+    
+    template <typename... Args>
+    type &
+    construct(Args&&... args);
+    
+    void 
+    destruct();
+    
+    type & 
+    get() const;
+
+    bool
+    good() const;
+private:
+    typedef detail::ctor_helper<type, 
+                std::is_default_constructible<type>::value> ctor_helper;
+                
+
+    std::unique_ptr<T> m_ptr;
+private:
+    singleton(const singleton &);
+    singleton & operator=(const singleton &);
+};
+    
+    
+template <typename T>
+class static_singleton {
+public:
+    typedef T type;
+    
+    static T & 
+    construct();
+    
+    template <typename... Args>
+    static T &
+    construct(Args&&... args);
+    
+    static void
+    destruct();
     
     static T & 
     get();
@@ -25,13 +73,17 @@ public:
     static bool
     good();
 private:
-    static std::unique_ptr<T> m_ptr;
+    typedef detail::ctor_helper<type, 
+                std::is_default_constructible<type>::value> ctor_helper;
+    
+    typedef std::unique_ptr<T> ptr_type;
+                
+    static ptr_type m_ptr;
 private:
-    singleton() = delete;
+    static_singleton();
 };
 
-    
-    
+
 } /* namespace elib */
 
 

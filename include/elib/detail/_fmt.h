@@ -12,11 +12,11 @@ namespace elib {
     
 template <typename T>
 std::string
-fmt(const T & value)
+fmt(T&& value)
 {
     static_assert(is_lexical<T>::value, "T must be a lexical type");
     
-    return lexical_cast<std::string>(value);
+    return lexical_cast<std::string>(std::forward<T>(value));
 }
 
 

@@ -2,6 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "elib/enum_traits.h"
+#include "elib/fmt.h"
 
 namespace elib {
     
@@ -71,6 +72,7 @@ BOOST_AUTO_TEST_CASE(test_basic_enum_traits)
     BOOST_CHECK(basic_traits::last_value == test_last_value);
     
     BOOST_CHECK(basic_traits::name_map.size() == test_size);
+    fmt(3);
 }
 
 BOOST_AUTO_TEST_CASE(test_enum_traits)

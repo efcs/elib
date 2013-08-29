@@ -6,6 +6,7 @@
 
 #include <string>
 #include <cstdarg>
+#include <utility>
 
 
 namespace elib {
@@ -20,7 +21,7 @@ fmt(const std::string & msg, va_list & vl);
 /* Really just a wrapper around lexical_cast<std::string, T> */
 template <typename T>
 std::string
-fmt(const T & value);
+fmt(T&& value);
    
 
 } /* namespace elib */

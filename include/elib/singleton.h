@@ -2,7 +2,7 @@
 #define ELIB_SINGLETON_H
 
 
-#include "detail/_default_constructor.h"
+#include "detail/_ctor_helper.h"
 
 #include <memory>
 #include <functional>

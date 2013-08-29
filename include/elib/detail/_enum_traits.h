@@ -40,6 +40,7 @@ struct has_enum_traits {
 };
 
 
+
 template <typename Enum>
 inline constexpr Enum
 default_enum()
@@ -51,7 +52,7 @@ default_enum()
     
 template <typename Enum>
 inline constexpr Enum
-bad_enum()
+npos_enum()
 {
     typedef typename std::underlying_type<Enum>::type underlying_type;
     typedef std::numeric_limits<underlying_type> limits;
@@ -62,15 +63,38 @@ bad_enum()
 
 template <typename Enum>
 inline constexpr bool
-is_bad_enum(Enum e)
+is_npos_enum(Enum e)
 {
     typedef enum_traits<Enum> traits;
     
-    static_assert(traits::last_value != traits::BAD_ENUM,
-                  "is_bad_enum cannot be used when " 
-                  "basic_enum_traits<Enum>::last_value = BAD_ENUM");
+    static_assert(traits::last_value == traits::NPOS_ENUM,
+                  "is_npos_enum cannot be used when " 
+                  "basic_enum_traits<Enum>::last_value = NPOS_ENUM");
     
-    return (traits::BAD_ENUM == e);
+    return (traits::NPOS_ENUM == e);
+}
+
+template <typename Enum>
+inline bool
+is_valid_enum(Enum e)
+{
+    typedef basic_enum_traits<Enum> traits;
+    
+    if (is_contiguous<Enum>())
+        return (e >= traits::first_value && e <= traits::last_value);
+    
+    return (traits::name_map.contains(e));
+}
+
+template <typename Enum>
+inline bool
+is_contiguous()
+{
+    typedef basic_enum_traits<Enum> traits;
+    unsigned diff = base_enum_cast(traits::last_value) - 
+                    base_enum_cast(traits::first_value) + 1;
+                    
+    return (diff == traits::name_map.size());
 }
 
 
@@ -78,6 +102,10 @@ is_bad_enum(Enum e)
 ////////////////////////////////////////////////////////////////////////////////
 //                          enum_traits definition
 ////////////////////////////////////////////////////////////////////////////////
+
+template <typename Enum>
+constexpr Enum
+enum_traits<Enum>::NPOS_ENUM;
 
 template <typename Enum>
 inline unsigned
@@ -149,7 +177,7 @@ enum_traits<Enum>::verify_enum_traits()
     
     ret &= ( (basic_traits::default_value >= basic_traits::first_value &&
               basic_traits::default_value <= basic_traits::last_value) ||
-             basic_traits::default_value == BAD_ENUM);
+             basic_traits::default_value == NPOS_ENUM);
     
     ret &= (size() != 0);
     ret &= (size() == basic_traits::name_map.size());
@@ -161,7 +189,7 @@ enum_traits<Enum>::verify_enum_traits()
     ret &= (basic_traits::name_map.count(enum_val) == 1);
     
     enum_val = basic_traits::default_value;
-    ret &= (enum_val == BAD_ENUM || 
+    ret &= (enum_val == NPOS_ENUM || 
             basic_traits::name_map.count(enum_val) == 1);
     
     

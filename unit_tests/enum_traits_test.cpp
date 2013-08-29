@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(test_safe_enum_cast)
     for (auto e : traits()) {
         str_val = lexical_enum_cast<std::string>(e);
         val = lexical_enum_cast<underlying_type>(e);
-        dest = bad_enum<test_e>();
+        dest = npos_enum<test_e>();
         
         BOOST_CHECK(enum_cast(val, dest));
         BOOST_CHECK(dest == e);

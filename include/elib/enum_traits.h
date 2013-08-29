@@ -29,6 +29,7 @@
 
 
 namespace elib {
+    
 
 /* has_enum_traits<T>::value is set to true,
  * if basic_enum_traits have been defined for type T,
@@ -37,12 +38,19 @@ template <typename T>
 struct has_enum_traits;
 
 
-/* bad_enum is a value that:
+/* npos_enum is a value that:
  *   a) is the numeric max for Enum's underlying type
  *   b) should not be a member of Enum (if it is used) */
 template <typename Enum>
 constexpr Enum
-bad_enum();
+npos_enum();
+
+
+/* return e == npos_enum() 
+ * is_npos_enum can only be used when basic_traits::last_value < NPOS_ENUM */
+template <typename Enum>
+constexpr bool
+is_npos_enum(Enum e);
 
 
 /* default value is retured as specified in basic_enum_traits
@@ -53,12 +61,16 @@ constexpr Enum
 default_enum();
 
 
-/* return (e == enum_traits<Enum>::BAD_ENUM) 
- * note: this function may only be used with Enum classes
- * that do not contain a member that is equal to BAD_ENUM */
+/* check if e is a member of Enum */
 template <typename Enum>
-constexpr bool
-is_bad_enum(Enum e);
+bool
+is_valid_enum(Enum e);
+
+/* check if the Enum class is a contiguous series,
+ * Enum's that are contiguous can have certain optimizations applied */
+template <typename Enum>
+bool
+is_contiguous();
 
 
 /* Allow for static access to begin and end iterator objects 
@@ -66,9 +78,25 @@ is_bad_enum(Enum e);
  * to access values in basic_enum_traits */
 template <typename Enum>
 struct enum_traits : public basic_enum_traits<Enum> {
+public:
     static_assert(std::is_enum<Enum>::value, "Enum must be an enumeration");
     
+    typedef Enum enum_type;
     typedef basic_enum_traits<Enum> basic_traits;
+     
+    /* check values is basic_traits */
+    static_assert(basic_traits::first_value <= basic_traits::last_value, 
+                  "first_value must be <= last_value");
+    
+    /* default_value may either be a valid member of Enum, or it may be
+     * BAD_ENUM so that default_value may be used for uninitalized enums */
+    static_assert((basic_traits::default_value >= basic_traits::first_value && 
+                   basic_traits::default_value <= basic_traits::last_value) 
+                  || basic_traits::default_value == npos_enum<Enum>(),
+                  "default value must be >= first_value && <= last_value"
+                  "or NPOS_ENUM");
+    
+    
     typedef enum_iterator<Enum> iterator;
     typedef enum_iterator<Enum> const_iterator;
     
@@ -76,22 +104,10 @@ struct enum_traits : public basic_enum_traits<Enum> {
      * casting integral values to and from enums */
     typedef typename std::underlying_type<Enum>::type underlying_type;
     
-    /* BAD_ENUM is to be used like string::npos or iterator::end()
-     * When using safe_enum_cast, BAD_ENUM is returned when a cast fails */
+    /* NPOS_ENUM is to be used like string::npos or iterator::end()
+     * When using safe_enum_cast, NPOS_ENUM is returned when a cast fails */
     static constexpr Enum
-    BAD_ENUM = bad_enum<Enum>();
-    
-    /* basic assumption checking */
-    static_assert(basic_traits::first_value <= basic_traits::last_value, 
-                  "first_value must be <= last_value");
-    
-    /* default_value may either be a valid member of Enum, or it may be
-     * BAD_ENUM so that default_value may be used for uninitalized enums */
-    static_assert((basic_traits::default_value >= basic_traits::first_value && 
-                   basic_traits::default_value <= basic_traits::last_value) || 
-                   basic_traits::default_value == BAD_ENUM,
-                  "default value must be >= first_value && <= last_value"
-                  "or BAD_ENUM");
+    NPOS_ENUM = npos_enum<Enum>();
     
     /* return the # of members in Enum
      * (really just basic_traits::name_map.size()) */

@@ -12,7 +12,6 @@
 namespace elib {
     
 
-
 /* this class defines the basic logging interface used with the
  * classes log, file_log, and elog (static) */
 class basic_log {
@@ -100,7 +99,8 @@ private:
         };
     
 private:
-    friend class elog;
+    template <typename T>
+    friend class static_log;
 };
 
 

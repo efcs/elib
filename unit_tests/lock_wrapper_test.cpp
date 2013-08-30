@@ -1,0 +1,44 @@
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
+#include "elib/lock_wrapper.h"
+
+#define GOOD(x) ((bool)x)
+
+using namespace elib;
+
+struct A {
+    int m_x;
+};
+
+struct B {
+    B(int b) { m_x = b; }
+    int m_x;
+};
+
+BOOST_AUTO_TEST_SUITE(lock_wrapper_test_suite)
+
+
+
+BOOST_AUTO_TEST_CASE(test_a)
+{
+    typedef lock_wrapper<A> lw;
+    A a;
+    lw l{a};
+    
+    auto guard = l.get_guard();
+    BOOST_CHECK(! GOOD(guard));
+    guard.lock();
+    BOOST_CHECK( GOOD(guard));
+    guard.unlock();
+    BOOST_CHECK( ! GOOD(guard));
+    
+}
+
+BOOST_AUTO_TEST_CASE(test_b)
+{
+    typedef type_lock_wrapper<B> lw;
+    lw l{3};
+}
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -16,34 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_LOG_H
-#define ELIB_LOG_H
+#ifndef ELIB_COMMON_DEF_H
+#define ELIB_COMMON_DEF_H
 
-#include "basic_log.h"
-#include "log_level.h"
 
-#include <iostream>
+/* used to suppress unused warnings */
+#define UNUSED(x) ((void)x);
 
-namespace elib {
+
+#define DISALLOW_COPY_AND_ASSIGN(T) \
+    T(const T &); \
+    T & operator=(const T &)
     
-
-namespace detail { class log_impl; }
     
-/* Actual logging class, implements the basic_log iterface */
-class log : public basic_log {
-public:
-    log();
-    explicit log(level_e level);
-    
-protected:
-    std::ostream & 
-    _get_stream(level_e level);
-    
-private:
-    std::ostream &m_out, &m_err;
-};
- 
+/* allow for macro overloading by counting # args */
+#define _NARGS_COUNT(NAME, _1, _2, _3, _4, _5,_,...) NAME##_
+#define NARGS(NAME, ...) _NARGS_COUNT(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
 
 
-} /* namespace elib */
-#endif /* ELIB_LOG_H */
+
+#endif /* ELIB_COMMON_DEF_H */

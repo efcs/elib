@@ -44,7 +44,6 @@ private:
     typedef detail::ctor_helper<type, 
                 std::is_default_constructible<type>::value> ctor_helper;
                 
-
     std::unique_ptr<T> m_ptr;
 private:
     singleton(const singleton &);

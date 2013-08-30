@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/lock_wrapper.h"
+#include "elib/locking_proxy.h"
 
 #define GOOD(x) ((bool)x)
 
@@ -16,13 +16,13 @@ struct B {
     int m_x;
 };
 
-BOOST_AUTO_TEST_SUITE(lock_wrapper_test_suite)
+BOOST_AUTO_TEST_SUITE(locking_proxy_test_suite)
 
 
 
 BOOST_AUTO_TEST_CASE(test_a)
 {
-    typedef lock_wrapper<A> lw;
+    typedef locking_proxy<A> lw;
     A a;
     lw l{a};
     
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(test_a)
 
 BOOST_AUTO_TEST_CASE(test_b)
 {
-    typedef type_lock_wrapper<B> lw;
+    typedef typed_locking_proxy<B> lw;
     lw l{3};
 }
 

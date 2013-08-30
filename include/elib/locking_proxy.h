@@ -1,5 +1,5 @@
-#ifndef ELIB_LOCK_WRAPPER_H
-#define ELIB_LOCK_WRAPPER_H
+#ifndef ELIB_LOCKING_PROXY_H
+#define ELIB_LOCKING_PROXY_H
 
 
 #include <mutex>
@@ -11,21 +11,21 @@ namespace elib {
     
     
 template <typename T, typename Lock>
-class scoped_lock_wrapper {    
+class access_guard {    
 public:
     typedef T type;
     typedef Lock lock_type;
     
-    scoped_lock_wrapper() = default;
-    scoped_lock_wrapper(scoped_lock_wrapper&&) = default;
+    access_guard() = default;
+    access_guard(access_guard&&) = default;
     
-    ~scoped_lock_wrapper() = default;
+    ~access_guard() = default;
     
-    scoped_lock_wrapper &
-    operator=(scoped_lock_wrapper&&) = default;
+    access_guard &
+    operator=(access_guard&&) = default;
     
     type * 
-    operator->() const;
+    operator->();
     
     type &
     operator*() const;
@@ -49,31 +49,31 @@ public:
     
 private:    
     template <typename T2, typename Lock2>
-    friend class lock_wrapper;
+    friend class locking_proxy;
     
-    scoped_lock_wrapper(type & val, lock_type & lock);
+    access_guard(type & val, lock_type & lock);
 
     type *m_val{nullptr};
     
-    mutable std::unique_lock<lock_type> m_lock{};
+    std::unique_lock<lock_type> m_lock{};
 };
     
     
 
 template <typename T, typename Lock=std::mutex>
-class lock_wrapper {
+class locking_proxy {
 public:
     typedef T type;
     typedef Lock lock_type;
-    typedef scoped_lock_wrapper<type, lock_type> scoped_wrapper;
+    typedef access_guard<type, lock_type> guard;
     
-    lock_wrapper(type & v);
-    ~lock_wrapper() = default;
+    locking_proxy(type & v);
+    ~locking_proxy() = default;
 
-    scoped_wrapper
+    guard
     operator->() const;
     
-    scoped_wrapper
+    guard
     get_guard() const;
     
     type &
@@ -90,33 +90,33 @@ typename std::enable_if<std::is_default_constructible<T>::value>::type;
     
 
 template <typename T, typename Lock=std::mutex, typename = void>
-class type_lock_wrapper : public lock_wrapper<T, Lock> {
+class typed_locking_proxy : public locking_proxy<T, Lock> {
 public:
-    typedef lock_wrapper<T, Lock> lock_wrapper_type;
-    typedef typename lock_wrapper_type::type type;
+    typedef locking_proxy<T, Lock> locking_proxy_type;
+    typedef typename locking_proxy_type::type type;
     
     template <typename... Args>
-    type_lock_wrapper(Args&&... args);
+    typed_locking_proxy(Args&&... args);
     
-    ~type_lock_wrapper() = default;
+    ~typed_locking_proxy() = default;
 private:
     type m_value;
 };
 
 
 template <typename T, typename Lock>
-class type_lock_wrapper<T, Lock, if_default_ctor<T>>
-    : public lock_wrapper<T, Lock> {
+class typed_locking_proxy<T, Lock, if_default_ctor<T>>
+    : public locking_proxy<T, Lock> {
 public:
-    typedef lock_wrapper<T, Lock> lock_wrapper_type;
-    typedef typename lock_wrapper_type::type type;
+    typedef locking_proxy<T, Lock> locking_proxy_type;
+    typedef typename locking_proxy_type::type type;
     
-    type_lock_wrapper();
+    typed_locking_proxy();
     
     template <typename... Args>
-    type_lock_wrapper(Args&&... args);
+    typed_locking_proxy(Args&&... args);
     
-    ~type_lock_wrapper() = default;
+    ~typed_locking_proxy() = default;
 private:
     type m_value{};
 };
@@ -125,7 +125,7 @@ private:
 } /* namespace elib */
 
 
-#include "detail/_lock_wrapper.h"
+#include "detail/_locking_proxy.h"
 
 
-#endif /* ELIB_LOCK_WRAPPER_H */
+#endif /* ELIB_LOCKING_PROXY_H */

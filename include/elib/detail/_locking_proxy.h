@@ -20,14 +20,14 @@ template <typename T, typename Lock>
 inline auto
 locking_proxy<T, Lock>::operator->() const -> access_guard_type
 {
-    return guard(m_value, *m_lock);
+    return access_guard_type(m_value, *m_lock);
 }
 
 template <typename T, typename Lock>
 inline auto 
 locking_proxy<T, Lock>::get_guard() const -> access_guard_type
 {
-    return guard(m_value, *m_lock);
+    return access_guard_type(m_value, *m_lock);
 }
 
 template <typename T, typename Lock>
@@ -88,7 +88,7 @@ access_guard<T, Lock>::unlock()
 }
 
 template <typename T, typename Lock>
-inline 
+inline Lock*
 access_guard<T, Lock>::release()
 {
     return m_lock.release();

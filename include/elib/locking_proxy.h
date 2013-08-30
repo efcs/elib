@@ -65,15 +65,15 @@ class locking_proxy {
 public:
     typedef T type;
     typedef Lock lock_type;
-    typedef access_guard<type, lock_type> guard;
+    typedef access_guard<type, lock_type> access_guard_type;
     
     locking_proxy(type & v);
     ~locking_proxy() = default;
 
-    guard
+    access_guard_type
     operator->() const;
     
-    guard
+    access_guard_type
     get_guard() const;
     
     type &

@@ -4,8 +4,11 @@
 
 #include "lexical_cast.h"
 
+
 #include <string>
 #include <cstdarg>
+#include <cstdio>
+#include <memory>
 #include <utility>
 
 

@@ -15,4 +15,5 @@ basic_enum_traits<level_e>::name_map =
       {level_e::raw_err, "raw_err"}
     };
     
+    
 } /* namespace elib */

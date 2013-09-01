@@ -27,14 +27,14 @@ public:
 /* cast strings and underlying_types to Enum values */
 template <typename Enum, typename From>
 Enum
-enum_cast(const From f);
+enum_cast(From&& from);
 
 /* these versions are nothrow
  * on success they return true, and write to dest,
  * otherwise dest is ignored and false is return */
 template <typename Enum, typename From>
 bool
-enum_cast(const From f, Enum & dest);
+enum_cast(From&& from, Enum & dest);
 
 /* since enum cast is overloaded, use this to access enum_cast 
  * via non-overloaded methods */
@@ -64,5 +64,6 @@ base_enum_cast(Enum e) noexcept;
 
 
 #include "detail/_enum_cast.h"
+
 
 #endif /* ELIB_ENUM_CAST_H */

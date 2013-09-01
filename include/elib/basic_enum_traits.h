@@ -30,7 +30,6 @@ namespace elib {
 namespace detail {
     typedef const decltype(nullptr) BAD_ENUM_TYPE;
     constexpr BAD_ENUM_TYPE BAD_ENUM_VALUE = nullptr;
-
 } /* namespace detail */
 
     

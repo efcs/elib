@@ -5,6 +5,8 @@
 #   error do not include this file directly
 #endif
 
+#include <utility>
+#include <type_traits>
 
 
 namespace elib {
@@ -96,7 +98,7 @@ struct enum_cast_helper<Enum, typename std::underlying_type<Enum>::type> {
     typedef typename std::underlying_type<Enum>::type underlying_type;
     
     inline static bool
-    cast(underlying_type v, Enum & dest)
+    cast(const underlying_type & v, Enum & dest)
     {
         typedef basic_enum_traits<Enum> traits;
     
@@ -119,10 +121,12 @@ struct enum_cast_helper<Enum, typename std::underlying_type<Enum>::type> {
 
 template <typename Enum, typename From>
 inline Enum
-enum_cast(const From f)
+enum_cast(From&& f)
 {
     Enum dest;
-    if (! detail::enum_cast_helper<Enum, From>::cast(f, dest)) {
+    if (! detail::enum_cast_helper<Enum, 
+                                   typename std::decay<From>::type
+                                  >::cast(std::forward<From>(f), dest)) {
         throw bad_enum_cast();
     }
     return dest;
@@ -130,9 +134,11 @@ enum_cast(const From f)
 
 template <typename Enum, typename From>
 inline bool
-enum_cast(const From f, Enum & dest)
+enum_cast(From&& f, Enum & dest)
 {
-    return detail::enum_cast_helper<Enum, From>::cast(f, dest);
+    return detail::enum_cast_helper<Enum, 
+                                    typename std::decay<From>::type
+                                   >::cast(std::forward<From>(f), dest);
 }
 
 

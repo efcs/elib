@@ -28,6 +28,7 @@ public:
     
     /* construct an iterator with the current position at e */
     enum_iterator(Enum e);
+    
     /* construct an iterator with the current position at the
      * begining or end */
     enum_iterator(iter_pos_e place = iter_pos_e::begin);

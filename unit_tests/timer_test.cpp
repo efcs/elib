@@ -2,7 +2,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include "elib/timer.h"
-#include "elib/elog.h"
 #include "elib/lexical_cast.h"
 
 #include <chrono>
@@ -34,8 +33,6 @@ BOOST_AUTO_TEST_CASE(test_milliseconds)
     
     BOOST_CHECK(t.running() == false);
     BOOST_CHECK(t.stopped());
-    
-    elog::raw_out("%lu", t.count());
 }
 
 

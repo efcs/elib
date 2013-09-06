@@ -35,10 +35,5 @@ BOOST_AUTO_TEST_CASE(test_a)
     
 }
 
-BOOST_AUTO_TEST_CASE(test_b)
-{
-    typedef typed_locking_proxy<B> lw;
-    lw l{3};
-}
 
 BOOST_AUTO_TEST_SUITE_END()

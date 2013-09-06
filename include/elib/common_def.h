@@ -30,7 +30,7 @@
     
     
 /* allow for macro overloading by counting # args */
-#define _NARGS_COUNT(NAME, _1, _2, _3, _4, _5,_,...) NAME##_
+#define _NARGS_COUNT(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
 #define NARGS(NAME, ...) _NARGS_COUNT(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
 
 

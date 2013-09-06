@@ -9,7 +9,7 @@ namespace elib {
     
     
 template <typename... Args>
-struct if_sub {
+struct if_def {
     static constexpr bool value = true; 
 };
     
@@ -26,11 +26,12 @@ struct if_defined<T, EnableIf, typename EnableIf<T>::type> {
     static constexpr bool value = true;
 };
 
-
 template <typename T, template <typename TProxy> class EnableIf>            
-struct if_defined<T, EnableIf, typename enable_if<EnableIf<T>::value>::type> {
+struct if_defined<T, EnableIf, typename enable_if<if_def<EnableIf<T>>::value>::type> {
     static constexpr bool value = true;
 };
+
+
 
 
 } /* namespace elib */

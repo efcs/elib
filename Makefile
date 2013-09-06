@@ -31,9 +31,12 @@ install:
 	
 .PHONY: check
 check:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo
 	@ echo === Running static tests ===
 	@ ./bin/elib_test_static --log_level=message --report_level=short
-	@ echo ""
+	@ echo 
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short
 

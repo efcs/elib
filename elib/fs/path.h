@@ -6,6 +6,7 @@
 
 #include <string>
 #include <iterator>
+#include <iostream>
 
 
 namespace elib {
@@ -55,6 +56,9 @@ public:
     remove_filename();
     
     path &
+    replace_filename(const path& replacement);
+    
+    path &
     replace_extension(const path & new_ext = path());
     
     void
@@ -75,20 +79,12 @@ public:
 //
     class iterator;
     typedef iterator const_iterator;
-    typedef std::reverse_iterator<iterator> reverse_iterator;
-    typedef reverse_iterator const_reverse_iterator;
     
     iterator
     begin() const;
     
     iterator
     end() const;
-    
-    reverse_iterator
-    rbegin() const;
-    
-    reverse_iterator
-    rend() const;
     
 //
 // append
@@ -262,12 +258,50 @@ private:
 };
 
 
+////////////////////////////////////////////////////////////////////////////////
+//                         non-member functions                                                
+////////////////////////////////////////////////////////////////////////////////
+
+void 
+swap(path & lhs, path & rhs);
+
+bool
+operator<(const path & lhs, const path & rhs);
+
+bool
+operator<=(const path & lhs, const path & rhs);
+
+bool
+operator>(const path & lhs, const path & rhs);
+
+bool
+operator>=(const path & lhs, const path & rhs);
+
+bool
+operator==(const path & lhs, const path & rhs);
+
+bool
+operator!=(const path & lhs, const path & rhs);
+
+path 
+operator/ (const path & lhs, const path & rhs);
+
+template <class charT, class traits>
+std::basic_ostream<charT, traits>&
+operator<<(std::basic_ostream<charT, traits>& os, const path& p);
+
+template <class charT, class traits>
+std::basic_istream<charT, traits>&
+operator>>(std::basic_istream<charT, traits>& is, path& p);
+
+
 } /* namespace fs */
 } /* namespace elib */
 
 
 #include <elib/fs/detail/path_inline.h>
 #include <elib/fs/detail/path_iterator_inline.h>
+#include <elib/fs/detail/path_func_inline.h>
 
 
 #endif /* ELIB_FS_PATH_H */

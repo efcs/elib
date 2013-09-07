@@ -56,6 +56,13 @@ path::remove_filename()
     return *this;
 }
 
+inline path&
+path::replace_filename(const path & replace)
+{
+    *this = (parent_path() /= replace);
+    return *this;
+}
+
 inline path &
 path::replace_extension(const path & new_ext)
 {
@@ -401,6 +408,7 @@ path::end() const
     return it;
 }
 
+/*
 inline path::reverse_iterator
 path::rbegin() const
 {
@@ -422,7 +430,7 @@ path::rend() const
     it.m_curr = path("");
     return reverse_iterator(it);
 }
-
+*/
 
 } /* namespace fs */    
 } /* namespace elib */

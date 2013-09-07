@@ -1,7 +1,7 @@
 #ifndef ELIB_FS_PATH_HELPER_H
 #define ELIB_FS_PATH_HELPER_H
 
-#include <elib/fs/fs_delim.h>
+#include <elib/fs/config.h>
 #include <elib/utility/size_type.h>
 #include <elib/enumeration/basic_enum_traits.h>
 

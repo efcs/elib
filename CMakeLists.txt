@@ -44,6 +44,7 @@ set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )
 set( CMAKE_CXX_FLAGS_DEBUG "-g -O0" )
 
+set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )

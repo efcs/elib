@@ -10,9 +10,15 @@ add_definitions(-fPIC)
 set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 aux_source_directory(${dotDir} dotSrc)
 aux_source_directory(${dotDir}/argp argpSrc)
+aux_source_directory(${dotDir}/fs fsSrc)
+aux_source_directory(${dotDir}/enumeration enumSrc)
+aux_source_directory(${dotDir}/log logSrc)
+aux_source_directory(${dotDir}/lock lockSrc)
 
 # compile into objects
-add_library(ObjLib OBJECT ${dotSrc} ${argpSrc})
+add_library(ObjLib OBJECT ${dotSrc} ${argpSrc} ${fsSrc} ${enumSrc} ${logSrc}
+                          ${lockSrc}
+           )
 
 #create static & shared libraries
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)

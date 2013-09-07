@@ -16,23 +16,4 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_COMMON_DEF_H
-#define ELIB_COMMON_DEF_H
-
-
-/* used to suppress unused warnings */
-#define UNUSED(x) ((void)x)
-
-
-#define DISALLOW_COPY_AND_ASSIGN(T) \
-    T(const T &); \
-    T & operator=(const T &)
-    
-    
-/* allow for macro overloading by counting # args */
-#define _NARGS_COUNT(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
-#define NARGS(NAME, ...) _NARGS_COUNT(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
-
-
-
-#endif /* ELIB_COMMON_DEF_H */
+#include "elib/log/elog.h"

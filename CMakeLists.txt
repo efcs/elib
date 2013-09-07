@@ -50,9 +50,10 @@ include_directories(${includeDir})
 
 find_package( Threads REQUIRED )
 add_definitions(-std=c++11 -Wall -Wextra -pedantic)
-add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/src/common.def)
+add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/include/elib/common_def.h)
 
 add_subdirectory(src)
 add_subdirectory(unit_tests)
+add_subdirectory(test_main)
 
 

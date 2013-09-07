@@ -17,8 +17,10 @@
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "elib/argp/arg_parser.h"
-#include "elib/fmt.h"
+#include <elib/utility/fmt.h>
 
+
+#include <cassert>
 #include <cctype>
 #include <sstream>
 #include <algorithm>

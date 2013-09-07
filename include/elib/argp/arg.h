@@ -1,14 +1,15 @@
 #ifndef ELIB_ARGP_ARG_H
 #define ELIB_ARGP_ARG_H
 
-#include "detail/_arg_option.h"
-#include "arg_token.h"
-#include "arg_errors.h"
+#include <elib/argp/detail/_arg_option.h>
+#include <elib/argp/arg_token.h>
+#include <elib/argp/arg_errors.h>
 
-#include "../lexical_cast.h"
-#include "../enum_traits.h"
-#include "../enum_cast.h"
-#include "../fmt.h"
+
+#include <elib/enumeration/enum_traits.h>
+#include <elib/enumeration/enum_cast.h>
+#include <elib/utility/lexical_cast.h>
+#include <elib/utility/fmt.h>
 
 #include <vector>
 #include <string>

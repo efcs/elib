@@ -16,23 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_COMMON_DEF_H
-#define ELIB_COMMON_DEF_H
+#include "elib/log/log.h"
 
-
-/* used to suppress unused warnings */
-#define UNUSED(x) ((void)x)
-
-
-#define DISALLOW_COPY_AND_ASSIGN(T) \
-    T(const T &); \
-    T & operator=(const T &)
+namespace elib {
+namespace log {
     
-    
-/* allow for macro overloading by counting # args */
-#define _NARGS_COUNT(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
-#define NARGS(NAME, ...) _NARGS_COUNT(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
+log::log()
+    : m_out(std::cout), m_err(std::cerr)
+{ }
 
+log::log(level_e l)
+    : basic_log(l), m_out(std::cout), m_err(std::cerr)
+{ }
 
+std::ostream &
+log::_get_stream(level_e l)
+{
+    if (l <= level_e::step || l == level_e::raw_out)
+        return m_out;
+    return m_err;
+}
 
-#endif /* ELIB_COMMON_DEF_H */
+} /* namespace log */
+} /* namespace elib */

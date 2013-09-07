@@ -91,7 +91,7 @@ struct _transformer_helper<T, e, false, true> {
     static inline typename basic_arg<T>::transformer_type
     transformer() 
     { 
-        return enum_cast_string<T>; 
+        return enumeration::enum_cast_string<T>; 
     }
 };
 

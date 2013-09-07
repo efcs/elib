@@ -6,10 +6,17 @@
 # must be commented out.
 
 set(dotDir ${CMAKE_CURRENT_LIST_DIR})
-aux_source_directory(${dotDir} dotSrc)
+set(mainSrc ${dotDir}/main.cpp)
 
-include_directories(${dotDir}/../src)
-include_directories(${dotDir})
+aux_source_directory(${dotDir}/fs fsSrc)
+aux_source_directory(${dotDir}/log logSrc)
+aux_source_directory(${dotDir}/lock lockSrc)
+aux_source_directory(${dotDir}/utility utilitySrc)
+aux_source_directory(${dotDir}/argp argpSrc)
+aux_source_directory(${dotDir}/enumeration enumSrc)
+
+set(testSources ${mainSrc} ${fsSrc} ${logSrc} ${lockSrc} 
+                ${utilitySrc} ${argpSrc} ${enumSrc})
 
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED OFF)
@@ -19,7 +26,7 @@ find_package(Boost 1.49.0 COMPONENTS unit_test_framework REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIRS})
 
-add_library(TestObjLib OBJECT ${dotSrc})
+add_library(TestObjLib OBJECT ${testSources})
 
 add_executable(elib_test_static $<TARGET_OBJECTS:TestObjLib>)
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObjLib>)

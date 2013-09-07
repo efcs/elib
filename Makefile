@@ -39,4 +39,11 @@ check:
 	@ echo 
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short
-
+	
+.PHONY: test
+test:
+	@ echo === Building test ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo
+	@ echo === Running tests ===
+	@ ./bin/elib_test_main

@@ -44,13 +44,11 @@ set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG "-g -O0" )
 set( CMAKE_CXX_FLAGS_DEBUG "-g -O0" )
 
-set(includeDir ${CMAKE_CURRENT_LIST_DIR}/include)
-set(headerDir ${includeDir}/elib)
-include_directories(${includeDir})
+include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
 add_definitions(-std=c++11 -Wall -Wextra -pedantic)
-add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/include/elib/common_def.h)
+add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.h)
 
 add_subdirectory(src)
 add_subdirectory(unit_tests)

@@ -7,7 +7,14 @@ namespace elib {
 namespace fs {
     
     
-typedef std::chrono::time_point<std::chrono::system_clock>  file_time_type;
+namespace detail {
+
+typedef std::chrono::system_clock clock;
+    
+} /* namespace detail */
+    
+    
+typedef std::chrono::time_point<detail::clock>  file_time_type;
     
 
 } /* namespace fs */

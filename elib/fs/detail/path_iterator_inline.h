@@ -4,7 +4,7 @@
 namespace elib {
 namespace fs {
 
-path::iterator::reference
+inline path::iterator::reference
 path::iterator::operator*()
 {
     return m_curr;
@@ -25,7 +25,7 @@ path::iterator::operator++(int)
     return it;
 }
     
-path::iterator &
+inline path::iterator &
 path::iterator::operator--()
 {
     prev();
@@ -108,6 +108,4 @@ path::iterator::is_end() const
 
 } /* namespace fs */
 } /* namespace elib */
-
-
 #endif /* ELIB_FS_PATH_ITERATOR_INLINE_H */

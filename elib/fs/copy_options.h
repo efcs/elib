@@ -6,7 +6,7 @@ namespace elib {
 namespace fs {
     
 
-enum class copy_options {
+enum class copy_options : unsigned {
     none = 0,
     skip_existing = 1,
     overwrite_existing = 2,
@@ -18,7 +18,10 @@ enum class copy_options {
     create_symlinks = 128,
     create_hard_links = 256
 };
-    
+
+
+#include <elib/fs/detail/copy_options_bitwise_operators.h>
+
 
 } /* namespace fs */
 } /* namespace elib */

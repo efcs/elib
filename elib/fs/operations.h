@@ -6,10 +6,23 @@
 #include <elib/fs/space_info.h>
 #include <elib/fs/file_status.h>
 #include <elib/fs/file_time_type.h>
+#include <elib/fs/detail/operations_helper.h>
+#include <elib/fs/detail/filesystem_error_helper.h>
+
 
 
 #include <system_error>
+#include <memory>
+
 #include <cstdint>
+#include <cstdlib>
+#include <climits>
+
+
+#include <unistd.h>
+#include <utime.h>
+#include <sys/stat.h>
+#include <sys/statvfs.h>
 
 
 namespace elib {
@@ -22,7 +35,7 @@ current_path();
     
 // absolute
 path 
-absolute(const path& p);
+absolute(const path& p, const path& base=current_path());
 
 
 // canonical
@@ -42,6 +55,13 @@ copy(const path& from, const path& to);
 
 void 
 copy(const path& from, const path& to, std::error_code& ec) noexcept;
+
+void
+copy(const path& from, const path& to, copy_options options);
+
+void
+copy(const path& from, const path& to, 
+     copy_options options, std::error_code& ec) noexcept;
 
 
 //copy_file
@@ -275,6 +295,14 @@ last_write_time(const path& p, file_time_type new_time);
 void
 last_write_time(const path& p, file_time_type new_time,
                 std::error_code& ec) noexcept;
+      
+
+// permissions
+void 
+permissions(const path& p, perms prms);
+
+void 
+permissions(const path& p, perms prms, std::error_code& ec) noexcept;
 
                 
 // read_symlink
@@ -354,13 +382,19 @@ temp_directory_path();
 path 
 temp_directory_path(std::error_code& ec);
 
-//TODO
-//path 
-//unique_path(const path& model="%%%%-%%%%-%%%%-%%%%");
+
+path 
+unique_path(const path& model="%%%%-%%%%-%%%%-%%%%");
 
 path 
 unique_path(const path& model, std::error_code& ec);
 
+
 } /* namespace fs */
 } /* namespace elib */
+
+
+#include <elib/fs/detail/operations_inline.h>
+
+
 #endif /* ELIB_FS_OPERATIONS_H */

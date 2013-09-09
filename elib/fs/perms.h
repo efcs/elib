@@ -5,8 +5,8 @@
 namespace elib {
 namespace fs {
     
-    
-enum class perms {
+
+enum class perms : unsigned {
     none = 0,
     owner_read = 0400,
     owner_write = 0200,
@@ -28,7 +28,10 @@ enum class perms {
     unknown = 0xFFFF,
     symlink_perms = 0x4000
 };
-    
+
+
+#include <elib/fs/detail/perms_bitwise_operators.h>
+
 
 } /* namespace fs */
 } /* namespace elib */

@@ -19,15 +19,15 @@ public:
     static constexpr size_type npos = std::string::npos;
     
     path();
+    
     path(const std::string & str);
+    
+    path(const char* str);
     
     path(const path&) = default;
     
     path &
     operator=(const path&) = default;
-    
-    path &
-    operator=(const std::string & s);
     
     path(path&&) = default;
     

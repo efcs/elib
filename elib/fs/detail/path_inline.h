@@ -20,12 +20,11 @@ path::path(const std::string & s)
     : m_pathname{s}
 { }
 
-inline path &
-path::operator=(const std::string & s)
-{
-    m_pathname = s;
-    return *this;
-}
+
+inline
+path::path(const char* s)
+    : m_pathname{s}
+{ }
 
 inline const std::string & 
 path::str() const
@@ -206,7 +205,7 @@ path::compare(const std::string & other) const
 //                            decomp                                              
 ////////////////////////////////////////////////////////////////////////////////
 
-path
+inline path
 path::root_name() const
 {
     path_part p = pp_helper::part(m_pathname, 0);
@@ -215,7 +214,7 @@ path::root_name() const
     return path();
 }
     
-path
+inline path
 path::root_directory() const
 {
     path_part p = pp_helper::part(m_pathname, 0);
@@ -231,7 +230,7 @@ path::root_directory() const
     return path();
 }
     
-path
+inline path
 path::root_path() const
 {
     path p = root_name();
@@ -240,7 +239,7 @@ path::root_path() const
     return p;
 }
     
-path
+inline path
 path::relative_path() const
 {
     path_part p;
@@ -263,7 +262,7 @@ path::relative_path() const
     throw;
 }
     
-path
+inline path
 path::parent_path() const
 {
     if (empty() || begin() == --end())
@@ -275,7 +274,7 @@ path::parent_path() const
     return path(m_pathname.substr(0, it.m_pos + (*it).str().size()));
 }
     
-path
+inline path
 path::stem() const
 {
     using namespace ::elib::fs::detail;
@@ -291,7 +290,7 @@ path::stem() const
     return path(str.substr(0, pos));
 }
     
-path
+inline path
 path::filename() const
 {
     if (empty())
@@ -301,7 +300,7 @@ path::filename() const
     return *it;
 }
     
-path
+inline path
 path::extension() const
 {
     using namespace ::elib::fs::detail;

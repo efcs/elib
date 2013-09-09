@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_PATH_ITERATOR_INLINE_H
-#define ELIB_FS_PATH_ITERATOR_INLINE_H
+#ifndef ELIB_FS_PATH_ITERATOR_DEF_H
+#define ELIB_FS_PATH_ITERATOR_DEF_H
 
 namespace elib {
 namespace fs {
@@ -108,4 +108,4 @@ path::iterator::is_end() const
 
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_PATH_ITERATOR_INLINE_H */
+#endif /* ELIB_FS_PATH_ITERATOR_DEF_H */

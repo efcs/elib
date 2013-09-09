@@ -1,6 +1,7 @@
 #ifndef ELIB_ELIB_FS_FILE_STATUS_H
 #define ELIB_ELIB_FS_FILE_STATUS_H
 
+#include <elib/fs/config.h>
 #include <elib/fs/file_type.h>
 #include <elib/fs/perms.h>
 
@@ -44,6 +45,7 @@ private:
 } /* namespace elib */
 
 
-#include <elib/fs/detail/file_status_inline.h>
-
+#ifndef ELIB_FS_DEFINITIONS_INLINE
+#   include <elib/fs/detail/file_status_def.h>
+#endif
 #endif /* ELIB_ELIB_FS_FILE_STATUS_H */

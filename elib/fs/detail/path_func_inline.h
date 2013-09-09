@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_PATH_FUNC_INLINE_H
-#define ELIB_FS_PATH_FUNC_INLINE_H
+#ifndef ELIB_FS_PATH_FUNC_DEF_H
+#define ELIB_FS_PATH_FUNC_DEF_H
 
 namespace elib {
 namespace fs {
@@ -75,4 +75,4 @@ operator>>(std::basic_istream<charT, traits>& is, path& p)
     
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_PATH_FUNC_INLINE_H */
+#endif /* ELIB_FS_PATH_FUNC_DEF_H */

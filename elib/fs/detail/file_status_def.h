@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_FILE_STATUS_INLINE_H
-#define ELIB_FS_FILE_STATUS_INLINE_H
+#ifndef ELIB_FS_FILE_STATUS_DEF_H
+#define ELIB_FS_FILE_STATUS_DEF_H
 
 
 namespace elib {
@@ -38,4 +38,4 @@ file_status::permissions(perms prms) noexcept
     
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_FILE_STATUS_INLINE_H */
+#endif /* ELIB_FS_FILE_STATUS_DEF_H */

@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_DIRECTORY_ENTRY_INLINE_H
-#define ELIB_FS_DIRECTORY_ENTRY_INLINE_H
+#ifndef ELIB_FS_DIRECTORY_ENTRY_DEF_H
+#define ELIB_FS_DIRECTORY_ENTRY_DEF_H
 
 namespace elib {
 namespace fs {
@@ -106,4 +106,4 @@ directory_entry::operator>=(const directory_entry& rhs) const noexcept
     
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_DIRECTORY_ENTRY_INLINE_H */
+#endif /* ELIB_FS_DIRECTORY_ENTRY_DEF_H */

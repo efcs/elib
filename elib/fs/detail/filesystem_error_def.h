@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_FILESYSTEM_ERROR_INLINE_H
-#define ELIB_FS_FILESYSTEM_ERROR_INLINE_H
+#ifndef ELIB_FS_FILESYSTEM_ERROR_DEF_H
+#define ELIB_FS_FILESYSTEM_ERROR_DEF_H
 
 namespace elib {
 namespace fs {
@@ -50,4 +50,4 @@ filesystem_error::what() const noexcept
     
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_FILESYSTEM_ERROR_INLINE_H */
+#endif /* ELIB_FS_FILESYSTEM_ERROR_DEF_H */

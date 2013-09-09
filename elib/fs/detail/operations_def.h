@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_OPERATIONS_INLINE_H
-#define ELIB_FS_OPERATIONS_INLINE_H
+#ifndef ELIB_FS_OPERATIONS_DEF_H
+#define ELIB_FS_OPERATIONS_DEF_H
 
 namespace elib {
 namespace fs {
@@ -1115,4 +1115,4 @@ unique_path(const path& model, std::error_code& ec);
     
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_OPERATIONS_INLINE_H */
+#endif /* ELIB_FS_OPERATIONS_DEF_H */

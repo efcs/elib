@@ -1,7 +1,7 @@
 #ifndef ELIB_FS_DIRECTORY_ENTRY_H
 #define ELIB_FS_DIRECTORY_ENTRY_H
 
-
+#include <elib/fs/config.h>
 #include <elib/fs/path.h>
 #include <elib/fs/file_status.h>
 
@@ -93,7 +93,8 @@ private:
 } /* namespace elib */
 
 
-#include <elib/fs/detail/directory_entry_inline.h>
-
+#ifdef ELIB_FS_DEFINITIONS_INLINE
+#   include <elib/fs/detail/directory_entry_def.h>
+#endif
 
 #endif /* ELIB_FS_DIRECTORY_ENTRY_H */

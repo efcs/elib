@@ -2,6 +2,7 @@
 #define ELIB_FS_OPERATIONS_H
 
 
+#include <elib/fs/config.h>
 #include <elib/fs/path.h>
 #include <elib/fs/space_info.h>
 #include <elib/fs/file_status.h>
@@ -393,8 +394,8 @@ unique_path(const path& model, std::error_code& ec);
 } /* namespace fs */
 } /* namespace elib */
 
-
-#include <elib/fs/detail/operations_inline.h>
-
+#ifdef ELIB_FS_DEFINITIONS_INLINE
+#include <elib/fs/detail/operations_def.h>
+#endif
 
 #endif /* ELIB_FS_OPERATIONS_H */

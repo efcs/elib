@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_FILESYSTEM_ERROR_H
 #define ELIB_FS_FILESYSTEM_ERROR_H
 
+#include <elib/fs/config.h>
 #include <elib/fs/path.h>
 
 #include <system_error>
@@ -41,7 +42,8 @@ private:
 } /* namespace elib */
 
 
-#include <elib/fs/detail/filesystem_error_inline.h>
-
+#ifndef ELIB_FS_DEFINITIONS_INLINE
+#   include <elib/fs/detail/filesystem_error_def.h>
+#endif
 
 #endif /* ELIB_FS_FILESYSTEM_ERROR_H */

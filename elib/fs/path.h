@@ -1,8 +1,7 @@
 #ifndef ELIB_FS_PATH_H
 #define ELIB_FS_PATH_H
 
-
-#include <elib/fs/detail/path_helper.h>
+#include <elib/fs/config.h>
 
 #include <string>
 #include <iterator>
@@ -299,9 +298,10 @@ operator>>(std::basic_istream<charT, traits>& is, path& p);
 } /* namespace elib */
 
 
-#include <elib/fs/detail/path_inline.h>
-#include <elib/fs/detail/path_iterator_inline.h>
-#include <elib/fs/detail/path_func_inline.h>
-
+#ifdef ELIB_FS_DEFINITIONS_INLINE
+#   include <elib/fs/detail/path_def.h>
+#   include <elib/fs/detail/path_iterator_def.h>
+#   include <elib/fs/detail/path_func_def.h>
+#endif
 
 #endif /* ELIB_FS_PATH_H */

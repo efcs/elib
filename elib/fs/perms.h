@@ -2,6 +2,9 @@
 #define ELIB_FS_PERMS_H
 
 
+#include <elib/fs/config.h>
+
+
 namespace elib {
 namespace fs {
     
@@ -30,9 +33,10 @@ enum class perms : unsigned {
 };
 
 
-#include <elib/fs/detail/perms_bitwise_operators.h>
-
-
 } /* namespace fs */
 } /* namespace elib */
+
+
+#include <elib/fs/detail/perms_bitwise_operators.h>
+
 #endif /* ELIB_FS_PERMS_H */

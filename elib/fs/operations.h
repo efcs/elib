@@ -4,26 +4,14 @@
 
 #include <elib/fs/config.h>
 #include <elib/fs/path.h>
+#include <elib/fs/copy_options.h>
 #include <elib/fs/space_info.h>
 #include <elib/fs/file_status.h>
 #include <elib/fs/file_time_type.h>
-#include <elib/fs/detail/operations_helper.h>
-#include <elib/fs/detail/filesystem_error_helper.h>
 
 
 
 #include <system_error>
-#include <memory>
-
-#include <cstdint>
-#include <cstdlib>
-#include <climits>
-
-
-#include <unistd.h>
-#include <utime.h>
-#include <sys/stat.h>
-#include <sys/statvfs.h>
 
 
 namespace elib {
@@ -393,6 +381,7 @@ unique_path(const path& model, std::error_code& ec);
 
 } /* namespace fs */
 } /* namespace elib */
+
 
 #ifdef ELIB_FS_DEFINITIONS_INLINE
 #include <elib/fs/detail/operations_def.h>

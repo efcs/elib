@@ -14,7 +14,6 @@ namespace fs {
     
 class directory_entry {
 public:
-
     // constructors and destructor
     directory_entry() = default;
     

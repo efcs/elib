@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_PATH_SEPERATOR_H
-#define ELIB_FS_PATH_SEPERATOR_H
+#ifndef ELIB_FS_PATH_SEPARATOR_H
+#define ELIB_FS_PATH_SEPARATOR_H
 
 
 namespace elib {
@@ -12,4 +12,4 @@ constexpr char path_separator_str[] = "/";
 
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_PATH_SEPERATOR_H */
+#endif /* ELIB_FS_PATH_SEPARATOR_H */

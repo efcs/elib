@@ -45,7 +45,7 @@ private:
 } /* namespace elib */
 
 
-#ifndef ELIB_FS_DEFINITIONS_INLINE
-#   include <elib/fs/detail/file_status_def.h>
-#endif
+#include <elib/fs/detail/file_status_def.h>
+
+
 #endif /* ELIB_ELIB_FS_FILE_STATUS_H */

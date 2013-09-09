@@ -1,10 +1,5 @@
-#ifndef ELIB_FS__PATH_H
-#define ELIB_FS__PATH_H
-
-
-#ifndef ELIB_FS_PATH_H
-#   error only include this file through path.h
-#endif
+#ifndef ELIB_FS_PATH_DEF_H
+#define ELIB_FS_PATH_DEF_H
 
 
 namespace elib {
@@ -433,4 +428,4 @@ path::rend() const
 
 } /* namespace fs */    
 } /* namespace elib */
-#endif /* ELIB_FS__PATH_H */
+#endif /* ELIB_FS_PATH_DEF_H */

@@ -42,7 +42,7 @@ private:
 } /* namespace elib */
 
 
-#ifndef ELIB_FS_DEFINITIONS_INLINE
+#ifdef ELIB_FS_DEFINITIONS_INLINE
 #   include <elib/fs/detail/filesystem_error_def.h>
 #endif
 

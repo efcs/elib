@@ -4,10 +4,14 @@
 
 #include <elib/fs/directory_entry.h>
 #include <elib/fs/path.h>
-
+#include <elib/fs/detail/directory_stream.h>
 
 #include <iterator>
 #include <system_error>
+#include <memory>
+
+
+#include <dirent.h>
 
 
 namespace elib {
@@ -53,6 +57,9 @@ public:
     // other members as required by
     //  C++ Std, 24.1.1 Input iterators [input.iterators]
     //TODO
+private:
+    directory_entry m_curr;
+    
 };
     
 

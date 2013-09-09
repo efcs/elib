@@ -1,2 +1,0 @@
-
-#define ELIB_FS_DEFINITIONS_INLINE 1

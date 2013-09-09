@@ -77,22 +77,27 @@ _status(const path& p, struct stat& path_stat, std::error_code& ec) noexcept
         return file_status(file_type::none);
     }
     
+    file_status fst;
+    
     const mode_t& mode = path_stat.st_mode;
     
     if (S_ISREG(mode))
-        return file_status(file_type::regular);
-    if (S_ISDIR(mode))
-        return file_status(file_type::directory);
-    if (S_ISBLK(mode))
-        return file_status(file_type::block);
-    if (S_ISCHR(mode))
-        return file_status(file_type::character);
-    if (S_ISFIFO(mode))
-        return file_status(file_type::fifo);
-    if (S_ISSOCK(mode))
-        return file_status(file_type::socket);
+        fst.type(file_type::regular);
+    else if (S_ISDIR(mode))
+        fst.type(file_type::directory);
+    else if (S_ISBLK(mode))
+        fst.type(file_type::block);
+    else if (S_ISCHR(mode))
+        fst.type(file_type::character);
+    else if (S_ISFIFO(mode))
+        fst.type(file_type::fifo);
+    else if (S_ISSOCK(mode))
+        fst.type(file_type::socket);
+    else
+        fst.type(file_type::unknown);
     
-    return file_status(file_type::unknown);
+    fst.permissions(detail::_get_perms(path_stat));
+    return fst;
 }
 
 
@@ -116,26 +121,29 @@ _symlink_status(const path& p, struct stat& path_stat, std::error_code & ec) noe
         return file_status(file_type::none);
     }
     
+    file_status fst;
     const mode_t& mode = path_stat.st_mode;
     
     if (S_ISLNK(mode))
-        return file_status(file_type::symlink);
-    if (S_ISREG(mode))
-        return file_status(file_type::regular);
-    if (S_ISDIR(mode))
-        return file_status(file_type::directory);
-    if (S_ISBLK(mode))
-        return file_status(file_type::block);
-    if (S_ISCHR(mode))
-        return file_status(file_type::character);
-    if (S_ISFIFO(mode))
-        return file_status(file_type::fifo);
-    if (S_ISSOCK(mode))
-        return file_status(file_type::socket);
+        fst.type(file_type::symlink);
+    else if (S_ISREG(mode))
+        fst.type(file_type::regular);
+    else if (S_ISDIR(mode))
+        fst.type(file_type::directory);
+    else if (S_ISBLK(mode))
+        fst.type(file_type::block);
+    else if (S_ISCHR(mode))
+        fst.type(file_type::character);
+    else if (S_ISFIFO(mode))
+        fst.type(file_type::fifo);
+    else if (S_ISSOCK(mode))
+        fst.type(file_type::socket);
+    else
+        fst.type(file_type::unknown);
     
-    //TODO symbolic_link
-    
-    return file_status(file_type::unknown);
+    // TODO symbolic link
+    fst.permissions(detail::_get_perms(path_stat));
+    return fst;
 }
 
 inline bool

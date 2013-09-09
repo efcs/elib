@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_PATH_HELPER_H
 #define ELIB_FS_PATH_HELPER_H
 
+#include <elib/fs/config.h>
 #include <elib/fs/path_separator.h>
 #include <elib/utility/size_type.h>
 
@@ -125,6 +126,7 @@ private:
 };
 
 
+
 struct path_part {
     typedef path_helper::size_type size_type;
     size_type pos;
@@ -136,6 +138,13 @@ struct path_part {
 
 } /* namespace detail */
 } /* namespace fs */
+
+
+#ifdef ELIB_FS_DEBUG
+
+
+#include <elib/enemuration/basic_enum_traits.h>
+
 
 template <>
 struct basic_enum_traits<fs::detail::path_part_e> {
@@ -151,6 +160,8 @@ public:
     typedef const std::map<pp_e, std::string> map_type;
     static map_type name_map;
 };
+
+#endif /* ELIB_FS_DEBUG */
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -474,4 +485,5 @@ is_path_root_name(const std::string & s)
 } /* namespace detail */
 } /* namespace fs */
 } /* namespace elib */
+
 #endif /* ELIB_FS_PATH_HELPER_H */

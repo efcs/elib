@@ -1,6 +1,21 @@
 #ifndef ELIB_FS_OPERATIONS_DEF_H
 #define ELIB_FS_OPERATIONS_DEF_H
 
+#include <elib/fs/detail/operations_helper.h>
+#include <elib/fs/detail/filesystem_error_helper.h>
+
+#include <memory>
+
+#include <cstdint>
+#include <cstdlib>
+#include <climits>
+
+#include <unistd.h>
+#include <utime.h>
+#include <sys/stat.h>
+#include <sys/statvfs.h>
+
+
 namespace elib {
 namespace fs {
     
@@ -499,8 +514,14 @@ file_size(const path& p, std::error_code& ec) noexcept
     
     file_status fst = detail::_status(p, pstat, ec);
     
-    if (ec || ! exists(fst) || ! is_regular_file(fst))
+    // ec is set when ! exists(fst)
+    if (ec)
         return static_cast<uintmax_t>(-1);
+    
+   if (! is_regular_file(fst)) {
+        detail::handle_error(std::errc::operation_not_permitted, ec);
+        return static_cast<uintmax_t>(-1);
+   }
     
     return detail::_file_size(pstat);
 }
@@ -543,26 +564,13 @@ is_block_file(file_status s) noexcept
 inline bool 
 is_block_file(const path& p)
 {
-    std::error_code ec;
-    
-    file_status fst = status(p, ec);
-    
-    if (! detail::_file_status_bad(fst))
-        throw filesystem_error(ec.message(), p, ec);
-    
-    return is_block_file(fst);
+    return is_block_file(status(p));
 }
 
 inline bool 
 is_block_file(const path& p, std::error_code& ec) noexcept
 {
-    ec.clear();
-    
-    auto fst = status(p, ec);
-    if (! detail::_file_status_bad(fst))
-        return false;
-    
-    return is_block_file(fst);
+    return is_block_file(status(p, ec));
 }
 
 
@@ -576,26 +584,13 @@ is_character_file(file_status s) noexcept
 inline bool 
 is_character_file(const path& p)
 {
-    std::error_code ec;
-    
-    file_status fst = status(p, ec);
-    
-    if (! detail::_file_status_bad(fst))
-        throw filesystem_error(ec.message(), p, ec);
-    
-    return is_character_file(fst);
+    return is_character_file(status(p));
 }
 
 inline bool 
 is_character_file(const path& p, std::error_code& ec) noexcept
 {
-    ec.clear();
-    
-    file_status fst = status(p, ec);
-    if ( ! detail::_file_status_bad(fst))
-        return false;
-    
-    return is_character_file(fst);
+    return is_character_file(status(p, ec));
 }
 
 
@@ -609,26 +604,13 @@ is_directory(file_status s) noexcept
 inline bool 
 is_directory(const path& p)
 {
-    std::error_code ec;
-    
-    file_status fst = status(p, ec);
-    
-    if (! detail::_file_status_bad(fst))
-        throw filesystem_error(ec.message(), p, ec);
-    
-    return is_directory(fst);
+    return is_directory(status(p));
 }
 
 inline bool 
 is_directory(const path& p, std::error_code& ec) noexcept
 {
-    ec.clear();
-    
-    file_status fst = status(p, ec);
-    if ( ! detail::_file_status_bad(fst))
-        return false;
-    
-    return is_directory(fst);
+    return is_directory(status(p, ec));
 }
 
 
@@ -1115,4 +1097,7 @@ unique_path(const path& model, std::error_code& ec);
     
 } /* namespace fs */
 } /* namespace elib */
+
+
+
 #endif /* ELIB_FS_OPERATIONS_DEF_H */

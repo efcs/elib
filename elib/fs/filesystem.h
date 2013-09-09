@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_FILESYSTEM_H
 #define ELIB_FS_FILESYSTEM_H
 
+#include <elib/fs/config.h>
 #include <elib/fs/copy_options.h>
 #include <elib/fs/directory_entry.h>
 #include <elib/fs/directory_iterator.h>

@@ -1,7 +1,8 @@
 #ifndef ELIB_FS_PERMS_BITWISE_OPERATORS_H
 #define ELIB_FS_PERMS_BITWISE_OPERATORS_H
 
-
+namespace elib {
+namespace fs {
 namespace detail {
     
 template <typename T, typename U>
@@ -136,5 +137,9 @@ operator^=(unsigned& lhs, perms rhs) noexcept
 {
     return (lhs = detail::_perms_bitwise_xor(lhs, rhs));
 }
+
+
+} /* namespace fs */
+} /* namespace elib */
 
 #endif /* ELIB_FS_PERMS_BITWISE_OPERATORS_H */

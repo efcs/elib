@@ -1,6 +1,8 @@
 #include "elib/fs/detail/path_helper.h"
 
 namespace elib {
+    
+#ifdef ELIB_FS_DEBUG
 
 basic_enum_traits<fs::detail::path_part_e>::map_type
 basic_enum_traits<fs::detail::path_part_e>::name_map =
@@ -13,5 +15,7 @@ basic_enum_traits<fs::detail::path_part_e>::name_map =
       {fs::detail::path_part_e::dot, "dot"},
       {fs::detail::path_part_e::double_dot, "double_dot"}
     };
+    
+#endif
     
 } /* namespace elib */

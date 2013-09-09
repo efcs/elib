@@ -20,9 +20,11 @@ enum class copy_options : unsigned {
 };
 
 
+} /* namespace fs */
+} /* namespace elib */
+
+
 #include <elib/fs/detail/copy_options_bitwise_operators.h>
 
 
-} /* namespace fs */
-} /* namespace elib */
 #endif /* ELIB_FS_COPY_OPTIONS_H */

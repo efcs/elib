@@ -1,7 +1,8 @@
 #ifndef ELIB_FS_COPY_OPTIONS_BITWISE_OPERATORS_H
 #define ELIB_FS_COPY_OPTIONS_BITWISE_OPERATORS_H
 
-
+namespace elib {
+namespace fs {
 namespace detail {
     
     
@@ -139,5 +140,6 @@ operator^=(unsigned& lhs, copy_options rhs) noexcept
 }
 
 
-
+} /* namespace fs */
+} /* namespace elib */
 #endif /* ELIB_FS_COPY_OPTIONS_BITWISE_OPERATORS_H */

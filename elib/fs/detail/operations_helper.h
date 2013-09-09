@@ -25,6 +25,7 @@ namespace fs {
 namespace detail {
     
 
+    
 std::string
 _readpath(const char* p_str, std::error_code& ec) noexcept;
 
@@ -58,8 +59,7 @@ _readlink(const path& p, std::error_code& ec) noexcept;
 } /* namespace elib */
 
 
-#ifdef ELIB_FS_DEFINITIONS_INLINE
-#   include <elib/fs/detail/operations_helper_def.h>
-#endif
+#include <elib/fs/detail/operations_helper_def.h>
+
 
 #endif /* ELIB_FS_OPERATIONS_HELPER_H */

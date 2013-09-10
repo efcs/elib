@@ -276,10 +276,21 @@ copy_symlink(const path& existing_symlink, const path& new_symlink,
              
 //create_directories
 inline bool 
-create_directories(const path& p);
+create_directories(const path& p)
+{
+    std::error_code ec;
+    bool ret = create_directories(p, ec);
+    if (ec)
+        throw filesystem_error(ec.message(), p, ec);
+    return ret;
+}
 
 inline bool 
-create_directories(const path& p, std::error_code& ec) noexcept;
+create_directories(const path& p, std::error_code& ec) noexcept
+{
+    path abs = absolute(p);
+    
+}
 
 
 // create_directory
@@ -297,9 +308,18 @@ inline bool
 create_directory(const path& p, std::error_code& ec) noexcept
 {
     ec.clear();
-    //TODO
-    ((void)p);
-    throw;
+    if(! detail::_mkdir(p.c_str(), ec)) {
+        // ec should be set
+        // check for special case EEXIST && is_directory(p)
+        std::error_code ec2;
+        if (ec.value() == EEXIST && is_directory(p, ec)) {
+            ec.clear();
+            return true;
+        }
+        return false;
+    }
+    
+    return true;
 }
 
 inline void 

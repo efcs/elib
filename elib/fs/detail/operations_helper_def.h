@@ -6,8 +6,21 @@ namespace elib {
 namespace  fs {
 namespace detail {
 
+inline bool
+_mkdir(const char* p_str, std::error_code& ec) noexcept
+{
+    ec.clear();
+    errno = 0;
+    int ret = mkdir(p_str, S_IRWXU|S_IRWXG|S_IRWXO);
+    if (ret == -1) {
+        detail::handle_errno(ec);
+        return false;
+    }
+    return true;
+}
     
-    inline std::string
+    
+inline std::string
 _realpath(const char* p_str, std::error_code& ec) noexcept
 {
     ec.clear();

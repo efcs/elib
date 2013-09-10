@@ -25,6 +25,8 @@ namespace fs {
 namespace detail {
     
 
+bool 
+_mkdir(const char* p, std::error_code& ec) noexcept;
     
 std::string
 _readpath(const char* p_str, std::error_code& ec) noexcept;

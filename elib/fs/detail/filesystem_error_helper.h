@@ -14,6 +14,12 @@ namespace elib {
 namespace fs {
 namespace detail {
     
+    
+inline void
+clear_errno()
+{
+    errno = 0;
+}
 
 inline void
 handle_errno(std::error_code & ec)

@@ -48,7 +48,8 @@ public:
 
     // observers
     const fs::path&
-    path() const noexcept;
+    path() const noexcept
+    { return m_path; }
     
     file_status
     status() const;
@@ -64,22 +65,28 @@ public:
 
     
     bool 
-    operator==(const directory_entry& rhs) const noexcept;
+    operator==(const directory_entry& rhs) const noexcept
+    { return (m_path == rhs.m_path); }
     
     bool 
-    operator!=(const directory_entry& rhs) const noexcept; 
+    operator!=(const directory_entry& rhs) const noexcept
+    { return (m_path != rhs.m_path); }
     
     bool 
-    operator< (const directory_entry& rhs) const noexcept;
+    operator< (const directory_entry& rhs) const noexcept
+    { return (m_path < rhs.m_path); }
     
     bool 
-    operator<=(const directory_entry& rhs) const noexcept;
+    operator<=(const directory_entry& rhs) const noexcept
+    { return (m_path <= rhs.m_path); }
     
     bool 
-    operator> (const directory_entry& rhs) const noexcept;
+    operator> (const directory_entry& rhs) const noexcept
+    { return (m_path > rhs.m_path); }
     
     bool 
-    operator>=(const directory_entry& rhs) const noexcept;
+    operator>=(const directory_entry& rhs) const noexcept
+    { return (m_path >= rhs.m_path); }
     
 private:
     fs::path m_path;       // for exposition only
@@ -90,10 +97,4 @@ private:
     
 } /* namespace fs */
 } /* namespace elib */
-
-
-#ifdef ELIB_FS_DEFINITIONS_INLINE
-#   include <elib/fs/detail/directory_entry_def.h>
-#endif
-
 #endif /* ELIB_FS_DIRECTORY_ENTRY_H */

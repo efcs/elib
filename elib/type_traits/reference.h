@@ -16,20 +16,7 @@ template <typename T>
 struct is_reference<T&&> : public true_type
 { };
     
-template <typename T>
-struct remove_reference {
-    typedef T type;
-};
 
-template <typename T>
-struct remove_reference<T&> {
-    typedef T type;
-};
-
-template <typename T>
-struct remove_reference<T&&> {
-    typedef T type;
-};
 
 
 namespace detail {

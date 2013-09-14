@@ -26,112 +26,14 @@
 namespace elib {
 namespace enumeration {
 
-////////////////////////////////////////////////////////////////////////////////
-//                          enum function definitions & helpers
-////////////////////////////////////////////////////////////////////////////////
-
-
-template <typename Enum>
-inline constexpr Enum
-default_enum()
-{
-    typedef enum_traits<Enum> traits;
-    return traits::default_value;
-}
-
-
-template <typename Enum>
-inline bool
-is_valid_enum(Enum e)
-{
-    typedef basic_enum_traits<Enum> traits;
-    
-    if (is_contiguous<Enum>())
-        return (e >= traits::first_value && e <= traits::last_value);
-    
-    return (traits::name_map.contains(e));
-}
-
-template <typename Enum>
-inline bool
-is_contiguous()
-{
-    typedef basic_enum_traits<Enum> traits;
-    unsigned diff = base_enum_cast(traits::last_value) - 
-                    base_enum_cast(traits::first_value) + 1;
-                    
-    return (diff == traits::name_map.size());
-}
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
 //                          enum_traits definition
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename Enum>
-constexpr Enum
-enum_traits<Enum>::NPOS_ENUM;
 
-template <typename Enum>
-inline unsigned
-enum_traits<Enum>::size()
-{ 
-    return basic_traits::name_map.size(); 
-}
 
-template <typename Enum>
-inline bool
-enum_traits<Enum>::good(underlying_type val)
-{
-    Enum e = static_cast<Enum>(val);
-    return good(e);
-}
-
-template <typename Enum>
-inline bool
-enum_traits<Enum>::good(Enum e)
-{
-    return (basic_traits::name_map.count(e) == 1);
-}
-
-template <typename Enum>
-inline typename enum_traits<Enum>::iterator
-enum_traits<Enum>::iterator_at(Enum e) 
-{ return iterator(e); }
-
-template <typename Enum>
-inline typename enum_traits<Enum>::iterator
-enum_traits<Enum>::iterator_at(iter_pos_e pos)
-{ return iterator(pos); }
-
-template <typename Enum>
-inline typename enum_traits<Enum>::iterator
-enum_traits<Enum>::begin()
-{
-    return iterator(iter_pos_e::begin);
-}
-
-template <typename Enum>    
-inline typename enum_traits<Enum>::iterator 
-enum_traits<Enum>::end()
-{
-    return iterator(iter_pos_e::end);
-}
-    
-template <typename Enum>    
-inline typename enum_traits<Enum>::const_iterator
-enum_traits<Enum>::cbegin() const
-{
-    return const_iterator(basic_traits::first_value);
-}
-    
-template <typename Enum>
-inline typename enum_traits<Enum>::const_iterator
-enum_traits<Enum>::cend() const
-{
-    return const_iterator(iter_pos_e::end);
-}
 
 template <typename Enum>
 inline bool

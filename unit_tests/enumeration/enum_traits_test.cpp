@@ -215,26 +215,15 @@ BOOST_AUTO_TEST_CASE(test_safe_enum_cast)
 }
 
 
-BOOST_AUTO_TEST_CASE(test_enum_iter_in_traits)
-{
-    iterator b = iterator(iter_pos_e::begin);
-    iterator e = iterator(iter_pos_e::end);
-    
-    BOOST_CHECK(traits().begin() == b);
-    BOOST_CHECK(traits().end() == e);
-    
-    BOOST_CHECK(traits().cbegin() == b);
-    BOOST_CHECK(traits().cend() == e);
-    
-}
+
 
 BOOST_AUTO_TEST_CASE(test_enum_iter)
 {
     test_e last = test_e::none;
     unsigned count = 0;
     
-    iterator b;
-    auto e = iterator(iter_pos_e::end);
+    auto b = traits::sbegin();
+    auto e = traits::send();
     
     for (auto it=b; it != e; ++it) {
         test_e curr = *it;
@@ -247,13 +236,13 @@ BOOST_AUTO_TEST_CASE(test_enum_iter)
     
     BOOST_CHECK(count == test_size);
     
-    auto other_b = iterator(iter_pos_e::begin);
+    auto other_b = traits::sbegin();
     BOOST_CHECK(b == other_b);
 }
 
 BOOST_AUTO_TEST_CASE(test_auto_iter)
 {
-    iterator it = iterator(iter_pos_e::begin);
+    iterator it = traits::sbegin();
     test_e other_e;
     for (auto e : traits()) {
         other_e = *it;
@@ -266,7 +255,7 @@ BOOST_AUTO_TEST_CASE(test_auto_iter)
 
 BOOST_AUTO_TEST_CASE(test_prefix_iter)
 {
-    iterator it = iterator(iter_pos_e::begin);
+    iterator it = traits::sbegin();
     test_e other_e;
     for (auto e : traits()) {
         auto other_it = it++;

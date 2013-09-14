@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE(check_t_arith)
     static_assert(! en::detail::is_mixed_bitwise_allowed<t_arith_m>::value, "");
     
     int lhs, rhs, expect;
-    t_arith_m lhs_e, rhs_e, lhs_ret, ret;
+    t_arith_m lhs_e, rhs_e, lhs_ret, ret, mret1, mret2, mlhs_ret;
     
     for (int i=0; i < 10; ++i) {
         lhs = i;
@@ -256,6 +256,35 @@ BOOST_AUTO_TEST_CASE(check_t_arith)
         expect = -lhs;
         ret = -lhs_e;
         BOOST_CHECK(en::base_enum_cast(ret) == expect);
+        
+        lhs = i;
+        lhs_e = static_cast<t_arith_m>(lhs);
+        expect = ++lhs;
+        ret = ++lhs_e;
+        BOOST_CHECK(en::base_enum_cast(ret) == expect);
+        BOOST_CHECK(en::base_enum_cast(lhs_e) == lhs);
+        
+        lhs = i;
+        lhs_e = static_cast<t_arith_m>(lhs);
+        expect = lhs++;
+        ret = lhs_e++;
+        BOOST_CHECK(en::base_enum_cast(ret) == expect);
+        BOOST_CHECK(en::base_enum_cast(lhs_e) == lhs);
+        
+        lhs = i;
+        lhs_e = static_cast<t_arith_m>(lhs);
+        expect = --lhs;
+        ret = --lhs_e;
+        BOOST_CHECK(en::base_enum_cast(ret) == expect);
+        BOOST_CHECK(en::base_enum_cast(lhs_e) == lhs);
+        
+        lhs = i;
+        lhs_e = static_cast<t_arith_m>(lhs);
+        expect = lhs--;
+        ret = lhs_e--;
+        BOOST_CHECK(en::base_enum_cast(ret) == expect);
+        BOOST_CHECK(en::base_enum_cast(lhs_e) == lhs);
+        
     }
     
     for (int i=0; i <= 10; ++i) {
@@ -267,40 +296,75 @@ BOOST_AUTO_TEST_CASE(check_t_arith)
             
             expect = lhs + rhs;
             ret = lhs_e + rhs_e;
+            mret1 = lhs_e + rhs;
+            mret2 = lhs + rhs_e;
             lhs_ret = lhs_e;
             lhs_ret += rhs_e;
+            mlhs_ret = lhs_e;
+            mlhs_ret += rhs;
             BOOST_CHECK(en::base_enum_cast(ret) == expect);
+            BOOST_CHECK(en::base_enum_cast(mret1) == expect);
+            BOOST_CHECK(en::base_enum_cast(mret2) == expect);
             BOOST_CHECK(en::base_enum_cast(lhs_ret) == expect);
+            BOOST_CHECK(en::base_enum_cast(mlhs_ret) == expect);
             
             expect = lhs - rhs;
             ret = lhs_e - rhs_e;
+            mret1 = lhs_e - rhs;
+            mret2 = lhs - rhs_e;
             lhs_ret = lhs_e;
             lhs_ret -= rhs_e;
+            mlhs_ret = lhs_e;
+            mlhs_ret -= rhs;
             BOOST_CHECK(en::base_enum_cast(ret) == expect);
+            BOOST_CHECK(en::base_enum_cast(mret1) == expect);
+            BOOST_CHECK(en::base_enum_cast(mret2) == expect);
             BOOST_CHECK(en::base_enum_cast(lhs_ret) == expect);
+            BOOST_CHECK(en::base_enum_cast(mlhs_ret) == expect);
             
             if (rhs != 0) {
                 expect = lhs / rhs;
                 ret = lhs_e / rhs_e;
+                mret1 = lhs_e / rhs;
+                mret2 = lhs / rhs_e;
                 lhs_ret = lhs_e;
                 lhs_ret /= rhs_e;
+                mlhs_ret = lhs_e;
+                mlhs_ret /= rhs;
                 BOOST_CHECK(en::base_enum_cast(ret) == expect);
+                BOOST_CHECK(en::base_enum_cast(mret1) == expect);
+                BOOST_CHECK(en::base_enum_cast(mret2) == expect);
                 BOOST_CHECK(en::base_enum_cast(lhs_ret) == expect);
+                BOOST_CHECK(en::base_enum_cast(mlhs_ret) == expect);
                 
                 expect = lhs % rhs;
                 ret = lhs_e % rhs_e;
+                mret1 = lhs_e % rhs;
+                mret2 = lhs % rhs_e;
                 lhs_ret = lhs_e;
                 lhs_ret %= rhs_e;
+                mlhs_ret = lhs_e;
+                mlhs_ret %= rhs;
                 BOOST_CHECK(en::base_enum_cast(ret) == expect);
+                BOOST_CHECK(en::base_enum_cast(mret1) == expect);
+                BOOST_CHECK(en::base_enum_cast(mret2) == expect);
                 BOOST_CHECK(en::base_enum_cast(lhs_ret) == expect);
+                BOOST_CHECK(en::base_enum_cast(mlhs_ret) == expect);
             }
             
             expect = lhs * rhs;
             ret = lhs_e * rhs_e;
+            mret1 = lhs_e * rhs;
+            mret2 = lhs * rhs_e;
             lhs_ret = lhs_e;
             lhs_ret *= rhs_e;
+            mlhs_ret = lhs_e;
+            mlhs_ret *= rhs;
             BOOST_CHECK(en::base_enum_cast(ret) == expect);
+            BOOST_CHECK(en::base_enum_cast(mret1) == expect);
+            BOOST_CHECK(en::base_enum_cast(mret2) == expect);
             BOOST_CHECK(en::base_enum_cast(lhs_ret) == expect);
+            BOOST_CHECK(en::base_enum_cast(mlhs_ret) == expect);
         }
     }
    
@@ -346,7 +410,7 @@ BOOST_AUTO_TEST_CASE(check_t_logic)
     
     t_logic_m lhs_e, rhs_e;
     int  lhs, rhs;
-    bool ret, expect;
+    bool ret, expect, mret1, mret2;
     
     for (int i=0; i <= 10; ++i) {
         lhs = i;
@@ -363,20 +427,24 @@ BOOST_AUTO_TEST_CASE(check_t_logic)
             lhs_e = static_cast<t_logic_m>(lhs);
             rhs_e = static_cast<t_logic_m>(rhs);
             ret = lhs_e && rhs_e;
+            mret1 = lhs_e && rhs;
+            mret2 = lhs && rhs_e;
             expect = static_cast<bool>(lhs && rhs);
             BOOST_CHECK(ret == expect);
-        }
-    }
-    
-    for (int i=0; i <= 10; ++i) {
-        for (int j=0; j <= 10; ++j) {
+            BOOST_CHECK(mret1 == expect);
+            BOOST_CHECK(mret2 == expect);
+            
             lhs = i;
             rhs = j;
             lhs_e = static_cast<t_logic_m>(lhs);
             rhs_e = static_cast<t_logic_m>(rhs);
             ret = lhs_e || rhs_e;
+            mret1 = lhs_e || rhs;
+            mret2 = lhs || rhs_e;
             expect = static_cast<bool>(lhs || rhs);
             BOOST_CHECK(ret == expect);
+            BOOST_CHECK(mret1 == expect);
+            BOOST_CHECK(mret2 == expect);
         }
     }
 }

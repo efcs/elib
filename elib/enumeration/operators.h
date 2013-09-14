@@ -246,10 +246,12 @@ operator++(EnumT& lhs) noexcept
 }
 
 template <typename EnumT>
-constexpr enable_if_arithmetic_allowed_t<EnumT>
-operator++(EnumT lhs, int) noexcept
+inline enable_if_arithmetic_allowed_t<EnumT>
+operator++(EnumT& lhs, int) noexcept
 {
-    return static_cast<EnumT>(base_enum_cast(lhs) + 1);
+    EnumT old = lhs;
+    ++lhs;
+    return old;
 }
 
 template <typename EnumT>
@@ -260,10 +262,12 @@ operator--(EnumT& lhs) noexcept
 }
 
 template <typename EnumT>
-constexpr enable_if_arithmetic_allowed_t<EnumT>
-operator--(EnumT lhs, int) noexcept
+inline enable_if_arithmetic_allowed_t<EnumT>
+operator--(EnumT& lhs, int) noexcept
 {
-    return static_cast<EnumT>(base_enum_cast(lhs) - 1);
+    EnumT old = lhs;
+    --lhs;
+    return old;
 }
 
 //

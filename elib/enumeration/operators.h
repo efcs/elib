@@ -579,7 +579,32 @@ operator^(base_t<EnumT> lhs, EnumT rhs) noexcept
 {
     return static_cast<EnumT>(lhs ^ base_enum_cast(rhs));
 }
-   
+
+//
+// mixed compound operators
+//
+
+template <typename EnumT>
+inline enable_if_mixed_bitwise_allowed_t<EnumT>&
+operator&=(EnumT& lhs, base_t<EnumT> rhs) noexcept
+{
+    return (lhs = lhs & rhs);
+}
+
+template <typename EnumT>
+inline enable_if_mixed_bitwise_allowed_t<EnumT>&
+operator|=(EnumT& lhs, base_t<EnumT> rhs) noexcept
+{
+    return (lhs = lhs | rhs);
+}
+
+template <typename EnumT>
+inline enable_if_mixed_bitwise_allowed_t<EnumT>&
+operator^=(EnumT& lhs, base_t<EnumT> rhs) noexcept
+{
+    return (lhs = lhs ^ rhs);
+}
+
    
 } // namespace operators 
 } // namespace detail 

@@ -20,8 +20,10 @@
 #define ELIB_ENUMERATION_ENUM_TRAITS_H
 
 #include <elib/enumeration/basic_enum_traits.h>
+#include <elib/enumeration/enum.h>
 #include <elib/enumeration/enum_iterator.h>
 #include <elib/enumeration/enum_cast.h>
+
 
 #include <limits>
 #include <string>
@@ -30,34 +32,8 @@
 
 namespace elib {
 namespace enumeration {
-    
-    
-/* easy base type access */
-template <typename EnumT>
-using base_t = typename std::underlying_type<
-                    typename std::remove_reference<EnumT>::type>::type;
-    
-
-/* has_enum_traits<T>::value is set to true,
- * if basic_enum_traits have been defined for type T,
- * false otherwise */
-template <typename T>
-struct has_enum_traits;
 
 
-/* npos_enum is a value that:
- *   a) is the numeric max for Enum's underlying type
- *   b) should not be a member of Enum (if it is used) */
-template <typename Enum>
-constexpr Enum
-npos_enum();
-
-
-/* return e == npos_enum() 
- * is_npos_enum can only be used when basic_traits::last_value < NPOS_ENUM */
-template <typename Enum>
-constexpr bool
-is_npos_enum(Enum e);
 
 
 /* default value is retured as specified in basic_enum_traits

@@ -1,6 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include "elib/enumeration/enum.h"
 #include "elib/enumeration/enum_traits.h"
 
 
@@ -55,7 +56,7 @@ typedef basic_enum_traits<test_e> basic_traits;
 typedef enum_traits<test_e> traits;
 typedef typename enum_traits<test_e>::iterator iterator;
 typedef typename enum_traits<test_e>::const_iterator const_iterator;
-typedef typename traits::underlying_type underlying_type;
+typedef typename traits::underlying_type utype;
 
 /* these are test cases, but they are static because they
  * test a constexpr function */
@@ -93,8 +94,8 @@ BOOST_AUTO_TEST_CASE(test_lexical_enum_cast)
             std::string ret_s = lexical_enum_cast<std::string>(e);
             BOOST_CHECK(ret_s == s);
             
-            auto val = static_cast<underlying_type>(e);
-            auto ret_val = lexical_enum_cast<underlying_type>(e);
+            auto val = static_cast<utype>(e);
+            auto ret_val = lexical_enum_cast<utype>(e);
             BOOST_CHECK(ret_val == val);
             return;
         };
@@ -107,7 +108,7 @@ BOOST_AUTO_TEST_CASE(test_lexical_enum_cast)
 BOOST_AUTO_TEST_CASE(test_enum_cast)
 {    
     auto test_fn = 
-        [&](test_e e, const std::string & s, underlying_type val)
+        [&](test_e e, const std::string & s, utype val)
         {
             test_e ret_e;
             ret_e = enum_cast<test_e>(s);
@@ -123,7 +124,7 @@ BOOST_AUTO_TEST_CASE(test_enum_cast)
     test_fn(test_e::five, "five", 5);
     
     auto test_bad_fn =
-        [&](const std::string & s, underlying_type val)
+        [&](const std::string & s, utype val)
         {
             try {
                 auto e = enum_cast<test_e>(s);
@@ -150,11 +151,11 @@ BOOST_AUTO_TEST_CASE(test_enum_cast)
 BOOST_AUTO_TEST_CASE(test_enum_cast2)
 {
     std::string str_val;
-    underlying_type val;
+    utype val;
     test_e other_e;
     for (auto & e : traits()) {
         str_val = lexical_enum_cast<std::string>(e);
-        val = lexical_enum_cast<underlying_type>(e);
+        val = lexical_enum_cast<utype>(e);
         
         other_e = enum_cast<test_e>(val);
         BOOST_CHECK(other_e == e);
@@ -186,12 +187,12 @@ BOOST_AUTO_TEST_CASE(test_enum_cast2)
 BOOST_AUTO_TEST_CASE(test_safe_enum_cast)
 {
     std::string str_val;
-    underlying_type val;
+    utype val;
     test_e dest;
     
     for (auto e : traits()) {
         str_val = lexical_enum_cast<std::string>(e);
-        val = lexical_enum_cast<underlying_type>(e);
+        val = lexical_enum_cast<utype>(e);
         dest = npos_enum<test_e>();
         
         BOOST_CHECK(enum_cast(val, dest));
@@ -206,11 +207,11 @@ BOOST_AUTO_TEST_CASE(test_safe_enum_cast)
     
     dest = test_e::none;
     BOOST_CHECK(enum_cast(val, dest) == false);
-    BOOST_CHECK(dest == test_e::none);
+    BOOST_CHECK(dest == npos_enum<test_e>());
     
     dest = test_e::none;
     BOOST_CHECK(enum_cast(str_val, dest) == false);
-    BOOST_CHECK(dest == test_e::none);
+    BOOST_CHECK(dest == npos_enum<test_e>());
 }
 
 
@@ -280,11 +281,11 @@ BOOST_AUTO_TEST_CASE(test_enum_traits_good)
 {
     for (auto e : traits()) {
         BOOST_CHECK(traits::good(e));
-        underlying_type val = lexical_enum_cast<underlying_type>(e);
+        utype val = lexical_enum_cast<utype>(e);
         BOOST_CHECK(traits::good(val));
     }
     
-    underlying_type val;
+    utype val;
     test_e e;
     
     val = 3;

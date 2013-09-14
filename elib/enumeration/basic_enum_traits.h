@@ -19,7 +19,6 @@
 #ifndef ELIB_ENUMERATION_BASIC_ENUM_TRAITS_H
 #define ELIB_ENUMERATION_BASIC_ENUM_TRAITS_H
 
-
 #include <string>
 #include <map>
 
@@ -80,7 +79,9 @@ struct basic_enum_traits {
     typedef const std::map<type, std::string> map_type;
     static map_type name_map;
 };
-    
+
+
+
 
 } /* namespace elib */
 #endif /* ELIB_ENUMERATION_BASIC_ENUM_TRAITS_H */

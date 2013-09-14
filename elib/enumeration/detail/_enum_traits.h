@@ -30,17 +30,6 @@ namespace enumeration {
 //                          enum function definitions & helpers
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename T>
-struct has_enum_traits {
-    typedef basic_enum_traits<T> traits;
-    
-    static constexpr bool value = 
-        ! std::is_same<
-                decltype(basic_enum_traits<T>::default_value), 
-                detail::BAD_ENUM_TYPE>::value;
-};
-
-
 
 template <typename Enum>
 inline constexpr Enum
@@ -50,30 +39,6 @@ default_enum()
     return traits::default_value;
 }
 
-    
-template <typename Enum>
-inline constexpr Enum
-npos_enum()
-{
-    typedef typename std::underlying_type<Enum>::type underlying_type;
-    typedef std::numeric_limits<underlying_type> limits;
-    
-    return static_cast<Enum>(limits::max());
-}
-
-
-template <typename Enum>
-inline constexpr bool
-is_npos_enum(Enum e)
-{
-    typedef enum_traits<Enum> traits;
-    
-    static_assert(traits::last_value == traits::NPOS_ENUM,
-                  "is_npos_enum cannot be used when " 
-                  "basic_enum_traits<Enum>::last_value = NPOS_ENUM");
-    
-    return (traits::NPOS_ENUM == e);
-}
 
 template <typename Enum>
 inline bool

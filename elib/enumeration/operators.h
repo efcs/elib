@@ -2,8 +2,7 @@
 #define ELIB_ENUMERATION_OPERATORS_H
 
 
-#include <elib/enumeration/enum_traits.h>
-#include <elib/enumeration/enum_cast.h>
+#include <elib/enumeration/enum.h>
 #include <elib/template_conditional.h>
 
 #include <type_traits>

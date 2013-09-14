@@ -1,4 +1,4 @@
-#include <elib/fs/directory_iterator.h>
+#include <elib/fs/directory_iterator.hpp>
 
 namespace elib {
 namespace fs {

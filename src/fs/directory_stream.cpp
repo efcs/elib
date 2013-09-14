@@ -1,4 +1,4 @@
-#include <elib/fs/detail/directory_stream.h>
+#include <elib/fs/detail/directory_stream.hpp>
 
 
 namespace elib {

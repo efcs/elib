@@ -1,5 +1,5 @@
-#include <elib/fs/directory_entry.h>
-#include <elib/fs/operations.h>
+#include <elib/fs/directory_entry.hpp>
+#include <elib/fs/operations.hpp>
 
 namespace elib {
 namespace fs {

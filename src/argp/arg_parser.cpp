@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "elib/argp/arg_parser.h"
-#include <elib/utility/fmt.h>
+#include "elib/argp/arg_parser.hpp"
+#include <elib/utility/fmt.hpp>
 
 
 #include <cassert>

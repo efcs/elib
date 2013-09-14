@@ -2,8 +2,8 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include "elib/fs/path.h"
-#include "elib/debug/eval.h"
+#include "elib/fs/path.hpp"
+#include "elib/debug/eval.hpp"
 
 
 

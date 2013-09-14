@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include <elib/fs/filesystem.h>
+#include <elib/fs/filesystem.hpp>
 
 #include <system_error>
 #include <iostream>

@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/lock/locking_proxy.h"
+#include "elib/lock/locking_proxy.hpp"
 
 #define GOOD(x) ((bool)x)
 

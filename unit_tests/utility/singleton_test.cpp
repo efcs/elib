@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/utility/singleton.h"
+#include "elib/utility/singleton.hpp"
 
 
 #define COUNT test_struct::count

@@ -1,3 +1,3 @@
-#include "elib/enumeration/enum_traits.h"
+#include "elib/enumeration/enum_traits.hpp"
 
 /* empty file so header is compiled */

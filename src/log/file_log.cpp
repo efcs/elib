@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "elib/log/file_log.h"
+#include "elib/log/file_log.hpp"
 
 namespace elib {
 namespace log {

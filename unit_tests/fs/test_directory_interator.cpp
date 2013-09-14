@@ -1,8 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/fs/path.h>
-#include <elib/fs/directory_iterator.h>
+#include <elib/fs/path.hpp>
+#include <elib/fs/directory_iterator.hpp>
 
 #include <vector>
 #include <string>

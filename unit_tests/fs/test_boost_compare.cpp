@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/filesystem.hpp>
-#include <elib/fs/filesystem.h>
+#include <elib/fs/filesystem.hpp>
 
 namespace bfs = boost::filesystem;
 namespace bsys = boost::system;

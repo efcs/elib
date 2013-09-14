@@ -2,8 +2,8 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include "elib/fs/detail/path_helper.h"
-#include "elib/log/elog.h"
+#include "elib/fs/detail/path_helper.hpp"
+#include "elib/log/elog.hpp"
 
 
 using namespace elib;

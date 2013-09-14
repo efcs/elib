@@ -1,11 +1,11 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/argp/arg_parser.h"
-#include "elib/argp/arg.h"
+#include "elib/argp/arg_parser.hpp"
+#include "elib/argp/arg.hpp"
 
-#include "elib/utility/static_string.h"
-#include "elib/enumeration/basic_enum_traits.h"
+#include "elib/utility/static_string.hpp"
+#include "elib/enumeration/basic_enum_traits.hpp"
 
 #include <vector>
 

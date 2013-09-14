@@ -1,8 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/utility/timer.h>
-#include <elib/utility/lexical_cast.h>
+#include <elib/utility/timer.hpp>
+#include <elib/utility/lexical_cast.hpp>
 
 #include <chrono>
 #include <thread>

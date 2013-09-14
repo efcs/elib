@@ -1,10 +1,10 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/enumeration/operators.h>
-#include <elib/enumeration/enum_cast.h>
+#include <elib/enumeration/operators.hpp>
+#include <elib/enumeration/enum_cast.hpp>
 #undef NDEBUG
-#include <elib/debug/dprint.h>
+#include <elib/debug/dprint.hpp>
 
 
 enum class t_all {

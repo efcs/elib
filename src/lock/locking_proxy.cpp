@@ -1,2 +1,2 @@
-#include "elib/lock/locking_proxy.h"
+#include "elib/lock/locking_proxy.hpp"
 

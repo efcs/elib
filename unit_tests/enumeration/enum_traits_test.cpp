@@ -1,8 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/enumeration/enum.h"
-#include "elib/enumeration/enum_traits.h"
+#include "elib/enumeration/enum.hpp"
+#include "elib/enumeration/enum_traits.hpp"
 
 
 

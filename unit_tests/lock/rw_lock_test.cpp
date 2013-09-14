@@ -2,8 +2,8 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include "elib/lock/rw_lock.h"
-#include "elib/lock/detail/rw_lock_impl.h"
+#include "elib/lock/rw_lock.hpp"
+#include "elib/lock/detail/rw_lock_impl.hpp"
 
 #include <thread>
 #include <type_traits>

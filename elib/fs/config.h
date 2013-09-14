@@ -1,8 +1,0 @@
-#ifndef ELIB_FS_CONFIG_H
-#define ELIB_FS_CONFIG_H
-
-
-#define ELIB_FS_DEFINITIONS_INLINE 1
-
-
-#endif /* ELIB_FS_CONFIG_H */

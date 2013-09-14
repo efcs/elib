@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/utility/size_type.h"
+#include "elib/utility/size_type.hpp"
 
 #include <string>
 #include <type_traits>

@@ -51,6 +51,39 @@ template <typename EnumT, typename Ret=EnumT>
 using enable_if_has_traits_t = typename enable_if_has_traits<EnumT, Ret>::type;
   
 
+
+/* default value is retured as specified in basic_enum_traits
+ * this is the only method that uses basic_enum_traits<T>::default_value,
+ * if you do not want to use default_enum, then it can be left undefined */
+template <typename EnumT>
+constexpr enable_if_has_traits_t<EnumT>
+default_enum() noexcept
+{
+    return basic_enum_traits<EnumT>::default_value;
+}
+
+
+/* check if e is a member of Enum */
+template <typename EnumT>
+inline enable_if_has_traits_t<EnumT, bool>
+is_valid_enum(EnumT e)
+{
+    return (basic_enum_traits<EnumT>::name_map.count(e) != 0);
+}
+
+/* check if the Enum class is a contiguous series,
+ * Enum's that are contiguous can have certain optimizations applied */
+template <typename EnumT>
+inline enable_if_has_traits_t<EnumT, bool>
+is_contiguous() noexcept
+{
+    typedef basic_enum_traits<EnumT> btraits;
+    std::size_t diff = base_enum_cast(btraits::last_value) -
+                       base_enum_cast(btraits::first_value) + 1;
+                       
+    return (diff == btraits::name_map.size());
+}
+
 /* npos_enum is a value that:
  *   a) is the numeric max for Enum's underlying type
  *   b) should not be a member of Enum (if it is used) */

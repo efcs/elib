@@ -35,56 +35,6 @@ namespace enumeration {
 
 
 
-template <typename Enum>
-inline bool
-enum_traits<Enum>::verify_enum_traits()
-{
-    bool ret = true;
-    
-    ret &= (basic_traits::last_value >= basic_traits::first_value); 
-    
-    ret &= ( (basic_traits::default_value >= basic_traits::first_value &&
-              basic_traits::default_value <= basic_traits::last_value) ||
-             basic_traits::default_value == NPOS_ENUM);
-    
-    ret &= (size() != 0);
-    ret &= (size() == basic_traits::name_map.size());
-    
-    Enum enum_val = basic_traits::first_value;
-    ret &= (basic_traits::name_map.count(enum_val) == 1);
-    
-    enum_val = basic_traits::last_value;
-    ret &= (basic_traits::name_map.count(enum_val) == 1);
-    
-    enum_val = basic_traits::default_value;
-    ret &= (enum_val == NPOS_ENUM || 
-            basic_traits::name_map.count(enum_val) == 1);
-    
-    
-    for (auto e : enum_traits<Enum>() ) {
-        try {
-            std::string s = lexical_enum_cast<std::string>(e);
-            Enum tmp_e = enum_cast<Enum>(s);
-            ret &= (tmp_e == e);
-            
-            underlying_type b = lexical_enum_cast<underlying_type>(e);
-            tmp_e = enum_cast<Enum>(b);
-            ret &= (tmp_e == e);
-            
-            ret &= (basic_traits::name_map.count(e) == 1);
-            
-        } catch (elib::enumeration::bad_enum_cast & ex) {
-            ret = false;
-            break;
-        }
-    }
-    
-    for (auto & kv : basic_traits::name_map) {
-        ret &= (basic_traits::name_map.count(kv.first) == 1);
-    }
-    
-    return ret;
-}
 
 
 } /* namespace enumeration */

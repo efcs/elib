@@ -35,40 +35,6 @@ namespace enumeration {
 
 
 
-
-/* default value is retured as specified in basic_enum_traits
- * this is the only method that uses basic_enum_traits<T>::default_value,
- * if you do not want to use default_enum, then it can be left undefined */
-template <typename EnumT>
-constexpr enable_if_has_traits_t<EnumT>
-default_enum() noexcept
-{
-    return basic_enum_traits<EnumT>::default_value;
-}
-
-
-/* check if e is a member of Enum */
-template <typename EnumT>
-inline enable_if_has_traits_t<EnumT, bool>
-is_valid_enum(EnumT e)
-{
-    return (basic_enum_traits<EnumT>::name_map.count(e) != 0);
-}
-
-/* check if the Enum class is a contiguous series,
- * Enum's that are contiguous can have certain optimizations applied */
-template <typename EnumT>
-inline enable_if_has_traits_t<EnumT, bool>
-is_contiguous() noexcept
-{
-    typedef basic_enum_traits<EnumT> btraits;
-    std::size_t diff = base_enum_cast(btraits::last_value) -
-                       base_enum_cast(btraits::first_value) + 1;
-                       
-    return (diff == btraits::name_map.size());
-}
-
-
 /* Allow for static access to begin and end iterator objects 
  * for an enumeration, as well as its size. This struct should be used
  * to access values in basic_enum_traits */
@@ -127,6 +93,7 @@ public:
     
     class iterator;
     typedef iterator const_iterator;
+    typedef std::reverse_iterator<iterator> reverse_iterator;
     
     /* return an iterator for Enum at a given position */
     static iterator
@@ -158,12 +125,26 @@ public:
     }
     
     /* basic iteratable methods */
-    iterator begin() const
+    iterator 
+    begin() const
     {
         return sbegin();
     }
     
-    iterator end() const
+    iterator 
+    end() const
+    {
+        return send();
+    }
+    
+    const_iterator
+    cbegin() const
+    {
+        return sbegin();
+    }
+    
+    const_iterator
+    cend() const
     {
         return send();
     }
@@ -179,6 +160,10 @@ template <typename Enum>
 constexpr Enum
 enum_traits<Enum>::NPOS_ENUM;
 
+
+////////////////////////////////////////////////////////////////////////////////
+//                        enum_traits::iterator                                                  
+////////////////////////////////////////////////////////////////////////////////
 
 template <typename EnumT>
 class enum_traits<EnumT>::iterator : 
@@ -257,13 +242,61 @@ private:
 };
 
 
+////////////////////////////////////////////////////////////////////////////////
+//                       enum_traits::verify_enum                                                   
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename Enum>
+inline bool
+enum_traits<Enum>::verify_enum_traits()
+{
+    bool ret = true;
+    
+    ret &= (basic_traits::last_value >= basic_traits::first_value); 
+    
+    ret &= ( (basic_traits::default_value >= basic_traits::first_value &&
+              basic_traits::default_value <= basic_traits::last_value) ||
+             basic_traits::default_value == NPOS_ENUM);
+    
+    ret &= (size() != 0);
+    ret &= (size() == basic_traits::name_map.size());
+    
+    Enum enum_val = basic_traits::first_value;
+    ret &= (basic_traits::name_map.count(enum_val) == 1);
+    
+    enum_val = basic_traits::last_value;
+    ret &= (basic_traits::name_map.count(enum_val) == 1);
+    
+    enum_val = basic_traits::default_value;
+    ret &= (enum_val == NPOS_ENUM || 
+            basic_traits::name_map.count(enum_val) == 1);
+    
+    
+    for (auto e : enum_traits<Enum>() ) {
+        try {
+            std::string s = lexical_enum_cast<std::string>(e);
+            Enum tmp_e = enum_cast<Enum>(s);
+            ret &= (tmp_e == e);
+            
+            underlying_type b = lexical_enum_cast<underlying_type>(e);
+            tmp_e = enum_cast<Enum>(b);
+            ret &= (tmp_e == e);
+            
+            ret &= (basic_traits::name_map.count(e) == 1);
+            
+        } catch (elib::enumeration::bad_enum_cast & ex) {
+            ret = false;
+            break;
+        }
+    }
+    
+    for (auto & kv : basic_traits::name_map) {
+        ret &= (basic_traits::name_map.count(kv.first) == 1);
+    }
+    
+    return ret;
+}
 
 } /* namespace enumeration */
 } /* namespace elib */
-
-
-/* Include the inline definitions */
-#include <elib/enumeration/detail/_enum_traits.h> 
-
-
 #endif /* ELIB_ENUMERATION_ENUM_TRAITS_H */

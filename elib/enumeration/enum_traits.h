@@ -31,6 +31,12 @@
 namespace elib {
 namespace enumeration {
     
+    
+/* easy base type access */
+template <typename EnumT>
+using base_t = typename std::underlying_type<
+                    typename std::remove_reference<EnumT>::type>::type;
+    
 
 /* has_enum_traits<T>::value is set to true,
  * if basic_enum_traits have been defined for type T,

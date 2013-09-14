@@ -60,9 +60,6 @@ constexpr typename std::underlying_type<Enum>::type
 base_enum_cast(Enum e) noexcept;
 
 
-template <typename T>
-using base_t = typename std::underlying_type<T>::type;
-
     
 } /* namespace enumeration */
 } /* namespace elib */

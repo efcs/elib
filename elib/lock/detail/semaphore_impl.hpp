@@ -1,5 +1,5 @@
-#ifndef ELIB_LOCK_SEMAPHORE_IMPL_H
-#define ELIB_LOCK_SEMAPHORE_IMPL_H
+#ifndef ELIB_LOCK_SEMAPHORE_IMPL_HPP
+#define ELIB_LOCK_SEMAPHORE_IMPL_HPP
 
 
 #include <atomic>
@@ -107,4 +107,4 @@ semaphore_impl::max() const
 } /* namespace detail */  
 } /* namespace lock */
 } /* namespace elib */
-#endif /* ELIB_LOCK_SEMAPHORE_IMPL_H */
+#endif /* ELIB_LOCK_SEMAPHORE_IMPL_HPP */

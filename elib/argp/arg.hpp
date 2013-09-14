@@ -1,5 +1,5 @@
-#ifndef ELIB_ARGP_ARG_H
-#define ELIB_ARGP_ARG_H
+#ifndef ELIB_ARGP_ARG_HPP
+#define ELIB_ARGP_ARG_HPP
 
 #include <elib/argp/detail/_arg_option.hpp>
 #include <elib/argp/arg_token.hpp>
@@ -249,4 +249,4 @@ public:
 #include "detail/_arg.hpp"
 
 
-#endif /* ELIB_ARGP_ARG_H */
+#endif /* ELIB_ARGP_ARG_HPP */

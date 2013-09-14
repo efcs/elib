@@ -1,5 +1,5 @@
-#ifndef ELIB_TYPE_TRAITS_ADD_CONST_H
-#define ELIB_TYPE_TRAITS_ADD_CONST_H
+#ifndef ELIB_TYPE_TRAITS_ADD_CONST_HPP
+#define ELIB_TYPE_TRAITS_ADD_CONST_HPP
 
 namespace elib {
 namespace type_traits {
@@ -13,4 +13,4 @@ struct add_const {
         
 } /* namespace type_traits */
 } /* namespace elib */
-#endif /* ELIB_TYPE_TRAITS_ADD_CONST_H */
+#endif /* ELIB_TYPE_TRAITS_ADD_CONST_HPP */

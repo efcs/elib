@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_LOG_STATIC_LOG_H
-#define ELIB_LOG_STATIC_LOG_H
+#ifndef ELIB_LOG_STATIC_LOG_HPP
+#define ELIB_LOG_STATIC_LOG_HPP
 
 #include <elib/log/log_level.hpp>
 #include <elib/log/log.hpp>
@@ -124,4 +124,4 @@ public:
 #include <elib/log/detail/_static_log.hpp>
 
 
-#endif /* ELIB_LOG_STATIC_LOG_H */
+#endif /* ELIB_LOG_STATIC_LOG_HPP */

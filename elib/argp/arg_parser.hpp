@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_ARGP_ARG_PARSER_H
-#define ELIB_ARGP_ARG_PARSER_H
+#ifndef ELIB_ARGP_ARG_PARSER_HPP
+#define ELIB_ARGP_ARG_PARSER_HPP
 
 
 #include "arg_token.hpp"
@@ -137,4 +137,4 @@ arg_parser::add_option(const basic_arg<T> & opt)
 
 } /* namespace argp */
 } /* namespace elib */
-#endif /* ELIB_ARGP_ARG_PARSER_H */
+#endif /* ELIB_ARGP_ARG_PARSER_HPP */

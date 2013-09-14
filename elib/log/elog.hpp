@@ -1,5 +1,5 @@
-#ifndef ELIB_LOG_ELOG_H
-#define ELIB_LOG_ELOG_H
+#ifndef ELIB_LOG_ELOG_HPP
+#define ELIB_LOG_ELOG_HPP
 
 
 #include "static_log.hpp"
@@ -17,4 +17,4 @@ typedef static_log<elog_tag_t> elog;
     
 } /* namespace log */
 } /* namespace elib */
-#endif /* ELIB_LOG_ELOG_H */
+#endif /* ELIB_LOG_ELOG_HPP */

@@ -1,5 +1,5 @@
-#ifndef ELIB_LOCK_RW_LOCK_H
-#define ELIB_LOCK_RW_LOCK_H
+#ifndef ELIB_LOCK_RW_LOCK_HPP
+#define ELIB_LOCK_RW_LOCK_HPP
 
 namespace elib {
 namespace lock {
@@ -82,4 +82,4 @@ private:
 
 } /* namespace lock */    
 } /* namespace elib */
-#endif /* ELIB_LOCK_RW_LOCK_H */
+#endif /* ELIB_LOCK_RW_LOCK_HPP */

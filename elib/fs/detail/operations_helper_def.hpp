@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_OPERATIONS_HPPELPER_DEF_HPP
-#define ELIB_FS_OPERATIONS_HPPELPER_DEF_HPP
+#ifndef ELIB_FS_OPERATIONS_HELPER_DEF_HPP
+#define ELIB_FS_OPERATIONS_HELPER_DEF_HPP
 
 
 namespace elib {
@@ -205,4 +205,4 @@ _readlink(const path& p, std::error_code& ec) noexcept
 } /* namespace detail */
 } /* namespace  fs */
 } /* namespace elib */
-#endif /* ELIB_FS_OPERATIONS_HPPELPER_DEF_HPP */
+#endif /* ELIB_FS_OPERATIONS_HELPER_DEF_HPP */

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_ARGP_ARG_ERRORS_H
-#define ELIB_ARGP_ARG_ERRORS_H
+#ifndef ELIB_ARGP_ARG_ERRORS_HPP
+#define ELIB_ARGP_ARG_ERRORS_HPP
 
 #include <stdexcept>
 
@@ -69,4 +69,4 @@ public:
 
 } /* namespace argp */
 } /* namespace elib */
-#endif /* ELIB_ARGP_ARG_ERRORS_H */
+#endif /* ELIB_ARGP_ARG_ERRORS_HPP */

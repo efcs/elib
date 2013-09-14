@@ -1,7 +1,7 @@
-#ifndef ELIB_ARGP__ARG_H
-#define ELIB_ARGP__ARG_H
+#ifndef ELIB_ARGP__ARG_HPP
+#define ELIB_ARGP__ARG_HPP
 
-#ifndef ELIB_ARGP_ARG_H
+#ifndef ELIB_ARGP_ARG_HPP
 #   error do not include this file directly
 #endif 
 
@@ -267,4 +267,4 @@ tagged_arg<Tag>::tagged_arg()
     
 } /* namespace argp */
 } /* namespace elib */
-#endif /* ELIB_ARGP__ARG_H */
+#endif /* ELIB_ARGP__ARG_HPP */

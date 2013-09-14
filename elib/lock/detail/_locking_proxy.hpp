@@ -1,8 +1,8 @@
-#ifndef ELIB_LOCK__LOCKING_PROXY_H
-#define ELIB_LOCK__LOCKING_PROXY_H
+#ifndef ELIB_LOCK__LOCKING_PROXY_HPP
+#define ELIB_LOCK__LOCKING_PROXY_HPP
 
 
-#ifndef ELIB_LOCK_LOCKING_PROXY_H
+#ifndef ELIB_LOCK_LOCKING_PROXY_HPP
 #   error only include this file through locking_proxy.h
 #endif
 
@@ -143,4 +143,4 @@ typed_locking_proxy(Args&&... args)
     
 } /* namespace lock */
 } /* namespace elib */
-#endif /* ELIB_LOCK__LOCKING_PROXY_H */
+#endif /* ELIB_LOCK__LOCKING_PROXY_HPP */

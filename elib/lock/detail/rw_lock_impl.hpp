@@ -1,5 +1,5 @@
-#ifndef ELIB_LOCK_RW_LOCK_IMPL_H
-#define ELIB_LOCK_RW_LOCK_IMPL_H
+#ifndef ELIB_LOCK_RW_LOCK_IMPL_HPP
+#define ELIB_LOCK_RW_LOCK_IMPL_HPP
 
 #include <mutex>
 #include <condition_variable>
@@ -238,4 +238,4 @@ rw_lock_impl::_advance_group()
 } /* namespace detail */
 } /* namespace lock */
 } /* namespace elib */
-#endif /* ELIB_LOCK_RW_LOCK_IMPL_H */
+#endif /* ELIB_LOCK_RW_LOCK_IMPL_HPP */

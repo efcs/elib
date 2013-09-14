@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_FS_HPP
-#define ELIB_FS_HPP
+#ifndef ELIB_FS_HPPPP
+#define ELIB_FS_HPPPP
 
 #include <string>
 #include <vector>
@@ -133,4 +133,4 @@ private:
 };
     
 } /* namespace elib */
-#endif /* ELIB_FS_HPP */
+#endif /* ELIB_FS_HPPPP */

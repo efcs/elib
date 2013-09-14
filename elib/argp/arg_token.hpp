@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_ARGP_ARG_TOKEN_H
-#define ELIB_ARGP_ARG_TOKEN_H
+#ifndef ELIB_ARGP_ARG_TOKEN_HPP
+#define ELIB_ARGP_ARG_TOKEN_HPP
 
 #include <string>
 
@@ -57,4 +57,4 @@ private:
 
 } /* namespace argp */
 } /* namespace elib */
-#endif /* ELIB_ARGP_ARG_TOKEN_H */
+#endif /* ELIB_ARGP_ARG_TOKEN_HPP */

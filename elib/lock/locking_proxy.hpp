@@ -1,5 +1,5 @@
-#ifndef ELIB_LOCK_LOCKING_PROXY_H
-#define ELIB_LOCK_LOCKING_PROXY_H
+#ifndef ELIB_LOCK_LOCKING_PROXY_HPP
+#define ELIB_LOCK_LOCKING_PROXY_HPP
 
 
 #include <mutex>
@@ -130,4 +130,4 @@ private:
 #include <elib/lock/detail/_locking_proxy.hpp>
 
 
-#endif /* ELIB_LOCK_LOCKING_PROXY_H */
+#endif /* ELIB_LOCK_LOCKING_PROXY_HPP */

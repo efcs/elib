@@ -1,5 +1,5 @@
-#ifndef ELIB_LOG_FILE_LOG_H
-#define ELIB_LOG_FILE_LOG_H
+#ifndef ELIB_LOG_FILE_LOG_HPP
+#define ELIB_LOG_FILE_LOG_HPP
 
 #include <elib/log/basic_log.hpp>
 #include <elib/log/log_level.hpp>
@@ -42,4 +42,4 @@ private:
 
 } /* namespace log */
 } /* namespace elib */
-#endif /* ELIB_LOG_FILE_LOG_H */
+#endif /* ELIB_LOG_FILE_LOG_HPP */

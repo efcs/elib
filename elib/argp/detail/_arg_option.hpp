@@ -1,5 +1,5 @@
-#ifndef ELIB_ARGP__ARG_OPTION_H
-#define ELIB_ARGP__ARG_OPTION_H
+#ifndef ELIB_ARGP__ARG_OPTION_HPP
+#define ELIB_ARGP__ARG_OPTION_HPP
 
 #include <string>
 
@@ -66,4 +66,4 @@ private:
 } /* namespace detail */    
 } /* namespace argp */    
 } /* namespace elib */
-#endif /* ELIB_ARGP__ARG_OPTION_H */
+#endif /* ELIB_ARGP__ARG_OPTION_HPP */

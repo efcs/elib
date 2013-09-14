@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_OPERATIONS_HPPELPER_HPP
-#define ELIB_FS_OPERATIONS_HPPELPER_HPP
+#ifndef ELIB_FS_OPERATIONS_HELPER_HPP
+#define ELIB_FS_OPERATIONS_HELPER_HPP
 
 
 #include <elib/fs/config.hpp>
@@ -64,4 +64,4 @@ _readlink(const path& p, std::error_code& ec) noexcept;
 #include <elib/fs/detail/operations_helper_def.hpp>
 
 
-#endif /* ELIB_FS_OPERATIONS_HPPELPER_HPP */
+#endif /* ELIB_FS_OPERATIONS_HELPER_HPP */

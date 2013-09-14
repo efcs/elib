@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_FILESYSTEM_ERROR_HPPELPER_HPP
-#define ELIB_FS_FILESYSTEM_ERROR_HPPELPER_HPP
+#ifndef ELIB_FS_FILESYSTEM_ERROR_HELPER_HPP
+#define ELIB_FS_FILESYSTEM_ERROR_HELPER_HPP
 
 
 #include <elib/fs/path.hpp>
@@ -108,4 +108,4 @@ handle_and_throw_errno(const std::string & s, const path& p1, const path& p2)
 } /* namespace detail */
 } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_FILESYSTEM_ERROR_HPPELPER_HPP */
+#endif /* ELIB_FS_FILESYSTEM_ERROR_HELPER_HPP */

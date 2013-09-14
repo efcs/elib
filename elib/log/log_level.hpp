@@ -1,5 +1,5 @@
-#ifndef ELIB_LOG_LOG_LEVEL_H
-#define ELIB_LOG_LOG_LEVEL_H
+#ifndef ELIB_LOG_LOG_LEVEL_HPP
+#define ELIB_LOG_LOG_LEVEL_HPP
 
 
 #include <elib/enumeration/basic_enum_traits.hpp>
@@ -42,4 +42,4 @@ struct basic_enum_traits<log::level_e> {
 };
     
 } /* namespace elib */
-#endif /* ELIB_LOG_LOG_LEVEL_H */
+#endif /* ELIB_LOG_LOG_LEVEL_HPP */

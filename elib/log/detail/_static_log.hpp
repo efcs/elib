@@ -1,17 +1,17 @@
-#ifndef ELIB_LOG__STATIC_LOG_H
-#define ELIB_LOG__STATIC_LOG_H
+#ifndef ELIB_LOG__STATIC_LOG_HPP
+#define ELIB_LOG__STATIC_LOG_HPP
 
 
-#ifndef ELIB_LOG_STATIC_LOG_H
+#ifndef ELIB_LOG_STATIC_LOG_HPP
 #   error this file must only be included through static_log.h
 #endif
 
-#ifdef _ELIB_LOG_FUNC_HANDLER
+#ifdef _ELIB_LOG_FUNC_HPPANDLER
 #   error needed macro name already defined
 #endif
 
     
-#define _ELIB_LOG_FUNC_HANDLER(level) \
+#define _ELIB_LOG_FUNC_HPPANDLER(level) \
     va_list __args; \
     va_start(__args, msg); \
     std::string __str = fmt(msg, __args); \
@@ -60,7 +60,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::print(level_e level, const char *msg, ... ) 
 {
-    _ELIB_LOG_FUNC_HANDLER(level);
+    _ELIB_LOG_FUNC_HPPANDLER(level);
 }
 
 template <typename Tag>
@@ -74,7 +74,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::debug(const char *msg, ... )
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::debug);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::debug);
 }
 
 template <typename Tag>
@@ -88,7 +88,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::info(const char *msg, ... )
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::info);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::info);
 }
 
 template <typename Tag>
@@ -102,7 +102,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::step(const char *msg, ... )
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::step);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::step);
 }
 
 template <typename Tag>
@@ -116,7 +116,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::warn(const char *msg, ... )
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::warn);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::warn);
 }
 
 template <typename Tag>
@@ -130,7 +130,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::err(const char *msg, ... )
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::err);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::err);
 }
 
 template <typename Tag>
@@ -144,7 +144,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::fatal(const char *msg, ...)
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::fatal);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::fatal);
 }
 
 template <typename Tag>
@@ -158,7 +158,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::raw_out(const char *msg, ...)
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::raw_out);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::raw_out);
 }
 
 template <typename Tag>
@@ -172,7 +172,7 @@ template <typename Tag>
 inline void 
 static_log<Tag>::raw_err(const char *msg, ...)
 {
-    _ELIB_LOG_FUNC_HANDLER(level_e::raw_err);
+    _ELIB_LOG_FUNC_HPPANDLER(level_e::raw_err);
 }
 
 template <typename Tag>
@@ -201,7 +201,7 @@ static_log<Tag>::on()
 } /* namespace elib */
 
 
-#undef _ELIB_LOG_LOG_FUNC_HANDLER
+#undef _ELIB_LOG_LOG_FUNC_HPPANDLER
 
 
-#endif /* ELIB_LOG__STATIC_LOG_H */
+#endif /* ELIB_LOG__STATIC_LOG_HPP */

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELIB_COMMON_DEF_HPP
-#define ELIB_COMMON_DEF_HPP
+#ifndef ELIB_COMMON_DEF_HPPPP
+#define ELIB_COMMON_DEF_HPPPP
 
 
 /* used to suppress unused warnings */
@@ -35,4 +35,4 @@
 
 
 
-#endif /* ELIB_COMMON_DEF_HPP */
+#endif /* ELIB_COMMON_DEF_HPPPP */

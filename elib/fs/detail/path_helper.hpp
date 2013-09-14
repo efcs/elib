@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_PATH_HPPELPER_HPP
-#define ELIB_FS_PATH_HPPELPER_HPP
+#ifndef ELIB_FS_PATH_HELPER_HPP
+#define ELIB_FS_PATH_HELPER_HPP
 
 #include <elib/fs/config.hpp>
 #include <elib/fs/path_separator.hpp>
@@ -486,4 +486,4 @@ is_path_root_name(const std::string & s)
 } /* namespace fs */
 } /* namespace elib */
 
-#endif /* ELIB_FS_PATH_HPPELPER_HPP */
+#endif /* ELIB_FS_PATH_HELPER_HPP */

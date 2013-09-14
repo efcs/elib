@@ -1,5 +1,5 @@
-#ifndef ELIB_TEMPLATE_CONDITIONAL_HPP
-#define ELIB_TEMPLATE_CONDITIONAL_HPP
+#ifndef ELIB_TEMPLATE_CONDITIONAL_HPPPP
+#define ELIB_TEMPLATE_CONDITIONAL_HPPPP
 
 #include <type_traits>
 
@@ -43,4 +43,4 @@ struct OR<false, false, false, false, false,
 
     
 } /* namespace elib */
-#endif /* ELIB_TEMPLATE_CONDITIONAL_HPP */
+#endif /* ELIB_TEMPLATE_CONDITIONAL_HPPPP */

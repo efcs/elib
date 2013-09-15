@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(test_enum_cast)
         {
             try {
                 auto e = enum_cast<test_e>(s);
-                UNUSED(e);
+                ELIB_UNUSED(e);
                 BOOST_CHECK(false);
             } catch (bad_enum_cast & ex) {
                 BOOST_CHECK(true);
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(test_enum_cast)
             
             try {
                 auto e = enum_cast<test_e>(val);
-                UNUSED(e);
+                ELIB_UNUSED(e);
                 BOOST_CHECK(false);
             } catch (bad_enum_cast & ex) {
                 BOOST_CHECK(true);
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(test_enum_traits_good)
     
     try {
         test_e bad_e = enum_cast<test_e>(val);
-        UNUSED(bad_e);
+        ELIB_UNUSED(bad_e);
         BOOST_CHECK(false);
     } catch (bad_enum_cast & ex) {
         BOOST_CHECK(true);
@@ -296,7 +296,7 @@ BOOST_AUTO_TEST_CASE(test_enum_traits_good)
     BOOST_CHECK(traits::good(val) == false);
     try {
         test_e bad_e = enum_cast<test_e>(val);
-        UNUSED(bad_e);
+        ELIB_UNUSED(bad_e);
         BOOST_CHECK(false);
     } catch (bad_enum_cast & ex) {
         BOOST_CHECK(true);

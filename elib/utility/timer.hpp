@@ -65,6 +65,15 @@ private:
 };
 
 
+template <typename Clock, typename Dura>
+constexpr typename timer<Clock, Dura>::duration_type
+timer<Clock, Dura>::ZERO_DURA;
+
+
+template <typename Clock, typename Dura>
+constexpr typename timer<Clock, Dura>::time_point
+timer<Clock, Dura>::ZERO_TIME;
+
 
 typedef timer<default_clock, nanoseconds> nanoseconds_timer;
 typedef timer<default_clock, microseconds> microseconds_timer;

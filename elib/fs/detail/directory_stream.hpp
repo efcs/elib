@@ -2,7 +2,7 @@
 #define ELIB_FS_DIRECTORY_STREAM_HPP
 
 #include <elib/fs/path.hpp>
-#include <elib/fs/detail/filesystem_error_helper.hpp>
+#include <elib/fs/filesystem_error.hpp>
 
 #include <string>
 #include <system_error>

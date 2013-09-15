@@ -8,6 +8,8 @@
 #include <string>
 #include <iostream>
 
+#if 0
+
 using namespace elib::fs;
 using namespace elib::fs::detail;
 
@@ -81,3 +83,5 @@ BOOST_AUTO_TEST_CASE(fs_directory_stream_init)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+#endif

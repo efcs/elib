@@ -1,172 +1,349 @@
 #ifndef ELIB_FS_PATH_HPP
 #define ELIB_FS_PATH_HPP
 
-#include <elib/fs/config.hpp>
-#include <elib/fs/detail/path_helper.hpp>
+#include <elib/fs/detail/path_converter.hpp>
 
 #include <string>
 #include <iterator>
+#include <locale>
+#include <cstddef>
 #include <iostream>
-
+#include <utility>
 
 namespace elib {
 namespace fs {
     
-    
 class path {
 public:
-    typedef typename std::string::size_type size_type;
-    static constexpr size_type npos = std::string::npos;
+    typedef char value_type;
+    typedef std::basic_string<value_type> string_type;
     
-    path();
+    static constexpr value_type preferred_separator = '/';
     
-    path(const std::string & str);
+// ctor & dtor
+    // can't be default for some reason
+    path() : m_pathname{}
+    { }
     
-    path(const char* str);
+    path(const path& p)
+    { m_pathname = p.m_pathname; }
     
-    path(const path&) = default;
+    path(path&& p) noexcept
+    { m_pathname = std::move(p.m_pathname); }
     
-    path &
-    operator=(const path&) = default;
+    template <typename Source>
+    path(const Source& src)
+    {
+        m_pathname = detail::dispatch<string_type>(src);
+    }
     
-    path(path&&) = default;
+    template <typename InputIter>
+    path(InputIter begin, InputIter end)
+    {
+        typedef typename std::iterator_traits<InputIter>::value_type vtype;
+        
+        if (begin != end) {
+            std::basic_string<vtype> s{begin, end};
+            m_pathname = detail::convert<string_type>(s);
+        }
+    }
     
-    path &
-    operator=(path&&) = default;
+    //TODO
+    template <typename Source>
+    path(const Source& src, const std::locale& loc);
     
-    ~path() = default;
+    //TODO
+    template <typename InputIter>
+    path(InputIter begin, InputIter end, const std::locale& loc);
+
     
-//
-// to string
-//
+//assignments
+    path&
+    operator=(const path& p)
+    { 
+        if (this == &p)
+            return *this;
+        m_pathname = p.m_pathname;
+        return *this;
+    }
     
-    const std::string &
-    str() const;
+    path&
+    operator=(path&& p) noexcept
+    {
+        if (this == &p)
+            return *this;
+        m_pathname = std::move(p.m_pathname);
+        return *this;
+    }
     
-    const char*
-    c_str() const;
+    template <typename Source>
+    detail::enable_if_convertible_t<Source, path>&
+    operator=(const Source& src)
+    { return assign(src); }
     
-//
+    template <typename Source>
+    detail::enable_if_convertible_t<Source, path>&
+    assign(const Source& src)
+    {
+        m_pathname = detail::dispatch<string_type>(src);
+        return *this;
+    }
+    
+    template <typename InputIter>
+    path& 
+    assign(InputIter begin, InputIter end)
+    {
+        typedef typename std::iterator_traits<InputIter>::value_type vtype;
+        
+        if (begin != end) {
+            std::basic_string<vtype> s{begin, end};
+            m_pathname = detail::convert<string_type>(s);
+        }
+        
+        return *this;
+    }
+    
+//appends
+    path& 
+    operator/=(const path& p)
+    {
+        bool append_sep = !( empty() ||
+                             p.empty() ||
+                             *p.native().cbegin() == preferred_separator ||
+                             native().back() == preferred_separator);
+        if (append_sep) 
+            m_pathname += preferred_separator;
+        
+        m_pathname += p.native();
+        return *this;
+    }
+    
+    template <typename Source>
+    detail::enable_if_convertible_t<Source, path>&
+    operator/=(const Source& src)
+    {
+        path p{detail::dispatch<string_type>(src)};
+        return this->operator/=(p);
+    }
+    
+    template <typename Source>
+    detail::enable_if_convertible_t<Source, path>&
+    append(const Source& src)
+    {
+        path p{detail::dispatch<string_type>(src)};
+        return this->operator/=(p);
+    }
+    
+    template <typename InputIter>
+    path&
+    append(InputIter begin, InputIter end)
+    {
+        typedef typename std::iterator_traits<InputIter>::value_type vtype;
+        if (begin != end) {
+            std::basic_string<vtype> str{begin, end};
+            
+            path p{detail::convert<string_type>(str)};
+            this->operator/=(p);
+        }
+        
+        return *this;
+    }
+    
+//concatenation
+    path&
+    operator+=(const path& p)
+    {
+        m_pathname += p.native();
+        return *this;
+    }
+    
+    path&
+    operator+=(const string_type& str)
+    {
+        m_pathname += str;
+        return *this;
+    }
+    
+    path&
+    operator+=(const value_type* str)
+    { 
+        m_pathname += str;
+        return *this;
+    }
+    
+    path&
+    operator+=(value_type ch)
+    {
+        m_pathname += ch;
+        return *this;
+    }
+    
+    template <typename Source>
+    detail::enable_if_convertible_t<Source, path>&
+    operator+=(const Source& src)
+    {
+        return this->operator+=(detail::dispatch<string_type>(src));
+    }
+    
+    template <typename CharT>
+    detail::enable_if_convertible_t<std::basic_string<CharT>, path>&
+    operator+=(CharT ch)
+    {
+        std::basic_string<CharT> tmp{};
+        tmp += ch;
+        return this->operator+=(detail::convert<string_type>(tmp));
+    }
+    
+    template <typename Source>
+    detail::enable_if_convertible_t<Source, path>&
+    concat(const Source& src)
+    {
+        return this->operator+=(detail::dispatch<string_type>(src));
+    }
+    
+    template <typename InputIter>
+    path&
+    concat(InputIter begin, InputIter end)
+    {
+        typedef typename std::iterator_traits<InputIter>::value_type vtype;
+        
+        if (begin != end) {
+            std::basic_string<vtype> tmp{begin, end};
+            this->operator+=(detail::convert<string_type>(tmp));
+        }
+        return *this;
+    }
+    
 // modifiers
-//
-    void 
-    clear();
+    void
+    clear() noexcept
+    { m_pathname.clear(); }
     
-    path &
-    remove_filename();
+    path&
+    make_preferred()
+    {
+        value_type other_sep;
+        if (preferred_separator == '/')
+            other_sep = '\\';
+        else
+            other_sep = '/';
+        
+        for (auto& ch : m_pathname) {
+            if (ch == other_sep)
+                ch = preferred_separator;
+        }
+        
+        return *this;
+    }
     
-    path &
-    replace_filename(const path& replacement);
+    path&
+    remove_filename()
+    {
+        path p = filename();
+        if (p.empty())
+            return *this;
+        
+        m_pathname.erase(m_pathname.size() - p.native().size());
+        return *this;
+    }
     
-    path &
-    replace_extension(const path & new_ext = path());
+    path&
+    replace_filename(const path& replacement)
+    {
+        remove_filename();
+        *this /= replacement;
+        return *this;
+    }
+    
+    path&
+    replace_extension(const path& replacement = path())
+    {
+        path p = extension();
+        if (!p.empty())
+            m_pathname.erase(m_pathname.size() - p.native().size());
+        
+        return (*this += replacement);
+    }
     
     void
-    swap(path & other);
-    
-//
-// cmp 
-//
-    
-    int 
-    compare(const path & other) const;
-    
-    int 
-    compare(const std::string & other) const;
-    
-//
-// iterator
-//
-    class iterator;
-    typedef iterator const_iterator;
-    
-    iterator
-    begin() const;
-    
-    iterator
-    end() const;
-    
-//
-// append
-//
-    path &
-    operator/=(const path & p);
-    
-    path &
-    operator/=(const std::string & s);
-    
-    path &
-    append(const path & p);
-    
-    path &
-    append(const std::string & s);
-    
-    template <typename InputIter>
-    path &
-    append(InputIter begin, InputIter end);
+    swap(path& rhs) noexcept
+    {
+        m_pathname.swap(rhs.m_pathname);
+    }
 
-//
-// concat
-//
-    path &
-    operator+=(const path & p);
+//native format observers
+    const string_type&
+    native() const noexcept
+    { return m_pathname; }
     
-    path &
-    operator+=(const std::string & s);
+    //EXTENSION
+    const string_type&
+    str() const noexcept
+    { return m_pathname; }
     
-    path &
-    operator+=(char ch);
+    const value_type*
+    c_str() const noexcept
+    { return m_pathname.c_str(); }
     
-    path & 
-    concat(const path & p);
+    operator string_type() const
+    { return m_pathname; }
     
-    path &
-    concat(const std::string & s);
+    template <class CharT, class Traits = std::char_traits<CharT>,
+              class Allocator = std::allocator<CharT>>
+    std::basic_string<CharT, Traits, Allocator>
+    string(const Allocator& a = Allocator()) const;
     
-    path &
-    concat(char ch);
+    std::string
+    string() const
+    { return m_pathname; }
     
-    template <typename InputIter>
-    path &
-    concat(InputIter begin, InputIter end);
+    std::wstring
+    wstring() const;
     
-//
-// check parts
-//
-    bool
-    empty() const;
+    std::string
+    u8string() const;
     
-    bool
-    has_root_name() const;
+    std::u16string
+    u16string() const;
     
-    bool
-    has_root_directory() const;
+    std::u32string 
+    u32string() const;
     
-    bool
-    has_root_path() const;
+//generic format observers
+    template <class CharT, class Traits = std::char_traits<CharT>,
+              class Allocator = std::allocator<CharT>>
+    std::basic_string<CharT, Traits, Allocator>
+    generic_string(const Allocator& a = Allocator()) const;
     
-    bool
-    has_parent_path() const;
+    std::string
+    generic_string() const;
     
-    bool
-    has_filename() const;
+    std::wstring
+    generic_wstring() const;
     
-    bool
-    has_stem() const;
+    std::string
+    generic_u8string() const;
     
-    bool
-    has_extension() const;
+    std::u16string
+    generic_u16string() const;
     
-    bool
-    is_absolute() const;
+    std::u32string 
+    generic_u32string() const;
     
-    bool
-    is_relative() const;
+// comparision
+    int 
+    compare(const path& p) const noexcept;
     
-//
-// decompose
-//
-    path
+    int 
+    compare(const string_type& str) const
+    { return compare(path(str)); }
+    
+    int 
+    compare(const value_type* str) const
+    { return compare(path(str)); }
+    
+//decompasition
+    path 
     root_name() const;
     
     path
@@ -182,127 +359,284 @@ public:
     parent_path() const;
     
     path
-    stem() const;
-    
-    path
     filename() const;
     
     path
+    stem() const;
+    
+    path
     extension() const;
-
+    
+// query
+    bool
+    empty() const noexcept
+    { return m_pathname.empty(); }
+    
+    bool
+    has_root_name() const
+    { return !root_name().empty(); }
+    
+    bool
+    has_root_directory() const
+    { return !root_directory().empty(); }
+    
+    bool
+    has_root_path() const
+    { return !root_path().empty(); }
+    
+    bool
+    has_relative_path() const
+    { return !relative_path().empty(); }
+    
+    bool
+    has_parent_path() const
+    { return !parent_path().empty(); }
+    
+    bool
+    has_filename() const
+    { return !filename().empty(); }
+    
+    bool
+    has_stem() const
+    { return !stem().empty(); }
+    
+    bool
+    has_extension() const
+    { return !extension().empty(); }
+    
+    bool
+    is_absolute() const
+    { return !root_directory().empty(); }
+    
+    bool
+    is_relative() const
+    { return !is_absolute(); }
+    
+// iterators
+    class iterator;
+    typedef iterator const_iterator;
+    
+    iterator
+    begin() const;
+    
+    iterator
+    end() const;
+    
 private:
-    using pp_helper = detail::path_helper;
-    using path_part = detail::path_part;
-    using pp_e = detail::path_part_e;
-    std::string m_pathname;
+    string_type m_pathname{};
 };
 
+////////////////////////////////////////////////////////////////////////////////
+//                        path functions                                                  
+////////////////////////////////////////////////////////////////////////////////
+
+inline void
+swap(path& lhs, path& rhs) noexcept
+{
+    lhs.swap(rhs);
+}
+
+inline bool
+operator<(const path& lhs, const path& rhs) noexcept
+{ return (lhs.compare(rhs) < 0); }
+
+inline bool
+operator<=(const path& lhs, const path& rhs) noexcept
+{ return (lhs.compare(rhs) <= 0); }
+
+inline bool
+operator>(const path& lhs, const path& rhs) noexcept
+{ return (lhs.compare(rhs) > 0); }
+
+inline bool
+operator>=(const path& lhs, const path& rhs) noexcept
+{ return (lhs.compare(rhs) >= 0); }
+
+inline bool
+operator==(const path& lhs, const path& rhs) noexcept
+{ return (lhs.compare(rhs) == 0); }
+
+inline bool
+operator!=(const path& lhs, const path& rhs) noexcept
+{ return (lhs.compare(rhs) == 0); }
+
+inline path
+operator/(const path& lhs, const path& rhs)
+{
+    path tmp{lhs};
+    return tmp /= rhs;
+}
+
+template <class CharT, class Traits>
+inline std::basic_ostream<CharT, Traits>&
+operator<<(std::basic_ostream<CharT, Traits>& os, const path& p)
+{
+    os << p.native();
+    return os;
+}
+
+template <class CharT, class Traits>
+inline std::basic_istream<CharT, Traits>&
+operator>>(std::basic_istream<CharT, Traits>& is, path& p)
+{
+    path::string_type tmp;
+    is >> tmp;
+    p = tmp;
+    return is;
+}
+
+template <class Source>
+path
+u8path(const Source& src);
+
+template <class InputIter>
+path
+u8path(InputIter begin, InputIter end);
+
+   
+
+////////////////////////////////////////////////////////////////////////////////
+//                       path_parser's needed types                                                 
+////////////////////////////////////////////////////////////////////////////////
+namespace path_parser {
+    
+    
+struct path_pos {
+    static constexpr std::size_t npos = static_cast<std::size_t>(-1);
+    
+    std::size_t begin{npos};
+    std::size_t end{npos};
+    
+    path_pos() = default;
+    
+    path_pos(std::size_t p1, std::size_t p2)
+        : begin{p1}, end{p2}
+    { }
+    
+    std::size_t
+    size() const
+    { 
+        if ((bool)*this)
+            return (end - begin + 1);
+        else
+            return 0;
+    }
+    
+    constexpr
+    operator bool() const
+    { return (begin != npos && end != npos && begin <= end); }
+    
+    constexpr bool
+    operator==(const path_pos& rhs) const
+    { return (begin == rhs.begin && end == rhs.end); }
+    
+    constexpr bool
+    operator!=(const path_pos& rhs) const
+    { return !(this->operator==(rhs)); }
+    
+    /* since operator bool() will allow this struct to be passed
+     * to any function that expects an integral, we overload and throw */
+    operator char() const
+    { throw; }
+};
+
+    
+} /* namespace path_parser */
 
 
-class path::iterator {
+////////////////////////////////////////////////////////////////////////////////
+//                        path::iterator                                                 
+////////////////////////////////////////////////////////////////////////////////
+
+
+class path::iterator 
+    : public std::iterator<std::bidirectional_iterator_tag, path> {
 public:
-    typedef path value_type;
-    typedef path& reference;
-    typedef path* pointer;
-    typedef std::bidirectional_iterator_tag iterator_category;
-    typedef std::ptrdiff_t difference_type;
-    
-    iterator() = default;
-    
-    iterator(const iterator &) = default;
-    
-    iterator &
-    operator=(const iterator &) = default; 
-    
-    ~iterator() = default;
-    
-    reference
-    operator*();
-
-    iterator &
-    operator++();
-    
-    iterator
-    operator++(int);
-    
-    iterator &
-    operator--();
-    
-    iterator
-    operator--(int);
-
-    bool
-    operator==(const iterator & other) const;
-    
-    bool
-    operator!=(const iterator & other) const;
-    
-private:
-    bool
-    is_end() const;
-    
-    void
-    next();
-    
-    void
-    prev();
-    
-    void
-    set_part(const path_part & p);
-    
-private:
     friend class path;
-    path m_curr;
-    size_type m_pos;
-    const path* m_path{nullptr};
+    
+// ctor & dtor
+    iterator() = default;
+    iterator(const iterator&) = default;
+    iterator(iterator&&) noexcept = default;
+    ~iterator() = default;
+     
+//assignments
+    iterator&
+    operator=(const iterator&) = default;
+     
+    iterator&
+    operator=(iterator&&) noexcept = default;
+     
+// iterator functionality
+    const path&
+    operator*() const
+    { return m_curr_path; }
+     
+    const path*
+    operator->() const
+    { return &m_curr_path; }
+     
+    iterator&
+    operator++()
+    { return next(); }
+     
+    iterator
+    operator++(int)
+    {
+        iterator it{*this};
+        next();
+        return it;
+    }
+     
+    iterator&
+    operator--()
+    { return prev(); }
+     
+    iterator
+    operator--(int)
+    {
+        iterator it{*this};
+        prev();
+        return it;
+    }
+     
+    iterator&
+    next();
+     
+    iterator&
+    prev();
+     
+// equality comparable     
+    bool
+    operator==(const iterator& other) const
+    { return (m_path == other.m_path && m_pos == other.m_pos); }
+    
+    bool
+    operator!=(const iterator& other) const
+    { return !(this->operator==(other)); }
+     
+private:
+    path m_path{};
+    path m_curr_path{};
+    path_parser::path_pos m_pos{};
 };
-
+   
 
 ////////////////////////////////////////////////////////////////////////////////
-//                         non-member functions                                                
+//                           path::hash                                               
 ////////////////////////////////////////////////////////////////////////////////
 
-void 
-swap(path & lhs, path & rhs);
-
-bool
-operator<(const path & lhs, const path & rhs);
-
-bool
-operator<=(const path & lhs, const path & rhs);
-
-bool
-operator>(const path & lhs, const path & rhs);
-
-bool
-operator>=(const path & lhs, const path & rhs);
-
-bool
-operator==(const path & lhs, const path & rhs);
-
-bool
-operator!=(const path & lhs, const path & rhs);
-
-path 
-operator/ (const path & lhs, const path & rhs);
-
-template <class charT, class traits>
-std::basic_ostream<charT, traits>&
-operator<<(std::basic_ostream<charT, traits>& os, const path& p);
-
-template <class charT, class traits>
-std::basic_istream<charT, traits>&
-operator>>(std::basic_istream<charT, traits>& is, path& p);
-
-
+inline std::size_t
+hash_value(const path& p) noexcept
+{
+    path::string_type str{};
+    for (auto& part : p)
+        str += part.native();
+    
+    std::hash<path::string_type> hash_fn;
+    return hash_fn(str);
+}
+    
 } /* namespace fs */
 } /* namespace elib */
-
-
-#ifdef ELIB_FS_DEFINITIONS_INLINE
-#   include <elib/fs/detail/path_def.hpp>
-#   include <elib/fs/detail/path_iterator_def.hpp>
-#   include <elib/fs/detail/path_functions_def.hpp>
-#endif
-
 #endif /* ELIB_FS_PATH_HPP */

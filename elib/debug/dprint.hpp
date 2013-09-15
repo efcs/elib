@@ -1,7 +1,7 @@
 #ifndef ELIB_DEBUG_DPRINT_HPP
 #define ELIB_DEBUG_DPRINT_HPP
 
-
+#undef NDEBUG
 #ifdef NDEBUG
 
 #   define DPRINT(s) ((void)s)

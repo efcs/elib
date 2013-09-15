@@ -1,0 +1,4 @@
+1.6 class path
+    - in path summary "int compare(const string& str) const" -> 
+                      "int compare(const string_type& str) const"
+                      

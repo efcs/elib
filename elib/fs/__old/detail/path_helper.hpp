@@ -39,19 +39,7 @@ is_path_root_name(const std::string & s);
 class path_part;
     
 
-enum class path_part_e {
-    none,
-    
-    name,
-    root_name,
-    
-    delim,
-    root_delim,
-    trailing_delim,
-    
-    dot,
-    double_dot
-};    
+   
 
 
 class parse_part_error : std::runtime_error {

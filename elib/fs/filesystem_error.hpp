@@ -1,49 +1,108 @@
 #ifndef ELIB_FS_FILESYSTEM_ERROR_HPP
 #define ELIB_FS_FILESYSTEM_ERROR_HPP
 
-#include <elib/fs/config.hpp>
 #include <elib/fs/path.hpp>
 
 #include <system_error>
+#include <memory>
 #include <string>
+#include <cerrno>
 
 
 namespace elib {
 namespace fs {
-    
+
 
 class filesystem_error : public std::system_error {
 public:
-    filesystem_error(const std::string& what_arg, std::error_code ec);
+    filesystem_error(const std::string& what_arg, std::error_code ec)
+        : std::system_error{ec}, m_impl{new impl_t}
+    {
+        m_impl->what_arg = what_arg;
+    }
     
-    filesystem_error(const std::string& what_arg,
-                     const path& p1, std::error_code ec);
+    filesystem_error(const std::string& what_arg, const path& p,
+                     std::error_code ec)
+        : filesystem_error{what_arg, ec}
+    {
+        m_impl->p1 = p;
+    }
     
-    filesystem_error(const std::string& what_arg,
-                     const path& p1, const path& p2, 
-                     std::error_code ec);
-
-    const path & 
-    path1() const noexcept;
+    filesystem_error(const std::string& what_arg, const path& p1,
+                     const path& p2, std::error_code ec)
+        : filesystem_error{what_arg, p1, ec}
+    {
+        m_impl->p2 = p2;
+    }
     
-    const path & 
-    path2() const noexcept;
     
-    const char*
-    what() const noexcept;
+    const path&
+    path1() const noexcept
+    { return m_impl->p1; }
+    
+    const path&
+    path2() const noexcept
+    { return m_impl->p2; }
+    
+    //TODO add meaningfull message
+    const char* 
+    what() const noexcept
+    { return m_impl->what_arg.c_str(); } 
+    
 private:
-    std::string m_what;
-    path m_p1{};
-    path m_p2{};
-};  
+    struct impl_t {
+        std::string what_arg;
+        path p1;
+        path p2;
+    };
+    
+    std::shared_ptr<impl_t> m_impl;
+};
+
+
+namespace detail {
+    
+    
+inline std::error_code
+handle_errno()
+{
+    std::error_code ec{errno, std::system_category()};
+    errno = 0;
+    return ec;
+}
+
+inline void
+handle_errno(std::error_code& ec)
+{
+    ec = handle_errno();
+}
+
+inline std::error_code
+handle_error(int xerrno)
+{
+    return std::error_code{xerrno, std::system_category()};
+}
+
+inline std::error_code
+handle_error(std::errc err_code)
+{
+    return std::make_error_code(err_code);
+}
+
+inline void
+handle_error(int xerrno, std::error_code& ec)
+{
+    ec = handle_error(xerrno);
+}
+
+inline void
+handle_error(std::errc err_code, std::error_code& ec)
+{
+    ec = handle_error(err_code);
+}
 
     
+} /* namespace detail */
 } /* namespace fs */
 } /* namespace elib */
-
-
-#ifdef ELIB_FS_DEFINITIONS_INLINE
-#   include <elib/fs/detail/filesystem_error_def.hpp>
-#endif
-
 #endif /* ELIB_FS_FILESYSTEM_ERROR_HPP */

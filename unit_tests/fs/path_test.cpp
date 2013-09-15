@@ -6,7 +6,7 @@
 #include "elib/debug/eval.hpp"
 
 
-
+#if 0
 
 using namespace elib;
 using namespace elib::fs;
@@ -76,3 +76,5 @@ BOOST_AUTO_TEST_CASE(path_table)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+#endif

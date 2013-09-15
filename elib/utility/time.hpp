@@ -1,7 +1,6 @@
 #ifndef ELIB_TIME_HPP
 #define ELIB_TIME_HPP
 
-#include <elib/utility/fmt.hpp>
 
 #include <chrono>
 

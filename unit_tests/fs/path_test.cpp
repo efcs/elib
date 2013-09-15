@@ -5,7 +5,6 @@
 #include "elib/fs/path.hpp"
 #include "elib/debug/eval.hpp"
 
-
 #if 0
 
 using namespace elib;

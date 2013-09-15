@@ -8,7 +8,7 @@
 namespace elib {
     
 
-template <typename T, T NPOS = -1>
+template <typename T, T NPOS = static_cast<T>(-1)>
 struct size_type_traits {
     typedef T type;
     typedef T size_type;

@@ -229,6 +229,33 @@ namespace elib
         return true;
       }
       
+      bool posix_symlink(const string_type& from, const string_type& to,
+                         std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        
+        if (::symlink(from.c_str(), to.c_str()) == 0)
+          return true;
+        
+        detail::handle_and_throw_errno("elib::fs::posix_symlink", path{from},
+                                       path{to}, ec);
+        return false;
+      }
+      
+      bool posix_link(const string_type& from, const string_type& to,
+                      std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        if (::link(from.c_str(), to.c_str()) == 0)
+          return true;
+        
+        detail::handle_and_throw_errno("elib::fs::posix_link", path{from},
+                                       path{to}, ec);
+        return false;
+      }
+      
       string_type posix_readlink(const string_type& s, std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -243,6 +270,34 @@ namespace elib
         return string_type{buff};
       }
       
+      bool posix_truncate(const string_type& s, std::uintmax_t size, 
+                          std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        
+        if (::truncate(s.c_str(), size) == -1)
+        {
+          detail::handle_and_throw_errno("elib::fs::posix_truncate", path{s},
+                                         ec);
+          return false;
+        }
+        return true;
+      }
+      
+      bool posix_rename(const string_type& from, const string_type& to,
+                        std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        if (::rename(from.c_str(), to.c_str()) == -1) 
+        {
+          detail::handle_and_throw_errno("elib::fs::posix_rename", path{from},
+                                         path{to}, ec);
+          return false;
+        }
+        return true;
+      }
       
     ////////////////////////////////////////////////////////////////////////////////
     //                           DETAIL::MISC                                           
@@ -342,10 +397,18 @@ namespace elib
                                     std::error_code *ec);
       
       void create_hard_link(const path& to, const path& new_hard_link,
-                            std::error_code *ec);
+                            std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        detail::posix_link(to.native(), new_hard_link.native(), ec);
+      }
       
       void create_symlink(const path& to, const path& new_symlink,
-                          std::error_code *ec);
+                          std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        detail::posix_symlink(to.native(), new_symlink.native(), ec);
+      }
       
       
       path current_path(std::error_code *ec)
@@ -485,7 +548,10 @@ namespace elib
       
       void rename(const path& from, const path& to, std::error_code *ec);
       
-      void resize_file(const path& p, uintmax_t size, std::error_code *ec);
+      void resize_file(const path& p, uintmax_t size, std::error_code *ec)
+      {
+        detail::posix_truncate(p, size, ec);
+      }
       
       space_info space(const path& p, std::error_code *ec)
       {

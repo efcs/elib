@@ -413,7 +413,7 @@ namespace elib
   
   
     ////////////////////////////////////////////////////////////////////////////////
-    //                        OTHER DEFINITIONS                                         
+    //                        CLASS DIRECTORY ENTRY                                     
     ////////////////////////////////////////////////////////////////////////////////
     
     
@@ -436,12 +436,6 @@ namespace elib
       void copy(const path& from, const path& to, copy_options option,
                 std::error_code *ec); //TODO
       
-      
-      bool copy_file(const path& from, const path& to, 
-                     std::error_code *ec)
-      {
-        return detail::copy_file(from, to, copy_options::none, ec);
-      }
       
       
       bool copy_file(const path& from, const path& to, copy_options option,

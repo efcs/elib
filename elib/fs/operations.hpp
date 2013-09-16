@@ -110,11 +110,8 @@ namespace elib
       file_status& operator=(file_status&&) noexcept = default;
       
       // observers
-      file_type type() const noexcept
-        { return m_type; }
-        
-      perms permissions() const noexcept
-        { return m_perms; }
+      file_type type() const noexcept { return m_type; }
+      perms permissions() const noexcept { return m_perms; }
       
       // modifiers
       void type(file_type ft) noexcept { m_type = ft; }
@@ -144,7 +141,9 @@ namespace elib
       directory_entry(directory_entry&&) noexcept = default;
       
       explicit directory_entry(const path& p, file_status st=file_status(),
-                               file_status symlink_st=file_status());
+                               file_status symlink_st=file_status())
+        : m_path{p}, m_status{st}, m_symlink_status{symlink_st}
+      { }
       
       ~directory_entry() = default; 
       
@@ -153,7 +152,12 @@ namespace elib
       directory_entry& operator=(directory_entry&&) noexcept = default;
       
       void assign(const path& p, file_status st=file_status(),
-                  file_status symlink_st=file_status());
+                  file_status symlink_st=file_status())
+      {
+        m_path = p;
+        m_status = st;
+        m_symlink_status = symlink_st;
+      }
       
       void replace_filename(const path& p, file_status st=file_status(),
                             file_status symlink_st=file_status());

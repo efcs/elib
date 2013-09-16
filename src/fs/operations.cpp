@@ -309,6 +309,16 @@ namespace elib
         return false;
       }
       
+      bool posix_mkdir(const string_type& p, mode_t m, std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        if (::mkdir(p.c_str(), m) == 0)
+          return true;
+        detail::handle_and_throw_errno("elib::fs::posix_mkdir", path{p}, ec);
+        return false;
+      }
+      
     ////////////////////////////////////////////////////////////////////////////////
     //                           DETAIL::MISC                                           
     ////////////////////////////////////////////////////////////////////////////////
@@ -360,6 +370,45 @@ namespace elib
       }
       
       
+      inline bool verify_copy_options(copy_options& opt) noexcept
+      {
+        if (opt == copy_options::none) return true;
+        copy_options g1 = copy_options::skip_existing | 
+                          copy_options::overwrite_existing |
+                          copy_options::update_existing;
+                          
+        copy_options g2 = copy_options::recursive;
+        
+        copy_options g3 = copy_options::copy_symlinks |
+                          copy_options::skip_symlinks;
+        
+        copy_options g4 = copy_options::directories_only |
+                          copy_options::create_symlinks |
+                          copy_options::create_hard_links;
+                          
+        int gcount = 0;
+        if (static_cast<bool>(opt & g1)) ++gcount;
+        if (static_cast<bool>(opt & g2)) ++gcount;
+        if (static_cast<bool>(opt & g3)) ++gcount;
+        if (static_cast<bool>(opt & g4)) ++gcount;
+        
+        return (gcount <= 1);
+      }
+      
+      inline bool verify_exists(const path& p)
+      {
+        std::error_code ec;
+        auto fst = detail::status(p, &ec);
+        return (status_known(fst) && exists(fst));
+      }
+      
+      bool copy_file_impl(const path& p1, const path& p2, std::error_code *ec)
+      {
+        //TODO
+        ((void)p1); ((void)p2); ((void)ec);
+        throw;
+      }
+      
     } // namespace detail 
   
   
@@ -384,42 +433,132 @@ namespace elib
         return detail::posix_realpath(ap, ec);
       }
       
-      void copy(const path& from, const path& to, 
+      void copy(const path& from, const path& to, copy_options option,
                 std::error_code *ec); //TODO
       
-      void copy_file(const path& from, const path& to, 
-                     std::error_code *ec); //TODO
       
-      void copy_file(const path& from, const path& to, copy_options option,
-                     std::error_code *ec); //TODO
+      bool copy_file(const path& from, const path& to, 
+                     std::error_code *ec)
+      {
+        return detail::copy_file(from, to, copy_options::none, ec);
+      }
+      
+      
+      bool copy_file(const path& from, const path& to, copy_options option,
+                     std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        auto from_st = detail::status(from, ec);
+        if (detail::handle_and_throw_status_error(from_st, "elib::fs::copy_file",
+                      from, to, ec))
+        { return false; }
+        
+        if (!exists(from_st))
+        {
+          detail::handle_and_throw_error(std::errc::no_such_file_or_directory,
+                    "elib::fs::copy_file", from, to, ec);
+          return false;
+        }
+        
+        auto to_st = detail::status(to, ec);
+        if (detail::handle_and_throw_status_error(to_st, "elib::fs::copy_file",
+                      from, to, ec))
+        { return false; }
+        
+        if (exists(to_st) && !(option & (copy_options::skip_existing |
+                                          copy_options::overwrite_existing |
+                                          copy_options::update_existing)))
+        {
+          detail::handle_and_throw_error(std::errc::file_exists,
+                  "elib::fs::copy_file", from, to, ec);
+          return false;
+        }
+        
+        bool should_copy = 
+            !exists(to_st) || (option & copy_options::overwrite_existing) ||
+            !(option & (copy_options::skip_existing |
+                        copy_options::overwrite_existing |
+                        copy_options::update_existing));
+            
+        // if we are not already going to copy
+        // and a update has been requested then
+        // set should_copy to true iff from is newer than to
+        if (exists(to_st) && !should_copy && 
+          (option & copy_options::update_existing))
+        {
+          detail::clear_error(ec);
+          auto from_time = detail::last_write_time(from, ec);
+          if (ec && *ec) return false;
+          auto to_time = detail::last_write_time(to, ec);
+          if (ec && *ec) return false;
+          if (from_time > to_time) should_copy = true;
+        }
+        
+        if (! should_copy) return false;
+        return detail::copy_file_impl(from, to, ec);
+      }
+      
       
       void copy_symlink(const path& existing_symlink, const path& new_symlink,
-                        std::error_code *ec); //TODO
+                        std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        auto p = detail::read_symlink(existing_symlink, ec);
+        if (ec && *ec) return;
+        auto fst = detail::status(p, ec);
+        if (!status_known(fst) || !exists(fst))
+        {
+          detail::handle_and_throw_error(std::errc::no_such_file_or_directory,
+                  "elib::fs::copy_symlink", existing_symlink, new_symlink, ec);
+          return;
+        }
+        if (is_directory(fst))
+          detail::create_directory_symlink(p, new_symlink, ec);
+        else
+          detail::create_symlink(p, new_symlink, ec);
+        
+      }
       
+      //TODO
       bool create_directories(const path& p, std::error_code *ec);
       
-      bool create_directory(const path& p, std::error_code *ec);
+      
+      bool create_directory(const path& p, std::error_code *ec)
+      {
+        return detail::posix_mkdir(p.native(), S_IRWXU|S_IRWXG|S_IRWXO, ec);
+      }
+      
       
       void create_directory(const path& p, const path& attributes, 
-                            std::error_code *ec);
+                            std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        struct stat st;
+        auto fst = detail::posix_stat(attributes, st, ec);
+        if (detail::handle_and_throw_status_error(fst, 
+            "elib::fs::create_directory", p, attributes, ec))
+          return;
+        detail::posix_mkdir(p.native(), st.st_mode, ec);
+      }
+      
       
       void create_directory_symlink(const path& to, const path& new_symlink,
                                     std::error_code *ec)
       {
-        create_symlink(to, new_symlink, ec);
+        detail::posix_link(to.native(), new_symlink.native(), ec);
       }
+      
       
       void create_hard_link(const path& to, const path& new_hard_link,
                             std::error_code *ec)
       {
-        detail::clear_error(ec);
         detail::posix_link(to.native(), new_hard_link.native(), ec);
       }
+      
       
       void create_symlink(const path& to, const path& new_symlink,
                           std::error_code *ec)
       {
-        detail::clear_error(ec);
         detail::posix_symlink(to.native(), new_symlink.native(), ec);
       }
       
@@ -429,10 +568,12 @@ namespace elib
         return path{detail::posix_getcwd(ec)};
       }
       
+      
       void current_path(const path& p, std::error_code *ec)
       {
         detail::posix_chdir(p.native(), ec);
       }
+      
       
       bool equivalent(const path& p1, const path& p2, 
                       std::error_code *ec)
@@ -455,6 +596,7 @@ namespace elib
         if (!exists(fs1) || !exists(fs2)) return false;
         return (st1.st_ino == st2.st_ino && st1.st_dev == st2.st_dev);
       }
+      
       
       std::uintmax_t file_size(const path& p, std::error_code *ec)
       {
@@ -479,6 +621,7 @@ namespace elib
         return static_cast<uintmax_t>(st.st_size);
       }
       
+      
       std::uintmax_t hard_link_count(const path& p, std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -497,7 +640,9 @@ namespace elib
         return static_cast<std::uintmax_t>(st.st_nlink);
       }
       
+      
       bool is_empty(const path& p, std::error_code *ec);
+      
       
       file_time_type last_write_time(const path& p, std::error_code *ec)
       {
@@ -523,6 +668,7 @@ namespace elib
         return detail::from_time_t(st.st_mtime);
       }
       
+      
       void last_write_time(const path& p, file_time_type new_time,
                            std::error_code *ec)
       {
@@ -534,20 +680,17 @@ namespace elib
         {
           return;
         }
-        
         if (!exists(fst)) {
           detail::handle_and_throw_error(std::errc::no_such_file_or_directory,
                       "elib::fs::last_write_time", p, ec);
           return;
         }
-          
         struct utimbuf tbuff;
         tbuff.actime = st.st_atime;
         tbuff.modtime = detail::to_time_t(new_time);
-        
         detail::posix_utime(p.native(), tbuff, ec);
-        
       }
+      
       
       path read_symlink(const path& p, std::error_code *ec)
       {
@@ -555,19 +698,26 @@ namespace elib
         return path{detail::posix_readlink(p.native(), ec)};
       }
       
+      
       bool remove(const path& p, std::error_code *ec)
       {
         return detail::posix_remove(p.native(), ec);
       }
       
+      
       std::intmax_t remove_all(const path& p, std::error_code *ec);
       
-      void rename(const path& from, const path& to, std::error_code *ec);
+      void rename(const path& from, const path& to, std::error_code *ec)
+      {
+        detail::posix_rename(from.c_str(), to.c_str(), ec);
+      }
+      
       
       void resize_file(const path& p, uintmax_t size, std::error_code *ec)
       {
         detail::posix_truncate(p, size, ec);
       }
+      
       
       space_info space(const path& p, std::error_code *ec)
       {
@@ -586,11 +736,13 @@ namespace elib
         return si;
       }
       
+      
       file_status status(const path& p, std::error_code *ec)
       {
         struct stat m_stat;
         return detail::posix_stat(p, m_stat, ec);
       }
+      
       
       file_status symlink_status(const path& p, std::error_code *ec)
       {
@@ -598,11 +750,13 @@ namespace elib
         return detail::posix_lstat(p, m_stat, ec);
       }
       
+      
       path system_complete(const path& p, std::error_code *ec)
       {
         detail::clear_error(ec);
         return absolute(p, current_path());
       }
+      
       
       path temp_directory_path(std::error_code *ec)
       {
@@ -627,6 +781,7 @@ namespace elib
         *ec = m_ec;
         return path{};
       }
+      
       
       path unique_path(const path& model, std::error_code *ec);
       

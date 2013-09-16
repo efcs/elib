@@ -26,3 +26,17 @@ system_complete description
 last_write_time description
   -- static_cast<std::chrono::time_point>(-1) is not valid
   
+copy_file description
+  -- copy_options::skip,  copy_options::overwrite and copy_options::update
+  are not members of copy_options
+  
+  -- copy_file has inconsistent return types. it is void is the
+      header summary and bool in the function description
+      
+copy description
+  -- the header description is missing 2 copy function declarations:
+      void copy(const path& from, const path& to, copy_options options);
+      void copy(const path& from, const path& to, copy_options options, error_code& ec) noexcept;
+  
+
+  

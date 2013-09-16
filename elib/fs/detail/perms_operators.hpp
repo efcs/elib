@@ -23,10 +23,16 @@ namespace elib
       constexpr base_t dc(perms p) noexcept
       { return static_cast<base_t>(p); }
       
+      // boolean cast
+      constexpr bool bc(perms p) noexcept
+      { return static_cast<bool>(p); }
       
       namespace operators
       {
         
+      ////////////////////////////////////////////////////////////////////////////////
+       //                   BITWISE OPERATORS                                                       
+      ////////////////////////////////////////////////////////////////////////////////
       // pure operators (lhs & rhs) == perms
         constexpr perms operator~(perms lhs) noexcept
         { return uc(~ dc(lhs)); }
@@ -78,6 +84,30 @@ namespace elib
         
         inline perms& operator^=(perms& lhs, base_t rhs) noexcept
         { return lhs = lhs ^ rhs; }
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      //                    LOGICAL OPERATORS                                                           
+      ////////////////////////////////////////////////////////////////////////////////
+      constexpr bool operator!(perms lhs) noexcept
+      { return ! bc(lhs); }
+      
+      constexpr bool operator&&(perms lhs, perms rhs) noexcept
+      { return bc(lhs) && bc(rhs); }
+      
+      constexpr bool operator||(perms lhs, perms rhs) noexcept
+      { return bc(lhs) || bc(rhs); }
+      
+      constexpr bool operator&&(bool lhs, perms rhs) noexcept
+      { return lhs && bc(rhs); }
+      
+      constexpr bool operator||(bool lhs, perms rhs) noexcept
+      { return lhs || bc(rhs); }
+      
+      constexpr bool operator&&(perms lhs, bool rhs) noexcept
+      { return bc(lhs) && rhs; }
+      
+      constexpr bool operator||(perms lhs, bool rhs) noexcept
+      { return bc(lhs) || rhs; }
       
       
       } // namespace operators

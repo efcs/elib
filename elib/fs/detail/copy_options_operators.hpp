@@ -23,6 +23,10 @@ namespace elib
       constexpr base_t dc(copy_options p) noexcept
       { return static_cast<base_t>(p); }
       
+      //bool cast
+      constexpr bool bc(copy_options p) noexcept
+      { return static_cast<bool>(p); }
+      
       
       namespace operators
       {
@@ -78,7 +82,32 @@ namespace elib
           
         inline copy_options& operator^=(copy_options& lhs, base_t rhs) noexcept
         { return lhs = lhs ^ rhs; }
-          
+        
+        
+      ////////////////////////////////////////////////////////////////////////////////
+      //                    LOGICAL OPERATORS                                                           
+      ////////////////////////////////////////////////////////////////////////////////
+        
+        constexpr bool operator!(copy_options lhs) noexcept
+        { return ! bc(lhs); }
+        
+        constexpr bool operator&&(copy_options lhs, copy_options rhs) noexcept
+        { return bc(lhs) && bc(rhs); }
+        
+        constexpr bool operator||(copy_options lhs, copy_options rhs) noexcept
+        { return bc(lhs) || bc(rhs); }
+        
+        constexpr bool operator&&(bool lhs, copy_options rhs) noexcept
+        { return lhs && bc(rhs); }
+        
+        constexpr bool operator||(bool lhs, copy_options rhs) noexcept
+        { return lhs || bc(rhs); }
+        
+        constexpr bool operator&&(copy_options lhs, bool rhs) noexcept
+        { return bc(lhs) && rhs; }
+        
+        constexpr bool operator||(copy_options lhs, bool rhs) noexcept
+        { return bc(lhs) || rhs; }
           
       } // namespace operators
     } // namespace copy_options_detail

@@ -349,13 +349,13 @@ namespace elib
       path canonical(const path& p, const path& base, 
                      std::error_code *ec=nullptr);
     
-      void copy(const path& from, const path& to, 
+      void copy(const path& from, const path& to, copy_options opt, 
                 std::error_code *ec=nullptr);
     
-      void copy_file(const path& from, const path& to, 
+      bool copy_file(const path& from, const path& to, 
                      std::error_code *ec=nullptr);
       
-      void copy_file(const path& from, const path& to, copy_options option,
+      bool copy_file(const path& from, const path& to, copy_options option,
                      std::error_code *ec=nullptr);
     
       void copy_symlink(const path& existing_symlink, const path& new_symlink,
@@ -442,26 +442,33 @@ namespace elib
     
     
     inline void copy(const path& from, const path& to)
-      { detail::copy(from, to); }
+      { detail::copy(from, to, copy_options::none); }
       
     inline void copy(const path& from, const path& to, std::error_code& ec) noexcept
-      { detail::copy(from, to, &ec); }
-    
-    
-    inline void copy_file(const path& from, const path& to)
-      { detail::copy_file(from, to); }
+      { detail::copy(from, to, copy_options::none, &ec); }
       
-    inline void copy_file(const path& from, const path& to, 
+    inline void copy(const path& from, const path& to, copy_options option)
+      { detail::copy(from, to, option); }
+      
+    inline void copy(const path& from, const path& to, copy_options option, 
+                     std::error_code& ec) noexcept
+      { detail::copy(from, to, option, &ec); }
+    
+    
+    inline bool copy_file(const path& from, const path& to)
+      { return detail::copy_file(from, to); }
+      
+    inline bool copy_file(const path& from, const path& to, 
             std::error_code& ec) noexcept
-      { detail::copy_file(from, to, &ec); }
+      { return detail::copy_file(from, to, &ec); }
           
           
-    inline void copy_file(const path& from, const path& to, copy_options option)
-      { detail::copy_file(from, to, option); }
+    inline bool copy_file(const path& from, const path& to, copy_options option)
+      { return detail::copy_file(from, to, option); }
       
-    inline void copy_file(const path& from, const path& to, copy_options option,
+    inline bool copy_file(const path& from, const path& to, copy_options option,
               std::error_code& ec) noexcept
-      { detail::copy_file(from, to, option, &ec); }
+      { return detail::copy_file(from, to, option, &ec); }
     
     
     inline void copy_symlink(const path& existing_symlink, const path& new_symlink)

@@ -24,18 +24,6 @@ public:
 //
     directory_stream() = default;
     
-    // although copy constructors and assigment are available,
-    // they should not be used when possible
-    directory_stream(const directory_stream& other)
-    { copy(other); }
-    
-    directory_stream&
-    operator=(const directory_stream& other)
-    {
-        copy(other);
-        return *this;
-    }
-    
     directory_stream(directory_stream&& other)
     { move(std::move(other)); }
     

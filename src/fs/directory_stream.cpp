@@ -144,27 +144,6 @@ directory_stream::seek(long pos) noexcept
 
 
 void
-directory_stream::copy(const directory_stream& other) noexcept
-{
-    reset(); // close our resources
-    
-    // if other is currently open,
-    // attempt to match it's current position
-    if (other.is_open()) {
-        // if failure occurs on matching abort
-        if (! _match_stream(other))
-            return;
-    } else { 
-        m_curr_path = other.m_curr_path;
-    }
-    //TODO
-    // copy other information
-    m_state = other.m_state;
-    m_ec = other.m_ec;
-    m_curr_path = other.m_curr_path;
-}
-
-void
 directory_stream::move(directory_stream&& other) noexcept
 {
     reset(); // close our resources
@@ -179,36 +158,7 @@ directory_stream::move(directory_stream&& other) noexcept
     other._reset();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                            private members                                           
-////////////////////////////////////////////////////////////////////////////////
 
-/* precondition: m_dir_stream has been closed */
-bool
-directory_stream::_match_stream(const directory_stream& other) noexcept
-{
-    if (!other.is_open() || other.bad())
-        return false;
-    
-    open(other.m_root_path);
-    if (! is_open())
-        return false;
-    
-    std::error_code ec;
-    long pos = other.tell(ec);
-    if (pos == -1) {
-        m_ec = ec;
-        //TODO
-        return false;
-    }
-    
-    seek(pos);
-    if (ec)
-        return false;
-    return true;
-}
-
-  
   
 } /* namespace detail */
 } /* namespace fs */

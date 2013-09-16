@@ -132,6 +132,16 @@ namespace elib
   //                      class directory_entry                                                     
   ////////////////////////////////////////////////////////////////////////////////
     
+    namespace detail
+    {
+      
+      class dir_stream
+      {
+      public:
+        
+      };                                                    // class dir_iter
+      
+    }                                                       // namespace detail
     
     class directory_entry
     {
@@ -268,6 +278,7 @@ namespace elib
       //
     private:
       //
+      std::shared_ptr<std::mutex> m_lock;
       
       directory_entry m_element;
       detail::directory_stream m_stream;

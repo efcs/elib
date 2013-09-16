@@ -1,11 +1,12 @@
 #ifndef ELIB_OPERATIONS_HPP
 #define ELIB_OPERATIONS_HPP
 
+#include <elib/fs/filesystem.hpp>
 #include <elib/fs/path.hpp>
 #include <elib/fs/detail/directory_stream.hpp>
 
 #include <system_error>
-#include <chrono>
+
 #include <iterator>
 
 #include <cstdint>
@@ -140,7 +141,7 @@ namespace elib
       directory_entry(const directory_entry&) = default;
       directory_entry(directory_entry&&) noexcept = default;
       
-      explicit directory_entry(const path& p, file_status st=file_status(),
+      explicit directory_entry(const fs::path& p, file_status st=file_status(),
                                file_status symlink_st=file_status())
         : m_path{p}, m_status{st}, m_symlink_status{symlink_st}
       { }
@@ -151,7 +152,7 @@ namespace elib
       directory_entry& operator=(const directory_entry&) = default;
       directory_entry& operator=(directory_entry&&) noexcept = default;
       
-      void assign(const path& p, file_status st=file_status(),
+      void assign(const fs::path& p, file_status st=file_status(),
                   file_status symlink_st=file_status())
       {
         m_path = p;
@@ -159,34 +160,74 @@ namespace elib
         m_symlink_status = symlink_st;
       }
       
-      void replace_filename(const path& p, file_status st=file_status(),
-                            file_status symlink_st=file_status());
+      void replace_filename(const fs::path& p, file_status st=file_status(),
+                            file_status symlink_st=file_status())
+      {
+        m_path.replace_filename(p);
+        m_status = st;
+        m_symlink_status = symlink_st;
+      }
       
     // observers
       const fs::path& path() const noexcept
         { return m_path; }
         
-      file_status status() const;
-      file_status status(std::error_code& ec) const noexcept;
-      file_status symlink_status() const;
-      file_status symlink_status(std::error_code& ec) const noexcept;
+      file_status status() const
+      { return m_get_status();}
+      
+      file_status status(std::error_code& ec) const noexcept
+      { return m_get_status(&ec); }
+      
+      file_status symlink_status() const
+      { return m_get_symlink_status(); }
+      
+      file_status symlink_status(std::error_code& ec) const noexcept
+      { return m_get_symlink_status(&ec); }
       
       bool operator==(const directory_entry& rhs) const noexcept
         { return m_path == rhs.m_path; }
+        
       bool operator!=(const directory_entry& rhs) const noexcept
         { return m_path != rhs.m_path; }
+        
       bool operator< (const directory_entry& rhs) const noexcept
         { return m_path < rhs.m_path; }
+        
       bool operator<=(const directory_entry& rhs) const noexcept
         { return m_path <= rhs.m_path; }
+        
       bool operator> (const directory_entry& rhs) const noexcept
         { return m_path > rhs.m_path; }
+        
       bool operator>=(const directory_entry& rhs) const noexcept
         { return m_path >= rhs.m_path; }
       
       //
     private:
       //
+      
+      
+      file_status m_get_status(std::error_code *ec=nullptr) const
+      {
+        if (!status_known(m_status))
+        {
+          if (status_known(m_symlink_status) && !is_symlink(m_symlink_status))
+            { m_status = m_symlink_status; }
+          else
+            { m_status = ec ? fs::status(m_path, *ec) : fs::status(m_path); }
+          return m_status;
+        }
+      }
+      
+      file_status m_get_symlink_status(std::error_code *ec=nullptr) const
+      {
+        if (!status_known(m_symlink_status))
+          m_symlink_status = ec ? fs::symlink_status(m_path, *ec)
+                                : fs::symlink_status(m_path);
+        return m_symlink_status;
+      }
+      
+      
       
       fs::path m_path;
       mutable file_status m_status;
@@ -228,8 +269,8 @@ namespace elib
     private:
       //
       
-      directory_entry m_element{};
-      detail::directory_stream m_stream{};
+      directory_entry m_element;
+      detail::directory_stream m_stream;
       
     
     //
@@ -262,15 +303,7 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
   //                                                                          
   ////////////////////////////////////////////////////////////////////////////////
-   
-   
-   struct space_info
-    {
-      std::uintmax_t capacity;
-      std::uintmax_t free; 
-      std::uintmax_t available; 
-    };
-    
+
     enum class copy_options
     {
       none = 0,
@@ -308,37 +341,6 @@ namespace elib
   namespace fs
   {
   
-    
-    enum class directory_options
-    {
-      none,
-      follow_directory_symlink,
-      skip_permission_denied
-    };
-    
-    namespace detail
-    {
-      typedef std::chrono::system_clock clock_type;
-      typedef typename clock_type::time_point time_point;
-      typedef typename clock_type::duration duration;
-      
-      template <typename TimeP>
-      inline std::time_t to_time_t(const TimeP& from)
-      {
-        auto tp = std::chrono::time_point_cast<duration>(from);
-        return std::chrono::system_clock::to_time_t(tp);
-      }
-      
-      inline time_point from_time_t(std::time_t t)
-      {
-        auto tp = std::chrono::system_clock::from_time_t(t);
-        return std::chrono::time_point_cast<duration>(tp);
-      }
-      
-    } // namespace detail
-    
-    typedef detail::time_point file_time_type;
-    
     
   ////////////////////////////////////////////////////////////////////////////////
   //                           DETAIL::OPERATIONS                                     
@@ -540,15 +542,6 @@ namespace elib
 
     inline void current_path(const path& p, std::error_code& ec) noexcept
       { detail::current_path(p, &ec); }
-      
-      
-    // forward
-    bool status_known(file_status s) noexcept;
-    file_status status(const path& p);
-    file_status status(const path& p, std::error_code& ec) noexcept;
-    file_status symlink_status(const path& p);
-    file_status symlink_status(const path& p, std::error_code& ec) noexcept;
-    
     
     inline bool exists(file_status s) noexcept
       { return status_known(s) && s.type() != file_type::not_found; }
@@ -627,13 +620,6 @@ namespace elib
       
     inline bool is_fifo(const path& p, std::error_code& ec) noexcept
       { return is_fifo(status(p, ec)); }
-    
-    
-    // forwards for is_other
-    bool exists(file_status) noexcept;
-    bool is_regular_file(file_status) noexcept;
-    bool is_directory(file_status) noexcept;
-    bool is_symlink(file_status) noexcept;
     
     inline bool is_other(file_status s) noexcept
     {

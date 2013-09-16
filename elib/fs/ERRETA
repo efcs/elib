@@ -18,8 +18,10 @@
       
   -- all references to filesystem::path should be written as such to
       avoid collision with directory_entry::path
+      
 1.13.2 directory_entry replace_filename
   -- postcondition table references path.branch() should be path.parent_path()
+      perhaps description should be done in terms of path.replace_filename
                 
 system_complete description
   -- in the example it reference complete(path,  current_path())

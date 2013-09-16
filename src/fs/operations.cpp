@@ -409,6 +409,20 @@ namespace elib
         throw;
       }
       
+      // chrono function helpers
+      template <typename TimeP>
+      inline std::time_t to_time_t(const TimeP& from)
+      {
+        auto tp = std::chrono::time_point_cast<duration>(from);
+        return std::chrono::system_clock::to_time_t(tp);
+      }
+      
+      inline time_point from_time_t(std::time_t t)
+      {
+        auto tp = std::chrono::system_clock::from_time_t(t);
+        return std::chrono::time_point_cast<duration>(tp);
+      }
+      
     } // namespace detail 
   
   
@@ -435,7 +449,6 @@ namespace elib
       
       void copy(const path& from, const path& to, copy_options option,
                 std::error_code *ec); //TODO
-      
       
       
       bool copy_file(const path& from, const path& to, copy_options option,

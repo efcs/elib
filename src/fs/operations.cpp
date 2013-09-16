@@ -299,6 +299,16 @@ namespace elib
         return true;
       }
       
+      bool posix_remove(const string_type& p, std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        if (::remove(p.c_str()) == 0)
+          return true;
+        detail::handle_and_throw_errno("elib::fs::posix_remove", path{p}, ec);
+        return false;
+      }
+      
     ////////////////////////////////////////////////////////////////////////////////
     //                           DETAIL::MISC                                           
     ////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +404,10 @@ namespace elib
                             std::error_code *ec);
       
       void create_directory_symlink(const path& to, const path& new_symlink,
-                                    std::error_code *ec);
+                                    std::error_code *ec)
+      {
+        create_symlink(to, new_symlink, ec);
+      }
       
       void create_hard_link(const path& to, const path& new_hard_link,
                             std::error_code *ec)
@@ -542,7 +555,10 @@ namespace elib
         return path{detail::posix_readlink(p.native(), ec)};
       }
       
-      bool remove(const path& p, std::error_code *ec);
+      bool remove(const path& p, std::error_code *ec)
+      {
+        return detail::posix_remove(p.native(), ec);
+      }
       
       std::intmax_t remove_all(const path& p, std::error_code *ec);
       

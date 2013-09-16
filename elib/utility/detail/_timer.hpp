@@ -50,14 +50,14 @@ timer<Clock, Dura>::mark_count() const
 }
 
 template <typename Clock, typename Dura>
-inline constexpr bool
+inline  bool
 timer<Clock, Dura>::running() const
 {
     return (m_start != ZERO_TIME && m_stop == ZERO_TIME);
 }
 
 template <typename Clock, typename Dura>
-inline constexpr bool
+inline  bool
 timer<Clock, Dura>::stopped() const
 {
     return (m_stop != ZERO_TIME);

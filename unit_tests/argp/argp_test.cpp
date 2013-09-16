@@ -4,7 +4,6 @@
 #include "elib/argp/arg_parser.hpp"
 #include "elib/argp/arg.hpp"
 
-#include "elib/utility/static_string.hpp"
 #include "elib/enumeration/basic_enum_traits.hpp"
 
 #include <vector>

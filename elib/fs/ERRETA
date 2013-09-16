@@ -1,4 +1,28 @@
+1.4 filesystem header summary
+  -- most functions of the form is_XXX_file(const path& p)
+      have a extra trailing comma (ie is_XXX_file(const path& p, ) )
+  
+
 1.6 class path
     - in path summary "int compare(const string& str) const" -> 
                       "int compare(const string_type& str) const"
+                 
+1.12 class file_status
+  -- in summary the explicit construct takes a default arguement of
+      perms prms = perms_not_knows -- this should be changed to
+      perms prms = perms::unknown
+                 
+1.13 class directory_entry
+  -- in class summary operator< is declared twice. (I understand why,  but its
+      not needed)
+      
+  -- all references to filesystem::path should be written as such to
+      avoid collision with directory_entry::path
+                
+system_complete description
+  -- in the example it reference complete(path,  current_path())
+      should be reference to absolute
                       
+last_write_time description
+  -- static_cast<std::chrono::time_point>(-1) is not valid
+  

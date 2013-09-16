@@ -1,4 +1,5 @@
 #include <elib/fs/path.hpp>
+#include <elib/debug/assert.hpp>
 
 #include <utility> // for pair 
 
@@ -25,7 +26,7 @@ namespace elib
       constexpr const value_type* dot = ".";
       constexpr const value_type* double_dot = "..";
       
-    // fwd
+    
       std::size_t start_of(const string_type& s, std::size_t pos)
       {
         if (pos >= s.size()) return npos;
@@ -46,7 +47,8 @@ namespace elib
       std::size_t end_of(const string_type& s, std::size_t pos)
       {
         if (pos >= s.size()) return npos;
-        if (is_root_name(s, pos)) return root_name_end(s);
+        // special case for root name
+        if (pos == 0 && is_root_name(s, pos)) return root_name_end(s);
         bool in_sep = (s[pos] == preferred_separator);
         while (pos + 1 < s.size() && 
           (s[pos+1] == preferred_separator) == in_sep)
@@ -98,31 +100,27 @@ namespace elib
         return is_name(s.substr(3));
       }
       
+      
+      std::size_t root_name_start(const string_type& s);
+      
       bool is_root_name(const string_type& s, std::size_t pos)
       {
-        if (pos != 0 || pos >= s.size() || s.size() < 2 ||
-          s[0] != preferred_separator || s[1] != preferred_separator)
-            { return false;}
-        if (s.size() == 2) return true;
-        return is_name(s.substr(3));
+        return good(pos) && pos == 0 ? root_name_start(s) == pos : false;
       }
       
       // fwd for is_root_directory
       std::size_t root_directory_start(const string_type&);
-      std::size_t root_directory_end(const string_type&);
       
       bool is_root_directory(const string_type& s, std::size_t pos)
       {
-        auto spos = root_directory_start(s);
-        if (!good(spos) || spos != pos) return false;
-        auto epos = root_directory_end(s);
-        return good(epos);
+        return good(pos) ? root_directory_start(s) == pos : false;
       }
       
       bool is_trailing_separator(const string_type& s, std::size_t pos)
       {
-        return (good(pos) && is_separator(s, pos) &&
-            end_of(s, pos) == s.size() - 1 && !is_root_directory(s, pos));
+        return (pos < s.size() && is_separator(s, pos) && 
+            end_of(s, pos) == s.size()-1 &&
+            !is_root_directory(s, pos) && !is_root_name(s, pos));
       }
       
       
@@ -130,9 +128,7 @@ namespace elib
       
       std::size_t root_name_start(const string_type& s)
       {
-        auto ret = root_name_end(s);
-        if (!good(ret)) return npos;
-        return 0;
+        return good(root_name_end(s)) ? 0 : npos;
       }
       
       
@@ -144,7 +140,7 @@ namespace elib
         if (s.size() == 2) return 1; // off by one
         std::size_t index = 2; // current position
         if (s[index] == preferred_separator) return npos;
-        while (index + 1 < s.size() && s[index + 1] != preferred_separator)
+        while (index + 1 < s.size() && s[index+1] != preferred_separator)
           ++index;
         return index;
       }
@@ -203,10 +199,10 @@ namespace elib
       {
         string_type raw = extract_raw(s, pos);
         if (raw.empty()) return raw;
-        if (is_trailing_separator(s, pos)) return string_type{double_dot};
+        if (is_trailing_separator(s, pos)) return string_type{dot};
         if (is_separator(s, pos) && !is_root_name(s, pos))
           return string_type{} += preferred_separator;
-        return s;
+        return raw;
       }
       
       string_pair extract_pair(const string_type& s, std::size_t pos)
@@ -214,12 +210,19 @@ namespace elib
         return string_pair{extract_raw(s, pos), extract_preferred(s, pos)};
       }
       
+      
     } // namespace parser
     
     
   ////////////////////////////////////////////////////////////////////////////////
   //                            path definitions                                                      
   ////////////////////////////////////////////////////////////////////////////////
+  
+    int path::compare(const path& rhs) const noexcept
+    {
+      //TODO
+      return m_pathname.compare(rhs.m_pathname);
+    }
     
     //decompasition
     path path::root_name() const
@@ -233,7 +236,7 @@ namespace elib
     {
       auto start_i = parser::root_directory_start(m_pathname);
       if(!parser::good(start_i)) return path{};
-      return path{parser::extract_raw(m_pathname, 0)};
+      return path{parser::extract_preferred(m_pathname, start_i)};
     }
     
     path path::root_path() const
@@ -243,27 +246,25 @@ namespace elib
     
     path path::relative_path() const
     {
-      if (empty()) return path{};
+      if (empty()) return *this;
       auto end_i = parser::root_directory_end(m_pathname);
-      if (parser::good(end_i))
-        return path{parser::extract_raw(m_pathname, end_i + 1)};
-      else
+      if (!parser::good(end_i))
         end_i = parser::root_name_end(m_pathname);
-      if (!parser::good(end_i)) return path{};
-      return path{parser::extract_raw(m_pathname, end_i+1)};
+      if (!parser::good(end_i)) return path{m_pathname};
+      return path{m_pathname.substr(end_i+1)};
     }
     
     path path::parent_path() const
     {
-      //TODO
-      throw;
+      if (empty() || begin() == --end()) return path{};
+      auto end_it = --(--end());
+      auto end_i = parser::end_of(m_pathname, end_it.m_pos);
+      return path{m_pathname.substr(0, end_i+1)};
     }
     
     path path::filename() const
     {
-      auto start_i = parser::filename_start(m_pathname);
-      if(!parser::good(start_i)) return path{};
-      return path{parser::extract_raw(m_pathname, start_i)};
+      return empty() ? path{} : *--end();
     }
     
     path path::stem() const
@@ -280,7 +281,7 @@ namespace elib
     {
       iterator it{};
       it.m_path_ptr = this;
-      set_iterator_pos(it, 0);
+      it.m_set_position(0);
       return it;
     }
     
@@ -288,54 +289,67 @@ namespace elib
     {
       iterator it{};
       it.m_path_ptr = this;
-      it.m_pos = parser::npos;
-      it.m_element = path{};
+      it.m_set_position(parser::npos);
       return it;
     }
     
-    bool path::valid_iterator_position(iterator& it)
+  ////////////////////////////////////////////////////////////////////////////////
+  //                            path::iterator                                                
+  ////////////////////////////////////////////////////////////////////////////////
+    
+    typename path::iterator& path::iterator::increment()
     {
-      if (it.m_pos == parser::npos) return true;
-      if (!parser::is_separator(it.m_path_ptr->native(), it.m_pos)) return true;
-      return (parser::is_root_name(it.m_path_ptr->native(), it.m_pos) ||
-          parser::is_root_directory(it.m_path_ptr->native(), it.m_pos) ||
-          parser::is_trailing_separator(it.m_path_ptr->native(), it.m_pos));
+      if (m_pos == parser::npos) return *this;
+      while (! m_set_position(parser::end_of(m_path_str(), m_pos)+1))
+        ;
+      return *this;
     }
     
-    typename path::iterator& path::increment_iterator(iterator& it)
+    typename path::iterator& path::iterator::decrement()
     {
-        if (!parser::good(it.m_pos))
-          return it;
-        set_iterator_pos(it, parser::end_of(it.m_path_ptr->native(), it.m_pos)+1);
-        while (!valid_iterator_position(it))
-          set_iterator_pos(it, parser::end_of(it.m_path_ptr->native(), it.m_pos)+1);
-        return it;
-    }
-    
-    typename path::iterator& path::decrement_iterator(iterator& it)
-    {
-      //TODO
-      throw it;
-    }
-    
-    typename path::iterator& 
-      path::set_iterator_pos(iterator& it, std::size_t pos)
-    {
-      if (pos == parser::npos)
+      if (m_pos == 0) 
+        m_set_position(0);
+      else if (m_pos == parser::npos)
+        m_set_position(parser::start_of(m_path_str(), m_path_str().size()-1));
+      else
       {
-        it.m_pos = parser::npos;
-        it.m_element = path{};
+        while (!m_set_position(parser::start_of(m_path_str(), m_pos-1)))
+          ;
+      }
+      ELIB_ASSERT(m_valid_iterator_position());
+      return *this;
+    }
+    
+    bool path::iterator::m_set_position(std::size_t pos)
+    {
+      // if past-end. set to end position
+      if (pos >= m_path_str().size()) 
+      {
+        m_pos = parser::npos;
+        m_element.clear();
       }
       else
       {
-        it.m_element = path{parser::extract_raw(it.m_path_ptr->native(), pos)};
-        it.m_pos = pos;
+        m_pos = pos;
+        m_element = path{parser::extract_preferred(m_path_str(), m_pos)};
       }
-      return it;
+      return m_valid_iterator_position();
     }
     
+    bool path::iterator::m_valid_iterator_position() const
+    {
+      if (m_pos == parser::npos) return true; // end position is valid
+      ELIB_ASSERT(m_pos < m_path_str().size());
+      return (!parser::is_separator(m_path_str(), m_pos) ||
+          parser::is_root_directory(m_path_str(), m_pos) ||
+          parser::is_trailing_separator(m_path_str(), m_pos) ||
+          parser::is_root_name(m_path_str(), m_pos));
+    }
     
-    
+    const path::string_type& path::iterator::m_path_str() const
+    {
+      return m_path_ptr->native();
+    }
 
   } // namespace fs
 } // namespace elib

@@ -1,8 +1,0 @@
-#ifndef ELIB_FS_CONFIG_HPP
-#define ELIB_FS_CONFIG_HPP
-
-
-#define ELIB_FS_DEFINITIONS_INLINE 1
-
-
-#endif /* ELIB_FS_CONFIG_HPP */

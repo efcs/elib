@@ -168,7 +168,7 @@ template <typename EnumT>
 class enum_traits<EnumT>::iterator : 
     public std::iterator<std::bidirectional_iterator_tag, const EnumT> {
     
-    friend class enum_traits<EnumT>;
+    friend struct enum_traits<EnumT>;
     typedef enum_traits<EnumT> traits;
     typedef decltype(basic_enum_traits<EnumT>::name_map) map_type;
     typedef typename map_type::const_iterator iterator_type;

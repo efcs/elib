@@ -17,7 +17,6 @@ using namespace elib::lock;
 using namespace elib::lock::detail;
 
     
-
 typedef rw_lock_impl::lock_type_e lock_type_e;
 typedef rw_lock_impl::request_group request_group;
 typedef rw_lock_impl::list_type list_type;
@@ -25,7 +24,8 @@ typedef rw_lock_impl::list_type list_type;
 
 namespace elib { namespace lock { namespace detail {
 
-struct test_rw_lock_impl {
+class test_rw_lock_impl {
+public:
     static list_type &
     get_lock_list(rw_lock_impl & l)
     { return l.m_groups; }

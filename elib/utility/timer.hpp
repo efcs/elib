@@ -34,10 +34,10 @@ public:
     typename Duration::rep
     mark_count() const;
     
-    constexpr bool 
+    bool 
     running() const;
     
-    constexpr bool
+    bool
     stopped() const;
     
     template <typename Duration=duration_type>
@@ -51,11 +51,11 @@ public:
 private:
     typedef typename clock_type::time_point time_point;
     
-    static constexpr duration_type 
-    ZERO_DURA = duration_type::zero();
+    static duration_type 
+    ZERO_DURA;
     
-    static constexpr time_point 
-    ZERO_TIME = time_point(ZERO_DURA);
+    static time_point 
+    ZERO_TIME;
     
     template <typename Duration=duration_type>
     Duration
@@ -66,13 +66,13 @@ private:
 
 
 template <typename Clock, typename Dura>
-constexpr typename timer<Clock, Dura>::duration_type
-timer<Clock, Dura>::ZERO_DURA;
+typename timer<Clock, Dura>::duration_type
+timer<Clock, Dura>::ZERO_DURA = duration_type::zero();
 
 
 template <typename Clock, typename Dura>
-constexpr typename timer<Clock, Dura>::time_point
-timer<Clock, Dura>::ZERO_TIME;
+typename timer<Clock, Dura>::time_point
+timer<Clock, Dura>::ZERO_TIME  = time_point(ZERO_DURA);
 
 
 typedef timer<default_clock, nanoseconds> nanoseconds_timer;

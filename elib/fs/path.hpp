@@ -28,8 +28,11 @@ namespace elib
         path() : m_pathname{}
         { }
         
-        path(const path&) = default;
-        path(path&&) noexcept = default;
+        path(const path& p)
+          { m_pathname = p.m_pathname; }
+          
+        path(path&& p) noexcept 
+          { m_pathname = std::move(p.m_pathname); }
         
         template <typename Source>
         path(const Source& src)
@@ -57,11 +60,20 @@ namespace elib
         template <typename InputIter>
         path(InputIter begin, InputIter end, const std::locale& loc);
 
-        ~path() noexcept = default;
+        ~path()=  default;
         
       //assignments
-        path& operator=(const path&) = default;
-        path& operator=(path&&) = default;
+        path& operator=(const path& p)
+        {
+          m_pathname = p.m_pathname;
+          return *this;
+        }
+        
+        path& operator=(path&& p) noexcept
+        {
+          m_pathname = std::move(p.m_pathname);
+          return *this;
+        }
         
         template <typename Source>
           detail::enable_if_convertible_t<Source, path>&
@@ -189,13 +201,11 @@ namespace elib
         path& concat(InputIter begin, InputIter end)
         {
           typedef typename std::iterator_traits<InputIter>::value_type vtype;
-          
           if (begin != end) 
           {
             std::basic_string<vtype> tmp{begin, end};
             this->operator+=(detail::convert<string_type>(tmp));
           }
-          
           return *this;
         }
         
@@ -371,12 +381,7 @@ namespace elib
         //
       private:
         //
-        
-        
-        static bool valid_iterator_position(iterator& it);
-        static iterator& increment_iterator(iterator& it);
-        static iterator& decrement_iterator(iterator& it);
-        static iterator& set_iterator_pos(iterator& it, std::size_t pos);
+
       
         string_type m_pathname{};
       
@@ -451,43 +456,49 @@ namespace elib
     {
       public:
         
-        // ctor & dtor
+      // ctor & dtor
         iterator() = default;
         iterator(const iterator&) = default;
         iterator(iterator&&) noexcept = default;
         ~iterator() = default;
         
-        //assignments
+      //assignments
         iterator& operator=(const iterator&) = default;
         iterator& operator=(iterator&&) = default;
         
-        // iterator functionality
+      // iterator functionality
         const path& operator*() const
         { return m_element; }
         
         const path* operator->() const
         { return &m_element; }
         
+      // forward iterator requirements
         iterator& operator++()
-        { return increment_iterator(*this); }
+        { return increment(); }
         
         iterator
         operator++(int)
         {
           iterator it{*this};
-          increment_iterator(*this);
+          increment();
           return it;
         }
         
+      // bidirectional iterator requirements
         iterator& operator--()
-        { return decrement_iterator(*this); }
+        { return decrement(); }
         
         iterator operator--(int)
         {
           iterator it{*this};
-          decrement_iterator(*this);
+          decrement();
           return it;
         }
+        
+        // logic for traversal is here
+        iterator& increment();
+        iterator& decrement();
 
     // equality comparable     
         bool operator==(const iterator& other) const
@@ -500,8 +511,26 @@ namespace elib
           return !(this->operator==(other)); 
         }
         
+        //
       private:
+        //
+        
+        // for begin() and end()
         friend class path;
+        
+        // check if the element is a valid iterator element,
+        // ie. check it is not a (non-trailing/root) separator
+        bool m_valid_iterator_position() const;
+        
+        // parse the token at pos & set the iterator to said element
+        // return the result of valid_iterator_position() after
+        // setting the element
+        bool m_set_position(std::size_t pos);
+        
+        // return the string for the assocated path
+        // as if by path::native()
+        const string_type&
+        m_path_str() const;
       
         path m_element;
         const path *m_path_ptr{nullptr};

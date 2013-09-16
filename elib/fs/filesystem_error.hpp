@@ -61,6 +61,11 @@ private:
 
 
 namespace detail {
+  
+constexpr int errc_cast(std::errc e) noexcept
+{
+  return static_cast<int>(e);
+}
     
     
 inline std::error_code
@@ -101,6 +106,85 @@ handle_error(std::errc err_code, std::error_code& ec)
     ec = handle_error(err_code);
 }
 
+
+inline void clear_error(std::error_code *ec)
+{
+  if (ec) ec->clear();
+}
+
+inline int clear_errno()
+{
+  int xerrno = errno;
+  errno = 0;
+  return xerrno;
+}
+
+
+inline bool handle_and_throw_error(int xerrno, 
+                                   const std::string& msg, std::error_code *ec)
+{
+  auto m_ec = handle_error(xerrno);
+  if (!m_ec) return false;
+  ec != nullptr ? *ec = m_ec : throw filesystem_error(msg, m_ec);
+  return true;
+}
+
+inline bool handle_and_throw_error(int xerrno, 
+                                   const std::string& msg, const path& p1, std::error_code *ec)
+{
+  auto m_ec = handle_error(xerrno);
+  if (!m_ec) return false;
+  ec != nullptr ? *ec = m_ec : throw filesystem_error(msg, p1, m_ec);
+  return true;
+}
+
+inline bool handle_and_throw_error(int xerrno, 
+                                   const std::string& msg, const path& p1,
+                                   const path& p2, std::error_code *ec)
+{
+  auto m_ec = handle_error(xerrno);
+  if (!m_ec) return false;
+  ec != nullptr ? *ec = m_ec : throw filesystem_error(msg, p1, p2, m_ec);
+  return true;
+}
+
+inline bool handle_and_throw_errno(const std::string& msg, std::error_code *ec)
+{
+  return handle_and_throw_error(clear_errno(), msg, ec);
+}
+
+inline bool handle_and_throw_errno(const std::string& msg, const path& p1,
+                                   std::error_code *ec)
+{ 
+  return handle_and_throw_error(clear_errno(), msg, p1, ec);
+}
+
+
+inline bool handle_and_throw_errno(const std::string& msg, const path& p1,
+                                   const path& p2, std::error_code *ec)
+{
+  return handle_and_throw_error(clear_errno(), msg, p1, p2, ec);
+}
+
+inline bool handle_and_throw_error(std::errc err_code, 
+                const std::string& msg, std::error_code *ec)
+{
+  return handle_and_throw_error(static_cast<int>(err_code), msg, ec);
+}
+
+inline bool handle_and_throw_error(std::errc err_code, 
+                const std::string& msg, const path& p1, std::error_code *ec)
+{
+  return handle_and_throw_error(static_cast<int>(err_code), msg, p1, ec);
+}
+
+
+inline bool handle_and_throw_error(std::errc err_code, 
+                                   const std::string& msg, const path& p1,
+                                   const path& p2, std::error_code *ec)
+{
+  return handle_and_throw_error(static_cast<int>(err_code), msg, p1, p2, ec);
+}
     
 } /* namespace detail */
 } /* namespace fs */

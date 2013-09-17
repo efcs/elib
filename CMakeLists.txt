@@ -5,7 +5,9 @@ option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 ################################################################################
 #                     Personal build enviroment configurations                           
 ################################################################################
-set(CONFIG_OPT_GCC 4.9.0)
+
+set(CONFIG_OPT_GCC 4.8.1)
+
 if (CONFIG_OPT_GCC MATCHES 4.8.1)
     set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)
     set(CMAKE_CXX_COMPILER /opt/gnu/bin/g++)

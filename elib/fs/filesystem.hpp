@@ -195,8 +195,8 @@ namespace elib
     bool remove(const path& p);
     bool remove(const path& p, std::error_code& ec) noexcept;
 
-    std::uintmax_t    remove_all(const path& p);
-    std::uintmax_t    remove_all(const path& p, std::error_code& ec) noexcept;
+    std::uintmax_t remove_all(const path& p);
+    std::uintmax_t remove_all(const path& p, std::error_code& ec) noexcept;
 
     void rename(const path& from, const path& to);
     void rename(const path& from, const path& to, std::error_code& ec) noexcept;

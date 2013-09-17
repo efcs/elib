@@ -319,6 +319,48 @@ namespace elib
         return false;
       }
       
+      DIR *posix_opendir(const string_type& p, std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        
+        DIR *ret;
+        
+        if ((ret = ::opendir(p.c_str())) == nullptr)
+          detail::handle_and_throw_errno("elib::fs::posix_opendir", 
+            path{p}, ec);
+            
+        return ret;
+      }
+      
+      string_type posix_readdir_r(DIR *dir_stream, std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        
+        struct dirent dir_entry;
+        struct dirent *dir_entry_ptr{nullptr};
+        
+        int ret;
+        if ((ret = ::readdir_r(dir_stream,  &dir_entry,  &dir_entry_ptr)) != 0)
+        {
+            detail::handle_and_throw_error(ret,  "elib::fs::posix_readdir_r", 
+              ec);
+            return string_type{};
+        }
+        if (dir_entry_ptr == nullptr) return string_type{};
+        return string_type{dir_entry.d_name};
+      }
+      
+      void posix_closedir(DIR *dir_stream,  std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        
+        if (::closedir(dir_stream) == -1)
+          detail::handle_and_throw_errno("elib::fs::posix_closedir", ec);
+      }
+      
     ////////////////////////////////////////////////////////////////////////////////
     //                           DETAIL::MISC                                           
     ////////////////////////////////////////////////////////////////////////////////
@@ -423,19 +465,170 @@ namespace elib
         return std::chrono::time_point_cast<duration>(tp);
       }
       
+      
     } // namespace detail 
   
-  
-    ////////////////////////////////////////////////////////////////////////////////
-    //                        CLASS DIRECTORY ENTRY                                     
-    ////////////////////////////////////////////////////////////////////////////////
     
     
     namespace detail
     {
+      
       ////////////////////////////////////////////////////////////////////////////////
-      //                        DETAIL::OPERATORS DEFINITIONS                                                        
+      //                          CLASS DIR_STREAM                                              
       ////////////////////////////////////////////////////////////////////////////////
+    
+      dir_stream::dir_stream(const path& p, std::error_code *ec)
+      {
+        m_dir_stream = detail::posix_opendir(p.native(),  ec);
+      }
+      
+      dir_stream::~dir_stream() noexcept
+      { 
+        if (m_dir_stream)
+        {
+          // we don't want to throw,  so eat the error
+          // if one exists
+          std::error_code ec;
+          this->close(&ec); 
+        }
+      }
+      
+      path dir_stream::advance(std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        path p{};
+        if (m_dir_stream == nullptr) return path{};
+        std::error_code m_ec;
+        auto str = detail::posix_readdir_r(m_dir_stream,  &m_ec);
+        if (m_ec || str.empty()) close();
+        if (ec && m_ec) *ec = m_ec;
+        return path{str};
+      }
+      
+      void dir_stream::close(std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        if (m_dir_stream == nullptr) return;
+        // incase posix_closedir throws, set m_dir_stream
+        // to nullptr before the call
+        DIR *tmp = m_dir_stream;
+        m_dir_stream = nullptr;
+        detail::posix_closedir(tmp, ec);
+      }
+      
+    }                                                       // namespace detail    
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //                        CLASS DIRECTORY_ITERATOR                                  
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    void directory_iterator::m_construct(const path& p, std::error_code *ec)
+    {
+      m_stream = ec ? std::make_shared<detail::dir_stream>(p, ec)
+                    : std::make_shared<detail::dir_stream>(p);
+      if (ec && *ec)
+      {
+        m_make_end();
+        return;
+      }
+      m_root_path = p;
+      // we "increment" the iterator to set it to the first value
+      m_increment(ec);
+    }
+    
+    directory_iterator& directory_iterator::m_increment(std::error_code *ec)
+    {
+      detail::clear_error(ec);
+      if (!m_stream) return *this;
+      
+      path part;
+      while (m_stream->good())
+      {
+        part = m_stream->advance(ec);
+        if (part != "." && part != "..")
+          break;
+      }
+      
+      if (!m_stream->good())
+        m_make_end();
+      else
+        m_element.assign(m_root_path / part);
+      return *this;
+    }
+    
+    void directory_iterator::m_make_end()
+    {
+      m_stream.reset();
+      m_root_path.clear();
+      m_element.assign(path{""});
+    }
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //                 CLASS RECURSIVE_DIRECTORY_ITERATOR                                                         
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    
+    void recursive_directory_iterator::m_construct(const path& p, 
+      directory_options opt, std::error_code *ec)
+    {
+      auto curr_iter = ec ? directory_iterator(p, *ec) : directory_iterator(p);
+      directory_iterator end_iter;
+      if ((ec && *ec) || curr_iter == end_iter) return;
+        
+      m_stack_ptr = std::make_shared<stack_type>();
+      m_stack_ptr->push(curr_iter);
+      m_element = *curr_iter;
+      m_options = opt;
+    }
+    
+    recursive_directory_iterator& 
+      recursive_directory_iterator::m_increment(std::error_code *ec)
+    {
+      detail::clear_error(ec);
+      if (!m_stack_ptr) return *this;
+        
+      while (!m_increment_depth(ec))
+      {
+        m_stack_ptr->pop();
+        if (m_stack_ptr->size() == 0)
+        {
+          m_make_end();
+          return *this;
+        }
+      }
+      
+      return *this;
+    }
+    
+    bool recursive_directory_iterator::m_increment_depth(std::error_code *ec)
+    {
+      detail::clear_error(ec);
+      if (! m_stack_ptr) return true; 
+      
+      auto& depth_iter = m_stack_ptr->top();
+      ++depth_iter;
+      if (depth_iter == directory_iterator())
+        return false;
+        
+      m_element = *depth_iter;
+      return true;
+    }
+    
+    void recursive_directory_iterator::m_make_end()
+    {
+      m_stack_ptr.reset();
+      m_element.assign("");
+    }
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //                        DETAIL::OPERATORS DEFINITIONS                                                        
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    namespace detail
+    {
       
       path canonical(const path& p, const path& base, 
                      std::error_code *ec)
@@ -487,8 +680,8 @@ namespace elib
                         copy_options::overwrite_existing |
                         copy_options::update_existing));
             
-        // if we are not already going to copy
-        // and a update has been requested then
+        // if ! should_copy 
+        // and if a update has been requested then
         // set should_copy to true iff from is newer than to
         if (exists(to_st) && !should_copy && 
           (option & copy_options::update_existing))

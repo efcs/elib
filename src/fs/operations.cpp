@@ -77,7 +77,7 @@ namespace elib
           
           if (ec) *ec = m_ec;
           if (!ec && fs_tmp.type() == file_type::none)
-            throw filesystem_error("elib::fs::status", p, m_ec);
+            throw filesystem_error("elib::fs::posix_stat", p, m_ec);
           return fs_tmp;
         }
         
@@ -839,6 +839,10 @@ namespace elib
                       p, ec);
           return static_cast<std::uintmax_t>(-1);
         }
+        else if (!exists(fst))
+		{
+		  return static_cast<std::uintmax_t>(0);
+		}
         return static_cast<std::uintmax_t>(st.st_nlink);
       }
       

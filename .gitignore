@@ -6,3 +6,5 @@ bin/
 #all kate & gedit temp files
 *.kate-swp
 *~
+
+/test_files

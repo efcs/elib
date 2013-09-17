@@ -30,8 +30,8 @@
     
     
 /* allow for macro overloading by counting # args */
-#define _ELIB_NARGS_COUNT(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
-#define ELIB_NARGS(NAME, ...) _ELIB_NARGS_COUNT(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
+#define _ELIB_GET_MACRO(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
+#define ELIB_GET_MACRO(NAME, ...) _ELIB_GET_MACRO(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
 
 
 

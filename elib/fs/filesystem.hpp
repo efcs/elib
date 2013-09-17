@@ -53,6 +53,8 @@ namespace elib
     enum class file_type;  // [enum.file_type]
 
     enum class perms;  // [enum.perms]
+    
+    enum class permission_options;
 
     class file_status;
 
@@ -183,12 +185,17 @@ namespace elib
     bool is_symlink(const path& p);
     bool is_symlink(const path& p, std::error_code& ec) noexcept;
 
-    file_time_type  last_write_time(const path& p);
-    file_time_type  last_write_time(const path& p, std::error_code& ec) noexcept;
+    file_time_type last_write_time(const path& p);
+    file_time_type last_write_time(const path& p, std::error_code& ec) noexcept;
+    
     void last_write_time(const path& p, file_time_type new_time);
     void last_write_time(const path& p, file_time_type new_time,
                                  std::error_code& ec) noexcept;
 
+    void permissions(const path& p, perms prms);
+    void permissions(const path& p,  perms prms,  std::error_code& ec) noexcept;
+                                 
+    
     path read_symlink(const path& p);
     path read_symlink(const path& p, std::error_code& ec);
 

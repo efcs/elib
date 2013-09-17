@@ -634,10 +634,10 @@ namespace elib
                      std::error_code *ec)
       {
         detail::clear_error(ec);
-        auto ap = absolute(p, base);
+        //auto ap = absolute(p, base);
         // on failure posix_read_path will throw or
         // return str == "". no need to check further
-        return detail::posix_realpath(ap, ec);
+        return detail::posix_realpath(p, ec);
       }
       
       void copy(const path& from, const path& to, copy_options option,
@@ -840,7 +840,7 @@ namespace elib
         return static_cast<std::uintmax_t>(st.st_nlink);
       }
       
-      
+      //TODO
       bool is_empty(const path& p, std::error_code *ec);
       
       
@@ -891,6 +891,13 @@ namespace elib
         detail::posix_utime(p.native(), tbuff, ec);
       }
       
+      //TODO
+      void permissions(const path& p,  perms prms,  std::error_code *ec)
+      {
+        ((void)p); ((void)prms); ((void)ec);
+        throw "elib::fs::detail::permissions not implemented";
+      }
+      
       
       path read_symlink(const path& p, std::error_code *ec)
       {
@@ -905,7 +912,9 @@ namespace elib
       }
       
       
+      //TODO
       std::intmax_t remove_all(const path& p, std::error_code *ec);
+      
       
       void rename(const path& from, const path& to, std::error_code *ec)
       {
@@ -982,11 +991,11 @@ namespace elib
         return path{};
       }
       
-      
+      //TODO
       path unique_path(const path& model, std::error_code *ec);
       
       
-    } // namespace detail
+    }                                                       // namespace detail
     
     
     ////////////////////////////////////////////////////////////////////////////////

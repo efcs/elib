@@ -36,7 +36,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 
 target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-target_link_libraries(elib_static)
+target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
 
 if(CMAKE_BUILD_TYPE MATCHES RELEASE)

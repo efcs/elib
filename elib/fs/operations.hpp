@@ -574,6 +574,8 @@ namespace elib
       void last_write_time(const path& p, file_time_type new_time,
               std::error_code *ec=nullptr);
       
+      void permissions(const path& p,  perms prms,  std::error_code *ec=nullptr);
+      
       path read_symlink(const path& p, std::error_code *ec=nullptr);
       
       bool remove(const path& p, std::error_code *ec=nullptr);
@@ -603,9 +605,6 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
   //                       OPERATIONS                                              
   ////////////////////////////////////////////////////////////////////////////////
-    
-    //forward
-    path current_path();
     
     
     path absolute(const path& p, const path& base=current_path());
@@ -852,6 +851,11 @@ namespace elib
             std::error_code& ec) noexcept
       { detail::last_write_time(p, new_time, &ec); }
     
+    inline void permissions(const path& p, perms prms)
+      { detail::permissions(p, prms); }
+      
+    inline void permissions(const path& p,  perms prms,  std::error_code& ec) noexcept
+      { detail::permissions(p, prms, &ec); }
     
     inline path read_symlink(const path& p)
       { return detail::read_symlink(p); }

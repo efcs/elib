@@ -181,8 +181,9 @@ namespace elib
     // misc
       string_pair separate_filename(const std::string& s)
       {
-        auto pos = s.find_last_of(preferred_separator);
-        if (pos == string_type::npos) return string_pair{};
+        if (s == "." || s == ".." || s.empty()) return string_pair{s, ""};
+        auto pos = s.find_last_of('.');
+        if (pos == string_type::npos) return string_pair{s, string_type{}};
         return string_pair{s.substr(0, pos), s.substr(pos)};
       }
       
@@ -269,12 +270,12 @@ namespace elib
     
     path path::stem() const
     {
-      return parser::separate_filename(filename()).first;
+      return path{parser::separate_filename(filename().native()).first};
     }
     
     path path::extension() const
     {
-      return parser::separate_filename(filename()).second;
+      return path{parser::separate_filename(filename().native()).second};
     }
     
     typename path::iterator path::begin() const

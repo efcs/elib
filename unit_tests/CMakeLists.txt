@@ -24,12 +24,14 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED OFF)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
+# boost filesystem (and system) is used to test
+# elib::fs
 find_package(Boost 1.49.0 COMPONENTS unit_test_framework
                                      system
                                      filesystem
                                     REQUIRED)
 
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS} ${dotDir}/../ )
 
 add_library(TestObjLib OBJECT ${testSources})
 

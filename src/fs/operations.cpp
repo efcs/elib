@@ -814,7 +814,9 @@ namespace elib
         }
         if (!exists(fst) || !is_regular_file(fst))
         {
-          detail::handle_and_throw_error(std::errc::bad_file_descriptor,
+          detail::handle_and_throw_error(exists(fst) 
+                  ? std::errc::operation_not_permitted 
+                  : std::errc::no_such_file_or_directory, 
                   "elib::fs::file_size", p, ec);
           return static_cast<std::uintmax_t>(-1);
         }
@@ -830,8 +832,8 @@ namespace elib
         if (!status_known(fst))
         {
           int xerrno;
-          ec ? xerrno = ec->value() 
-             : xerrno = detail::errc_cast(std::errc::no_such_file_or_directory);
+         xerrno = ec ? ec->value() 
+             : detail::errc_cast(std::errc::no_such_file_or_directory);
           ELIB_ASSERT(xerrno != 0);
           detail::handle_and_throw_error(xerrno, "elib::fs::hard_link_count",
                       p, ec);

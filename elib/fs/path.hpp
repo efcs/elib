@@ -233,18 +233,14 @@ namespace elib
         
         path& remove_filename()
         {
-          path p = filename();
-          if (p.empty())
-            return *this;
-          m_pathname.erase(m_pathname.size() - p.native().size());
-          return *this;
+          return *this = parent_path();
         }
+        
         
         path& replace_filename(const path& replacement)
         {
           remove_filename();
-          *this /= replacement;
-          return *this;
+          return *this /= replacement;
         }
         
         path& replace_extension(const path& replacement = path())
@@ -252,7 +248,13 @@ namespace elib
           path p = extension();
           if (!p.empty())
             m_pathname.erase(m_pathname.size() - p.native().size());
-          return (*this += replacement);
+          if (!replacement.empty())
+          {
+            if (replacement.native()[0] != '.')
+              m_pathname += ".";
+            m_pathname.append(replacement.m_pathname);
+          }
+          return *this;
         }
         
         void swap(path& rhs) noexcept

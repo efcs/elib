@@ -28,14 +28,14 @@ namespace efs {
   using std::error_code;
 }
 
-bool operator==(const efs::path& epath,  const bfs::path& bpath)
+inline bool operator==(const efs::path& epath,  const bfs::path& bpath)
 { 
   ELIB_EVAL_BEGIN()
   ELIB_EVAL(==, epath.native(), bpath.native());
   ELIB_EVAL_END()
 }
 
-bool operator==(const bfs::path& bpath,  const efs::path& epath)
+inline bool operator==(const bfs::path& bpath,  const efs::path& epath)
 { 
   ELIB_EVAL_BEGIN()
   ELIB_EVAL(==, bpath.native(), epath.native());
@@ -43,14 +43,14 @@ bool operator==(const bfs::path& bpath,  const efs::path& epath)
 }
 
 
-bool operator==(const efs::error_code& e_ec, const bfs::error_code& b_ec)
+inline bool operator==(const efs::error_code& e_ec, const bfs::error_code& b_ec)
 { 
   ELIB_EVAL_BEGIN()
   ELIB_EVAL(==, e_ec.value(), b_ec.value());
   ELIB_EVAL_END()
 }
 
-bool operator==(const bfs::error_code& b_ec, const efs::error_code& e_ec)
+inline bool operator==(const bfs::error_code& b_ec, const efs::error_code& e_ec)
 { 
   ELIB_EVAL_BEGIN()
   ELIB_EVAL(==, b_ec.value(), e_ec.value());
@@ -201,6 +201,7 @@ void modifier_test(const std::string& s)
   BOOST_CHECK(e.remove_filename() == b.remove_filename());
   e = efs::path{s};
   b = bfs::path{s};
+  
   BOOST_CHECK(e.replace_extension() == b.replace_extension());
   e = efs::path{s};
   b = bfs::path{s};
@@ -213,7 +214,7 @@ BOOST_AUTO_TEST_CASE(fs_path_iter_test)
     iter_test(s);
     decomp_test(s);
     query_test(s);
-    //modifier_test("/foo/bar/.");
+    modifier_test(s);
   }
 }
 

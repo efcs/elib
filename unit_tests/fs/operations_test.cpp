@@ -54,6 +54,22 @@ inline bool operator==(const bfs::error_code& b_ec, const efs::error_code& e_ec)
   ELIB_EVAL_END()
 }
 
+inline bool operator==(const efs::directory_entry& e_de, 
+                        const bfs::directory_entry& b_de)
+{
+  ELIB_EVAL_BEGIN()
+  ELIB_EVAL(==, e_de.path(), b_de.path());
+  ELIB_EVAL_END()
+}
+
+inline bool operator==(const bfs::directory_entry& b_de, 
+                      const efs::directory_entry& e_de)
+{
+  ELIB_EVAL_BEGIN()
+  ELIB_EVAL(==, b_de.path(), e_de.path());
+  ELIB_EVAL_END()
+}
+
 
 
 const std::vector<std::string> example_path_list = 
@@ -78,10 +94,25 @@ BOOST_AUTO_TEST_CASE(fs_current_path_test)
   BOOST_CHECK(bec.value() == eec.value());
 }
 
+BOOST_AUTO_TEST_CASE(fs_dir_iter_test)
+{
+  std::string s{"/home/eric/workspace/elib"};
+  efs::path e{s};
+  bfs::path b{s};
+  
+  
+}
+
 BOOST_AUTO_TEST_CASE(fs_test_main)
 {
     efs::path e, e1, e2;
     bfs::path b, b1, b2;
+    
+    efs::directory_entry e_de;
+    bfs::directory_entry b_de;
+    
+    efs::directory_iterator e_dit, e_end;
+    bfs::directory_iterator b_dit, b_end;
     
     efs::error_code e_ec;
     bfs::error_code b_ec;
@@ -97,13 +128,49 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
           b1  = bfs::path{s1};
           e2  = efs::path{s2};
           b2  = bfs::path{s2};
+          e_de.assign(efs::path{});
+          b_de.assign(bfs::path{});
+          e_dit = efs::directory_iterator();
+          e_end = efs::directory_iterator();
+          b_dit = bfs::directory_iterator();
+          b_end = bfs::directory_iterator();
           clear_ec();
         };
-    
-    auto read_only_ops = [&](const std::string& s,  
-          const std::string& s1,  const std::string& s2)
+     
+  auto set_iters = [&]()
         {
-          //BOOST_CHECK(efs::absolute(e) == bfs::absolute(b));
+          clear_ec();
+          e_dit = efs::directory_iterator(e, e_ec);
+          b_dit = bfs::directory_iterator(b, b_ec);
+          if (e_dit != e_end && b_dit != b_end)
+            BOOST_CHECK(*e_dit == *b_dit);
+          BOOST_CHECK(e_ec == b_ec);
+        };
+        
+  auto dir_iter_test = [&](const std::string& s,  
+                          const std::string& s1,  const std::string& s2)
+        {
+          reset_state(s, s1, s2);
+          set_iters();
+          while (e_dit != e_end && b_dit != b_end)
+          {
+            clear_ec();
+            BOOST_CHECK(e_dit->path() == b_dit->path());
+            BOOST_CHECK(e_ec == b_ec);
+            ++e_dit;
+            ++b_dit;
+          }
+          
+          BOOST_CHECK(e_dit == e_end);
+          BOOST_CHECK(b_dit == b_end);
+        };
+          
+          
+    
+  auto read_only_ops = [&](const std::string& s,  
+    const std::string& s1,  const std::string& s2)
+        {
+          BOOST_CHECK(efs::absolute(e) == bfs::absolute(b));
           reset_state(s, s1, s2);
           BOOST_CHECK(efs::exists(e, e_ec) == bfs::exists(b, b_ec));
           BOOST_CHECK(e_ec == b_ec);
@@ -114,10 +181,6 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
           
           reset_state(s, s1, s2);
           BOOST_CHECK(efs::hard_link_count(e, e_ec) == bfs::hard_link_count(b, b_ec));
-          if (! efs::hard_link_count(e, e_ec) == bfs::hard_link_count(b, b_ec))
-          std::cout <<  efs::hard_link_count(e, e_ec) << " " 
-                    <<  bfs::hard_link_count(b, b_ec)
-                    << " " <<  e <<  std::endl;
           BOOST_CHECK(e_ec == b_ec);
           
           //reset_state(s, s1, s2);
@@ -128,42 +191,44 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
           //BOOST_CHECK(efs::is_character_file(e, e_ec) == bfs::is_character_file(b, b_ec));
           //BOOST_CHECK(e_ec == b_ec);
           
+          reset_state(s, s1, s2);
+          BOOST_CHECK(efs::is_directory(e, e_ec) == bfs::is_directory(b, b_ec));
+          BOOST_CHECK(e_ec == b_ec);
+          
 //           reset_state(s, s1, s2);
-//           BOOST_CHECK(efs::is_directory(e, e_ec) == bfs::is_directory(b, b_ec));
+//           BOOST_CHECK(efs::is_empty(e, e_ec) == bfs::is_empty(b, b_ec));
+//           std::cout << efs::is_directory(e,e_ec) <<  "  " <<  e << std::endl;
 //           BOOST_CHECK(e_ec == b_ec);
-//           
-          //reset_state(s, s1, s2);
-          //BOOST_CHECK(efs::is_empty(e, e_ec) == bfs::is_empty(b, b_ec));
-          //BOOST_CHECK(e_ec == b_ec);
           
           //reset_state(s, s1, s2);
           //BOOST_CHECK(efs::is_fifo(e, e_ec) == bfs::is_fifo(b, b_ec));
           //BOOST_CHECK(e_ec == b_ec);
           
-//           reset_state(s, s1, s2);
-//           BOOST_CHECK(efs::is_other(e, e_ec) == bfs::is_other(b, b_ec));
-//           BOOST_CHECK(e_ec == b_ec);
-//           
-//           reset_state(s, s1, s2);
-//           BOOST_CHECK(efs::is_regular_file(e, e_ec) == bfs::is_regular_file(b, b_ec));
-//           BOOST_CHECK(e_ec == b_ec);
-//           
+          reset_state(s, s1, s2);
+          BOOST_CHECK(efs::is_other(e, e_ec) == bfs::is_other(b, b_ec));
+          BOOST_CHECK(e_ec == b_ec);
+          
+          reset_state(s, s1, s2);
+          BOOST_CHECK(efs::is_regular_file(e, e_ec) == bfs::is_regular_file(b, b_ec));
+          BOOST_CHECK(e_ec == b_ec);
+          
           //reset_state(s, s1, s2);
           //BOOST_CHECK(efs::is_socket(e, e_ec) == bfs::is_socket(b, b_ec));
           //BOOST_CHECK(e_ec == b_ec);
           
-//           reset_state(s, s1, s2);
-//           BOOST_CHECK(efs::is_symlink(e, e_ec) == bfs::is_symlink(b, b_ec));
-//           BOOST_CHECK(e_ec == b_ec);
-//           
-//           reset_state(s, s1, s2);
-//           BOOST_CHECK(efs::read_symlink(e, e_ec) == bfs::read_symlink(b, b_ec));
-//           BOOST_CHECK(e_ec == b_ec);
+          reset_state(s, s1, s2);
+          BOOST_CHECK(efs::is_symlink(e, e_ec) == bfs::is_symlink(b, b_ec));
+          BOOST_CHECK(e_ec == b_ec);
+          
+          reset_state(s, s1, s2);
+          BOOST_CHECK(efs::read_symlink(e, e_ec) == bfs::read_symlink(b, b_ec));
+          BOOST_CHECK(e_ec == b_ec);
           
         } ;
         
     for (auto& s : example_path_list)
     {
+      dir_iter_test(s, "", "");
       read_only_ops(s, "", "");
     }
     

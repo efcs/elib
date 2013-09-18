@@ -1,15 +1,19 @@
 #include <elib/fs/operations.hpp>
 #include <elib/fs/filesystem_error.hpp>
+
+#define ELIB_DEBUG_WARN 1
 #include <elib/debug/assert.hpp>
 
 #include <memory>
 #include <cstdlib>
 #include <climits>
+#include <fstream>
 
 #include <unistd.h>
 #include <utime.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
+#include <fcntl.h>  /* values for fchmodat */
 
 namespace elib
 {
@@ -58,6 +62,37 @@ namespace elib
           pmask |= perms::sticky_bit;
         
         return pmask;
+      }
+      
+      mode_t posix_convert_perms(perms prms)
+      {
+        mode_t p = 0;
+        if ((bool)(prms & perms::owner_read))
+          p |= S_IRUSR;
+        if ((bool)(prms & perms::owner_write))
+          p |= S_IWUSR;
+        if ((bool)(prms & perms::owner_exec))
+          p |= S_IXUSR;
+        if ((bool)(prms & perms::group_read))
+          p |= S_IRGRP;
+        if ((bool)(prms & perms::group_write))
+          p |= S_IWGRP;
+        if ((bool)(prms & perms::group_exec))
+          p |= S_IXGRP;
+        if ((bool)(prms & perms::others_read))
+          p |= S_IROTH;
+        if ((bool)(prms & perms::others_write))
+          p |= S_IWOTH;
+        if ((bool)(prms & perms::others_exec))
+          p |= S_IXOTH;
+        if ((bool)(prms & perms::set_uid))
+          p |= S_ISUID;
+        if ((bool)(prms & perms::set_gid))
+          p |= S_ISGID;
+        if ((bool)(prms & perms::sticky_bit))
+          p |= S_ISVTX;
+          
+        return p;
       }
       
       file_status posix_stat(const path& p, struct stat& path_stat,
@@ -361,6 +396,19 @@ namespace elib
           detail::handle_and_throw_errno("elib::fs::posix_closedir", ec);
       }
       
+      bool posix_fchmodat(int fd, const string_type& s, mode_t mode,
+              std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        if (::fchmodat(fd, s.c_str(), mode, 0) == -1)
+        {
+          detail::handle_and_throw_errno("elib::fs::posix_fchmodat", path{s}, ec);
+          return false;
+        }
+        return true;
+      }
+      
     ////////////////////////////////////////////////////////////////////////////////
     //                           DETAIL::MISC                                           
     ////////////////////////////////////////////////////////////////////////////////
@@ -444,11 +492,23 @@ namespace elib
         return (status_known(fst) && exists(fst));
       }
       
-      bool copy_file_impl(const path& p1, const path& p2, std::error_code *ec)
+      bool copy_file_impl(const path& from, const path& to, std::error_code *ec)
       {
-        //TODO
-        ((void)p1); ((void)p2); ((void)ec);
-        throw;
+        detail::clear_error(ec);
+        std::ifstream in(from.c_str(), std::ios::binary);
+        std::ofstream out(to.c_str(),  std::ios::binary);
+        
+        if (in.good() && out.good())
+          out <<  in.rdbuf();
+          
+        if (!out.good() || !in.good())
+        {
+          detail::handle_and_throw_error(std::errc::operation_not_permitted,
+                    "elib::fs::copy_file_impl", from, to, ec);
+          return false;
+        }
+        
+        return true;
       }
       
       // chrono function helpers
@@ -546,10 +606,11 @@ namespace elib
       while (m_stream->good())
       {
         part = m_stream->advance(ec);
+        
         if (part != "." && part != "..")
           break;
       }
-      
+
       if (!m_stream->good())
         m_make_end();
       else
@@ -634,14 +695,97 @@ namespace elib
                      std::error_code *ec)
       {
         detail::clear_error(ec);
-        //auto ap = absolute(p, base);
+        auto ap = absolute(p, base);
         // on failure posix_read_path will throw or
         // return str == "". no need to check further
-        return detail::posix_realpath(p, ec);
+        return detail::posix_realpath(ap, ec);
       }
       
-      void copy(const path& from, const path& to, copy_options option,
-                std::error_code *ec); //TODO
+      void copy(const path& from, const path& to, copy_options options,
+                std::error_code *ec)
+      {
+        file_status fst, tst;
+        bool sym_options = (options & copy_options::create_symlinks) ||
+                           (options & copy_options::skip_symlinks);
+                    
+        fst = sym_options ? detail::symlink_status(from,  ec)
+                          : detail::status(from,  ec);
+        //TODO check fst validity
+        std::error_code m_ec;
+        
+        if (!exists(fst))
+          m_ec = std::make_error_code(std::errc::no_such_file_or_directory);
+        else if (is_other(fst))
+          m_ec = std::make_error_code(std::errc::operation_not_permitted);
+        else
+        {
+          tst = sym_options ? detail::symlink_status(to, ec)
+                            : detail::status(to, ec);
+           
+           //TODO check tst validity
+          if (is_other(tst) || (is_directory(fst) && is_regular_file(tst)) ||
+                detail::equivalent(from, to, ec))
+            m_ec = std::make_error_code(std::errc::operation_not_permitted);
+        }
+        
+        // report error
+        if (m_ec)
+        {
+          detail::handle_and_throw_error(m_ec.value(), "elib::fs::copy", 
+                    from, to, ec);
+          return;
+        }
+        
+        // the remainder is split into three cases
+        // -- is_symlink(f)
+        // -- is_regular_file(f)
+        // -- is_directory(f)
+        
+        if (is_symlink(fst))
+        {
+          if ((bool)(options & copy_options::skip_symlinks))
+            return;
+          if (!exists(tst))
+          {
+            detail::copy_symlink(from, to, ec);
+            return;
+          }
+          //report error
+          detail::handle_and_throw_error(std::errc::operation_not_permitted, 
+                    "elib::fs::copy", from, to, ec);
+          return;
+        }
+        else if (is_regular_file(fst))
+        {
+          if ((bool)(options & copy_options::directories_only))
+            return;
+          else if ((bool)(options & copy_options::create_symlinks))
+          {
+            detail::create_symlink(from, to, ec);
+          }
+          else if ((bool)(options & copy_options::create_hard_links))
+          {
+            detail::create_hard_link(from, to, ec);
+          }
+          else if (is_directory(tst))
+          {
+            detail::copy_file(from, to / from.filename(), options, ec);
+          }
+          else
+          {
+            detail::copy_file(from, to, options,  ec);
+          }
+          
+          return;
+        }
+        else if (is_directory(tst))
+        {
+            throw "recursive copy not implemented";
+        }
+        
+        ELIB_WARN_MSG(false, "Exiting copy without taking action");
+        
+      }
       
       
       bool copy_file(const path& from, const path& to, copy_options option,
@@ -840,14 +984,20 @@ namespace elib
           return static_cast<std::uintmax_t>(-1);
         }
         else if (!exists(fst))
-		{
-		  return static_cast<std::uintmax_t>(0);
-		}
+        {
+          return 0;
+        }
         return static_cast<std::uintmax_t>(st.st_nlink);
       }
       
       //TODO
-      bool is_empty(const path& p, std::error_code *ec);
+      bool is_empty(const path& p, std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        auto is_dir = is_directory(detail::status(p, ec));
+        return (is_dir ? directory_iterator(p) == directory_iterator()
+                       : detail::file_size(p, ec) == 0); 
+      }
       
       
       file_time_type last_write_time(const path& p, std::error_code *ec)
@@ -897,11 +1047,11 @@ namespace elib
         detail::posix_utime(p.native(), tbuff, ec);
       }
       
-      //TODO
+      
       void permissions(const path& p,  perms prms,  std::error_code *ec)
       {
-        ((void)p); ((void)prms); ((void)ec);
-        throw "elib::fs::detail::permissions not implemented";
+        detail::posix_fchmodat(AT_FDCWD, p.string(),
+                detail::posix_convert_perms(prms), ec);
       }
       
       
@@ -1008,20 +1158,40 @@ namespace elib
     //                      OPERATORS DEFINITION                                                    
     ////////////////////////////////////////////////////////////////////////////////
   
-    //currently only absolute is not forwarded through detail
+    //since the specification of absolute in the current specification
+    // this implementation is designed after the sample implementation
+    // using the sample table as a guide
     path absolute(const path& p, const path& base)
     {
-      if (p.has_root_name())
-      {
-        if (p.has_root_directory()) return p;
-        //else
-        return (p.root_name() / absolute(base).root_directory()
-            / absolute(base).relative_path() / p.relative_path());
-      }
-      //else
-      if (p.has_root_directory()) return absolute(base).root_name() / p;
-      else return absolute(base) / p;
-    }
+      auto root_name = p.root_name();
+      auto root_dir = p.root_directory();
     
+      if (!root_name.empty() && !root_dir.empty())
+        return p;
+        
+      auto abs_base = base.is_absolute() ? base : absolute(base);
+      
+      /* !has_root_name && !has_root_dir */
+      if (root_name.empty() && root_dir.empty()) 
+      {
+        return abs_base / p;
+      }
+      else if (!root_name.empty()) /* has_root_name && !has_root_dir */
+      {
+        return  root_name / abs_base.root_directory()
+                /
+                abs_base.relative_path() / p.relative_path();
+      }
+      else /* !has_root_name && has_root_dir */
+      {
+        if (abs_base.has_root_name())
+          return abs_base.root_name() / p;
+        // else p is absolute,  return outside of block
+      }
+      
+      ELIB_ASSERT(p.is_absolute());
+      return p;
+    }
+      
   } // namespace fs
 } // namespace elib 

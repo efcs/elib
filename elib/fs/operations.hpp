@@ -319,7 +319,7 @@ namespace elib
       { 
         directory_iterator it{*this}; 
         m_increment();
-        return *this;
+        return it;
       }
       
       directory_iterator& increment(std::error_code& ec) noexcept
@@ -328,6 +328,9 @@ namespace elib
       
       bool operator==(const directory_iterator& rhs) const noexcept
       { return m_stream.get() == rhs.m_stream.get(); }
+      
+      bool operator!=(const directory_iterator& rhs) const noexcept
+      { return !(*this == rhs); }
       
       //
     private:

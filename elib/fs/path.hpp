@@ -107,10 +107,10 @@ namespace elib
       //appends
         path& operator/=(const path& p)
         {
-            bool append_sep = !( empty() ||
-                                p.empty() ||
-                                *p.native().cbegin() == preferred_separator ||
-                                native().back() == preferred_separator);
+            bool append_sep = ( !empty() &&
+                                !p.empty() &&
+                                p.m_pathname[0] != preferred_separator &&
+                                m_pathname.back() != preferred_separator);
             if (append_sep) 
                 m_pathname += preferred_separator;
             
@@ -413,7 +413,7 @@ namespace elib
       { return (lhs.compare(rhs) == 0); }
       
     inline bool operator!=(const path& lhs, const path& rhs) noexcept
-      { return (lhs.compare(rhs) == 0); }
+      { return (lhs.compare(rhs) != 0); }
 
     
     inline path operator/(const path& lhs, const path& rhs)

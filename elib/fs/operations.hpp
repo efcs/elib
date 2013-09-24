@@ -70,11 +70,11 @@ namespace elib
       unknown = 0xFFFF,
       symlink_perms = 0x4000
       
-    }; // enum class perms
+    };                                                      // enum class perms
     
     
-  } // namespace fs
-} // namespace elib
+  }                                                         // namespace fs
+}                                                           // namespace elib
 
 
 // add bitwise operators inline
@@ -124,7 +124,7 @@ namespace elib
       file_type m_type;
       perms m_perms;
       
-    }; // class file_status
+    };                                                      // class file_status
     
     
   ////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +205,7 @@ namespace elib
     private:
       //
       
-      
+      // These don't need to be inline,  but they are for now.
       file_status m_get_status(std::error_code *ec=nullptr) const
       {
         if (!status_known(m_status))
@@ -228,8 +228,11 @@ namespace elib
       }
       
       
-      
       fs::path m_path;
+      
+      // Although these are not atomic to adjust, mutability allows
+      // for file status caching as suggested in the standard
+      // documentation
       mutable file_status m_status;
       mutable file_status m_symlink_status; 
   
@@ -243,6 +246,7 @@ namespace elib
     namespace detail
     {
       
+      // underlying POSIX implementation for directory_iterator
       class dir_stream
       {
       public:
@@ -252,6 +256,7 @@ namespace elib
         dir_stream(dir_stream&&) noexcept;
         dir_stream& operator=(dir_stream&&) noexcept;
         
+        // NO COPYING
         dir_stream(const dir_stream&) = delete;
         dir_stream& operator=(const dir_stream&) = delete;
         
@@ -277,6 +282,7 @@ namespace elib
     
     
     }                                                       // namespace detail
+    
     
     class directory_iterator
       : public std::iterator<std::input_iterator_tag, directory_entry>
@@ -336,8 +342,10 @@ namespace elib
     private:
       //
       
+      // construct the dir_stream
       void m_construct(const path& p, std::error_code *ec=nullptr);
       directory_iterator& m_increment(std::error_code *ec=nullptr);
+      // convert iterator into end iterator
       void m_make_end();
       
       std::shared_ptr<detail::dir_stream> m_stream{nullptr};

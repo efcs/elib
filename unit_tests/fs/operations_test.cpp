@@ -151,6 +151,7 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
                           const std::string& s1,  const std::string& s2)
         {
           reset_state(s, s1, s2);
+
           set_iters();
           while (e_dit != e_end && b_dit != b_end)
           {
@@ -163,6 +164,10 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
           
           BOOST_CHECK(e_dit == e_end);
           BOOST_CHECK(b_dit == b_end);
+          if (e_dit != e_end) 
+            std::cout <<  "e " <<  s <<  std::endl;
+          if (b_dit != b_end)
+            std::cout <<  "b " <<  s.empty() << std::endl;
         };
           
           
@@ -195,10 +200,9 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
           BOOST_CHECK(efs::is_directory(e, e_ec) == bfs::is_directory(b, b_ec));
           BOOST_CHECK(e_ec == b_ec);
           
-//           reset_state(s, s1, s2);
-//           BOOST_CHECK(efs::is_empty(e, e_ec) == bfs::is_empty(b, b_ec));
-//           std::cout << efs::is_directory(e,e_ec) <<  "  " <<  e << std::endl;
-//           BOOST_CHECK(e_ec == b_ec);
+          reset_state(s, s1, s2);
+          BOOST_CHECK(efs::is_empty(e, e_ec) == bfs::is_empty(b, b_ec));
+          BOOST_CHECK(e_ec == b_ec);
           
           //reset_state(s, s1, s2);
           //BOOST_CHECK(efs::is_fifo(e, e_ec) == bfs::is_fifo(b, b_ec));

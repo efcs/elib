@@ -2,6 +2,7 @@
 # define ELIB_ENUMERATION_ENUM_ITERATOR_HPP
 
 # include <elib/config.hpp>
+# include <elib/enumeration/v2/basic_enum_traits.hpp>
 # include <elib/enumeration/v2/enum_traits.hpp>
 # include <elib/enumeration/v2/enum_fields.hpp>
 
@@ -20,10 +21,14 @@ namespace elib
     { };
     
     
-    
     namespace detail
     {
       
+      enum class iter_pos_e 
+      {
+        begin, 
+        end
+      };
       
       template <typename T, typename=void>
       class iter_impl;
@@ -36,6 +41,15 @@ namespace elib
           : m_end{true}
         { };
 
+        iter_impl(iter_pos_e e)
+          : m_end{false}
+        {
+          if (e == iter_pos_e::end)
+            make_end();
+          else
+            m_val = enum_range<T>::min;
+        }
+        
         iter_impl(T e) noexcept
           : m_end{false}, m_val{e}
         { };
@@ -87,8 +101,8 @@ namespace elib
         //
         
         typedef typename std::underlying_type<T>::type underlying_type;
-        static constexpr T first_value = first_field_value<T>::value;
-        static constexpr T last_value = last_field_value<T>::value;
+        static constexpr T first_value = first_field<T>::value;
+        static constexpr T last_value = last_field<T>::value;
         
         
         bool m_end;
@@ -103,10 +117,18 @@ namespace elib
       public:
         iter_impl() noexcept = default;
         
+        iter_impl(iter_pos_e e)
+        {
+          if (e == iter_pos_e::end)
+            make_end();
+          else
+            *this = iter_impl{enum_range<T>::min};
+        }
+        
         iter_impl(T e)
-          : m_it{basic_enum_traits<T>::name_map.begin()}
+          : m_it{basic_enum_traits<T>::name_map.cbegin()}
         { 
-          auto end_it = basic_enum_traits<T>::name_map.end();
+          auto end_it = basic_enum_traits<T>::name_map.cend();
           while (m_it != end_it && m_it->first != e)
             m_it++;
         }
@@ -124,8 +146,11 @@ namespace elib
         
         void increment()
         {
-          if (*this == iter_impl{}) return;
-          ++m_it;
+          if (m_it == iter_type{}) return;
+          if (m_it->first == enum_range<T>::max)
+            make_end();
+          else
+            ++m_it;
         }
         
         void decrement()
@@ -146,7 +171,8 @@ namespace elib
       private:
       //
       
-        typedef typename basic_enum_traits<T>::name_map::iterator iter_type;
+        typedef typename decltype(basic_enum_traits<T>::name_map)::const_iterator 
+          iter_type;
         iter_type m_it{};
         
       };                                                     // class iter_impl
@@ -163,6 +189,10 @@ namespace elib
       enum_iterator() noexcept = default;
       
       enum_iterator(EnumT e)
+        : m_impl{e}
+      { };
+      
+      enum_iterator(detail::iter_pos_e e)
         : m_impl{e}
       { };
 

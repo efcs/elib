@@ -1,5 +1,5 @@
-#ifndef ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HPP
-#define ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HPP
+#ifndef ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HELPER_HPP
+#define ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HELPER_HPP
 
 # include <elib/config.hpp>
 
@@ -10,16 +10,6 @@ namespace elib
 {
   namespace enumeration
   {    
-    
-    template <typename T, typename Ret=void>
-    struct enable_if_enum 
-    : public std::enable_if<std::is_enum<T>::value, Ret>
-    { };
-
-    template <typename T, typename Ret=void>
-    using enable_if_enum_t = typename enable_if_enum<T, Ret>::type;
-
-    
     namespace detail
     {
       
@@ -95,4 +85,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                    // namespace enumeration
 }                                                           // namespace elib
-#endif /* ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HPP */
+#endif /* ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HELPER_HPP */

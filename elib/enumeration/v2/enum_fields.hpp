@@ -27,15 +27,13 @@ namespace elib
       ELIB_ENUM_ALLOW_LOGICAL_OPERATORS = false, 
       ELIB_ENUM_ALLOW_MIXED_LOGICAL_OPERATORS = true,
       
-      ELIB_ENUM_ALLOW_ARITHMETIC_OPERATORS =false, 
-      ELIB_ENUM_ALLOW_MIXED_ARITHMETIC_OPERATORS =
-true,
+      ELIB_ENUM_ALLOW_ARITHMETIC_OPERATORS = false, 
+      ELIB_ENUM_ALLOW_MIXED_ARITHMETIC_OPERATORS = true,
       
-      ELIB_ENUM_ALLOW_STREAM_EXTRACTION_OPERATOR =
-false, 
-      ELIB_ENUM_ALLOW_STREAM_INSERTION_OPERATOR =
-true
-    };
+      ELIB_ENUM_ALLOW_STREAM_EXTRACTION_OPERATOR = true, 
+      ELIB_ENUM_ALLOW_STREAM_INSERTION_OPERATOR = true
+      
+    };                                         // enum class enumeration_fields
     
     namespace detail
     {
@@ -83,7 +81,7 @@ true
       std::integral_constant<T, T::ELIB_ENUM_FIRST_VALUE>;
 
     template <typename T>
-    struct first_field_value
+    struct first_field
       : public detail::basic_detector<T, first_field_type>::type
     { };
 
@@ -93,7 +91,7 @@ true
       std::integral_constant<T, T::ELIB_ENUM_LAST_VALUE>;
 
     template <typename T>
-    struct last_field_value
+    struct last_field
       : public detail::basic_detector<T, last_field_type>::type
     { };
 
@@ -103,7 +101,7 @@ true
       std::integral_constant<T, T::ELIB_ENUM_DEFAULT_VALUE>;
 
     template <typename T>
-    struct default_field_value
+    struct default_field
       : public detail::basic_detector<T, default_field_type>::type
     { };
 
@@ -113,17 +111,8 @@ true
       std::integral_constant<T, T::ELIB_ENUM_NPOS_VALUE>;
 
     template <typename T>
-    struct npos_field_value
+    struct npos_field
       : public detail::basic_detector<T, npos_field_type>::type
-    { };
-
-    template <typename T> 
-    using size_field_type =
-      std::integral_constant<T, T::ELIB_ENUM_SIZE>;
-
-    template <typename T>
-    struct size_field_value
-      : public detail::basic_detector<T, size_field_type>::type
     { };
 
     template <typename T> 
@@ -131,7 +120,7 @@ true
       std::integral_constant<T, T::ELIB_ENUM_IS_CONTIGUOUS>;
 
     template <typename T>
-    struct is_contiguous_field_value
+    struct is_contiguous_field
       : public detail::basic_detector<T, is_contiguous_field_type>::type
     { };
 

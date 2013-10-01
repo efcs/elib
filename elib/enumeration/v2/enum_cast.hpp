@@ -3,7 +3,7 @@
 
 # include <elib/config.hpp>
 # include <elib/enumeration/v2/enum_traits.hpp>
-# include <elib/enumeration/v2/enum_type_traits.hpp>
+# include <elib/enumeration/v2/detail/enum_type_traits_helper.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 

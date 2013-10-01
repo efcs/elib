@@ -41,7 +41,7 @@ namespace elib
           : m_end{true}
         { };
 
-        iter_impl(iter_pos_e e)
+        explicit iter_impl(iter_pos_e e)
           : m_end{false}
         {
           if (e == iter_pos_e::end)
@@ -50,7 +50,7 @@ namespace elib
             m_val = enum_range<T>::min;
         }
         
-        iter_impl(T e) noexcept
+        explicit iter_impl(T e) noexcept
           : m_end{false}, m_val{e}
         { };
         
@@ -115,9 +115,9 @@ namespace elib
                               !has_constexpr_range<T>::value>>
       {
       public:
-        iter_impl() noexcept = default;
+        iter_impl() = default;
         
-        iter_impl(iter_pos_e e)
+        explicit iter_impl(iter_pos_e e)
         {
           if (e == iter_pos_e::end)
             make_end();
@@ -186,7 +186,7 @@ namespace elib
       : public std::iterator<std::bidirectional_iterator_tag, const EnumT>
     {
     public:
-      enum_iterator() noexcept = default;
+      enum_iterator() = default;
       
       enum_iterator(EnumT e)
         : m_impl{e}
@@ -253,14 +253,6 @@ namespace elib
     
     };                                                   // class enum_iterator
     
-    
-    template <typename T>
-    std::enable_if_t<is_enumerable<T>::value, enum_iterator<T>>
-    begin();
-
-    template <typename T>
-    std::enable_if_t<is_enumerable<T>::value, enum_iterator<T>>
-    end();
     
   }                                                    // namespace enumeration
 }                                                           // namespace elib

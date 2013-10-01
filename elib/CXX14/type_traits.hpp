@@ -8,9 +8,6 @@
 namespace std
 {
   
-  template <bool Pred, typename Ret=void>
-  using enable_if_t = typename enable_if<Pred, Ret>::type;
-  
   template <typename T>
   using remove_const_t = typename remove_const<T>::type; 
   

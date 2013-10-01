@@ -124,6 +124,12 @@ namespace elib
     };                                                        // class timer
 
 
+    template <typename Clock>
+    constexpr typename Clock::time_point timer<Clock>::npos_time_point;
+    
+    template <typename Clock>
+    constexpr typename Clock::duration timer<Clock>::npos_duration;
+    
   }                                                         // namespace chrono
 }                                                           // namespace elib
 

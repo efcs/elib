@@ -6,7 +6,7 @@ option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 #                     Personal build enviroment configurations                           
 ################################################################################
 
-set(CONFIG_OPT_GCC 4.8.1)
+set(CONFIG_OPT_GCC 4.9.0)
 
 if (CONFIG_OPT_GCC MATCHES 4.8.1)
   
@@ -55,13 +55,40 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
+	
+set(CONFIG_BOOST_VERSION 1.54.0)
+set(BOOST_DEFAULT_VERSION 1.52.0)
+
+set(CONFIG_BOOST_VERSION_LIST ${BOOST_DEFAULT_VERSION} 
+  1.46.1 1.48.0 1.54.0 1.52.0 CACHE
+  STRING "available boost versions" FORCE)
+
+if (NOT CONFIG_BOOST_VERSION)
+  set(CONFIG_BOOST_VERSION ${BOOST_DEFAULT_VERSION})
+endif()
+
+list(FIND CONFIG_BOOST_VERSION_LIST ${CONFIG_BOOST_VERSION} boost_ver_good)
+  if (boost_ver_good EQUAL -1)
+  message(STATUS "${CONFIG_BOOST_VERSION_LIST}")
+  message(FATAL_ERROR "bad boost version: ${CONFIG_BOOST_VERSION}")
+endif()
+
+if (NOT CONFIG_BOOST_VERSION MATCHES ${BOOST_DEFAULT_VERSION})
+  set(ENV{BOOST_ROOT} /opt/boost-${CONFIG_BOOST_VERSION})
+  set(Boost_NO_SYSTEM_PATHS OFF)
+endif()
+
+
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED OFF)
+set(Boost_USE_STATIC_RUNTIME OFF)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
 
-set( CMAKE_BUILD_TYPE RELEASE)
+set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -O0 -DELIB_WARN_ON " )

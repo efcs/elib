@@ -9,17 +9,15 @@
 
 # include <elib/CXX14/type_traits.hpp>
 
-# include <string>
-# include <map>
 # include <iterator>
 # include <cstddef>
-# include <functional>
 
 
 namespace elib 
 {
   namespace enumeration
   {
+    
     
     template <typename T>
     struct has_basic_enum_traits
@@ -40,14 +38,15 @@ namespace elib
   
     template <typename T>
     struct has_constexpr_bounds 
-      : public std::integral_constant<bool, first_field<T>::good && 
-          last_field<T>::good>
+      : public std::integral_constant<bool, first_field<T>::good 
+            && last_field<T>::good>
     { };
 
+    
     template <typename T>
     struct has_bounds 
-      : public std::integral_constant<bool, has_constexpr_bounds<T>::value ||
-          has_basic_enum_traits<T>::value>
+      : public std::integral_constant<bool, has_constexpr_bounds<T>::value 
+            || has_basic_enum_traits<T>::value>
     { };
 
     
@@ -57,6 +56,7 @@ namespace elib
           && is_contiguous_field<T>::bool_value>
     { };
 
+    
     template <typename T>
     struct has_range
       : public std::integral_constant<bool, has_constexpr_range<T>::value ||
@@ -97,19 +97,22 @@ namespace elib
           !has_constexpr_bounds<EnumT>::value>>::min = 
             basic_enum_traits<EnumT>::name_map.cbegin()->first;
             
+            
       template <typename EnumT>
       const EnumT 
       enum_bounds<EnumT, std::enable_if_t<has_bounds<EnumT>::value && 
         !has_constexpr_bounds<EnumT>::value>>::max = 
           basic_enum_traits<EnumT>::name_map.crbegin()->first;
-        
 
+        
     }                                                       // namespace detail 
+    
     
     template <typename EnumT>
     struct enum_bounds : public detail::enum_bounds<EnumT>
     { };
 
+    
     template <typename EnumT>
     constexpr std::size_t size_of_bounds(EnumT min, EnumT max) noexcept
     {
@@ -118,6 +121,7 @@ namespace elib
         static_cast<utype>(min) + 1);
     }
 
+    
     template <typename EnumT>
     constexpr std::enable_if_t<has_constexpr_bounds<EnumT>::value, std::size_t>
     size_of_bounds() noexcept
@@ -125,6 +129,7 @@ namespace elib
       using bounds = enum_bounds<EnumT>;
       return size_of_bounds(bounds::min, bounds::max);
     }
+    
     
     template <typename EnumT>
     std::enable_if_t<has_bounds<EnumT>::value 
@@ -140,8 +145,10 @@ namespace elib
     namespace detail
     {
       
+      
       template <typename EnumT, typename=void>
       struct enum_range;
+      
       
       template <typename EnumT>
       struct enum_range<EnumT, 
@@ -153,6 +160,7 @@ namespace elib
                          enum_bounds<EnumT>::max);
       };
       
+      
       template <typename EnumT>
       struct enum_range<EnumT, std::enable_if_t<has_range<EnumT>::value && 
             !has_constexpr_range<EnumT>::value>>
@@ -161,10 +169,12 @@ namespace elib
         static const std::size_t size;
       };
       
+      
       template <typename EnumT>
       const std::size_t 
       enum_range<EnumT, std::enable_if_t<has_range<EnumT>::value && 
         !has_constexpr_range<EnumT>::value>>::size = size_of_bounds<EnumT>();
+      
       
     }                                                       // namespace detail
     
@@ -174,7 +184,38 @@ namespace elib
     { };
     
     
+    template <typename T>
+    constexpr std::enable_if_t<has_constexpr_range<T>::value, bool>
+    valid_enum(T val) noexcept
+    {
+      // ensure constexpr-ness of function
+      static_assert(enum_range<T>::size == enum_range<T>::size, "");
+      
+      return (enum_range<T>::size != 0 
+              && val >= enum_range<T>::min
+              && val <= enum_range<T>::max);
+    }
     
+    template <typename T>
+    std::enable_if_t<has_range<T>::value 
+        && !has_constexpr_range<T>::value
+        && is_contiguous_field<T>::bool_value, bool>
+    valid_enum(T val) noexcept
+    {
+      return (enum_range<T>::size != 0
+              && val >= enum_range<T>::min 
+              && val <= enum_range<T>::value);
+    }
+    
+    /* has_range && !has_constexpr_range -> has_basic_enum_traits */
+    template <typename T>
+    std::enable_if_t<has_range<T>::value 
+        && !has_constexpr_range<T>::value
+        && !is_contiguous_field<T>::bool_value, bool>
+    valid_enum(T val)
+    {
+      return basic_enum_traits<T>::name_map.count(val) != 0;
+    }
 
   }                                                    // namespace enumeration
 }                                                           // namespace elib

@@ -52,14 +52,14 @@ namespace elib { namespace enumeration {
       
   
     template <>
-    struct basic_enum_traits<::B> 
+    struct basic_enum_traits<B> 
     {
-      static const std::map<::B, std::string> name_map;
+      static const std::map<B, std::string> name_map;
     };
       
 #define ENUM_ENTRY(e) {::B::e, "" #e} 
 
-    const std::map<::B,  std::string> basic_enum_traits<::B>::name_map = 
+    const std::map<B, std::string> basic_enum_traits<B>::name_map = 
       {
         ENUM_ENTRY(zero), 
         ENUM_ENTRY(one), 
@@ -79,6 +79,19 @@ dc(T v) noexcept
 {
   return static_cast<typename std::underlying_type<T>::type>(v);
 }
+
+template <typename To, typename From>
+bool enum_cast_check_throws(const From& val)
+{
+  try
+  {
+    en::enum_cast<To>(val);
+    return false;
+  } catch (...) {
+    return true;
+  }
+}
+
 
 BOOST_AUTO_TEST_SUITE(enumeration_v2_test_suite)
 
@@ -230,6 +243,23 @@ BOOST_AUTO_TEST_CASE(test_range)
   static_assert(en::enum_range<A>::size == 3, "");
 }
 
+BOOST_AUTO_TEST_CASE(test_is_valid_enum)
+{
+  BOOST_CHECK(en::valid_enum(static_cast<A>(0)));
+  BOOST_CHECK(en::valid_enum(static_cast<B>(1)));
+  
+  
+  BOOST_CHECK(!en::valid_enum(static_cast<A>(-1)));
+  BOOST_CHECK(!en::valid_enum(static_cast<A>(10)));
+  BOOST_CHECK(!en::valid_enum(static_cast<B>(10)));
+  
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                          ENUM_ITERATOR                                                
+////////////////////////////////////////////////////////////////////////////////
+
 BOOST_AUTO_TEST_CASE(test_enum_iterator)
 {
   {
@@ -274,8 +304,69 @@ BOOST_AUTO_TEST_CASE(test_enum_iterator)
     ++it;
     BOOST_CHECK(it == end_it);  
   }
-  
-  
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                           ENUM CAST                                             
+////////////////////////////////////////////////////////////////////////////////
+
+
+#define CHECK_THROWS(cast) \
+do {                       \
+  try {                    \
+    (void)(cast);          \
+  } catch (...) {          \
+    ((void)0);             \
+  }                        \
+} while (false)
+
+BOOST_AUTO_TEST_CASE(test_enum_cast)
+{
+  BOOST_CHECK(en::underlying_cast(C::zero) == 0);
+  BOOST_CHECK(en::underlying_cast(C::one) == 1);
+  BOOST_CHECK(en::underlying_cast(C::two) == 2);
+  
+  // check constexpr-ness of underlying_enum_cast
+  static_assert(en::underlying_cast(C::zero) == 0, "");
+  static_assert(en::underlying_cast(C::one) == 1, "");
+  static_assert(en::underlying_cast(C::two) == 2, "");
+  
+  // check unchecked_cast
+  BOOST_CHECK(en::unchecked_enum_cast<int>(A::zero) == 0);
+  BOOST_CHECK(en::unchecked_enum_cast<int>(A::one) == 1);
+  BOOST_CHECK(en::unchecked_enum_cast<int>(A::two) == 2);
+  
+  BOOST_CHECK(en::unchecked_enum_cast<A>(0) == A::zero);
+  BOOST_CHECK(en::unchecked_enum_cast<A>(1) == A::one);
+  BOOST_CHECK(en::unchecked_enum_cast<A>(2) == A::two);
+  
+  static_assert(en::unchecked_enum_cast<int>(A::zero) == 0, "");
+  static_assert(en::unchecked_enum_cast<int>(A::one) == 1, "");
+  static_assert(en::unchecked_enum_cast<int>(A::two) == 2, "");
+
+  static_assert(en::unchecked_enum_cast<A>(0) == A::zero, "");
+  static_assert(en::unchecked_enum_cast<A>(1) == A::one, "");
+  static_assert(en::unchecked_enum_cast<A>(2) == A::two, "");
+  
+  //check Integral enum_cast(Enum)
+  BOOST_CHECK(en::enum_cast<int>(B::zero) == 0);
+  BOOST_CHECK(en::enum_cast<int>(B::one) == 1);
+  BOOST_CHECK(en::enum_cast<int>(B::two) == 2);
+  
+  static_assert(en::enum_cast<int>(B::zero) == 0, "");
+  static_assert(en::enum_cast<int>(B::one) == 1, "");
+  static_assert(en::enum_cast<int>(B::two) == 2, "");
+  
+  // check Enum enum_cast(Integral) 
+  BOOST_CHECK(en::enum_cast<A>(0) == A::zero);
+  BOOST_CHECK(en::enum_cast<B>(1) == B::one);
+  
+  BOOST_CHECK_THROW(en::enum_cast<A>(10), en::bad_enum_cast);
+  
+  //CHECK_THROWS(en::enum_cast<B>(-1));
+}
+
+#undef CHECK_THROWS
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -80,18 +80,6 @@ dc(T v) noexcept
   return static_cast<typename std::underlying_type<T>::type>(v);
 }
 
-template <typename To, typename From>
-bool enum_cast_check_throws(const From& val)
-{
-  try
-  {
-    en::enum_cast<To>(val);
-    return false;
-  } catch (...) {
-    return true;
-  }
-}
-
 
 BOOST_AUTO_TEST_SUITE(enumeration_v2_test_suite)
 
@@ -312,14 +300,6 @@ BOOST_AUTO_TEST_CASE(test_enum_iterator)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#define CHECK_THROWS(cast) \
-do {                       \
-  try {                    \
-    (void)(cast);          \
-  } catch (...) {          \
-    ((void)0);             \
-  }                        \
-} while (false)
 
 BOOST_AUTO_TEST_CASE(test_enum_cast)
 {
@@ -363,10 +343,10 @@ BOOST_AUTO_TEST_CASE(test_enum_cast)
   BOOST_CHECK(en::enum_cast<B>(1) == B::one);
   
   BOOST_CHECK_THROW(en::enum_cast<A>(10), en::bad_enum_cast);
-  
-  //CHECK_THROWS(en::enum_cast<B>(-1));
+  BOOST_CHECK_THROW(en::enum_cast<B>(-1), en::bad_enum_cast);
+
 }
 
-#undef CHECK_THROWS
+
 
 BOOST_AUTO_TEST_SUITE_END()

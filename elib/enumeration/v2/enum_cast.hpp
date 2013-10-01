@@ -16,7 +16,8 @@ namespace elib
   {
   
   
-# ifdef ELIB_ENUMERATION_RUNTIME_ERROR
+# define ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND 1
+# ifdef ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND
 
     class bad_enum_cast : public std::runtime_error
     {

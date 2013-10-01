@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_PATH_HPP
 #define ELIB_FS_PATH_HPP
 
+# include <elib/config.hpp>
 #include <elib/fs/detail/path_converter.hpp>
 
 #include <string>

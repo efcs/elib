@@ -30,6 +30,9 @@ template <typename T>
 struct remove_cv : public remove_const<typename remove_volatile<T>::type>
 { };
         
+
+template <typename T>
+using remove_cv_t = typename remove_cv<T>::type;
         
 } /* namespace type_traits */
 } /* namespace elib */

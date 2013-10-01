@@ -13,7 +13,7 @@ if (CONFIG_OPT_GCC MATCHES 4.8.1)
     set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)
     set(CMAKE_CXX_COMPILER /opt/gnu/bin/g++)
     set(LD_FLAGS -Wl,-rpath -Wl,/opt/gnu/lib64)
-    add_definitions( -fmax-errors=10 )
+    add_definitions( -fmax-errors=30 )
     
 elseif(CONFIG_OPT_GCC MATCHES 4.9.0)
 
@@ -25,7 +25,7 @@ elseif(CONFIG_OPT_GCC MATCHES 4.9.0)
 elseif(CONFIG_OPT_GCC MATCHES 4.7.3)
 
     # default compiler 
-    add_definitions( -fmax-errors=10 )
+    add_definitions( -fmax-errors=30 )
 
 elseif(CONFIG_OPT_GCC MATCHES CLANG)
 
@@ -64,14 +64,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set( CMAKE_BUILD_TYPE RELEASE)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_DEBUG " -g -O0 -DELIB_DEBUG_ASSERT -DELIB_DEBUG_WARN " )
-set( CMAKE_CXX_FLAGS_DEBUG " -g -O0 -DELIB_DEBUG_ASSERT -DELIB_DEBUG_WARN " )
+set( CMAKE_C_FLAGS_DEBUG " -g -O0 -DELIB_WARN_ON " )
+set( CMAKE_CXX_FLAGS_DEBUG " -g -O0 -DELIB_WARN_ON " )
 
 set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
 add_definitions(-std=c++11 -Wall -Wextra -pedantic)
+add_definitions( -DELIB_DEFAULT_CONFIG )
 add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.hpp)
 
 add_subdirectory(src)

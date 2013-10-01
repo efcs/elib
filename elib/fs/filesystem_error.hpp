@@ -1,12 +1,13 @@
 #ifndef ELIB_FS_FILESYSTEM_ERROR_HPP
 #define ELIB_FS_FILESYSTEM_ERROR_HPP
 
-#include <elib/fs/path.hpp>
+# include <elib/config.hpp>
+# include <elib/fs/path.hpp>
 
-#include <system_error>
-#include <memory>
-#include <string>
-#include <cerrno>
+# include <system_error>
+# include <memory>
+# include <string>
+# include <cerrno>
 
 
 namespace elib 
@@ -17,6 +18,7 @@ namespace elib
 
     class filesystem_error : public std::system_error {
     public:
+      
       filesystem_error(const std::string& what_arg, std::error_code ec)
           : std::system_error{ec}, m_impl{new impl_t}
       {
@@ -24,14 +26,14 @@ namespace elib
       }
         
       filesystem_error(const std::string& what_arg, const path& p,
-                        std::error_code ec)
+                       std::error_code ec)
         : filesystem_error{what_arg, ec}
       {
         m_impl->p1 = p;
       }
         
       filesystem_error(const std::string& what_arg, const path& p1,
-                      const path& p2, std::error_code ec)
+                       const path& p2, std::error_code ec)
         : filesystem_error{what_arg, p1, ec}
       {
         m_impl->p2 = p2;
@@ -46,7 +48,7 @@ namespace elib
       path2() const noexcept
       { return m_impl->p2; }
         
-      //TODO add meaningfull message
+      //TODO add meaningful message
       const char* 
       what() const noexcept
       { return m_impl->what_arg.c_str(); } 
@@ -131,7 +133,7 @@ namespace elib
 
       
       inline bool handle_and_throw_error(int xerrno, 
-                                        const std::string& msg, std::error_code *ec)
+                                    const std::string& msg, std::error_code *ec)
       {
         auto m_ec = handle_error(xerrno);
         if (!m_ec) return false;
@@ -141,7 +143,7 @@ namespace elib
 
       
       inline bool handle_and_throw_error(int xerrno, 
-                                        const std::string& msg, const path& p1, std::error_code *ec)
+                    const std::string& msg, const path& p1, std::error_code *ec)
       {
         auto m_ec = handle_error(xerrno);
         if (!m_ec) return false;

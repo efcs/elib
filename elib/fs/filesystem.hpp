@@ -1,6 +1,8 @@
 #ifndef ELIB_FS_FILESYSTEM_HPP
 #define ELIB_FS_FILESYSTEM_HPP
 
+# include <elib/config.hpp>
+
 # include <system_error>
 # include <chrono>
 # include <string>

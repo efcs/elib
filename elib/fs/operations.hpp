@@ -1,6 +1,7 @@
 #ifndef ELIB_OPERATIONS_HPP
 #define ELIB_OPERATIONS_HPP
 
+# include <elib/config.hpp>
 #include <elib/fs/filesystem.hpp>
 #include <elib/fs/path.hpp>
 #include <elib/fs/detail/directory_stream.hpp>

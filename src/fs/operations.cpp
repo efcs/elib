@@ -1,8 +1,8 @@
 #include <elib/fs/operations.hpp>
 #include <elib/fs/filesystem_error.hpp>
 
-#define ELIB_DEBUG_WARN 1
-#include <elib/debug/assert.hpp>
+
+#include <elib/assert.hpp>
 
 #include <memory>
 #include <cstdlib>

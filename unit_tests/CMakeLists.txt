@@ -16,16 +16,12 @@ aux_source_directory(${dotDir}/utility utilitySrc)
 aux_source_directory(${dotDir}/argp argpSrc)
 aux_source_directory(${dotDir}/enumeration enumSrc)
 
-#set(testSources ${mainSrc} ${logSrc} ${lockSrc} 
- #               ${utilitySrc} ${argpSrc} ${enumSrc}
-  #              ${fsSrc} ${chronoSrc}
-  #)
-  
-set(testSources ${mainSrc} ${enumSrc})
+set(testSources ${mainSrc} ${logSrc} ${lockSrc} 
+                ${utilitySrc} ${argpSrc} ${enumSrc}
+                ${chronoSrc}
+                ${fsSrc} 
+  )
 
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED OFF)
-set(Boost_USE_STATIC_RUNTIME OFF)
 
 # boost filesystem (and system) is used to test
 # elib::fs

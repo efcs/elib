@@ -254,6 +254,19 @@ namespace elib
     };                                                   // class enum_iterator
     
     
+    // iteration can be done using an enum_range
+    template <typename T>
+    enum_iterator<T> begin(enum_range<T>)
+    {
+      return enum_iterator<T>{detail::iter_pos_e::begin};
+    }
+    
+    template <typename T>
+    enum_iterator<T> end(enum_range<T>)
+    {
+      return enum_iterator<T>{};
+    }
+    
   }                                                    // namespace enumeration
 }                                                           // namespace elib
 #endif /* ELIB_ENUMERATION_ENUM_ITERATOR_HPP */

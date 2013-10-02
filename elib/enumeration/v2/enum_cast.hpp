@@ -16,8 +16,8 @@ namespace elib
   {
   
   
-# define ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND 0
-# ifdef ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND
+# define ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND 1
+# if ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND
 
     class bad_enum_cast : public std::runtime_error
     {
@@ -55,8 +55,8 @@ namespace elib
       struct can_cast_str_to_enum : public std::integral_constant<bool, 
           std::is_enum<To>::value 
           && has_basic_enum_traits<To>::value
-          && (std::is_same<const From&, const std::string&>::value
-              || std::is_same<const From, const char*>::value)>
+          && (std::is_same<From, std::string&>::value
+              || std::is_same<From, char*>::value)>
       { };
 
       
@@ -107,14 +107,16 @@ namespace elib
     enum_cast(From val)
     {
       using bt = basic_enum_traits<From>;
-      if (bt::name_map.count(val) == 0)
+      auto pos = bt::name_map.find(val);
+      if (pos == bt::name_map.end())
         throw bad_enum_cast{};
-      return bt::name_map[val];
+      return pos->second;
     }
     
     // Unsafe Checked: String -> Enum
     template <typename To, typename From>
-    std::enable_if_t<detail::can_cast_str_to_enum<To, From>::value, To>
+    std::enable_if_t<detail::can_cast_str_to_enum<To, 
+        std::decay_t<From>>::value, To>
     enum_cast(const From& str)
     {
       using bt = basic_enum_traits<To>;
@@ -155,14 +157,16 @@ namespace elib
     safe_enum_cast(From val, To& dest) noexcept
     {
       using bt = basic_enum_traits<From>;
-      if (bt::name_map.count(val) == 0) return false;
-      dest = bt::name_map[val];
+      auto it = bt::name_map.find(val);
+      if (it == bt::name_map.end())
+        return false;
+      dest = it->second;
       return true;
     }
     
     // Safe Checked: String -> Enum
     template <typename To, typename From>
-    std::enable_if_t<detail::can_cast_str_to_enum<To, From>::value, bool>
+    std::enable_if_t<detail::can_cast_str_to_enum<To, std::decay_t<From>>::value, bool>
     safe_enum_cast(const From& val, To& dest) noexcept
     {
       using bt = basic_enum_traits<To>;

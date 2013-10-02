@@ -18,6 +18,12 @@ namespace elib
   namespace enumeration
   {
     
+    template <typename T, typename Ret=void>
+    struct enable_if_enum : public std::enable_if<std::is_enum<T>::value, Ret>
+    { };
+    
+    template <typename T, typename Ret=void>
+    using enable_if_enum_t = typename enable_if_enum<T, Ret>::type;
     
     template <typename T>
     struct has_basic_enum_traits
@@ -216,7 +222,7 @@ namespace elib
     {
       return basic_enum_traits<T>::name_map.count(val) != 0;
     }
-
+    
   }                                                    // namespace enumeration
 }                                                           // namespace elib
 #endif /* ELIB_ENUMERATION_ENUM_TRAITS_HPP */

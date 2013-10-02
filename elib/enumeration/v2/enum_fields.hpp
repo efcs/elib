@@ -31,13 +31,19 @@ namespace elib
       ELIB_ENUM_ALLOW_MIXED_ARITHMETIC_OPERATORS = true,
       
       ELIB_ENUM_ALLOW_STREAM_EXTRACTION_OPERATOR = true, 
-      ELIB_ENUM_ALLOW_STREAM_INSERTION_OPERATOR = true
+      ELIB_ENUM_ALLOW_STREAM_INSERTION_OPERATOR = true, 
+      
+      // Since we cannot define operator bool(), we have the choice
+      // these are hacky work arounds
+      // bool indirection defines the operator bool operator*(Enum);
+      // underlying dereference defines std::underlying_type operator&(Enum);
+      ELIB_ENUM_ALLOW_BOOL_INDIRECTION_OPERATOR = true, 
+      ELIB_ENUM_ALLOW_UNDERLYING_DEREFERENCE_OPERATOR = true, 
       
     };                                         // enum class enumeration_fields
     
     namespace detail
     {
-      
 
       template <typename EnumT, typename T>
       struct transform_integral
@@ -45,23 +51,37 @@ namespace elib
         static_assert(std::is_same<EnumT, typename T::value_type>::value, "mest be same");
         typedef EnumT type;
         static constexpr bool good = true;
-        static constexpr type value = T::value;
+        static constexpr EnumT value = T::value;
         static constexpr bool bool_value = static_cast<bool>(T::value);
       };
 
+      
       template <typename EnumT>
       struct transform_integral<EnumT, std::false_type>
       {
         typedef EnumT type;
         static constexpr bool good = false;
-        static constexpr type value = static_cast<type>(false);
+        static constexpr EnumT value = static_cast<EnumT>(false);
         static constexpr bool bool_value = false;
       };
 
-      template <typename T, template <typename U> class Detector>
+      
+      // special case for when T != Enum
+      enum class BAD_ENUM_CLASS {};
+      
+      template <typename T, template <typename U> class Detector, typename=void>
       struct basic_detector
       {
+        typedef transform_integral<BAD_ENUM_CLASS, std::false_type> type;
+      };
+      
+      template <typename T, template <typename U> class Detector>
+      struct basic_detector<T, Detector, 
+          std::enable_if_t<std::is_enum<T>::value>>
+      {
       private:
+        static_assert(std::is_enum<T>::value,  "T must be enum");
+        
         template <typename U>
         static Detector<U> test(decltype(Detector<U>::value)*);
 
@@ -71,6 +91,7 @@ namespace elib
       public:
         typedef transform_integral<T, decltype(test<T>(0))> type;
       };
+
 
 
     }                                                       // namespace detail
@@ -165,8 +186,6 @@ namespace elib
       : public detail::basic_detector<T, allow_mixed_logical_operators_field_type>::type
     { };
 
-
-
     template <typename T> 
     using allow_arithmetic_operators_field_type =
       std::integral_constant<T, T::ELIB_ENUM_ALLOW_ARITHMETIC_OPERATORS>;
@@ -209,6 +228,26 @@ namespace elib
     struct allow_stream_insertion_operator_field
       : public detail::basic_detector<T, 
         allow_stream_insertion_operator_field_type>::type
+    { };
+    
+    template <typename T>
+    using allow_bool_indirection_operator_field_type =
+      std::integral_constant<T, T::ELIB_ENUM_ALLOW_BOOL_INDIRECTION_OPERATOR>;
+      
+    template <typename T>
+    struct allow_bool_indirection_operator_field
+      :  public detail::basic_detector<T, 
+            allow_bool_indirection_operator_field_type>::type
+    { };
+    
+    template <typename T>
+    using allow_underlying_dereference_operator_field_type =
+    std::integral_constant<T, T::ELIB_ENUM_ALLOW_UNDERLYING_DEREFERENCE_OPERATOR>;
+
+    template <typename T>
+    struct allow_underlying_dereference_operator_field
+      :  public detail::basic_detector<T, 
+            allow_underlying_dereference_operator_field_type>::type
     { };
   
   }                                                    // namespace enumeration

@@ -6,42 +6,49 @@ option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 #                     Personal build enviroment configurations                           
 ################################################################################
 
-set(CONFIG_OPT_GCC 4.9.0)
+if (CONFIG_MY_BUILD)
 
-if (CONFIG_OPT_GCC MATCHES 4.8.1)
-  
-    set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)
-    set(CMAKE_CXX_COMPILER /opt/gnu/bin/g++)
-    set(LD_FLAGS -Wl,-rpath -Wl,/opt/gnu/lib64)
-    add_definitions( -fmax-errors=30 )
+  set(CONFIG_OPT_GCC CLANG)
+
+  if (CONFIG_OPT_GCC MATCHES 4.8.1)
     
-elseif(CONFIG_OPT_GCC MATCHES 4.9.0)
+      set(CMAKE_C_COMPILER /opt/gnu/bin/gcc)
+      set(CMAKE_CXX_COMPILER /opt/gnu/bin/g++)
+      set(LD_FLAGS -Wl,-rpath -Wl,/opt/gnu/lib64)
+      add_definitions( -fmax-errors=30 )
+      
+  elseif(CONFIG_OPT_GCC MATCHES 4.9.0)
 
-    set(CMAKE_C_COMPILER /opt/gcc/4.9.0/bin/gcc)
-    set(CMAKE_CXX_COMPILER /opt/gcc/4.9.0/bin/g++)
-    set(LD_FLAGS -Wl,-rpath -Wl,/opt/gcc/4.9.0/lib64)
-    add_definitions()
+      set(CMAKE_C_COMPILER /opt/gcc/4.9.0/bin/gcc)
+      set(CMAKE_CXX_COMPILER /opt/gcc/4.9.0/bin/g++)
+      set(LD_FLAGS -Wl,-rpath -Wl,/opt/gcc/4.9.0/lib64)
+      
+  elseif(CONFIG_OPT_GCC MATCHES 4.7.3)
+
+      # default compiler 
+      add_definitions( -fmax-errors=30 )
+
+  elseif(CONFIG_OPT_GCC MATCHES CLANG)
+
+  ## clang currently doesn't correctly compile std::thread on linux
+  ## but the compile messages are so helpful
+      set(CMAKE_C_COMPILER /usr/bin/clang)
+      set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+      add_definitions( -ferror-limit=15)
+  ##set(LD_FLAGS -Wl,-rpath -Wl,/opt/gcc/4.9.0/lib64)
+
+  elseif(CONFIG_OPT_GCC)
+
+    set(CMAKE_C_COMPILER /usr/bin/gcc)
+    set(CMAKE_CXX_COMPILER /usr/bin/g++)
     
-elseif(CONFIG_OPT_GCC MATCHES 4.7.3)
+  endif()
 
-    # default compiler 
-    add_definitions( -fmax-errors=30 )
+endif() # CONFIG_MY_BUILD
 
-elseif(CONFIG_OPT_GCC MATCHES CLANG)
-
-## clang currently doesn't correctly compile std::thread on linux
-## but the compile messages are so helpfull
-    set(CMAKE_C_COMPILER /usr/bin/clang)
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-    add_definitions( -ferror-limit=15)
-##set(LD_FLAGS -Wl,-rpath -Wl,/opt/gcc/4.9.0/lib64)
-
-elseif(CONFIG_OPT_GCC)
-
-  message(FATAL_ERROR "${CONFIG_OPT_GCC} is not a valid value for CONFIG_OPT_GCC")
-
-endif()
-
+################################################################################
+#                         PROJECT ELIB
+################################################################################
 
 # we need C to get the pthreads library 
 project(EricsLibrary CXX C)
@@ -56,7 +63,11 @@ if (CONFIG_MY_BUILD)
 endif()
 	
 	
-set(CONFIG_BOOST_VERSION 1.54.0)
+################################################################################
+#                             BOOST Version Configuration
+################################################################################
+	
+set(CONFIG_BOOST_VERSION 1.52.0)
 set(BOOST_DEFAULT_VERSION 1.52.0)
 
 set(CONFIG_BOOST_VERSION_LIST ${BOOST_DEFAULT_VERSION} 
@@ -98,7 +109,7 @@ set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
-add_definitions(-std=c++11 -Wall -Wextra -pedantic)
+add_definitions( -std=c++11 -Wall -Wextra -pedantic )
 add_definitions( -DELIB_DEFAULT_CONFIG )
 add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.hpp)
 

@@ -20,7 +20,8 @@ namespace elib
       };
 
       template <typename EnumT>
-      struct sfinae_underlying_type<EnumT, std::underlying_type_t<EnumT>>
+      struct sfinae_underlying_type<EnumT, 
+          std::enable_if_t<std::is_enum<EnumT>::value>>
       {
         typedef std::underlying_type_t<EnumT> type;
       };

@@ -1,0 +1,126 @@
+==25633== Memcheck, a memory error detector
+==25633== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==25633== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==25633== Command: ./bin/elib_test_shared
+==25633== 
+--25633-- Valgrind options:
+--25633--    --suppressions=/usr/lib/valgrind/debian-libc6-dbg.supp
+--25633--    -v
+--25633-- Contents of /proc/version:
+--25633--   Linux version 3.8.0-31-generic (buildd@panlong) (gcc version 4.7.3 (Ubuntu/Linaro 4.7.3-1ubuntu1) ) #46-Ubuntu SMP Tue Sep 10 20:03:44 UTC 2013
+--25633-- Arch and hwcaps: AMD64, amd64-sse3
+--25633-- Page sizes: currently 4096, max supported 4096
+--25633-- Valgrind library directory: /usr/lib/valgrind
+--25633-- Reading syms from /home/eric/workspace/elib/bin/elib_test_shared
+--25633-- Reading syms from /lib/x86_64-linux-gnu/ld-2.17.so
+--25633--   Considering /lib/x86_64-linux-gnu/ld-2.17.so ..
+--25633--   .. CRC mismatch (computed 0e805c9a wanted d5b108bd)
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.17.so ..
+--25633--   .. CRC is valid
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.17.so ..
+--25633--   .. CRC is valid
+--25633-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--25633--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--25633--   .. CRC mismatch (computed 8dadd6e3 wanted 096f8488)
+--25633--    object doesn't have a symbol table
+--25633--    object doesn't have a dynamic symbol table
+--25633-- Scheduler: using generic scheduler lock implementation.
+--25633-- Reading suppressions file: /usr/lib/valgrind/debian-libc6-dbg.supp
+--25633-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==25633== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-25633-by-eric-on-???
+==25633== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-25633-by-eric-on-???
+==25633== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-25633-by-eric-on-???
+==25633== 
+==25633== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==25633== don't want to do, unless you know exactly what you're doing,
+==25633== or are doing some strange experiment):
+==25633==   /usr/lib/valgrind/../../bin/vgdb --pid=25633 ...command...
+==25633== 
+==25633== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==25633==   /path/to/gdb ./bin/elib_test_shared
+==25633== and then give GDB the following command
+==25633==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=25633
+==25633== --pid is optional if only one valgrind process is running
+==25633== 
+--25633-- REDIR: 0x4018f40 (strlen) redirected to 0x3806c7e1 (???)
+--25633-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--25633--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--25633--   .. CRC mismatch (computed 7ae7d82a wanted 34ea3d89)
+--25633--    object doesn't have a symbol table
+--25633-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--25633--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--25633--   .. CRC mismatch (computed 272279e5 wanted bc83f658)
+--25633--    object doesn't have a symbol table
+--25633-- REDIR: 0x4018db0 (index) redirected to 0x4c2d440 (index)
+--25633-- REDIR: 0x4018e30 (strcmp) redirected to 0x4c2e480 (strcmp)
+--25633-- Reading syms from /home/eric/workspace/elib/bin/libelib.so
+--25633-- Reading syms from /lib/x86_64-linux-gnu/libpthread-2.17.so
+--25633--   Considering /lib/x86_64-linux-gnu/libpthread-2.17.so ..
+--25633--   .. CRC mismatch (computed da6bb310 wanted d2233b1f)
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libpthread-2.17.so ..
+--25633--   .. CRC is valid
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libpthread-2.17.so ..
+--25633--   .. CRC is valid
+--25633-- Reading syms from /usr/lib/libboost_unit_test_framework.so.1.53.0
+--25633--    object doesn't have a symbol table
+--25633-- Reading syms from /usr/lib/libboost_system.so.1.53.0
+--25633--    object doesn't have a symbol table
+--25633-- Reading syms from /usr/lib/libboost_filesystem.so.1.53.0
+--25633--    object doesn't have a symbol table
+--25633-- Reading syms from /opt/gnu/packages/gcc-4.8.1/lib64/libstdc++.so.6.0.18
+--25633-- Reading syms from /lib/x86_64-linux-gnu/libm-2.17.so
+--25633--   Considering /lib/x86_64-linux-gnu/libm-2.17.so ..
+--25633--   .. CRC mismatch (computed 0f18ff95 wanted 109dbed1)
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libm-2.17.so ..
+--25633--   .. CRC is valid
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libm-2.17.so ..
+--25633--   .. CRC is valid
+--25633-- Reading syms from /opt/gnu/packages/gcc-4.8.1/lib64/libgcc_s.so.1
+--25633-- Reading syms from /lib/x86_64-linux-gnu/libc-2.17.so
+--25633--   Considering /lib/x86_64-linux-gnu/libc-2.17.so ..
+--25633--   .. CRC mismatch (computed 7a0d6b10 wanted 5a2fe04b)
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.17.so ..
+--25633--   .. CRC is valid
+--25633--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.17.so ..
+--25633--   .. CRC is valid
+--25633-- REDIR: 0x622c990 (strcasecmp) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x6228d20 (strnlen) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x622ec60 (strncasecmp) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x622b7a0 (memset) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x622b750 (memcpy@GLIBC_2.2.5) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x622a710 (__GI_strrchr) redirected to 0x4c2d260 (__GI_strrchr)
+--25633-- REDIR: 0x6228bf0 (strlen) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x6228c40 (__GI_strlen) redirected to 0x4c2d7c0 (__GI_strlen)
+--25633-- REDIR: 0x59df450 (operator new(unsigned long)) redirected to 0x4c2c740 (operator new(unsigned long))
+--25633-- REDIR: 0x6231340 (memcpy@@GLIBC_2.14) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x6231390 (__GI_memcpy) redirected to 0x4c2e7b0 (memcpy@@GLIBC_2.14)
+--25633-- REDIR: 0x6227100 (strcmp) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x6227140 (__GI_strcmp) redirected to 0x4c2e430 (__GI_strcmp)
+--25633-- REDIR: 0x6228e40 (__GI_strncmp) redirected to 0x4c2dc90 (__GI_strncmp)
+--25633-- REDIR: 0x622b160 (bcmp) redirected to 0x4a25710 (_vgnU_ifunc_wrapper)
+--25633-- REDIR: 0x622b1a0 (__GI_memcmp) redirected to 0x4c2f570 (bcmp)
+--25633-- REDIR: 0x6223010 (calloc) redirected to 0x4c2ab30 (calloc)
+--25633-- REDIR: 0x59dd780 (operator delete(void*)) redirected to 0x4c2b530 (operator delete(void*))
+--25633-- REDIR: 0x622b5a0 (__GI_memmove) redirected to 0x4c2fc00 (__GI_memmove)
+--25633-- REDIR: 0x622ae10 (memchr) redirected to 0x4c2e520 (memchr)
+--25633-- REDIR: 0x59df560 (operator new[](unsigned long)) redirected to 0x4c2bfd0 (operator new[](unsigned long))
+--25633-- REDIR: 0x6232b30 (strchrnul) redirected to 0x4c2fea0 (strchrnul)
+--25633-- REDIR: 0x62229b0 (free) redirected to 0x4c2ba00 (free)
+--25633-- REDIR: 0x6232920 (__GI___rawmemchr) redirected to 0x4c2ff00 (__GI___rawmemchr)
+--25633-- REDIR: 0x59dd7b0 (operator delete[](void*)) redirected to 0x4c2afb0 (operator delete[](void*))
+--25633-- REDIR: 0x6236740 (__memset_x86_64) redirected to 0x4c2f950 (memset)
+--25633-- REDIR: 0x6222520 (malloc) redirected to 0x4c2cd10 (malloc)
+
+*** No errors detected
+==25633== 
+==25633== HEAP SUMMARY:
+==25633==     in use at exit: 0 bytes in 0 blocks
+==25633==   total heap usage: 1,298 allocs, 1,298 frees, 134,927 bytes allocated
+==25633== 
+==25633== All heap blocks were freed -- no leaks are possible
+==25633== 
+==25633== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
+--25633-- 
+--25633-- used_suppression:      2 dl-hack3-cond-1
+==25633== 
+==25633== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)

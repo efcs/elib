@@ -26,15 +26,74 @@
 #define ELIB_UNUSED(x) ((void)x)
 
 
-#define ELIB_DISALLOW_COPY_AND_ASSIGN(T) \
-    T(const T &); \
-    T & operator=(const T &)
-    
+/* ELIB_TODO can be used to locate TODO 's in code */
+# if ELIB_STATIC_ASSERT_TODO
+#   define ELIB_TODO(str) static_assert(! "ELIB TODO FOUND: ", str)
+# elif ELIB_ASSERT_TODO
+#   define ELIB_TODO(msg) ELIB_ASSERT(! "ELIB TODO", msg)
+# elif ELIB_WARN_TODO
+#   define ELIB_TODO(msg) ELIB_WARN(! "ELIB TODO", msg)
+# elif ELIB_THROW_TODO
+#   define ELIB_TODO(msg) throw "ELIB TODO " msg
+# else
+#   define ELIB_TODO(msg) ((void)0)
+# endif
+
     
 /* allow for macro overloading by counting # args */
 #define _ELIB_GET_MACRO(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
 #define ELIB_GET_MACRO(NAME, ...) _ELIB_GET_MACRO(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
 
+
+// Default declaration macros
+
+# define ELIB_DEFAULT_CTOR(class, ...) \
+  class() __VA_ARGS__ = default
+  
+# define ELIB_CONSTEXPR_CTOR(class) \
+  constexpr class() noexcept = default;
+  
+# define ELIB_DEFAULT_DTOR(class, ...) \
+  ~class() __VA_ARGS__ = default
+    
+# define ELIB_DEFAULT_CTOR_AND_DTOR(class, ...) \
+  ELIB_DEFAULT_CTOR(class, __VA_ARGS__);            \
+  ELIB_DEFAULT_DTOR(class, __VA_ARGS__)
+
+# define ELIB_DEFAULT_COPY(class, ...)   \
+  class(const class&) __VA_ARGS__ = default; \
+  class& operator=(const class&) __VA_ARGS__ = default
+  
+# define ELIB_DEFAULT_MOVE(class, ...) \
+  class(class&&) __VA_ARGS__ = default;    \
+  class& operator=(class&&) __VA_ARGS__ = default
+  
+# define ELIB_NOEXCEPT_MOVE(class) \
+  ELIB_DEFAULT_MOVE(class, noexcept)
+  
+# define ELIB_DEFAULT_COPY_AND_MOVE(class, ...) \
+  ELIB_DEFAULT_COPY(class, __VA_ARGS__);            \
+  ELIB_DEFAULT_MOVE(class, __VA_ARGS__)
+  
+# define ELIB_ALL_DEFAULT_DECLARATIONS(class) \
+  ELIB_DEFAULT_CTOR_AND_DTOR(class);        \
+  ELIB_DEFAULT_COPY_AND_MOVE(class);        \
+
+
+// Delete declaration macros
+
+# define ELIB_DELETE_COPY(class) \
+  class(const class&) = delete;       \
+  class& operator=(const class&) = delete;
+  
+# define ELIB_DELETE_MOVE(class) \
+  class(class&&) = delete;            \
+  class& operator=(class&&) = delete;
+  
+# define ELIB_DELETE_COPY_AND_MOVE(class) \
+  ELIB_DELETE_COPY(class);                \
+  ELIB_DELETE_MOVE(class)
+  
 
 
 #endif /* ELIB_COMMON_DEF_HPP */

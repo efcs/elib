@@ -74,7 +74,7 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////////
     namespace detail 
     {
-  
+      
       constexpr int errc_cast(std::errc e) noexcept
       {
         return static_cast<int>(e);
@@ -195,7 +195,7 @@ namespace elib
         return handle_and_throw_error(static_cast<int>(err_code), msg, p1, ec);
       }
 
-
+      
       inline bool handle_and_throw_error(std::errc err_code, 
                     const std::string& msg, const path& p1,
                     const path& p2, std::error_code *ec)

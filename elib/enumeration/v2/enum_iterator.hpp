@@ -190,11 +190,11 @@ namespace elib
       
       enum_iterator(EnumT e)
         : m_impl{e}
-      { };
+      { }
       
       enum_iterator(detail::iter_pos_e e)
         : m_impl{e}
-      { };
+      { }
 
       enum_iterator(const enum_iterator&) = default;
       enum_iterator& operator=(const enum_iterator&) = default;

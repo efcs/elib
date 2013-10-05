@@ -727,6 +727,7 @@ namespace elib
         return static_cast<bool>(val);
       }
       
+      
       template <typename T>
       constexpr std::enable_if_t<has_underlying_dereference_operator<T>::value,
         detail::sfinae_underlying_type_t<T>>

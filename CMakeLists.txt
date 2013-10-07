@@ -8,7 +8,7 @@ option(CONFIG_MY_BUILD "These are my specific build settings" ON)
 
 if (CONFIG_MY_BUILD)
 
-  set(CONFIG_OPT_GCC CLANG)
+  set(CONFIG_OPT_GCC 4.8.1)
 
   if (CONFIG_OPT_GCC MATCHES 4.8.1)
     

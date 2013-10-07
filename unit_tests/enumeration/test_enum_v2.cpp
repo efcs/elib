@@ -7,7 +7,6 @@
 #include <elib/enumeration/v2/enum_cast.hpp>
 #include <elib/enumeration/v2/enum_iterator.hpp>
 #include <elib/enumeration/v2/operators.hpp>
-#include <elib/enumeration/v2/enum_adapter.hpp>
 
 #include <type_traits>
 

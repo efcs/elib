@@ -3,17 +3,26 @@
 
 # include <elib/config.hpp>
 
-# define __ELIB_WARN_ON   defined(ELIB_WARN_ON) || defined(ELIB_DEBUG_ON)
-# define __ELIB_ASSERT_ON defined(ELIB_ASSERT_ON) || defined(__ELIB_WARN_ON)
+# if !defined(NDEBUG) || defined(ELIB_ASSERT_ON)
 
+#   define _ELIB_ASSERT_ON 1
 
+#   if defined(ELIB_DEBUG_ON)
+#     define _ELIB_DEBUG_ON 1
+#   endif
+
+#   if defined(ELIB_WARN_ON) || defined(_ELIB_DEBUG_ON)
+#     define _ELIB_WARN_ON 1
+#   endif
+
+# endif
 
 ////////////////////////////////////////////////////////////////////////////////
 //                          ELIB_ASSERT                                             
 ////////////////////////////////////////////////////////////////////////////////
 
 
-# if __ELIB_ASSERT_ON
+# ifdef _ELIB_ASSERT_ON
 
 #   include <iostream>
 
@@ -44,20 +53,22 @@
   }                                                           // namespace elib
 
   
-#   define ELIB_ASSERT(pred) \
+#   define ELIB_ASSERT_1(pred) \
     ::elib::elib_assert(pred, "" #pred, __FILE__, __func__,  __LINE__)
 
     
-#   define ELIB_ASSERT_MSG(pred, msg) \
+#   define ELIB_ASSERT_2(pred, msg) \
     ::elib::elib_assert(pred,  "" #pred, \
             __FILE__,  __func__, __LINE__, msg)
+            
+
+#   define ELIB_ASSERT(...) ELIB_OVERLOAD(ELIB_ASSERT_,  __VA_ARGS__)(__VA_ARGS__)
 
             
 # else                                                      // __ELIB_ASSERT_ON
 
 
-#   define ELIB_ASSERT(pred)          ((void)0)
-#   define ELIB_ASSERT_MSG(pred, msg) ((void)0)
+#   define ELIB_ASSERT(...)          ((void)0)
 
 
 # endif                                                     // __ELIB_ASSERT_ON
@@ -68,7 +79,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-# if __ELIB_WARN_ON
+# if _ELIB_WARN_ON
 
 
 #   include <iostream> 
@@ -90,18 +101,19 @@
   }                                                         // namespace elib
 
   
-#   define ELIB_WARN(pred) \
+#   define ELIB_WARN_1(pred) \
     ::elib::elib_warn(pred, "" #pred, __FILE__, __func__, __LINE__)
     
-#   define ELIB_WARN_MSG(pred, msg) \
+#   define ELIB_WARN_2(pred, msg) \
     ::elib::elib_warn(pred, "" #pred, __FILE__,  __func__,  __LINE__, msg)
     
+    
+#   define ELIB_WARN(...) ELIB_OVERLOAD(ELIB_WARN_, __VA_ARGS__)(__VA_ARGS__)
     
 # else                                                      // __ELIB_WARN_ON
 
 
-#   define ELIB_WARN(pred)            ((void)0)
-#   define ELIB_WARN_MSG(pred,  msg)  ((void)0)
+#   define ELIB_WARN(...)            ((void)0)
 
 
 # endif                                                     // __ELIB_WARN_ON
@@ -112,21 +124,15 @@
 //                            ELIB DEBUG                                                       
 ////////////////////////////////////////////////////////////////////////////////
 
-# ifdef ELIB_DEBUG_ON
+# ifdef _ELIB_DEBUG_ON
 
 #   include <iostream>
-
-#   define ELIB_DEBUG(pred)                             \
-    ::elib::elib_debug(pred, "" #pred, __FILE__, __func__, __LINE__)
-    
-#   define ELIB_DEBUG_MSG(pred, msg) \
-    ::elib::elib_debug(pred, "" #pred, __FILE__, __func__, __LINE__, msg)
     
   namespace elib
   {
       
     inline void elib_debug(bool pred, const char* pred_str, 
-                           const char* filename, const char* func_name, 
+                           const char* filename, const char* func, 
                            int line, const char* opt_msg=nullptr) 
     {
       if (pred) return;
@@ -137,22 +143,32 @@
         std::cout << "  " << opt_msg << std::endl;
         
     }
+    
       
   }                                                         // namespace elib
 
+  
+#   define ELIB_DEBUG(...) ELIB_OVERLOAD(ELIB_DEBUG_, __VA_ARGS__)(__VA_ARGS__)
+
+#   define ELIB_DEBUG_1(pred) ELIB_DEBUG_2(pred, nullptr)
+  
+#   define ELIB_DEBUG_2(pred, msg) \
+  ::elib::elib_debug(pred, "" # pred, __FILE__, __func__, __LINE__, msg)
+  
+  
 # else                                                      // ELIB_DEBUG_ON
 
 
-#   define ELIB_DEBUG(pred)          ((void)0)
-#   define ELIB_DEBUG_MSG(pred, msg) ((void)0)
+#   define ELIB_DEBUG(...)          ((void)0)
+
 
 
 #  endif                                                    // ELIB_DEBUG_ON
 
 
 
-# undef __ELIB_ASSERT_ON
-# undef __ELIB_WARN_ON
-
+# undef _ELIB_ASSERT_ON
+# undef _ELIB_WARN_ON
+# undef _ELIB_DEBUG_ON
 
 #endif /* ELIB_ASSERT_HPP */

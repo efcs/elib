@@ -39,8 +39,11 @@
 
     
 /* allow for macro overloading by counting # args */
-#define _ELIB_GET_MACRO(NAME, _1, _2, _3, _4, _5, _, ...) NAME##_
-#define ELIB_GET_MACRO(NAME, ...) _ELIB_GET_MACRO(NAME, __VA_ARGS__, 5, 4, 3, 2, 1, 0)
+#define \
+  _ELIB_OVERLOAD(NAME, _1, _2, _3, _4, _5, _6,  _7,  _8,  _9,  _, ...) NAME##_
+  
+#define ELIB_OVERLOAD(NAME, ...) \
+  _ELIB_OVERLOAD(NAME, __VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
 
 // Default declaration macros

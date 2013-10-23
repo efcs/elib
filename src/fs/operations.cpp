@@ -812,7 +812,7 @@ namespace elib
             throw "recursive copy not implemented";
         }
         
-        ELIB_WARN_MSG(false, "Exiting copy without taking action");
+        ELIB_WARN(false, "Exiting copy without taking action");
         
       }
       

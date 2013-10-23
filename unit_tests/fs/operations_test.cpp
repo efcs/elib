@@ -238,4 +238,9 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
     
 }
 
+BOOST_AUTO_TEST_CASE(rec_inter_test)
+{
+  efs::recursive_directory_iterator it{"/home/eric/tmp"};
+}
+
 BOOST_AUTO_TEST_SUITE_END()

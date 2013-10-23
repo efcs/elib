@@ -4,11 +4,13 @@
 #include "elib/enumeration/enum.hpp"
 #include "elib/enumeration/enum_traits.hpp"
 
+#include <iostream>
+
 
 
 namespace elib {
     
-enum class test_e {
+enum class test_e : int {
     none = -10,
     one = 1,
     two = 2,

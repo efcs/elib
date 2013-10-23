@@ -2,11 +2,6 @@
 #define ELIB_COMPILER_CONFIG_HPP
 
 
-# include <elib/version_config.hpp>
-
-
-# ifdef ELIB_COMPILER_DEFAULT_CONFIG
-
 #   undef ELIB_GNU
 #   undef ELIB_CLANG
 #   undef ELIB_MSVC
@@ -24,10 +19,6 @@
 #   else
 #     error ELIB cannot find compiler information
 #   endif
-
-
-# endif                                        // ELIB_COMPILER_DEFAULT_CONFIG
-
 
 # define __ELIB_DEF_COUNT defined(ELIB_GNU) + defined(ELIB_CLANG) + \
                           defined(ELIB_MSVC) + defined(ELIB_MINGW)

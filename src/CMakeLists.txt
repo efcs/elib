@@ -39,11 +39,11 @@ target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
 
-if(CMAKE_BUILD_TYPE MATCHES RELEASE)
-	install(TARGETS elib LIBRARY DESTINATION lib)
-	install(TARGETS elib_static ARCHIVE DESTINATION lib)
-	install(DIRECTORY ${headerDir} DESTINATION include)
-endif()
+
+install(TARGETS elib LIBRARY DESTINATION lib)
+install(TARGETS elib_static ARCHIVE DESTINATION lib)
+install(DIRECTORY ${headerDir} DESTINATION include)
+
 
 				
 

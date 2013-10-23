@@ -39,10 +39,10 @@ add_executable(elib_test_static $<TARGET_OBJECTS:TestObjLib>)
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObjLib>)
 
 
-target_link_libraries(elib_test_static elib_static ${LD_FLAGS} 
+target_link_libraries(elib_test_static elib_static
                       ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
                       
-target_link_libraries(elib_test_shared elib ${LD_FLAGS} ${CMAKE_THREAD_LIBS_INIT}
+target_link_libraries(elib_test_shared elib ${CMAKE_THREAD_LIBS_INIT}
                             ${Boost_LIBRARIES})
 
 

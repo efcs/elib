@@ -3,7 +3,7 @@
 
 // include common macros
 
-# include <elib/version_config.hpp>
+# include <elib/config/version_config.hpp>
 
 # ifdef ELIB_DEFAULT_CONFIG
 #   define ELIB_PLATFORM_DEFAULT_CONFIG
@@ -11,8 +11,8 @@
 # endif
 
 
-# include <elib/platform_config.hpp>
-# include <elib/compiler_config.hpp>
+# include <elib/config/platform_config.hpp>
+# include <elib/config/compiler_config.hpp>
 
 // include common macros
 # include <elib/common_def.hpp>

@@ -6,6 +6,8 @@
 #include <elib/fs/path.hpp>
 #include <elib/fs/detail/directory_stream.hpp>
 
+# include <elib/assert.hpp>
+
 # include <system_error>
 # include <iterator>
 # include <stack>
@@ -294,14 +296,12 @@ namespace elib
       { }
       
       explicit directory_iterator(const path& p)
-      { 
-        m_construct(p);
-      }
+        : directory_iterator(p, nullptr)
+      { }
       
       directory_iterator(const path& p, std::error_code& ec) noexcept
-      { 
-        m_construct(p, &ec);
-      }
+        : directory_iterator(p, &ec)
+      { }
       
       directory_iterator(const directory_iterator&) = default;
       directory_iterator(directory_iterator&&) = default;
@@ -343,8 +343,13 @@ namespace elib
     private:
       //
       
+      // recursive_directory_iterator uses this class
+      // as its underlying implementation, and therefore it
+      // needs access to the methods that take an optional error_code
+      friend class recursive_directory_iterator;
+      
       // construct the dir_stream
-      void m_construct(const path& p, std::error_code *ec=nullptr);
+      directory_iterator(const path& p, std::error_code *ec);
       directory_iterator& m_increment(std::error_code *ec=nullptr);
       // convert iterator into end iterator
       void m_make_end();
@@ -358,8 +363,11 @@ namespace elib
     
     
     // enable directory_iterator range-based for statements
-    const directory_iterator& begin(const directory_iterator& iter) noexcept;
-    directory_iterator end(const directory_iterator&) noexcept;
+    inline const directory_iterator& begin(const directory_iterator& iter) noexcept
+    { return iter; }
+    
+    inline directory_iterator end(const directory_iterator&) noexcept
+    { return directory_iterator{}; }
     
     
   ////////////////////////////////////////////////////////////////////////////////
@@ -376,54 +384,47 @@ namespace elib
       { }
       
       explicit recursive_directory_iterator(const path& p,
-        directory_options options = directory_options::none)
-      {
-        m_construct(p, options);
-      }
+                  directory_options options = directory_options::none)
+          : recursive_directory_iterator(p, options,  nullptr)
+      { }
 
       recursive_directory_iterator(const path& p,
-        directory_options options, std::error_code& ec) noexcept
-      {
-        m_construct(p, options, &ec);
-      }
+          directory_options options, std::error_code& ec) noexcept
+        : recursive_directory_iterator(p, options, &ec)
+      { }
       
       recursive_directory_iterator(const path& p, std::error_code& ec) noexcept
-      {
-        m_construct(p, directory_options::none, &ec);
-      }
+        : recursive_directory_iterator(p, directory_options::none,  &ec)
+      { }
       
-      recursive_directory_iterator(
-        const recursive_directory_iterator&) = default;
+      recursive_directory_iterator(const recursive_directory_iterator&) = default;
       
       recursive_directory_iterator(recursive_directory_iterator&&) = default;
       
-      ~recursive_directory_iterator() = default;
-
-      // observers
-      directory_options options() const
-      { return m_options; }
-      
-      int depth() const
-      {
-        // m_stack_ptr && m_stack_ptr->size() == 0 should
-        // never be true
-        if (m_stack_ptr) return m_stack_ptr->size() - 1;
-        return 0;
-      }
-      
-      bool recursion_pending() const
-        { return m_rec; }
-
-      // modifiers
       recursive_directory_iterator& 
         operator=(const recursive_directory_iterator&) = default;
+        
         
       recursive_directory_iterator& 
         operator=(recursive_directory_iterator&&) = default;
         
-
+      
+      ~recursive_directory_iterator() = default;
+      
+      
+      const directory_entry& operator*() const
+      {
+        return *(m_stack_ptr->top());
+      }
+      
+      const directory_entry* operator->() const
+      {
+        return &(*(m_stack_ptr->top()));
+      }
+      
       recursive_directory_iterator& operator++()
       { return m_increment(); }
+      
       
       recursive_directory_iterator operator++(int)
       {
@@ -434,60 +435,84 @@ namespace elib
       
       recursive_directory_iterator& increment(std::error_code& ec)
       { return m_increment(&ec); }
+      
+
+      // observers
+      directory_options options() const
+      { return m_options; }
+      
+      
+      int depth() const
+      {
+        // m_stack_ptr && m_stack_ptr->size() == 0 should
+        // never be true
+        if (m_stack_ptr) return m_stack_ptr->size() - 1;
+        return 0;
+      }
+      
+      
+      bool recursion_pending() const
+        { return m_rec; }
+
+        
+      // modifiers
 
       void pop()
       {
-        if (!m_stack_ptr) return;
-        m_element.assign("");
-        if (depth() == 0)
-          m_make_end();
-        else
-          m_stack_ptr->pop();
+        if (!m_stack_ptr)
+          return;
+        
+        ELIB_ASSERT(m_stack_ptr->size() > 0);
+        
+        m_stack_ptr->top() = directory_iterator{};
+        m_increment();
       }
       
-      void disable_recursion_pending()
+      void disable_recursion_pending() noexcept
         { m_rec = false; }
       
-      bool operator==(const recursive_directory_iterator& other) const
-      { return m_stack_ptr == other.m_stack_ptr; }
-      
+      bool operator==(const recursive_directory_iterator& other) const noexcept
+        { return m_stack_ptr == other.m_stack_ptr; }
+     
+      bool operator!=(const recursive_directory_iterator& other) const noexcept
+        { return !(*this == other);}
+     
       //
     private:
       //
-      
-      typedef std::stack<directory_iterator> stack_type;
-      typedef std::shared_ptr<stack_type> stack_ptr_type;
-      
-      void m_construct(const path& p, directory_options opt, 
-                       std::error_code *ec=nullptr);
+     
+  
+      recursive_directory_iterator(const path& p, directory_options opt, 
+                                  std::error_code *ec);
       
       void m_make_end();
       
+      bool m_try_recursion(std::error_code *ec);
+      
       recursive_directory_iterator& m_increment(std::error_code *ec=nullptr);
       
-      bool m_increment_depth(std::error_code *ec);
-      
-      stack_ptr_type m_stack_ptr{nullptr};
+      std::shared_ptr<std::stack<directory_iterator>> m_stack_ptr{nullptr};
       
       directory_options m_options{directory_options::none};
-      
-      directory_entry m_element{};
       
       bool m_rec{true};
     };                                     // class recursive_directory_iterator
     
+    
     // enable recursive_directory_iterator range-based for statements
-    const recursive_directory_iterator& 
-      begin(const recursive_directory_iterator& iter) noexcept;
-      
-    recursive_directory_iterator 
-      end(const recursive_directory_iterator&) noexcept;
-  
+    inline const recursive_directory_iterator& 
+    begin(const recursive_directory_iterator& iter) noexcept
+    { return iter; }
+    
+    
+    inline recursive_directory_iterator 
+    end(const recursive_directory_iterator&) noexcept
+    { return recursive_directory_iterator{}; }
       
   
     
   ////////////////////////////////////////////////////////////////////////////////
-  //                                                                          
+  //                   Copy options 
   ////////////////////////////////////////////////////////////////////////////////
 
     enum class copy_options

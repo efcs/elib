@@ -19,8 +19,6 @@
 #ifndef ELIB_COMMON_DEF_HPP
 #define ELIB_COMMON_DEF_HPP
 
-# include <elib/version_config.hpp>
-
 
 /* used to suppress unused warnings */
 #define ELIB_UNUSED(x) ((void)x)

@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <climits>
 #include <fstream>
+#include <type_traits>
 
 #include <unistd.h>
 #include <utime.h>
@@ -583,7 +584,8 @@ namespace elib
     //                        CLASS DIRECTORY_ITERATOR                                  
     ////////////////////////////////////////////////////////////////////////////////
     
-    void directory_iterator::m_construct(const path& p, std::error_code *ec)
+    directory_iterator::directory_iterator(const path& p, std::error_code *ec)
+      : directory_iterator()
     {
       m_stream = ec ? std::make_shared<detail::dir_stream>(p, ec)
                     : std::make_shared<detail::dir_stream>(p);
@@ -631,56 +633,83 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////////
     
     
-    void recursive_directory_iterator::m_construct(const path& p, 
-      directory_options opt, std::error_code *ec)
+    
+    recursive_directory_iterator::recursive_directory_iterator(const path& p, 
+        directory_options opt, std::error_code *ec)
+      : recursive_directory_iterator()
     {
-      auto curr_iter = ec ? directory_iterator(p, *ec) : directory_iterator(p);
-      directory_iterator end_iter;
-      if ((ec && *ec) || curr_iter == end_iter) return;
-        
-      m_stack_ptr = std::make_shared<stack_type>();
-      m_stack_ptr->push(curr_iter);
-      m_element = *curr_iter;
       m_options = opt;
+      auto curr_iter = directory_iterator{p, ec};
+      if ((ec && *ec) || curr_iter == directory_iterator{}) return;
+        
+      m_stack_ptr = std::make_shared<
+                      std::stack<directory_iterator> 
+                    >();
+
+      m_stack_ptr->push(curr_iter);
     }
     
+    
+    
     recursive_directory_iterator& 
-      recursive_directory_iterator::m_increment(std::error_code *ec)
+    recursive_directory_iterator::m_increment(std::error_code *ec)
     {
       detail::clear_error(ec);
+      
       if (!m_stack_ptr) return *this;
+      
+      if (m_try_recursion(ec) || (ec && *ec))
+        return *this;
         
-      while (!m_increment_depth(ec))
+        
+      const directory_iterator end_it{};
+      while (m_stack_ptr->size() > 0)
       {
+        m_stack_ptr->top().m_increment(ec);
+        if ((ec && *ec) || m_stack_ptr->top() != end_it)
+          break;
+          
         m_stack_ptr->pop();
-        if (m_stack_ptr->size() == 0)
-        {
-          m_make_end();
-          return *this;
-        }
       }
       
+      if ((ec && *ec) || m_stack_ptr->size() == 0)
+        m_make_end();
+        
+      m_rec = true;
       return *this;
     }
     
-    bool recursive_directory_iterator::m_increment_depth(std::error_code *ec)
+    bool recursive_directory_iterator::m_try_recursion(std::error_code *ec)
     {
       detail::clear_error(ec);
-      if (! m_stack_ptr) return true; 
       
-      auto& depth_iter = m_stack_ptr->top();
-      ++depth_iter;
-      if (depth_iter == directory_iterator())
-        return false;
+      if (!m_stack_ptr || m_stack_ptr->size() == 0 
+          || m_stack_ptr->top() == directory_iterator{})
+      { return false; }
+      
+      auto& curr_it = m_stack_ptr->top();
+      
+      using under_t = typename std::underlying_type<directory_options>::type;
+      bool rec_sym = static_cast<under_t>(options()) 
+          & static_cast<under_t>(directory_options::follow_directory_symlink);
         
-      m_element = *depth_iter;
-      return true;
+      if (recursion_pending() && is_directory(curr_it->status()) &&
+          (!is_symlink(curr_it->symlink_status()) || rec_sym))
+      {
+        auto tmp = directory_iterator{curr_it->path(), ec};
+        if ((ec && *ec) || tmp == directory_iterator{})
+          return false;
+        //else
+        m_stack_ptr->push(tmp);
+        return true;
+      }
+      
+      return false;
     }
     
     void recursive_directory_iterator::m_make_end()
     {
       m_stack_ptr.reset();
-      m_element.assign("");
     }
     
     

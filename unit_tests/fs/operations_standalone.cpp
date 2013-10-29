@@ -15,7 +15,12 @@
 #undef NDEBUG
 #include <cassert>
 
-#include <iostream>
+#if defined(DEBUG)
+# include <iostream>
+# include <boost/filesystem.hpp>
+  namespace bfs = boost::filesystem;
+# endif
+
 
 #include <unistd.h>
 
@@ -192,7 +197,7 @@ BOOST_AUTO_TEST_CASE(fs_type_query_test)
     BOOST_CHECK(!fs::is_symlink(p));
     BOOST_CHECK(!fs::is_fifo(p));
     BOOST_CHECK(!fs::is_socket(p));
-    BOOST_CHECK(!fs::is_other(p) || fs::is_block_file(p));
+    BOOST_CHECK(fs::is_other(p));
   }
   
   for (auto& s : character_files)
@@ -238,24 +243,7 @@ BOOST_AUTO_TEST_CASE(fs_type_query_test)
   {
     fs::path p {s};
     BOOST_CHECK(fs::is_symlink(p));
-    if (!fs::is_symlink(p))
-      std::cout << p << std::endl;
   }
-  
-  /*
-  for (auto& s : )
-  {
-    fs::path p {s};
-    BOOST_CHECK(!fs::is_directory(p));
-    BOOST_CHECK(!fs::is_character_file(p));
-    BOOST_CHECK(!fs::is_block_file(p));
-    BOOST_CHECK(!fs::is_regular_file(p));
-    BOOST_CHECK(!fs::is_symlink(p));
-    BOOST_CHECK(!fs::is_fifo(p));
-    BOOST_CHECK(!fs::is_socket(p));
-    BOOST_CHECK(!fs::is_other(p));
-  }
-  */
  
 }
 

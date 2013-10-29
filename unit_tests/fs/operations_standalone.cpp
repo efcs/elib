@@ -84,6 +84,22 @@ vector_list files_list =
 };
 
 
+std::vector<std::string> create_iterable_paths()
+{
+  std::vector<std::string> paths;
+  
+  paths.insert(paths.end(), directories.begin(), directories.end());
+  paths.insert(paths.end(), regular_files.begin(), regular_files.end());
+  paths.insert(paths.end(), fifo_files.begin(), fifo_files.end());
+  paths.insert(paths.end(), symlink_to.begin(), symlink_to.end());
+  paths.insert(paths.end(), empty_files.begin(), empty_files.end());
+  paths.insert(paths.end(), non_empty_files.begin(), non_empty_files.end());
+  
+  return paths;
+}
+
+const std::vector<std::string> iterable_paths = create_iterable_paths();
+
 
 BOOST_AUTO_TEST_SUITE(fs_standalone_test_suite)
 
@@ -246,12 +262,31 @@ BOOST_AUTO_TEST_CASE(fs_type_query_test)
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+//                            ITERATORS
+////////////////////////////////////////////////////////////////////////////////
 
+BOOST_AUTO_TEST_CASE(test_top_iterator)
+{
+  fs::path p {"."};
+  for (auto& d_ent : fs::directory_iterator {p})
+  {
+    std::cout << d_ent.path() << std::endl;
+  }
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                           MODIFIERS                                              
+////////////////////////////////////////////////////////////////////////////////
 
 
 BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
 {
-    const std::string top_level = ELIB_CONFIGURE_FS_UNIT_TEST_PATH "/test_env/mkdir";
+    const std::string top_level = ELIB_CONFIGURE_FS_UNIT_TEST_PATH 
+                                    "/test_env/mkdir";
+                                    
     fs::path p {top_level};
 
     BOOST_REQUIRE(!fs::is_directory(p));

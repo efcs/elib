@@ -262,7 +262,6 @@ BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
     const std::vector<std::string> to_create = {
       "dir1", "dir2", "dir1/dir1", "dir1/dir1/dir2" };
       
-    std::cout <<  "HERE " <<  std::endl;
     for (auto& s : to_create)
     {
       p = top_level + "/" + s;
@@ -270,10 +269,10 @@ BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
       BOOST_CHECK(fs::is_directory(p));
     }
     
-    for (auto& s : to_create.rbegin())
+    for (auto it=to_create.crbegin(); it != to_create.crend(); ++it)
     {
       std::error_code ec {};
-      p = top_level + "/" + s;
+      p = top_level + "/" + *it;
       BOOST_REQUIRE(fs::is_directory(p));
       BOOST_CHECK(fs::remove(p, ec));
       BOOST_CHECK(!ec);

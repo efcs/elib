@@ -1,7 +1,0 @@
-test_env
-./test_env
-../fs/test_env 
-././test_env
-test_env/dir1
-./test_env/dir1
-./test_env/../test_env/dir1

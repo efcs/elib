@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import shutil
 
 dot_path, file_name = os.path.split(os.path.realpath(__file__))
 file_path = os.path.join(dot_path, file_name)
@@ -29,7 +30,7 @@ def call_shell(cmd):
   try:
     subprocess.call(cmd, shell=True)
   except subprocess.CalledProcessError as er:
-    yield
+    print(er)
     
 
   
@@ -39,6 +40,9 @@ def call_shell(cmd):
   setup and takedown for query tests
 """
 
+relative_paths = ['test_env', './test_env', '../fs/test_env', 
+                  '././test_env', 'test_env/dir1', './test_env/dir1',
+                  './test_env/../test_env/dir1']
 dne_paths = ["dne", "dir1/dne", "cfile1/dne"]
 
 directories = ["dir1", "dir1/dir2", "dir2", "dir2/dir1", "dir2/dir1/dir1"]
@@ -61,10 +65,10 @@ def init_filesystem():
   init_query_files()
   
 def init_path_files():
-  ll = read_list("test_files/relative_paths")
-  ap = [ os.path.join(dot_path, p) for p in ll]
+  write_list(relative_paths, "test_files/relative_paths")
+  ap = [ os.path.join(dot_path, p) for p in relative_paths]
   write_list(ap, "test_files/absolute_paths")
-  cp = [ os.path.abspath(p) for p in ll]
+  cp = [ os.path.abspath(p) for p in relative_paths]
   write_list(cp, "test_files/canonical_paths")
   
 
@@ -99,7 +103,7 @@ def init_query_files():
   for i in range(0, len(symlink_from)):
     from_path = os.path.join(env_path, symlink_from[i])
     to_path = os.path.join(env_path, symlink_to[i])
-    call_shell("ln -s " + from_path + " " + to_path)
+    os.symlink(from_path, to_path)
   write_list_abs(symlink_from, "test_files/symlink_from")
   write_list_abs(symlink_to, "test_files/symlink_to")
   
@@ -116,13 +120,13 @@ def init_query_files():
   
   
 def clean_filesystem():
-  env_path = os.path.join(dot_path, "test_env/")
+  env_path = os.path.join(dot_path, "test_env")
   list_path = os.path.join(dot_path, "test_files")
   
-  call_shell("rm -rf " + env_path)
+  shutil.rmtree(env_path)
   
-  created_lists = ["directories", "character_files", "block_files", 
-                   "regular_files", "fifo_files", "symlink_to",
+  created_lists = ["relative_paths", "directories", "character_files", 
+                   "block_files", "regular_files", "fifo_files", "symlink_to",
                    "symlink_from", "empty_files", "non_empty_files",
                    "absolute_paths", "canonical_paths", "dne_paths"]
   

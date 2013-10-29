@@ -8,6 +8,8 @@
 set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 set(mainSrc ${dotDir}/main.cpp)
 
+add_definitions( -DELIB_CONFIGURE_FS_UNIT_TEST_PATH="${dotDir}/fs" )
+
 aux_source_directory(${dotDir}/fs fsSrc)
 aux_source_directory(${dotDir}/log logSrc)
 aux_source_directory(${dotDir}/lock lockSrc)
@@ -31,7 +33,7 @@ find_package(Boost ${CONFIG_BOOST_VERSION}
              filesystem
   REQUIRED)
 
-include_directories(${Boost_INCLUDE_DIRS} ${dotDir}/../ )
+include_directories(${Boost_INCLUDE_DIRS} ${dotDir} )
 
 add_library(TestObjLib OBJECT ${testSources})
 

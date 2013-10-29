@@ -868,10 +868,10 @@ namespace elib
       { return s.type() == file_type::symlink; }
       
     inline bool is_symlink(const path& p)
-      { return is_symlink(status(p)); }
+      { return is_symlink(symlink_status(p)); }
     
     inline bool is_symlink(const path& p, std::error_code& ec) noexcept
-      { return is_symlink(status(p, ec)); }
+      { return is_symlink(symlink_status(p, ec)); }
     
     
     inline file_time_type last_write_time(const path& p)

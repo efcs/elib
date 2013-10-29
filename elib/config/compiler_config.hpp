@@ -8,11 +8,11 @@
 #   undef ELIB_MINGW
 
 
-#   if __GNUC__
+#   if defined(__GNUC__) && !defined(__clang__)
 #     define ELIB_GNU   1
-#   elif __clang__
+#   elif defined(__clang__)
 #     define ELIB_CLANG 1
-#   elif __MINGW32__
+#   elif defined(__MINGW32__)
 #     define ELIB_MINGW 1
 #   elif _MSC_VER
 #     define ELIB_MSVC  1

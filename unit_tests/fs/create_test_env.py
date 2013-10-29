@@ -103,7 +103,8 @@ def init_query_files():
   for i in range(0, len(symlink_from)):
     from_path = os.path.join(env_path, symlink_from[i])
     to_path = os.path.join(env_path, symlink_to[i])
-    os.symlink(from_path, to_path)
+    if not os.path.exists(to_path):
+      os.symlink(from_path, to_path)
   write_list_abs(symlink_from, "test_files/symlink_from")
   write_list_abs(symlink_to, "test_files/symlink_to")
   

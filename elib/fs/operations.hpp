@@ -703,7 +703,7 @@ namespace elib
     
     
     inline bool create_directory(const path& p)
-      { return create_directory(p); }
+      { return detail::create_directory(p); }
       
     inline bool create_directory(const path& p, std::error_code& ec) noexcept
       { return detail::create_directory(p, &ec); }

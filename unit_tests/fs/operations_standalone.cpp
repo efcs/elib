@@ -244,7 +244,49 @@ BOOST_AUTO_TEST_CASE(fs_type_query_test)
     fs::path p {s};
     BOOST_CHECK(fs::is_symlink(p));
   }
- 
+}
+
+
+
+
+BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
+{
+    const std::string top_level = ELIB_CONFIGURE_FS_UNIT_TEST_PATH "/test_env/mkdir";
+    fs::path p {top_level};
+
+    BOOST_REQUIRE(!fs::is_directory(p));
+    BOOST_CHECK_NO_THROW(fs::create_directory(p));
+    BOOST_CHECK(fs::exists(p));
+    BOOST_REQUIRE(fs::is_directory(p));
+
+    const std::vector<std::string> to_create = {
+      "dir1", "dir2", "dir1/dir1", "dir1/dir1/dir2" };
+      
+    std::cout <<  "HERE " <<  std::endl;
+    for (auto& s : to_create)
+    {
+      p = top_level + "/" + s;
+      BOOST_CHECK_NO_THROW(fs::create_directory(p));
+      BOOST_CHECK(fs::is_directory(p));
+    }
+    
+    for (auto& s : to_create.rbegin())
+    {
+      std::error_code ec {};
+      p = top_level + "/" + s;
+      BOOST_REQUIRE(fs::is_directory(p));
+      BOOST_CHECK(fs::remove(p, ec));
+      BOOST_CHECK(!ec);
+      BOOST_CHECK(fs::exists(p) == false);
+    }
+    
+    p = top_level;
+    std::error_code ec {};
+    BOOST_CHECK(fs::remove(p, ec));
+    BOOST_CHECK(!ec);
+    BOOST_CHECK(fs::exists(p) == false);
+        
+    
 }
 
 BOOST_AUTO_TEST_CASE(fs_standalone_clean)

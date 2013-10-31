@@ -22,10 +22,16 @@
 namespace elib {
 namespace log {
     
+
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_global_constructors.hpp>
+# include <elib/pragma/ignore_exit_time_destructors.hpp>
     
 template <typename Tag>
 log
 static_log<Tag>::m_impl;
+
+# include <elib/pragma/diagnostic_pop.hpp>
 
 
 template <typename Tag>

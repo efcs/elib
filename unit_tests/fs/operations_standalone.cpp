@@ -1,9 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/fs/path.hpp>
-#include <elib/fs/operations.hpp>
-#include <elib/fs/filesystem_error.hpp>
+#include "elib/filesystem.hpp"
 #include <system_error>
 
 #include <vector>

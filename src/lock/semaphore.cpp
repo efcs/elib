@@ -4,8 +4,9 @@
 namespace elib {
 namespace lock {
 
-semaphore::semaphore(unsigned count)
-    : m_impl(new detail::semaphore_impl(count))    
+//TODO constructor leaks
+semaphore::semaphore(unsigned xcount)
+    : m_impl(new detail::semaphore_impl(xcount))    
 { 
 }
 

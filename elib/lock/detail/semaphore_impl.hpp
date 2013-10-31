@@ -41,8 +41,8 @@ private:
 
 
 inline
-semaphore_impl::semaphore_impl(unsigned count)
-    : m_max(count), m_count(count)
+semaphore_impl::semaphore_impl(unsigned xcount)
+    : m_max{xcount}, m_count{xcount}
 {
     /* just make sure that std::atomic_uint is lock free */
     if (m_count.is_lock_free() == false)
@@ -64,8 +64,7 @@ semaphore_impl::lock()
         if (m_count.compare_exchange_weak(old_val, old_val-1))
             return;
     }
-    /* shouldn't be here */
-    throw 1;
+    // shouldn't be here
 }
 
 inline void
@@ -88,7 +87,7 @@ semaphore_impl::try_lock()
         if (m_count.compare_exchange_strong(old_val, old_val-1))
             return true;
     }
-    throw 1;
+    // should not be here
 }
 
 inline unsigned 

@@ -19,6 +19,8 @@ class directory_entry;
     
 namespace detail {
     
+#include <elib/pragma/diagnostic_push.hpp>
+#include <elib/pragma/ignore_effcxx.hpp>
     
 template <typename T>
 struct is_convertible : public std::false_type { };
@@ -48,9 +50,12 @@ struct enable_if_convertible
                             Ret>
 { };
 
+# include <elib/pragma/diagnostic_pop.hpp>
 
 template <typename T, typename Ret=void>
 using enable_if_convertible_t = typename enable_if_convertible<T, Ret>::type;
+
+
 
 
 template <typename Ret>

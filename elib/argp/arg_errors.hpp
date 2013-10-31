@@ -19,12 +19,16 @@
 #ifndef ELIB_ARGP_ARG_ERRORS_HPP
 #define ELIB_ARGP_ARG_ERRORS_HPP
 
+# include <elib/config.hpp>
+
 #include <stdexcept>
 
 namespace elib {
 namespace argp {
-    
-    
+   
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_weak_vtables.hpp>
+
 class option_conflict_error : public std::logic_error {
 public:
     option_conflict_error()
@@ -57,15 +61,16 @@ public:
         : std::runtime_error("invalid argument")
     { }
     
-    invalid_arg_error(const std::string & what)
-        : std::runtime_error("invalid argument: " + what)
+    invalid_arg_error(const std::string& what_arg)
+        : std::runtime_error("invalid argument: " + what_arg)
     { }
     
-    invalid_arg_error(const std::string & what, const std::string & arg)
-        : std::runtime_error("invalid argument: " + what + ": ( " + arg + " )")
+    invalid_arg_error(const std::string& what_arg, const std::string & arg)
+        : std::runtime_error("invalid argument: " + what_arg + ": ( " + arg + " )")
     { }
 };
 
+# include <elib/pragma/diagnostic_pop.hpp>
 
 } /* namespace argp */
 } /* namespace elib */

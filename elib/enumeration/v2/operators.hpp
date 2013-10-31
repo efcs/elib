@@ -12,7 +12,10 @@ namespace elib
 {
   namespace enumeration
   {
-    
+   
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
+
     template <typename T>
     struct has_mixed_bitwise_operators
       : public std::integral_constant<bool, 
@@ -76,6 +79,7 @@ namespace elib
           allow_underlying_dereference_operator_field<T>::bool_value>
     { };
     
+# include <elib/pragma/diagnostic_pop.hpp>
     
   ////////////////////////////////////////////////////////////////////////////////
   //                        PURE BITWISE OPERATORS                                                  
@@ -345,6 +349,15 @@ namespace elib
         return static_cast<bool>(!underlying_cast(op));
       }
       
+/* effc++ warning is triggered by casting both sides of a boolean expression
+ * ie it voilates boolean short circuting
+ * 
+ * it is continued in the arithmetic operators because g++ does not properly
+ * notices if the return type is a reference on not 
+ */
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
+      
       template <typename T>
       constexpr std::enable_if_t<has_logical_operators<T>::value, bool>
       operator&&(T lhs, T rhs) noexcept
@@ -394,6 +407,7 @@ namespace elib
         return static_cast<bool>(lhs || underlying_cast(rhs));
       }
       
+
       
     ////////////////////////////////////////////////////////////////////////////////
     //                       Arithmetic Operators                                                   
@@ -414,9 +428,11 @@ namespace elib
         return static_cast<T>(- underlying_cast(op));
       }
     
+    //TODO fix reference return types 
+    
     // Increment & Decrement
       template <typename T>
-      std::enable_if_t<has_arithmetic_operators<T>::value, T>&
+      std::enable_if_t<has_arithmetic_operators<T>::value, T&>
       operator++(T& op) noexcept
       {
         return (op = static_cast<T>(underlying_cast(op) + 1));
@@ -432,7 +448,7 @@ namespace elib
       }
       
       template <typename T>
-      std::enable_if_t<has_arithmetic_operators<T>::value, T>&
+      std::enable_if_t<has_arithmetic_operators<T>::value, T&>
       operator--(T& op) noexcept
       {
         return (op = static_cast<T>(underlying_cast(op) - 1));
@@ -447,6 +463,7 @@ namespace elib
         return tmp;
       }
       
+# include <elib/pragma/diagnostic_pop.hpp>
       
     // Pure Binary operators
       
@@ -741,9 +758,12 @@ namespace elib
   }                                                    // namespace enumeration
 }                                                      // namespace elib
 
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_header_hygiene.hpp>
 
 // import operators into top level namespace
 using namespace elib::enumeration::operators;
 
+# include <elib/pragma/diagnostic_pop.hpp>
 
 #endif /* ELIB_ENUMERATION_OPERATORS_HPP */

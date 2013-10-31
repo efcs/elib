@@ -29,7 +29,10 @@
 namespace elib {
 namespace enumeration {
     
-    
+
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_weak_vtables.hpp>
+ 
 /* the exception thrown when any of the non-safe casts fail */
 class bad_enum_cast : public std::logic_error {
 public:
@@ -37,10 +40,12 @@ public:
         : std::logic_error("bad enum cast")
     { }
     
-    bad_enum_cast(const std::string & what)
-        : std::logic_error("bad enum cast: " + what)
+    bad_enum_cast(const std::string & what_arg)
+        : std::logic_error("bad enum cast: " + what_arg)
     { }
 };
+
+# include <elib/pragma/diagnostic_pop.hpp>
 
 
 /* cast strings and underlying_types to Enum values */

@@ -22,10 +22,10 @@ namespace elib {
 namespace log {
     
 
-file_log::file_log(const std::string & filename)
-    : m_filename(filename)
+file_log::file_log(const std::string & xfilename)
+    : m_filename(xfilename)
 {
-    open(filename);
+    open(xfilename);
 }
 
 
@@ -36,16 +36,16 @@ file_log::filename() const
 }
 
 bool
-file_log::open(const std::string & filename)
+file_log::open(const std::string& xfilename)
 {
-    return open(filename, std::ios_base::app);
+    return open(xfilename, std::ios_base::app);
 }
 
 bool
-file_log::open(const std::string & filename, std::ios_base::openmode mode)
+file_log::open(const std::string& xfilename, std::ios_base::openmode mode)
 {
-    m_filename = filename;
-    m_out.open(filename.c_str(), mode);
+    m_filename = xfilename;
+    m_out.open(m_filename, mode);
     return m_out.good();
 }
 
@@ -59,6 +59,11 @@ void
 file_log::close()
 {
     m_out.close();
+}
+
+std::ostream& file_log::_get_stream(level_e)
+{
+  return m_out;
 }
 
 } /* namespace log */

@@ -25,9 +25,12 @@ namespace elib
       constexpr const value_type preferred_separator = path::preferred_separator;
       constexpr const value_type* dot = ".";
       constexpr const value_type* double_dot = "..";
-      
     
-      std::size_t start_of(const string_type& s, std::size_t pos)
+    
+      //NOTE: the following functions are marked as inline to prevent
+      // the "-Wmissing-prototypes" warning
+    
+      inline std::size_t start_of(const string_type& s, std::size_t pos)
       {
         if (pos >= s.size()) return npos;
         bool in_sep = (s[pos] == preferred_separator);
@@ -44,7 +47,7 @@ namespace elib
       bool is_root_name(const string_type&, std::size_t);
       std::size_t root_name_end(const string_type&);
       
-      std::size_t end_of(const string_type& s, std::size_t pos)
+      inline std::size_t end_of(const string_type& s, std::size_t pos)
       {
         if (pos >= s.size()) return npos;
         // special case for root name
@@ -57,7 +60,7 @@ namespace elib
       }
       
       // end == npos if size == 0
-      std::size_t end(const string_type& s)
+      inline std::size_t end(const string_type& s)
         { return s.size()-1; }
       
     // lexical observers
@@ -69,13 +72,13 @@ namespace elib
         return true;
       }
       
-      bool is_separator(const string_type& s, std::size_t pos)
+      inline bool is_separator(const string_type& s, std::size_t pos)
       {
         return (pos < s.size() && s[pos] == preferred_separator);
       }
         
       
-      bool is_name(const string_type& s)
+      inline bool is_name(const string_type& s)
       {
         if (s.empty()) return false;
         for (auto& ch : s)
@@ -86,12 +89,12 @@ namespace elib
         return true;
       }
       
-      bool is_name(const string_type& s, std::size_t pos)
+      inline bool is_name(const string_type& s, std::size_t pos)
       {
         return (pos < s.size() && s[pos] != preferred_separator);
       }
       
-      bool is_root_name(const string_type& s)
+      inline bool is_root_name(const string_type& s)
       {
         if (s.size() < 2 || s[0] != preferred_separator ||
           s[1] == preferred_separator)
@@ -103,7 +106,7 @@ namespace elib
       
       std::size_t root_name_start(const string_type& s);
       
-      bool is_root_name(const string_type& s, std::size_t pos)
+      inline bool is_root_name(const string_type& s, std::size_t pos)
       {
         return good(pos) && pos == 0 ? root_name_start(s) == pos : false;
       }
@@ -111,12 +114,12 @@ namespace elib
       // fwd for is_root_directory
       std::size_t root_directory_start(const string_type&);
       
-      bool is_root_directory(const string_type& s, std::size_t pos)
+      inline bool is_root_directory(const string_type& s, std::size_t pos)
       {
         return good(pos) ? root_directory_start(s) == pos : false;
       }
       
-      bool is_trailing_separator(const string_type& s, std::size_t pos)
+      inline bool is_trailing_separator(const string_type& s, std::size_t pos)
       {
         return (pos < s.size() && is_separator(s, pos) && 
             end_of(s, pos) == s.size()-1 &&
@@ -126,13 +129,13 @@ namespace elib
       
     // index of observers
       
-      std::size_t root_name_start(const string_type& s)
+      inline std::size_t root_name_start(const string_type& s)
       {
         return good(root_name_end(s)) ? 0 : npos;
       }
       
       
-      std::size_t root_name_end(const std::string& s)
+      inline std::size_t root_name_end(const std::string& s)
       {
         if (s.size() < 2 || s[0] != preferred_separator ||
           s[1] != preferred_separator)
@@ -146,7 +149,7 @@ namespace elib
       }
       
       
-      std::size_t root_directory_start(const string_type& s)
+      inline std::size_t root_directory_start(const string_type& s)
       {
         auto e = root_name_end(s);
         if (!good(e))
@@ -155,7 +158,7 @@ namespace elib
       }
       
       
-      std::size_t root_directory_end(const std::string& s)
+      inline std::size_t root_directory_end(const std::string& s)
       {
         auto st = root_directory_start(s);
         if (!good(st)) return npos;
@@ -165,13 +168,13 @@ namespace elib
         return index;
       }
       
-      std::size_t filename_start(const string_type& s)
+      inline std::size_t filename_start(const string_type& s)
       {
         // start_of handles size == 0 case (npos is passed)
         return start_of(s, s.size()-1);
       }
       
-      std::size_t filename_end(const std::string& s)
+      inline std::size_t filename_end(const std::string& s)
       {
         // filename_start will never succed on s.size() == 0
         // so s.size() - 1 never rolls over
@@ -179,7 +182,7 @@ namespace elib
       }
       
     // misc
-      string_pair separate_filename(const std::string& s)
+      inline string_pair separate_filename(const std::string& s)
       {
         if (s == "." || s == ".." || s.empty()) return string_pair{s, ""};
         auto pos = s.find_last_of('.');
@@ -189,14 +192,14 @@ namespace elib
       
       
     // substring extraction
-      string_type extract_raw(const string_type& s, std::size_t pos)
+      inline string_type extract_raw(const string_type& s, std::size_t pos)
       {
         std::size_t end_i = end_of(s, pos);
         if (!good(end_i)) return string_type{};
         return s.substr(pos, end_i - pos + 1);
       }
       
-      string_type extract_preferred(const string_type& s, std::size_t pos)
+      inline string_type extract_preferred(const string_type& s, std::size_t pos)
       {
         string_type raw = extract_raw(s, pos);
         if (raw.empty()) return raw;
@@ -206,7 +209,7 @@ namespace elib
         return raw;
       }
       
-      string_pair extract_pair(const string_type& s, std::size_t pos)
+      inline string_pair extract_pair(const string_type& s, std::size_t pos)
       {
         return string_pair{extract_raw(s, pos), extract_preferred(s, pos)};
       }

@@ -94,9 +94,9 @@ private:
     
 private:
     std::string m_program_name;
-    sptr_type m_pos_option;
-    std::vector<sptr_type> m_options;
-    std::vector<arg_token> m_tokens;
+    sptr_type m_pos_option{nullptr};
+    std::vector<sptr_type> m_options{};
+    std::vector<arg_token> m_tokens{};
 private:
     /* DISALLOW COPY AND ASSIGN */
     arg_parser(const arg_parser&);

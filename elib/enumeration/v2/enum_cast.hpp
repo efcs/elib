@@ -16,6 +16,9 @@ namespace elib
   {
   
   
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_weak_vtables.hpp>
+  
 # define ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND 1
 # if ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND
 
@@ -38,6 +41,8 @@ namespace elib
   };
   
 # endif
+
+# include <elib/pragma/diagnostic_pop.hpp>
   
     namespace detail
     {

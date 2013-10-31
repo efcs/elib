@@ -22,39 +22,42 @@
 #include <string>
 
 
-namespace elib {
-namespace argp {    
+namespace elib 
+{
+  namespace argp 
+  {
 
-class arg_token {
-public:
-    arg_token(unsigned pos, 
-              const std::string & raw_arg,
-              const std::string name = "", 
-              const std::string value = "",
-              bool xhas_assign = false);
-    
-    unsigned position() const;
-    
-    const std::string & raw_arg() const;
-    const std::string & name() const;
-    const std::string & value() const;
-    
-    bool invocation() const;
-    bool positional() const;
-    bool has_name() const;
-    bool has_value() const;
-    bool has_assign() const;
-    
-    bool matched() const;
-    void matched(bool);
-private:
-    unsigned m_pos;
-    std::string m_raw, m_name, m_value;
-    bool m_assign;
-    bool m_matched{false};
-};
+    class arg_token {
+    public:
+        arg_token(unsigned pos, 
+                  const std::string & raw_arg,
+                  const std::string name = "", 
+                  const std::string value = "",
+                  bool xhas_assign = false);
+
+        
+        unsigned position() const;
+        
+        const std::string & raw_arg() const;
+        const std::string & name() const;
+        const std::string & value() const;
+        
+        bool invocation() const;
+        bool positional() const;
+        bool has_name() const;
+        bool has_value() const;
+        bool has_assign() const;
+        
+        bool matched() const;
+        void matched(bool);
+    private:
+        unsigned m_pos;
+        std::string m_raw, m_name, m_value;
+        bool m_assign;
+        bool m_matched{false};
+    };
 
 
-} /* namespace argp */
+  } /* namespace argp */
 } /* namespace elib */
 #endif /* ELIB_ARGP_ARG_TOKEN_HPP */

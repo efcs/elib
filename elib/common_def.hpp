@@ -25,13 +25,13 @@
 
 
 /* ELIB_TODO can be used to locate TODO 's in code */
-# if ELIB_STATIC_ASSERT_TODO
+# if defined( ELIB_STATIC_ASSERT_TODO )
 #   define ELIB_TODO(str) static_assert(! "ELIB TODO FOUND: ", str)
-# elif ELIB_ASSERT_TODO
+# elif defined( ELIB_ASSERT_TODO )
 #   define ELIB_TODO(msg) ELIB_ASSERT(! "ELIB TODO", msg)
-# elif ELIB_WARN_TODO
+# elif defined( ELIB_WARN_TODO )
 #   define ELIB_TODO(msg) ELIB_WARN(! "ELIB TODO", msg)
-# elif ELIB_THROW_TODO
+# elif defined( ELIB_THROW_TODO )
 #   define ELIB_TODO(msg) throw "ELIB TODO " msg
 # else
 #   define ELIB_TODO(msg) ((void)0)

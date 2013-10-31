@@ -24,7 +24,10 @@
 #include <type_traits>
 
 namespace elib {
-    
+ 
+ 
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_weak_vtables.hpp>
     
 /* bad_cast error for lexical casts */
 class bad_lexical_cast : public std::runtime_error {
@@ -34,6 +37,8 @@ public:
         : std::runtime_error("bad lexical cast")
     { }
 };
+
+# include <elib/pragma/diagnostic_pop.hpp>
 
 
 /* static type-traits style struct to

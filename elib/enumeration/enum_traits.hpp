@@ -283,7 +283,7 @@ enum_traits<Enum>::verify_enum_traits()
             
             ret &= (basic_traits::name_map.count(e) == 1);
             
-        } catch (elib::enumeration::bad_enum_cast & ex) {
+        } catch (elib::enumeration::bad_enum_cast) {
             ret = false;
             break;
         }

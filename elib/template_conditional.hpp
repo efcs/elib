@@ -5,6 +5,8 @@
 
 namespace elib {
 
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
     
 template <bool b>
 struct NOT : public std::false_type
@@ -40,6 +42,8 @@ struct OR<false, false, false, false, false,
           false, false, false, false, false>
     : public std::false_type
 { };
+
+# include <elib/pragma/diagnostic_pop.hpp>
 
     
 } /* namespace elib */

@@ -30,7 +30,10 @@ namespace elib
       using sfinae_underlying_type_t 
         = typename sfinae_underlying_type<T>::type;
       
-      
+    
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
+    
       template <typename T, typename U>
       struct is_enum_enum 
         : public std::integral_constant<bool, 
@@ -82,7 +85,8 @@ namespace elib
       using enable_if_integral_t = 
         std::enable_if_t<std::is_integral<T>::value, Ret>;
         
-        
+# include <elib/pragma/diagnostic_pop.hpp>
+      
     }                                                       // namespace detail
   }                                                    // namespace enumeration
 }                                                           // namespace elib

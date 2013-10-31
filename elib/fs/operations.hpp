@@ -2,86 +2,14 @@
 #define ELIB_OPERATIONS_HPP
 
 # include <elib/config.hpp>
-#include <elib/fs/filesystem.hpp>
-#include <elib/fs/path.hpp>
-#include <elib/fs/detail/directory_stream.hpp>
+# include <elib/fs/path.hpp>
+# include <elib/fs/file_status.hpp>
 
 # include <elib/assert.hpp>
 
 # include <system_error>
-# include <iterator>
-# include <stack>
+# include <chrono>
 # include <cstdint>
-
-
-namespace elib 
-{
-  namespace fs
-  {
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                enum class file_type                                                           
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    
-    enum class file_type
-    {
-      none = 0,
-      not_found = -1,
-      regular = 1,
-      directory = 2,
-      symlink = 3,
-      block = 4,
-      character = 5,
-      fifo = 6,
-      socket = 7,
-      unknown = 8
-    }; // enum class file_type
-    
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                    enum class perms                                                       
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    
-    enum class perms
-    {
-      none = 0,
-      
-      owner_read = 0400,
-      owner_write = 0200,
-      owner_exec = 0100,
-      owner_all = 0700,
-      
-      group_read = 040,
-      group_write = 020,
-      group_exec = 010,
-      group_all = 070,
-      
-      others_read = 04,
-      others_write = 02,
-      others_exec = 01,
-      others_all = 07,
-      
-      all = 0777,
-      
-      set_uid = 04000,
-      set_gid = 02000,
-      sticky_bit = 01000,
-      
-      mask = 07777,
-      unknown = 0xFFFF,
-      symlink_perms = 0x4000
-      
-    };                                                      // enum class perms
-    
-    
-  }                                                         // namespace fs
-}                                                           // namespace elib
-
-
-// add bitwise operators inline
-# include <elib/fs/detail/perms_operators.hpp>
 
 
 namespace elib
@@ -90,430 +18,28 @@ namespace elib
   {
     
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                  class file_status                                                            
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    
-    class file_status
-    {
-    public:
-      // constructors
-      explicit 
-      file_status(file_type ft = file_type::none,
-          perms prms = perms::unknown) noexcept
-        : m_type{ft}, m_perms{prms}
-      { }
-      
-      file_status(const file_status&) noexcept = default;
-      file_status(file_status&&) noexcept = default;
-      ~file_status() = default;
-      
-      file_status& operator=(const file_status&) noexcept = default;
-      file_status& operator=(file_status&&) noexcept = default;
-      
-      // observers
-      file_type type() const noexcept { return m_type; }
-      perms permissions() const noexcept { return m_perms; }
-      
-      // modifiers
-      void type(file_type ft) noexcept { m_type = ft; }
-      void permissions(perms prms) noexcept { m_perms = prms; }
-      
-      //
-    private:
-      //
-      
-      file_type m_type;
-      perms m_perms;
-      
-    };                                                      // class file_status
-    
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                      class directory_entry                                                     
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    
-    class directory_entry
-    {
-    public:
-    //ctor & dtor
-      directory_entry() = default;
-      directory_entry(const directory_entry&) = default;
-      directory_entry(directory_entry&&) noexcept = default;
-      
-      explicit directory_entry(const fs::path& p, file_status st=file_status(),
-                               file_status symlink_st=file_status())
-        : m_path{p}, m_status{st}, m_symlink_status{symlink_st}
-      { }
-      
-      ~directory_entry() = default; 
-      
-    // modifiers
-      directory_entry& operator=(const directory_entry&) = default;
-      directory_entry& operator=(directory_entry&&) noexcept = default;
-      
-      void assign(const fs::path& p, file_status st=file_status(),
-                  file_status symlink_st=file_status())
-      {
-        m_path = p;
-        m_status = st;
-        m_symlink_status = symlink_st;
-      }
-      
-      void replace_filename(const fs::path& p, file_status st=file_status(),
-                            file_status symlink_st=file_status())
-      {
-        m_path.replace_filename(p);
-        m_status = st;
-        m_symlink_status = symlink_st;
-      }
-      
-    // observers
-      const fs::path& path() const noexcept
-        { return m_path; }
-        
-      file_status status() const
-      { return m_get_status();}
-      
-      file_status status(std::error_code& ec) const noexcept
-      { return m_get_status(&ec); }
-      
-      file_status symlink_status() const
-      { return m_get_symlink_status(); }
-      
-      file_status symlink_status(std::error_code& ec) const noexcept
-      { return m_get_symlink_status(&ec); }
-      
-      bool operator==(const directory_entry& rhs) const noexcept
-        { return m_path == rhs.m_path; }
-        
-      bool operator!=(const directory_entry& rhs) const noexcept
-        { return m_path != rhs.m_path; }
-        
-      bool operator< (const directory_entry& rhs) const noexcept
-        { return m_path < rhs.m_path; }
-        
-      bool operator<=(const directory_entry& rhs) const noexcept
-        { return m_path <= rhs.m_path; }
-        
-      bool operator> (const directory_entry& rhs) const noexcept
-        { return m_path > rhs.m_path; }
-        
-      bool operator>=(const directory_entry& rhs) const noexcept
-        { return m_path >= rhs.m_path; }
-      
-      //
-    private:
-      //
-      
-      // These don't need to be inline,  but they are for now.
-      file_status m_get_status(std::error_code *ec=nullptr) const
-      {
-        if (!status_known(m_status))
-        {
-          if (status_known(m_symlink_status) && !is_symlink(m_symlink_status))
-            m_status = m_symlink_status; 
-          else
-            m_status = ec ? fs::status(m_path, *ec) : fs::status(m_path);
-        }
-        
-        return m_status;
-      }
-      
-      file_status m_get_symlink_status(std::error_code *ec=nullptr) const
-      {
-        if (!status_known(m_symlink_status))
-          m_symlink_status = ec ? fs::symlink_status(m_path, *ec)
-                                : fs::symlink_status(m_path);
-        return m_symlink_status;
-      }
-      
-      
-      fs::path m_path;
-      
-      // Although these are not atomic to adjust, mutability allows
-      // for file status caching as suggested in the standard
-      // documentation
-      mutable file_status m_status;
-      mutable file_status m_symlink_status; 
-  
-    }; // class directory_entry
-  
-  
-  ////////////////////////////////////////////////////////////////////////////////
-  //                class directory_iterator                                                                
-  ////////////////////////////////////////////////////////////////////////////////
-    
     namespace detail
     {
-      
-      // underlying POSIX implementation for directory_iterator
-      class dir_stream
-      {
-      public:
-        dir_stream() noexcept = default;
-        dir_stream(const path& root, std::error_code *ec=nullptr);
-        
-        dir_stream(dir_stream&&) noexcept;
-        dir_stream& operator=(dir_stream&&) noexcept;
-        
-        // NO COPYING
-        dir_stream(const dir_stream&) = delete;
-        dir_stream& operator=(const dir_stream&) = delete;
-        
-        ~dir_stream() noexcept;
-        
-        bool good() const noexcept
-          { return m_dir_stream != nullptr; }
-          
-        operator bool() const noexcept
-          { return this->good(); }
-        
-        path advance(std::error_code *ec=nullptr);
-        
-        void close(std::error_code *ec=nullptr);
-        
-        //
-      private:
-        //
-        
-        DIR *m_dir_stream{nullptr};
-      
-      };                                                     // class dir_stream
-    
-    
+      typedef std::chrono::system_clock clock_type;
+      typedef typename clock_type::time_point time_point;
+      typedef typename clock_type::duration duration;
     }                                                       // namespace detail
+
     
+    typedef detail::time_point file_time_type;
+
     
-    class directory_iterator
-      : public std::iterator<std::input_iterator_tag, directory_entry>
+    struct space_info  // returned by space function
     {
-    public:
-    //ctor & dtor 
-      directory_iterator() noexcept
-      { }
-      
-      explicit directory_iterator(const path& p)
-        : directory_iterator(p, nullptr)
-      { }
-      
-      directory_iterator(const path& p, std::error_code& ec) noexcept
-        : directory_iterator(p, &ec)
-      { }
-      
-      directory_iterator(const directory_iterator&) = default;
-      directory_iterator(directory_iterator&&) = default;
-      ~directory_iterator() = default;
-      
-    //assignment
-      directory_iterator& operator=(const directory_iterator&) = default;
-      directory_iterator& operator=(directory_iterator&&) = default;
-      
-    // iterator access
-      const directory_entry& operator*() const
-        { return m_element; }
-        
-      const directory_entry* operator->() const
-        { return &m_element; }
-    
-    // iterator modifiers
-      directory_iterator& operator++()
-        { return m_increment(); }
-        
-      directory_iterator operator++(int)
-      { 
-        directory_iterator it{*this}; 
-        m_increment();
-        return it;
-      }
-      
-      directory_iterator& increment(std::error_code& ec) noexcept
-      { return m_increment(&ec); }
-      
-      
-      bool operator==(const directory_iterator& rhs) const noexcept
-      { return m_stream.get() == rhs.m_stream.get(); }
-      
-      bool operator!=(const directory_iterator& rhs) const noexcept
-      { return !(*this == rhs); }
-      
-      //
-    private:
-      //
-      
-      // recursive_directory_iterator uses this class
-      // as its underlying implementation, and therefore it
-      // needs access to the methods that take an optional error_code
-      friend class recursive_directory_iterator;
-      
-      // construct the dir_stream
-      directory_iterator(const path& p, std::error_code *ec);
-      directory_iterator& m_increment(std::error_code *ec=nullptr);
-      // convert iterator into end iterator
-      void m_make_end();
-      
-      std::shared_ptr<detail::dir_stream> m_stream{nullptr};
-      path m_root_path{};
-      directory_entry m_element{};
-    
-    };                                                 // class directory_entry
-    
-    
-    
-    // enable directory_iterator range-based for statements
-    inline const directory_iterator& begin(const directory_iterator& iter) noexcept
-    { return iter; }
-    
-    inline directory_iterator end(const directory_iterator&) noexcept
-    { return directory_iterator{}; }
-    
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                    class recursive_directory_iterator                                                               
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    //TODO
-    class recursive_directory_iterator
-      : public std::iterator<std::input_iterator_tag,  directory_entry>
-    {
-    public:
-      // constructors and destructor
-      recursive_directory_iterator() noexcept
-      { }
-      
-      explicit recursive_directory_iterator(const path& p,
-                  directory_options options = directory_options::none)
-          : recursive_directory_iterator(p, options,  nullptr)
-      { }
-
-      recursive_directory_iterator(const path& p,
-          directory_options options, std::error_code& ec) noexcept
-        : recursive_directory_iterator(p, options, &ec)
-      { }
-      
-      recursive_directory_iterator(const path& p, std::error_code& ec) noexcept
-        : recursive_directory_iterator(p, directory_options::none,  &ec)
-      { }
-      
-      recursive_directory_iterator(const recursive_directory_iterator&) = default;
-      
-      recursive_directory_iterator(recursive_directory_iterator&&) = default;
-      
-      recursive_directory_iterator& 
-        operator=(const recursive_directory_iterator&) = default;
-        
-        
-      recursive_directory_iterator& 
-        operator=(recursive_directory_iterator&&) = default;
-        
-      
-      ~recursive_directory_iterator() = default;
-      
-      
-      const directory_entry& operator*() const
-      {
-        return *(m_stack_ptr->top());
-      }
-      
-      const directory_entry* operator->() const
-      {
-        return &(*(m_stack_ptr->top()));
-      }
-      
-      recursive_directory_iterator& operator++()
-      { return m_increment(); }
-      
-      
-      recursive_directory_iterator operator++(int)
-      {
-        auto cp = *this;
-        m_increment();
-        return cp;
-      }
-      
-      recursive_directory_iterator& increment(std::error_code& ec)
-      { return m_increment(&ec); }
-      
-
-      // observers
-      directory_options options() const
-      { return m_options; }
-      
-      
-      int depth() const
-      {
-        // m_stack_ptr && m_stack_ptr->size() == 0 should
-        // never be true
-        if (m_stack_ptr) return m_stack_ptr->size() - 1;
-        return 0;
-      }
-      
-      
-      bool recursion_pending() const
-        { return m_rec; }
-
-        
-      // modifiers
-
-      void pop()
-      {
-        if (!m_stack_ptr)
-          return;
-        
-        ELIB_ASSERT(m_stack_ptr->size() > 0);
-        
-        m_stack_ptr->top() = directory_iterator{};
-        m_increment();
-      }
-      
-      void disable_recursion_pending() noexcept
-        { m_rec = false; }
-      
-      bool operator==(const recursive_directory_iterator& other) const noexcept
-        { return m_stack_ptr == other.m_stack_ptr; }
-     
-      bool operator!=(const recursive_directory_iterator& other) const noexcept
-        { return !(*this == other);}
-     
-      //
-    private:
-      //
-     
-  
-      recursive_directory_iterator(const path& p, directory_options opt, 
-                                  std::error_code *ec);
-      
-      void m_make_end();
-      
-      bool m_try_recursion(std::error_code *ec);
-      
-      recursive_directory_iterator& m_increment(std::error_code *ec=nullptr);
-      
-      std::shared_ptr<std::stack<directory_iterator>> m_stack_ptr{nullptr};
-      
-      directory_options m_options{directory_options::none};
-      
-      bool m_rec{true};
-    };                                     // class recursive_directory_iterator
-    
-    
-    // enable recursive_directory_iterator range-based for statements
-    inline const recursive_directory_iterator& 
-    begin(const recursive_directory_iterator& iter) noexcept
-    { return iter; }
-    
-    
-    inline recursive_directory_iterator 
-    end(const recursive_directory_iterator&) noexcept
-    { return recursive_directory_iterator{}; }
-      
+      std::uintmax_t capacity;
+      std::uintmax_t free; 
+      std::uintmax_t available; // free space available to a non-privileged process
+    };
   
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                   Copy options 
-  ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //                   Copy options 
+    ////////////////////////////////////////////////////////////////////////////////
 
     enum class copy_options
     {
@@ -617,7 +143,7 @@ namespace elib
       
       bool remove(const path& p, std::error_code *ec=nullptr);
       
-      std::intmax_t remove_all(const path& p, std::error_code *ec=nullptr);
+      std::uintmax_t remove_all(const path& p, std::error_code *ec=nullptr);
       
       void rename(const path& from, const path& to, std::error_code *ec=nullptr);
       
@@ -643,9 +169,12 @@ namespace elib
   //                       OPERATIONS                                              
   ////////////////////////////////////////////////////////////////////////////////
     
+    // forward declarations
+    path current_path();
+    bool status_known(file_status s) noexcept;
+    
     
     path absolute(const path& p, const path& base=current_path());
-    
     
     inline path canonical(const path& p, const path& base = current_path())
       { return detail::canonical(p, base); }
@@ -757,10 +286,10 @@ namespace elib
       { return status_known(s) && s.type() != file_type::not_found; }
       
     inline bool exists(const path& p)
-      { return exists(status(p)); }
+      { return exists(detail::status(p)); }
       
     inline bool exists(const path& p, std::error_code& ec) noexcept
-      { return exists(status(p, ec)); }
+      { return exists(detail::status(p, &ec)); }
     
     
     inline bool equivalent(const path& p1, const path& p2)
@@ -789,30 +318,40 @@ namespace elib
       { return s.type() == file_type::block; }
       
     inline bool is_block_file(const path& p)
-      { return is_block_file(status(p)); }
+      { return is_block_file(detail::status(p)); }
     
     inline bool is_block_file(const path& p, std::error_code& ec) noexcept
-      { return is_block_file(status(p, ec)); }
+      { return is_block_file(detail::status(p, &ec)); }
     
     
     inline bool is_character_file(file_status s) noexcept
       { return s.type() == file_type::character; }
       
     inline bool is_character_file(const path& p)
-      { return is_character_file(status(p)); }
+      { return is_character_file(detail::status(p)); }
       
     inline bool is_character_file(const path& p, std::error_code& ec) noexcept
-      { return is_character_file(status(p, ec)); }
+      { return is_character_file(detail::status(p, &ec)); }
+    
+    
+    inline bool is_regular_file(file_status s) noexcept
+      { return s.type() == file_type::regular; }
+    
+    inline bool is_regular_file(const path& p)
+      { return is_regular_file(detail::status(p)); }
+    
+    inline bool is_regular_file(const path& p, std::error_code& ec) noexcept
+      { return is_regular_file(detail::status(p, &ec)); }
     
     
     inline bool is_directory(file_status s) noexcept
       { return s.type() == file_type::directory; }
       
     inline bool is_directory(const path& p)
-      { return is_directory(status(p)); }
+      { return is_directory(detail::status(p)); }
     
     inline bool is_directory(const path& p, std::error_code& ec) noexcept
-      { return is_directory(status(p, ec)); }
+      { return is_directory(detail::status(p, &ec)); }
     
     
     inline bool is_empty(const path& p)
@@ -826,10 +365,31 @@ namespace elib
       { return s.type() == file_type::fifo; }
       
     inline bool is_fifo(const path& p)
-      { return is_fifo(status(p)); }
+      { return is_fifo(detail::status(p)); }
       
     inline bool is_fifo(const path& p, std::error_code& ec) noexcept
-      { return is_fifo(status(p, ec)); }
+      { return is_fifo(detail::status(p, &ec)); }
+    
+    
+     inline bool is_socket(file_status s) noexcept
+      { return s.type() == file_type::socket; }
+      
+    inline bool is_socket(const path& p)
+      { return is_socket(detail::status(p)); }
+      
+    inline bool is_socket(const path& p, std::error_code& ec) noexcept
+      { return is_socket(detail::status(p, &ec)); }
+    
+    
+    inline bool is_symlink(file_status s) noexcept
+      { return s.type() == file_type::symlink; }
+      
+    inline bool is_symlink(const path& p)
+      { return is_symlink(detail::symlink_status(p)); }
+    
+    inline bool is_symlink(const path& p, std::error_code& ec) noexcept
+      { return is_symlink(detail::symlink_status(p, &ec)); }
+    
     
     inline bool is_other(file_status s) noexcept
     {
@@ -838,40 +398,10 @@ namespace elib
     }
     
     inline bool is_other(const path& p)
-      { return is_other(status(p)); }
+      { return is_other(detail::status(p)); }
       
     inline bool is_other(const path& p, std::error_code& ec) noexcept
-      { return is_other(status(p, ec)); }
-    
-    
-    inline bool is_regular_file(file_status s) noexcept
-    { return s.type() == file_type::regular; }
-    
-    inline bool is_regular_file(const path& p)
-    { return is_regular_file(status(p)); }
-    
-    inline bool is_regular_file(const path& p, std::error_code& ec) noexcept
-    { return is_regular_file(status(p, ec)); }
-    
-    
-    inline bool is_socket(file_status s) noexcept
-      { return s.type() == file_type::socket; }
-      
-    inline bool is_socket(const path& p)
-      { return is_socket(status(p)); }
-      
-    inline bool is_socket(const path& p, std::error_code& ec) noexcept
-      { return is_socket(status(p, ec)); }
-    
-    
-    inline bool is_symlink(file_status s) noexcept
-      { return s.type() == file_type::symlink; }
-      
-    inline bool is_symlink(const path& p)
-      { return is_symlink(symlink_status(p)); }
-    
-    inline bool is_symlink(const path& p, std::error_code& ec) noexcept
-      { return is_symlink(symlink_status(p, ec)); }
+      { return is_other(detail::status(p, &ec)); }
     
     
     inline file_time_type last_write_time(const path& p)

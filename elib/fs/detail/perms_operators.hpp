@@ -27,96 +27,80 @@ namespace elib
       constexpr bool bc(perms p) noexcept
       { return static_cast<bool>(p); }
       
-      namespace operators
-      {
-        
-      ////////////////////////////////////////////////////////////////////////////////
-       //                   BITWISE OPERATORS                                                       
-      ////////////////////////////////////////////////////////////////////////////////
-      // pure operators (lhs & rhs) == perms
-        constexpr perms operator~(perms lhs) noexcept
-        { return uc(~ dc(lhs)); }
-      
-        constexpr perms operator&(perms lhs, perms rhs) noexcept
-        { return uc(dc(lhs) & dc(rhs)); }
-        
-        constexpr perms operator|(perms lhs, perms rhs) noexcept
-        { return uc(dc(lhs) | dc(rhs)); }
-        
-        constexpr perms operator^(perms lhs, perms rhs) noexcept
-        { return uc(dc(lhs) ^ dc(rhs)); }
-        
-        inline perms& operator&=(perms& lhs, perms rhs) noexcept
-        { return lhs = lhs & rhs; }
-        
-        inline perms& operator|=(perms& lhs, perms rhs) noexcept
-        { return lhs = lhs | rhs; }
-        
-        inline perms& operator^=(perms& lhs, perms rhs) noexcept
-        { return lhs = lhs ^ rhs; }
-        
-      //mixed operators
-        constexpr perms operator&(base_t lhs, perms rhs) noexcept
-        { return uc(lhs & dc(rhs)); }
-    
-        constexpr perms operator|(base_t lhs, perms rhs) noexcept
-        { return uc(lhs | dc(rhs)); }
-    
-        constexpr perms operator^(base_t lhs, perms rhs) noexcept
-        { return uc(lhs ^ dc(rhs)); }
-    
-    
-        constexpr perms operator&(perms lhs, base_t rhs) noexcept
-        { return uc(dc(lhs) & rhs); }
-    
-        constexpr perms operator|(perms lhs, base_t rhs) noexcept
-        { return uc(dc(lhs) | rhs); }
-    
-        constexpr perms operator^(perms lhs, base_t rhs) noexcept
-        { return uc(dc(lhs) ^ rhs); }
-        
-        
-        inline perms& operator&=(perms& lhs, base_t rhs) noexcept
-        { return lhs = lhs & rhs; }
-        
-        inline perms& operator|=(perms& lhs, base_t rhs) noexcept
-        { return lhs = lhs | rhs; }
-        
-        inline perms& operator^=(perms& lhs, base_t rhs) noexcept
-        { return lhs = lhs ^ rhs; }
-      
-      ////////////////////////////////////////////////////////////////////////////////
-      //                    LOGICAL OPERATORS                                                           
-      ////////////////////////////////////////////////////////////////////////////////
-      constexpr bool operator!(perms lhs) noexcept
-      { return ! bc(lhs); }
-      
-      constexpr bool operator&&(perms lhs, perms rhs) noexcept
-      { return bc(lhs) && bc(rhs); }
-      
-      constexpr bool operator||(perms lhs, perms rhs) noexcept
-      { return bc(lhs) || bc(rhs); }
-      
-      constexpr bool operator&&(bool lhs, perms rhs) noexcept
-      { return lhs && bc(rhs); }
-      
-      constexpr bool operator||(bool lhs, perms rhs) noexcept
-      { return lhs || bc(rhs); }
-      
-      constexpr bool operator&&(perms lhs, bool rhs) noexcept
-      { return bc(lhs) && rhs; }
-      
-      constexpr bool operator||(perms lhs, bool rhs) noexcept
-      { return bc(lhs) || rhs; }
-      
-      
-      } // namespace operators
     } // namespace perms_detail
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //         BITWISE OPERATORS                       
+    ////////////////////////////////////////////////////////////////////////////////
+    // pure operators (lhs & rhs) == perms
+    constexpr perms operator~(perms lhs) noexcept
+    { return perms_detail::uc(~ perms_detail::dc(lhs)); }
+    
+    constexpr perms operator&(perms lhs, perms rhs) noexcept
+    { return perms_detail::uc(perms_detail::dc(lhs) & perms_detail::dc(rhs)); }
+    
+    constexpr perms operator|(perms lhs, perms rhs) noexcept
+    { return perms_detail::uc(perms_detail::dc(lhs) | perms_detail::dc(rhs)); }
+    
+    constexpr perms operator^(perms lhs, perms rhs) noexcept
+    { return perms_detail::uc(perms_detail::dc(lhs) ^ perms_detail::dc(rhs)); }
+    
+    inline perms& operator&=(perms& lhs, perms rhs) noexcept
+    { return lhs = lhs & rhs; }
+    
+    inline perms& operator|=(perms& lhs, perms rhs) noexcept
+    { return lhs = lhs | rhs; }
+    
+    inline perms& operator^=(perms& lhs, perms rhs) noexcept
+    { return lhs = lhs ^ rhs; }
+    
+    //mixed operators
+    
+    
+    constexpr perms operator&(perms lhs, perms_detail::base_t rhs) noexcept
+    { return perms_detail::uc(perms_detail::dc(lhs) & rhs); }
+    
+    constexpr perms operator|(perms lhs, perms_detail::base_t rhs) noexcept
+    { return perms_detail::uc(perms_detail::dc(lhs) | rhs); }
+    
+    constexpr perms operator^(perms lhs, perms_detail::base_t rhs) noexcept
+    { return perms_detail::uc(perms_detail::dc(lhs) ^ rhs); }
+    
+    inline perms& operator&=(perms& lhs, perms_detail::base_t rhs) noexcept
+    { return lhs = lhs & rhs; }
+    
+    inline perms& operator|=(perms& lhs, perms_detail::base_t rhs) noexcept
+    { return lhs = lhs | rhs; }
+    
+    inline perms& operator^=(perms& lhs, perms_detail::base_t rhs) noexcept
+    { return lhs = lhs ^ rhs; }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //        LOGICAL OPERATORS                   
+    ////////////////////////////////////////////////////////////////////////////////
+    
+/* suppress warning about always evaluating both sides */
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
+    
+    constexpr bool operator!(perms lhs) noexcept
+    { return ! perms_detail::bc(lhs); }
+    
+    constexpr bool operator&&(perms lhs, perms rhs) noexcept
+    { return perms_detail::bc(lhs) && perms_detail::bc(rhs); }
+    
+    constexpr bool operator||(perms lhs, perms rhs) noexcept
+    { return perms_detail::bc(lhs) || perms_detail::bc(rhs); }
+    
+    constexpr bool operator&&(perms lhs, bool rhs) noexcept
+    { return perms_detail::bc(lhs) && rhs; }
+    
+    constexpr bool operator||(perms lhs, bool rhs) noexcept
+    { return perms_detail::bc(lhs) || rhs; }
+    
+# include <elib/pragma/diagnostic_pop.hpp>
+    
   } // namespace fs
 } // namespace elib 
-
-
-// insert intro global namespace 
-using namespace elib::fs::perms_detail::operators;
 
 #endif /* ELIB_FS_PERMS_OPERATORS_HPP */

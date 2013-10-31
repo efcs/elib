@@ -46,8 +46,8 @@ locking_proxy<T, Lock>::operator*() const
     
 template <typename T, typename Lock>
 inline
-access_guard<T, Lock>::access_guard(T & val, Lock & lock)
-    : m_val(&val), m_lock(lock, std::defer_lock)
+access_guard<T, Lock>::access_guard(T & val, Lock & xlock)
+    : m_val(&val), m_lock(xlock, std::defer_lock)
 { }
 
 template <typename T, typename Lock>

@@ -68,8 +68,8 @@ rw_lock::as_write_lock()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-rw_read_lock::rw_read_lock(rw_lock &lock)
-    : m_lock(lock)
+rw_read_lock::rw_read_lock(rw_lock& xlock)
+    : m_lock(xlock)
 { 
 }
  
@@ -97,8 +97,8 @@ rw_read_lock::try_lock()
 ////////////////////////////////////////////////////////////////////////////////
 
 
-rw_write_lock::rw_write_lock(rw_lock &lock)
-    : m_lock(lock)
+rw_write_lock::rw_write_lock(rw_lock& xlock)
+    : m_lock(xlock)
 { 
 }
  

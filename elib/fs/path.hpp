@@ -23,6 +23,7 @@ namespace elib
         typedef std::basic_string<value_type> string_type;
         
         static constexpr value_type preferred_separator = '/';
+        static constexpr value_type other_separator = '\\';
         
         // ctor & dtor
         // can't be default for some reason
@@ -42,13 +43,13 @@ namespace elib
         }
         
         template <typename InputIter>
-        path(InputIter begin, InputIter end)
+        path(InputIter xbegin, InputIter xend)
         {
           typedef typename std::iterator_traits<InputIter>::value_type vtype;
             
-          if (begin != end) 
+          if (xbegin != xend) 
           {
-            std::basic_string<vtype> s{begin, end};
+            std::basic_string<vtype> s{xbegin, xend};
             m_pathname = detail::convert<string_type>(s);
           }
         }
@@ -92,13 +93,13 @@ namespace elib
         }
         
         template <typename InputIter>
-        path& assign(InputIter begin, InputIter end)
+        path& assign(InputIter xbegin, InputIter xend)
         {
           typedef typename std::iterator_traits<InputIter>::value_type vtype;
           
-          if (begin != end)
+          if (xbegin != xend)
           {
-            std::basic_string<vtype> s{begin, end};
+            std::basic_string<vtype> s{xbegin, xend};
             m_pathname = detail::convert<string_type>(s);
           }
             
@@ -136,14 +137,14 @@ namespace elib
         }
         
         template <typename InputIter>
-        path& append(InputIter begin, InputIter end)
+        path& append(InputIter xbegin, InputIter xend)
         {
           typedef typename std::iterator_traits<InputIter>::value_type vtype;
           
-          if (begin != end) 
+          if (xbegin != xend) 
           {
-            std::basic_string<vtype> str{begin, end};
-            path p{detail::convert<string_type>(str)};
+            std::basic_string<vtype> xstr{xbegin, xend};
+            path p{detail::convert<string_type>(xstr)};
             this->operator/=(p);
           }
             
@@ -157,15 +158,15 @@ namespace elib
           return *this;
         }
         
-        path& operator+=(const string_type& str)
+        path& operator+=(const string_type& xstr)
         {
-          m_pathname += str;
+          m_pathname += xstr;
           return *this;
         }
         
-        path& operator+=(const value_type* str)
+        path& operator+=(const value_type* xstr)
         { 
-          m_pathname += str;
+          m_pathname += xstr;
           return *this;
         }
         
@@ -199,12 +200,12 @@ namespace elib
         }
         
         template <typename InputIter>
-        path& concat(InputIter begin, InputIter end)
+        path& concat(InputIter xbegin, InputIter xend)
         {
           typedef typename std::iterator_traits<InputIter>::value_type vtype;
-          if (begin != end) 
+          if (xbegin != xend) 
           {
-            std::basic_string<vtype> tmp{begin, end};
+            std::basic_string<vtype> tmp{xbegin, xend};
             this->operator+=(detail::convert<string_type>(tmp));
           }
           return *this;
@@ -216,21 +217,17 @@ namespace elib
         { 
           m_pathname.clear(); 
         }
-        
+
         path& make_preferred()
         {
-          value_type other_sep;
-          if (preferred_separator == '/')
-            other_sep = '\\';
-          else
-            other_sep = '/';
           for (auto& ch : m_pathname) 
           {
-            if (ch == other_sep)
+            if (ch == other_separator)
               ch = preferred_separator;
           }
           return *this;
         } 
+    
         
         path& remove_filename()
         {
@@ -317,14 +314,14 @@ namespace elib
     // comparision
         int compare(const path& p) const noexcept;
         
-        int compare(const string_type& str) const
+        int compare(const string_type& xstr) const
         { 
-          return compare(path(str)); 
+          return compare(path(xstr)); 
         }
         
-        int compare(const value_type* str) const
+        int compare(const value_type* xstr) const
         { 
-          return compare(path(str)); 
+          return compare(path(xstr)); 
         }
         
         
@@ -453,10 +450,17 @@ namespace elib
 //                        path::iterator                                                 
 ////////////////////////////////////////////////////////////////////////////////
 
+// suppress g++ effc++ warning for std::iterator
+// not having a virtual destructor
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
 
     class path::iterator 
       : public std::iterator<std::bidirectional_iterator_tag, path> 
     {
+      
+# include <elib/pragma/diagnostic_pop.hpp>
+
       public:
         
       // ctor & dtor
@@ -535,9 +539,9 @@ namespace elib
         const string_type&
         m_path_str() const;
       
-        path m_element;
+        path m_element {};
         const path *m_path_ptr{nullptr};
-        std::size_t m_pos;
+        std::size_t m_pos {};
         
     }; // class path::iterator
    

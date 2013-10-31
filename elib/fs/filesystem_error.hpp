@@ -15,12 +15,15 @@ namespace elib
   namespace fs
   {
 
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_weak_vtables.hpp>
 
     class filesystem_error : public std::system_error {
     public:
       
+      //TODO
       filesystem_error(const std::string& what_arg, std::error_code ec)
-          : std::system_error{ec}, m_impl{new impl_t}
+          : std::system_error{ec}, m_impl{std::make_shared<impl_t>()}
       {
           m_impl->what_arg = what_arg;
       }
@@ -59,16 +62,17 @@ namespace elib
       
       struct impl_t 
       {
-        std::string what_arg;
-        path p1;
-        path p2;
+        std::string what_arg {};
+        path p1 {};
+        path p2 {};
       };
         
       std::shared_ptr<impl_t> m_impl;
       
     };                                                // class filesystem_error
 
-
+# include <elib/pragma/diagnostic_pop.hpp>
+    
     ////////////////////////////////////////////////////////////////////////////////
     //                      MISC ERROR HELPERS                                                      
     ////////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/system/error_code.hpp>
 
-#include "elib/fs/path.hpp"
+#include "elib/filesystem.hpp"
 
 #define ELIB_DEBUG_EVAL_FAILED
 #include "elib/debug/eval.hpp"

@@ -26,14 +26,14 @@ namespace argp {
 ///////////////////////////////////////////////////////////////////////////////
     
 arg_token::arg_token(unsigned pos, 
-                     const std::string & raw_arg,
-                     const std::string name,
-                     const std::string value,
+                     const std::string& xraw_arg,
+                     const std::string xname,
+                     const std::string xvalue,
                      bool xhas_assign)
     : m_pos{pos}
-    , m_raw{raw_arg}
-    , m_name{name}
-    , m_value{value}
+    , m_raw{xraw_arg}
+    , m_name{xname}
+    , m_value{xvalue}
     , m_assign{xhas_assign}
 {
 } 

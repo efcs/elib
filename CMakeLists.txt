@@ -16,9 +16,49 @@ if (CONFIG_MY_BUILD)
       set(CMAKE_C_COMPILER /usr/bin/clang)
       set(CMAKE_CXX_COMPILER /usr/bin/clang++)
       add_definitions( -ferror-limit=15 )
-
+                       
+      add_definitions( -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic
+                        -Wno-padded
+                     )
+      
   endif()
 
+  set(CONFIG_GCC_ALL_WARNINGS TRUE)
+  if (CONFIG_GCC_ALL_WARNINGS)
+    
+#add_definitions( -Werror  )
+  
+    
+    add_definitions( -g -O -Wall -Weffc++ -pedantic  
+      -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
+      -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
+      -Wdisabled-optimization 
+      -Wfloat-equal  -Wformat  -Wformat=2 
+      -Wformat-nonliteral -Wformat-security  
+      -Wformat-y2k 
+      -Wimport  -Winit-self  -Winline 
+      -Winvalid-pch   
+      -Wlong-long -Wmissing-braces 
+      -Wmissing-field-initializers -Wmissing-format-attribute   
+      -Wmissing-include-dirs -Wmissing-noreturn 
+      -Wpacked  -Wpadded -Wparentheses  -Wpointer-arith 
+      -Wredundant-decls -Wreturn-type 
+      -Wsequence-point  -Wshadow -Wsign-compare  -Wstack-protector 
+      -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch  -Wswitch-default 
+      -Wswitch-enum -Wtrigraphs  -Wuninitialized 
+      -Wunknown-pragmas  -Wunreachable-code -Wunused 
+      -Wunused-function  -Wunused-label  -Wunused-parameter 
+      -Wunused-value  -Wunused-variable  -Wvariadic-macros 
+      -Wvolatile-register-var  -Wwrite-strings
+    )
+    
+    if (NOT (CONFIG_OPT_GCC MATCHES CLANG))
+      add_definitions( -Wunsafe-loop-optimizations )
+    endif()
+    
+    add_definitions( -Wno-padded -Wno-aggregate-return -Wno-inline )
+  endif()
+  
 endif() # CONFIG_MY_BUILD
 
 ################################################################################
@@ -68,7 +108,7 @@ add_definitions( -DELIB_DEFAULT_CONFIG )
 add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.hpp)
 
 add_subdirectory(src)
-add_subdirectory(unit_tests)
-add_subdirectory(test_main)
+#add_subdirectory(unit_tests)
+#add_subdirectory(test_main)
 
 

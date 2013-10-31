@@ -42,6 +42,9 @@ namespace log {
 basic_log::basic_log(level_e l)
     : m_level(l)
 { }
+
+basic_log::~basic_log() noexcept
+{ }
     
 
 const std::string &
@@ -56,13 +59,13 @@ basic_log::prompt(level_e l) const
 }
 
 void 
-basic_log::prompt(level_e l, const std::string &prompt)
+basic_log::prompt(level_e l, const std::string &prompt_str)
 {
     if (! is_basic_level(l))
         throw std::logic_error("not a valid basic level");
     
     lock_guard lock(m_lock);
-    m_prompts[l] = prompt;
+    m_prompts[l] = prompt_str;
 }
 
 void 
@@ -82,15 +85,15 @@ basic_log::level()
 }
 
 void 
-basic_log::print(level_e level, const char *msg, ... ) 
+basic_log::print(level_e xlevel, const char *msg, ... ) 
 {
-    LOG_FUNC_HANDLER(level);
+    LOG_FUNC_HANDLER(xlevel);
 }
 
 void 
-basic_log::print(level_e level, const std::string &msg)
+basic_log::print(level_e xlevel, const std::string &msg)
 {
-    _log(level, msg);
+    _log(xlevel, msg);
 }
     
 void 

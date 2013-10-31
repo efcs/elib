@@ -39,7 +39,7 @@ namespace elib
       public:
         iter_impl() noexcept
           : m_end{true}
-        { };
+        { }
 
         explicit iter_impl(iter_pos_e e)
           : m_end{false}
@@ -52,7 +52,7 @@ namespace elib
         
         explicit iter_impl(T e) noexcept
           : m_end{false}, m_val{e}
-        { };
+        { }
         
         iter_impl(const iter_impl&) = default;
         iter_impl& operator=(const iter_impl&) = default;

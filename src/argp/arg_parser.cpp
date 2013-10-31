@@ -21,6 +21,7 @@
 
 
 #include <cassert>
+#include <cstddef>
 #include <cctype>
 #include <sstream>
 #include <algorithm>
@@ -58,8 +59,9 @@ arg_parser::description() const
 void
 arg_parser::format_command(std::stringstream & ss) const
 {
-    unsigned col_count = 0;
-    const unsigned col_max = 80;
+    // use std::size_t to prevent conversion warnings
+    std::size_t col_count = 0;
+    const std::size_t col_max = 80;
     std::string indent = "  ";
     
     std::string offset;
@@ -70,7 +72,7 @@ arg_parser::format_command(std::stringstream & ss) const
     ss << indent << m_program_name << " ";
     col_count += indent.size() + m_program_name.size() + 1;
     
-    for (auto & o : m_options) {
+    for (auto& o : m_options) {
         if (o->command_description().size() + col_count >= col_max) {
             ss << "\n" << indent << offset;
             col_count = indent.size() + offset.size();
@@ -90,8 +92,11 @@ arg_parser::format_command(std::stringstream & ss) const
     ss << "\n";
 }
 
+#include <elib/pragma/diagnostic_push.hpp>
+#include <elib/pragma/ignore_unsafe_loop_optimizations.hpp>
+
 void
-arg_parser::format_description(std::stringstream & ss) const
+arg_parser::format_description(std::stringstream& ss) const
 {
     if (m_pos_option) {
         format_description(ss, 
@@ -99,9 +104,16 @@ arg_parser::format_description(std::stringstream & ss) const
             m_pos_option->description());
     }
     
-    for (auto & o : m_options)
-        format_description(ss, o->command_description(), o->description());
+    // TODO for some reason GCC's "-Wunsafe-loop-optimizations" is triggered
+    // by this loop saying that the "loop counter might overflow"
+    for (auto& o : m_options)
+    {
+      format_description(ss, o->command_description(), o->description());
+    }
 }
+
+#include <elib/pragma/diagnostic_pop.hpp>
+
 
 void
 arg_parser::format_description(std::stringstream & ss,
@@ -109,15 +121,15 @@ arg_parser::format_description(std::stringstream & ss,
                                const std::string & desc) const
 {
     std::string indent = "    ";
-    std::vector<std::string> token_list;
+    std::vector<std::string> tk_list;
     
-    int word_start, word_len;
+    unsigned word_start, word_len;
     word_start = word_len = 0;
     
     for (unsigned i=0; i < desc.size(); ++i) {
         if (desc[i] == ' ') {
             if (word_len != 0) {
-                token_list.push_back(desc.substr(word_start, word_len));
+                tk_list.push_back(desc.substr(word_start, word_len));
                 word_start = 0;
                 word_len = 0;
             }
@@ -129,14 +141,14 @@ arg_parser::format_description(std::stringstream & ss,
     }
     
     if (word_len != 0)
-        token_list.push_back(desc.substr(word_start, word_len));
+        tk_list.push_back(desc.substr(word_start, word_len));
     
     ss << "\n" << indent << cmd_desc << "\n";
     
     ss << indent << indent << indent;
-    int col_count = indent.size() * 3;
+    std::size_t col_count = indent.size() * 3;
     
-    for (auto & s : token_list) {
+    for (auto & s : tk_list) {
         if (s == "\n" || col_count + s.size() >= 80) {
             col_count = 3 * indent.size();
             ss << "\n" << indent << indent << indent;

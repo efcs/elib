@@ -75,6 +75,8 @@ namespace elib
         typedef transform_integral<BAD_ENUM_CLASS, std::false_type> type;
       };
       
+
+
       template <typename T, template <typename U> class Detector>
       struct basic_detector<T, Detector, 
           std::enable_if_t<std::is_enum<T>::value>>
@@ -96,6 +98,13 @@ namespace elib
 
     }                                                       // namespace detail
       
+      
+/* the inheritence used below triggers the effc++ warning
+ * since none of the base-classes are polymorphic
+ */
+# include <elib/pragma/diagnostic_push.hpp>
+# include <elib/pragma/ignore_effcxx.hpp>
+
 
     template <typename T> 
     using first_field_type =
@@ -249,6 +258,8 @@ namespace elib
       :  public detail::basic_detector<T, 
             allow_underlying_dereference_operator_field_type>::type
     { };
+    
+# include <elib/pragma/diagnostic_pop.hpp>
   
   }                                                    // namespace enumeration
 }                                                           // namespace elib

@@ -1,0 +1,7 @@
+#include "elib/enumeration/v2/basic_enum_traits.hpp"
+#include "elib/enumeration/v2/enum_cast.hpp"
+#include "elib/enumeration/v2/enum_fields.hpp"
+#include "elib/enumeration/v2/enum_iterator.hpp"
+#include "elib/enumeration/v2/enum_traits.hpp"
+#include "elib/enumeration/v2/operator_macros.hpp"
+#include "elib/enumeration/v2/operators.hpp"

@@ -1,4 +1,5 @@
 #include <elib/fs/operations.hpp>
+#include <elib/fs/directory_iterator.hpp>
 #include <elib/fs/filesystem_error.hpp>
 
 
@@ -32,8 +33,11 @@ namespace elib
       //                       POSIX HELPERS                                                 
       ////////////////////////////////////////////////////////////////////////////////
       
+      // NOTE: The below functions are marked as inline so that they
+      // do not set off the "-Wmissing-prototypes" warning
+      
       // set the permissions as described in stat
-      perms posix_get_perms(const struct stat& st) noexcept
+      inline perms posix_get_perms(const struct stat& st) noexcept
       {
         perms pmask = perms::none;
         const mode_t& mode = st.st_mode;
@@ -65,7 +69,7 @@ namespace elib
         return pmask;
       }
       
-      mode_t posix_convert_perms(perms prms)
+      inline mode_t posix_convert_perms(perms prms)
       {
         mode_t p = 0;
         if ((bool)(prms & perms::owner_read))
@@ -96,7 +100,8 @@ namespace elib
         return p;
       }
       
-      file_status posix_stat(const path& p, struct stat& path_stat,
+      
+      inline file_status posix_stat(const path& p, struct stat& path_stat,
                       std::error_code* ec)
       {
         file_status fs_tmp{};
@@ -138,7 +143,7 @@ namespace elib
       }
                  
                  
-      file_status posix_lstat(const path& p, struct stat& path_stat,
+      inline file_status posix_lstat(const path& p, struct stat& path_stat,
                       std::error_code* ec)
       {
         file_status fs_tmp{};
@@ -182,7 +187,7 @@ namespace elib
         return fs_tmp;
       }
       
-      bool posix_statvfs(const path& p, struct statvfs& sv, 
+      inline bool posix_statvfs(const path& p, struct statvfs& sv, 
                          std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -196,7 +201,7 @@ namespace elib
         return true;
       }
       
-      path posix_realpath(const path& p, 
+      inline path posix_realpath(const path& p, 
                       std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -215,7 +220,7 @@ namespace elib
         return path{buff};
       }
       
-      string_type posix_getenv(const string_type& s, std::error_code *ec)
+      inline string_type posix_getenv(const string_type& s, std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
@@ -225,7 +230,7 @@ namespace elib
         return string_type{ret};
       }
       
-      string_type posix_getcwd(std::error_code *ec)
+      inline string_type posix_getcwd(std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
@@ -240,7 +245,7 @@ namespace elib
         return string_type{buff.get()};
       }
       
-      bool posix_chdir(const string_type& s, std::error_code *ec)
+      inline bool posix_chdir(const string_type& s, std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
@@ -253,7 +258,7 @@ namespace elib
       }
       
       
-      bool posix_utime(const string_type& s, const struct utimbuf& ut,
+      inline bool posix_utime(const string_type& s, const struct utimbuf& ut,
               std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -265,7 +270,8 @@ namespace elib
         return true;
       }
       
-      bool posix_symlink(const string_type& from, const string_type& to,
+      
+      inline bool posix_symlink(const string_type& from, const string_type& to,
                          std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -279,7 +285,8 @@ namespace elib
         return false;
       }
       
-      bool posix_link(const string_type& from, const string_type& to,
+      
+      inline bool posix_link(const string_type& from, const string_type& to,
                       std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -292,7 +299,7 @@ namespace elib
         return false;
       }
       
-      string_type posix_readlink(const string_type& s, std::error_code *ec)
+      inline string_type posix_readlink(const string_type& s, std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
@@ -306,13 +313,14 @@ namespace elib
         return string_type{buff};
       }
       
-      bool posix_truncate(const string_type& s, std::uintmax_t size, 
+      
+      inline bool posix_truncate(const string_type& s, std::uintmax_t size, 
                           std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
         
-        if (::truncate(s.c_str(), size) == -1)
+        if (::truncate(s.c_str(), static_cast<long>(size)) == -1)
         {
           detail::handle_and_throw_errno("elib::fs::posix_truncate", path{s},
                                          ec);
@@ -321,7 +329,8 @@ namespace elib
         return true;
       }
       
-      bool posix_rename(const string_type& from, const string_type& to,
+      
+      inline bool posix_rename(const string_type& from, const string_type& to,
                         std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -335,7 +344,8 @@ namespace elib
         return true;
       }
       
-      bool posix_remove(const string_type& p, std::error_code *ec)
+      
+      inline bool posix_remove(const string_type& p, std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
@@ -345,7 +355,8 @@ namespace elib
         return false;
       }
       
-      bool posix_mkdir(const string_type& p, mode_t m, std::error_code *ec)
+      
+      inline bool posix_mkdir(const string_type& p, mode_t m, std::error_code *ec)
       {
         detail::clear_error(ec);
         errno = 0;
@@ -355,49 +366,8 @@ namespace elib
         return false;
       }
       
-      DIR *posix_opendir(const string_type& p, std::error_code *ec)
-      {
-        detail::clear_error(ec);
-        errno = 0;
-        
-        DIR *ret;
-        
-        if ((ret = ::opendir(p.c_str())) == nullptr)
-          detail::handle_and_throw_errno("elib::fs::posix_opendir", 
-            path{p}, ec);
-            
-        return ret;
-      }
       
-      string_type posix_readdir_r(DIR *dir_stream, std::error_code *ec)
-      {
-        detail::clear_error(ec);
-        errno = 0;
-        
-        struct dirent dir_entry;
-        struct dirent *dir_entry_ptr{nullptr};
-        
-        int ret;
-        if ((ret = ::readdir_r(dir_stream,  &dir_entry,  &dir_entry_ptr)) != 0)
-        {
-            detail::handle_and_throw_error(ret,  "elib::fs::posix_readdir_r", 
-              ec);
-            return string_type{};
-        }
-        if (dir_entry_ptr == nullptr) return string_type{};
-        return string_type{dir_entry.d_name};
-      }
-      
-      void posix_closedir(DIR *dir_stream,  std::error_code *ec)
-      {
-        detail::clear_error(ec);
-        errno = 0;
-        
-        if (::closedir(dir_stream) == -1)
-          detail::handle_and_throw_errno("elib::fs::posix_closedir", ec);
-      }
-      
-      bool posix_fchmodat(int fd, const string_type& s, mode_t mode,
+      inline bool posix_fchmodat(int fd, const string_type& s, mode_t mode,
               std::error_code *ec)
       {
         detail::clear_error(ec);
@@ -493,7 +463,7 @@ namespace elib
         return (status_known(fst) && exists(fst));
       }
       
-      bool copy_file_impl(const path& from, const path& to, std::error_code *ec)
+      inline bool copy_file_impl(const path& from, const path& to, std::error_code *ec)
       {
         detail::clear_error(ec);
         std::ifstream in(from.c_str(), std::ios::binary);
@@ -531,186 +501,6 @@ namespace elib
   
     
     
-    namespace detail
-    {
-      
-      ////////////////////////////////////////////////////////////////////////////////
-      //                          CLASS DIR_STREAM                                              
-      ////////////////////////////////////////////////////////////////////////////////
-    
-      dir_stream::dir_stream(const path& p, std::error_code *ec)
-      {
-        m_dir_stream = detail::posix_opendir(p.native(),  ec);
-      }
-      
-      dir_stream::~dir_stream() noexcept
-      { 
-        if (m_dir_stream)
-        {
-          // we don't want to throw,  so eat the error
-          // if one exists
-          std::error_code ec;
-          this->close(&ec); 
-        }
-      }
-      
-      path dir_stream::advance(std::error_code *ec)
-      {
-        detail::clear_error(ec);
-        path p{};
-        if (m_dir_stream == nullptr) return path{};
-        std::error_code m_ec;
-        auto str = detail::posix_readdir_r(m_dir_stream,  &m_ec);
-        if (m_ec || str.empty()) close();
-        if (ec && m_ec) *ec = m_ec;
-        return path{str};
-      }
-      
-      void dir_stream::close(std::error_code *ec)
-      {
-        detail::clear_error(ec);
-        if (m_dir_stream == nullptr) return;
-        // incase posix_closedir throws, set m_dir_stream
-        // to nullptr before the call
-        DIR *tmp = m_dir_stream;
-        m_dir_stream = nullptr;
-        detail::posix_closedir(tmp, ec);
-      }
-      
-    }                                                       // namespace detail    
-    
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    //                        CLASS DIRECTORY_ITERATOR                                  
-    ////////////////////////////////////////////////////////////////////////////////
-    
-    directory_iterator::directory_iterator(const path& p, std::error_code *ec)
-      : directory_iterator()
-    {
-      m_stream = ec ? std::make_shared<detail::dir_stream>(p, ec)
-                    : std::make_shared<detail::dir_stream>(p);
-      if (ec && *ec)
-      {
-        m_make_end();
-        return;
-      }
-      m_root_path = p;
-      // we "increment" the iterator to set it to the first value
-      m_increment(ec);
-    }
-    
-    directory_iterator& directory_iterator::m_increment(std::error_code *ec)
-    {
-      detail::clear_error(ec);
-      if (!m_stream) return *this;
-      
-      path part;
-      while (m_stream->good())
-      {
-        part = m_stream->advance(ec);
-        
-        if (part != "." && part != "..")
-          break;
-      }
-
-      if (!m_stream->good())
-        m_make_end();
-      else
-        m_element.assign(m_root_path / part);
-      return *this;
-    }
-    
-    void directory_iterator::m_make_end()
-    {
-      m_stream.reset();
-      m_root_path.clear();
-      m_element.assign(path{""});
-    }
-    
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    //                 CLASS RECURSIVE_DIRECTORY_ITERATOR                                                         
-    ////////////////////////////////////////////////////////////////////////////////
-    
-    
-    
-    recursive_directory_iterator::recursive_directory_iterator(const path& p, 
-        directory_options opt, std::error_code *ec)
-      : recursive_directory_iterator()
-    {
-      m_options = opt;
-      auto curr_iter = directory_iterator{p, ec};
-      if ((ec && *ec) || curr_iter == directory_iterator{}) return;
-        
-      m_stack_ptr = std::make_shared<
-                      std::stack<directory_iterator> 
-                    >();
-
-      m_stack_ptr->push(curr_iter);
-    }
-    
-    
-    
-    recursive_directory_iterator& 
-    recursive_directory_iterator::m_increment(std::error_code *ec)
-    {
-      detail::clear_error(ec);
-      
-      if (!m_stack_ptr) return *this;
-      
-      if (m_try_recursion(ec) || (ec && *ec))
-        return *this;
-        
-        
-      const directory_iterator end_it{};
-      while (m_stack_ptr->size() > 0)
-      {
-        m_stack_ptr->top().m_increment(ec);
-        if ((ec && *ec) || m_stack_ptr->top() != end_it)
-          break;
-          
-        m_stack_ptr->pop();
-      }
-      
-      if ((ec && *ec) || m_stack_ptr->size() == 0)
-        m_make_end();
-        
-      m_rec = true;
-      return *this;
-    }
-    
-    bool recursive_directory_iterator::m_try_recursion(std::error_code *ec)
-    {
-      detail::clear_error(ec);
-      
-      if (!m_stack_ptr || m_stack_ptr->size() == 0 
-          || m_stack_ptr->top() == directory_iterator{})
-      { return false; }
-      
-      auto& curr_it = m_stack_ptr->top();
-      
-      using under_t = typename std::underlying_type<directory_options>::type;
-      bool rec_sym = static_cast<under_t>(options()) 
-          & static_cast<under_t>(directory_options::follow_directory_symlink);
-        
-      if (recursion_pending() && is_directory(curr_it->status()) &&
-          (!is_symlink(curr_it->symlink_status()) || rec_sym))
-      {
-        auto tmp = directory_iterator{curr_it->path(), ec};
-        if ((ec && *ec) || tmp == directory_iterator{})
-          return false;
-        //else
-        m_stack_ptr->push(tmp);
-        return true;
-      }
-      
-      return false;
-    }
-    
-    void recursive_directory_iterator::m_make_end()
-    {
-      m_stack_ptr.reset();
-    }
     
     
     ////////////////////////////////////////////////////////////////////////////////
@@ -848,16 +638,17 @@ namespace elib
         }
         
         bool should_copy = 
-            !exists(to_st) || (option & copy_options::overwrite_existing) ||
-            !(option & (copy_options::skip_existing |
+            !exists(to_st)
+            || static_cast<bool>(option & copy_options::overwrite_existing)
+            || !(option & (copy_options::skip_existing |
                         copy_options::overwrite_existing |
                         copy_options::update_existing));
             
         // if ! should_copy 
         // and if a update has been requested then
         // set should_copy to true iff from is newer than to
-        if (exists(to_st) && !should_copy && 
-          (option & copy_options::update_existing))
+        if (exists(to_st) && !should_copy
+            && static_cast<bool>(option & copy_options::update_existing))
         {
           detail::clear_error(ec);
           auto from_time = detail::last_write_time(from, ec);
@@ -893,7 +684,7 @@ namespace elib
       }
       
       //TODO
-      bool create_directories(const path& p, std::error_code *ec);
+      //bool create_directories(const path& p, std::error_code *ec);
       
       
       bool create_directory(const path& p, std::error_code *ec)
@@ -1098,7 +889,7 @@ namespace elib
       
       
       //TODO
-      std::intmax_t remove_all(const path& p, std::error_code *ec);
+      //std::uintmax_t remove_all(const path& p, std::error_code *ec);
       
       
       void rename(const path& from, const path& to, std::error_code *ec)
@@ -1177,7 +968,7 @@ namespace elib
       }
       
       //TODO
-      path unique_path(const path& model, std::error_code *ec);
+      //path unique_path(const path& model, std::error_code *ec);
       
       
     }                                                       // namespace detail

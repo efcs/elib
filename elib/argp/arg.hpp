@@ -30,7 +30,8 @@ typedef std::function<void(const arg_token&)> option_callback;
  * option: [-cArg|--STRING=ARG] (flag syntax is allowed 
  *                               when there is an implicit value)
  * positional: an non-option argument */
-enum class arg_type_e {
+enum class arg_type_e
+{
     positional,
     flag,
     option,

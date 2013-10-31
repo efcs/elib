@@ -132,16 +132,16 @@ get_tranformer(arg_type_e e)
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-basic_arg<T>::basic_arg(arg_type_e arg_type,
+basic_arg<T>::basic_arg(arg_type_e xarg_type,
                     const std::string name,
                     const std::string cmd_desc,
                     const std::string desc,
                     storage_type & store)
-    : arg_option(arg_type, name, cmd_desc, desc),
+    : arg_option(xarg_type, name, cmd_desc, desc),
       m_val(store)
       
 {
-   m_transformer = detail::get_tranformer<value_type>(arg_type);
+   m_transformer = detail::get_tranformer<value_type>(xarg_type);
 }
 
 template <typename T>

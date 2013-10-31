@@ -44,7 +44,8 @@ public:
         { }
         
         /* read, write lock request */
-        lock_type_e lock_type;
+        //TODO fix default initalization
+        lock_type_e lock_type {};
         /* currently held/requested locks */
         unsigned lock_count{0};
         /* is this group allowed to have the lock ? */
@@ -74,8 +75,8 @@ public:
     
     void _advance_group();
 private:
-    std::mutex m_lock;
-    list_type m_groups;
+    std::mutex m_lock {};
+    list_type m_groups {};
 private:
     rw_lock_impl(const rw_lock_impl&);
     rw_lock_impl& operator=(const rw_lock_impl&);

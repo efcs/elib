@@ -14,11 +14,18 @@ aux_source_directory(${dotDir}/fs fsSrc)
 aux_source_directory(${dotDir}/enumeration enumSrc)
 aux_source_directory(${dotDir}/log logSrc)
 aux_source_directory(${dotDir}/lock lockSrc)
+aux_source_directory(${dotDir}/utility utilSrc)
 
 # compile into objects
-add_library(ObjLib OBJECT ${dotSrc} ${argpSrc} ${fsSrc} ${enumSrc} ${logSrc}
+add_library(ObjLib OBJECT ${dotSrc} 
+                          ${utilSrc}
+                          ${argpSrc} 
+                          ${fsSrc}
+                          ${enumSrc} 
+                          ${logSrc}
                           ${lockSrc}
            )
+           
 
 #create static & shared libraries
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)

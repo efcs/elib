@@ -5,6 +5,8 @@
 # but the project configurations in this make file DO NOT WORK and they 
 # must be commented out.
 
+set(CONFIG_MY_BUILD ON)
+set(CONFIG_ALL_WARNINGS ON)
 if (CONFIG_MY_BUILD)
 
   if (CONFIG_ALL_WARNINGS)
@@ -32,7 +34,7 @@ if (CONFIG_MY_BUILD)
       -Wvolatile-register-var  -Wwrite-strings
     )
   
-    if (CONFIG_COMPILER MATCHES CLANG)
+    if (CONFIG_USE_CLANG)
     
       add_definitions( -Weverything -Wno-c++98-compat 
                        -Wno-c++98-compat-pedantic)
@@ -42,13 +44,17 @@ if (CONFIG_MY_BUILD)
       
     endif()
   
-    add_definitions( -Wno-padded -Wno-aggregate-return -Wno-inline )
+    add_definitions( -Wno-padded -Wno-aggregate-return 
+                      -Wno-inline 
+                   )
   
   endif()
 
 endif()
 
-add_definitions(-fPIC)
+if ( NOT CONFIG_NO_LIBRARIES )
+  add_definitions(-fPIC)
+endif()
 
 set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 aux_source_directory(${dotDir} dotSrc)
@@ -58,6 +64,7 @@ aux_source_directory(${dotDir}/enumeration enumSrc)
 aux_source_directory(${dotDir}/log logSrc)
 aux_source_directory(${dotDir}/lock lockSrc)
 aux_source_directory(${dotDir}/utility utilSrc)
+
 
 # compile into objects
 add_library(ObjLib OBJECT ${dotSrc} 
@@ -70,29 +77,35 @@ add_library(ObjLib OBJECT ${dotSrc}
            )
            
 
-#create static & shared libraries
-add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
-add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)
+    
+if ( NOT CONFIG_NO_LIBRARIES )
+  #create static & shared libraries
+  add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
+  add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)
 
-################################################################################
-##                      BOOST library configuration                           ##
-################################################################################
+  
 
-find_package(Boost ${CONFIG_BOOST_VERSION}
-             COMPONENTS system filesystem REQUIRED)
+  ################################################################################
+  ##                      BOOST library configuration                           ##
+  ################################################################################
 
-include_directories(${Boost_INCLUDE_DIRS})
+  find_package(Boost ${CONFIG_BOOST_VERSION}
+              COMPONENTS system filesystem REQUIRED)
 
-
-
-target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-
+  include_directories(${Boost_INCLUDE_DIRS})
 
 
-install(TARGETS elib LIBRARY DESTINATION lib)
-install(TARGETS elib_static ARCHIVE DESTINATION lib)
-install(DIRECTORY ${headerDir} DESTINATION include)
+
+  target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+  target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+
+
+
+  install(TARGETS elib LIBRARY DESTINATION lib)
+  install(TARGETS elib_static ARCHIVE DESTINATION lib)
+  install(DIRECTORY ${headerDir} DESTINATION include)
+  
+endif() # NOT CONFIG_NO_LIBRARIES 
 
 
 				

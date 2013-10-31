@@ -1,24 +1,49 @@
 cmake_minimum_required (VERSION 2.8)
 
-option(CONFIG_MY_BUILD "These are my specific build settings" ON)
+option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-################################################################################
-#                     Personal build enviroment configurations                           
-################################################################################
+option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
 
-if (CONFIG_MY_BUILD)
-	
-#set(CONFIG_COMPILER CLANG)
-      
-  if(CONFIG_COMPILER MATCHES CLANG)
-      set(CMAKE_C_COMPILER /usr/bin/clang)
-      set(CMAKE_CXX_COMPILER /usr/bin/clang++)      
-  endif()
+option(CONFIG_NO_LIBRARIES "only produce the object files for /src. useful for
+                              when you don't want to link against a library
+                              e.g. clang's sanatizers" OFF)
+                              
+option(CONFIG_CLANG_ASAN "compile and link elib_boost_test_main using boost
+                            address sanitizer" OFF)
 
-  set(CONFIG_ALL_WARNINGS ON)
+option(CONFIG_CLANG_TSAN "use clangs thread sanitizer" OFF)
+option(CONFIG_CLANG_MSAN "clangs memory sanitizer" OFF)
+                            
+option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" OFF)
+
+
+#set(CONFIG_CLANG_ASAN ON CACHE BOOL "" FORCE)
 
   
-endif() # CONFIG_MY_BUILD
+if (CONFIG_CLANG_ASAN)
+  set(CONFIG_USE_CLANG ON CACHE BOOL "" FORCE)
+  set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
+  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -O1 -fsanitize=address ")
+endif()
+
+if (CONFIG_CLANG_TSAN)
+   set(CONFIG_USE_CLANG ON CACHE BOOL "" FORCE)
+  set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
+  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -fsanitize=thread ")
+endif() 
+
+if (CONFIG_CLANG_MSAN)
+   set(CONFIG_USE_CLANG ON CACHE BOOL "" FORCE)
+  set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -fmemory-saniziter )
+  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -O2 -fsanitize=memory -fno-omit-frame-pointer ")
+endif() 
+      
+if(CONFIG_USE_CLANG)
+    set(CMAKE_C_COMPILER /usr/bin/clang)
+    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+endif()
+
 
 ################################################################################
 #                         PROJECT ELIB

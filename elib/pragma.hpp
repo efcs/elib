@@ -35,6 +35,7 @@
 # define ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
 
 
+
 # if defined(ELIB_GNU) || defined(ELIB_CLANG)
 
 #   undef ELIB_PRAGMA_DIAG_PUSH
@@ -42,7 +43,9 @@
 #   undef ELIB_PRAGMA_DIAG_IGNORE
 #   undef ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL
 
-#   define ELIB_PRAGMA_DIAG_PUSH() \
+#   define ELIB_PRAGMA_DIAG_PUSH()                                \
+      _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic push)) \
+      _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic push)) \
       _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic push))
   
 #   define ELIB_PRAGMA_DIAG_POP() \
@@ -106,5 +109,6 @@
       ELIB_PRAGMA_DIAG_IGNORE("-Wweak-vtables")
 
 # endif
+
 
 #endif                                                      // ELIB_PRAGMA_HPP

@@ -1,6 +1,11 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+
+#include <elib/config.hpp>
+
+#ifndef ELIB_CLANG
+
 #include <elib/chrono/timer.hpp>
 
 #include <chrono>
@@ -31,3 +36,5 @@ BOOST_AUTO_TEST_CASE(test_milliseconds)
 
 
 BOOST_AUTO_TEST_SUITE_END()
+
+# endif

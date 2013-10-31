@@ -1,8 +1,11 @@
 #ifndef ELIB_CHRONO_TIMER_HPP
 #define ELIB_CHRONO_TIMER_HPP
 
+# include <elib/config.hpp>
 # include <chrono>
 
+
+# ifndef ELIB_CLANG
 
 namespace elib
 {
@@ -134,4 +137,5 @@ namespace elib
 }                                                           // namespace elib
 
 
+# endif                                                    // ELIB_CLANG
 #endif /* ELIB_CHRONO_TIMER_HPP */

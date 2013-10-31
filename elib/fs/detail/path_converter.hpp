@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_CONVERSION_HPP
 #define ELIB_FS_CONVERSION_HPP
 
+# include <elib/pragma.hpp>
 
 #include <locale>
 #include <string>
@@ -18,9 +19,9 @@ class directory_entry;
 
     
 namespace detail {
-    
-#include <elib/pragma/diagnostic_push.hpp>
-#include <elib/pragma/ignore_effcxx.hpp>
+
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
     
 template <typename T>
 struct is_convertible : public std::false_type { };
@@ -50,7 +51,7 @@ struct enable_if_convertible
                             Ret>
 { };
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 template <typename T, typename Ret=void>
 using enable_if_convertible_t = typename enable_if_convertible<T, Ret>::type;
@@ -102,9 +103,6 @@ dispatch(const directory_entry& from);
 template <>
 std::string
 dispatch(const directory_entry& from);
-
-
-
 
 
     

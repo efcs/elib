@@ -2,7 +2,7 @@
 #define ELIB_ENUMERATION_ENUM_TYPE_TRAITS_HELPER_HPP
 
 # include <elib/config.hpp>
-
+# include <elib/pragma.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
 
@@ -31,8 +31,8 @@ namespace elib
         = typename sfinae_underlying_type<T>::type;
       
     
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
     
       template <typename T, typename U>
       struct is_enum_enum 
@@ -85,7 +85,7 @@ namespace elib
       using enable_if_integral_t = 
         std::enable_if_t<std::is_integral<T>::value, Ret>;
         
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
       
     }                                                       // namespace detail
   }                                                    // namespace enumeration

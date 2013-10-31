@@ -2,14 +2,15 @@
 #define ELIB_FS_PATH_HPP
 
 # include <elib/config.hpp>
-#include <elib/fs/detail/path_converter.hpp>
+# include <elib/pragma.hpp>
+# include <elib/fs/detail/path_converter.hpp>
 
-#include <string>
-#include <iterator>
-#include <locale>
-#include <cstddef>
-#include <iostream>
-#include <utility>
+# include <string>
+# include <iterator>
+# include <locale>
+# include <cstddef>
+# include <iostream>
+# include <utility>
 
 namespace elib 
 {
@@ -452,14 +453,14 @@ namespace elib
 
 // suppress g++ effc++ warning for std::iterator
 // not having a virtual destructor
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
 
     class path::iterator 
       : public std::iterator<std::bidirectional_iterator_tag, path> 
     {
       
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
       public:
         

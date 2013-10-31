@@ -20,14 +20,15 @@
 #define ELIB_ARGP_ARG_ERRORS_HPP
 
 # include <elib/config.hpp>
+# include <elib/pragma.hpp>
 
 #include <stdexcept>
 
 namespace elib {
 namespace argp {
    
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_weak_vtables.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
 
 class option_conflict_error : public std::logic_error {
 public:
@@ -70,7 +71,7 @@ public:
     { }
 };
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 } /* namespace argp */
 } /* namespace elib */

@@ -19,6 +19,8 @@
 #ifndef ELIB_LEXICAL_CAST_HPP
 #define ELIB_LEXICAL_CAST_HPP
 
+# include <elib/pragma.hpp>
+
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -26,8 +28,8 @@
 namespace elib {
  
  
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_weak_vtables.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
     
 /* bad_cast error for lexical casts */
 class bad_lexical_cast : public std::runtime_error {
@@ -38,7 +40,7 @@ public:
     { }
 };
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 
 /* static type-traits style struct to

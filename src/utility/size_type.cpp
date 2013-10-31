@@ -1,10 +1,11 @@
 #include "elib/utility/size_type.hpp"
+# include <elib/pragma.hpp>
 
-#include <elib/pragma/diagnostic_push.hpp>
-#include <elib/pragma/ignore_missing_variable_declarations.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_MISSING_VARIABLE_DECLARATIONS()
 
 // explicitly instantiate a couple templates so the compiler checks them
 elib::size_type_traits<char> _char;
 elib::size_type_traits<int> _int;
 
-#include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()

@@ -1,11 +1,13 @@
 #include <elib/log/log_level.hpp>
+#include <elib/pragma.hpp>
 
 namespace elib
 {
     
-#include <elib/pragma/diagnostic_push.hpp>
-#include <elib/pragma/ignore_global_constructors.hpp>
-#include <elib/pragma/ignore_exit_time_destructors.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_GLOBAL_CONSTRUCTORS()
+ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
+
       
   basic_enum_traits<log::level_e>::map_type 
   basic_enum_traits<log::level_e>::name_map =
@@ -19,7 +21,7 @@ namespace elib
         {log::level_e::raw_err, "raw_err"}
       };
 
-#include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
       
     
 } /* namespace elib */

@@ -2,6 +2,7 @@
 #define ELIB_FS_PERMS_OPERATORS_HPP
 
 // definition for perms must already be available
+# include <elib/pragma.hpp>
 
 #include <type_traits>
 
@@ -80,8 +81,8 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////////
     
 /* suppress warning about always evaluating both sides */
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
     
     constexpr bool operator!(perms lhs) noexcept
     { return ! perms_detail::bc(lhs); }
@@ -98,7 +99,7 @@ namespace elib
     constexpr bool operator||(perms lhs, bool rhs) noexcept
     { return perms_detail::bc(lhs) || rhs; }
     
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
     
   } // namespace fs
 } // namespace elib 

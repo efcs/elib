@@ -1,5 +1,5 @@
 #include <elib/utility/fmt.hpp>
-
+# include <elib/pragma.hpp>
 # include <elib/CXX14/memory.hpp>
 # include <elib/assert.hpp>
 
@@ -20,8 +20,8 @@ namespace elib
       return tmp;
   }
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_format_nonliteral.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL()
 
   std::string fmt(const std::string & msg, va_list & args)
   {
@@ -54,6 +54,6 @@ namespace elib
       return { buff_ptr.get() };
   }
     
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
     
 }                                                             // namespace elib

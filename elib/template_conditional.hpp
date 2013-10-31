@@ -1,12 +1,13 @@
 #ifndef ELIB_TEMPLATE_CONDITIONAL_HPPPP
 #define ELIB_TEMPLATE_CONDITIONAL_HPPPP
 
+# include <elib/pragma.hpp>
 #include <type_traits>
 
 namespace elib {
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
     
 template <bool b>
 struct NOT : public std::false_type
@@ -43,7 +44,7 @@ struct OR<false, false, false, false, false,
     : public std::false_type
 { };
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
     
 } /* namespace elib */

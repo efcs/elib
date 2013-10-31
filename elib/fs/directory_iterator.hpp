@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_DIRECTORY_ITERATOR_HPP
 # define ELIB_FS_DIRECTORY_ITERATOR_HPP
 
+# include <elib/pragma.hpp>
 # include <elib/fs/path.hpp>
 # include <elib/fs/file_status.hpp>
 # include <elib/fs/operations.hpp>
@@ -178,14 +179,14 @@ namespace elib
     
     }                                                       // namespace detail
     
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
     
     class directory_iterator
       : public std::iterator<std::input_iterator_tag, directory_entry>
     {
       
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
     public:
     //ctor & dtor 
       directory_iterator() noexcept
@@ -271,14 +272,14 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
     
     
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
 
     class recursive_directory_iterator
       : public std::iterator<std::input_iterator_tag,  directory_entry>
     {
   
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
   
     public:
       // constructors and destructor

@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_FILESYSTEM_ERROR_HPP
 #define ELIB_FS_FILESYSTEM_ERROR_HPP
 
+# include <elib/pragma.hpp>
 # include <elib/config.hpp>
 # include <elib/fs/path.hpp>
 
@@ -15,8 +16,8 @@ namespace elib
   namespace fs
   {
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_weak_vtables.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
 
     class filesystem_error : public std::system_error {
     public:
@@ -71,7 +72,7 @@ namespace elib
       
     };                                                // class filesystem_error
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
     
     ////////////////////////////////////////////////////////////////////////////////
     //                      MISC ERROR HELPERS                                                      

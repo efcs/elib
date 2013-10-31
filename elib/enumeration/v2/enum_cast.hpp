@@ -2,6 +2,7 @@
 # define ELIB_ENUMERATION_ENUM_CAST_HPP
 
 # include <elib/config.hpp>
+# include <elib/pragma.hpp>
 # include <elib/enumeration/v2/enum_traits.hpp>
 # include <elib/enumeration/v2/detail/enum_type_traits_helper.hpp>
 
@@ -16,8 +17,8 @@ namespace elib
   {
   
   
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_weak_vtables.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
   
 # define ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND 1
 # if ELIB_ENUMERATION_RUNTIME_ERROR_WORKAROUND
@@ -42,7 +43,7 @@ namespace elib
   
 # endif
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
   
     namespace detail
     {

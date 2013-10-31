@@ -95,6 +95,11 @@
   ELIB_DELETE_COPY(class);                \
   ELIB_DELETE_MOVE(class)
   
+  
+# define ELIB_STR(str) #str
 
+# define ELIB_STR_DELAY(str) ELIB_STR(str)
+  
 
+  
 #endif /* ELIB_COMMON_DEF_HPP */

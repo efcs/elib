@@ -2,6 +2,7 @@
 # define ELIB_ENUMERATION_OPERATORS_HPP
 
 # include <elib/config.hpp>
+# include <elib/pragma.hpp>
 # include <elib/enumeration/v2/enum_fields.hpp>
 # include <elib/enumeration/v2/enum_traits.hpp>
 # include <elib/enumeration/v2/enum_cast.hpp>
@@ -13,8 +14,8 @@ namespace elib
   namespace enumeration
   {
    
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
 
     template <typename T>
     struct has_mixed_bitwise_operators
@@ -79,7 +80,7 @@ namespace elib
           allow_underlying_dereference_operator_field<T>::bool_value>
     { };
     
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
     
   ////////////////////////////////////////////////////////////////////////////////
   //                        PURE BITWISE OPERATORS                                                  
@@ -355,8 +356,8 @@ namespace elib
  * it is continued in the arithmetic operators because g++ does not properly
  * notices if the return type is a reference on not 
  */
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
       
       template <typename T>
       constexpr std::enable_if_t<has_logical_operators<T>::value, bool>
@@ -463,7 +464,7 @@ namespace elib
         return tmp;
       }
       
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
       
     // Pure Binary operators
       
@@ -758,12 +759,12 @@ namespace elib
   }                                                    // namespace enumeration
 }                                                      // namespace elib
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_header_hygiene.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_HEADER_HYGIENE()
 
 // import operators into top level namespace
 using namespace elib::enumeration::operators;
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 #endif /* ELIB_ENUMERATION_OPERATORS_HPP */

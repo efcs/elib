@@ -1,6 +1,8 @@
 #ifndef ELIB_LOG__STATIC_LOG_HPP
 #define ELIB_LOG__STATIC_LOG_HPP
 
+# include <elib/pragma.hpp>
+
 
 #ifndef ELIB_LOG_STATIC_LOG_HPP
 #   error this file must only be included through static_log.h
@@ -23,15 +25,15 @@ namespace elib {
 namespace log {
     
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_global_constructors.hpp>
-# include <elib/pragma/ignore_exit_time_destructors.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_GLOBAL_CONSTRUCTORS()
+ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
     
 template <typename Tag>
 log
 static_log<Tag>::m_impl;
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 
 template <typename Tag>

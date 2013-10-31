@@ -19,7 +19,7 @@
 #ifndef ELIB_ENUMERATION_OPERATORS_HPP
 #define ELIB_ENUMERATION_OPERATORS_HPP
 
-
+# include <elib/pragma.hpp>
 #include <elib/enumeration/enum.hpp>
 #include <elib/template_conditional.hpp>
 
@@ -31,8 +31,8 @@ namespace elib
   namespace enumeration 
   {
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
           
       template <typename EnumT>
       struct allow_arithmetic_operators : public std::false_type
@@ -58,7 +58,7 @@ namespace elib
       struct allow_mixed_bitwise_operators : public std::false_type
       { };
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
       namespace detail 
       {
@@ -261,8 +261,8 @@ namespace elib
         //  inc & dec
         //
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
 
         template <typename EnumT>
         inline enable_if_arithmetic_allowed_t<EnumT>&
@@ -296,7 +296,7 @@ namespace elib
             return old;
         }
     
-#include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
         //
         // mixed type expressions
@@ -426,8 +426,8 @@ namespace elib
             return static_cast<bool>(! base_enum_cast(lhs));
         }
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
 
         template <typename EnumT>
         constexpr enable_if_logical_allowed_t<EnumT, bool>
@@ -475,7 +475,7 @@ namespace elib
             return static_cast<bool>(lhs || base_enum_cast(rhs));
         }
         
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
         ////////////////////////////////////////////////////////////////////////////////
         //                      bitwise operators                                                     
@@ -645,12 +645,12 @@ namespace elib
 } // namespace elib 
 
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_header_hygiene.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_HEADER_HYGIENE()
 
 // put operators into top level namespace
 using namespace elib::enumeration::detail::operators;
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 #endif // ELIB_ENUMERATION_OPERATORS_HPP

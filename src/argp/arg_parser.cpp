@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with elib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "elib/argp/arg_parser.hpp"
-#include <elib/utility/fmt.hpp>
+
+# include <elib/pragma.hpp>
+# include <elib/argp/arg_parser.hpp>
+# include <elib/utility/fmt.hpp>
 
 
 #include <cassert>
@@ -92,8 +94,7 @@ arg_parser::format_command(std::stringstream & ss) const
     ss << "\n";
 }
 
-#include <elib/pragma/diagnostic_push.hpp>
-#include <elib/pragma/ignore_unsafe_loop_optimizations.hpp>
+
 
 void
 arg_parser::format_description(std::stringstream& ss) const
@@ -104,15 +105,21 @@ arg_parser::format_description(std::stringstream& ss) const
             m_pos_option->description());
     }
     
+    //workaround for issue below
+    for (auto it=m_options.begin(); it != m_options.end(); ++it)
+    {
+      format_description(ss, (*it)->command_description(), (*it)->description());
+    }
+    
     // TODO for some reason GCC's "-Wunsafe-loop-optimizations" is triggered
     // by this loop saying that the "loop counter might overflow"
-    for (auto& o : m_options)
+    /*for (auto& o : m_options)
     {
       format_description(ss, o->command_description(), o->description());
-    }
+    } 
+    */
 }
 
-#include <elib/pragma/diagnostic_pop.hpp>
 
 
 void

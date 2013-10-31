@@ -19,6 +19,7 @@
 #ifndef ELIB_ENUMERATION_ENUM_CAST_HPP
 #define ELIB_ENUMERATION_ENUM_CAST_HPP
 
+# include <elib/pragma.hpp>
 #include <elib/enumeration/basic_enum_traits.hpp>
 #include <elib/enumeration/enum.hpp>
 
@@ -30,8 +31,8 @@ namespace elib {
 namespace enumeration {
     
 
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_weak_vtables.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
  
 /* the exception thrown when any of the non-safe casts fail */
 class bad_enum_cast : public std::logic_error {
@@ -45,7 +46,7 @@ public:
     { }
 };
 
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
 
 
 /* cast strings and underlying_types to Enum values */

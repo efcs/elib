@@ -2,6 +2,7 @@
 # define ELIB_ENUMERATION_ENUM_FIELDS_HPP
 
 # include <elib/config.hpp>
+# include <elib/pragma.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
 namespace elib 
@@ -102,8 +103,8 @@ namespace elib
 /* the inheritence used below triggers the effc++ warning
  * since none of the base-classes are polymorphic
  */
-# include <elib/pragma/diagnostic_push.hpp>
-# include <elib/pragma/ignore_effcxx.hpp>
+ELIB_PRAGMA_DIAG_PUSH()
+ELIB_PRAGMA_IGNORE_EFFCXX()
 
 
     template <typename T> 
@@ -259,7 +260,7 @@ namespace elib
             allow_underlying_dereference_operator_field_type>::type
     { };
     
-# include <elib/pragma/diagnostic_pop.hpp>
+ELIB_PRAGMA_DIAG_POP()
   
   }                                                    // namespace enumeration
 }                                                           // namespace elib

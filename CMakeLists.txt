@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
+option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 
 option(CONFIG_NO_LIBRARIES "only produce the object files for /src. useful for
                               when you don't want to link against a library
@@ -14,7 +14,7 @@ option(CONFIG_CLANG_ASAN "compile and link elib_boost_test_main using boost
 option(CONFIG_CLANG_TSAN "use clangs thread sanitizer" OFF)
 option(CONFIG_CLANG_MSAN "clangs memory sanitizer" OFF)
                             
-option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" OFF)
+option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
 
 
 #set(CONFIG_CLANG_ASAN ON CACHE BOOL "" FORCE)

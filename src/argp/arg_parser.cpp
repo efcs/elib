@@ -106,18 +106,20 @@ arg_parser::format_description(std::stringstream& ss) const
     }
     
     //workaround for issue below
+    /*
     for (auto it=m_options.begin(); it != m_options.end(); ++it)
     {
       format_description(ss, (*it)->command_description(), (*it)->description());
     }
+    */
     
     // TODO for some reason GCC's "-Wunsafe-loop-optimizations" is triggered
     // by this loop saying that the "loop counter might overflow"
-    /*for (auto& o : m_options)
+    for (auto& o : m_options)
     {
       format_description(ss, o->command_description(), o->description());
     } 
-    */
+    
 }
 
 

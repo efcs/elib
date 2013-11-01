@@ -174,8 +174,6 @@ BOOST_AUTO_TEST_CASE(fs_exists_test)
     {
       fs::path p {s};
       BOOST_CHECK(fs::exists(p));
-      if (!fs::exists(p))
-        std::cout << p.native() << std::endl;
     }
   }
   
@@ -266,11 +264,8 @@ BOOST_AUTO_TEST_CASE(fs_type_query_test)
 
 BOOST_AUTO_TEST_CASE(test_top_iterator)
 {
-  fs::path p {"."};
-  for (auto& d_ent : fs::directory_iterator {p})
-  {
-    std::cout << d_ent.path() << std::endl;
-  }
+  //TODO
+  BOOST_CHECK(true);
 }
 
 

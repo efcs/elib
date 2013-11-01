@@ -72,11 +72,10 @@ inline bool operator==(const bfs::directory_entry& b_de,
 
 
 const std::vector<std::string> example_path_list = 
-#if 0
-# include "test_files/fs/paths_list"
-#else
-{ "",  "/",  ".",  "//",  "foo"};
-#endif
+  {
+#   include "unit_tests/fs/test_files/long_paths_list"
+  };
+
 
 
 BOOST_AUTO_TEST_SUITE(fs_operations_test_suite)

@@ -59,11 +59,10 @@ inline bool operator==(const bfs::error_code& b_ec, const efs::error_code& e_ec)
   
 
 const std::vector<std::string> example_path_list = 
-#if 1
-# include "test_files/fs/paths_list"
-# else
-{ "",  "/",  ".",  "//",  "foo"};
-# endif
+  {
+#   include "unit_tests/fs/test_files/long_paths_list"
+  };
+
 
 
 BOOST_AUTO_TEST_SUITE(path_test_suite)

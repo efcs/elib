@@ -4,7 +4,6 @@
 
 #include <elib/config.hpp>
 
-#ifndef ELIB_CLANG
 
 #include <elib/chrono/timer.hpp>
 
@@ -36,5 +35,3 @@ BOOST_AUTO_TEST_CASE(test_milliseconds)
 
 
 BOOST_AUTO_TEST_SUITE_END()
-
-# endif

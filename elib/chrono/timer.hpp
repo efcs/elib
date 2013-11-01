@@ -5,8 +5,6 @@
 # include <chrono>
 
 
-# ifndef ELIB_CLANG
-
 namespace elib
 {
   namespace chrono
@@ -137,5 +135,4 @@ namespace elib
 }                                                           // namespace elib
 
 
-# endif                                                    // ELIB_CLANG
 #endif /* ELIB_CHRONO_TIMER_HPP */

@@ -17,7 +17,6 @@ option(CONFIG_CLANG_MSAN "clangs memory sanitizer" OFF)
 option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
 
 
-#set(CONFIG_CLANG_ASAN ON CACHE BOOL "" FORCE)
 
   
 if (CONFIG_CLANG_ASAN)

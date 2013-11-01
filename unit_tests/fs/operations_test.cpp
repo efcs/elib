@@ -72,7 +72,7 @@ inline bool operator==(const bfs::directory_entry& b_de,
 
 
 const std::vector<std::string> example_path_list = 
-#if 1
+#if 0
 # include "test_files/fs/paths_list"
 #else
 { "",  "/",  ".",  "//",  "foo"};

@@ -42,7 +42,7 @@ if (CONFIG_NO_LIBRARIES)
   add_executable(elib_boost_test_main $<TARGET_OBJECTS:TestObjLib>
                                   $<TARGET_OBJECTS:ObjLib>)
   
-  target_link_libraries(elib_boost_test_main
+  target_link_libraries(elib_boost_test_main ${STDLIB_LINK}
                       ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
 else()
@@ -51,10 +51,10 @@ else()
   add_executable(elib_test_shared $<TARGET_OBJECTS:TestObjLib>)
 
 
-  target_link_libraries(elib_test_static elib_static
+  target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
                       ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
                       
-  target_link_libraries(elib_test_shared elib ${CMAKE_THREAD_LIBS_INIT}
+  target_link_libraries(elib_test_shared elib ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT}
                             ${Boost_LIBRARIES})
                             
 endif()

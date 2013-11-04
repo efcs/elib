@@ -1,0 +1,44 @@
+=== Building tests ===
+[ 51%] Built target ObjLib
+[ 51%] Built target elib
+[ 51%] Built target elib_static
+Scanning dependencies of target TestObjLib
+[ 53%] Building CXX object unit_tests/CMakeFiles/TestObjLib.dir/enumeration/v3_test.cpp.o
+In file included from /home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:7:0,
+                 from /home/eric/workspace/elib/unit_tests/enumeration/v3_test.cpp:4:
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp: In substitution of ‘template<class T> using default_value_field_t = elib::enumeration::detail::field_extractor<T, elib::enumeration::detail::_default_value_field_t, std::integral_constant<T, static_cast<T>((-1))> > [with T = elib::enumeration::basic_enum_traits<T>]’:
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:131:60:   required from here
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp:74:71: error: ‘struct elib::enumeration::basic_enum_traits<T>’ is not a valid type for a template non-type parameter
+         field_extractor<T, _default_value_field_t, _default_enum_t<T>>;
+                                                                       ^
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp: In substitution of ‘template<class T> using error_value_field_t = elib::enumeration::detail::field_extractor<T, elib::enumeration::detail::_error_value_field_t, std::integral_constant<T, static_cast<T>((-1))> > [with T = elib::enumeration::basic_enum_traits<T>]’:
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:136:58:   required from here
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp:78:69: error: ‘struct elib::enumeration::basic_enum_traits<T>’ is not a valid type for a template non-type parameter
+         field_extractor<T, _error_value_field_t, _default_enum_t<T>>;
+                                                                     ^
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp: In substitution of ‘template<class T> using first_value_field_t = elib::enumeration::detail::field_extractor<T, elib::enumeration::detail::_first_value_field_t, std::integral_constant<T, static_cast<T>((-1))> > [with T = elib::enumeration::basic_enum_traits<T>]’:
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:141:58:   required from here
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp:82:69: error: ‘struct elib::enumeration::basic_enum_traits<T>’ is not a valid type for a template non-type parameter
+         field_extractor<T, _first_value_field_t, _default_enum_t<T>>;
+                                                                     ^
+In file included from /home/eric/workspace/elib/unit_tests/enumeration/v3_test.cpp:4:0:
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:143:11: error: ‘_value_field_t’ is not a member of ‘elib::enumeration::detail’
+           detail::_value_field_t<basic_enum_traits<T>>::value;
+           ^
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:143:53: error: expected primary-expression before ‘>’ token
+           detail::_value_field_t<basic_enum_traits<T>>::value;
+                                                     ^
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:143:55: error: ‘::value’ has not been declared
+           detail::_value_field_t<basic_enum_traits<T>>::value;
+                                                       ^
+In file included from /home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:7:0,
+                 from /home/eric/workspace/elib/unit_tests/enumeration/v3_test.cpp:4:
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp: In substitution of ‘template<class T> using last_value_field_t = elib::enumeration::detail::field_extractor<T, elib::enumeration::detail::_last_value_field_t, std::integral_constant<T, static_cast<T>((-1))> > [with T = elib::enumeration::basic_enum_traits<T>]’:
+/home/eric/workspace/elib/elib/enumeration/v3/basic_enum_traits.hpp:146:57:   required from here
+/home/eric/workspace/elib/elib/enumeration/v3/enum_fields.hpp:86:68: error: ‘struct elib::enumeration::basic_enum_traits<T>’ is not a valid type for a template non-type parameter
+         field_extractor<T, _last_value_field_t, _default_enum_t<T>>;
+                                                                    ^
+make[3]: *** [unit_tests/CMakeFiles/TestObjLib.dir/enumeration/v3_test.cpp.o] Error 1
+make[2]: *** [unit_tests/CMakeFiles/TestObjLib.dir/all] Error 2
+make[1]: *** [all] Error 2
+make: *** [check] Error 2

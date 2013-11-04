@@ -17,10 +17,11 @@ aux_source_directory(${dotDir}/chrono chronoSrc)
 aux_source_directory(${dotDir}/utility utilitySrc)
 aux_source_directory(${dotDir}/argp argpSrc)
 aux_source_directory(${dotDir}/enumeration enumSrc)
+aux_source_directory(${dotDir}/etl etlSrc)
 
 set(testSources ${mainSrc} ${logSrc} ${lockSrc} 
                 ${utilitySrc} ${argpSrc} ${enumSrc}
-                ${chronoSrc}
+                ${chronoSrc} ${etlSrc} 
                 ${fsSrc} 
   )
 

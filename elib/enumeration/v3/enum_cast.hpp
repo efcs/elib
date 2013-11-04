@@ -64,22 +64,59 @@ namespace elib
           , Ret 
         >;
       
-      
-      
-      
     }                                                       // namespace detail
     
-    template <typename T>
-    typename detail::enum_if<T>::underlying_type
-    underlying_cast(T v) noexcept
+    template <typename From, typename To>
+    if_enum_to_enum_t<From, To, To>
+    enum_cast(From v)
     {
-      return static_cast<underlying_t<T>>(v);
+      To tmp = static_cast<To>(v);
+      if (in_range(tmp))
+        return tmp;
+      throw "TODO";
     }
     
     template <class From, class To>
-    detail::if_enum_to_enum<From, To>
+    constexpr if_enum_to_integral_t<From, To, To>
+    enum_cast(From v) noexcept
+    {
+      return static_cast<To>(v);
+    }
+    
+    template <class From, class To>
+    if_integral_to_enum_t<From, To, To>
+    enum_cast(From v)
+    {
+      To tmp = static_cast<To>(v);
+      if (in_range(tmp))
+        return tmp;
+      throw "TODO";
+    }
+    
+    template <class From, class To>
+    if_sting_to_enum<From, To, To>
+    enum_cast(From v)
+    {
+      static_assert(has_name_map<To>::value, "must have name map");
+      for (auto& kv : basic_enum_traits<To>::name_map)
+      {
+        if (kv.second == v)
+          return kv.first;
+      }
+      throw "TODO";
+    }
     
     
+    template <class From, class To>
+    if_enum_to_string_t<From, To, To>
+    enum_cast(From v)
+    {
+      static_assert(has_name_map<From>::value, "must have name map");
+      auto pos = basic_enum_traits<T>::name_map.find(v);
+      if (pos != basic_enum_traits<T>::name_map.end())
+        return pos->second;
+      throw "TODO";
+    }
     
     
     

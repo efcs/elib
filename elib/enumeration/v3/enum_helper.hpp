@@ -40,6 +40,8 @@ namespace elib
     using underlying_t = std::underlying_type_t<T>;
     
     
+    
+    
     namespace detail
     {
       
@@ -68,6 +70,14 @@ namespace elib
       };
       
     }                                                       // namespace detail
+    
+    /* should be in enum_cast but it is put here to avoid circular dependancies */
+    template <typename T>
+    constexpr typename detail::enum_if<T>::underlying_type
+    underlying_cast(T v) noexcept
+    {
+      return static_cast<underlying_t<T>>(v);
+    }
     
     
   }                                                    // namespace enumeration

@@ -1,5 +1,5 @@
-#ifndef ELIB_ENUMERATION_ENUM_HELPERS_HPP
-# define ELIB_ENUMERATION_ENUM_HELPERS_HPP
+#ifndef ELIB_ENUMERATION_ENUM_HELPER_HPP
+# define ELIB_ENUMERATION_ENUM_HELPER_HPP
 
 # include <elib/config.hpp>
 
@@ -26,7 +26,6 @@ namespace elib
       typedef void type;
     };
     
-    
     template <typename T>
     struct sfinae_underlying_type<T, true>
     {
@@ -36,6 +35,7 @@ namespace elib
     template <typename T>
     using sfinae_underlying_type_t = typename sfinae_underlying_type<T>::type;
     
+    
     template <typename T>
     using underlying_t = std::underlying_type_t<T>;
     
@@ -43,15 +43,28 @@ namespace elib
     namespace detail
     {
       
-      template <typename T, bool=std::is_enum<T>::value>
+      template <typename T, typename Ret=void>
+      using enable_if_integral = std::enable_if<std::is_integral<T>::value, Ret>;
+      
+      template <class T, class Ret=void>
+      using enable_if_integral_t = typename enable_if_integral<T, Ret>::type;
+      
+      
+      template <class T, class=void>
       struct enum_if
       { };
       
-      template <typename T>
-      struct enum_if<T, true>
+      template <class T>
+      struct enum_if<T, enable_if_enum_t<T>>
       {
         typedef T enum_type;
         typedef std::underlying_type_t<T> underlying_type;
+      };
+      
+      template <class T>
+      struct enum_if<T,  enable_if_integral_t<T>>
+      {
+        typedef T integral_type;
       };
       
     }                                                       // namespace detail
@@ -59,4 +72,4 @@ namespace elib
     
   }                                                    // namespace enumeration
 }                                                           // namespace elib
-#endif /* ELIB_ENUMERATION_ENUM_HELPERS_HPP */
+#endif /* ELIB_ENUMERATION_ENUM_HELPER_HPP */

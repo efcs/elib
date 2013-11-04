@@ -3,22 +3,30 @@ cmake_minimum_required (VERSION 2.8)
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
+option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
 option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" OFF)
+
+option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
 
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
 
 option(CONFIG_NO_LIBRARIES "do not build libraries" OFF)                            
-option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" OFF)
+
 
 
 if (CONFIG_USE_GCC_49)
   set(CMAKE_C_COMPILER /opt/gcc4.9/bin/gcc)
   set(CMAKE_CXX_COMPILER /opt/gcc4.9/bin/g++)
+endif()
+
+if (CONFIG_USE_CLANG_TRUNK)
+  set(CMAKE_C_COMPILER /opt/llvm/bin/clang)
+  set(CMAKE_CXX_COMPILER /opt/llvm/bin/clang++)
 endif()
       
 if(CONFIG_USE_CLANG)

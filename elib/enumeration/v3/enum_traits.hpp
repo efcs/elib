@@ -2,9 +2,9 @@
 # define ELIB_ENUMERATION_ENUM_TRAITS_HPP
 
 # include <elib/config.hpp>
-# include <elib/enumeration/v3/detail/enum_helpers.hpp>
-# include <elib/enumeration/v3/basic_enum_traits.hpp>
-# include <elib/enumeration/v3/intrusive_enum_traits.hpp>
+# include <elib/enumeration/v3/enum_helper.hpp>
+# include <elib/enumeration/v3/detail/meta_basic_enum_traits.hpp>
+# include <elib/enumeration/v3/detail/intrusive_enum_traits.hpp>
 
 
 namespace elib 
@@ -12,24 +12,9 @@ namespace elib
   namespace enumeration
   {
     
-    namespace detail
-    {
-      
-      template <typename T>
-      constexpr T merge_traits(bool has_one, T one, bool has_two, T two) noexcept
-      {
-        return has_one ? one : two;
-      }
-      
-      
-    }
-    
     
 # define ELIB_ENUM_MERGE_HAS(name) meta_t::has_##name || int_t::has_##name
-    
-# define ELIB_ENUM_MERGE(name)                                       \
-  detail::merge_traits(meta_t::has_##name, meta_t::name, \
-                       int_t::has_##name, int_t::name)
+# define ELIB_ENUM_MERGE(name) meta_t::has_##name ? meta_t::name : int_t::name
     
     template <class T, class=enable_if_enum<T>>
     struct enum_traits
@@ -41,9 +26,6 @@ namespace elib
     public:
       
       typedef T enum_type;
-      
-      static constexpr bool has_basic_enum_traits = meta_t::has_basic_enum_traits;
-      static constexpr bool has_name_map = meta_t::has_name_map;
       
       static constexpr bool has_default_value = ELIB_ENUM_MERGE_HAS(default_value);
       static constexpr T default_value = ELIB_ENUM_MERGE(default_value);
@@ -71,14 +53,14 @@ namespace elib
         has_first_value && has_last_value;
         
       static constexpr bool bounds_known = 
-        constexpr_bounds_known || has_name_map;
+        constexpr_bounds_known || has_name_map<enum_type>::value;
       
       
       static constexpr bool constexpr_range_known = 
         constexpr_bounds_known && is_contigious;
       
       static constexpr bool range_known = 
-        constexpr_range_known || has_name_map;
+        constexpr_range_known || has_name_map<enum_type>::value;
         
     };                                                    // struct enum_traits
     

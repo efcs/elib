@@ -1,7 +1,10 @@
-#ifndef ELIB_ENUM_ENUM_FIELDS_HPP
-# define ELIB_ENUM_ENUM_FIELDS_HPP
+#ifndef ELIB_ENUMERATION_ENUM_FIELDS_HPP
+# define ELIB_ENUMERATION_ENUM_FIELDS_HPP
 
 # include <elib/config.hpp>
+
+# include <elib/CXX14/type_traits.hpp>
+
 
 namespace elib 
 {
@@ -93,4 +96,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                    // namespace enumeration
 }                                                           // namespace elib
-#endif /* ELIB_ENUM_ENUM_FIELDS_HPP */
+#endif /* ELIB_ENUMERATION_ENUM_FIELDS_HPP */

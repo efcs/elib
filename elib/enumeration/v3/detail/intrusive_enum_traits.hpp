@@ -2,8 +2,8 @@
 # define ELIB_ENUMERATION_INTRUSIVE_ENUM_TRAITS_HPP
 
 # include <elib/config.hpp>
-# include <elib/enumeration/v3/detail/enum_helpers.hpp>
-# include <elib/enumeration/v3/enum_fields.hpp>
+# include <elib/enumeration/v3/enum_helper.hpp>
+# include <elib/enumeration/v3/detail/enum_fields.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 

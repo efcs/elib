@@ -1,8 +1,6 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/enumeration/v3/basic_enum_traits.hpp>
-#include <elib/enumeration/v3/intrusive_enum_traits.hpp>
 #include <elib/enumeration/v3/enum_traits.hpp>
 
 using namespace elib::enumeration;
@@ -90,14 +88,6 @@ BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
   typedef detail::meta_basic_enum_traits<A> meta_A;
   typedef detail::meta_basic_enum_traits<B> meta_B;
   typedef detail::meta_basic_enum_traits<C> meta_C;
-  
-  BOOST_CHECK(meta_A::has_basic_enum_traits == false);
-  BOOST_CHECK(meta_B::has_basic_enum_traits == false);
-  BOOST_CHECK(meta_C::has_basic_enum_traits == true);
-                                
-  BOOST_CHECK(meta_A::has_name_map == false);
-  BOOST_CHECK(meta_B::has_name_map == false);
-  BOOST_CHECK(meta_C::has_name_map == true);
   
   BOOST_CHECK(meta_A::has_default_value == false);
   BOOST_CHECK(meta_B::has_default_value == false);
@@ -224,14 +214,6 @@ BOOST_AUTO_TEST_CASE(enum_traits_test)
   typedef enum_traits<A> traits_A;
   typedef enum_traits<B> traits_B;
   typedef enum_traits<C> traits_C;
-  
-  BOOST_CHECK(traits_A::has_basic_enum_traits == false);
-  BOOST_CHECK(traits_B::has_basic_enum_traits == false);
-  BOOST_CHECK(traits_C::has_basic_enum_traits == true);
-  
-  BOOST_CHECK(traits_A::has_name_map == false);
-  BOOST_CHECK(traits_B::has_name_map == false);
-  BOOST_CHECK(traits_C::has_name_map == true);
   
   BOOST_CHECK(traits_A::has_default_value == false);
   BOOST_CHECK(traits_B::has_default_value == true);

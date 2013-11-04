@@ -18,7 +18,7 @@ enum class B
   one, 
   
   ELIB_ENUM_DEFAULT_VALUE = none, 
-  ELIB_ENUM_ERROR_VALUE = -1, 
+  ELIB_ENUM_ERROR_VALUE = none, 
   
   ELIB_ENUM_FIRST_VALUE = none,
   ELIB_ENUM_LAST_VALUE = one, 
@@ -46,7 +46,7 @@ namespace elib
       static enum_map_t<C> name_map;
       
       static constexpr C ELIB_ENUM_DEFAULT_VALUE = C::none;
-      static constexpr C ELIB_ENUM_ERROR_VALUE = static_cast<C>(-1); 
+      static constexpr C ELIB_ENUM_ERROR_VALUE = C::none; 
   
       static constexpr C ELIB_ENUM_FIRST_VALUE = C::none;
       static constexpr C ELIB_ENUM_LAST_VALUE = C::three;
@@ -66,6 +66,11 @@ namespace elib
   }                                                    // namespace enumeration
 }                                                           // namespace elib
 
+template <typename T>
+constexpr T bad_value() noexcept
+{
+  return static_cast<T>(-1);
+}
 
 BOOST_AUTO_TEST_SUITE(enum_v3_test_suite)
 
@@ -98,29 +103,57 @@ BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
   BOOST_CHECK(meta_B::has_default_value == false);
   BOOST_CHECK(meta_C::has_default_value == true);
   
+  BOOST_CHECK(meta_A::default_value == bad_value<A>());
+  BOOST_CHECK(meta_B::default_value == bad_value<B>());
+  BOOST_CHECK(meta_C::default_value == C::none);
+  
   BOOST_CHECK(meta_A::has_error_value == false);
   BOOST_CHECK(meta_B::has_error_value == false);
   BOOST_CHECK(meta_C::has_error_value == true);
+  
+  BOOST_CHECK(meta_A::error_value == bad_value<A>());
+  BOOST_CHECK(meta_B::error_value == bad_value<B>());
+  BOOST_CHECK(meta_C::error_value == C::none);
   
   BOOST_CHECK(meta_A::has_first_value == false);
   BOOST_CHECK(meta_B::has_first_value == false);
   BOOST_CHECK(meta_C::has_first_value == true);
   
+  BOOST_CHECK(meta_A::first_value == bad_value<A>());
+  BOOST_CHECK(meta_B::first_value == bad_value<B>());
+  BOOST_CHECK(meta_C::first_value == C::none);
+  
   BOOST_CHECK(meta_A::has_last_value == false);
   BOOST_CHECK(meta_B::has_last_value == false);
   BOOST_CHECK(meta_C::has_last_value == true);
+  
+  BOOST_CHECK(meta_A::last_value == bad_value<A>());
+  BOOST_CHECK(meta_B::last_value == bad_value<B>());
+  BOOST_CHECK(meta_C::last_value == C::three);
   
   BOOST_CHECK(meta_A::has_is_contigious == false);
   BOOST_CHECK(meta_B::has_is_contigious == false);
   BOOST_CHECK(meta_C::has_is_contigious == true);
   
+  BOOST_CHECK(meta_A::is_contigious == false);
+  BOOST_CHECK(meta_B::is_contigious == false);
+  BOOST_CHECK(meta_C::is_contigious == false);
+  
   BOOST_CHECK(meta_A::has_is_bitmask == false);
   BOOST_CHECK(meta_B::has_is_bitmask == false);
   BOOST_CHECK(meta_C::has_is_bitmask == true);
   
+  BOOST_CHECK(meta_A::is_bitmask == false);
+  BOOST_CHECK(meta_B::is_bitmask == false);
+  BOOST_CHECK(meta_C::is_bitmask == true);
+  
   BOOST_CHECK(meta_A::has_is_arithmetic == false);
   BOOST_CHECK(meta_B::has_is_arithmetic == false);
   BOOST_CHECK(meta_C::has_is_arithmetic == true);
+  
+  BOOST_CHECK(meta_A::is_arithmetic == false);
+  BOOST_CHECK(meta_B::is_arithmetic == false);
+  BOOST_CHECK(meta_C::is_arithmetic == true);
 }
 
 BOOST_AUTO_TEST_CASE(intrusive_enum_traits_test)
@@ -133,29 +166,57 @@ BOOST_AUTO_TEST_CASE(intrusive_enum_traits_test)
   BOOST_CHECK(int_B::has_default_value == true);
   BOOST_CHECK(int_C::has_default_value == false);
   
+  BOOST_CHECK(int_A::default_value == bad_value<A>());
+  BOOST_CHECK(int_B::default_value == B::none);
+  BOOST_CHECK(int_C::default_value == bad_value<C>());
+  
   BOOST_CHECK(int_A::has_error_value == false);
   BOOST_CHECK(int_B::has_error_value == true);
   BOOST_CHECK(int_C::has_error_value == false);
+  
+  BOOST_CHECK(int_A::error_value == bad_value<A>());
+  BOOST_CHECK(int_B::error_value == B::none);
+  BOOST_CHECK(int_C::error_value == bad_value<C>());
   
   BOOST_CHECK(int_A::has_first_value == false);
   BOOST_CHECK(int_B::has_first_value == true);
   BOOST_CHECK(int_C::has_first_value == false);
   
+  BOOST_CHECK(int_A::first_value == bad_value<A>());
+  BOOST_CHECK(int_B::first_value == B::none);
+  BOOST_CHECK(int_C::first_value == bad_value<C>());
+  
   BOOST_CHECK(int_A::has_last_value == false);
   BOOST_CHECK(int_B::has_last_value == true);
   BOOST_CHECK(int_C::has_last_value == false);
+  
+  BOOST_CHECK(int_A::last_value == bad_value<A>());
+  BOOST_CHECK(int_B::last_value == B::one);
+  BOOST_CHECK(int_C::last_value == bad_value<C>());
   
   BOOST_CHECK(int_A::has_is_contigious == false);
   BOOST_CHECK(int_B::has_is_contigious == true);
   BOOST_CHECK(int_C::has_is_contigious == false);
   
+  BOOST_CHECK(int_A::is_contigious == false);
+  BOOST_CHECK(int_B::is_contigious == true);
+  BOOST_CHECK(int_C::is_contigious == false);
+  
   BOOST_CHECK(int_A::has_is_bitmask == false);
   BOOST_CHECK(int_B::has_is_bitmask == true);
   BOOST_CHECK(int_C::has_is_bitmask == false);
   
+  BOOST_CHECK(int_A::is_bitmask == false);
+  BOOST_CHECK(int_B::is_bitmask == false);
+  BOOST_CHECK(int_C::is_bitmask == false);
+  
   BOOST_CHECK(int_A::has_is_arithmetic == false);
   BOOST_CHECK(int_B::has_is_arithmetic == true);
   BOOST_CHECK(int_C::has_is_arithmetic == false);
+  
+  BOOST_CHECK(int_A::is_arithmetic == false);
+  BOOST_CHECK(int_B::is_arithmetic == false);
+  BOOST_CHECK(int_C::is_arithmetic == false);
 }
 
 BOOST_AUTO_TEST_CASE(enum_traits_test)

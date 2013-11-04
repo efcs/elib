@@ -16,39 +16,55 @@ namespace elib
     {
       
     
-      template <class T, class U, class Ret=void>
+      template <class From, class To, class Ret=void>
       using if_enum_to_enum_t = 
         std::enable_if_t<
-          std::is_enum<T>::value && std::is_enum<U>::value,
-          Ret
+          std::is_enum<From>::value 
+            && std::is_enum<To>::value
+            && has_range<To>::value
+          , Ret
         >;
         
-      template <class T, class U, class Ret=void>
+      template <class From, class To, class Ret=void>
       using if_integral_to_enum_t = 
         std::enable_if_t<
-          std::is_integral<T>::value && std::is_enum<U>::value,
-          Ret
+          std::is_integral<From>::value 
+            && std::is_enum<To>::value
+            && has_range<To>::value
+          , Ret
         >;
         
+   
       template <class T, class U, class Ret=void>
       using if_enum_to_integral_t = 
         std::enable_if_t<
-          std::is_enum<T>::value && std::is_integral<U>::value, 
-          Ret
+          std::is_enum<T>::value 
+            && std::is_integral<U>::value
+          , Ret
         >;
         
       template <class T, class U, class Ret=void>
-      using if_string_to_enum_t;
-      
+      using if_enum_to_string_t = 
+        std::enable_if_t<
+          std::is_enum<T>::value
+            && has_name_map<T>::value
+            && std::is_same<std::string, U>::value
+          , Ret
+        >;
+          
+        
       template <class T, class U, class Ret=void>
-      using if_enum_to_string_t
+      using if_string_to_enum_t =
+        std::enable_if_t<
+            (std::is_same<T, const char*>::value
+              || std::is_same<T, const std::string>
+              || std::is_name<T, const std::string&>)
+            && std::is_enum<U>::value
+            && has_name_map<U>::value
+          , Ret 
+        >;
       
-      template <class T, class U,
-        std::enable_if_t<std::is_enum<T>::value && std::is_enum>>
-      castible_if
-      {};
       
-      template
       
       
     }                                                       // namespace detail
@@ -59,6 +75,9 @@ namespace elib
     {
       return static_cast<underlying_t<T>>(v);
     }
+    
+    template <class From, class To>
+    detail::if_enum_to_enum<From, To>
     
     
     

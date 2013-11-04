@@ -67,6 +67,63 @@ namespace elib
     
 # undef ELIB_ENUM_MERGE
 # undef ELIB_ENUM_MERGE_HAS
+
+  template <typename T, bool=std::is_enum<T>::value>
+  struct has_bounds : std::false_type
+  {};
+  
+  template <typename T>
+  struct has_bounds<T, true>
+    : std::integral_constant<bool, enum_traits<T>::has_bounds>
+  {};
+  
+  template <typename T, bool=std::is_enum<T>::value>
+  struct has_constexpr_bounds : std::false_type
+  {};
+  
+  template <typename T>
+  struct has_constexpr_bounds<T, true>
+    : std::integral_constant<bool, enum_traits<T>::has_constexpr_bounds>
+  {};
+  
+
+  template <typename T, bool=std::is_enum<T>::value>
+  struct has_range : std::false_type
+  {};
+  
+  template <typename T>
+  struct has_range<T, true>
+    : std::integral_constant<bool, enum_traits<T>::has_range>
+  {};
+  
+  template <class T, bool=std::is_enum<T>::value>
+  struct has_constexpr_range : std::false_type
+  {};
+  
+  template <class T>
+  struct has_constexpr_range<T, true> 
+    : std::integral_constant<bool, enum_traits<T>::has_constexpr_range>
+  {};
+  
+  template <typename T>
+  constexpr std::enable_if_t<has_constexpr_range<T>::value, bool> 
+  in_range(T v) noexcept
+  {
+    using e_t = enum_traits<T>;
+    return (e_t::first_value <= v && e_t::last_value >= v);
+  }
+  
+  template <typename T>
+  std::enable_if_t<
+    has_range<T>::value 
+    && !has_constexpr_range<T>::value
+  , bool>
+  in_range(T v)
+  {
+    
+  }
+  
+  
     
   }                                                    // namespace enumeration
 }                                                           // namespace elib

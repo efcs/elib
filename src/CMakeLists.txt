@@ -25,9 +25,9 @@ if (CONFIG_MY_BUILD)
       -Wvariadic-macros -Wvolatile-register-var  -Wwrite-strings
     )
   
-    if (CONFIG_USE_CLANG)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
       add_definitions( -Weverything -Wno-c++98-compat 
-                       -Wno-c++98-compat-pedantic)
+                       -Wno-c++98-compat-pedantic -Wno-newline-eof )
     else()
                        
       add_definitions( -Wunsafe-loop-optimizations )

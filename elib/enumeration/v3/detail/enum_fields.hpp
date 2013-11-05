@@ -97,7 +97,12 @@ namespace elib
         std::integral_constant<bool, 
           static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)
         >;
-                                      
+           
+      template <class T>
+      using is_mixed_comparible_field_t =
+        std::integral_constant<bool, 
+          static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)
+        >;
        
     }                                                       // namespace detail
   }                                                    // namespace enumeration

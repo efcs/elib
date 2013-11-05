@@ -45,6 +45,9 @@ namespace elib
                                   
           using m_is_logical = field_extractor<From,
                                     is_logical_field_t, std::false_type>;
+                                    
+          using m_is_mixed_comparible = field_extractor<From, 
+                                  is_mixed_comparible_field_t, std::false_type>;
           
         public:
           
@@ -71,6 +74,11 @@ namespace elib
           
           static constexpr bool has_is_logical = m_is_logical::found;
           static constexpr bool is_logical = m_is_logical::value;
+          
+          static constexpr bool has_is_mixed_comparible = 
+            m_is_mixed_comparible::found;
+          static constexpr bool is_mixed_comparible = 
+            m_is_mixed_comparible::value;
         
         
       };                                                  // struct meta_traits

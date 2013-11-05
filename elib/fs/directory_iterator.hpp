@@ -380,6 +380,9 @@ ELIB_PRAGMA_DIAG_POP()
      
       bool operator!=(const recursive_directory_iterator& other) const noexcept
         { return !(*this == other);}
+        
+        
+      
      
       //
     private:

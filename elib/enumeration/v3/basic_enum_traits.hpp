@@ -39,6 +39,7 @@ namespace elib
       static constexpr bool ELIB_ENUM_IS_BITMASK = false;
       static constexpr bool ELIB_ENUM_IS_ARITHMETIC = false;
       static constexpr bool ELIB_ENUM_IS_LOGICAL = false;
+      static constexpr bool ELIB_ENUM_IS_MIXED_COMPARIBLE = false;
       
     };
     

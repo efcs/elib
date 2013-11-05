@@ -1,9 +1,11 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <elib/config.hpp>
 #include <elib/enumeration/v3/enum_traits.hpp>
 #include <elib/enumeration/v3/enum_cast.hpp>
 #include <elib/enumeration/v3/operators.hpp>
+#include <elib/enumeration/v3/enum_iterator.hpp>
 
 #include <string>
 
@@ -28,7 +30,8 @@ enum class B
   ELIB_ENUM_IS_CONTIGIOUS = true, 
   ELIB_ENUM_IS_BITMASK = false, 
   ELIB_ENUM_IS_ARITHMETIC = false, 
-  ELIB_ENUM_IS_LOGICAL = false
+  ELIB_ENUM_IS_LOGICAL = false, 
+  ELIB_ENUM_IS_MIXED_COMPARIBLE = false
 };
 
 enum class C
@@ -58,6 +61,7 @@ namespace elib
       static constexpr bool ELIB_ENUM_IS_BITMASK = true;
       static constexpr bool ELIB_ENUM_IS_ARITHMETIC = true;
       static constexpr bool ELIB_ENUM_IS_LOGICAL = true;
+      static constexpr bool ELIB_ENUM_IS_MIXED_COMPARIBLE = true;
     };
     
     enum_map_t<C> basic_enum_traits<C>::name_map = 
@@ -158,6 +162,14 @@ BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
   BOOST_CHECK(meta_A::is_logical == false);
   BOOST_CHECK(meta_B::is_logical == false);
   BOOST_CHECK(meta_C::is_logical == true);
+  
+  BOOST_CHECK(meta_A::has_is_mixed_comparible == false);
+  BOOST_CHECK(meta_B::has_is_mixed_comparible == false);
+  BOOST_CHECK(meta_C::has_is_mixed_comparible == true);
+  
+  BOOST_CHECK(meta_A::is_mixed_comparible == false);
+  BOOST_CHECK(meta_B::is_mixed_comparible == false);
+  BOOST_CHECK(meta_C::is_mixed_comparible == true);
 }
 
 BOOST_AUTO_TEST_CASE(intrusive_enum_traits_test)
@@ -229,6 +241,14 @@ BOOST_AUTO_TEST_CASE(intrusive_enum_traits_test)
   BOOST_CHECK(int_A::is_logical == false);
   BOOST_CHECK(int_B::is_logical == false);
   BOOST_CHECK(int_C::is_logical == false);
+  
+  BOOST_CHECK(int_A::has_is_mixed_comparible == false);
+  BOOST_CHECK(int_B::has_is_mixed_comparible == true);
+  BOOST_CHECK(int_C::has_is_mixed_comparible == false);
+  
+  BOOST_CHECK(int_A::is_mixed_comparible == false);
+  BOOST_CHECK(int_B::is_mixed_comparible == false);
+  BOOST_CHECK(int_C::is_mixed_comparible == false);
 }
 
 BOOST_AUTO_TEST_CASE(enum_traits_test)
@@ -268,6 +288,10 @@ BOOST_AUTO_TEST_CASE(enum_traits_test)
   BOOST_CHECK(traits_A::has_is_logical == false);
   BOOST_CHECK(traits_B::has_is_logical == true);
   BOOST_CHECK(traits_C::has_is_logical == true);
+  
+  BOOST_CHECK(traits_A::has_is_mixed_comparible == false);
+  BOOST_CHECK(traits_B::has_is_mixed_comparible == true);
+  BOOST_CHECK(traits_C::has_is_mixed_comparible == true);
 }
 
 BOOST_AUTO_TEST_CASE(test_has_range)
@@ -381,8 +405,287 @@ BOOST_AUTO_TEST_CASE(test_enum_cast)
   BOOST_CHECK_THROW(enum_cast<std::string>(static_cast<C>(-1)), bad_enum_cast);
   BOOST_CHECK_THROW(enum_cast<std::string>(static_cast<C>(2)), bad_enum_cast);
   BOOST_CHECK_THROW(enum_cast<std::string>(static_cast<C>(100)), bad_enum_cast);
-
 }
+
+BOOST_AUTO_TEST_CASE(test_operators_guard)
+{
+  BOOST_CHECK(detail::is_bitmask<A>::value == false);
+  BOOST_CHECK(detail::is_bitmask<B>::value == false);
+  BOOST_CHECK(detail::is_bitmask<C>::value == true);
+  // check some misc types
+  BOOST_CHECK(detail::is_bitmask<char*>::value == false);
+  BOOST_CHECK(detail::is_bitmask<std::string>::value == false);
+  
+  BOOST_CHECK(detail::is_arithmetic<A>::value == false);
+  BOOST_CHECK(detail::is_arithmetic<B>::value == false);
+  BOOST_CHECK(detail::is_arithmetic<C>::value == true);
+  BOOST_CHECK(detail::is_arithmetic<int>::value == false);
+  BOOST_CHECK(detail::is_arithmetic<basic_enum_traits<A>>::value == false);
+  
+  BOOST_CHECK(detail::is_logical<A>::value == false);
+  BOOST_CHECK(detail::is_logical<B>::value == false);
+  BOOST_CHECK(detail::is_logical<C>::value == true);
+  BOOST_CHECK(detail::is_logical<bool>::value == false);
+  BOOST_CHECK(detail::is_logical<void>::value == false);
+  
+  BOOST_CHECK(detail::is_mixed_comparible<A>::value == false);
+  BOOST_CHECK(detail::is_mixed_comparible<B>::value == false);
+  BOOST_CHECK(detail::is_mixed_comparible<C>::value == true);
+  BOOST_CHECK(detail::is_mixed_comparible<bool>::value == false);
+  BOOST_CHECK(detail::is_mixed_comparible<void>::value == false);
+  
+}
+
+ELIB_ENUM_USING_OPERATORS()
+
+BOOST_AUTO_TEST_CASE(test_enum_operators)
+{
+ 
+  auto cmp_equal =
+    [](int val, C cval)
+    {
+      return (val == static_cast<int>(cval));
+    };
+ 
+  auto test_bitmask_fn =
+    [&](int lhs, int rhs)
+    {
+      int ret;
+      C clhs, crhs, cret;
+      
+      clhs = static_cast<C>(lhs);
+      crhs = static_cast<C>(rhs);
+      
+      BOOST_CHECK(cmp_equal(~lhs, ~clhs));
+      BOOST_CHECK(cmp_equal(~rhs, ~crhs));
+      
+      ret = lhs & rhs;
+      BOOST_CHECK(cmp_equal(ret, clhs & crhs));
+      BOOST_CHECK(cmp_equal(ret, clhs & rhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret &= crhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret &= rhs));
+      
+      ret = lhs | rhs;
+      BOOST_CHECK(cmp_equal(ret, clhs | crhs));
+      BOOST_CHECK(cmp_equal(ret, clhs | rhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret |= crhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret |= rhs));
+      
+      ret = lhs ^ rhs;
+      BOOST_CHECK(cmp_equal(ret, clhs ^ crhs));
+      BOOST_CHECK(cmp_equal(ret, clhs ^ rhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret ^= crhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret ^= rhs));
+      
+    };                                                      // test_bitmask_fn
+    
+  auto test_arithmetic_fn =
+    [&](int lhs, int rhs)
+    {
+      int ret;
+      C cret;
+        
+      const C clhs = static_cast<C>(lhs);
+      const C crhs = static_cast<C>(rhs);
+        
+      BOOST_CHECK(cmp_equal(+lhs, +clhs));
+      BOOST_CHECK(cmp_equal(+rhs, +crhs));
+        
+      BOOST_CHECK(cmp_equal(-lhs, -clhs));
+      BOOST_CHECK(cmp_equal(-rhs, -crhs));
+        
+      ret = lhs + rhs;
+      BOOST_CHECK(cmp_equal(ret, clhs + crhs));
+      BOOST_CHECK(cmp_equal(ret, clhs + rhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret += crhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret += rhs));
+        
+      ret = lhs - rhs;
+      BOOST_CHECK(cmp_equal(ret, clhs - crhs));
+      BOOST_CHECK(cmp_equal(ret, clhs - rhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret -= crhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret -= rhs));
+        
+      ret = lhs * rhs;
+      BOOST_CHECK(cmp_equal(ret, clhs * crhs));
+      BOOST_CHECK(cmp_equal(ret, clhs * rhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret *= crhs));
+      cret = clhs;
+      BOOST_CHECK(cmp_equal(ret, cret *= rhs));
+        
+      if (rhs != 0)
+      {
+        ret = lhs / rhs;
+        BOOST_CHECK(cmp_equal(ret, clhs / crhs));
+        BOOST_CHECK(cmp_equal(ret, clhs / rhs));
+        cret = clhs;
+        BOOST_CHECK(cmp_equal(ret, cret /= crhs));
+        cret = clhs;
+        BOOST_CHECK(cmp_equal(ret, cret /= rhs));
+          
+        ret = lhs % rhs;
+        BOOST_CHECK(cmp_equal(ret, clhs % crhs));
+        BOOST_CHECK(cmp_equal(ret, clhs % rhs));
+        cret = clhs;
+        BOOST_CHECK(cmp_equal(ret, cret %= crhs));
+        cret = clhs;
+        BOOST_CHECK(cmp_equal(ret, cret %= rhs));
+      }
+    };                                                  // test_arithmetic_fn
+  
+  
+  auto test_logical_fn =
+    [&](int lhs, int rhs)
+    {
+      const C clhs = static_cast<C>(lhs);
+      const C crhs = static_cast<C>(rhs);
+      
+      bool ret;
+      
+      BOOST_CHECK(!lhs == !clhs);
+      BOOST_CHECK(!rhs == !crhs);
+      
+      ret = lhs && rhs;
+      BOOST_CHECK(ret == (clhs && crhs));
+      BOOST_CHECK(ret == (clhs && rhs));
+      BOOST_CHECK(ret == (lhs && crhs));
+      
+      ret = lhs || rhs;
+      BOOST_CHECK(ret == (clhs || crhs));
+      BOOST_CHECK(ret == (clhs || rhs));
+      BOOST_CHECK(ret == (lhs || crhs));
+      
+    };                                                      // test_logical_fn
+  
+  auto test_mixed_comparible_fn =
+    [](int lhs, int rhs)
+    {
+      const C clhs = static_cast<C>(lhs);
+      const C crhs = static_cast<C>(rhs);
+      
+      bool ret = lhs == rhs;
+      BOOST_CHECK(ret == (clhs == crhs));
+      BOOST_CHECK(ret == (clhs == rhs));
+      
+      ret = lhs != rhs;
+      BOOST_CHECK(ret == (clhs != crhs));
+      BOOST_CHECK(ret == (clhs != rhs));
+      
+      ret = lhs < rhs;
+      BOOST_CHECK(ret == (clhs < crhs));
+      BOOST_CHECK(ret == (clhs < rhs));
+      
+      ret = lhs <= rhs;
+      BOOST_CHECK(ret == (clhs <= crhs));
+      BOOST_CHECK(ret == (clhs <= rhs));
+      
+      ret = lhs > rhs;
+      BOOST_CHECK(ret == (clhs > crhs));
+      BOOST_CHECK(ret == (clhs > rhs));
+      
+      ret = lhs >= rhs;
+      BOOST_CHECK(ret == (clhs >= crhs));
+      BOOST_CHECK(ret == (clhs >= rhs));
+      
+    };                                              // test_mixed_comparible_fn
+    
+  for (int i=-15; i <= 15; ++i)
+  {
+    for (int j=-15; j <= 15; ++j)
+    {
+      test_bitmask_fn(i, j);
+      test_arithmetic_fn(i, j);
+      test_logical_fn(i, j);
+      
+/* clang 3.4 has a bug where comparisions don't work */
+# ifndef ELIB_CLANG
+      test_mixed_comparible_fn(i, j);
+#endif
+    }
+  }
+  
+}
+
+
+#ifndef ELIB_CLANG
+
+BOOST_AUTO_TEST_CASE(test_iter)
+{
+  BOOST_CHECK(detail::is_iterable<A>::value == false);
+  BOOST_CHECK(detail::is_iterable<B>::value == true);
+  BOOST_CHECK(detail::is_iterable<C>::value == true);
+  
+  BOOST_CHECK(detail::is_constexpr_range_iterable<A>::value == false);
+  BOOST_CHECK(detail::is_constexpr_range_iterable<B>::value == true);
+  BOOST_CHECK(detail::is_constexpr_range_iterable<C>::value == false);
+  
+  BOOST_CHECK(detail::is_name_map_iterable<A>::value == false);
+  BOOST_CHECK(detail::is_name_map_iterable<B>::value == false);
+  BOOST_CHECK(detail::is_name_map_iterable<C>::value == true);
+  
+  /* test for constexpr iterator (e.g. B's) */
+  using b_iter = enum_iterator<B>;
+  b_iter bit = begin(b_iter{});
+  const b_iter bend = b_iter{};
+  
+  BOOST_CHECK(bit == b_iter{first_value<B>()});
+  
+  BOOST_CHECK(*bit == B::none);
+  BOOST_CHECK(bit != bend);
+  ++bit;
+  BOOST_CHECK(*bit == B::one);
+  BOOST_CHECK(bit != bend);
+  ++bit;
+  BOOST_CHECK(bit == bend);
+  ++bit;
+  BOOST_CHECK(bit == bend);
+  --bit;
+  BOOST_CHECK(*bit == B::one);
+  --bit;
+  BOOST_CHECK(*bit == B::none);
+  --bit;
+  BOOST_CHECK(*bit == B::none);
+  --bit;
+  BOOST_CHECK(*bit == B::none);
+  ++bit;
+  BOOST_CHECK(*bit == B::one);
+  
+  /* test for name iterator */
+  using c_iter = enum_iterator<C>;
+  c_iter cit = begin(c_iter{});
+  const c_iter cend = end(c_iter{});
+  
+  BOOST_CHECK(cend == c_iter{});
+  
+  BOOST_CHECK(cit != cend);
+  BOOST_CHECK(*cit == C::none);
+  ++cit;
+  BOOST_CHECK(cit != cend);
+  BOOST_CHECK(*cit == C::one);
+  ++cit;
+  BOOST_CHECK(cit != cend);
+  BOOST_CHECK(*cit == C::three);
+  ++cit;
+  BOOST_CHECK(cit == cend);
+  ++cit;
+  BOOST_CHECK(cit == cend);
+  --cit;
+  BOOST_CHECK(cit != cend);
+  
+}
+
+# endif
 
 
 BOOST_AUTO_TEST_SUITE_END()

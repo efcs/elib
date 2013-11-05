@@ -53,6 +53,11 @@ namespace elib
       static constexpr bool has_is_logical = ELIB_ENUM_MERGE_HAS(is_logical);
       static constexpr bool is_logical = ELIB_ENUM_MERGE(is_logical);
       
+      static constexpr bool has_is_mixed_comparible = 
+        ELIB_ENUM_MERGE_HAS(is_mixed_comparible);
+      static constexpr bool is_mixed_comparible = 
+        ELIB_ENUM_MERGE(is_mixed_comparible);
+      
       static constexpr bool has_constexpr_bounds =
         has_first_value && has_last_value;
       

@@ -92,14 +92,6 @@ BOOST_AUTO_TEST_CASE(fs_current_path_test)
   BOOST_CHECK(bec.value() == eec.value());
 }
 
-BOOST_AUTO_TEST_CASE(fs_dir_iter_test)
-{
-  std::string s{"/home/eric/workspace/elib"};
-  efs::path e{s};
-  bfs::path b{s};
-  
-  
-}
 
 BOOST_AUTO_TEST_CASE(fs_test_main)
 {
@@ -237,11 +229,6 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
       read_only_ops(s, "", "");
     }
     
-}
-
-BOOST_AUTO_TEST_CASE(rec_inter_test)
-{
-  efs::recursive_directory_iterator it{"/home/eric/tmp"};
 }
 
 BOOST_AUTO_TEST_SUITE_END()

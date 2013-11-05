@@ -2,9 +2,9 @@
 # define ELIB_ENUMERATION_ENUM_ITERATOR_HPP
 
 # include <elib/config.hpp>
-# include <elib/enumeration/v3/enum_helper.hpp>
-# include <elib/enumeration/v3/basic_enum_traits.hpp>
-# include <elib/enumeration/v3/enum_traits.hpp>
+# include <elib/enumeration/enum_helper.hpp>
+# include <elib/enumeration/basic_enum_traits.hpp>
+# include <elib/enumeration/enum_traits.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 

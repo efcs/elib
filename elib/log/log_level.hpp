@@ -12,7 +12,8 @@ namespace log {
  * a log level is on if it is >= the current level, it is off otherwise.
  * only levels debug-fatal are valid logging levels 
  * raw levels are not affected by the level */
-enum class level_e {
+enum class level_e 
+{
     debug,
     info,
     step,
@@ -29,17 +30,28 @@ constexpr level_e default_log_level = level_e::step;
 
 } /* namespace log */
 
+namespace enumeration
+{
 
-/* level_e can be used with enum_traits */
-template <>
-struct basic_enum_traits<log::level_e> {    
-    static constexpr log::level_e default_value = log::default_log_level;
-    static constexpr log::level_e first_value = log::level_e::debug;
-    static constexpr log::level_e last_value = log::level_e::raw_err;
-    
-    typedef const std::map<log::level_e, std::string> map_type;
-    static map_type name_map;
-};
-    
+  /* level_e can be used with enum_traits */
+  template <>
+  struct basic_enum_traits<log::level_e> 
+  {    
+      static constexpr log::level_e ELIB_ENUM_DEFAULT_VALUE = 
+        log::default_log_level;
+        
+      static constexpr log::level_e ELIB_ENUM_FIRST_VALUE = 
+        log::level_e::debug;
+        
+      static constexpr log::level_e ELIB_ENUM_LAST_VALUE = 
+        log::level_e::raw_err;
+        
+      static constexpr bool ELIB_ENUM_IS_CONTIGIOUS = true;
+      
+      static enum_map_t<log::level_e> name_map;
+  };
+  
+}                                                      // namespace enumeration
+      
 } /* namespace elib */
 #endif /* ELIB_LOG_LOG_LEVEL_HPP */

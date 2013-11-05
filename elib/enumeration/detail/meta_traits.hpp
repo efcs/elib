@@ -2,8 +2,8 @@
 # define ELIB_ENUMERATION_META_TRAITS_HPP
 
 # include <elib/config.hpp>
-# include <elib/enumeration/v3/detail/enum_fields.hpp>
-# include <elib/enumeration/v3/basic_enum_traits.hpp>
+# include <elib/enumeration/detail/enum_fields.hpp>
+# include <elib/enumeration/basic_enum_traits.hpp>
 
 
 namespace elib 

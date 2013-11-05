@@ -2,7 +2,7 @@
 # define ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
 
 # include <elib/config.hpp>
-# include <elib/enumeration/v3/enum_helper.hpp>
+# include <elib/enumeration/enum_helper.hpp>
 # include <elib/etl/basic_detector.hpp>
 
 # include <elib/CXX14/type_traits.hpp>

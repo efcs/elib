@@ -8,12 +8,12 @@
 #   undef ELIB_MINGW
 #   undef ELIB_COMPILER_NAME
 
-#   if defined(__GNUC__) && !defined(__clang__)
-#     define ELIB_GNU   1
-#     define ELIB_COMPILER_NAME GCC
-#   elif defined(__clang__)
+#   if defined(__clang__)
 #     define ELIB_CLANG 1
 #     define ELIB_COMPILER_NAME clang
+#  elif defined(__GNUC__) 
+#     define ELIB_GNU   1
+#     define ELIB_COMPILER_NAME GCC
 #   elif defined(__MINGW32__)
 #     define ELIB_MINGW 1
 #     define ELIB_COMPILER_NAME mingw

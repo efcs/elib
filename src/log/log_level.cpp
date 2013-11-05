@@ -8,8 +8,10 @@ ELIB_PRAGMA_DIAG_PUSH()
 ELIB_PRAGMA_IGNORE_GLOBAL_CONSTRUCTORS()
 ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
 
-      
-  basic_enum_traits<log::level_e>::map_type 
+namespace enumeration
+{
+  
+  enum_map_t<log::level_e>
   basic_enum_traits<log::level_e>::name_map =
       { {log::level_e::debug, "debug"},
         {log::level_e::info, "info"},
@@ -20,6 +22,7 @@ ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
         {log::level_e::raw_out, "raw_out"},
         {log::level_e::raw_err, "raw_err"}
       };
+}                                                       //namespace enumeration
 
 ELIB_PRAGMA_DIAG_POP()
       

@@ -2,10 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <elib/config.hpp>
-#include <elib/enumeration/v3/enum_traits.hpp>
-#include <elib/enumeration/v3/enum_cast.hpp>
-#include <elib/enumeration/v3/operators.hpp>
-#include <elib/enumeration/v3/enum_iterator.hpp>
+#include <elib/enumeration.hpp>
 
 #include <string>
 
@@ -582,6 +579,7 @@ BOOST_AUTO_TEST_CASE(test_enum_operators)
       BOOST_CHECK(ret == (clhs != crhs));
       BOOST_CHECK(ret == (clhs != rhs));
       
+# if ! ELIB_WORKAROUND(ELIB_CLANG, CLANG_ENUMERATION_COMPARE_BUG)
       ret = lhs < rhs;
       BOOST_CHECK(ret == (clhs < crhs));
       BOOST_CHECK(ret == (clhs < rhs));
@@ -597,6 +595,7 @@ BOOST_AUTO_TEST_CASE(test_enum_operators)
       ret = lhs >= rhs;
       BOOST_CHECK(ret == (clhs >= crhs));
       BOOST_CHECK(ret == (clhs >= rhs));
+# endif
       
     };                                              // test_mixed_comparible_fn
     
@@ -607,18 +606,15 @@ BOOST_AUTO_TEST_CASE(test_enum_operators)
       test_bitmask_fn(i, j);
       test_arithmetic_fn(i, j);
       test_logical_fn(i, j);
-      
-/* clang 3.4 has a bug where comparisions don't work */
-# ifndef ELIB_CLANG
       test_mixed_comparible_fn(i, j);
-#endif
+
     }
   }
   
 }
 
 
-#ifndef ELIB_CLANG
+
 
 BOOST_AUTO_TEST_CASE(test_iter)
 {
@@ -646,8 +642,6 @@ BOOST_AUTO_TEST_CASE(test_iter)
   ++bit;
   BOOST_CHECK(*bit == B::one);
   BOOST_CHECK(bit != bend);
-  ++bit;
-  BOOST_CHECK(bit == bend);
   ++bit;
   BOOST_CHECK(bit == bend);
   --bit;
@@ -678,14 +672,12 @@ BOOST_AUTO_TEST_CASE(test_iter)
   BOOST_CHECK(*cit == C::three);
   ++cit;
   BOOST_CHECK(cit == cend);
-  ++cit;
-  BOOST_CHECK(cit == cend);
   --cit;
   BOOST_CHECK(cit != cend);
   
 }
 
-# endif
+
 
 
 BOOST_AUTO_TEST_SUITE_END()

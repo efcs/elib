@@ -43,6 +43,9 @@ namespace elib
         using m_is_arithmetic = 
           field_extractor<T, is_arithmetic_field_t, std::false_type>;
           
+        using m_is_logical =
+          field_extractor<T, is_logical_field_t, std::false_type>;
+          
       public:
         static constexpr bool has_default_value = m_default_value::found;
         static constexpr T default_value = m_default_value::value;
@@ -64,6 +67,9 @@ namespace elib
           
         static constexpr bool has_is_arithmetic = m_is_arithmetic::found;
         static constexpr bool is_arithmetic = m_is_arithmetic::value;
+        
+        static constexpr bool has_is_logical = m_is_logical::found;
+        static constexpr bool is_logical = m_is_logical::value;
           
       };
       

@@ -45,6 +45,9 @@ namespace elib
         static constexpr bool has_is_arithmetic = false;
         static constexpr bool is_arithmetic = false;
         
+        static constexpr bool has_is_logical = false;
+        static constexpr bool is_logical = false;
+        
       };
       
       
@@ -75,6 +78,9 @@ namespace elib
                                   
         using m_is_arithmetic = field_extractor<basic_enum_traits<T>,
                                   is_arithmetic_field_t, std::false_type>;
+                                
+        using m_is_logical = field_extractor<basic_enum_traits<T>,
+                                  is_logical_field_t, std::false_type>;
         
       public:
         
@@ -98,6 +104,9 @@ namespace elib
         
         static constexpr bool has_is_arithmetic = m_is_arithmetic::found;
         static constexpr bool is_arithmetic = m_is_arithmetic::value;
+        
+        static constexpr bool has_is_logical = m_is_logical::found;
+        static constexpr bool is_logical = m_is_logical::value;
         
       };
       

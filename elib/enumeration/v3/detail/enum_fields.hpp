@@ -91,6 +91,12 @@ namespace elib
         std::integral_constant<bool, 
           static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)
         >;
+        
+      template <class T>
+      using is_logical_field_t =
+        std::integral_constant<bool, 
+          static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)
+        >;
                                       
        
     }                                                       // namespace detail

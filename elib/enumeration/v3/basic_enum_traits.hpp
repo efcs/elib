@@ -18,37 +18,43 @@ namespace elib
     
     template <typename T>
     using enum_map_t = const std::map<T, std::string>;
-    
+  
+  
+# ifdef ELIB_ENUM_EXAMPLE
+
+#   error This code is an example and should never be compiled
     
     template <typename T>
     struct basic_enum_traits
     {
-      static_assert(std::is_enum<T>::value, "T must be an enumeration type");
+      static enum_map_t<T> name_map;
       
-      /* when implementing replace BAD_ENUM_TYPE with your type T, 
-       * BAD_ENUM_TYPE is used to check for default instatiations
-       */
-      static enum_map_t<BAD_ENUM_TYPE> name_map;
+      static constexpr T ELIB_ENUM_DEFAULT_VALUE = T::value; 
+      static constexpr T ELIB_ENUM_ERROR_VALUE = T::value;
       
-      static constexpr BAD_ENUM_TYPE ELIB_ENUM_DEFAULT_VALUE = 
-        BAD_ENUM_TYPE::none;
-      static constexpr BAD_ENUM_TYPE ELIB_ENUM_ERROR_VALUE = 
-        BAD_ENUM_TYPE::none;
-      
-      static constexpr BAD_ENUM_TYPE ELIB_ENUM_FIRST_VALUE = 
-        BAD_ENUM_TYPE::none;
-      static constexpr BAD_ENUM_TYPE ELIB_ENUM_LAST_VALUE = 
-        BAD_ENUM_TYPE::none;
+      static constexpr T ELIB_ENUM_FIRST_VALUE = T::value;
+      static constexpr T ELIB_ENUM_LAST_VALUE = T::value;
       
       static constexpr bool ELIB_ENUM_IS_CONTIGIOUS = false;
       static constexpr bool ELIB_ENUM_IS_BITMASK = false;
       static constexpr bool ELIB_ENUM_IS_ARITHMETIC = false;
-      
-      // this is used purely to determine if the default
-      // instatiation (ie this one) is being used
-      static constexpr bool ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS = true;
+      static constexpr bool ELIB_ENUM_IS_LOGICAL = false;
       
     };
+    
+#endif
+
+    /* Actual implementation of basic_enum_traits, 
+     * it has no members, except one used to detect if it is the default
+     * instantiation
+     */
+    
+    template <class T>
+    struct basic_enum_traits
+    {
+      static constexpr bool ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS = true;
+    };
+      
       
     namespace detail
     {
@@ -69,11 +75,14 @@ namespace elib
         >
     {};
     
+    template <class T, bool=has_basic_enum_traits<T>::value>
+    struct has_name_map : std::false_type
+    {};
+    
     template <class T>
-    struct has_name_map
+    struct has_name_map<T, true>
       : std::integral_constant<bool, 
-          has_basic_enum_traits<T>::value
-          && etl::basic_detector<T, detail::traits_name_map_detector>::value
+          etl::basic_detector<T, detail::traits_name_map_detector>::value
         >
     {};
     

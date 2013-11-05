@@ -3,8 +3,10 @@
 
 # include <elib/config.hpp>
 # include <elib/enumeration/v3/enum_helper.hpp>
-# include <elib/enumeration/v3/detail/meta_basic_enum_traits.hpp>
-# include <elib/enumeration/v3/detail/intrusive_enum_traits.hpp>
+# include <elib/enumeration/v3/basic_enum_traits.hpp>
+# include <elib/enumeration/v3/detail/meta_traits.hpp>
+
+# include <cstddef>
 
 
 namespace elib 
@@ -20,8 +22,8 @@ namespace elib
     struct enum_traits
     {
     private:
-      typedef detail::meta_basic_enum_traits<T> meta_t;
-      typedef detail::intrusive_enum_traits<T> int_t;
+      using meta_t = detail::meta_basic_enum_traits<T>;
+      using int_t = detail::meta_intrusive_traits<T>;
       
     public:
       
@@ -48,18 +50,14 @@ namespace elib
       static constexpr bool has_is_arithmetic = ELIB_ENUM_MERGE_HAS(is_arithmetic);
       static constexpr bool is_arithmetic = ELIB_ENUM_MERGE(is_arithmetic);
       
+      static constexpr bool has_is_logical = ELIB_ENUM_MERGE_HAS(is_logical);
+      static constexpr bool is_logical = ELIB_ENUM_MERGE(is_logical);
       
-      static constexpr bool has_constexpr_bounds = 
+      static constexpr bool has_constexpr_bounds =
         has_first_value && has_last_value;
-        
-      static constexpr bool has_bounds = 
-        has_constexpr_bounds || has_name_map<enum_type>::value;
       
       static constexpr bool has_constexpr_range = 
         has_constexpr_bounds && is_contigious;
-      
-      static constexpr bool has_range = 
-        has_constexpr_range || has_name_map<enum_type>::value;
         
     };                                                    // struct enum_traits
     
@@ -67,147 +65,164 @@ namespace elib
 # undef ELIB_ENUM_MERGE
 # undef ELIB_ENUM_MERGE_HAS
 
-    template <typename T, bool=std::is_enum<T>::value>
-    struct has_bounds : std::false_type
-    {};
-    
-    template <typename T>
-    struct has_bounds<T, true>
-      : std::integral_constant<bool, enum_traits<T>::has_bounds>
-    {};
-    
-    template <typename T, bool=std::is_enum<T>::value>
-    struct has_constexpr_bounds : std::false_type
-    {};
-    
-    template <typename T>
-    struct has_constexpr_bounds<T, true>
-      : std::integral_constant<bool, enum_traits<T>::has_constexpr_bounds>
-    {};
-    
-
-    template <typename T, bool=std::is_enum<T>::value>
+    template <class T, bool=std::is_enum<T>::value>
     struct has_range : std::false_type
     {};
     
-    template <typename T>
-    struct has_range<T, true>
-      : std::integral_constant<bool, enum_traits<T>::has_range>
-    {};
-    
-    template <class T, bool=std::is_enum<T>::value>
-    struct has_constexpr_range : std::false_type
-    {};
-    
     template <class T>
-    struct has_constexpr_range<T, true> 
-      : std::integral_constant<bool, enum_traits<T>::has_constexpr_range>
+    struct has_range<T, true>
+      : std::integral_constant<
+          bool
+          , enum_traits<T>::has_constexpr_range
+            || has_name_map<T>::value
+        >
     {};
     
 
     template <class T>
-    constexpr std::enable_if_t<has_constexpr_bounds<T>::value, T>
+    constexpr std::enable_if_t<
+      enum_traits<T>::has_default_value
+      , T
+    >
+    default_value() noexcept
+    {
+      return enum_traits<T>::default_value;
+    }
+    
+    template <class T>
+    constexpr std::enable_if_t<
+      enum_traits<T>::has_error_value
+      , T
+    >
+    error_value() noexcept
+    {
+      return enum_traits<T>::error_value;
+    }
+    
+    
+    template <class T>
+    constexpr std::enable_if_t<
+      enum_traits<T>::has_first_value
+      , T
+    >
     first_value() noexcept
     {
       return enum_traits<T>::first_value;
     }
     
+    template <class T>
+    constexpr std::enable_if_t<
+      enum_traits<T>::has_last_value
+      , T
+    >
+    last_value() noexcept
+    {
+      return enum_traits<T>::last_value;
+    }
     
     template <class T>
     std::enable_if_t<
-      has_bounds<T>::value 
-        && !has_constexpr_bounds<T>::value
-      , T>
+      has_name_map<T>::value
+        && !enum_traits<T>::has_first_value
+      , T
+    >
     first_value()
     {
-      static_assert(has_name_map<T>::value, "must have name map");
       return basic_enum_traits<T>::name_map.begin()->first;
     }
     
     
     template <class T>
-    constexpr std::enable_if_t<has_constexpr_bounds<T>::value, T>
-    last_value() noexcept
-    {
-      static_assert(enum_traits<T>::has_last_value, "must have last value");
-      return enum_traits<T>::last_value;
-    }
-    
-    
-    template <class T>
-      std::enable_if_t<
-        has_bounds<T>::value && !has_constexpr_bounds<T>::value
-      , T>
+    std::enable_if_t<
+      has_name_map<T>::value
+        && !enum_traits<T>::has_last_value
+      , T
+    >
     last_value()
     {
-      static_assert(has_name_map<T>::value, "must have name map");                  
       return (basic_enum_traits<T>::name_map.end()--)->first;
     }
     
     
     template <class T>
-    constexpr std::enable_if_t<has_constexpr_range<T>::value, std::size_t>
+    constexpr std::enable_if_t<
+      enum_traits<T>::has_constexpr_range
+      , std::size_t
+    >
     size() noexcept
     {
-      return underlying_cast(last_value<T>()) - underlying_cast(first_value<T>());
+      return underlying_cast(last_value<T>()) 
+             - underlying_cast(first_value<T>()) + 1;
     }
     
     
     template <class T>
     std::enable_if_t<
-      has_range<T>::value 
-        && !has_constexpr_range<T>::value
-      , std::size_t>
-    size() noexcept
+      has_name_map<T>::value
+        && !enum_traits<T>::has_constexpr_range
+      , std::size_t
+    >
+    size()
     {
-      return underlying_cast(last_value<T>()) - underlying_cast(first_value<T>());
+      return basic_enum_traits<T>::name_map.size();
     }
     
     
     template <class T>
     constexpr std::enable_if_t<
-      has_constexpr_range<T>::value
-    , bool>
+      enum_traits<T>::has_is_contigious
+      , bool
+    >
     is_contigious() noexcept
     {
-      return true;
+      return enum_traits<T>::is_contigious;
     }
     
-    template <class T>
-    constexpr std::enable_if_t<
-      !has_range<T>::value
-    , bool>
-    is_contigious() noexcept
-    {
-      return false;
-    }
     
     template <class T>
     std::enable_if_t<
-      has_range<T>::value
-      && !has_constexpr_range<T>::value
-    , bool>
+      has_name_map<T>::value
+        && !enum_traits<T>::has_is_contigious
+      , bool
+    >
     is_contigious()
     {
-      return size<T>() == (last_value<T>() - first_value<T>());
+      return (size<T>() == 0 
+        || (underlying_cast(last_value<T>()) - underlying_cast(first_value<T>())
+             == size<T>()
+          ));
     }
-      
+    
     
     template <class T>
-    constexpr std::enable_if_t<has_constexpr_range<T>::value, bool>
+    constexpr std::enable_if_t<
+      enum_traits<T>::has_constexpr_range
+      , bool 
+    >
     in_range(T v) noexcept
     {
       return (first_value<T>() <= v && v <= last_value<T>());
     }
     
+    
     template <class T>
     std::enable_if_t<
-      has_range<T>::value && !has_constexpr_range<T>::value 
-    , bool>
+      has_name_map<T>::value
+        && !enum_traits<T>::has_constexpr_range
+      , bool
+    >
     in_range(T v)
     {
-      return (first_value<T>() <= v && v <= last_value<T>());
+      if (size<T>() == 0)
+        return false;
+      if (is_contigious<T>())
+        return (first_value<T>() <= v && v <= last_value<T>());
+      return basic_enum_traits<T>::name_map.count(v) > 0;
     }
+    
+      
+    
+    
     
   }                                                    // namespace enumeration
 }                                                           // namespace elib

@@ -8,6 +8,8 @@
 
 # include <elib/CXX14/type_traits.hpp>
 
+# include <stdexcept>
+
 namespace elib 
 {
   namespace enumeration
@@ -16,7 +18,7 @@ namespace elib
     {
       
     
-      template <class From, class To, class Ret=void>
+      template <class From, class To, class Ret=To>
       using if_enum_to_enum_t = 
         std::enable_if_t<
           std::is_enum<From>::value 
@@ -25,7 +27,8 @@ namespace elib
           , Ret
         >;
         
-      template <class From, class To, class Ret=void>
+        
+      template <class From, class To, class Ret=To>
       using if_integral_to_enum_t = 
         std::enable_if_t<
           std::is_integral<From>::value 
@@ -35,67 +38,83 @@ namespace elib
         >;
         
    
-      template <class T, class U, class Ret=void>
+      template <class From, class To, class Ret=To>
       using if_enum_to_integral_t = 
         std::enable_if_t<
-          std::is_enum<T>::value 
-            && std::is_integral<U>::value
+          std::is_enum<From>::value 
+            && std::is_integral<To>::value
           , Ret
         >;
         
-      template <class T, class U, class Ret=void>
+        
+      template <class From, class To, class Ret=To>
       using if_enum_to_string_t = 
         std::enable_if_t<
-          std::is_enum<T>::value
-            && has_name_map<T>::value
-            && std::is_same<std::string, U>::value
+          std::is_enum<From>::value
+            && has_name_map<From>::value
+            && std::is_same<std::string, To>::value
           , Ret
         >;
           
         
-      template <class T, class U, class Ret=void>
+      template <class S>
+      using string_decay_t =
+        std::remove_reference_t<
+          std::decay_t<S>
+        >;
+        
+      template <class From, class To, class Ret=To>
       using if_string_to_enum_t =
         std::enable_if_t<
-            (std::is_same<T, const char*>::value
-              || std::is_same<T, const std::string>
-              || std::is_name<T, const std::string&>)
-            && std::is_enum<U>::value
-            && has_name_map<U>::value
+            (std::is_same<string_decay_t<From>, const char*>::value
+              || std::is_same<string_decay_t<From>, std::string>::value)
+            && std::is_enum<To>::value
+            && has_name_map<To>::value
           , Ret 
         >;
+        
       
     }                                                       // namespace detail
     
-    template <typename From, typename To>
-    if_enum_to_enum_t<From, To, To>
+    
+    class bad_enum_cast : public std::runtime_error
+    {
+      using std::runtime_error::runtime_error;
+    };
+    
+    template <class To, class From>
+    detail::if_enum_to_enum_t<From, To>
     enum_cast(From v)
     {
       To tmp = static_cast<To>(v);
       if (in_range(tmp))
         return tmp;
-      throw "TODO";
+      throw bad_enum_cast{"bad enum cast"};
     }
     
-    template <class From, class To>
-    constexpr if_enum_to_integral_t<From, To, To>
+    
+    template <class To, class From>
+    constexpr detail::if_enum_to_integral_t<From, To>
     enum_cast(From v) noexcept
     {
       return static_cast<To>(v);
     }
     
-    template <class From, class To>
-    if_integral_to_enum_t<From, To, To>
+    
+    template <class To, class From>
+    detail::if_integral_to_enum_t<From, To>
     enum_cast(From v)
     {
       To tmp = static_cast<To>(v);
       if (in_range(tmp))
         return tmp;
-      throw "TODO";
+      throw bad_enum_cast{"bad enum cast"};
     }
     
-    template <class From, class To>
-    if_sting_to_enum<From, To, To>
-    enum_cast(From v)
+    
+    template <class To, class From>
+    detail::if_string_to_enum_t<From, To>
+    enum_cast(From&& v)
     {
       static_assert(has_name_map<To>::value, "must have name map");
       for (auto& kv : basic_enum_traits<To>::name_map)
@@ -103,19 +122,19 @@ namespace elib
         if (kv.second == v)
           return kv.first;
       }
-      throw "TODO";
+      throw bad_enum_cast{"bad enum cast"};
     }
     
     
-    template <class From, class To>
-    if_enum_to_string_t<From, To, To>
+    template <class To, class From>
+    detail::if_enum_to_string_t<From, To>
     enum_cast(From v)
     {
       static_assert(has_name_map<From>::value, "must have name map");
-      auto pos = basic_enum_traits<T>::name_map.find(v);
-      if (pos != basic_enum_traits<T>::name_map.end())
+      auto pos = basic_enum_traits<From>::name_map.find(v);
+      if (pos != basic_enum_traits<From>::name_map.end())
         return pos->second;
-      throw "TODO";
+      throw bad_enum_cast{"bad enum cast"};
     }
     
     

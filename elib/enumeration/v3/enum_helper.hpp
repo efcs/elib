@@ -79,6 +79,13 @@ namespace elib
       return static_cast<underlying_t<T>>(v);
     }
     
+    template <typename T>
+    constexpr std::enable_if_t<std::is_enum<T>::value, bool>
+    bool_cast(T v) noexcept
+    {
+      return static_cast<bool>(v);
+    }
+    
     
   }                                                    // namespace enumeration
 }                                                           // namespace elib

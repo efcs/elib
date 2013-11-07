@@ -16,12 +16,12 @@ namespace elib
     {};
     
     
-    template <class ...Args>
-    struct protect<bind<Args...>>
+    template <class F, class ...Args>
+    struct protect<bind<F, Args...>>
     {
       
       template <class ...Args2>
-      struct apply : apply_wrap<bind<Args...>, Args2...>
+      struct apply : apply_wrap<bind<F, Args...>, Args2...>
       {};
       
     };

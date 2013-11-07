@@ -17,16 +17,42 @@ namespace elib
     namespace detail
     {
       
+      template <class T>
+      struct resolver
+      {
+        template <class ...Args>
+        struct apply
+        {
+          typedef T type;
+        };
+      };
+      
+      template <std::size_t N>
+      struct resolver<arg<N>>
+      {
+        template <class ...Args>
+        struct apply : apply_wrap<arg<N>, Args...>
+        {};
+      };
+      
+      template <class F, class ...Args>
+      struct resolver<bind<F, Args...>>
+      {
+        template <class ...Args2>
+        struct apply : apply_wrap<bind<F, Args...>, Args2...>
+        {};
+      };
+      
       template <typename T, typename ...Args>
       struct resolve_bind_arg
       {
         typedef T type;
       };
       
-      template <typename ...Args1, typename ...Args2>
-      struct resolve_bind_arg<bind<Args1...>, Args2...>
+      template <typename F, typename ...Args1, typename ...Args2>
+      struct resolve_bind_arg<bind<F, Args1...>, Args2...>
       {
-        typedef apply_wrap_t<bind<Args1...>, Args2...> type;
+        typedef apply_wrap_t<bind<F, Args1...>, Args2...> type;
       };
       
       template <std::size_t N, typename ...Args>

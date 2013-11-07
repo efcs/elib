@@ -9,6 +9,8 @@
 #include <elib/mp/has_apply.hpp>
 #include <elib/mp/has_type.hpp>
 #include <elib/mp/quote.hpp>
+#include <elib/mp/protect.hpp>
+#include <elib/mp/is_placeholder.hpp>
 
 #include <type_traits>
 
@@ -67,6 +69,15 @@ BOOST_AUTO_TEST_CASE(mp_arg_placeholders_test)
   
   using T4 = _2::template apply<bad, good, bad>::type;
   CHECK_GOOD(T4);
+}
+
+BOOST_AUTO_TEST_CASE(mp_is_placeholder_test)
+{
+  using namespace mp::placeholders;
+  BOOST_CHECK(mp::is_placeholder<_1>::value);
+  BOOST_CHECK(mp::is_placeholder<_9>::value);
+  BOOST_CHECK(mp::is_placeholder<void>::value == false);
+  BOOST_CHECK(mp::is_placeholder<int>::value == false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

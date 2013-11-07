@@ -96,9 +96,8 @@
   ELIB_DELETE_MOVE(class)
   
   
-# define ELIB_STR(str) #str
-
-# define ELIB_STR_DELAY(str) ELIB_STR(str)
+# define ELIB_PP_STR(str) ELIB_PP_STR_2(str)
+# define ELIB_PP_STR_2(str) #str
   
 
   

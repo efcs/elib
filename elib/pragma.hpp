@@ -33,6 +33,7 @@
 # define ELIB_PRAGMA_IGNORE_UNREACHABLE_CODE()
 # define ELIB_PRAGMA_IGNORE_UNSAFE_LOOP_OPTIMIZATIONS()
 # define ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
+# define ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
 
 
 
@@ -44,15 +45,15 @@
 #   undef ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL
 
 #   define ELIB_PRAGMA_DIAG_PUSH()                                \
-      _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic push)) \
-      _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic push)) \
-      _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic push))
+      _Pragma(ELIB_PP_STR(ELIB_COMPILER_NAME diagnostic push)) \
+      _Pragma(ELIB_PP_STR(ELIB_COMPILER_NAME diagnostic push)) \
+      _Pragma(ELIB_PP_STR(ELIB_COMPILER_NAME diagnostic push))
   
 #   define ELIB_PRAGMA_DIAG_POP() \
-      _Pragma(ELIB_STR_DELAY(ELIB_COMPILER_NAME diagnostic pop))
+      _Pragma(ELIB_PP_STR(ELIB_COMPILER_NAME diagnostic pop))
   
 #   define ELIB_PRAGMA_DIAG_IGNORE(d) \
-      _Pragma(ELIB_STR_DELAY( ELIB_COMPILER_NAME diagnostic ignored d ))
+      _Pragma(ELIB_PP_STR( ELIB_COMPILER_NAME diagnostic ignored d ))
       
 
 #   define ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL() \
@@ -86,6 +87,7 @@
 #   undef ELIB_PRAGMA_IGNORE_NON_VIRTUAL_DTOR
 #   undef ELIB_PRAGMA_IGNORE_UNREACHABLE_CODE
 #   undef ELIB_PRAGMA_IGNORE_WEAK_VTABLES
+#   undef ELIB_PRAGMA_IGNORE_CXX11_NARROWING
 
 #   define ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS() \
       ELIB_PRAGMA_DIAG_IGNORE("-Wexit-time-destructors")
@@ -107,6 +109,9 @@
       
 #   define ELIB_PRAGMA_IGNORE_WEAK_VTABLES() \
       ELIB_PRAGMA_DIAG_IGNORE("-Wweak-vtables")
+      
+#   define ELIB_PRAGMA_IGNORE_CXX11_NARROWING() \
+      ELIB_PRAGMA_DIAG_IGNORE("-Wc++11-narrowing")
 
 # endif
 

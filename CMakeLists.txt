@@ -100,10 +100,27 @@ set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
-add_definitions( -std=c++11 -Wall -Wextra -pedantic )
+add_definitions( -std=c++11 -Wall -Wextra -pedantic)
 add_definitions( -save-temps )
 add_definitions( -DELIB_DEFAULT_CONFIG )
 add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.hpp)
+
+
+################################################################################
+#                           Additional config
+################################################################################
+
+set(CONFIG_MP_LIMIT_MAX ON)
+if (CONFIG_MP_LIMIT_MAX)
+  
+  add_definitions( -DELIB_MP_USE_MAX_LIMITS )
+  
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth=1024 ")
+  endif()
+    
+endif()
+
 
 add_subdirectory(src)
 add_subdirectory(unit_tests)

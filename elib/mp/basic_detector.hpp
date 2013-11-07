@@ -1,12 +1,12 @@
-#ifndef ELIB_ETL_BASIC_DETECTOR_HPP
-# define ELIB_ETL_BASIC_DETECTOR_HPP
+#ifndef ELIB_MPL_BASIC_DETECTOR_HPP
+# define ELIB_MPL_BASIC_DETECTOR_HPP
 
-# include <elib/etl/config.hpp>
+# include <elib/mp/config.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
 namespace elib 
 {
-  namespace etl
+  namespace mp
   {
     
     namespace detail
@@ -37,6 +37,6 @@ namespace elib
     { };
     
    
-  }                                                           // namespace etl
+  }                                                           // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_ETL_BASIC_DETECTOR_HPP */
+#endif /* ELIB_MPL_BASIC_DETECTOR_HPP */

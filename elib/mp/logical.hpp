@@ -1,13 +1,13 @@
-#ifndef ELIB_ETL_LOGICAL_HPP
-# define ELIB_ETL_LOGICAL_HPP
+#ifndef ELIB_MPL_LOGICAL_HPP
+# define ELIB_MPL_LOGICAL_HPP
 
-# include <elib/etl/config.hpp>
-# include <elib/etl/types.hpp>
+# include <elib/mp/config.hpp>
+# include <elib/mp/types.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
 namespace elib 
 {
-  namespace etl
+  namespace mp
   {
     
     template <class T>
@@ -49,15 +49,6 @@ namespace elib
     { };
     
     
-    template <class ...Args>
-    struct and_f
-    {
-      template <class ...Args>
-      struct apply : and_<Args...>
-      {};
-    };
-    
-    
     
     ////////////////////////////////////////////////////////////////////////////////
     //                             OR                                             
@@ -91,14 +82,6 @@ namespace elib
         >
     { };
     
-    
-    struct or_f
-    {
-      template <class ...Args>
-      struct apply : or_<Args...>
-      {};
-    };
-    
-  }                                                         //  namespace etl
+  }                                                         //  namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_ETL_LOGICAL_HPP */
+#endif /* ELIB_MPL_LOGICAL_HPP */

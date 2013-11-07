@@ -3,7 +3,7 @@
 
 # include <elib/config.hpp>
 # include <elib/enumeration/enum_helper.hpp>
-# include <elib/etl/basic_detector.hpp>
+# include <elib/mp/basic_detector.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 
@@ -72,7 +72,7 @@ namespace elib
     template <class T>
     struct has_basic_enum_traits 
       : std::integral_constant<bool, 
-          !etl::basic_detector<T, detail::traits_is_default_detector>::value
+          !mp::basic_detector<T, detail::traits_is_default_detector>::value
         >
     {};
     
@@ -83,7 +83,7 @@ namespace elib
     template <class T>
     struct has_name_map<T, true>
       : std::integral_constant<bool, 
-          etl::basic_detector<T, detail::traits_name_map_detector>::value
+          mp::basic_detector<T, detail::traits_name_map_detector>::value
         >
     {};
     

@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/etl/basic_detector.hpp>
+#include <elib/mp/basic_detector.hpp>
 
 using namespace elib;
 
@@ -58,25 +58,25 @@ using dne_fn_dt = decltype(&T::dne);
 
 
 
-BOOST_AUTO_TEST_SUITE(etl_detector_test_suite)
+BOOST_AUTO_TEST_SUITE(mp_detector_test_suite)
 
-BOOST_AUTO_TEST_CASE(etl_detector_fail)
+BOOST_AUTO_TEST_CASE(mp_detector_fail)
 {
-  BOOST_CHECK((etl::basic_detector<mem_enum, dne_enum_dt>::value) == false);
-  BOOST_CHECK((etl::basic_detector<mem_type, dne_type_dt>::value) == false);
-  BOOST_CHECK((etl::basic_detector<mem_data, dne_data_dt>::value) == false);
-  BOOST_CHECK((etl::basic_detector<mem_fn, dne_fn_dt>::value) == false);
+  BOOST_CHECK((mp::basic_detector<mem_enum, dne_enum_dt>::value) == false);
+  BOOST_CHECK((mp::basic_detector<mem_type, dne_type_dt>::value) == false);
+  BOOST_CHECK((mp::basic_detector<mem_data, dne_data_dt>::value) == false);
+  BOOST_CHECK((mp::basic_detector<mem_fn, dne_fn_dt>::value) == false);
 }
 
-BOOST_AUTO_TEST_CASE(etl_detector_pass)
+BOOST_AUTO_TEST_CASE(mp_detector_pass)
 {
-  BOOST_CHECK((etl::basic_detector<mem_enum, enum_dt>::value));
-  BOOST_CHECK((etl::basic_detector<mem_type, type_dt>::value));
-  BOOST_CHECK((etl::basic_detector<mem_data, data_dt>::value));
-  BOOST_CHECK((etl::basic_detector<mem_fn, fn_dt>::value));
+  BOOST_CHECK((mp::basic_detector<mem_enum, enum_dt>::value));
+  BOOST_CHECK((mp::basic_detector<mem_type, type_dt>::value));
+  BOOST_CHECK((mp::basic_detector<mem_data, data_dt>::value));
+  BOOST_CHECK((mp::basic_detector<mem_fn, fn_dt>::value));
 }
 
-BOOST_AUTO_TEST_CASE(etl_detector_test_type)
+BOOST_AUTO_TEST_CASE(mp_detector_test_type)
 {
   // for enum
   BOOST_CHECK(std::is_enum<enum_dt<mem_enum>>::value);

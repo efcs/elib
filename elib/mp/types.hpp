@@ -1,5 +1,5 @@
-#ifndef ELIB_ETL_TYPES_HPP
-# define ELIB_ETL_TYPES_HPP
+#ifndef ELIB_MP_TYPES_HPP
+# define ELIB_MP_TYPES_HPP
 
 # include <elib/config.hpp>
 
@@ -9,7 +9,7 @@
 
 namespace elib 
 {
-  namespace etl
+  namespace mp
   {
     
     using void_ = void;
@@ -44,7 +44,7 @@ namespace elib
     using unsigned_ = std::integral_constant<unsigned, Val>;
     
     template <long Val>
-    using long_ = std::integral_constant<long, Val>
+    using long_ = std::integral_constant<long, Val>;
     
     template <unsigned long Val>
     using ulong_ = std::integral_constant<unsigned long, Val>;
@@ -55,6 +55,6 @@ namespace elib
     template <unsigned long long Val>
     using ullong_ = std::integral_constant<unsigned long long, Val>;
     
-  }                                                         // namespace etl
+  }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_ETL_TYPES_HPP */
+#endif /* ELIB_MP_TYPES_HPP */

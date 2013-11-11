@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_TYPES_HPP
 # define ELIB_MP_TYPES_HPP
 
-# include <elib/config.hpp>
+# include <elib/mp/config.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 

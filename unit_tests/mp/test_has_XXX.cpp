@@ -1,8 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/mp/has_type.hpp>
-#include <elib/mp/has_apply.hpp>
+#include <elib/mp/detail/has_type.hpp>
+#include <elib/mp/detail/has_apply.hpp>
 
 #include <type_traits>
 

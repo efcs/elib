@@ -3,7 +3,7 @@
 
 # include <elib/mp/config.hpp>
 # include <elib/mp/types.hpp>
-# include <elib/mp/has_type.hpp>
+# include <elib/mp/detail/has_type.hpp>
 
 namespace elib 
 {

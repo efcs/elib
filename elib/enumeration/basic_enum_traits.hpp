@@ -3,7 +3,6 @@
 
 # include <elib/config.hpp>
 # include <elib/enumeration/enum_helper.hpp>
-# include <elib/mp/basic_detector.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 
@@ -60,19 +59,53 @@ namespace elib
     namespace detail
     {
      
+      template <
+        class T
+        , template <class _Test> class ApplyTest
+      >
+      struct traits_detector_impl
+      {
+      private:
+        
+        template <class _T>
+        static std::true_type test(ApplyTest<_T>*);
+        
+        template <class _T>
+        static std::false_type test(...);
+        
+      public:
+        
+        typedef decltype(test<T>(0)) type;
+        
+      };
+      
+      
+      template <
+        class T
+        , template <class _Test> class ApplyTest 
+      >
+      struct traits_detector 
+        : traits_detector_impl<T, ApplyTest>::type
+      {};
+     
+     
       template <class T>
-      using traits_is_default_detector 
-        = decltype(&basic_enum_traits<T>::ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS);
+      using traits_is_default_detector = 
+        decltype(&basic_enum_traits<T>::ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS);
         
       template <class T>
-      using traits_name_map_detector = decltype(&basic_enum_traits<T>::name_map);
+      using traits_name_map_detector = 
+        decltype(&basic_enum_traits<T>::name_map);
+      
       
     }                                                       // namespace detail
     
     template <class T>
     struct has_basic_enum_traits 
       : std::integral_constant<bool, 
-          !mp::basic_detector<T, detail::traits_is_default_detector>::value
+          !detail::traits_detector<
+            T, detail::traits_is_default_detector
+          >::value
         >
     {};
     
@@ -83,7 +116,9 @@ namespace elib
     template <class T>
     struct has_name_map<T, true>
       : std::integral_constant<bool, 
-          mp::basic_detector<T, detail::traits_name_map_detector>::value
+          detail::traits_detector<
+            T, detail::traits_name_map_detector
+          >::value
         >
     {};
     

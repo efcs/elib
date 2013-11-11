@@ -6,11 +6,12 @@
 #include <elib/mp/apply_wrap.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/bind.hpp>
-#include <elib/mp/has_apply.hpp>
-#include <elib/mp/has_type.hpp>
 #include <elib/mp/quote.hpp>
 #include <elib/mp/protect.hpp>
-#include <elib/mp/is_placeholder.hpp>
+
+#include <elib/mp/detail/is_placeholder.hpp>
+#include <elib/mp/detail/has_apply.hpp>
+#include <elib/mp/detail/has_type.hpp>
 
 #include <type_traits>
 

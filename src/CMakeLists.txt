@@ -50,6 +50,7 @@ aux_source_directory(${dotDir}/enumeration enumSrc)
 aux_source_directory(${dotDir}/log logSrc)
 aux_source_directory(${dotDir}/lock lockSrc)
 aux_source_directory(${dotDir}/utility utilSrc)
+aux_source_directory(${dotDir}/mp mpSrc)
 
 
 # compile into objects
@@ -59,6 +60,7 @@ add_library(ObjLib OBJECT ${dotSrc}
                           ${enumSrc} 
                           ${logSrc}
                           ${lockSrc}
+                          ${mpSrc}
            )
            
 

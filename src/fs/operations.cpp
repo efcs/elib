@@ -986,16 +986,16 @@ namespace elib
         
         if (char_id < 10)
           return static_cast<char>('0' + char_id);
-        
+          
         return static_cast<char>('a' + (char_id - 10));
       }                                                     // random_char
       
       ELIB_PRAGMA_DIAG_POP()
       
+      
       path unique_path(const path& model, std::error_code *ec)
       {
         detail::clear_error(ec);
-        
         std::string tmp_str = model.native();
         
         for (auto& ch : tmp_str)

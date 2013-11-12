@@ -14,6 +14,12 @@ e:
 	@ $(MAKE) --no-print-directory redep
 	@ $(MAKE) --no-print-directory -C build
 	
+.PHONY: ej
+ej:
+	@ $(MAKE) --no-print-directory distclean
+	@ $(MAKE) --no-print-directory redep
+	@ $(MAKE) --no-print-directory -j2 -C build
+	
 	
 .PHONY: clean
 clean:

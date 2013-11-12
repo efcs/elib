@@ -34,7 +34,9 @@ if (CONFIG_MY_BUILD)
 
     endif()
   
-    add_definitions( -Wno-padded -Wno-aggregate-return -Wno-inline )
+    add_definitions( -Wno-padded -Wno-aggregate-return -Wno-inline 
+                     -Wno-long-long
+                    )
   
   endif()
 endif()

@@ -4,12 +4,14 @@
 
 
 #include <elib/assert.hpp>
+#include <elib/pragma.hpp>
 
 #include <memory>
 #include <cstdlib>
 #include <climits>
 #include <fstream>
 #include <type_traits>
+#include <random>  /* for unique_path */
 
 #include <unistd.h>
 #include <utime.h>
@@ -967,8 +969,68 @@ namespace elib
         return path{};
       }
       
-      //TODO
-      //path unique_path(const path& model, std::error_code *ec);
+      
+      
+      ELIB_PRAGMA_DIAG_PUSH()
+      ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
+      
+      // to suppress warnings
+      char random_hex_char();
+      
+      char random_hex_char()
+      {
+        static std::mt19937 rd { std::random_device{}() };
+        static std::uniform_int_distribution<int> mrand{0, 15};
+        
+        int char_id = mrand(rd);
+        
+        if (char_id < 10)
+          return static_cast<char>('0' + char_id);
+        
+        return static_cast<char>('a' + (char_id - 10));
+      }                                                     // random_char
+      
+      ELIB_PRAGMA_DIAG_POP()
+      
+      std::size_t replace_str(std::string&);
+      
+      std::size_t replace_str(std::string& str)
+      {
+        std::size_t count = 0;
+        for (auto& ch : str)
+        {
+          if (ch == '%')
+          {
+            ch = random_hex_char();
+            ++count;
+          }
+        }
+        
+        return count;
+      }
+      
+      
+      path unique_path(const path& model, std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        
+        std::string tmp_str = model.native();
+        path tmp;
+        
+        while (true)
+        {
+          std::size_t count = replace_str(tmp_str);
+          //TODO
+          if (count == 0)
+            throw "TODO";
+            
+          tmp.assign(tmp_str);
+          bool ret = exists( detail::status( tmp, ec ) );
+          if (ec && *ec) return path{};
+          if (!ret) return tmp;
+        }
+        
+      }                                                     // unique_path
       
       
     }                                                       // namespace detail

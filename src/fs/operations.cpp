@@ -992,44 +992,19 @@ namespace elib
       
       ELIB_PRAGMA_DIAG_POP()
       
-      std::size_t replace_str(std::string&);
-      
-      std::size_t replace_str(std::string& str)
-      {
-        std::size_t count = 0;
-        for (auto& ch : str)
-        {
-          if (ch == '%')
-          {
-            ch = random_hex_char();
-            ++count;
-          }
-        }
-        
-        return count;
-      }
-      
-      
       path unique_path(const path& model, std::error_code *ec)
       {
         detail::clear_error(ec);
         
         std::string tmp_str = model.native();
-        path tmp;
         
-        while (true)
+        for (auto& ch : tmp_str)
         {
-          std::size_t count = replace_str(tmp_str);
-          //TODO
-          if (count == 0)
-            throw "TODO";
-            
-          tmp.assign(tmp_str);
-          bool ret = exists( detail::status( tmp, ec ) );
-          if (ec && *ec) return path{};
-          if (!ret) return tmp;
+          if (ch == '%')
+            ch = random_hex_char();
         }
         
+        return path {tmp_str};
       }                                                     // unique_path
       
       

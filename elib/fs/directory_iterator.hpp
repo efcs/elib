@@ -403,6 +403,7 @@ ELIB_PRAGMA_DIAG_POP()
       directory_options m_options{directory_options::none};
       
       bool m_rec{true};
+      
     };                                     // class recursive_directory_iterator
     
     
@@ -419,5 +420,4 @@ ELIB_PRAGMA_DIAG_POP()
   
   }                                                         // namespace fs
 }                                                           //  namespace elib
-
 # endif                                       // ELIB_FS_DIRECTORY_ITERATOR_HPP

@@ -688,9 +688,18 @@ namespace elib
       //TODO
       //bool create_directories(const path& p, std::error_code *ec);
       
-      
+
       bool create_directory(const path& p, std::error_code *ec)
       {
+        detail::clear_error(ec);
+        
+        auto st = detail::status(p, ec);
+        if (is_directory(st))
+        {
+          detail::clear_error(ec);
+          return false;
+        }
+        
         return detail::posix_mkdir(p.native(), S_IRWXU|S_IRWXG|S_IRWXO, ec);
       }
       
@@ -970,27 +979,33 @@ namespace elib
       }
       
       
+    //-------------------------------- to_hex --------------------------------// 
+
+      inline char to_hex(int ch) noexcept
+      {
+        if (ch < 10)
+          return static_cast<char>('0' + ch);
+          
+        return static_cast<char>('a' + (ch - 10));
+      }
       
-      ELIB_PRAGMA_DIAG_PUSH()
+      
+    //-------------------------------- random_hex_char --------------------------------// 
+     
+     ELIB_PRAGMA_DIAG_PUSH()
       ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
       
-      // to suppress warnings
-      char random_hex_char();
-      
-      char random_hex_char()
+      inline char random_hex_char()
       {
         static std::mt19937 rd { std::random_device{}() };
         static std::uniform_int_distribution<int> mrand{0, 15};
         
-        int char_id = mrand(rd);
-        
-        if (char_id < 10)
-          return static_cast<char>('0' + char_id);
-          
-        return static_cast<char>('a' + (char_id - 10));
+        return to_hex( mrand(rd) );
       }                                                     // random_char
       
       ELIB_PRAGMA_DIAG_POP()
+      
+    //-------------------------------- unique_path --------------------------------// 
       
       
       path unique_path(const path& model, std::error_code *ec)

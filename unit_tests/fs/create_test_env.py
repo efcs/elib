@@ -47,7 +47,7 @@ dne_paths = ["dne", "dir1/dne", "cfile1/dne"]
 
 directories = ["dir1", "dir1/dir2", "dir2", "dir2/dir1", "dir2/dir1/dir1"]
 character_files = ["/dev/null", "/dev/zero"]
-block_files = ["/dev/sda", "/dev/sda1", "/dev/sdb"]
+block_files = ["/dev/sda"]
 regular_files = ["rfile1", "rfile2", "dir1/rfile1", "dir2/dir1/rfile1"]
 fifo_files = ["fifo1", "dir1/fifo1", "dir2/fifo1", "dir2/dir1/fifo1"]
 

@@ -60,7 +60,7 @@ inline bool operator==(const bfs::error_code& b_ec, const efs::error_code& e_ec)
 
 const std::vector<std::string> example_path_list = 
   {
-#   include "unit_tests/fs/test_files/long_paths_list"
+#   include "test_files/long_paths_list"
   };
 
 

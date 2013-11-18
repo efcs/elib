@@ -5,11 +5,15 @@
 # but the project configurations in this make file DO NOT WORK and they 
 # must be commented out.
 
+set(LIBRARY_FLAGS "")
+set(UNIT_TEST_FLAGS "")
+
 if (CONFIG_MY_BUILD)
 
   if (CONFIG_ALL_WARNINGS)
   
-     add_definitions(-Wall -Weffc++ -pedantic  
+     add_flags( LIBRARY_FLAGS 
+      -Wall -Weffc++ -pedantic  
       -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
       -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
       -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 
@@ -26,58 +30,56 @@ if (CONFIG_MY_BUILD)
     )
   
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-      add_definitions( -Weverything -Wno-c++98-compat 
-                       -Wno-c++98-compat-pedantic -Wno-newline-eof )
+      
+      add_flags( LIBRARY_FLAGS
+        -Weverything -Wno-c++98-compat 
+        -Wno-c++98-compat-pedantic -Wno-newline-eof 
+      )
+      
     else()
                        
-      add_definitions( -Wunsafe-loop-optimizations )
+      add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
 
     endif()
   
-    add_definitions( -Wno-padded -Wno-aggregate-return -Wno-inline 
-                     -Wno-long-long
-                    )
+    add_flags( LIBRARY_FLAGS 
+      -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long
+    )
   
   endif()
 endif()
 
 
-add_definitions( -fPIC )
+add_flags(LIBRARY_FLAGS -fPIC)
 
 
-set(dotDir ${CMAKE_CURRENT_LIST_DIR})
-aux_source_directory(${dotDir} dotSrc)
-aux_source_directory(${dotDir}/fs fsSrc)
-aux_source_directory(${dotDir}/enumeration enumSrc)
-aux_source_directory(${dotDir}/log logSrc)
-aux_source_directory(${dotDir}/utility utilSrc)
-aux_source_directory(${dotDir}/mp mpSrc)
+set(LIBRARY_SRC "")
+set(UNIT_TEST_SRC "")
 
+#include(enumeration/build.cmake)
+include(enumeration/build.cmake)
+include(log/build.cmake)
+include(fs/build.cmake)
+include(mp/build.cmake)
+include(utility/build.cmake)
+
+
+find_package(Boost ${CONFIG_BOOST_VERSION}
+              COMPONENTS system filesystem unit_test_framework REQUIRED)
+
+include_directories(${Boost_INCLUDE_DIRS})
 
 # compile into objects
-add_library(ObjLib OBJECT ${dotSrc} 
-                          ${utilSrc}
-                          ${fsSrc}
-                          ${enumSrc} 
-                          ${logSrc}
-                          ${mpSrc}
-           )
-           
 
+add_library(ObjLib OBJECT ${LIBRARY_SRC})
+set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+
+add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
     
 if ( NOT CONFIG_NO_LIBRARIES )
   #create static & shared libraries
   add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
   add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
-
-  ################################################################################
-  ##                      BOOST library configuration                           ##
-  ################################################################################
-
-  find_package(Boost ${CONFIG_BOOST_VERSION}
-              COMPONENTS system filesystem REQUIRED)
-
-  include_directories(${Boost_INCLUDE_DIRS})
 
   target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} 
                         ${STDLIB_LINK} )
@@ -89,8 +91,28 @@ if ( NOT CONFIG_NO_LIBRARIES )
   install(TARGETS elib_static ARCHIVE DESTINATION lib)
   install(DIRECTORY ${headerDir} DESTINATION include)
   
-endif() # NOT CONFIG_NO_LIBRARIES 
+  add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
+  add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj>)
 
 
-				
+  target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
+                      ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+                      
+  target_link_libraries(elib_test_shared elib ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT}
+                            ${Boost_LIBRARIES})
+  
+else()
+
+  add_executable(elib_boost_test_main $<TARGET_OBJECTS:TestObj>
+                                  $<TARGET_OBJECTS:ObjLib>)
+  
+  target_link_libraries(elib_boost_test_main ${STDLIB_LINK}
+                      ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+endif()
+
+
+
+################################################################################
+
+
 

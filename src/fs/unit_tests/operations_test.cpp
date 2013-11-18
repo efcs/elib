@@ -73,7 +73,7 @@ inline bool operator==(const bfs::directory_entry& b_de,
 
 const std::vector<std::string> example_path_list = 
   {
-#   include "unit_tests/fs/test_files/long_paths_list"
+#   include "test_files/long_paths_list"
   };
 
 

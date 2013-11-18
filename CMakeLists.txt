@@ -121,9 +121,44 @@ if (CONFIG_MP_LIMIT_MAX)
     
 endif()
 
+################################################################################
+#                           Macros & Functions
+################################################################################
+
+macro(set_dot_dir)
+  set(dotDir ${CMAKE_CURRENT_LIST_DIR})
+endmacro(set_dot_dir)
+
+macro(add_library_src)
+  set_dot_dir()
+  aux_source_directory(${dotDir} _src)
+  list(APPEND LIBRARY_SRC ${_src})
+endmacro(add_library_src)
+
+macro(add_unit_test_src)
+  set_dot_dir()
+  aux_source_directory(${dotDir}/unit_tests _test)
+  list(APPEND UNIT_TEST_SRC ${_test})
+endmacro(add_unit_test_src)
+
+macro(add_src)
+  add_library_src()
+  add_unit_test_src()
+endmacro(add_src)
+
+macro(stringify_list m_list dest)
+  string(REPLACE ";" " " ${dest} "${m_list}")
+endmacro(stringify_list)
+
+macro(add_flags to)
+  stringify_list("${ARGN}" _TMP)
+  set(${to} "${${to}} ${_TMP}")
+endmacro(add_flags)
+
+set(test foo bar baz)
+add_flags(test lala)
 
 add_subdirectory(src)
-add_subdirectory(unit_tests)
 #add_subdirectory(test_main)
 
 

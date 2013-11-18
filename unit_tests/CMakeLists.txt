@@ -12,15 +12,17 @@ add_definitions( -DELIB_CONFIGURE_FS_UNIT_TEST_PATH="${dotDir}/fs" )
 
 aux_source_directory(${dotDir}/fs fsSrc)
 aux_source_directory(${dotDir}/log logSrc)
-aux_source_directory(${dotDir}/lock lockSrc)
 aux_source_directory(${dotDir}/chrono chronoSrc)
 aux_source_directory(${dotDir}/utility utilitySrc)
 aux_source_directory(${dotDir}/enumeration enumSrc)
 aux_source_directory(${dotDir}/mp mpSrc)
 
-set(testSources ${mainSrc} ${logSrc} ${lockSrc} 
-                ${utilitySrc} ${enumSrc}
-                ${chronoSrc} ${mpSrc} 
+set(testSources ${mainSrc} 
+                ${logSrc} 
+                ${utilitySrc} 
+                ${enumSrc}
+                ${chronoSrc} 
+                ${mpSrc} 
                 ${fsSrc} 
   )
 

@@ -40,7 +40,7 @@ def call_shell(cmd):
   setup and takedown for query tests
 """
 
-relative_paths = ['test_env', './test_env', '../fs/test_env', 
+relative_paths = ['test_env', './test_env', '../unit_tests/test_env', 
                   '././test_env', 'test_env/dir1', './test_env/dir1',
                   './test_env/../test_env/dir1']
 dne_paths = ["dne", "dir1/dne", "cfile1/dne"]

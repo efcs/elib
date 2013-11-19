@@ -15,11 +15,15 @@ option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
 
-option(CONFIG_NO_UNIT_TESTS "do not build unit tests" OFF)
+option(CONFIG_UNIT_TESTS "build unit tests" ON)
 
-option(CONFIG_NO_LIBRARIES "do not build libraries" OFF)                            
-
-
+# Options to select what parts to build
+option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
+option(CONFIG_LIB_MPL "Build MPL" ON)
+option(CONFIG_LIB_LOG "Build Log" ON)
+option(CONFIG_LIB_UTILITY "Build Utility" ON)
+option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
+              
 
 if (CONFIG_USE_GCC_49)
   set(CMAKE_C_COMPILER /opt/gcc4.9/bin/gcc)
@@ -43,6 +47,12 @@ endif()
 
 # we need C to get the pthreads library 
 project(EricsLibrary CXX C)
+
+# Turn off filesystem on Win32
+if ( WIN32 AND CONFIG_LIB_FILESYSTEM )
+  message(WARNING "Disabling Filesystem build on windows (On by default)")
+  set( CONFIG_LIB_FILESYSTEM OFF CACHE BOOL "" FORCE)
+endif()
 
 if (CONFIG_USE_LIBCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
@@ -77,11 +87,6 @@ if (CONFIG_MY_BUILD)
 endif()
 	
 	
-################################################################################
-#                             BOOST Version Configuration
-################################################################################
-	
-
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
@@ -100,8 +105,6 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
 add_definitions( -std=c++11 -Wall -Wextra -pedantic)
-add_definitions( -save-temps )
-add_definitions( -DELIB_DEFAULT_CONFIG )
 add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.hpp)
 
 
@@ -119,6 +122,8 @@ if (CONFIG_MP_LIMIT_MAX)
   endif()
     
 endif()
+
+
 
 ################################################################################
 #                           Macros & Functions
@@ -154,8 +159,14 @@ macro(add_flags to)
   set(${to} "${${to}} ${_TMP}")
 endmacro(add_flags)
 
-set(test foo bar baz)
-add_flags(test lala)
+
+macro(include_library_if Pred CFile)
+  if (${Pred})
+    include(${CFile})
+    add_definitions( -DELIB_${Pred} )
+  endif()
+endmacro(include_library_if)
+
 
 add_subdirectory(src)
 #add_subdirectory(test_main)

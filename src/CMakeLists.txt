@@ -56,12 +56,11 @@ add_flags(LIBRARY_FLAGS -fPIC)
 set(LIBRARY_SRC "")
 set(UNIT_TEST_SRC "")
 
-#include(enumeration/build.cmake)
-include(enumeration/build.cmake)
-include(log/build.cmake)
-include(fs/build.cmake)
-include(mp/build.cmake)
-include(utility/build.cmake)
+include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake)
+include_library_if(CONFIG_LIB_FILESYSTEM fs/build.cmake)
+include_library_if(CONFIG_LIB_LOG log/build.cmake)
+include_library_if(CONFIG_LIB_MPL mp/build.cmake)
+include_library_if(CONFIG_LIB_UTILITY utility/build.cmake)
 
 # compile into objects
 
@@ -72,27 +71,23 @@ set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
     
 ################################################################################
   #create static & shared libraries
-  add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
-  add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
+add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
+add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
 
-  target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} 
-                        ${STDLIB_LINK} )
-                        
-  target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
+target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} 
                         ${STDLIB_LINK})
+                        
+target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 
-  install(TARGETS elib LIBRARY DESTINATION lib)
-  install(TARGETS elib_static ARCHIVE DESTINATION lib)
-  install(DIRECTORY ${headerDir} DESTINATION include)
+install(TARGETS elib LIBRARY DESTINATION lib)
+install(TARGETS elib_static ARCHIVE DESTINATION lib)
+install(DIRECTORY ${headerDir} DESTINATION include)
   
-
-  
-
 
 
 ################################################################################
 
-if(NOT CONFIG_NO_UNIT_TESTS) 
+if(CONFIG_UNIT_TESTS) 
 
 	set(Boost_USE_STATIC_LIBS OFF)
 	set(Boost_USE_MULTITHREADED OFF)
@@ -102,15 +97,18 @@ if(NOT CONFIG_NO_UNIT_TESTS)
 	include_directories(${Boost_INCLUDE_DIRS})
 	add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
 	
-  	add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
-  	add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj>)
+  add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
+  add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj>)
 
 
-  	target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
-                      ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+  target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
+                        ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
+                      )
                       
-  	target_link_libraries(elib_test_shared elib ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT}
-                            ${Boost_LIBRARIES})
+  target_link_libraries(elib_test_shared elib 
+                        ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT}
+                        ${Boost_LIBRARIES}
+                       )
                             
 endif()
 

@@ -49,9 +49,18 @@ endif()
 project(EricsLibrary CXX C)
 
 # Turn off filesystem on Win32
-if ( WIN32 AND CONFIG_LIB_FILESYSTEM )
-  message(WARNING "Disabling Filesystem build on windows (On by default)")
-  set( CONFIG_LIB_FILESYSTEM OFF CACHE BOOL "" FORCE)
+if ( WIN32 )
+
+  if ( CONFIG_LIB_FILESYSTEM )
+    message(WARNING "Disabling Filesystem build on windows (On by default)")
+    set( CONFIG_LIB_FILESYSTEM OFF CACHE BOOL "" FORCE)
+  endif()
+  
+  if ( CONFIG_UNIT_TESTS )
+    message(WARNING "Disabling Unit tests on Windows (On by default)")
+    set(CONFIG_UNIT_TESTS OFF CACHE BOOL "" FORCE)
+  endif()
+
 endif()
 
 if (CONFIG_USE_LIBCXX)

@@ -55,11 +55,6 @@ if ( WIN32 )
     message(WARNING "Disabling Filesystem build on windows (On by default)")
     set( CONFIG_LIB_FILESYSTEM OFF CACHE BOOL "" FORCE)
   endif()
-  
-  if ( CONFIG_UNIT_TESTS )
-    message(WARNING "Disabling Unit tests on Windows (On by default)")
-    set(CONFIG_UNIT_TESTS OFF CACHE BOOL "" FORCE)
-  endif()
 
 endif()
 
@@ -175,6 +170,8 @@ macro(include_library_if Pred CFile)
     add_definitions( -DELIB_${Pred} )
   endif()
 endmacro(include_library_if)
+
+
 
 
 add_subdirectory(src)

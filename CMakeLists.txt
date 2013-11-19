@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 2.7)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
@@ -14,6 +14,8 @@ option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
+
+option(CONFIG_NO_UNIT_TESTS "do not build unit tests" OFF)
 
 option(CONFIG_NO_LIBRARIES "do not build libraries" OFF)                            
 
@@ -79,11 +81,8 @@ endif()
 #                             BOOST Version Configuration
 ################################################################################
 	
-set(CONFIG_BOOST_VERSION 1.54.0)
 
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED OFF)
-set(Boost_USE_STATIC_RUNTIME OFF)
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)

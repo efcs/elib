@@ -90,26 +90,24 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
-	
 
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
-
-
-set( CMAKE_BUILD_TYPE RELEASE)
-set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_DEBUG " -O -fno-omit-frame-pointer -DELIB_WARN_ON " )
-set( CMAKE_CXX_FLAGS_DEBUG " -O -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
+set( CMAKE_BUILD_TYPE DEBUG)
+set( CMAKE_CXX_FLAGS_RELEASE "-O2  -DNDEBUG " )
+set( CMAKE_C_FLAGS_RELEASE "-O2  -DNDEBUG " )
+set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
+set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 
 set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
 add_definitions( -std=c++11 -Wall -Wextra -pedantic)
-add_definitions(-include ${CMAKE_CURRENT_LIST_DIR}/elib/common_def.hpp)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+
 
 
 ################################################################################

@@ -601,6 +601,7 @@ namespace elib
         }
         else if (is_directory(tst))
         {
+          //TODO
             throw "recursive copy not implemented";
         }
         

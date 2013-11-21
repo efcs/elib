@@ -11,12 +11,15 @@ namespace elib
   {
     namespace detail
     {
+     
+      //-------------------------------- quote_impl --------------------------------// 
       
       template <class F, class = typename has_type<F>::type>
       struct quote_impl
       {
         typedef F type;
       };
+      
       
       template <class F>
       struct quote_impl<F, true_>
@@ -28,20 +31,18 @@ namespace elib
     }                                                       // namespace detail
     
     
-    template <class T>
-    struct quote;
+    //-------------------------------- quote --------------------------------// 
     
-    template <template <class...> class F, class ...Args>
-    struct quote<F<Args...>>
+    template <template <class...> class F>
+    struct quote
     {
-      
-      template <class ...Args2>
+      template <class ...Args>
       struct apply
       {
-        typedef typename detail::quote_impl<F<Args2...>>::type type;
+        typedef typename detail::quote_impl<F<Args...>>::type type;
       };
-      
     };
+    
     
   }                                                         // namespace mp
 }                                                           // namespace elib

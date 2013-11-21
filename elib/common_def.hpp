@@ -37,15 +37,6 @@
 #   define ELIB_TODO(msg) ((void)0)
 # endif
 
-    
-/* allow for macro overloading by counting # args */
-#define \
-  _ELIB_OVERLOAD(NAME, _1, _2, _3, _4, _5, _6,  _7,  _8,  _9,  _, ...) NAME##_
-  
-#define ELIB_OVERLOAD(NAME, ...) \
-  _ELIB_OVERLOAD(NAME, __VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
-
-
 // Default declaration macros
 
 # define ELIB_DEFAULT_CTOR(class, ...) \
@@ -96,9 +87,25 @@
   ELIB_DELETE_MOVE(class)
   
   
+// Misc preprocessor utility macros
+  
+  
 # define ELIB_PP_STR(str) ELIB_PP_STR_2(str)
 # define ELIB_PP_STR_2(str) #str
   
+# define ELIB_PP_CONCAT(tk1, tk2) \
+  ELIB_PP_CONCAT_(tk1, tk2)
+  
+# define ELIB_PP_CONCAT_(tk1, tk2) tk1##tk2
+
+/* allow for macro overloading by counting # args */
+# define ELIB_PP_ARITY(...) \
+    ELIB_PP_ARITY_(__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+    
+# define ELIB_PP_ARITY_(_1, _2, _3, _4, _5, _6, _7, _8, _9, _, ...) _
+
+# define ELIB_PP_OVERLOAD(name, ...) \
+  ELIB_PP_CONCAT(name, ELIB_PP_ARITY(__VA_ARGS__))
 
   
 #endif /* ELIB_COMMON_DEF_HPP */

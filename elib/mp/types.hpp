@@ -57,6 +57,9 @@ namespace elib
     template <unsigned long long Val>
     using ullong_ = std::integral_constant<unsigned long long, Val>;
     
+    template <std::size_t Val>
+    using size_t_ = std::integral_constant<std::size_t, Val>;
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_TYPES_HPP */

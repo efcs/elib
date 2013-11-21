@@ -11,20 +11,26 @@ namespace elib
   namespace mp
   {
     
+    // Default case: F is not a bind expression
     template <class F>
     struct protect : F
     {};
     
-    
+    // Hide a bind expression. 
+    // TODO: The boost implentation does something weird
     template <class F, class ...Args>
-    struct protect<bind<F, Args...>>
+    struct protect< bind<F, Args...> >
     {
       
-      template <class ...Args2>
-      struct apply : apply_wrap<bind<F, Args...>, Args2...>
+      template <class ...ApplyArgs>
+      struct apply 
+        : apply_wrap< 
+            bind<F, Args...>
+            , ApplyArgs...
+          >
       {};
       
-    };
+    };                                                      // struct protect
     
     
   }                                                         // namespace mp

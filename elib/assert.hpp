@@ -62,7 +62,8 @@
             __FILE__,  __func__, __LINE__, msg)
             
 
-#   define ELIB_ASSERT(...) ELIB_OVERLOAD(ELIB_ASSERT_,  __VA_ARGS__)(__VA_ARGS__)
+#   define ELIB_ASSERT(...) \
+      ELIB_PP_OVERLOAD(ELIB_ASSERT_,  __VA_ARGS__)(__VA_ARGS__)
 
             
 # else                                                      // __ELIB_ASSERT_ON

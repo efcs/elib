@@ -5,6 +5,7 @@
 
 #include <elib/mp/apply_wrap.hpp>
 #include <elib/mp/arg.hpp>
+#include <elib/mp/placeholders.hpp>
 #include <elib/mp/bind.hpp>
 #include <elib/mp/quote.hpp>
 #include <elib/mp/protect.hpp>
@@ -167,20 +168,20 @@ typedef void PH3;
 
 BOOST_AUTO_TEST_CASE(mp_quote_test)
 {
-  using _T1 = mp::quote< QUOTE1<bad> >;
+  using _T1 = mp::quote< QUOTE1 >;
   using T1 = mp::apply_wrap_t<_T1, good>;
   CHECK_GOOD(T1);
   
-  using _T2 = mp::quote< QUOTE2<bad, bad> >;
+  using _T2 = mp::quote< QUOTE2 >;
   using T2 = mp::apply_wrap_t<_T2, bad, good>;
   CHECK_GOOD(T2);
   
-  using _T3 = mp::quote< QUOTE3<bad, bad, bad> >;
+  using _T3 = mp::quote< QUOTE3 >;
   using T3 = mp::apply_wrap_t<_T3, bad, bad, good>;
   CHECK_GOOD(T3);
   
   /* QUOTE4 has no internal typedef so QUOTE4<good, good> is returned */
-  using _T4 = mp::quote< QUOTE4<bad, bad> >;
+  using _T4 = mp::quote< QUOTE4 >;
   using T4 = mp::apply_wrap_t<_T4, good, good>;
   using T4_2 = QUOTE4<good, good>;
   CHECK_SAME(T4, T4_2);

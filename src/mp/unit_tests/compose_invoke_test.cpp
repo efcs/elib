@@ -51,20 +51,18 @@ namespace e
 }
 
 
-#if ELIB_MP_BOOST_MPL_TESTS
+# if ELIB_MP_BOOST_MPL_TESTS
 
-namespace b
-{
-  using namespace boost::mpl;
-  using namespace boost::mpl::placeholders;
-}
+  namespace b
+  {
+    using namespace boost::mpl;
+    using namespace boost::mpl::placeholders;
+  }
+  
+#   define OPT_BOOST(...) __VA_ARGS__
 
-# define OPT_BOOST(...) __VA_ARGS__
-
-# else                                                // ELIB_MP_BOOST_MPL_TESTS
-
-# define OPT_BOOST(...) 
-
+# else                                               
+#   define OPT_BOOST(...) 
 # endif                                              // ELIB_MP_BOOST_MPL_TESTS
 
 
@@ -108,18 +106,14 @@ struct void_mfc
 
 template <class T>
 struct identity_f
-{
-  typedef T type;
-};
+{ typedef T type; };
 
-
+  
 struct identity_mfc
 {
   template <class T>
   struct apply
-  {
-    typedef T type;
-  };
+  { typedef T type; };
 };
 
 //-------------------------------- first --------------------------------// 
@@ -127,15 +121,14 @@ struct identity_mfc
 
 template <class First, class Second>
 struct first_f
-{
-  typedef First type;
-};
+{ typedef First type; };
+
 
 // using matching metafunction
 struct first_mfc
 {
   template <class First, class Second>
-  struct apply
+  struct apply 
   {
     typedef typename first_f<First, Second>::type type;
   };
@@ -148,7 +141,8 @@ struct first_mfc
 template <class First, class Second>
 struct add_f
 {
-  using type = std::integral_constant<
+  using type = 
+  std::integral_constant<
     decltype(First::value + Second::value)
     , First::value + Second::value
   >; 
@@ -158,7 +152,7 @@ struct add_f
 struct add_mfc
 {
   template <class First, class Second>
-  struct apply
+  struct apply 
     : add_f<First, Second>
   {};
 };
@@ -322,9 +316,34 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
 
   //-------------------------------- quote --------------------------------// 
   
+  //TODO
   BOOST_AUTO_TEST_CASE(quote_test)
   {
     BOOST_CHECK(true);
   }                                                         // quote_test
   
+  //-------------------------------- protect --------------------------------// 
+  
+  //TODO
+  BOOST_AUTO_TEST_CASE(protect_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // protect_test
+  
+  //-------------------------------- lambda --------------------------------// 
+  
+  //TODO
+  BOOST_AUTO_TEST_CASE(lambda_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // lambda_test
+  
+  //-------------------------------- apply --------------------------------// 
+
+  //TODO
+  BOOST_AUTO_TEST_CASE(apply_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // apply_test
+
 BOOST_AUTO_TEST_SUITE_END()

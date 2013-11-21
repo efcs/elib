@@ -13,10 +13,12 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+
 #include <elib/config.hpp>
 #include <elib/mp/types.hpp>
 #include <elib/mp/compose.hpp>
 #include <elib/mp/invoke.hpp>
+#include <elib/mp/detail/is_placeholder.hpp>
 
 
 //TODO move this definition to the build system
@@ -189,7 +191,7 @@ using two_t = std::integral_constant<int, 2>;
  * - apply (depends on lambda)
  * 
  */
-BOOST_AUTO_TEST_SUITE(mp_compose_invoke_boost_test_suite)
+BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
 
 //-------------------------------- apply_wrap -------------------------------// 
 
@@ -200,7 +202,6 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_boost_test_suite)
     { 
       using E1 = e::apply_wrap<void_f>;
       using E2 = e::apply_wrap<identity_f<void>>;
-
       OPT_BOOST(
         using B1 = b::apply_wrap0<void_f>;
         using B2 = b::apply_wrap0<identity_f<void>>;
@@ -241,35 +242,89 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_boost_test_suite)
     }
   }                                                         // apply_wrap_test
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                       COMPOSITION & ARGS
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    
   //-------------------------------- arg test --------------------------------// 
-  // For the most part,  these tests can (and should) be
-  // standalone (i.e. will compile without needing boost::mpl)
-  // So only minimal testing is performed
-  BOOST_AUTO_TEST_CASE(arg_placeholder_test)
+  
+  BOOST_AUTO_TEST_CASE(arg_test)
   {
+    {
+      using T1 = e::arg<1>::template apply<true_t>::type;
+      SAME_TYPE(T1, true_t);
+      
+      using T2 = e::arg<1>::template apply<true_t, false_t, false_t>::type;
+      SAME_TYPE(T2, true_t);
+      
+      using T3 = e::arg<2>::template apply<false_t, true_t>::type;
+      SAME_TYPE(T3, true_t);
+      
+      using T4 = e::arg<2>::template apply<false_t, true_t, false_t>::type;
+      SAME_TYPE(T4, true_t);
+      
+      using T1 = e::_1::template apply<true_t>::type;
+      SAME_TYPE(T1, true_t);
+      
+      using T2 = e::_1::template apply<true_t, false_t, false_t>::type;
+      SAME_TYPE(T2, true_t);
+      
+      using T3 = e::_2::template apply<false_t, true_t>::type;
+      SAME_TYPE(T3, true_t);
+      
+      using T4 = e::_2::template apply<false_t, true_t, false_t>::type;
+      SAME_TYPE(T4, true_t);
+    }
     {
       using E = e::apply_wrap_t<e::arg<1>, true_t, false_t>;
       SAME_TYPE(E, true_t);
-      
       OPT_BOOST(
         using B = typename b::apply_wrap2<b::arg<1>, true_t, false_t>::type;
         SAME_TYPE(B, E);
-      )
+        )
     }
     {
       using E = e::apply_wrap_t<e::_2, false_t, true_t, false_t>;
       SAME_TYPE(E, true_t);
-      
       OPT_BOOST(
         using B = typename b::apply_wrap3<b::_2, false_t, true_t, false_t>::type;
         SAME_TYPE(B, E);
-      )
+        )
     }
-  }
+    // is_placeholder
+    {
+      BOOST_CHECK(e::is_placeholder<e::_1>::value);
+      BOOST_CHECK(e::is_placeholder<e::_9>::value);
+      BOOST_CHECK(e::is_placeholder<void>::value == false);
+      BOOST_CHECK(e::is_placeholder<int>::value == false);
+    }
+  }                                                     // arg_test
+  
+  //-------------------------------- bind --------------------------------// 
+  
+  BOOST_AUTO_TEST_CASE(bind_test)
+  {
+    {
+      using E = e::apply_wrap_t<e::quote<identity_f>, true_t>;
+      SAME_TYPE(E, true_t);
+      OPT_BOOST(
+        using B = typename b::apply_wrap1<b::quote1<identity_f>, true_t>::type;
+        SAME_TYPE(B, E);
+        )
+    }
+    {
+      using E = e::apply_wrap_t<e::quote<first_f>, true_t, false_t>;
+      SAME_TYPE(E, true_t);
+      OPT_BOOST(
+        using B = 
+          typename b::apply_wrap2<b::quote2<first_f>, true_t, false_t>::type;
+        SAME_TYPE(B, E);
+        )
+    }
+    //TODO test nested vs non-nested ::type
+  }                                                         // bind_test
+
+  //-------------------------------- quote --------------------------------// 
+  
+  BOOST_AUTO_TEST_CASE(quote_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // quote_test
   
 BOOST_AUTO_TEST_SUITE_END()

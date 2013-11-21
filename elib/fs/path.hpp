@@ -7,6 +7,7 @@
 
 # include <string>
 # include <iterator>
+# include <algorithm>
 # include <locale>
 # include <cstddef>
 # include <iostream>
@@ -29,13 +30,13 @@ namespace elib
         // ctor & dtor
         // can't be default for some reason
         path() : m_pathname{}
-        { }
+        {}
         
         path(const path& p)
-          { m_pathname = p.m_pathname; }
+        { m_pathname = p.m_pathname; }
           
         path(path&& p) noexcept 
-          { m_pathname = std::move(p.m_pathname); }
+        { m_pathname = std::move(p.m_pathname); }
         
         template <typename Source>
         path(const Source& src)
@@ -46,7 +47,7 @@ namespace elib
         template <typename InputIter>
         path(InputIter xbegin, InputIter xend)
         {
-          typedef typename std::iterator_traits<InputIter>::value_type vtype;
+          using vtype = typename std::iterator_traits<InputIter>::value_type;
             
           if (xbegin != xend) 
           {
@@ -148,7 +149,6 @@ namespace elib
             path p{detail::convert<string_type>(xstr)};
             this->operator/=(p);
           }
-            
           return *this;
         }
         
@@ -212,36 +212,32 @@ namespace elib
           return *this;
         }
         
-        
       // modifiers
+      
         void clear() noexcept
-        { 
-          m_pathname.clear(); 
-        }
+        { m_pathname.clear(); }
 
         path& make_preferred()
         {
-          for (auto& ch : m_pathname) 
-          {
-            if (ch == other_separator)
-              ch = preferred_separator;
-          }
+          char bad = other_separator;
+          char good = preferred_separator;
+          std::replace(std::begin(m_pathname), std::end(m_pathname)
+            , bad, good);
           return *this;
         } 
     
-        
+    
         path& remove_filename()
-        {
-          return *this = parent_path();
-        }
+        { return *this = parent_path(); }
         
         
         path& replace_filename(const path& replacement)
         {
           remove_filename();
-          return *this /= replacement;
+          return (*this /= replacement);
         }
-        
+    
+    
         path& replace_extension(const path& replacement = path())
         {
           path p = extension();
@@ -256,52 +252,52 @@ namespace elib
           return *this;
         }
         
-        void swap(path& rhs) noexcept
-        {
-          m_pathname.swap(rhs.m_pathname);
-        }
-
-    //native format observers
-        const string_type& native() const noexcept
-        { 
-          return m_pathname; 
-        }
         
-        //EXTENSION
+        void swap(path& rhs) noexcept
+        { m_pathname.swap(rhs.m_pathname); }
+
+      //native format observers
+    
+        const string_type& native() const noexcept
+        { return m_pathname; }
+        
+        // EXTENSION
         const string_type& str() const noexcept
-        { 
-          return m_pathname; 
-        }
+        { return m_pathname; }
+        
         
         const value_type* c_str() const noexcept
-        { 
-          return m_pathname.c_str(); 
-        }
+        { return m_pathname.c_str(); }
+        
         
         operator string_type() const
-        { 
-          return m_pathname; 
-        }
+        { return m_pathname; }
         
-        template <class CharT, class Traits = std::char_traits<CharT>,
-            class Allocator = std::allocator<CharT>>
+        
+        template <class CharT
+          , class Traits = std::char_traits<CharT>
+          , class Allocator = std::allocator<CharT>
+        > 
           std::basic_string<CharT, Traits, Allocator>
         string(const Allocator& a = Allocator()) const; //TODO
         
+        
         std::string string() const
-        { 
-          return m_pathname; 
-        }
+        { return m_pathname; }
+        
         
         std::wstring wstring() const; //TODO
         std::string u8string() const; //TODO
         std::u16string u16string() const; //TODO
         std::u32string u32string() const; //TODO
         
-        
     //generic format observers
-        template <class CharT, class Traits = std::char_traits<CharT>,
-            class Allocator = std::allocator<CharT>>
+    
+        template <
+          class CharT
+          , class Traits = std::char_traits<CharT>
+          , class Allocator = std::allocator<CharT>
+        >
           std::basic_string<CharT, Traits, Allocator>
         generic_string(const Allocator& a = Allocator()) const; //TODO
         
@@ -311,22 +307,18 @@ namespace elib
         std::u16string generic_u16string() const; //TODO
         std::u32string generic_u32string() const; //TODO
         
-        
     // comparision
+    
         int compare(const path& p) const noexcept;
         
         int compare(const string_type& xstr) const
-        { 
-          return compare(path(xstr)); 
-        }
+        { return compare(path(xstr)); }
         
         int compare(const value_type* xstr) const
-        { 
-          return compare(path(xstr)); 
-        }
+        { return compare(path(xstr)); }
         
-        
-    //decompasition
+    // decomp
+    
         path root_name() const;
         path root_directory() const;
         path root_path() const;
@@ -336,57 +328,57 @@ namespace elib
         path stem() const;
         path extension() const;
         
-        
     // query
+    
         bool empty() const noexcept
-          { return m_pathname.empty(); }
+        { return m_pathname.empty(); }
         
         bool has_root_name() const
-          { return !root_name().empty(); }
+        { return !root_name().empty(); }
         
         bool has_root_directory() const
-          { return !root_directory().empty(); }
+        { return !root_directory().empty(); }
         
         bool has_root_path() const
-          { return !root_path().empty(); }
+        { return !root_path().empty(); }
         
         bool has_relative_path() const
-          { return !relative_path().empty(); }
+        { return !relative_path().empty(); }
         
         bool has_parent_path() const
-          { return !parent_path().empty();}
+        { return !parent_path().empty();}
         
         bool has_filename() const
-          { return !filename().empty(); }
+        { return !filename().empty(); }
         
         bool has_stem() const
-          { return !stem().empty();}
+        { return !stem().empty();}
           
         bool has_extension() const
-          { return !extension().empty(); }
+        { return !extension().empty(); }
         
         bool is_absolute() const
-          { return !root_directory().empty();}
+        { return !root_directory().empty();}
         
         bool is_relative() const
-          { return !is_absolute(); }
+        { return !is_absolute(); }
         
       // iterators
+      
         class iterator;
         typedef iterator const_iterator;
         
         iterator begin() const;
         iterator end() const;
         
-        
         //
       private:
         //
-
       
         string_type m_pathname{};
       
     }; // class path
+    
 
 ////////////////////////////////////////////////////////////////////////////////
 //                        path functions                                                  

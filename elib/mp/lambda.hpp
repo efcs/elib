@@ -15,9 +15,9 @@ namespace elib
 {
   namespace mp
   {
-    
     namespace detail
     {
+      
       
       template <
         class IsPHE
@@ -38,7 +38,7 @@ namespace elib
       struct make_lambda<true_, F, Args...>
       {
         using raw_type_ = 
-          bind<
+          bind< 
             quote<F>
             , typename Args::raw_type_...
           >;
@@ -58,6 +58,7 @@ namespace elib
       using type = raw_type_;
     };
     
+    
     template <std::size_t N>
     struct lambda< arg<N> >
     {
@@ -65,6 +66,7 @@ namespace elib
       using raw_type_ = arg<N>;
       using type = raw_type_;
     };
+    
     
     template <class F, class ...Args>
     struct lambda< bind<F, Args...> >
@@ -74,6 +76,7 @@ namespace elib
       using type = raw_type_;
     };
     
+    
     template <class T>
     struct lambda< protect<T> >
     {
@@ -82,10 +85,12 @@ namespace elib
       using type = raw_type_;
     };
     
+    
     template <template <class...> class F, class ...Args>
     struct lambda< F<Args...> >
     {
       using is_phe_ = or_<typename lambda<Args>::is_phe_...>;
+      
       using lambda_result_ = 
         detail::make_lambda<
           is_phe_
@@ -100,20 +105,6 @@ namespace elib
     
     template <class T>
     using lambda_t = typename lambda<T>::type;
-    
-    
-    template <class T>
-    struct is_placeholder_expression
-      : lambda<T>::is_phe_
-    {};
-    
-    // For boost compadibility
-    template <class T>
-    struct is_lambda_expression
-      : lambda<T>::is_phe_
-    {};
-    
-    
     
     
   }                                                         // namespace mp

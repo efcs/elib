@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_SUITE(mp_has_XXX_test_suite)
 struct good {};
 struct bad {};
 
-
+/* has-type-good and has-type-bad */
 struct HTG1 { typedef good type; };
 template <class T> struct HTG2 { typedef T type; };
 typedef HTG2<good> HTG3;
@@ -54,9 +54,6 @@ struct HAG2
 };
 
 typedef HAG2<int, int> HAG3;
-
-
-
 
 struct HAB1 {};
 struct HAB2 { template <class> struct apply {}; };

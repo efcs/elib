@@ -13,10 +13,8 @@
 #include <elib/mp/protect.hpp>
 #include <elib/mp/quote.hpp>
 #include <elib/mp/types.hpp>
-
-
+#
 #include <elib/mp/detail/is_placeholder.hpp>
 #include <elib/mp/detail/has_apply.hpp>
 #include <elib/mp/detail/has_type.hpp>
-
-// Nothing here, just including them to ensure the compiler sees them
+# // Nothing here, just including them to ensure the compiler sees them

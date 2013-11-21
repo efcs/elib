@@ -9,7 +9,6 @@ namespace elib
 {
   namespace mp
   {
-    
     namespace detail
     {
       

@@ -19,24 +19,27 @@ namespace elib
       
       template <typename T, typename ...Args>
       struct resolve_bind_arg
-      {
-        typedef T type;
-      };
+      { using type = T; };
       
       template <typename F, typename ...Args1, typename ...Args2>
       struct resolve_bind_arg<bind<F, Args1...>, Args2...>
       {
-        typedef apply_wrap_t<bind<F, Args1...>, Args2...> type;
+        using type = 
+          apply_wrap_t<
+            bind<F, Args1...>
+            , Args2...
+          >;
       };
       
       template <std::size_t N, typename ...Args>
       struct resolve_bind_arg<arg<N>, Args...>
       {
-        typedef apply_wrap_t<arg<N>, Args...> type;
+        using type = apply_wrap_t<arg<N>, Args...>;
       };
       
       template <typename ...Args>
-      using resolve_bind_arg_t = typename resolve_bind_arg<Args...>::type;
+      using resolve_bind_arg_t =
+        typename resolve_bind_arg<Args...>::type;
       
     }                                                       // namespace detail
     

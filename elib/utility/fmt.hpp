@@ -9,26 +9,18 @@
 
 # include <string>
 # include <utility>  /* for std::forward */
-
 # include <cstdio>
 # include <cstdarg>
-
-
 
 namespace elib 
 {
   
-  
-
   inline std::string fmt(std::string msg, ...) 
   {
       va_list args;
       va_start(args, msg);
-      
       auto tmp = fmt(msg, args);
-      
       va_end(args);
-      
       return tmp;
   }
 
@@ -68,18 +60,13 @@ ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL()
     
 ELIB_PRAGMA_DIAG_POP()
   
-
-template <typename T>
-std::string fmt(T&& value)
-{
-    static_assert(is_lexical<T>::value, "T must be a lexical type");
-    
-    return lexical_cast<std::string>(std::forward<T>(value));
-}
+  template <typename T>
+  std::string fmt(T&& value)
+  {
+      static_assert(is_lexical<T>::value, "T must be a lexical type");
+      
+      return lexical_cast<std::string>(std::forward<T>(value));
+  }
    
-
-} /* namespace elib */
-
-
-
-#endif /* ELIB_FMT_HPP */
+}                                                            // namespace elib
+#endif                                                       // ELIB_FMT_HPP

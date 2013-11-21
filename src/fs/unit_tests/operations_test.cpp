@@ -6,12 +6,10 @@
 
 #include "elib/filesystem.hpp"
 
-#define ELIB_DEBUG_EVAL_FAILED
-#include "elib/debug/eval.hpp"
-
 #include <string>
 #include <system_error>
 #include <vector>
+
 
 namespace bfs { 
 using namespace boost::filesystem;
@@ -25,48 +23,34 @@ using std::error_code;
 
 inline bool operator==(const efs::path& epath,  const bfs::path& bpath)
 { 
-  ELIB_EVAL_BEGIN()
-  ELIB_EVAL(==, epath.native(), bpath.native());
-  ELIB_EVAL_END()
+  return (epath.native() == bpath.native());
 }
 
 inline bool operator==(const bfs::path& bpath,  const efs::path& epath)
 { 
-  ELIB_EVAL_BEGIN()
-  ELIB_EVAL(==, bpath.native(), epath.native());
-  ELIB_EVAL_END()
+    return (bpath.native() == epath.native());
 }
-
 
 inline bool operator==(const efs::error_code& e_ec, const bfs::error_code& b_ec)
 { 
-  ELIB_EVAL_BEGIN()
-  ELIB_EVAL(==, e_ec.value(), b_ec.value());
-  ELIB_EVAL(==, e_ec.message(), b_ec.message());
-  ELIB_EVAL_END()
+  return (e_ec.value() == b_ec.value());
 }
 
 inline bool operator==(const bfs::error_code& b_ec, const efs::error_code& e_ec)
 { 
-  ELIB_EVAL_BEGIN()
-  ELIB_EVAL(==, b_ec.value(), e_ec.value());
-  ELIB_EVAL_END()
+  return (b_ec.value() == e_ec.value());
 }
 
 inline bool operator==(const efs::directory_entry& e_de, 
                         const bfs::directory_entry& b_de)
 {
-  ELIB_EVAL_BEGIN()
-  ELIB_EVAL(==, e_de.path(), b_de.path());
-  ELIB_EVAL_END()
+  return (e_de.path() == b_de.path());
 }
 
 inline bool operator==(const bfs::directory_entry& b_de, 
                       const efs::directory_entry& e_de)
 {
-  ELIB_EVAL_BEGIN()
-  ELIB_EVAL(==, b_de.path(), e_de.path());
-  ELIB_EVAL_END()
+  return (b_de.path() == e_de.path());
 }
 
 

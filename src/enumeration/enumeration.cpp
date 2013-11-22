@@ -1,7 +1,7 @@
-/* The build system does not like "header-only" libraries
- * So this is a dummy file to trick it into thinking it is not headerless
- * 
- * More specificly,  if only this library is built, the build will still
- * try and create the shared and static libraries. but it needs at least
- * one source file to do so. 
- */
+# // Ensure the compiler sees the code
+#include <elib/enumeration/basic_enum_traits.hpp>
+#include <elib/enumeration/enum_cast.hpp>
+#include <elib/enumeration/enum_helper.hpp>
+#include <elib/enumeration/enum_iterator.hpp>
+#include <elib/enumeration/enum_traits.hpp>
+#include <elib/enumeration/operators.hpp>

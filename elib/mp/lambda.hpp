@@ -86,7 +86,10 @@ namespace elib
     };
     
     
-    template <template <class...> class F, class ...Args>
+    template <
+      template <class...> class F
+      , class ...Args
+    >
     struct lambda< F<Args...> >
     {
       using is_phe_ = or_<typename lambda<Args>::is_phe_...>;
@@ -105,6 +108,10 @@ namespace elib
     
     template <class T>
     using lambda_t = typename lambda<T>::type;
+    
+    
+    template <class T>
+    using is_lambda_expression = typename lambda<T>::is_phe_;
     
     
   }                                                         // namespace mp

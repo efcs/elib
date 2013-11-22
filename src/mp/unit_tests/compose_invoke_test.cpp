@@ -39,6 +39,7 @@
 # endif                                              // ELIB_MP_BOOST_MPL_TESTS
 
 #include <type_traits>
+#include <vector>
 #include <iostream>
 
 
@@ -157,6 +158,18 @@ struct add_mfc
   {};
 };
 
+//------------------------------- nested/non-nested ::type -------------------//
+
+template <class, class, class Three>
+struct nested_type
+{
+  using type = Three;
+};
+
+template <class, class, class Three>
+struct non_nested_type
+{};
+
 //-------------------------------- misc types --------------------------------// 
 
 using true_t = std::true_type;
@@ -200,7 +213,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
         using B1 = b::apply_wrap0<void_f>;
         using B2 = b::apply_wrap0<identity_f<void>>;
         using B3 = b::apply_wrap2<first_f<false_t, true_t>, void, void>;
-        )
+      )
     }
     { 
       using E = typename e::apply_wrap<void_mfc>::type;
@@ -208,7 +221,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap0<void_mfc>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
     {
       using E = e::apply_wrap_t<identity_mfc, true_t>;
@@ -216,7 +229,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap1<identity_mfc, true_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
     {
       using E = e::apply_wrap_t<first_mfc, true_t, false_t>;
@@ -224,7 +237,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap2<first_mfc, true_t, false_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
     {
       using E = e::apply_wrap_t<add_mfc, zero_t, one_t>;
@@ -232,7 +245,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap2<add_mfc, zero_t, one_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
   }                                                         // apply_wrap_test
     
@@ -271,7 +284,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap2<b::arg<1>, true_t, false_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
     {
       using E = e::apply_wrap_t<e::_2, false_t, true_t, false_t>;
@@ -279,7 +292,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap3<b::_2, false_t, true_t, false_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
     // is_placeholder
     {
@@ -290,9 +303,9 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
     }
   }                                                     // arg_test
   
-  //-------------------------------- bind --------------------------------// 
+  //-------------------------------- quote --------------------------------// 
   
-  BOOST_AUTO_TEST_CASE(bind_test)
+  BOOST_AUTO_TEST_CASE(quote_test)
   {
     {
       using E = e::apply_wrap_t<e::quote<identity_f>, true_t>;
@@ -300,7 +313,7 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
       OPT_BOOST(
         using B = typename b::apply_wrap1<b::quote1<identity_f>, true_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
     {
       using E = e::apply_wrap_t<e::quote<first_f>, true_t, false_t>;
@@ -309,18 +322,51 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
         using B = 
           typename b::apply_wrap2<b::quote2<first_f>, true_t, false_t>::type;
         SAME_TYPE(B, E);
-        )
+      )
     }
-    //TODO test nested vs non-nested ::type
-  }                                                         // bind_test
+    // quote with nested type
+    {
+      using E = e::apply_wrap_t<e::quote<nested_type>, false_t, false_t, true_t>;
+      SAME_TYPE(E, true_t);
+      OPT_BOOST(
+        using B = typename b::apply_wrap3<
+          b::quote3<nested_type> 
+          , false_t, false_t, true_t
+        >::type;
+        SAME_TYPE(E, B);
+      )   
+    }
+    // quote with no nested ::type
+    {
+      using E = e::apply_wrap_t<
+        e::quote<non_nested_type>
+        , true_t, true_t, true_t
+      >;
+      using Expect = non_nested_type<true_t, true_t, true_t>;
+      SAME_TYPE(E, Expect);
+      OPT_BOOST(
+        using B = typename b::apply_wrap3<
+          b::quote3<non_nested_type>
+          , true_t, true_t, true_t
+        >::type;
+        SAME_TYPE(E, B);
+      )
+    }
+    // quote with no nested ::type, default template parameters
+    {
+      using E = e::apply_wrap_t<e::quote<std::vector>, int>;
+      SAME_TYPE(std::vector<int>, E);
+      // Boost doesn't handle default parameters nicely
+    }
+  }                                                         // quote_test
 
-  //-------------------------------- quote --------------------------------// 
+  //-------------------------------- bind --------------------------------// 
   
   //TODO
-  BOOST_AUTO_TEST_CASE(quote_test)
+  BOOST_AUTO_TEST_CASE(bind_test)
   {
     BOOST_CHECK(true);
-  }                                                         // quote_test
+  }                                                         // bind_test
   
   //-------------------------------- protect --------------------------------// 
   

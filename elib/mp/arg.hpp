@@ -22,6 +22,7 @@ namespace elib
         typedef get_arg_t<N-1, Args...> type;
         
       };
+      
       static_assert(N != 0, "0 is not a valid arg index (one indexed)");
     };
     

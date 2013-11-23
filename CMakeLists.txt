@@ -2,11 +2,11 @@ cmake_minimum_required (VERSION 2.7)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
+option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
 option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
-option(CONFIG_USE_GCC_49 "use gcc 4.9" ON)
+option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" OFF)
 
 option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
@@ -24,7 +24,6 @@ option(CONFIG_LIB_LOG "Build Log" ON)
 option(CONFIG_LIB_UTILITY "Build Utility" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
               
-
 if (CONFIG_USE_GCC_49)
   set(CMAKE_C_COMPILER /opt/gcc4.9/bin/gcc)
   set(CMAKE_CXX_COMPILER /opt/gcc4.9/bin/g++)
@@ -39,7 +38,6 @@ if(CONFIG_USE_CLANG)
     set(CMAKE_C_COMPILER /usr/bin/clang)
     set(CMAKE_CXX_COMPILER /usr/bin/clang++)
 endif()
-
 
 ################################################################################
 #                         PROJECT ELIB
@@ -90,8 +88,6 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
-
-
 set( CMAKE_BUILD_TYPE RELEASE)
 set( CMAKE_CXX_FLAGS_RELEASE "-O2  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O2  -DNDEBUG " )
@@ -108,8 +104,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
-
-
 ################################################################################
 #                           Additional config
 ################################################################################
@@ -124,8 +118,6 @@ if (CONFIG_MP_LIMIT_MAX)
   endif()
     
 endif()
-
-
 
 ################################################################################
 #                           Macros & Functions
@@ -168,7 +160,6 @@ macro(include_library_if Pred CFile)
     add_definitions( -DELIB_${Pred} )
   endif()
 endmacro(include_library_if)
-
 
 
 

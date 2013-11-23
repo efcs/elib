@@ -28,7 +28,7 @@
 BOOST_AUTO_TEST_SUITE(mp_arithmetic_test_suite)
 
 // Turn off C++11 narrowing error for clang
-// since we want to actually test narrowing conversions
+// to test with narrowing conversions
 ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
 
 //-------------------------------- negate --------------------------------// 

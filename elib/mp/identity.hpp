@@ -10,9 +10,7 @@ namespace elib
     
     template <class T>
     struct identity
-    {
-      using type = T;
-    };
+    { using type = T; };
     
   }                                                         // namespace mp
 }                                                           // namespace elib

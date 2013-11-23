@@ -20,13 +20,11 @@ namespace elib
       static_assert(!B, "B must be false");
     };
     
-    
     template <class If, class Else>
     struct if_c<true, If, Else>
     {
       using type = If;
     };
-    
     
     template <bool P, class If, class Else>
     using if_c_t = typename if_c<P, If, Else>::type;
@@ -61,7 +59,7 @@ namespace elib
       using type = typename if_c_t<P, If, Else>::type;
     };
     
-    
+
     template <bool P, class If, class Else>
     using eval_if_c_t = typename eval_if_c<P, If, Else>::type;
     

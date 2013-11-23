@@ -17,8 +17,8 @@ namespace elib
     template <class T>
     struct bitnegate_ 
       : std::integral_constant<
-          decltype( ~ T::value )
-          , ~ T::value  
+          decltype( ~T::value )
+          , ~T::value  
         >
     {};
     

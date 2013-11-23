@@ -70,13 +70,15 @@ BOOST_AUTO_TEST_SUITE(mp_compose_invoke_test_suite)
   {
     // Check that these incorrect cases still compile.
     // Only when Type::type is accessed should the compile fail
+    // NOTE: SAME_TYPE(x, x) is used to suppres unused warnings
     { 
-      using E1 = e::apply_wrap<void_f>;
-      using E2 = e::apply_wrap<identity_f<void>>;
+      using E1 = e::apply_wrap<void_f>; SAME_TYPE(E1, E1);
+      using E2 = e::apply_wrap<identity_f<void>>; SAME_TYPE(E2, E2);
       OPT_BOOST(
-        using B1 = b::apply_wrap0<void_f>;
-        using B2 = b::apply_wrap0<identity_f<void>>;
-        using B3 = b::apply_wrap2<first_f<false_, true_>, void, void>;
+        using B1 = b::apply_wrap0<void_f>; SAME_TYPE(B1, B1);
+        using B2 = b::apply_wrap0<identity_f<void>>; SAME_TYPE(B2, B2);
+        using B3 = b::apply_wrap2<first_f<false_, true_>, void, void>; 
+        SAME_TYPE(B3, B3);
       )
     }
     { 

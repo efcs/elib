@@ -20,6 +20,11 @@ namespace elib
     
     namespace detail
     {
+      /* mp::or_ only accepts 2 or more params,
+       * lambda needs 0 or more and false on 0.
+       * detail::or_impl provides this. */
+      template <class ...Args>
+      using lambda_or = detail::or_impl<false, Args...>;
       
       //-------------------------------- make_lambda ------------------------// 
       
@@ -106,7 +111,9 @@ namespace elib
     >
     struct lambda< F<Args...> >
     {
-      using is_phe_ = or_<typename lambda<Args>::is_phe_...>;
+      // detail::or_impl is used since it accepts 0 or more parameters.
+      // mp::or_ requires at least 2
+      using is_phe_ =  detail::lambda_or<typename lambda<Args>::is_phe_...>;
       
       using lambda_result_ = 
         detail::make_lambda<
@@ -127,11 +134,11 @@ namespace elib
     template <class T>
     using is_placeholder_expression = typename lambda<T>::is_phe_;
     
+    
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES    
     template <class T>
     using is_lambda_expression = is_placeholder_expression<T>;
 # endif
-    
     
   }                                                         // namespace mp
 }                                                           // namespace elib

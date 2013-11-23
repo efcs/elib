@@ -5,6 +5,7 @@
 # include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/enum_traits.hpp>
 
+# include <elib/pragma.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
 namespace elib 
@@ -250,6 +251,10 @@ namespace elib
       }
       
     // Increment & Decrement
+      
+      ELIB_PRAGMA_DIAG_PUSH()
+      ELIB_PRAGMA_IGNORE_EFFCXX()
+    
       template <class LHS>
       constexpr std::enable_if_t<detail::is_arithmetic<LHS>::value, LHS>
       operator++(LHS lhs, int) noexcept
@@ -277,6 +282,8 @@ namespace elib
       {
         return lhs = lhs--;
       }
+      
+      ELIB_PRAGMA_DIAG_POP()
       
     // Add, Sub, Mul, Div, Mod
       template <class LHS, class RHS>
@@ -354,6 +361,9 @@ namespace elib
     //                        Logical                                                  
     ////////////////////////////////////////////////////////////////////////////////
       
+      ELIB_PRAGMA_DIAG_PUSH()
+      ELIB_PRAGMA_IGNORE_EFFCXX()
+      
       template <class LHS>
       constexpr std::enable_if_t<detail::is_arithmetic<LHS>::value, bool>
       operator!(LHS lhs) noexcept
@@ -378,6 +388,8 @@ namespace elib
           detail::opt_cast(lhs) || detail::opt_cast(rhs)
         );
       }
+      
+      ELIB_PRAGMA_DIAG_POP()
       
     ////////////////////////////////////////////////////////////////////////////////
     //                     Mixed Comparible                                                     

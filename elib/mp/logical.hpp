@@ -10,77 +10,80 @@ namespace elib
   namespace mp
   {
     
+   
+  ////////////////////////////////////////////////////////////////////////////////
+  //                                 NOT
+  ////////////////////////////////////////////////////////////////////////////////
+    
+
     template <class T>
     struct not_ 
-      : std::integral_constant<typename T::value_type, !T::value>
+      : std::integral_constant<bool, !T::type::value>
     {};
     
     
-    ////////////////////////////////////////////////////////////////////////////////
-    //                          AND                                                   
-    ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  //                          AND                                                   
+  ////////////////////////////////////////////////////////////////////////////////
     
-    
-    template <class ...Args>
-    struct and_ : true_
+    namespace detail
     {
-      static_assert(sizeof...(Args) == 0, 
-        "specialization must be empty param pack");
-    };
+      
+      template <bool B, class ...Args>
+      struct and_impl : false_
+      {
+        static_assert(!B, "B must be false");
+      };
+      
+      template <class ...Args>
+      struct and_impl<true, Args...> : true_
+      {
+        static_assert(sizeof...(Args) == 0,  "Param pack must be empty");
+      };
     
+      template <class First, class ...Rest>
+      struct and_impl<true, First, Rest...>
+        : and_impl<First::type::value, Rest...>
+      {};
+      
+      
+    }                                                       // namespace detail
     
-    template <class P1>
-    struct and_<P1> : P1
+    template <class P1, class P2, class ...Rest>
+    struct and_ : detail::and_impl<P1::type::value, P2, Rest...>
     {};
     
     
-    template <class P1, class P2>
-    struct and_<P1, P2> 
-      : std::integral_constant<bool, P1::value && P2::value>
-    {};
+  ////////////////////////////////////////////////////////////////////////////////
+  //                             OR                                             
+  ////////////////////////////////////////////////////////////////////////////////
     
-    
-    template <class P1, class P2, class P3, class ...Rest>
-    struct and_<P1, P2, P3, Rest...>
-      : and_<
-          and_<P1, P2>, 
-          and_<P3, Rest...>
-        >
-    { };
-    
-    
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    //                             OR                                             
-    ////////////////////////////////////////////////////////////////////////////////
-    
-    
-    template <class ...Args>
-    struct or_ : false_
+    namespace detail
     {
-      static_assert(sizeof...(Args) == 0, 
-        "specialization must be empty param pack");
-    };
+        
+      template <bool B, class ...Args>
+      struct or_impl : false_
+      {
+        static_assert(!B, "B must be false");
+      };
+      
+      template <class ...Args>
+      struct or_impl<true, Args...> : true_
+      {};
+      
+      template <class First, class ...Rest>
+      struct or_impl<false, First, Rest...> 
+        : or_impl<First::type::value, Rest...>
+      {};
+      
+    }                                                       // namespace detail
     
     
-    template <class P1>
-    struct or_<P1> : P1
+    template <class P1, class P2, class ...Rest>
+    struct or_ : detail::or_impl<P1::type::value, P2, Rest...>
     {};
     
     
-    template <class P1, class P2>
-    struct or_<P1, P2> 
-      : std::integral_constant<bool, P1::value || P2::value>
-    {};
-    
-    
-    template <class P1, class P2, class P3, class ...Rest>
-    struct or_<P1, P2, P3, Rest...>
-      : or_<
-          or_<P1, P2>, 
-          or_<P3, Rest...>
-        >
-    { };
     
   }                                                         //  namespace mp
 }                                                           // namespace elib

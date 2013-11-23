@@ -69,8 +69,8 @@ ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
       SAME_INTC(e::negate<UINT(1)>, UINT(-1));
       SAME_INTC(e::negate<UINT(-1)>, UINT(1));
       
-      CHECK_INTC(e::negate<max_uint_>, uint, (-max_uint_::value));
-      CHECK_INTC(e::negate<min_uint_>, uint, (-min_uint_::value));
+      CHECK_INTC(e::negate<max_uint_>, unsigned, (-max_uint_::value));
+      CHECK_INTC(e::negate<min_uint_>, unsigned, (-min_uint_::value));
     }
     // long
     {
@@ -120,7 +120,7 @@ ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
       using E5 = add<INT(-1), INT(1)>;
       SAME_INTC(E5, INT(0));
     }
-    // uint
+    // unsigned
     {
       using E1 = add<UINT(0), UINT(0)>;
       SAME_INTC(E1, UINT(0));
@@ -129,10 +129,10 @@ ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
       SAME_INTC(E2, UINT(2));
       
       using E3 = add<UINT(-1), UINT(0)>;
-      SAME_INTC(E3, UINT(((uint)-1) + ((uint)0)));
+      SAME_INTC(E3, UINT(((unsigned)-1) + ((unsigned)0)));
       
       using E4 = add<UINT(-1), UINT(-1)>;
-      SAME_INTC(E4, UINT(((uint)-1) + ((uint)-1)));
+      SAME_INTC(E4, UINT(((unsigned)-1) + ((unsigned)-1)));
     }
   // MIXED //
     // bool - int

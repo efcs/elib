@@ -4,7 +4,6 @@
 # include <elib/mp/config.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
-
 # include <cstddef>
 
 namespace elib 
@@ -16,6 +15,9 @@ namespace elib
     
     using void_ = void;
     using nullptr_ = std::nullptr_t;
+    
+    template <class T, T Val>
+    using intc_ = std::integral_constant<T, Val>;
     
     template <bool Val>
     using bool_ = std::integral_constant<bool, Val>;
@@ -43,8 +45,8 @@ namespace elib
     template <int Val>
     using int_ = std::integral_constant<int, Val>;
     
-    template <uint Val>
-    using uint_ = std::integral_constant<uint, Val>;
+    template <unsigned int Val>
+    using uint_ = std::integral_constant<unsigned int, Val>;
     
     // I know that this and the above type are the same, 
     // but it is done to provided common names

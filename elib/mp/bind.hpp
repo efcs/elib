@@ -58,7 +58,7 @@ namespace elib
       struct apply
         : apply_wrap<
             detail::resolve_bind_arg_t<F, ApplyArgs...>
-            , detail::resolve_bind_arg_t<Args, ApplyArgs...>...
+          , detail::resolve_bind_arg_t<Args, ApplyArgs...>...
           >
       {};
     };                                                      // struct bind

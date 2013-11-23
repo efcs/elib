@@ -18,7 +18,7 @@ namespace elib
 
     template <class T>
     struct not_ 
-      : std::integral_constant<bool, !T::type::value>
+      : std::integral_constant<bool, static_cast<bool>(!T::type::value)>
     {};
     
     
@@ -43,14 +43,15 @@ namespace elib
     
       template <class First, class ...Rest>
       struct and_impl<true, First, Rest...>
-        : and_impl<First::type::value, Rest...>
+        : and_impl<static_cast<bool>(First::type::value), Rest...>
       {};
       
       
     }                                                       // namespace detail
     
     template <class P1, class P2, class ...Rest>
-    struct and_ : detail::and_impl<P1::type::value, P2, Rest...>
+    struct and_ 
+      : detail::and_impl<static_cast<bool>(P1::type::value), P2, Rest...>
     {};
     
     
@@ -73,14 +74,15 @@ namespace elib
       
       template <class First, class ...Rest>
       struct or_impl<false, First, Rest...> 
-        : or_impl<First::type::value, Rest...>
+        : or_impl<static_cast<bool>(First::type::value), Rest...>
       {};
       
     }                                                       // namespace detail
     
     
     template <class P1, class P2, class ...Rest>
-    struct or_ : detail::or_impl<P1::type::value, P2, Rest...>
+    struct or_ 
+      : detail::or_impl<static_cast<bool>(P1::type::value), P2, Rest...>
     {};
     
     

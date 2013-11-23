@@ -16,8 +16,7 @@ namespace elib
     struct protect : F
     {};
     
-    // Hide a bind expression. 
-    // TODO: The boost implentation does something weird
+    
     template <class F, class ...Args>
     struct protect< bind<F, Args...> >
     {

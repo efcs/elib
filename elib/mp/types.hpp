@@ -33,12 +33,18 @@ namespace elib
     template <unsigned char Val>
     using uchar_ = std::integral_constant<unsigned char, Val>;
     
+    template <short Val>
+    using short_ = std::integral_constant<short, Val>;
+    
+    template <unsigned short Val>
+    using ushort_ = std::integral_constant<unsigned short, Val>;
+    
     
     template <int Val>
     using int_ = std::integral_constant<int, Val>;
     
-    template <unsigned int Val>
-    using uint_ = std::integral_constant<unsigned int, Val>;
+    template <uint Val>
+    using uint_ = std::integral_constant<uint, Val>;
     
     // I know that this and the above type are the same, 
     // but it is done to provided common names

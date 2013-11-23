@@ -99,28 +99,28 @@ template <char N>
 using char_ = integral_constant<char, N>;
 
 using max_char_ = std::integral_constant<char, std::numeric_limits<char>::max()>;
-using min_char_ =std::integral_constant<char, std::numeric_limits<char>::min()>;
+using min_char_ = std::integral_constant<char, std::numeric_limits<char>::min()>;
   
 
 template <int N>
 using int_ = integral_constant<int, N>;
 
 using max_int_ = std::integral_constant<int, std::numeric_limits<int>::max()>;
-using min_int_ =std::integral_constant<int, std::numeric_limits<int>::min()>;
+using min_int_ = std::integral_constant<int, std::numeric_limits<int>::min()>;
   
 
 template <uint N>
 using uint_ = integral_constant<uint, N>;
 
 using max_uint_ = std::integral_constant<uint, std::numeric_limits<uint>::max()>;
-using min_uint_ =std::integral_constant<uint, std::numeric_limits<uint>::min()>;
+using min_uint_ = std::integral_constant<uint, std::numeric_limits<uint>::min()>;
   
 
 template <long N>
 using long_ = integral_constant<long, N>;
 
 using max_long_ = std::integral_constant<long, std::numeric_limits<long>::max()>;
-using min_long_ =std::integral_constant<long, std::numeric_limits<long>::min()>;
+using min_long_ = std::integral_constant<long, std::numeric_limits<long>::min()>;
   
 
 
@@ -132,8 +132,6 @@ using min_long_ =std::integral_constant<long, std::numeric_limits<long>::min()>;
 # define INT(x)   int_<x>
 # define UINT(x)  uint_<x>
 # define LONG(x)  long_<x>
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //                          Sample input types                                                

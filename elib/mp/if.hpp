@@ -25,7 +25,7 @@ namespace elib
     };
     
     template <class P, class If, class Else>
-    struct if_ : if_c<P::value, If, Else>
+    struct if_ : if_c<static_cast<bool>(P::value), If, Else>
     {};
     
     template <class P, class If, class Else>
@@ -39,7 +39,7 @@ namespace elib
     template <class P, class If, class Else>
     struct eval_if
     {
-      using type = typename if_c_t<P::value, If, Else>::type;
+      using type = typename if_c_t<static_cast<bool>(P::value), If, Else>::type;
     };
     
     template <bool P, class If, class Else>

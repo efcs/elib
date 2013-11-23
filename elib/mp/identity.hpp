@@ -8,13 +8,11 @@ namespace elib
   namespace mp
   {
     
-    
     template <class T>
     struct identity
     {
       using type = T;
     };
-    
     
   }                                                         // namespace mp
 }                                                           // namespace elib

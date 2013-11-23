@@ -9,7 +9,7 @@ option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" OFF)
 
-option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
+option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" OFF)
 
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)

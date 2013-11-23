@@ -15,12 +15,16 @@ namespace elib
 {
   namespace mp
   {
+    
+    template <class> struct lambda;
+    
     namespace detail
     {
       
+      //-------------------------------- make_lambda ------------------------// 
       
       template <
-        class IsPHE
+        bool IsPHE
         , template <class...> class F
         , class ...Args
       >
@@ -28,6 +32,11 @@ namespace elib
       {
         using raw_type_ = F<typename Args::type...>;
         using type = raw_type_;
+        
+        // Implementation check: this overload should only
+        // be selected when isPHE is false
+        static_assert(IsPHE == false,
+          "Incorrect overload selected for make_lambda");
       };
       
       
@@ -35,7 +44,7 @@ namespace elib
         template <class...> class F
         , class ...Args
       >
-      struct make_lambda<true_, F, Args...>
+      struct make_lambda<true, F, Args...>
       {
         using raw_type_ = 
           bind< 
@@ -48,8 +57,10 @@ namespace elib
       
       
     }                                                       // namespace detail
+   
+    //-------------------------------- lambda -------------------------------// 
     
-    
+    // base case
     template <class T>
     struct lambda
     {
@@ -58,6 +69,7 @@ namespace elib
       using type = raw_type_;
     };
     
+    // special cases
     
     template <std::size_t N>
     struct lambda< arg<N> >
@@ -86,6 +98,8 @@ namespace elib
     };
     
     
+    // recursive case
+    
     template <
       template <class...> class F
       , class ...Args
@@ -96,7 +110,7 @@ namespace elib
       
       using lambda_result_ = 
         detail::make_lambda<
-          is_phe_
+          is_phe_::value
           , F
           , lambda<Args>...
         >;
@@ -111,7 +125,12 @@ namespace elib
     
     
     template <class T>
-    using is_lambda_expression = typename lambda<T>::is_phe_;
+    using is_placeholder_expression = typename lambda<T>::is_phe_;
+    
+# if ELIB_MP_BOOST_COMPATIBLE_NAMES    
+    template <class T>
+    using is_lambda_expression = is_placeholder_expression<T>;
+# endif
     
     
   }                                                         // namespace mp

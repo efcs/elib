@@ -17,10 +17,13 @@ namespace elib
     namespace detail
     {
       
+      //---------------------- resolve_bind_arg ------------------------------// 
+      
       template <typename T, typename ...Args>
       struct resolve_bind_arg
       { using type = T; };
       
+      // bind<...>
       template <typename F, typename ...Args1, typename ...Args2>
       struct resolve_bind_arg<bind<F, Args1...>, Args2...>
       {
@@ -31,29 +34,34 @@ namespace elib
           >;
       };
       
+      // arg<N>
       template <std::size_t N, typename ...Args>
       struct resolve_bind_arg<arg<N>, Args...>
       {
         using type = apply_wrap_t<arg<N>, Args...>;
       };
       
+      //--------------------- resolve_bind_arg_t ----------------------------// 
+      
       template <typename ...Args>
       using resolve_bind_arg_t =
         typename resolve_bind_arg<Args...>::type;
       
+      
     }                                                       // namespace detail
+    
     
     template <class F, class ...Args>
     struct bind
     {
-      template <class ...Args2>
+      template <class ...ApplyArgs>
       struct apply
         : apply_wrap<
-            detail::resolve_bind_arg_t<F, Args2...>
-            , detail::resolve_bind_arg_t<Args, Args2...>...
+            detail::resolve_bind_arg_t<F, ApplyArgs...>
+            , detail::resolve_bind_arg_t<Args, ApplyArgs...>...
           >
       {};
-    };
+    };                                                      // struct bind
     
   }                                                         // namespace mp
 }                                                           // namespace elib

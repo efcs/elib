@@ -10,137 +10,188 @@ namespace elib
   namespace mp
   {
     
-    ////////////////////////////////////////////////////////////////////////////////
-    //                               NEGATE                                           
-    ////////////////////////////////////////////////////////////////////////////////
-    
+  //-------------------------------- negate --------------------------------// 
+
     template <class T>
     struct negate 
       : std::integral_constant<
-          decltype( - T::value )
-          , - T::value
+          decltype( -T::value )
+          , -T::value
         >
     {};
     
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    //                      ADDITION                                                         
-    ////////////////////////////////////////////////////////////////////////////////
-    
-
-    template <class ...Args>
-    struct add;
-      
-    template <class Arg>
-    struct add<Arg> : Arg
-    {};
-      
-    template <class Arg1, class Arg2>
-    struct add<Arg1, Arg2>
-      : std::integral_constant<
-          decltype(Arg1::value + Arg2::value)
-          , Arg1::value + Arg2::value 
-        >
-    {};
-      
-    template <class Arg1, class Arg2, class Arg3, class ...Args>
-    struct add<Arg1, Arg2, Arg3, Args...>
-      : add<
-          add<Arg1, Arg2>
-          , add<Arg3, Args...> 
-        >
-    {};
-    
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    //                        SUBTRACTION                                                  
-    ////////////////////////////////////////////////////////////////////////////////
-
+  //-------------------------------- add --------------------------------// 
   
-    template <class ...Args>
-    struct subtract;
+    namespace detail
+    {
       
-    template <class Arg>
-    struct subtract<Arg> : Arg
-    {};
+      template <class ...Args>
+      struct add_impl;
       
-    template <class Arg1, class Arg2>
-    struct subtract<Arg1, Arg2>
-      : std::integral_constant<
-          decltype(Arg1::value - Arg2::value)
-          , Arg1::value - Arg2::value 
-        >
-    {};
       
-    template <class Arg1, class Arg2, class Arg3, class ...Args>
-    struct subtract<Arg1, Arg2, Arg3, Args...>
-      : subtract<
-          subtract<Arg1, Arg2>
-          , subtract<Arg3, Args...> 
-        >
+      template <class Arg>
+      struct add_impl<Arg> : Arg
+      {};
+        
+        
+      template <class Arg1, class Arg2>
+      struct add_impl<Arg1, Arg2>
+        : std::integral_constant<
+            decltype(Arg1::value + Arg2::value)
+            , Arg1::value + Arg2::value 
+          >
+      {};
+      
+      
+      template <class Arg1, class Arg2, class Arg3, class ...Args>
+      struct add_impl<Arg1, Arg2, Arg3, Args...>
+        : add_impl<
+            add_impl<Arg1, Arg2>
+            , add_impl<Arg3, Args...> 
+          >
+      {};
+      
+    }                                                       // namespace detail
+  
+    
+    
+    template <class LHS, class RHS, class ...Rest>
+    struct add : detail::add_impl<LHS, RHS, Rest...>
     {};
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                         MULTIPLY                                                   
-  ////////////////////////////////////////////////////////////////////////////////
-
     
+# if ELIB_MP_BOOST_COMPATIBLE_NAMES
     template <class ...Args>
-    struct multiply;
+    using plus = add<Args...>;
+# endif                                     // ELIB_MP_BOOST_COMPATIBLE_NAMES
+    
+  //-------------------------------- subtract ------------------------------// 
+    
+    namespace detail
+    {
       
-    template <class Arg>
-    struct multiply<Arg> : Arg
+      template <class ...Args>
+      struct subtract_impl;
+        
+      template <class Arg>
+      struct subtract_impl<Arg> : Arg
+      {};
+        
+      template <class Arg1, class Arg2>
+      struct subtract_impl<Arg1, Arg2>
+        : std::integral_constant<
+            decltype(Arg1::value - Arg2::value)
+            , Arg1::value - Arg2::value 
+          >
+      {};
+        
+      template <class Arg1, class Arg2, class Arg3, class ...Args>
+      struct subtract_impl<Arg1, Arg2, Arg3, Args...>
+        : subtract_impl<
+              subtract_impl<Arg1, Arg2>
+            , Arg3, Args...
+          >
+      {};
+      
+    }                                                       // namespace detail
+    
+    
+    template <class LHS, class RHS, class ...Rest>
+    struct subtract : detail::subtract_impl<LHS, RHS, Rest...>
     {};
+    
+    
+# if ELIB_MP_BOOST_COMPATIBLE_NAMES
+    template <class ...Args>
+    using minus = subtract<Args...>;
+# endif
+    
+  //-------------------------------- multiply --------------------------------// 
+    namespace detail
+    {
       
-    template <class Arg1, class Arg2>
-    struct multiply<Arg1, Arg2>
-      : std::integral_constant<
-          decltype(Arg1::value * Arg2::value)
+      template <class ...Args>
+      struct multiply_impl;
+        
+        
+      template <class Arg>
+      struct multiply_impl<Arg> 
+        : Arg
+      {};
+        
+        
+      template <class Arg1, class Arg2>
+      struct multiply_impl<Arg1, Arg2>
+        : std::integral_constant<
+            decltype(Arg1::value * Arg2::value)
           , Arg1::value * Arg2::value 
-        >
-    {};
-      
-    template <class Arg1, class Arg2, class Arg3, class ...Args>
-    struct multiply<Arg1, Arg2, Arg3, Args...>
-      : multiply<
-          multiply<Arg1, Arg2>
-          , multiply<Arg3, Args...> 
-        >
+          >
+      {};
+        
+        
+      template <class Arg1, class Arg2, class Arg3, class ...Args>
+      struct multiply_impl<Arg1, Arg2, Arg3, Args...>
+        : multiply_impl<
+            multiply_impl<Arg1, Arg2>
+          , multiply_impl<Arg3, Args...> 
+          >
+      {};
+    
+    }                                                         // namespace detail
+    
+    
+    template <class LHS, class RHS, class ...Rest>
+    struct multiply : detail::multiply_impl<LHS, RHS, Rest...>
     {};
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                              DIVIDE                                              
-  ////////////////////////////////////////////////////////////////////////////////
-  
-  
+    
+# if ELIB_MP_BOOST_COMPATIBLE_NAMES
     template <class ...Args>
-    struct divide;
-      
-    template <class Arg>
-    struct divide<Arg> : Arg
-    {};
-      
-    template <class Arg1, class Arg2>
-    struct divide<Arg1, Arg2>
-      : std::integral_constant<
-          decltype(Arg1::value / Arg2::value)
-          , Arg1::value / Arg2::value 
-        >
-    {};
-      
-    template <class Arg1, class Arg2, class Arg3, class ...Args>
-    struct divide<Arg1, Arg2, Arg3, Args...>
-      : divide<
-          divide<Arg1, Arg2>
-          , divide<Arg3, Args...> 
-        >
-    {};
+    using times = multiply<Args...>;
+# endif
   
+  //-------------------------------- divide --------------------------------// 
   
-  ////////////////////////////////////////////////////////////////////////////////
-  //                           MODULUS                                         
-  ////////////////////////////////////////////////////////////////////////////////
+    namespace detail
+    {
+      
+      template <class ...Args>
+      struct divide_impl;
+        
+      template <class Arg>
+      struct divide_impl<Arg> : Arg
+      {};
+        
+      template <class Arg1, class Arg2>
+      struct divide_impl<Arg1, Arg2>
+        : std::integral_constant<
+            decltype(Arg1::value / Arg2::value)
+            , Arg1::value / Arg2::value 
+          >
+      {};
+        
+      template <class Arg1, class Arg2, class Arg3, class ...Args>
+      struct divide_impl<Arg1, Arg2, Arg3, Args...>
+        : divide_impl<
+            divide_impl<Arg1, Arg2>
+            , Arg3, Args...
+          >
+      {};
+      
+    }                                                       // namespace detail
+    
+    
+    template <class LHS, class RHS, class ...Rest>
+    struct divide : detail::divide_impl<LHS, RHS, Rest...>
+    {};
+    
+    
+# if ELIB_MP_BOOST_COMPATIBLE_NAMES
+    template <class ...Args>
+    using divides = divide<Args...>;
+# endif
   
+  //-------------------------------- modulus --------------------------------// 
   
     template <class Arg1, class Arg2>
     struct modulus 
@@ -149,7 +200,6 @@ namespace elib
           , Arg1::value % Arg2::value
         >
     {};
-  
   
   }                                                         // namespace mp
 }                                                           // namespace elib

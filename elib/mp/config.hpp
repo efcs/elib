@@ -1,8 +1,21 @@
-#ifndef ELIB_MPL_CONFIG_HPP
-# define ELIB_MPL_CONFIG_HPP
+#ifndef ELIB_MP_CONFIG_HPP
+# define ELIB_MP_CONFIG_HPP
 #
 # include <elib/config.hpp>
-#
+# 
+# ////////////////////////////////////////////////////////////////////////////////
+# //                            CONFIGURATION                                          
+# ////////////////////////////////////////////////////////////////////////////////
+# 
+# // allow the use of boost compatible names
+# define ELIB_MP_BOOST_COMPATIBLE_NAMES 1
+# 
+# // test against boost in unit tests
+# // TODO find a better place to put this
+# define ELIB_MP_BOOST_MPL_TESTS 1
+# 
+# //-------------------------------- limits config ------------------------// 
+# 
 # // as defined in the c++11 standard 
 # define ELIB_MP_MAX_PARAM_LIMIT 1024
 # define ELIB_MP_MAX_REC_LIMIT 1024
@@ -34,4 +47,4 @@
     " limit to be violated: " ELIB_PP_STR(ELIB_MP_REC_LIMIT)        \
   )
 #
-#endif /* ELIB_MPL_CONFIG_HPP */
+#endif /* ELIB_MP_CONFIG_HPP */

@@ -784,7 +784,88 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
 //                               Comparison                                           
 ////////////////////////////////////////////////////////////////////////////////
   
-  //TODO
+  //-------------------------------- equal --------------------------------// 
+  BOOST_AUTO_TEST_CASE(equal_test)
+  {
+    using e::equal;
+    using E1 = equal<INT(1), LONG(1)>;
+    SAME_INTC(E1, BOOL(true));
+    
+    using E2 = equal<CHAR(0), UINT(1)>;
+    SAME_INTC(E2, BOOL(false));
+  }                                                         // equal_test
+  
+  //-------------------------------- not_equal --------------------------------// 
+  BOOST_AUTO_TEST_CASE(not_equal_test)
+  {
+    using e::not_equal;
+    using E1 = not_equal<BOOL(true), LONG(0)>;
+    SAME_INTC(E1, BOOL(true));
+    
+    using E2 = not_equal<CHAR(1), UINT(1)>;
+    SAME_INTC(E2, BOOL(false));
+  }                                                         // not_equal_test
+  
+  //-------------------------------- less --------------------------------// 
+  BOOST_AUTO_TEST_CASE(less_test)
+  {
+    using e::less;
+    using E1 = less<INT(0), INT(1)>;
+    SAME_INTC(E1, BOOL(true));
+    
+    using E2 = less<BOOL(true), INT(0)>;
+    SAME_INTC(E2, BOOL(false));
+    
+    using E3 = less<CHAR(5), UINT(5)>;
+    SAME_INTC(E3, BOOL(false));
+  }                                                         // less_test
+  
+  //-------------------------------- less_equal -----------------------------// 
+  BOOST_AUTO_TEST_CASE(less_equal_test)
+  {
+    using e::less_equal;
+    
+    using E1 = less_equal<UINT(0), LONG(100)>;
+    SAME_INTC(E1, true_);
+    
+    using E2 = less_equal<CHAR(-1), INT(-1)>;
+    SAME_INTC(E2, true_);
+    
+    using E3 = less_equal<BOOL(true), LONG(0)>;
+    SAME_INTC(E3, false_);
+  }
+  
+  //-------------------------------- greater --------------------------------// 
+  BOOST_AUTO_TEST_CASE(greater_test)
+  {
+    using e::greater;
+    using E1 = greater<BOOL(true), BOOL(false)>;
+    SAME_INTC(E1, true_);
+    
+    using E2 = greater<UINT(10), CHAR(10)>;
+    SAME_INTC(E2, false_);
+    
+    using E3 = greater<LONG(10), INT(100)>;
+    SAME_INTC(E3, false_);
+  }                                                         // greater_test
+  
+  //-------------------------------- greater_equal --------------------------// 
+  BOOST_AUTO_TEST_CASE(greater_equal_test)
+  {
+    using e::greater_equal;
+    using E1 = greater_equal<CHAR(10), LONG(1)>;
+    SAME_INTC(E1, true_);
+    
+    using E2 = greater_equal<BOOL(1), INT(1)>;
+    SAME_INTC(E2, true_);
+    
+    using E3 = greater_equal<INT(1), UINT(10)>;
+    SAME_INTC(E3, false_);
+    
+    // INT(-1) in converted to uint before comparisons
+    using E4 = greater_equal<UINT(10), INT(-1)>;
+    SAME_INTC(E4, false_);
+  }                                                       // greater_equal_test
   
 ////////////////////////////////////////////////////////////////////////////////
 //                              Logical                                            
@@ -848,5 +929,80 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
     SAME_INTC(E8, BOOL(true));
   }                                                         // or_test
 
+
+////////////////////////////////////////////////////////////////////////////////
+//                          Bitwise
+////////////////////////////////////////////////////////////////////////////////
   
+  //-------------------------------- bitnegate ------------------------------//
+  //TODO
+  BOOST_AUTO_TEST_CASE(bitnegate_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // bitnegate_test
+  
+  //-------------------------------- binand --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(bitand_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // bitand_test
+  
+  //-------------------------------- bitor --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(bitor_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // bitor_test
+  
+  //-------------------------------- left_shift -----------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(left_shift_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // left_shift_test
+  
+  //-------------------------------- right_shift ----------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(right_shift_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // right_shift_test
+  
+////////////////////////////////////////////////////////////////////////////////
+//                                    Misc                                                 
+////////////////////////////////////////////////////////////////////////////////
+
+  //-------------------------------- identity --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(identity_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // identity_test  
+  
+  //-------------------------------- always --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(always_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // always_test  
+  
+
+  //-------------------------------- min_max --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(min_max_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // min_max_test  
+  
+
+  //-------------------------------- sizeof --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(sizeof_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // sizeof_test  
+  
+
+
 BOOST_AUTO_TEST_SUITE_END()

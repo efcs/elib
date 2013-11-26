@@ -8,7 +8,7 @@
 # include <elib/mp/config.hpp>
 
 // include args so we get elib::mp and mp::placeholders
-# include <elib/mp/metafunctions/arg.hpp>
+# include <elib/mp/metafunction/arg.hpp>
 
 namespace e
 {

@@ -3,7 +3,7 @@
 
 # include <elib/mp/config.hpp>
 # include <elib/mp/types.hpp>
-# include <elib/mp/metafunctions/arg.hpp>
+# include <elib/mp/metafunction/arg.hpp>
 
 # include <cstddef>
 

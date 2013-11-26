@@ -13,7 +13,8 @@ namespace elib
     
     struct na {};
     
-    using void_ = void;
+    struct void_ { using type = void; };
+    
     using nullptr_ = std::nullptr_t;
     
     template <class T, T Val>

@@ -34,6 +34,7 @@
 
 
 #include <elib/pragma.hpp>
+#include <string> /* for sizeof_ test */
 
 // Turn off C++11 narrowing error for clang
 // to test with narrowing conversions
@@ -969,6 +970,13 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
     BOOST_CHECK(true);
   }                                                         // bitor_test
   
+  //-------------------------------- bitxor --------------------------------// 
+  //TODO
+  BOOST_AUTO_TEST_CASE(bitxor_test)
+  {
+    BOOST_CHECK(true);
+  }                                                         // bitxor_test
+  
   //-------------------------------- shift_left -----------------------------// 
   BOOST_AUTO_TEST_CASE(shift_left_test)
   {
@@ -983,7 +991,6 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
   }                                                         // shift_left_test
   
   //-------------------------------- shift_right ----------------------------// 
-  //TODO
   BOOST_AUTO_TEST_CASE(shift_right_test)
   {
     using e::shift_right;

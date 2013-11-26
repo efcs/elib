@@ -14,7 +14,7 @@ namespace elib
       template <typename T>
       struct template_arity
       {
-        typedef none type;
+        using type = na;
       };
       
       

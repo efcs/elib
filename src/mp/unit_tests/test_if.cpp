@@ -3,7 +3,7 @@
 
 #include "mp_test_config.hpp"
 
-#include <elib/mp/if.hpp>
+#include <elib/mp/metafunctions/if.hpp>
 #include <elib/mp/types.hpp>
 
 #include <elib/pragma.hpp>

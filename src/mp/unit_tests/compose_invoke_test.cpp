@@ -20,8 +20,7 @@
 
 #include <elib/mp/config.hpp>
 #include <elib/mp/types.hpp>
-#include <elib/mp/compose.hpp>
-#include <elib/mp/invoke.hpp>
+#include <elib/mp/metafunctions.hpp>
 #include <elib/mp/detail/is_placeholder.hpp>
 
 #if ELIB_MP_BOOST_MPL_TESTS

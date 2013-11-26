@@ -2,8 +2,8 @@
 # define ELIB_MP_PROTECT_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/mp/apply_wrap.hpp>
-# include <elib/mp/bind.hpp>
+# include <elib/mp/metafunctions/apply_wrap.hpp>
+# include <elib/mp/metafunctions/bind.hpp>
 
 
 namespace elib 

@@ -3,11 +3,11 @@
 
 # include <elib/mp/config.hpp>
 # include <elib/mp/types.hpp>
-# include <elib/mp/bind.hpp>
-# include <elib/mp/arg.hpp>
-# include <elib/mp/protect.hpp>
-# include <elib/mp/quote.hpp>
-# include <elib/mp/logical.hpp>
+# include <elib/mp/metafunctions/bind.hpp>
+# include <elib/mp/metafunctions/arg.hpp>
+# include <elib/mp/metafunctions/protect.hpp>
+# include <elib/mp/metafunctions/quote.hpp>
+# include <elib/mp/metafunctions/logical.hpp>
 
 # include <cstddef>
 

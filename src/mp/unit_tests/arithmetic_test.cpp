@@ -3,7 +3,7 @@
 
 // get helper definitions
 #include "mp_test_config.hpp"
-#include <elib/mp/arithmetic.hpp>
+#include <elib/mp/metafunctions/arithmetic.hpp>
 
 #if ELIB_MP_BOOST_MPL_TESTS
 # include <boost/mpl/arithmetic.hpp>
@@ -27,12 +27,12 @@
  */
 BOOST_AUTO_TEST_SUITE(mp_arithmetic_test_suite)
 
+
 // Turn off C++11 narrowing error for clang
 // to test with narrowing conversions
 ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
 
 //-------------------------------- negate --------------------------------// 
-
   BOOST_AUTO_TEST_CASE(negate_test)
   {
     // bool
@@ -80,7 +80,6 @@ ELIB_PRAGMA_IGNORE_CXX11_NARROWING()
   }                                                           // negate_test
 
 //-------------------------------- add --------------------------------// 
-  
   BOOST_AUTO_TEST_CASE(add_test)
   {
     using e::add;

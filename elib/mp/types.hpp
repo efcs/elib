@@ -11,7 +11,7 @@ namespace elib
   namespace mp
   {
     
-    struct none {};
+    struct na {};
     
     using void_ = void;
     using nullptr_ = std::nullptr_t;

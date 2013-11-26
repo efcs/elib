@@ -7,8 +7,8 @@
 
 # include <elib/mp/config.hpp>
 
-// include a placeholders so we see all the namespaces
-# include <elib/mp/placeholders.hpp>
+// include args so we get elib::mp and mp::placeholders
+# include <elib/mp/metafunctions/arg.hpp>
 
 namespace e
 {
@@ -69,6 +69,8 @@ do {                                        \
   CHECK_VALUE(c, val);                      \
 } while (false)
 
+# define GOOD_TYPE(t) SAME_TYPE(t, good)
+
 //-------------------------------- helper types -----------------------------// 
 
 
@@ -122,7 +124,21 @@ using long_ = integral_constant<long, N>;
 using max_long_ = std::integral_constant<long, std::numeric_limits<long>::max()>;
 using min_long_ = std::integral_constant<long, std::numeric_limits<long>::min()>;
   
+// good & bad types that are separate from integral_constant
 
+struct good
+{
+  using type = good;
+  using value_type = bool;
+  static constexpr value_type value = true;
+};
+
+struct bad
+{
+  using type = bad;
+  using value_type = bool;
+  static constexpr value_type value = false;
+};
 
 //-------------------------------- helper intc macros------------------------// 
 

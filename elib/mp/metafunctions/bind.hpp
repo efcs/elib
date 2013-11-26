@@ -2,8 +2,8 @@
 # define ELIB_MP_BIND_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/mp/arg.hpp>
-# include <elib/mp/apply_wrap.hpp>
+# include <elib/mp/metafunctions/arg.hpp>
+# include <elib/mp/metafunctions/apply_wrap.hpp>
 
 # include <cstddef>
 

@@ -3,12 +3,12 @@
 
 #include "mp_test_config.hpp"
 
-#include <elib/mp/logical.hpp>
+#include <elib/mp/metafunctions/logical.hpp>
 
 
 BOOST_AUTO_TEST_SUITE(mp_logical_test_suite)
 
-//-------------------------------- not --------------------------------// 
+  //-------------------------------- not --------------------------------// 
   BOOST_AUTO_TEST_CASE(not_test)
   {
     using e::not_;
@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_SUITE(mp_logical_test_suite)
     SAME_INTC(not_<INT(-1)>, BOOL(false));
   }                                                         // not_test
   
-//-------------------------------- end --------------------------------// 
+  //-------------------------------- and --------------------------------// 
   BOOST_AUTO_TEST_CASE(and_test)
   {
     using e::and_;
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(mp_logical_test_suite)
     SAME_INTC(E6, BOOL(false));
   }                                                         // and_test
   
-//-------------------------------- or --------------------------------// 
+  //-------------------------------- or --------------------------------// 
   BOOST_AUTO_TEST_CASE(or_test)
   {
     using e::or_;

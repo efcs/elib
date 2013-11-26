@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(mp_detail_init)
   BOOST_CHECK((
     std::is_same<
       mp::detail::template_arity<NONE>::type
-      , mp::none
+      , mp::na
     >::value
   ));
 

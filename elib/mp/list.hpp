@@ -98,6 +98,7 @@ namespace elib
     {
       
     //-------------------------------- advance ------------------------------//
+      //TODO
       template <>
       struct advance_impl<detail::list_iter_tag>
       {
@@ -106,7 +107,7 @@ namespace elib
       };
       
     //-------------------------------- distance -----------------------------//
-    
+      //TODO
       template <>
       struct distance_impl<detail::list_iter_tag>
       {
@@ -187,7 +188,7 @@ namespace elib
         template <class Seq>
         struct apply
         {
-          using type = deref_t<begin_t<Seq>>;
+          using type = typename Seq::item;
         };
       };
     
@@ -250,7 +251,9 @@ namespace elib
         template <class Seq>
         struct apply
         {
-          using type = next_t<Seq>;
+          using type = typename Seq::next;
+          
+          static_assert(empty_t<Seq>::value == false, "cannot pop empty list");
         };
       };
       

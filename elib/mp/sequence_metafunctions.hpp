@@ -5,6 +5,7 @@
 # include <elib/mp/types.hpp>
 # include <elib/mp/sequence_tag.hpp>
 # include <elib/mp/detail/sequence_fwd.hpp>
+# include <elib/mp/sequence_iterator.hpp>
 # include <elib/mp/metafunctions/apply_wrap.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
@@ -187,8 +188,7 @@ namespace elib
       };
     }                                                       // namespace detail
     
-    //TODO void_? 
-    template <class Seq, class First, class Last = void_>
+    template <class Seq, class First, class Last = next_t<First>>
     struct erase
       : apply_wrap<
           detail::erase_impl<sequence_tag_t<Seq>>
@@ -196,7 +196,7 @@ namespace elib
         >
     {};
     
-    template <class Seq, class First, class Last = void_>
+    template <class Seq, class First, class Last = next_t<First>>
     using erase_t = typename erase<Seq, First, Last>::type;
   
   //-------------------------------- erase_key ------------------------------//

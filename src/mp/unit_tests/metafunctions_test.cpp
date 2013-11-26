@@ -410,10 +410,13 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
   }                                                         // apply_wrap_test
     
   //-------------------------------- apply --------------------------------// 
-  //TODO
   BOOST_AUTO_TEST_CASE(apply_test)
   {
-    BOOST_CHECK(true); 
+    using E1 = typename e::apply<add_f<e::_1, e::_2>, INT(1), INT(2)>::type;
+    SAME_INTC(E1, INT(3));
+    
+    using E2 = e::apply_t<e::quote<add_f>, INT(1), INT(2)>;
+    SAME_INTC(E2, INT(3));
   }                                                         // apply_test
   
   //---------------------------- unpack_args --------------------------------// 
@@ -935,10 +938,21 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
 ////////////////////////////////////////////////////////////////////////////////
   
   //-------------------------------- bitnegate ------------------------------//
-  //TODO
   BOOST_AUTO_TEST_CASE(bitnegate_test)
   {
-    BOOST_CHECK(true);
+    using e::bitnegate_;
+    using E1 = bitnegate_<BOOL(false)>;
+    SAME_INTC(E1, INT(~false));
+    
+    using E2 = bitnegate_<CHAR(100)>;
+    using E2Expect = INT( ~static_cast<char>(100) );
+    SAME_INTC(E2, E2Expect);
+    
+    using E3 = bitnegate_<INT(0)>;
+    SAME_INTC(E3, INT(~0));
+    
+    using E4 = bitnegate_<LONG(1000)>;
+    SAME_INTC(E4, LONG(~static_cast<long>(1000)));
   }                                                         // bitnegate_test
   
   //-------------------------------- binand --------------------------------// 
@@ -955,19 +969,32 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
     BOOST_CHECK(true);
   }                                                         // bitor_test
   
-  //-------------------------------- left_shift -----------------------------// 
-  //TODO
-  BOOST_AUTO_TEST_CASE(left_shift_test)
+  //-------------------------------- shift_left -----------------------------// 
+  BOOST_AUTO_TEST_CASE(shift_left_test)
   {
-    BOOST_CHECK(true);
-  }                                                         // left_shift_test
+    using e::shift_left;
+    using E1 = shift_left<INT(1), INT(1)>;
+    using E1Expect = INTC(1 << 1);
+    SAME_INTC(E1, E1Expect);
+    
+    using E2 = shift_left<BOOL(false), LONG(10)>;
+    using E2Expect = INTC( false << 10l );
+    SAME_INTC(E2, E2Expect);
+  }                                                         // shift_left_test
   
-  //-------------------------------- right_shift ----------------------------// 
+  //-------------------------------- shift_right ----------------------------// 
   //TODO
-  BOOST_AUTO_TEST_CASE(right_shift_test)
+  BOOST_AUTO_TEST_CASE(shift_right_test)
   {
-    BOOST_CHECK(true);
-  }                                                         // right_shift_test
+    using e::shift_right;
+    using E1 = shift_right<CHAR(15), LONG(2)>;
+    using E1Expect = INTC( static_cast<char>(15) >> 2l );
+    SAME_INTC(E1, E1Expect);
+    
+    using E2 = shift_right<UINT(2), INT(5)>;
+    using E2Expect = INTC( 2u >> 5 );
+    SAME_INTC(E2, E2Expect);
+  }                                                         // shift_right_test
   
 ////////////////////////////////////////////////////////////////////////////////
 //                                    Misc                                                 
@@ -977,7 +1004,13 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
   //TODO
   BOOST_AUTO_TEST_CASE(identity_test)
   {
-    BOOST_CHECK(true);
+    using namespace e;
+    
+    using E1 = typename identity<good>::type;
+    GOOD_TYPE(E1);
+    
+    using E2 = typename identity<void>::type;
+    SAME_TYPE(E2, void);
   }                                                         // identity_test  
   
   //-------------------------------- always --------------------------------// 
@@ -987,22 +1020,41 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
     BOOST_CHECK(true);
   }                                                         // always_test  
   
-
-  //-------------------------------- min_max --------------------------------// 
-  //TODO
-  BOOST_AUTO_TEST_CASE(min_max_test)
+  //-------------------------------- min --------------------------------// 
+  BOOST_AUTO_TEST_CASE(min_test)
   {
-    BOOST_CHECK(true);
-  }                                                         // min_max_test  
+    using e::min;
+    using e::min_t;
+    
+    using E1 = typename min<INT(0), LONG(1)>::type;
+    SAME_TYPE(E1, INT(0));
+    
+    using E2 = min_t<LONG(10), INT(100)>;
+    SAME_TYPE(E2, LONG(10));
+  }                                                         // min_test  
   
-
-  //-------------------------------- sizeof --------------------------------// 
+  //-------------------------------- max --------------------------------// 
   //TODO
+  BOOST_AUTO_TEST_CASE(max_test)
+  {
+    using e::max;
+    using e::max_t;
+    
+    using E1 = typename max<BOOL(false), INT(1)>::type;
+    SAME_TYPE(E1, INT(1));
+    
+    using E2 = max_t<CHAR(0), BOOL(true)>;
+    SAME_TYPE(E2, BOOL(true));
+  }                                                         // max_test  
+  
+  //-------------------------------- sizeof --------------------------------// 
   BOOST_AUTO_TEST_CASE(sizeof_test)
   {
-    BOOST_CHECK(true);
+    using e::sizeof_;
+    using E1 = sizeof_<std::string>;
+    BOOST_CHECK(E1::value == sizeof(std::string));
+    SAME_TYPE(E1::value_type, std::size_t);
   }                                                         // sizeof_test  
-  
 
 
 BOOST_AUTO_TEST_SUITE_END()

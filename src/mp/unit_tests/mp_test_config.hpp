@@ -142,7 +142,7 @@ struct bad
 
 //-------------------------------- helper intc macros------------------------// 
 
-# define INTC(x) integral_constant<decltype(x), x>
+# define INTC(x) integral_constant<decltype(x), (x)>
 # define BOOL(x)  bool_<x>
 # define CHAR(x)  char_<x>
 # define INT(x)   int_<x>

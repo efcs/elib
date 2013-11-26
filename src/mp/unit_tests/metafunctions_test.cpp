@@ -819,6 +819,9 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
     SAME_INTC(E5, BOOL(true));
     using E6 = and_<INT(0), true_>;
     SAME_INTC(E6, BOOL(false));
+    
+    using E7 = and_<true_, false_, e::na, e::na>;
+    SAME_INTC(E7, BOOL(false));
   }                                                         // and_test
   
   //-------------------------------- or --------------------------------// 
@@ -840,6 +843,9 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
     SAME_INTC(E6, BOOL(true));
     using E7 = or_<CHAR(-1), false_>;
     SAME_INTC(E7, BOOL(true));
+    
+    using E8 = or_<false_, true_, e::na>;
+    SAME_INTC(E8, BOOL(true));
   }                                                         // or_test
 
   

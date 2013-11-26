@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_ITERATOR_ITERATOR_FWD_HPP
-# define ELIB_MP_ITERATOR_ITERATOR_FWD_HPP
+#define ELIB_MP_ITERATOR_ITERATOR_FWD_HPP
 
 # include <elib/mp/iterator/iterator_tags.hpp>
 # include <elib/mp/sequence/sequence_fwd.hpp>

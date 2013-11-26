@@ -4,6 +4,7 @@
 # include <elib/mp/sequence/sequence_fwd.hpp>
 # include <elib/mp/types.hpp>
 # include <elib/mp/metafunction/if.hpp>
+# include <elib/mp/detail/has_begin.hpp>
 
 namespace elib
 {
@@ -11,29 +12,6 @@ namespace elib
   {
     namespace detail
     {
-      
-    //-------------------------------- has_begin_impl ------------------------// 
-      
-      template <class T>
-      struct has_begin_impl
-      {
-      private:
-        
-        template <class U>
-        static true_ test(typename U::begin*);
-        
-        template <class U>
-        static false_ test(...);
-        
-      public:
-        using type = decltype(test<T>(0));
-      };
-      
-    //-------------------------------- has_begin ----------------------------// 
-      
-      template <class T>
-      struct has_begin : has_begin_impl<T>::type
-      {};
       
     //-------------------------------- get_begin ----------------------------// 
       
@@ -63,6 +41,42 @@ namespace elib
         };
       };
       
+    // partial specialization ( detail::nested_begin_tag )
+    
+      template <>
+      struct begin_impl< detail::nested_begin_tag >
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = typename Seq::begin;
+        };
+      };
+      
+    // partial specialization ( detail::non_seq_tag )
+      
+      template <>
+      struct begin_impl< detail::non_seq_tag >
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = void_;
+        };
+      };
+      
+    // partial specialization ( na )
+      
+      template <>
+      struct begin_impl< na >
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = void_;
+        };
+      };
+      
     //-------------------------------- end_impl -------------------------------// 
     
       template <class Tag>
@@ -72,6 +86,42 @@ namespace elib
         struct apply
         {
           using type = eval_if_t<has_begin<Seq>, get_end<Seq>, void_>;
+        };
+      };
+      
+    // partial specialization ( detail::nested_begin_tag )
+    
+      template <>
+      struct end_impl< detail::nested_begin_tag >
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = typename Seq::end;
+        };
+      };
+      
+    // partial specialization ( detail::non_seq_tag )
+      
+      template <>
+      struct end_impl< detail::non_seq_tag >
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = void_;
+        };
+      };
+      
+    // partial specialization ( na )
+      
+      template <>
+      struct end_impl< na >
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = void_;
         };
       };
       

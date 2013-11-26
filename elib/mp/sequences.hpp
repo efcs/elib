@@ -22,6 +22,7 @@
 # include <elib/mp/sequence/push_front.hpp>
 # include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/sequence/size.hpp>
+# include <elib/mp/sequence/nested_size.hpp>
 # include <elib/mp/sequence/value_type.hpp>
 # // containers
 # include <elib/mp/sequence/sequence_tag.hpp>

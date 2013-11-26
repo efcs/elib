@@ -9,6 +9,7 @@
 # include <elib/mp/metafunction/unpack_args.hpp>
 # // composition and arg binding
 # include <elib/mp/metafunction/arg.hpp>
+# include <elib/mp/metafunction/placeholders.hpp>
 # include <elib/mp/metafunction/lambda.hpp>
 # include <elib/mp/metafunction/bind.hpp>
 # include <elib/mp/metafunction/quote.hpp>

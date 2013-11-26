@@ -1,11 +1,6 @@
 #ifndef ELIB_MP_ALGORITHM_ALGORITHM_FWD_HPP
 #define ELIB_MP_ALGORITHM_ALGORITHM_FWD_HPP
 
-# include <elib/mp/types.hpp>
-# include <elib/mp/metafunction/arg.hpp>
-# include <elib/mp/metafunction/comparison.hpp>
-# include <elib/CXX14/type_traits.hpp>
-
 namespace elib 
 {
   namespace mp
@@ -15,6 +10,9 @@ namespace elib
   //                            Inserters                                              
   //////////////////////////////////////////////////////////////////////////////
   
+  //-------------------------------- inserter --------------------------------// 
+  
+    template <class State, class Operation> struct inserter;
    
   //-------------------------------- back_inserter---------------------------//
   
@@ -23,10 +21,6 @@ namespace elib
   //-------------------------------- front_inserter -------------------------// 
   
     template <class Seq> struct front_inserter;
-    
-  //-------------------------------- inserter --------------------------------// 
-  
-    template <class State, class Operation> struct inserter;
     
   //////////////////////////////////////////////////////////////////////////////
   //                            Iteration                                              

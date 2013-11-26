@@ -57,6 +57,8 @@ namespace elib
         };
       };
       
+    //-------------------------------- advance_impl -------------------------// 
+      
       template <class Tag>
       struct advance_impl
       {

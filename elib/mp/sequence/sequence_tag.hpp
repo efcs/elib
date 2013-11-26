@@ -1,73 +1,55 @@
 #ifndef ELIB_MP_SEQUENCE_SEQUENCE_TAG_HPP
 #define ELIB_MP_SEQUENCE_SEQUENCE_TAG_HPP
 
-# include <elib/mp/config.hpp>
-
+# include <elib/mp/sequence/sequence_fwd.hpp>
+# include <elib/mp/detail/has_tag.hpp>
+# include <elib/mp/detail/has_begin.hpp>
 
 namespace elib 
 {
   namespace mp
   {
+    
     namespace detail
     {
       
-      struct no_seq_tag {};
+    //-------------------------------- sequence_tag_impl --------------------// 
       
-    //-------------------------------- has_tag_impl -----------------------// 
-      
-      template <class T>
-      struct has_tag_impl
-      {
-      private:
-        
-        template <class U>
-        static true_ test(typename U::tag*);
-        
-        template <class U>
-        static false_ test(...);
-        
-      public:
-        using type = decltype( test<T>(0) );
-      };                                                    // has_tag_impl
-      
-    //-------------------------------- has_tag ----------------------------// 
-      
-      template <class T>
-      struct has_tag : has_tag_impl<T>::type
-      {};
-      
-      //--------------------------- sequence_tag_impl ------------------------// 
-      
-      
-      template <bool HasTag, class T>
+      template <bool HasTag, bool HasBegin, class T>
       struct sequence_tag_impl
       {
-        using type = no_seq_tag;
+        using type = non_seq_tag;
         
-        static_assert(!HasTag, "Must not have a tag");
+        static_assert(HasTag == false && HasBegin == false,
+                      "Overload Assertion Failed");
       };
       
-      template <class T>
-      struct sequence_tag_impl<true, T>
+      
+      template <bool HasBegin, class T>
+      struct sequence_tag_impl<true, HasBegin, T>
       {
         using type = typename T::tag;
       };
       
+      
+      template <class T>
+      struct sequence_tag_impl<false, true, T>
+      {
+        using type = nested_begin_tag;
+      };
+      
     }                                                       // namespace detail
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                            sequence_tag                                              
-  ////////////////////////////////////////////////////////////////////////////////
-  
+  //-------------------------------- sequence_tag ---------------------------// 
+    
     template <class T>
     struct sequence_tag 
       : detail::sequence_tag_impl<
           detail::has_tag<T>::value
-          , T
+        , detail::has_begin<T>::value
+        , T
         >
     {};
-    
-    
     
   }                                                         // namespace mp
 }                                                           // namespace elib

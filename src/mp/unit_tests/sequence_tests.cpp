@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_SUITE(mp_sequence_test_suite)
     }
     {
       using E1 = e::sequence_tag_t<no_tag>;
-      SAME_TYPE(E1, e::detail::no_seq_tag);
+      SAME_TYPE(E1, e::detail::non_seq_tag);
     }
   }                                                           // sequence_tag_test
 

@@ -87,7 +87,13 @@ namespace elib
 ////////////////////////////////////////////////////////////////////////////////
   
    
-  //-------------------------------- sequence_tag ---------------------------// 
+  //-------------------------------- sequence_tag ---------------------------//
+  
+    namespace detail
+    {
+      struct non_seq_tag {};
+      struct nested_begin_tag {};
+    }
     
     template <class T>
     struct sequence_tag;
@@ -453,6 +459,22 @@ namespace elib
     template <class T>
     using size_t = typename size<T>::type;
     
+  //-------------------------------- nested_size ----------------------------// 
+    
+    namespace detail
+    {
+      template <class Tag> struct nested_size_impl;
+    }
+    
+    template <class T>
+    struct nested_size 
+      : detail::nested_size_impl<sequence_tag_t<T>>
+          ::template apply<T>
+    {};
+    
+    template <class T>
+    using nested_size_t = typename nested_size<T>::type;
+    
   //-------------------------------- value_type -----------------------------// 
     
     namespace detail
@@ -507,7 +529,7 @@ namespace elib
   //-------------------------------- zip_view -------------------------------//
   
     template <class Sequences>
-    class zip_view;
+    struct zip_view;
   
   }                                                         // namespace mp
 }                                                           // namespace elib

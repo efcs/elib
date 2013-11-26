@@ -39,8 +39,6 @@ namespace elib
       using _8 = arg<8>;
       using _9 = arg<9>;
     }                                                 // namespace placeholders
-
-    using namespace placeholders;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

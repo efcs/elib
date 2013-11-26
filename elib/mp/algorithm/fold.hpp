@@ -174,9 +174,19 @@ namespace elib
     
   //-------------------------------- reverse_fold ---------------------------// 
     
-    //TODO
     template <class Seq, class State, class BackwardOp, class ForwardOp=_1>
-    struct reverse_fold;
+    struct reverse_fold
+    {
+      using type = typename
+        detail::reverse_fold_impl<
+            nested_size<Seq>::value
+          , begin_t<Seq>
+          , end_t<Seq>
+          , State
+          , lambda_t<BackwardOp>
+          , lambda_t<ForwardOp>
+        >::state;
+    };
     
   }                                                         // namespace mp
 }                                                           // namespace elib

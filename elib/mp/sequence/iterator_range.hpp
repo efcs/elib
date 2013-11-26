@@ -6,9 +6,19 @@ namespace elib
   namespace mp
   {
     
-    //TODO
+    namespace detail
+    {
+      struct iterator_range_tag {};
+    }
+    
     template <class First, class Last>
-    struct iterator_range;
+    struct iterator_range
+    {
+      using type = iterator_range;
+      using tag = detail::iterator_range_tag;
+      using begin = First;
+      using end = Last;
+    };
     
   }                                                         //namespace mp
 }                                                           //namespace elib

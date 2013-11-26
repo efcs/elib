@@ -40,6 +40,8 @@ namespace elib
       using _9 = arg<9>;
     }                                                 // namespace placeholders
 
+    using namespace placeholders;
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_METAFUNCTION_ARG_HPP */

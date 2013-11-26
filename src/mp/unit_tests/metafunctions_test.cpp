@@ -788,27 +788,27 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
 //                               Comparison                                           
 ////////////////////////////////////////////////////////////////////////////////
   
-  //-------------------------------- equal --------------------------------// 
-  BOOST_AUTO_TEST_CASE(equal_test)
+  //-------------------------------- equal_to -------------------------------// 
+  BOOST_AUTO_TEST_CASE(equal_to_test)
   {
-    using e::equal;
-    using E1 = equal<INT(1), LONG(1)>;
+    using e::equal_to;
+    using E1 = equal_to<INT(1), LONG(1)>;
     SAME_INTC(E1, BOOL(true));
     
-    using E2 = equal<CHAR(0), UINT(1)>;
+    using E2 = equal_to<CHAR(0), UINT(1)>;
     SAME_INTC(E2, BOOL(false));
-  }                                                         // equal_test
+  }                                                         // equal_to_test
   
   //-------------------------------- not_equal --------------------------------// 
-  BOOST_AUTO_TEST_CASE(not_equal_test)
+  BOOST_AUTO_TEST_CASE(not_equal_to_test)
   {
-    using e::not_equal;
-    using E1 = not_equal<BOOL(true), LONG(0)>;
+    using e::not_equal_to;
+    using E1 = not_equal_to<BOOL(true), LONG(0)>;
     SAME_INTC(E1, BOOL(true));
     
-    using E2 = not_equal<CHAR(1), UINT(1)>;
+    using E2 = not_equal_to<CHAR(1), UINT(1)>;
     SAME_INTC(E2, BOOL(false));
-  }                                                         // not_equal_test
+  }                                                        // not_equal_to_test
   
   //-------------------------------- less --------------------------------// 
   BOOST_AUTO_TEST_CASE(less_test)

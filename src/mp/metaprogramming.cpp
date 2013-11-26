@@ -1,4 +1,3 @@
-#
 # include <elib/mp/config.hpp>
 # include <elib/mp/types.hpp>
 # // compose, invoke and other various metafunctions
@@ -7,6 +6,8 @@
 # include <elib/mp/sequences.hpp>
 # // iterator & metafunctions
 # include <elib/mp/iterator.hpp>
+# // algorithms
+# include <elib/mp/algorithm.hpp>
 # // detail
 # include <elib/mp/detail/is_placeholder.hpp>
 # include <elib/mp/detail/has_apply.hpp>

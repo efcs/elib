@@ -13,9 +13,9 @@ namespace elib
     
     struct na {};
     
-    struct void_ { using type = void; };
+    struct empty_base {};
     
-    using nullptr_ = std::nullptr_t;
+    struct void_ { using type = void; };
     
     template <class T, T Val>
     using intc_ = std::integral_constant<T, Val>;

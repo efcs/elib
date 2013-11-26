@@ -3,6 +3,7 @@
 
 # include <elib/mp/sequence/sequence_fwd.hpp>
 # include <elib/mp/types.hpp>
+# include <elib/mp/metafunction/if.hpp>
 
 namespace elib
 {
@@ -34,24 +35,45 @@ namespace elib
       struct has_begin : has_begin_impl<T>::type
       {};
       
+    //-------------------------------- get_begin ----------------------------// 
+      
+      template <class T>
+      struct get_begin
+      {
+        using type = typename T::begin;
+      };
+      
+    //-------------------------------- get_end ------------------------------// 
+      
+      template <class T>
+      struct get_end
+      {
+        using type = typename T::end;
+      };
+      
     //-------------------------------- begin_impl ---------------------------// 
-      //TODO
+
       template <class Tag>
       struct begin_impl
       {
         template <class Seq>
-        struct apply;
+        struct apply
+        {
+          using type = eval_if_t<has_begin<Seq>, get_begin<Seq>, void_>;
+        };
       };
       
-  //-------------------------------- end_impl -------------------------------// 
+    //-------------------------------- end_impl -------------------------------// 
     
-    //TODO
-    template <class Tag>
-    struct end_impl
-    {
-      template <class Seq>
-      struct apply;
-    };
+      template <class Tag>
+      struct end_impl
+      {
+        template <class Seq>
+        struct apply
+        {
+          using type = eval_if_t<has_begin<Seq>, get_end<Seq>, void_>;
+        };
+      };
       
     }                                                       // namespace detail
   }                                                         // namespace mp

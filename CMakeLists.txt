@@ -88,7 +88,7 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
-set( CMAKE_BUILD_TYPE RELEASE)
+set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O2  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O2  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
@@ -108,16 +108,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 #                           Additional config
 ################################################################################
 
-set(CONFIG_MP_LIMIT_MAX ON)
-if (CONFIG_MP_LIMIT_MAX)
-  
-  add_definitions( -DELIB_MP_USE_MAX_LIMITS )
-  
-  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftemplate-depth=1024 ")
-  endif()
-    
-endif()
+
 
 ################################################################################
 #                           Macros & Functions

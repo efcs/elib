@@ -7,10 +7,9 @@
 # include <elib/mp/iterator/iterator_fwd.hpp>
 # include <elib/mp/iterator/iterator_tags.hpp>
 # include <elib/mp/iterator/deref.hpp>
+# include <elib/mp/iterator/next_prior.hpp>
 # include <elib/mp/metafunction/logical.hpp>
 # include <elib/mp/metafunction/arithmetic.hpp>
-# include <elib/mp/metafunction/increment.hpp>
-# include <elib/mp/metafunction/decrement.hpp>
 # include <elib/mp/metafunction/intc_cast.hpp>
 # include <elib/mp/types/long.hpp>
 # include <type_traits>
@@ -163,7 +162,7 @@ namespace elib
       {
         template <class Range>  
         struct apply
-        { using type = decrement_t<typename Range::finish>; };
+        { using type = prior_t<typename Range::finish>; };
       };
     
     }                                                       // namespace detail

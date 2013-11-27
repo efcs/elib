@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_TYPES_LONG_HPP
 #define ELIB_MP_TYPES_LONG_HPP
 
-# include <elib/mp/types/integral_c.hpp>
+# include <type_traits>
 
 namespace elib
 {
@@ -9,20 +9,20 @@ namespace elib
   {
     
     template <long Val>
-    using long_ = integral_c<long, Val>;
+    using long_ = std::integral_constant<long, Val>;
     
     
     template <unsigned long Val>
-    using ulong_ = integral_c<unsigned long, Val>;
+    using ulong_ = std::integral_constant<unsigned long, Val>;
     
   //-------------------------------- long long ------------------------------// 
     
     template <long long Val>
-    using llong_ = integral_c<long long, Val>;
+    using llong_ = std::integral_constant<long long, Val>;
     
     
     template <unsigned long long Val>
-    using ullong_ = integral_c<unsigned long long, Val>;
+    using ullong_ = std::integral_constant<unsigned long long, Val>;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

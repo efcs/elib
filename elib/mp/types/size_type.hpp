@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_TYPES_SIZE_TYPE_HPP
 #define ELIB_MP_TYPES_SIZE_TYPE_HPP
 
-# include <elib/mp/types/integral_c.hpp>
+# include <type_traits>
 # include <cstddef>
 
 namespace elib
@@ -10,7 +10,7 @@ namespace elib
   {
     
     template <std::size_t Val>
-    using size_type = integral_c<std::size_t, Val>;
+    using size_type = std::integral_constant<std::size_t, Val>;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

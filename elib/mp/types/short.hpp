@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_TYPES_SHORT_HPP
 #define ELIB_MP_TYPES_SHORT_HPP
 
-# include <elib/mp/types/integral_c.hpp>
+# include <type_traits>
 
 namespace elib
 {
@@ -9,11 +9,11 @@ namespace elib
   {
     
     template <short Val>
-    using short_ = integral_c<short, Val>;
+    using short_ = std::integral_constant<short, Val>;
     
     
     template <unsigned short Val>
-    using ushort_ = integral_c<unsigned short, Val>;
+    using ushort_ = std::integral_constant<unsigned short, Val>;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

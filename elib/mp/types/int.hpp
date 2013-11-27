@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_TYPES_INT_HPP
 #define ELIB_MP_TYPES_INT_HPP
 
-# include <elib/mp/types/integral_c.hpp>
+# include <type_traits>
 
 namespace elib
 {
@@ -9,15 +9,15 @@ namespace elib
   {
     
     template <int Val>
-    using int_ = integral_c<int, Val>;
+    using int_ = std::integral_constant<int, Val>;
     
     
     template <unsigned int Val>
-    using uint_ = integral_c<unsigned int, Val>;
+    using uint_ = std::integral_constant<unsigned int, Val>;
     
     
     template <unsigned int Val>
-    using unsigned_ = integral_c<unsigned int, Val>;
+    using unsigned_ = std::integral_constant<unsigned int, Val>;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

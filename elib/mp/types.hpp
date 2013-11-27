@@ -1,7 +1,5 @@
 #ifndef ELIB_MP_TYPES_HPP
 #define ELIB_MP_TYPES_HPP
-# // Prefered integral_constant impl
-# include <elib/mp/types/integral_c.hpp>
 # // Integral wrappers
 # include <elib/mp/types/bool.hpp>
 # include <elib/mp/types/char.hpp>

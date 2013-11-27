@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_METAFUNCTION_INTC_CAST_HPP
 #define ELIB_MP_METAFUNCTION_INTC_CAST_HPP
 
-# include <elib/CXX14/type_traits.hpp>
+# include <type_traits>
 
 namespace elib 
 {

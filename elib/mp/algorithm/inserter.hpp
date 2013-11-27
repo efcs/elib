@@ -2,8 +2,8 @@
 #define ELIB_MP_ALGORITHM_INSERTER_HPP
 
 # include <elib/mp/algorithm/algorithm_fwd.hpp>
-# include <elib/mp/sequence/push_front.hpp>
-# include <elib/mp/sequence/push_back.hpp>
+# include <elib/mp/intrinsic/push_front.hpp>
+# include <elib/mp/intrinsic/push_back.hpp>
 # include <elib/mp/metafunction/placeholders.hpp>
 
 namespace elib

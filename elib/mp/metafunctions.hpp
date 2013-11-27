@@ -19,8 +19,6 @@
 # include <elib/mp/metafunction/comparison.hpp>
 # include <elib/mp/metafunction/logical.hpp>
 # include <elib/mp/metafunction/bitwise.hpp>
-# include <elib/mp/metafunction/increment.hpp>
-# include <elib/mp/metafunction/decrement.hpp>
 # // misc
 # include <elib/mp/metafunction/identity.hpp>
 # include <elib/mp/metafunction/inherit.hpp>

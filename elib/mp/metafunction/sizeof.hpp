@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_METAFUNCTION_SIZEOF_HPP
 #define ELIB_MP_METAFUNCTION_SIZEOF_HPP
 
-# include <elib/CXX14/type_traits.hpp>
+# include <type_traits>
 
 namespace elib 
 {

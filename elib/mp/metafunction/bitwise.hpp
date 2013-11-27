@@ -2,7 +2,7 @@
 #define ELIB_MP_METAFUNCTION_BITWISE_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/CXX14/type_traits.hpp>
+# include <type_traits>
 
 namespace elib 
 {

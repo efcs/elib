@@ -4,8 +4,8 @@
 # include <elib/mp/algorithm/algorithm_fwd.hpp>
 # include <elib/mp/metafunction/apply_wrap.hpp>
 # include <elib/mp/metafunction/lambda.hpp>
-# include <elib/mp/sequence/begin_end.hpp>
-# include <elib/mp/sequence/nested_size.hpp>
+# include <elib/mp/intrinsic/begin_end.hpp>
+# include <elib/mp/intrinsic/nested_size.hpp>
 # include <elib/mp/iterator/next_prior.hpp>
 
 namespace elib

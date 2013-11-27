@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_ALGORITHM_FOR_EACH_HPP
-# define ELIB_MP_ALGORITHM_FOR_EACH_HPP
+#define ELIB_MP_ALGORITHM_FOR_EACH_HPP
 
 # include <elib/mp/algorithm/algorithm_fwd.hpp>
 

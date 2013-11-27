@@ -8,8 +8,8 @@
 # include <elib/mp/metafunction/lambda.hpp>
 # include <elib/mp/iterator/deref.hpp>
 # include <elib/mp/iterator/next_prior.hpp>
-# include <elib/mp/sequence/nested_size.hpp>
-# include <elib/mp/sequence/begin_end.hpp>
+# include <elib/mp/intrinsic/nested_size.hpp>
+# include <elib/mp/intrinsic/begin_end.hpp>
 
 namespace elib
 {

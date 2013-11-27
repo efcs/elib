@@ -3,7 +3,7 @@
 
 # include <elib/mp/iterator/iterator_fwd.hpp>
 # include <elib/mp/iterator/next_prior.hpp>
-# include <elib/mp/sequence/sequence_tag.hpp>
+# include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/metafunction/apply_wrap.hpp>
 # include <elib/mp/metafunction/comparison.hpp>
 # include <elib/mp/metafunction/arithmetic.hpp>

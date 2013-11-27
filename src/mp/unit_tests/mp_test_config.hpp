@@ -45,11 +45,11 @@ namespace e
 
 
 
-#define SAME_TYPE(lhs, rhs) \
-  BOOST_CHECK((std::is_same<lhs, rhs>::value))
+#define SAME_TYPE(...) \
+  BOOST_CHECK((std::is_same<__VA_ARGS__>::value))
   
-#define NOT_SAME_TYPE(lhs, rhs) \
-  BOOST_CHECK((!std::is_same<lhs, rhs>::value))
+#define NOT_SAME_TYPE(...) \
+  BOOST_CHECK((!std::is_same<__VA_ARGS__>::value))
   
 #define SAME_VALUE(lhs, rhs) \
   BOOST_CHECK( lhs::value == rhs::value )
@@ -73,53 +73,27 @@ do {                                        \
 
 //-------------------------------- helper types -----------------------------// 
 
+# include <elib/mp/types/bool.hpp>
+# include <elib/mp/types/char.hpp>
+# include <elib/mp/types/int.hpp>
+# include <elib/mp/types/long.hpp>
 
-/* boost does not play nice with std::integral_constant so we only use it
- * if we are not testing against boost. 
- * also, boost::mpl::integral_c poops itself at numeric limits, 
- * so min_x_ and max_x_ must be std::integral_constant
- */
-# if ELIB_MP_BOOST_MPL_TESTS
-#   include <boost/mpl/integral_c.hpp>
-  template <class T, T Val> 
-  using integral_constant = ::boost::mpl::integral_c<T, Val>;
-# else
-  template <class T, T Val>
-  using integral_constant = std::integral_constant<T, Val>;
-# endif
-
-template <class T, T Val>
-using intc_ = integral_constant<T, Val>;
-
-template <bool N>
-using bool_ = integral_constant<bool, N>;
-
-using true_ = bool_<true>;
-using false_ = bool_<false>;
-
-template <char N>
-using char_ = integral_constant<char, N>;
+using e::bool_;
+using e::char_;
+using e::int_;
+using e::uint_;
+using e::long_;
+using e::true_;
+using e::false_;
 
 using max_char_ = std::integral_constant<char, std::numeric_limits<char>::max()>;
 using min_char_ = std::integral_constant<char, std::numeric_limits<char>::min()>;
-  
-
-template <int N>
-using int_ = integral_constant<int, N>;
 
 using max_int_ = std::integral_constant<int, std::numeric_limits<int>::max()>;
 using min_int_ = std::integral_constant<int, std::numeric_limits<int>::min()>;
-  
-
-template <unsigned N>
-using uint_ = integral_constant<unsigned, N>;
 
 using max_uint_ = std::integral_constant<unsigned, std::numeric_limits<unsigned>::max()>;
 using min_uint_ = std::integral_constant<unsigned, std::numeric_limits<unsigned>::min()>;
-  
-
-template <long N>
-using long_ = integral_constant<long, N>;
 
 using max_long_ = std::integral_constant<long, std::numeric_limits<long>::max()>;
 using min_long_ = std::integral_constant<long, std::numeric_limits<long>::min()>;
@@ -142,7 +116,7 @@ struct bad
 
 //-------------------------------- helper intc macros------------------------// 
 
-# define INTC(x) integral_constant<decltype(x), (x)>
+# define INTC(x) std::integral_constant<decltype(x), (x)>
 # define BOOL(x)  bool_<x>
 # define CHAR(x)  char_<x>
 # define INT(x)   int_<x>
@@ -247,7 +221,7 @@ template <class First, class Second>
 struct add_f
 {
   using type = 
-  integral_constant<
+  std::integral_constant<
     decltype(First::value + Second::value)
     , First::value + Second::value
   >; 

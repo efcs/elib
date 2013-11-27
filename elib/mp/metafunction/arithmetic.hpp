@@ -19,6 +19,10 @@ namespace elib
         >
     {};
     
+    
+    template <class T>
+    using negate_t = typename negate<T>::type;
+    
   //-------------------------------- add --------------------------------// 
   
     namespace detail
@@ -57,6 +61,9 @@ namespace elib
     template <class LHS, class RHS, class ...Rest>
     struct add : detail::add_impl<LHS, RHS, Rest...>
     {};
+    
+    template <class LHS, class RHS, class ...Rest>
+    using add_t = typename add<LHS, RHS, Rest...>::type;
     
     
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
@@ -98,6 +105,9 @@ namespace elib
     template <class LHS, class RHS, class ...Rest>
     struct subtract : detail::subtract_impl<LHS, RHS, Rest...>
     {};
+    
+    template <class LHS, class RHS, class ...Rest>
+    using subtract_t = typename subtract<LHS, RHS, Rest...>::type;
     
     
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
@@ -144,6 +154,10 @@ namespace elib
     {};
     
     
+    template <class LHS, class RHS, class ...Rest>
+    using multiply_t = typename multiply<LHS, RHS, Rest...>::type;
+    
+    
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
     template <class ...Args>
     using times = multiply<Args...>;
@@ -185,6 +199,10 @@ namespace elib
     {};
     
     
+    template <class LHS, class RHS, class ...Rest>
+    using divide_t = typename divide<LHS, RHS, Rest...>::type;
+    
+    
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
     template <class ...Args>
     using divides = divide<Args...>;
@@ -199,6 +217,10 @@ namespace elib
           , Arg1::value % Arg2::value
         >
     {};
+    
+    
+    template <class LHS, class RHS>
+    using modulus_t = typename modulus<LHS, RHS>::type;
   
   }                                                         // namespace mp
 }                                                           // namespace elib

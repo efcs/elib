@@ -82,7 +82,7 @@ namespace elib
     {
       using type = typename 
         detail::fold_impl<
-            nested_size<Seq>::value
+            nested_size_t<Seq>::value
           , begin_t<Seq>
           , end_t<Seq>
           , State
@@ -181,7 +181,7 @@ namespace elib
     {
       using type = typename
         detail::reverse_fold_impl<
-            nested_size<Seq>::value
+            nested_size_t<Seq>::value
           , begin_t<Seq>
           , end_t<Seq>
           , State

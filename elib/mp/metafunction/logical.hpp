@@ -22,6 +22,10 @@ namespace elib
     {};
     
     
+    template <class T>
+    using not_t = typename not_<T>::type;
+    
+    
   ////////////////////////////////////////////////////////////////////////////////
   //                          AND                                                   
   ////////////////////////////////////////////////////////////////////////////////
@@ -55,6 +59,10 @@ namespace elib
     {};
     
     
+    template <class P1, class P2, class ...Rest>
+    using and_t = typename and_<P1, P2, Rest...>::type;
+    
+    
   ////////////////////////////////////////////////////////////////////////////////
   //                             OR                                             
   ////////////////////////////////////////////////////////////////////////////////
@@ -86,6 +94,8 @@ namespace elib
     {};
     
     
+    template <class P1, class P2, class ...Rest>
+    using or_t = typename or_<P1, P2, Rest...>::type;
     
   }                                                         //  namespace mp
 }                                                           // namespace elib

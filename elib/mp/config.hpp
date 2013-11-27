@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_CONFIG_HPP
-# define ELIB_MP_CONFIG_HPP
+#define ELIB_MP_CONFIG_HPP
 #
 # include <elib/config.hpp>
 # 
@@ -13,6 +13,9 @@
 # // test against boost in unit tests
 # // TODO find a better place to put this
 # define ELIB_MP_BOOST_MPL_TESTS 1
+# 
+# // Allow use of integral constants as sequences
+# define ELIB_MP_SEQUENTIAL_INTEGRAL_CONSTANT 1
 # 
 # //-------------------------------- limits config ------------------------// 
 # 

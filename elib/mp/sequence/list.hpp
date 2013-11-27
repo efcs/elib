@@ -34,7 +34,7 @@ namespace elib
       };
       
     //-------------------------------- list_end -----------------------------// 
-      class list_end
+      struct list_end
       {
         using tag = list_tag;
         using type = list_end;
@@ -57,7 +57,8 @@ namespace elib
     {
       using type = list;
       
-      static_assert(sizeof...(Args) == 0, "Args must be empty");
+      static_assert(sizeof...(Args) == 0,
+        "Overload resolution check");
     };
     
     
@@ -81,6 +82,9 @@ namespace elib
     {
       using value_type = T;
       using type = list_c;
+      
+      static_assert(sizeof...(Values) == 0, 
+          "Overload resolution check");
     };
     
     template <class T, T First, T ...Rest>
@@ -210,11 +214,11 @@ namespace elib
       template <>
       struct pop_front_impl<list_tag>
       {
-        template <class Seq>
+        template <class List>
         struct apply
         {
-          using type = typename Seq::next;
-          static_assert(empty_t<Seq>::value == false,
+          using type = typename List::next;
+          static_assert(empty_t<List>::value == false,
                         "cannot pop empty list");
         };
       };

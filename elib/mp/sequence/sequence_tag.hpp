@@ -1,9 +1,14 @@
 #ifndef ELIB_MP_SEQUENCE_SEQUENCE_TAG_HPP
 #define ELIB_MP_SEQUENCE_SEQUENCE_TAG_HPP
 
+# include <elib/mp/config.hpp>
 # include <elib/mp/sequence/sequence_fwd.hpp>
 # include <elib/mp/detail/has_tag.hpp>
 # include <elib/mp/detail/has_begin.hpp>
+
+# if ELIB_MP_SEQUENTIAL_INTEGRAL_CONSTANT
+#   include <elib/CXX14/type_traits.hpp>
+# endif
 
 namespace elib 
 {
@@ -53,9 +58,23 @@ namespace elib
         >
     {};
     
+# if ELIB_MP_SEQUENTIAL_INTEGRAL_CONSTANT
+
+    namespace detail { struct integral_constant_tag {}; }
+
+    template <class T, T Val>
+    struct sequence_tag< std::integral_constant<T, Val> >
+    {
+      using type = detail::integral_constant_tag;
+    };
+
+# endif
+    
     template <class T>
     using sequence_tag_t = typename sequence_tag<T>::type;
     
   }                                                         // namespace mp
 }                                                           // namespace elib
+
+
 #endif /* ELIB_MP_SEQUENCE_SEQUENCE_TAG_HPP */

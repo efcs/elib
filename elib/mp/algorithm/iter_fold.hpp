@@ -2,10 +2,11 @@
 #define ELIB_MP_ALGORITHM_ITER_FOLD_HPP
 
 # include <elib/mp/algorithm/algorithm_fwd.hpp>
-# include <elib/mp/metafunction/apply.hpp>
+# include <elib/mp/metafunction/apply_wrap.hpp>
 # include <elib/mp/metafunction/lambda.hpp>
 # include <elib/mp/sequence/begin_end.hpp>
 # include <elib/mp/sequence/nested_size.hpp>
+# include <elib/mp/iterator/next_prior.hpp>
 
 namespace elib
 {
@@ -26,7 +27,7 @@ namespace elib
             N-1
           , next_t<First>
           , Last
-          , apply_t<ForwardOp, State, ForwardOp>
+          , apply_wrap_t<ForwardOp, State, ForwardOp>
           , ForwardOp
         >;
         
@@ -52,7 +53,7 @@ namespace elib
             -1
           , next_t<First>
           , Last
-          , apply_t<ForwardOp, State, First>
+          , apply_wrap_t<ForwardOp, State, First>
           , ForwardOp
         >;
         
@@ -101,14 +102,15 @@ namespace elib
               N - 1
             , next_t<First>
             , Last
-            , apply_t<ForwardOp, State, First>
+            , apply_wrap_t<ForwardOp, State, First>
             , BackwardOp
             , ForwardOp
           >;
         
         using iterator = typename step_::iterator;
         
-        using state = apply_t<
+        using state = 
+          apply_wrap_t<
               BackwardOp
             , typename step_::state
             , First
@@ -148,13 +150,18 @@ namespace elib
               -1
             , next_t<First>
             , Last
-            , apply_t<ForwardOp, State, First>
+            , apply_wrap_t<ForwardOp, State, First>
             , BackwardOp
             , ForwardOp
           >;
         
         using iterator = typename rec_fold_::iterator;
-        using state = apply_t<BackwardOp, typename rec_fold_::state, First>;
+        using state = 
+          apply_wrap_t<
+              BackwardOp
+            , typename rec_fold_::state
+            , First
+          >;
       };                                       // struct reverse_iter_fold_impl
       
       
@@ -173,8 +180,9 @@ namespace elib
     
   //-------------------------------- reverse_iter_fold ----------------------// 
   
-    //TODO
-    template <class Seq, class State, class BackwardOp, class ForwardOp=_1>
+    template <class Seq, class State
+      , class BackwardOp, class ForwardOp = _1
+    >
     struct reverse_iter_fold
     {
       using type = typename

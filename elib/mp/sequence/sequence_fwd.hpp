@@ -414,6 +414,9 @@ namespace elib
     {
       template <class Tag>
       struct push_back_impl;
+      
+      template <class Tag>
+      struct has_push_back_impl;
     }                                                       // namespace detail
   
     template <class Seq, class T>
@@ -422,8 +425,18 @@ namespace elib
           ::template apply<Seq, T>
     {};
     
+    template <class Seq>
+    struct has_push_back 
+      : detail::has_push_back_impl<sequence_tag_t<Seq>>
+          ::template apply<Seq>
+    {};
+        
+    
     template <class Seq, class T>
     using push_back_t = typename push_back<Seq, T>::type;
+    
+    template <class Seq>
+    using has_push_back_t = typename has_push_back<Seq>::type;
   
   //-------------------------------- push_front -----------------------------//
     
@@ -431,6 +444,9 @@ namespace elib
     {
       template <class Tag>
       struct push_front_impl;
+      
+      template <class Tag>
+      struct has_push_front_impl;
     }                                                       // namespace detail
   
     template <class Seq, class T>
@@ -439,8 +455,17 @@ namespace elib
           ::template apply<Seq, T>
     {};
     
+    template <class Seq>
+    struct has_push_front
+      : detail::has_push_front_impl<sequence_tag_t<Seq>>
+          ::template apply<Seq>
+    {};
+    
     template <class Seq, class T>
     using push_front_t = typename push_front<Seq, T>::type;
+    
+    template <class Seq, class T>
+    using has_push_front_t = typename has_push_front<Seq>::type;
   
   //-------------------------------- size --------------------------------// 
     

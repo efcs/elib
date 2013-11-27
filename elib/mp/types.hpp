@@ -1,74 +1,18 @@
 #ifndef ELIB_MP_TYPES_HPP
-# define ELIB_MP_TYPES_HPP
-
-# include <elib/mp/config.hpp>
-
-# include <elib/CXX14/type_traits.hpp>
-# include <cstddef>
-
-namespace elib 
-{
-  namespace mp
-  {
-    
-    struct na {};
-    
-    struct empty_base {};
-    
-    struct void_ { using type = void; };
-    
-    template <class T, T Val>
-    using intc_ = std::integral_constant<T, Val>;
-    
-    template <bool Val>
-    using bool_ = std::integral_constant<bool, Val>;
-    
-    using true_ = bool_<true>;
-    using false_ = bool_<false>;
-    
-    
-    template <char Val>
-    using char_ = std::integral_constant<char, Val>;
-    
-    template <signed char Val>
-    using schar_ = std::integral_constant<signed char, Val>;
-    
-    template <unsigned char Val>
-    using uchar_ = std::integral_constant<unsigned char, Val>;
-    
-    template <short Val>
-    using short_ = std::integral_constant<short, Val>;
-    
-    template <unsigned short Val>
-    using ushort_ = std::integral_constant<unsigned short, Val>;
-    
-    
-    template <int Val>
-    using int_ = std::integral_constant<int, Val>;
-    
-    template <unsigned int Val>
-    using uint_ = std::integral_constant<unsigned int, Val>;
-    
-    // I know that this and the above type are the same, 
-    // but it is done to provided common names
-    template <unsigned Val>
-    using unsigned_ = std::integral_constant<unsigned, Val>;
-    
-    template <long Val>
-    using long_ = std::integral_constant<long, Val>;
-    
-    template <unsigned long Val>
-    using ulong_ = std::integral_constant<unsigned long, Val>;
-    
-    template <long long Val>
-    using llong_ = std::integral_constant<long long, Val>;
-    
-    template <unsigned long long Val>
-    using ullong_ = std::integral_constant<unsigned long long, Val>;
-    
-    template <std::size_t Val>
-    using size_t_ = std::integral_constant<std::size_t, Val>;
-    
-  }                                                         // namespace mp
-}                                                           // namespace elib
+#define ELIB_MP_TYPES_HPP
+# // Prefered integral_constant impl
+# include <elib/mp/types/integral_c.hpp>
+# // Integral wrappers
+# include <elib/mp/types/bool.hpp>
+# include <elib/mp/types/char.hpp>
+# include <elib/mp/types/short.hpp>
+# include <elib/mp/types/int.hpp>
+# include <elib/mp/types/long.hpp>
+# include <elib/mp/types/size_type.hpp>
+# // Misc
+# include <elib/mp/types/pair.hpp>
+# include <elib/mp/types/empty_base.hpp>
+# include <elib/mp/types/na.hpp>
+# include <elib/mp/types/void.hpp>
+# 
 #endif /* ELIB_MP_TYPES_HPP */

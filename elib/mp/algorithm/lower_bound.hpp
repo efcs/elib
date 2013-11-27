@@ -2,6 +2,8 @@
 #define ELIB_MP_ALGORITHM_LOWER_BOUND_HPP
 
 # include <elib/mp/algorithm/algorithm_fwd.hpp>
+# include <elib/mp/metafunction/comparison.hpp>
+# include <elib/mp/metafunction/placeholders.hpp>
 
 namespace elib
 {

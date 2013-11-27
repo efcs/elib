@@ -7,7 +7,9 @@
 # include <elib/mp/metafunction/apply_wrap.hpp>
 # include <elib/mp/metafunction/lambda.hpp>
 # include <elib/mp/iterator/deref.hpp>
+# include <elib/mp/iterator/next_prior.hpp>
 # include <elib/mp/sequence/nested_size.hpp>
+# include <elib/mp/sequence/begin_end.hpp>
 
 namespace elib
 {
@@ -27,7 +29,7 @@ namespace elib
             N - 1
           , next_t<First>
           , Last
-          , apply_t<ForwardOp, State, deref_t<First>>
+          , apply_wrap_t<ForwardOp, State, deref_t<First>>
           , ForwardOp
         >;
         
@@ -106,14 +108,14 @@ namespace elib
               N - 1
             , next_t<First>
             , Last
-            , apply_t<ForwardOp, State, deref_t<First>>
+            , apply_wrap_t<ForwardOp, State, deref_t<First>>
             , BackwardOp
             , ForwardOp
           >;
         
         using iterator = typename step_::iterator;
         using state =
-          apply_t<
+          apply_wrap_t<
               BackwardOp
             , typename step_::state
             , deref_t<First>
@@ -144,7 +146,7 @@ namespace elib
               -1
             , next_t<First>
             , Last
-            , apply_t<ForwardOp, State, deref_t<First>>
+            , apply_wrap_t<ForwardOp, State, deref_t<First>>
             , BackwardOp
             , ForwardOp
           >;
@@ -152,7 +154,7 @@ namespace elib
         using iterator = typename step_::iterator;
         
         using state = 
-          apply_t<
+          apply_wrap_t<
               BackwardOp
             , typename step_::state
             , deref_t<First>

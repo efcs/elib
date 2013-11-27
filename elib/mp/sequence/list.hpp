@@ -32,7 +32,7 @@ namespace elib
       {
         using tag = list_tag;
         using type = list_end;
-        using size = size_t_<0>;
+        using size = size_type<0>;
       };
       
       template <class ListNode>
@@ -60,7 +60,7 @@ namespace elib
       : detail::list_item<
           First
           , list<Rest...>
-          , size_t_<sizeof...(Rest) + 1>
+          , size_type<sizeof...(Rest) + 1>
       >
     {
       using type = list;
@@ -82,7 +82,7 @@ namespace elib
       : detail::list_item<
           std::integral_constant<T, First>
           , list_c<T, Rest...>
-          , size_t_<sizeof...(Rest) + 1>
+          , size_type<sizeof...(Rest) + 1>
         >
     {
       using value_type = T;
@@ -238,7 +238,7 @@ namespace elib
         template <class Seq, class T>
         struct apply
         {
-          using type = list_item<T, Seq, size_t_<Seq::size::value + 1> >;
+          using type = list_item<T, Seq, size_type<Seq::size::value + 1> >;
         };
       };
     

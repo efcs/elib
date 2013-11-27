@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_METAFUNCTION_COMPARISON_HPP
 #define ELIB_MP_METAFUNCTION_COMPARISON_HPP
 
-# include <elib/mp/types.hpp>
+# include <elib/mp/types/bool.hpp>
 
 namespace elib 
 {

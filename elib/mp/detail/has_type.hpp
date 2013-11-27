@@ -1,17 +1,16 @@
-#ifndef ELIB_MP_HAS_TYPE_HPP
-# define ELIB_MP_HAS_TYPE_HPP
+#ifndef ELIB_MP_DETAIL_HAS_TYPE_HPP
+#define ELIB_MP_DETAIL_HAS_TYPE_HPP
 
-# include <elib/mp/config.hpp>
-# include <elib/mp/types.hpp>
+
+# include <elib/mp/types/bool.hpp>
 
 namespace elib 
 {
   namespace mp
   {
-    
     namespace detail
     {
-      
+    //-------------------------------- has_type_impl ------------------------// 
       
       template <class T>
       struct has_type_impl
@@ -25,19 +24,17 @@ namespace elib
         static false_ test(...);
         
       public:
-        
-        typedef decltype(test<T>(0)) type;
-        
+        using type = decltype(test<T>(0));
       };                                                // struct has_type_impl
       
+    
+    //-------------------------------- has_type -----------------------------// 
+      
+      template <class T>
+      struct has_type : has_type_impl<T>::type
+      {};
+      
     }                                                       // namespace detail
-    
-    
-    template <class T>
-    struct has_type : detail::has_type_impl<T>::type
-    {};
-    
-    
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_HAS_TYPE_HPP */
+#endif /* ELIB_MP_DETAIL_HAS_TYPE_HPP */

@@ -19,7 +19,7 @@ namespace elib
       {
         template <class Seq, std::size_t N>
         struct apply 
-          : detail::at_impl<Tag> ::template apply< Seq, size_t_<N> >
+          : detail::at_impl<Tag> ::template apply< Seq, size_type<N> >
         {};
       };
       

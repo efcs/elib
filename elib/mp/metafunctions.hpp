@@ -21,6 +21,8 @@
 # include <elib/mp/metafunction/bitwise.hpp>
 # // misc
 # include <elib/mp/metafunction/identity.hpp>
+# include <elib/mp/metafunction/inherit.hpp>
+# include <elib/mp/metafunction/inherit_linearly.hpp>
 # include <elib/mp/metafunction/always.hpp>
 # include <elib/mp/metafunction/min_max.hpp>
 # include <elib/mp/metafunction/sizeof.hpp>

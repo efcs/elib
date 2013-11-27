@@ -12,8 +12,16 @@ namespace elib
   {
     
     template <class T>
-    struct always : bind< identity<placeholders::_1>, T > 
-    {};
+    struct always
+    {
+      // Not sure why apply requires at least 1 param
+      // but it does
+      template <class U, class ...Args>
+      struct apply
+      {
+        using type = T;
+      };
+    };
     
   }                                                         // namespace mp
 }                                                           // namespace elib

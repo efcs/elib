@@ -32,7 +32,7 @@ namespace elib
       struct size_impl<empty_sequence_tag>
       {
         template <class Seq>
-        struct apply : size_t_<0>
+        struct apply : size_type<0>
         {};
       };
     

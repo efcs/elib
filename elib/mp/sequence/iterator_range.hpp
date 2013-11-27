@@ -1,6 +1,9 @@
 #ifndef ELIB_MP_SEQUENCE_ITERATOR_RANGE_HPP
 #define ELIB_MP_SEQUENCE_ITERATOR_RANGE_HPP
 
+# include <elib/mp/sequence/sequence_fwd.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
+
 namespace elib
 {
   namespace mp

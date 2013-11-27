@@ -2,14 +2,28 @@
 #define ELIB_MP_SEQUENCE_NESTED_SIZE_HPP
 
 # include <elib/mp/sequence/sequence_fwd.hpp>
-# include <elib/mp/types.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/metafunction/if.hpp>
+# include <elib/mp/types/long.hpp>
 # include <elib/mp/detail/has_size.hpp>
 
 namespace elib 
 {
   namespace mp
   {
+  //-------------------------------- nested_size ----------------------------// 
+    
+    template <class T>
+    struct nested_size 
+      : detail::nested_size_impl<sequence_tag_t<T>>
+          ::template apply<T>
+    {};
+    
+     
+    template <class T>
+    using nested_size_t = typename nested_size<T>::type;
+    
+    
     namespace detail
     {
       

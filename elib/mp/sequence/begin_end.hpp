@@ -2,6 +2,7 @@
 #define ELIB_MP_SEQUENCE_BEGIN_END_HPP
 
 # include <elib/mp/sequence/sequence_fwd.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/types.hpp>
 # include <elib/mp/metafunction/if.hpp>
 # include <elib/mp/detail/has_begin.hpp>
@@ -10,6 +11,30 @@ namespace elib
 {
   namespace mp
   {
+  //-------------------------------- begin ----------------------------------//
+  
+    template <class T>
+    struct begin
+      : detail::begin_impl<sequence_tag_t<T>> 
+          ::template apply<T>
+    {};
+    
+    template <class T>
+    using begin_t = typename begin<T>::type;
+    
+  //-------------------------------- end ------------------------------------//   
+    
+    template <class T>
+    struct end
+      : detail::end_impl<sequence_tag_t<T>> 
+          ::template apply<T>
+    {};
+    
+      
+    template <class T>
+    using end_t = typename end<T>::type;
+    
+    
     namespace detail
     {
       
@@ -65,17 +90,6 @@ namespace elib
         };
       };
       
-    // partial specialization ( na )
-      
-      template <>
-      struct begin_impl< na >
-      {
-        template <class Seq>
-        struct apply
-        {
-          using type = void_;
-        };
-      };
       
     //-------------------------------- end_impl -------------------------------// 
     
@@ -113,17 +127,6 @@ namespace elib
         };
       };
       
-    // partial specialization ( na )
-      
-      template <>
-      struct end_impl< na >
-      {
-        template <class Seq>
-        struct apply
-        {
-          using type = void_;
-        };
-      };
       
     }                                                       // namespace detail
   }                                                         // namespace mp

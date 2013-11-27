@@ -32,6 +32,16 @@ namespace elib
     struct is_not_na< na > : false_
     {};
     
+  //-------------------------------- if_na ----------------------------------// 
+  
+    template <class T, class U>
+    struct if_na
+    { using type = T; };
+    
+    template <class U>
+    struct if_na<na, U>
+    { using type = U; };
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_TYPES_NA_HPP */

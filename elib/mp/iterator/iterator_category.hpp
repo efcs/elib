@@ -7,12 +7,15 @@ namespace elib
 {
   namespace mp
   {
+  //-------------------------------- iterator_category ----------------------// 
     
     template <class Iter>
     struct iterator_category
-    {
-      using type = typename Iter::category;
-    };
+    { using type = typename Iter::category; };
+    
+    
+    template <class Iter>
+    using iterator_category_t = typename iterator_category<Iter>::type;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

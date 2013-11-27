@@ -3,6 +3,7 @@
 
 # include <elib/mp/iterator/iterator_fwd.hpp>
 # include <elib/mp/iterator/next_prior.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/metafunction/apply_wrap.hpp>
 # include <elib/mp/metafunction/comparison.hpp>
 # include <elib/mp/metafunction/arithmetic.hpp>
@@ -13,6 +14,19 @@ namespace elib
 {
   namespace mp
   {
+  //-------------------------------- advance --------------------------------//
+  
+    template <class Iter, class N>
+    struct advance 
+      : detail::advance_impl< sequence_tag_t<Iter> > 
+          ::template apply<Iter, N>
+    {};
+          
+          
+    template <class Iter, class N>
+    using advance_t = typename advance<Iter, N>::type;
+    
+    
     namespace detail
     {
       

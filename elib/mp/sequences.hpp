@@ -2,7 +2,6 @@
 # define ELIB_MP_SEQUENCES_HPP
 # // intrinsic metafunctions
 # include <elib/mp/sequence/at.hpp>
-# include <elib/mp/sequence/at_c.hpp>
 # include <elib/mp/sequence/back.hpp>
 # include <elib/mp/sequence/begin_end.hpp>
 # include <elib/mp/sequence/clear.hpp>

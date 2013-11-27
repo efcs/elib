@@ -1,6 +1,8 @@
 #ifndef ELIB_MP_SEQUENCE_JOINT_VIEW_HPP
 #define ELIB_MP_SEQUENCE_JOINT_VIEW_HPP
 
+# include <elib/mp/sequence/sequence_fwd.hpp>
+
 namespace elib
 {
   namespace mp

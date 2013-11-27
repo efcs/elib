@@ -2,6 +2,7 @@
 #define ELIB_MP_SEQUENCE_PUSH_BACK_HPP
 
 # include <elib/mp/sequence/sequence_fwd.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/detail/has_type.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
@@ -9,6 +10,30 @@ namespace elib
 {
   namespace mp
   {
+  //-------------------------------- push_back ------------------------------// 
+  
+    template <class Seq, class T>
+    struct push_back
+      : detail::push_back_impl<sequence_tag_t<Seq>> 
+          ::template apply<Seq, T>
+    {};
+    
+    template <class Seq, class T>
+    using push_back_t = typename push_back<Seq, T>::type;
+  
+  //-------------------------------- has_push_back --------------------------// 
+    
+    template <class Seq>
+    struct has_push_back 
+      : detail::has_push_back_impl<sequence_tag_t<Seq>>
+          ::template apply<Seq>
+    {};
+    
+      
+    template <class Seq>
+    using has_push_back_t = typename has_push_back<Seq>::type;
+  
+    
     namespace detail
     {
       
@@ -30,6 +55,7 @@ namespace elib
     //-------------------------------- push_back_impl -----------------------// 
       
       /* Implementation checking shamelessly stolen from boost::mpl */
+      // No default impl
       template <class Tag>
       struct push_back_impl
       {

@@ -1,9 +1,9 @@
 #ifndef ELIB_MP_SEQUENCE_LIST_HPP
 #define ELIB_MP_SEQUENCE_LIST_HPP
 
-# include <elib/mp/config.hpp>
-# include <elib/mp/types.hpp>
 # include <elib/mp/sequence/sequence_fwd.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
+# include <elib/mp/types/size_type.hpp>
 # include <elib/mp/iterator.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
@@ -16,7 +16,12 @@ namespace elib
     
     namespace detail
     {
-      //-------------------------------- list_item --------------------------// 
+    //-------------------------------- list tags ----------------------------// 
+      
+      struct list_tag {};
+      struct list_iter_tag {};
+      
+    //-------------------------------- list_item ----------------------------// 
       template <class Item, class Next, class Size>
       struct list_item
       {
@@ -27,7 +32,7 @@ namespace elib
         using size = Size;
       };
       
-      //-------------------------------- list_end ---------------------------// 
+    //-------------------------------- list_end -----------------------------// 
       class list_end
       {
         using tag = list_tag;

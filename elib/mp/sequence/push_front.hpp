@@ -2,6 +2,7 @@
 # define ELIB_MP_SEQUENCE_PUSH_FRONT_HPP
 
 # include <elib/mp/sequence/sequence_fwd.hpp>
+# include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/detail/has_type.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
@@ -9,6 +10,31 @@ namespace elib
 {
   namespace mp
   {
+  //-------------------------------- push_front -----------------------------//
+  
+    template <class Seq, class T>
+    struct push_front
+      : detail::push_front_impl<sequence_tag_t<Seq>> 
+          ::template apply<Seq, T>
+    {};
+    
+     
+    template <class Seq, class T>
+    using push_front_t = typename push_front<Seq, T>::type;
+  
+  //-------------------------------- has_push_front -------------------------// 
+    
+    template <class Seq>
+    struct has_push_front
+      : detail::has_push_front_impl<sequence_tag_t<Seq>>
+          ::template apply<Seq>
+    {};
+    
+    
+    template <class Seq, class T>
+    using has_push_front_t = typename has_push_front<Seq>::type;
+  
+    
     namespace detail
     {
     //-------------------------------- push_front_dummy ---------------------// 
@@ -28,6 +54,8 @@ namespace elib
       
     //-------------------------------- push_front_impl ----------------------// 
     
+      /* Method for implementation checking stolen from boost::mpl */
+      // No default Impl
       template <class Tag>
       struct push_front_impl
       {

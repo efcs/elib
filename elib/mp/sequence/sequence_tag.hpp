@@ -9,9 +9,11 @@ namespace elib
 {
   namespace mp
   {
-    
     namespace detail
     {
+    //-------------------------------- sequence tags ------------------------// 
+      struct non_seq_tag {};
+      struct nested_begin_tag {};
       
     //-------------------------------- sequence_tag_impl --------------------// 
       
@@ -50,6 +52,9 @@ namespace elib
         , T
         >
     {};
+    
+    template <class T>
+    using sequence_tag_t = typename sequence_tag<T>::type;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

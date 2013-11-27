@@ -7,12 +7,15 @@ namespace elib
 {
   namespace mp
   {
+  //-------------------------------- deref ----------------------------------// 
     
     template <class Iter>
     struct deref
-    {
-      using type = typename Iter::type;
-    };
+    { using type = typename Iter::type; };
+    
+    
+    template <class Iter>
+    using deref_t = typename deref<Iter>::type;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

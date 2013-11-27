@@ -1,7 +1,6 @@
 #ifndef ELIB_MP_SEQUENCE_VECTOR_HPP
 #define ELIB_MP_SEQUENCE_VECTOR_HPP
 
-# include <elib/mp/config.hpp>
 # include <elib/mp/sequence/sequence_fwd.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
@@ -9,6 +8,11 @@ namespace elib
 {
   namespace mp
   {
+    namespace detail
+    {
+      struct vector_tag {};
+      struct vector_iter_tag {};
+    }                                                       // namespace detail
     
     template <class ...Args>
     struct vector

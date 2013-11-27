@@ -33,6 +33,20 @@ namespace elib
     struct is_not_void< void_ > : false_
     {};
     
+  //-------------------------------- if_void --------------------------------// 
+    
+    template <class T, class U>
+    struct if_void 
+    {
+      using type = T;
+    };
+    
+    template <class U>
+    struct if_void<void_, U>
+    {
+      using type = U;
+    };
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_TYPES_VOID_HPP */

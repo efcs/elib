@@ -15,9 +15,10 @@ namespace elib
   
     template <class Seq, class N>
     struct at 
-      : detail::at_impl<sequence_tag_t<Seq>>
+      : detail::at_impl< sequence_tag_t<Seq> >
           ::template apply<Seq, N>
     {};
+    
     
     template <class Seq, class N>
     using at_t = typename at<Seq, N>::type;

@@ -4,6 +4,7 @@
 # include <elib/mp/sequence/sequence_fwd.hpp>
 # include <elib/mp/sequence/sequence_tag.hpp>
 # include <elib/mp/types/size_type.hpp>
+# include <elib/mp/types/bool.hpp>
 # include <elib/mp/iterator.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
@@ -98,28 +99,6 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////
     //                            Iterator Metafunctions                                              
     ////////////////////////////////////////////////////////////////////////////
-    namespace detail
-    {
-      
-    //-------------------------------- advance ------------------------------//
-      //TODO
-      template <>
-      struct advance_impl<detail::list_iter_tag>
-      {
-        template <class Iter, class N>
-        struct apply;
-      };
-      
-    //-------------------------------- distance -----------------------------//
-      //TODO
-      template <>
-      struct distance_impl<detail::list_iter_tag>
-      {
-        template <class First, class Last>
-        struct apply;
-      };
-      
-    }                                                       // namespace detail
     
   //-------------------------------- next --------------------------------// 
     template <class Node>
@@ -148,9 +127,7 @@ namespace elib
       {
         template <class Seq>
         struct apply
-        {
-          using type = list_iter<typename Seq::type>;
-        };
+        { using type = list_iter<typename Seq::type>; };
       };
     
     //-------------------------------- end ----------------------------------//
@@ -160,9 +137,7 @@ namespace elib
       {
         template <class Seq>
         struct apply
-        {
-          using type = list_iter<list_end>;
-        };
+        { using type = list_iter<list_end>; };
       };
       
     //-------------------------------- size ---------------------------------//
@@ -170,8 +145,18 @@ namespace elib
       template <>
       struct size_impl<list_tag>
       {
-        template <class Seq>
-        struct apply : Seq::size
+        template <class List>
+        struct apply : List::size
+        {};
+      };
+      
+    //-------------------------------- nested_size --------------------------// 
+      
+      template <>
+      struct nested_size_impl<list_tag>
+      {
+        template <class List>
+        struct apply : List::size
         {};
       };
     
@@ -191,36 +176,7 @@ namespace elib
       {
         template <class Seq>
         struct apply
-        {
-          using type = typename Seq::item;
-        };
-      };
-    
-    //-------------------------------- insert -------------------------------//
-      //TODO
-      template <>
-      struct insert_impl<list_tag>
-      {
-        template <class Seq, class Pos, class T>
-        struct apply;
-      };
-      
-    //-------------------------------- insert_range -------------------------//
-      //TODO
-      template <>
-      struct insert_range_impl<list_tag>
-      {
-        template <class Seq, class Pos, class Range>
-        struct apply;
-      };
-    
-    //-------------------------------- erase --------------------------------//
-      //TODO
-      template <>
-      struct erase_impl<list_tag>
-      {
-        template <class Seq, class First, class Last>
-        struct apply;
+        { using type = typename Seq::item; };
       };
     
     //-------------------------------- clear --------------------------------//
@@ -230,9 +186,7 @@ namespace elib
       {
         template <class Seq>
         struct apply
-        {
-          using type = list_end;
-        };
+        { using type = list_end; };
       };
     
     //-------------------------------- push_front ---------------------------//
@@ -243,7 +197,11 @@ namespace elib
         template <class Seq, class T>
         struct apply
         {
-          using type = list_item<T, Seq, size_type<Seq::size::value + 1> >;
+          using type = 
+            list_item<
+                T, Seq
+              , size_type<Seq::size::value + 1> 
+            >;
         };
       };
     
@@ -256,10 +214,21 @@ namespace elib
         struct apply
         {
           using type = typename Seq::next;
-          
-          static_assert(empty_t<Seq>::value == false, "cannot pop empty list");
+          static_assert(empty_t<Seq>::value == false,
+                        "cannot pop empty list");
         };
       };
+      
+  //-------------------------------- push_back ------------------------------// 
+    
+    template <>
+    struct has_push_back_impl<list_tag>
+    {
+      template <class List>
+      struct apply : false_
+      {};
+    };
+    
       
     }                                                       // namespace detail
   }                                                         // namespace mp

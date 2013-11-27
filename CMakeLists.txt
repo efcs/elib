@@ -162,7 +162,6 @@ macro(include_library_if Pred CFile)
 endmacro(include_library_if)
 
 
-
 add_subdirectory(src)
 #add_subdirectory(test_main)
 

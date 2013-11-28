@@ -2,6 +2,7 @@
 #define ELIB_ASSERT_HPP
 
 # include <elib/config.hpp>
+# include <elib/pp/overload.hpp>
 
 # if !defined(NDEBUG) || defined(ELIB_ASSERT_ON)
 

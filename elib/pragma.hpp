@@ -2,6 +2,7 @@
 #define ELIB_PRAGMA_HPP
 # 
 # include <elib/config.hpp>
+# include <elib/pp/str.hpp> 
 # 
 # define ELIB_PRAGMA_DIAG_PUSH()
 # define ELIB_PRAGMA_DIAG_POP()

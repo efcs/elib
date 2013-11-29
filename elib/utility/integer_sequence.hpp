@@ -91,5 +91,7 @@ namespace elib
   
   template<class... T>
   using to_index_seq = make_index_seq<sizeof...(T)>;
+
+  
 }                                                           // namespace elib
 #endif /* ELIB_UTILITY_INTEGER_SEQUENCE_HPP */

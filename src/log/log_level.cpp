@@ -1,5 +1,6 @@
-#include <elib/log/log_level.hpp>
-#include <elib/pragma.hpp>
+#include "elib/config.hpp"
+#include "elib/log/log_level.hpp"
+#include "elib/pragma.hpp"
 
 namespace elib
 {

@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "mp_test_config.hpp"
-#include <elib/mp/metafunctions.hpp>
+#include "elib/mp/metafunctions.hpp"
 
 #if ELIB_MP_BOOST_MLP_TESTS
 # // type selection

@@ -5,10 +5,10 @@
 # include <type_traits>
 # include <limits>
 
-# include <elib/mp/config.hpp>
+# include "elib/mp/config.hpp"
 
 // include args so we get elib::mp and mp::placeholders
-# include <elib/mp/metafunction/arg.hpp>
+# include "elib/mp/metafunction/arg.hpp"
 
 namespace e
 {

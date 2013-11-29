@@ -1,7 +1,7 @@
 #define BOOST_DYN_TEST_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/utility/lexical_cast.hpp>
+#include "elib/utility/lexical_cast.hpp"
 
 #include <string>
 #include <cstring>

@@ -375,18 +375,19 @@ namespace elib
       constexpr detail::enable_if_logical_t<LHS, RHS, bool>
       operator&&(LHS lhs, RHS rhs) noexcept
       {
-        return static_cast<bool>(
-          detail::opt_cast(lhs) && detail::opt_cast(rhs)
-        );
+        return 
+          (!detail::opt_cast(lhs)) 
+            ? false 
+            : detail::opt_cast(rhs);
       }
       
       template <class LHS, class RHS>
       constexpr detail::enable_if_logical_t<LHS, RHS, bool>
       operator||(LHS lhs, RHS rhs) noexcept
       {
-        return static_cast<bool>(
-          detail::opt_cast(lhs) || detail::opt_cast(rhs)
-        );
+        return detail::opt_cast(lhs) 
+          ? true 
+          : detail::opt_cast(rhs);
       }
       
       ELIB_PRAGMA_DIAG_POP()

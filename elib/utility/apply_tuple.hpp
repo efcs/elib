@@ -13,18 +13,26 @@ namespace elib
   namespace detail
   {
       
-    template <class F, class Tuple, std::size_t... I>
+    template <
+        class F
+      , class Tuple
+      , std::size_t... I
+    >
     auto apply_tuple_impl(F&& f, Tuple&& t, index_seq<I...>)
-    -> decltype(std::forward<F>(f)(std::get<I>(std::forward<Tuple>(t))...))
+    -> decltype(std::forward<F>(f)( std::get<I>(std::forward<Tuple>(t))... ))
     {
-      return std::forward<F>(f)( std::get<I>( std::forward<Tuple>(t) )... );
+      return std::forward<F>(f)( 
+        std::get<I>( std::forward<Tuple>(t) )... 
+      );
     }
     
   }                                                         // namespace detail
   
 //-------------------------- apply_unpacked_tuple -------------------------// 
   
-  template <class F, class Tuple
+  template <
+        class F
+      , class Tuple
       , class IndexSeq = make_index_seq<std::tuple_size<Tuple>::value>
   >
   auto apply_unpacked_tuple(F&& f, Tuple&& t, IndexSeq())

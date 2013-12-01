@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "elib/mp/detail/template_arity.hpp"
-#include "elib/mp/types.hpp"
+#include "elib/mp/integral_constant.hpp"
 
 #include <type_traits>
 

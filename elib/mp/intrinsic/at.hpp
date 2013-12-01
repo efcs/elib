@@ -5,7 +5,7 @@
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/begin_end.hpp>
 # include <elib/mp/advance.hpp>
-# include <elib/mp/long.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

@@ -6,9 +6,9 @@
 # include <elib/mp/iterator_fwd.hpp>
 # include <elib/mp/iterator_tags.hpp>
 # include <elib/mp/next_prior.hpp>
-# include <elib/mp/types.hpp>
-
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/type_wrapper.hpp>
+# include <elib/mp/void.hpp>
 
 namespace elib 
 {
@@ -98,7 +98,7 @@ namespace elib
       {
         using index_ = long_<Index>;
         using result_ = decltype( Vect::get_(index_()) );
-        using type = type_t<result_>;
+        using type = unwrap_t<result_>;
       };
       
       template <class Vect, long Index>
@@ -197,7 +197,7 @@ namespace elib
     //-------------------------------- Vector_C --------------------------------// 
     
     template <class T, T ...Values>
-    using vector_c = vector< std::integral_constant<T, Values>... >;
+    using vector_c = vector< integral_c<T, Values>... >;
     
   ////////////////////////////////////////////////////////////////////////////////
   //                           Intrinsic Metafunctions                                              

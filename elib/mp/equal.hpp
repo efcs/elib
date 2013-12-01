@@ -3,7 +3,7 @@
 
 # include <elib/mp/algorithm_fwd.hpp>
 # include <elib/mp/placeholders.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

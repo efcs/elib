@@ -8,7 +8,7 @@
 # include <elib/mp/comparison.hpp>
 # include <elib/mp/arithmetic.hpp>
 # include <elib/mp/if.hpp>
-# include <elib/mp/types.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

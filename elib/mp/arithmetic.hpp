@@ -2,7 +2,7 @@
 #define ELIB_MP_ARITHMETIC_HPP
 
 # include <elib/mp/config.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {
@@ -13,7 +13,7 @@ namespace elib
 
     template <class T>
     struct negate 
-      : std::integral_constant<
+      : integral_c<
           decltype( -T::value )
           , -T::value
         >
@@ -39,7 +39,7 @@ namespace elib
         
       template <class Arg1, class Arg2>
       struct add_impl<Arg1, Arg2>
-        : std::integral_constant<
+        : integral_c<
             decltype(Arg1::value + Arg2::value)
             , Arg1::value + Arg2::value 
           >
@@ -85,7 +85,7 @@ namespace elib
         
       template <class Arg1, class Arg2>
       struct subtract_impl<Arg1, Arg2>
-        : std::integral_constant<
+        : integral_c<
             decltype(Arg1::value - Arg2::value)
             , Arg1::value - Arg2::value 
           >
@@ -131,7 +131,7 @@ namespace elib
         
       template <class Arg1, class Arg2>
       struct multiply_impl<Arg1, Arg2>
-        : std::integral_constant<
+        : integral_c<
             decltype(Arg1::value * Arg2::value)
           , Arg1::value * Arg2::value 
           >
@@ -177,7 +177,7 @@ namespace elib
         
       template <class Arg1, class Arg2>
       struct divide_impl<Arg1, Arg2>
-        : std::integral_constant<
+        : integral_c<
             decltype(Arg1::value / Arg2::value)
             , Arg1::value / Arg2::value 
           >
@@ -212,7 +212,7 @@ namespace elib
   
     template <class Arg1, class Arg2>
     struct modulus 
-      : std::integral_constant<
+      : integral_c<
           decltype(Arg1::value % Arg2::value)
           , Arg1::value % Arg2::value
         >

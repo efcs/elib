@@ -2,7 +2,7 @@
 #define ELIB_MP_BITWISE_HPP
 
 # include <elib/mp/config.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {
@@ -15,7 +15,7 @@ namespace elib
     
     template <class T>
     struct bitnegate_ 
-      : std::integral_constant<
+      : integral_c<
           decltype( ~T::value )
           , ~T::value  
         >
@@ -37,7 +37,7 @@ namespace elib
       
       template <class A1, class A2>
       struct bitand_impl<A1, A2> 
-        : std::integral_constant<
+        : integral_c<
             decltype( A1::value & A2::value)
             , A1::value & A2::value
           >
@@ -74,7 +74,7 @@ namespace elib
       
       template <class A1, class A2>
       struct bitor_impl<A1, A2> 
-        : std::integral_constant<
+        : integral_c<
             decltype( A1::value | A2::value)
             , A1::value | A2::value
           >
@@ -112,7 +112,7 @@ namespace elib
       
       template <class A1, class A2>
       struct bitxor_impl<A1, A2> 
-        : std::integral_constant<
+        : integral_c<
             decltype( A1::value ^ A2::value)
             , A1::value ^ A2::value
           >
@@ -139,7 +139,7 @@ namespace elib
   
    template <class C, class Shift>
    struct shift_left 
-     : std::integral_constant<
+     : integral_c<
         decltype(C::value << Shift::value)
         , (C::value << Shift::value)
       >
@@ -152,7 +152,7 @@ namespace elib
     
     template <class C, class Shift>
     struct shift_right 
-      : std::integral_constant<
+      : integral_c<
           decltype(C::value >> Shift::value)
           , (C::value >> Shift::value) 
         >

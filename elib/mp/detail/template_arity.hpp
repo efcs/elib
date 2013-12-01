@@ -2,7 +2,8 @@
 #define ELIB_MP_TEMPLATE_ARITY_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/mp/types.hpp>
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/na.hpp>
 
 namespace elib 
 {

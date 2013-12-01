@@ -8,7 +8,7 @@
 # include <elib/mp/iterator_range.hpp>
 # include <elib/mp/placeholders.hpp>
 # include <elib/mp/iter_fold.hpp>
-# include <elib/mp/long.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

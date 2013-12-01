@@ -2,6 +2,7 @@
 #define ELIB_MP_TRANSFORM_HPP
 
 # include <elib/mp/algorithm_fwd.hpp>
+# include <elib/mp/na.hpp>
 
 namespace elib
 {

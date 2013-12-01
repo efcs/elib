@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_COMPARISON_HPP
 #define ELIB_MP_COMPARISON_HPP
 
-# include <elib/mp/bool.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {

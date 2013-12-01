@@ -3,7 +3,7 @@
 
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/iterator_tags.hpp>
-# include <elib/mp/long.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

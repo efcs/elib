@@ -6,7 +6,7 @@
 # include <elib/mp/intrinsic/begin_end.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/void.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

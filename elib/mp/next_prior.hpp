@@ -2,7 +2,7 @@
 #define ELIB_MP_NEXT_PRIOR_HPP
 
 # include <elib/mp/iterator_fwd.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {
@@ -32,15 +32,15 @@ namespace elib
   //------------------------- integral_constant overloads --------------------// 
 
     template <class T, T Val>
-    struct next< std::integral_constant<T, Val> >
+    struct next< integral_c<T, Val> >
     {
-      using type = std::integral_constant<T, Val + 1>;
+      using type = integral_c<T, Val + 1>;
     };
     
     template <class T, T Val>
-    struct prior< std::integral_constant<T, Val> >
+    struct prior< integral_c<T, Val> >
     {
-      using type = std::integral_constant<T, Val - 1>;
+      using type = integral_c<T, Val - 1>;
     };
 
 

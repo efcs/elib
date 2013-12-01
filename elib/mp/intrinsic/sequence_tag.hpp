@@ -5,7 +5,7 @@
 # include <elib/mp/detail/has_tag.hpp>
 # include <elib/mp/detail/has_begin.hpp>
 
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 
 namespace elib 
@@ -66,7 +66,7 @@ namespace elib
     namespace detail { struct integral_constant_tag {}; }
 
     template <class T, T Val>
-    struct sequence_tag< std::integral_constant<T, Val> >
+    struct sequence_tag< integral_c<T, Val> >
     {
       using type = detail::integral_constant_tag;
     };

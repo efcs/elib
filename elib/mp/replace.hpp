@@ -2,6 +2,7 @@
 #define ELIB_MP_REPLACE_HPP
 
 # include <elib/mp/algorithm_fwd.hpp>
+# include <elib/mp/na.hpp>
 
 namespace elib
 {

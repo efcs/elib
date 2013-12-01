@@ -8,8 +8,8 @@
 # include <elib/mp/logical.hpp>
 # include <elib/mp/arithmetic.hpp>
 # include <elib/mp/intc_cast.hpp>
-# include <elib/mp/long.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {
@@ -94,8 +94,8 @@ namespace elib
       using type = range_c;
       using tag = detail::range_c_tag;
       
-      using start = std::integral_constant<T, Start>;
-      using finish = std::integral_constant<T, Finish>;
+      using start = integral_c<T, Start>;
+      using finish = integral_c<T, Finish>;
       
       using begin = detail::range_iter<start>;
       using end = detail::range_iter<finish>;

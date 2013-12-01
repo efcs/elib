@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_CHAR_HPP
 #define ELIB_MP_CHAR_HPP
 
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {
@@ -9,15 +9,15 @@ namespace elib
   {
     
     template <char Val>
-    using char_ = std::integral_constant<char, Val>;
+    using char_ = integral_c<char, Val>;
     
     
     template <signed char Val>
-    using schar_ = std::integral_constant<signed char, Val>;
+    using schar_ = integral_c<signed char, Val>;
     
     
     template <unsigned char Val>
-    using uchar_ = std::integral_constant<unsigned char, Val>;
+    using uchar_ = integral_c<unsigned char, Val>;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

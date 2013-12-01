@@ -4,7 +4,7 @@
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/begin_end.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib
 {

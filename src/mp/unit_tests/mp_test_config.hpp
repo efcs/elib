@@ -73,10 +73,9 @@ do {                                        \
 
 //-------------------------------- helper types -----------------------------// 
 
-# include <elib/mp/bool.hpp>
-# include <elib/mp/char.hpp>
-# include <elib/mp/int.hpp>
-# include <elib/mp/long.hpp>
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/na.hpp>
+
 
 using e::bool_;
 using e::char_;

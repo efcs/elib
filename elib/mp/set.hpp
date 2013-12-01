@@ -4,7 +4,7 @@
 # include <elib/mp/set_fwd.hpp>
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {
@@ -28,7 +28,7 @@ namespace elib
     struct set_c
     {
       using value_type = T;
-      using type = set<std::integral_constant<T, Values>...>;
+      using type = set<integral_c<T, Values>...>;
       using tag = typename type::tag;
     };                                                    
     

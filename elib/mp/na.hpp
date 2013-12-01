@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_NA_HPP
 #define ELIB_MP_NA_HPP
 
-# include <elib/mp/bool.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/pragma.hpp>
 
 ELIB_PRAGMA_DIAG_PUSH()

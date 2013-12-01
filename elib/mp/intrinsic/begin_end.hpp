@@ -3,7 +3,8 @@
 
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
-# include <elib/mp/types.hpp>
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/void.hpp>
 # include <elib/mp/if.hpp>
 # include <elib/mp/detail/has_begin.hpp>
 

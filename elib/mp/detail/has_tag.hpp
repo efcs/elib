@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_DETAIL_HAS_TAG_HPP
 #define ELIB_MP_DETAIL_HAS_TAG_HPP
 
-# include <elib/mp/types.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {

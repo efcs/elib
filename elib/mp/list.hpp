@@ -5,11 +5,11 @@
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/empty.hpp>
-# include <elib/mp/size_type.hpp>
-# include <elib/mp/bool.hpp>
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/iterator.hpp>
 
-# include <type_traits>
+# include <elib/mp/integral_constant.hpp>
 
 
 namespace elib 
@@ -74,7 +74,7 @@ namespace elib
   //-------------------------------- list_c --------------------------------// 
     
     template <class T, T ...Values>
-    using list_c = list< std::integral_constant<T, Values>... >;
+    using list_c = list< integral_c<T, Values>... >;
   
     
     ////////////////////////////////////////////////////////////////////////////

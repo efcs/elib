@@ -2,7 +2,7 @@
 #define ELIB_MP_IS_PLACEHOLDER_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/mp/types.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/arg.hpp>
 
 # include <cstddef>

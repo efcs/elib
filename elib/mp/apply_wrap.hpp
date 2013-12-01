@@ -2,7 +2,7 @@
 # define ELIB_MP_APPLY_WRAP_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/mp/types.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/detail/has_apply.hpp>
 
 namespace elib 

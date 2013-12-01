@@ -8,7 +8,7 @@
 # include "elib/mp/config.hpp"
 
 // include args so we get elib::mp and mp::placeholders
-# include "elib/mp/metafunction/arg.hpp"
+# include "elib/mp/arg.hpp"
 
 namespace e
 {
@@ -73,10 +73,10 @@ do {                                        \
 
 //-------------------------------- helper types -----------------------------// 
 
-# include <elib/mp/types/bool.hpp>
-# include <elib/mp/types/char.hpp>
-# include <elib/mp/types/int.hpp>
-# include <elib/mp/types/long.hpp>
+# include <elib/mp/bool.hpp>
+# include <elib/mp/char.hpp>
+# include <elib/mp/int.hpp>
+# include <elib/mp/long.hpp>
 
 using e::bool_;
 using e::char_;

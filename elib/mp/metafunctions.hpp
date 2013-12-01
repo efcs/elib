@@ -2,30 +2,30 @@
 #define ELIB_MP_METAFUNCTIONS_HPP
 # 
 // type selection
-# include <elib/mp/metafunction/if.hpp>
+# include <elib/mp/if.hpp>
 # // invocation
-# include <elib/mp/metafunction/apply.hpp>
-# include <elib/mp/metafunction/apply_wrap.hpp>
-# include <elib/mp/metafunction/unpack_args.hpp>
+# include <elib/mp/apply.hpp>
+# include <elib/mp/apply_wrap.hpp>
+# include <elib/mp/unpack_args.hpp>
 # // composition and arg binding
-# include <elib/mp/metafunction/arg.hpp>
-# include <elib/mp/metafunction/placeholders.hpp>
-# include <elib/mp/metafunction/lambda.hpp>
-# include <elib/mp/metafunction/bind.hpp>
-# include <elib/mp/metafunction/quote.hpp>
-# include <elib/mp/metafunction/protect.hpp>
+# include <elib/mp/arg.hpp>
+# include <elib/mp/placeholders.hpp>
+# include <elib/mp/lambda.hpp>
+# include <elib/mp/bind.hpp>
+# include <elib/mp/quote.hpp>
+# include <elib/mp/protect.hpp>
 # // common metafunctions
-# include <elib/mp/metafunction/arithmetic.hpp>
-# include <elib/mp/metafunction/comparison.hpp>
-# include <elib/mp/metafunction/logical.hpp>
-# include <elib/mp/metafunction/bitwise.hpp>
+# include <elib/mp/arithmetic.hpp>
+# include <elib/mp/comparison.hpp>
+# include <elib/mp/logical.hpp>
+# include <elib/mp/bitwise.hpp>
 # // misc
-# include <elib/mp/metafunction/identity.hpp>
-# include <elib/mp/metafunction/inherit.hpp>
-# include <elib/mp/metafunction/inherit_linearly.hpp>
-# include <elib/mp/metafunction/always.hpp>
-# include <elib/mp/metafunction/min_max.hpp>
-# include <elib/mp/metafunction/sizeof.hpp>
-# include <elib/mp/metafunction/intc_cast.hpp>
+# include <elib/mp/identity.hpp>
+# include <elib/mp/inherit.hpp>
+# include <elib/mp/inherit_linearly.hpp>
+# include <elib/mp/always.hpp>
+# include <elib/mp/min_max.hpp>
+# include <elib/mp/sizeof.hpp>
+# include <elib/mp/intc_cast.hpp>
 # 
 #endif /* ELIB_MP_METAFUNCTIONS_HPP */

@@ -3,8 +3,8 @@
 
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
-# include <elib/mp/metafunction/if.hpp>
-# include <elib/mp/types/long.hpp>
+# include <elib/mp/if.hpp>
+# include <elib/mp/long.hpp>
 # include <elib/mp/detail/has_size.hpp>
 
 namespace elib 

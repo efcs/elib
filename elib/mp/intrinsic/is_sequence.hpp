@@ -4,8 +4,8 @@
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/begin_end.hpp>
-# include <elib/mp/metafunction/logical.hpp>
-# include <elib/mp/types/void.hpp>
+# include <elib/mp/logical.hpp>
+# include <elib/mp/void.hpp>
 # include <type_traits>
 
 namespace elib

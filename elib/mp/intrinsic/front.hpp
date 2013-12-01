@@ -4,7 +4,7 @@
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/begin_end.hpp>
-# include <elib/mp/iterator/deref.hpp>
+# include <elib/mp/deref.hpp>
 
 namespace elib
 {

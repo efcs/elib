@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_HAS_APPLY_HPP
-# define ELIB_MP_HAS_APPLY_HPP
+#define ELIB_MP_HAS_APPLY_HPP
 
 # include <elib/mp/config.hpp>
 # include <elib/mp/types.hpp>

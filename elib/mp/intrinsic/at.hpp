@@ -4,8 +4,8 @@
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/begin_end.hpp>
-# include <elib/mp/iterator/advance.hpp>
-# include <elib/mp/types/long.hpp>
+# include <elib/mp/advance.hpp>
+# include <elib/mp/long.hpp>
 
 namespace elib
 {

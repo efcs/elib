@@ -2,7 +2,7 @@
 #define ELIB_MP_DETAIL_HAS_TYPE_HPP
 
 
-# include <elib/mp/types/bool.hpp>
+# include <elib/mp/bool.hpp>
 
 namespace elib 
 {

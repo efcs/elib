@@ -5,8 +5,8 @@
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/sequence_tag.hpp>
 # include <elib/mp/intrinsic/empty.hpp>
-# include <elib/mp/types/size_type.hpp>
-# include <elib/mp/types/bool.hpp>
+# include <elib/mp/size_type.hpp>
+# include <elib/mp/bool.hpp>
 # include <elib/mp/iterator.hpp>
 
 # include <type_traits>
@@ -15,15 +15,10 @@
 namespace elib 
 {
   namespace mp
-  {
-    
+  {    
     namespace detail
     {
-    //-------------------------------- list tags ----------------------------// 
-      
-      struct list_tag {};
-      struct list_iter_tag {};
-      
+
     //-------------------------------- list_item ----------------------------// 
       template <class Item, class Next, class Size>
       struct list_item
@@ -79,27 +74,7 @@ namespace elib
   //-------------------------------- list_c --------------------------------// 
     
     template <class T, T ...Values>
-    struct list_c
-      : detail::list_end
-    {
-      using value_type = T;
-      using type = list_c;
-      
-      static_assert(sizeof...(Values) == 0, 
-          "Overload resolution check");
-    };
-    
-    template <class T, T First, T ...Rest>
-    struct list_c<T, First, Rest...>
-      : detail::list_item<
-          std::integral_constant<T, First>
-          , list_c<T, Rest...>
-          , size_type<sizeof...(Rest) + 1>
-        >
-    {
-      using value_type = T;
-      using type = list_c;
-    };
+    using list_c = list< std::integral_constant<T, Values>... >;
   
     
     ////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_TEMPLATE_ARITY_HPP
-# define ELIB_MP_TEMPLATE_ARITY_HPP
+#define ELIB_MP_TEMPLATE_ARITY_HPP
 
 # include <elib/mp/config.hpp>
 # include <elib/mp/types.hpp>

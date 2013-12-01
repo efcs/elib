@@ -1,12 +1,21 @@
-#ifndef ELIB_MP_VECTOR_FWD_HPP
-#define ELIB_MP_VECTOR_FWD_HPP
+#ifndef ELIB_MP_CONTAINER_VECTOR_FWD_HPP
+#define ELIB_MP_CONTAINER_VECTOR_FWD_HPP
 
 namespace elib 
 {
   namespace mp
   {
+    
     template <class ...Args> struct vector;
-    template <class T, T ...Values> struct vector_c;
+    
+    namespace detail
+    {
+      struct vector_tag {};
+      struct vector_iter_tag {};
+
+      struct vector_front_tag {};
+      struct vector_back_tag {};
+    }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VECTOR_FWD_HPP */
+#endif /* ELIB_MP_CONTAINER_VECTOR_FWD_HPP */

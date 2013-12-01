@@ -14,8 +14,7 @@ namespace elib
     namespace detail
     {
     //-------------------------------- set tags -----------------------------// 
-      struct set_tag {};
-      struct set_iter_tag {};
+      
     }                                                       // namespace detail
     
     template <class ...Args>

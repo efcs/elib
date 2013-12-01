@@ -4,27 +4,17 @@
 # include <elib/mp/range_c_fwd.hpp>
 # include <elib/mp/intrinsic/intrinsic_fwd.hpp>
 # include <elib/mp/intrinsic/size.hpp>
-# include <elib/mp/iterator/iterator_fwd.hpp>
-# include <elib/mp/iterator/iterator_tags.hpp>
-# include <elib/mp/iterator/deref.hpp>
-# include <elib/mp/iterator/next_prior.hpp>
-# include <elib/mp/metafunction/logical.hpp>
-# include <elib/mp/metafunction/arithmetic.hpp>
-# include <elib/mp/metafunction/intc_cast.hpp>
-# include <elib/mp/types/long.hpp>
+# include <elib/mp/iterator.hpp>
+# include <elib/mp/logical.hpp>
+# include <elib/mp/arithmetic.hpp>
+# include <elib/mp/intc_cast.hpp>
+# include <elib/mp/long.hpp>
 # include <type_traits>
 
 namespace elib 
 {
   namespace mp
   {
-    namespace detail
-    {
-    //-------------------------------- range_c tags -------------------------// 
-      struct range_c_tag {};
-      struct range_c_iter_tag {};
-    }                                                       // namespace detail
-    
   //////////////////////////////////////////////////////////////////////////////
   //                            Range Iterator                                              
   //////////////////////////////////////////////////////////////////////////////

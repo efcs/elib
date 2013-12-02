@@ -39,7 +39,8 @@ namespace elib
   
   namespace detail
   {
-    
+
+
     template <class T, class Count, class Seq>
     struct make_seq_impl;
     
@@ -57,7 +58,7 @@ namespace elib
           , typename Seq::next
         >
     {};
-    
+
     
   }                                                        // namespace detail
   

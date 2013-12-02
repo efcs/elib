@@ -1,15 +1,15 @@
-#ifndef ELIB_MP_UNPACK_ARGS_HPP
-#define ELIB_MP_UNPACK_ARGS_HPP
-
+#ifndef ELIB_MP_TAG_DISPATCH_HPP
+#define ELIB_MP_TAG_DISPATCH_HPP
 
 namespace elib 
 {
   namespace mp
   {
     
-    //TODO
-    template <class> struct unpack_args;
+    template <class T>
+    struct tag_dispatch
+    {};
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_UNPACK_ARGS_HPP */
+#endif /* ELIB_MP_TAG_DISPATCH_HPP */

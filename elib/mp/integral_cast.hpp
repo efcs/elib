@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_INTC_CAST_HPP
-#define ELIB_MP_INTC_CAST_HPP
+#ifndef ELIB_MP_INTEGRAL_CAST_HPP
+#define ELIB_MP_INTEGRAL_CAST_HPP
 
 # include <elib/mp/integral_constant.hpp>
 
@@ -9,7 +9,7 @@ namespace elib
   {
     
     template <class IntC, class T>
-    struct intc_cast 
+    struct integral_cast 
       : integral_c<
           T
         , static_cast<T>(IntC::value)
@@ -18,9 +18,9 @@ namespace elib
     
     
     template <class IntC, class T>
-    using intc_cast_t = typename intc_cast<IntC, T>::type;
+    using integral_cast_t = integral_c<T, static_cast<T>(IntC::value)>;
     
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_INTC_CAST_HPP */
+#endif /* ELIB_MP_INTEGRAL_CAST_HPP */

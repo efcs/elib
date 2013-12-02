@@ -11,7 +11,7 @@
 #include <elib/mp/identity.hpp>
 #include <elib/mp/if.hpp>
 #include <elib/mp/inherit.hpp>
-#include <elib/mp/intc_cast.hpp>
+#include <elib/mp/integral_cast.hpp>
 #include <elib/mp/integral_constant.hpp>
 #include <elib/mp/lambda.hpp>
 #include <elib/mp/logical.hpp>

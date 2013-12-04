@@ -2,7 +2,6 @@
 #define ELIB_MP_VARIADIC_HPP
 
 # include <elib/mp/variadic_fwd.hpp>
-# include <elib/mp/index_sequence.hpp>
 # include <elib/mp/type_wrapper.hpp>
 # include <elib/mp/integral_constant.hpp>
 

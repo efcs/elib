@@ -164,11 +164,7 @@ namespace elib
     template <class Seq, class T>
     using value_type_t = typename value_type<Seq, T>::type;
     
-    
-    
-    
-    
-    
+
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_SEQUENCE_INTRINSICS_HPP */

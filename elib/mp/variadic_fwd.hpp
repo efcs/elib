@@ -69,10 +69,10 @@ namespace elib
     
     
     template <std::size_t N, class ...Args>
-    struct drop_n;
+    struct back_nth;
     
     template <std::size_t N, class ...Args>
-    using drop_n_t = typename drop_n<N, Args...>::type;
+    using back_nth_t = typename back_nth<N, Args...>::type;
     
     
     namespace detail
@@ -85,7 +85,7 @@ namespace elib
       struct get_nth_impl;
       
       template <class PtrSeq>
-      struct drop_n_impl;
+      struct back_nth_impl;
     }                                                       // namespace detail
     
   }                                                         // namespace mp

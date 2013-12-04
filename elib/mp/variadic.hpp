@@ -142,20 +142,43 @@ namespace elib
     struct get_nth
     {
       using type = decltype(
-        detail::get_nth_impl< make_pack_of_t<N, decltype(nullptr)> 
-          >::eval((type_<Args>*)nullptr...)
+        detail::get_nth_impl< 
+          make_pack_of_t<N, decltype(nullptr)> 
+        >::eval((type_<Args>*)nullptr...)
+      );
+    };
+    
+    
+    template <std::size_t N, class ...Args>
+    struct get_nth<N, pack<Args...> >
+    {
+      using type = decltype(
+        detail::get_nth_impl< 
+          make_pack_of_t<N, decltype(nullptr) >
+        >::eval((type_<Args>*)nullptr...)
+      );
+    };
+    
+    
+    template <std::size_t N, class ...Args>
+    struct back_nth
+    {
+      using type = decltype(
+        detail::back_nth_impl< 
+          make_pack_of_t<N, decltype(nullptr)> 
+        >::eval((type_<Args>*)nullptr...)
       );
     };
     
     template <std::size_t N, class ...Args>
-    struct drop_n
+    struct back_nth<N, pack<Args...> >
     {
       using type = decltype(
-        detail::drop_n_impl< make_pack_of_t<N, decltype(nullptr)> 
-          >::eval((type_<Args>*)nullptr...)
+        detail::back_nth_impl< 
+          make_pack_of_t<N, decltype(nullptr)>
+        >::eval((type_<Args>*)nullptr...)
       );
     };
-    
     
     namespace detail
     {
@@ -166,19 +189,21 @@ namespace elib
         eat_pod(...);
       };
       
-      
       template <class ...Ignored>
       struct get_nth_impl< pack<Ignored...> >
       {
         template <class T, class ...Rest>
-        static unwrap_t<T> eval(eat_pod<Ignored>...,  T*, Rest* ...);
+        static unwrap_t<T> 
+          eval(eat_pod<Ignored>...,  T*, Rest* ...);
       };
       
+      
       template <class ...Ignored>
-      struct drop_n_impl< pack<Ignored...> >
+      struct back_nth_impl< pack<Ignored...> >
       {
         template <class ...Rest>
-        static pack< unwrap_t<Rest>... > eval(eat_pod<Ignored>..., Rest*...);
+        static pack< unwrap_t<Rest>... > 
+          eval(eat_pod<Ignored>..., Rest*...);
       };
       
     }                                                       // namespace detail

@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_INDEX_SEQUENCE_FWD_HPP
-#define ELIB_MP_INDEX_SEQUENCE_FWD_HPP
+#ifndef ELIB_MP_FWD_INDEX_SEQUENCE_HPP
+#define ELIB_MP_FWD_INDEX_SEQUENCE_HPP
 
 # include <cstddef>
 
@@ -33,4 +33,4 @@ namespace elib
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_INDEX_SEQUENCE_FWD_HPP */
+#endif /* ELIB_MP_FWD_INDEX_SEQUENCE_HPP */

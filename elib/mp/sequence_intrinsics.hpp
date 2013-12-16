@@ -3,6 +3,7 @@
 
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/na.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 # include <cstddef>
 
@@ -19,10 +20,10 @@ namespace elib
     
     
     template <class Seq, std::size_t N>
-    using at_c = typename get_impl_t<Seq>::template at_c<Seq, N>;
+    using at_c = typename get_impl_t<Seq>::template at<Seq, size_type<N>>;
     
     template <class Seq, std::size_t N>
-    using at_c_t = typename at_c<Seq, N>::type;
+    using at_c_t = typename at<Seq, size_type<N>>::type;
     
     
     template <class Seq>

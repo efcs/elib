@@ -1,29 +1,20 @@
 #ifndef ELIB_MP_BIDIRECTIONAL_SEQUENCE_HPP
-# define ELIB_MP_BIDIRECTIONAL_SEQUENCE_HPP
+#define ELIB_MP_BIDIRECTIONAL_SEQUENCE_HPP
+
+# include <elib/mp/forward_sequence.hpp>
+# include <elib/mp/get_impl.hpp>
 
 namespace elib 
 {
-  
-    struct bidirectional_sequence
-    {
-      template <class Seq>
-      struct begin;
-      
-      template <class Seq>
-      struct end;
-      
-      template <class Seq>
-      struct size;
-      
-      template <class Seq>
-      struct empty;
-      
-      template <class Seq>
-      struct front;
-      
-      template <class Seq>
-      struct back;
-    };
+  namespace mp
+  {
     
+    template <class S>
+    using back = typename get_impl_t<S>::template back<S>;
+
+    template <class S>
+    using back_t = typename back<S>::type;
+    
+  }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_BIDIRECTIONAL_SEQUENCE_HPP */

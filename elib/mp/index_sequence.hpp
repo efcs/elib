@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_INDEX_SEQUENCE_HPP
 #define ELIB_MP_INDEX_SEQUENCE_HPP
 
-# include <elib/mp/index_sequence_fwd.hpp>
+# include <elib/mp/fwd/index_sequence.hpp>
 # include <cstddef>
 
 /* Thanks to ericniebler/proto-0x for implementation */

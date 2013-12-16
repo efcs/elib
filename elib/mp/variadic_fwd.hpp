@@ -69,23 +69,23 @@ namespace elib
     
     
     template <std::size_t N, class ...Args>
-    struct back_nth;
+    struct drop_front;
     
     template <std::size_t N, class ...Args>
-    using back_nth_t = typename back_nth<N, Args...>::type;
+    using drop_front_t = typename drop_front<N, Args...>::type;
     
     
     namespace detail
     {
       
-      template <class = decltype(nullptr)>
+      template <class=decltype(nullptr)>
       struct eat_pod;
       
       template <class PtrSeq>
       struct get_nth_impl;
       
       template <class PtrSeq>
-      struct back_nth_impl;
+      struct drop_front_impl;
     }                                                       // namespace detail
     
   }                                                         // namespace mp

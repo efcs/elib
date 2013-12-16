@@ -161,24 +161,26 @@ namespace elib
     
     
     template <std::size_t N, class ...Args>
-    struct back_nth
+    struct drop_front
     {
       using type = decltype(
-        detail::back_nth_impl< 
+        detail::drop_front_impl< 
           make_pack_of_t<N, decltype(nullptr)> 
         >::eval((type_<Args>*)nullptr...)
       );
     };
     
+    
     template <std::size_t N, class ...Args>
-    struct back_nth<N, pack<Args...> >
+    struct drop_front<N, pack<Args...> >
     {
       using type = decltype(
-        detail::back_nth_impl< 
+        detail::drop_front_impl< 
           make_pack_of_t<N, decltype(nullptr)>
         >::eval((type_<Args>*)nullptr...)
       );
     };
+    
     
     namespace detail
     {
@@ -199,7 +201,7 @@ namespace elib
       
       
       template <class ...Ignored>
-      struct back_nth_impl< pack<Ignored...> >
+      struct drop_front_impl< pack<Ignored...> >
       {
         template <class ...Rest>
         static pack< unwrap_t<Rest>... > 

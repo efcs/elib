@@ -1,7 +1,7 @@
-#ifndef ELIB_MP_VARIADIC_APPEND_IMPL_HPP
-#define ELIB_MP_VARIADIC_APPEND_IMPL_HPP
+#ifndef ELIB_MP_VARIADIC_DETAIL_APPEND_IMPL_HPP
+#define ELIB_MP_VARIADIC_DETAIL_APPEND_IMPL_HPP
 
-# include <elib/mp/variadic/append_impl.hpp>
+# include <elib/mp/variadic/fwd.hpp>
 
 namespace elib 
 {
@@ -19,4 +19,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_APPEND_IMPL_HPP */
+#endif /* ELIB_MP_VARIADIC_DETAIL_APPEND_IMPL_HPP */

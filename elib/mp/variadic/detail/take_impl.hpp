@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_VARIADIC_TAKE_IMPL_HPP
-#define ELIB_MP_VARIADIC_TAKE_IMPL_HPP
+#ifndef ELIB_MP_VARIADIC_DETAIL_TAKE_IMPL_HPP
+#define ELIB_MP_VARIADIC_DETAIL_TAKE_IMPL_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
 # include <cstddef>
@@ -44,7 +44,7 @@ namespace elib
       template <
           template <class...> class S
         , class ...ToArgs
-        , class A1, class A2 class ...Rest
+        , class A1, class A2, class ...Rest
         >
       struct variadic_take_impl<
           S<ToArgs...>
@@ -124,4 +124,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_TAKE_IMPL_HPP */
+#endif /* ELIB_MP_VARIADIC_DETAIL_TAKE_IMPL_HPP */

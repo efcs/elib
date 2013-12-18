@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_VARIADIC_PREPEND_IMPL_HPP
-#define ELIB_MP_VARIADIC_PREPEND_IMPL_HPP
+#ifndef ELIB_MP_VARIADIC_DETAIL_JOIN_IMPL_HPP
+#define ELIB_MP_VARIADIC_DETAIL_JOIN_IMPL_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
 
@@ -9,14 +9,14 @@ namespace elib
   {
     namespace detail
     {
-      
-      template <template <class...> struct S, class ...SArgs, class ...ToPrepend>
-      struct variadic_prepend_impl<S<SArgs...>, ToPrepend...>
+     
+      template <template <class...> class S, class ...Left, class ...Right>
+      struct variadic_join_impl<S<Left...>, S<Right...>>
       {
-        using type = S<ToPrepend..., SArgs...>;
+        using type = S<Left..., Right...>;
       };
       
     }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_PREPEND_IMPL_HPP */
+#endif /* ELIB_MP_VARIADIC_DETAIL_JOIN_IMPL_HPP */

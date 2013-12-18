@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_VARIADIC_ITERATOR_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_ITERATOR_INTRINSICS_HPP
+#ifndef ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP
+# define ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP
 
 namespace elib 
 {
@@ -8,4 +8,4 @@ namespace elib
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_ITERATOR_INTRINSICS_HPP */
+#endif /* ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP */

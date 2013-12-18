@@ -2,7 +2,7 @@
 #define ELIB_MP_VARIADIC_FILL_VARIADIC_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/join_impl.hpp>
+# include <elib/mp/variadic/detail/join_impl.hpp>
 
 namespace elib 
 {
@@ -20,7 +20,7 @@ namespace elib
     struct fill_variadic
       : detail::variadic_join_impl<
           fill_variadic_t<Seq, T, (N / 2)>
-        , fill_variadic_t<Seq, T, (N - (N / 2)>
+        , fill_variadic_t<Seq, T, (N - (N / 2))>
         >
     {};
     

@@ -1,15 +1,15 @@
-#ifndef ELIB_MP_VARIADIC_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_INTRINSICS_HPP
+#ifndef ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP
+#define ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/iterator.hpp>
+# include <elib/mp/variadic/sequence_iterator.hpp>
 # include <elib/mp/variadic/fill_variadic.hpp>
-# include <elib/mp/variadic/at_impl.hpp>
-# include <elib/mp/variadic/drop_impl.hpp>
-# include <elib/mp/variadic/take_impl.hpp>
-# include <elib/mp/variadic/join_impl.hpp>
-# include <elib/mp/variadic/append_impl.hpp>
-# include <elib/mp/variadic/prepend_impl.hpp>
+# include <elib/mp/variadic/detail/at_impl.hpp>
+# include <elib/mp/variadic/detail/drop_impl.hpp>
+# include <elib/mp/variadic/detail/take_impl.hpp>
+# include <elib/mp/variadic/detail/join_impl.hpp>
+# include <elib/mp/variadic/detail/append_impl.hpp>
+# include <elib/mp/variadic/detail/prepend_impl.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/sequence.hpp>
@@ -20,7 +20,8 @@ namespace elib
   namespace mp
   {
     
-    struct variadic_intrinsics
+    template <template <class, std::size_t> class IteratorType>
+    struct variadic_sequence_intrinsics
     {
       
     //-------------------------- sequence_size -----------------------------// 
@@ -40,18 +41,18 @@ namespace elib
     //------------------------------ begin & end ----------------------------// 
     
       template <class S>
-      using begin = variadic_iterator<S, 0>;
+      using begin = IteratorType<S, 0>;
       
       
       template <class S>
-      using end = variadic_iterator<S, sequence_size<S>::type::value>;
+      using end = IteratorType<S, sequence_size<S>::type::value>;
       
     //-------------------------------- at -----------------------------------// 
       
       template <class S, std::size_t N> struct at_c;
       
       template <template <class...> class S, class ...Args, std::size_t N>
-      struct at_c 
+      struct at_c< S<Args...>, N> 
       {
         using type = decltype(
           detail::variadic_at_impl< 
@@ -83,7 +84,7 @@ namespace elib
       template <class S> struct clear;
     
       template <template <class...> class S, class ...Args>
-      struct clear : identity<S<>>
+      struct clear< S<Args...> > : identity<S<>>
       {};
       
     //-------------------------------- push & pop back ----------------------// 
@@ -93,12 +94,16 @@ namespace elib
       
       template <class S>
       using pop_back = 
-        detail::variadic_take_impl<S, sequence_size<S>::type::value - 1>;
+        detail::variadic_take_impl<
+            typename clear<S>::type
+          , S
+          , sequence_size<S>::type::value - 1
+        >;
       
     //-------------------------------- push & pop front ---------------------//
     
       template <class S, class T>
-      using push_front = detail::variadic_prepend<S, T>;
+      using push_front = detail::variadic_prepend_impl<S, T>;
       
       
       template <class S> struct pop_front;
@@ -108,7 +113,7 @@ namespace elib
       struct pop_front< S<First, Rest...> > : identity< S<Rest...> >
       {};
       
-    //-------------------------------- take & drop --------------------------// 
+    //------------------------ take & drop & slice --------------------------// 
     
       template <class S, std::size_t N>
       using take = detail::variadic_take_impl<typename clear<S>::type, S, N>;
@@ -126,6 +131,15 @@ namespace elib
         );
       };
       
+      
+      template <class Seq, std::size_t First, std::size_t Last>
+      using slice = 
+        take<
+            typename drop<Seq, First>::type
+          , Last - First
+        >;
+      
+      
     //------------------------ join & append & prepend ----------------------// 
     
       template <class Left, class Right>
@@ -137,8 +151,8 @@ namespace elib
       template <class S, class ...Args>
       using prepend = detail::variadic_prepend_impl<S, Args...>;
       
-    };                                                      // variadic_intrinsics
+    };                                          // variadic_sequence_intrinsics
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_INTRINSICS_HPP */
+#endif /* ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP */

@@ -238,10 +238,24 @@ namespace elib
     
     
     template <class Left, class Right>
-    using concat = typename get_impl_t<Left>::template concat<Left, Right>;
+    using join = typename get_impl_t<Left>::template join<Left, Right>;
     
     template <class Left, class Right>
-    using concat_t = typename concat<Left, Right>::type;
+    using join_t = typename join<Left, Right>::type;
+    
+    
+    template <class S, class ...Args>
+    using prepend = typename get_impl_t<S>::template prepend<S, Args...>;
+    
+    template <class S, class ...Args>
+    using prepend_t = typename prepend<S, Args...>::type;
+    
+    
+    template <class S, class ...Args>
+    using append = typename get_impl_t<S>::template append<S, Args...>;
+    
+    template <class S, class ...Args>
+    using append_t = typename append<S, Args...>::type;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

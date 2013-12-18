@@ -1,9 +1,7 @@
 #ifndef ELIB_MP_ARG_HPP
 #define ELIB_MP_ARG_HPP
 
-# include <elib/mp/config.hpp>
-# include <elib/mp/get_arg.hpp>
-
+# include <elib/mp/pack.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -19,8 +17,7 @@ namespace elib
       template <class ...Args>
       struct apply
       {
-        typedef get_arg_t<N-1, Args...> type;
-        
+        using type = at_c_t<pack<Args...>, N>;
       };
       
       static_assert(N != 0, "0 is not a valid arg index (one indexed)");

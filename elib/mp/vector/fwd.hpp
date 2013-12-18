@@ -20,7 +20,17 @@ namespace elib
       struct vector_intrinsics;
       struct vector_iterator_intrinsics;
       
+      template <class Tag, class T, class Vector>
+      struct vector_item;
+      
+      template <class Tag, class Vector>
+      struct vector_mask;
+      
+      struct vector_front_tag {};
+      struct vector_back_tag {};
+      
     }                                                       // namespace detail
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_VECTOR_FWD_HPP */

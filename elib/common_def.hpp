@@ -35,5 +35,7 @@
 #   define ELIB_TODO(msg) ((void)0)
 # endif
 # 
+# /* used to clearly have exposition for code we don't want to compile */
+# define ELIB_EXPO(...) 
 # 
 #endif /* ELIB_COMMON_DEF_HPP */

@@ -1,0 +1,154 @@
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
+#include <elib/mp/list.hpp>
+#include <elib/mp/arg.hpp>
+#include <elib/mp/iterator.hpp>
+#include "mp_test_helper.hpp"
+
+template <class List>
+using l_iter = list_iterator<List>;
+
+BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
+
+  BOOST_AUTO_TEST_CASE(mp_list_construction)
+  {
+    using T0 = list<>;
+    using C0 = list_c<int>;
+    SAME_TYPE(T0, C0);
+    SAME_TYPE(typename T0::type, T0);
+    
+    using T1 = list<int_<0>>;
+    using C1 = list_c<int, 0>;
+    SAME_TYPE(T1, C1);
+    SAME_TYPE(typename T1::type, T1);
+    
+    using T2 = list<true_, false_>;
+    using C2 = list_c<bool, true, false>;
+    SAME_TYPE(T2, C2);
+    SAME_TYPE(typename T2::type, T2);
+  }                                                     // mp_list_construction
+  
+  BOOST_AUTO_TEST_CASE(mp_list_intrinsics)
+  {
+    // empty
+    {
+      using T = list<>;
+      // observers
+      CHECK(sequence_size_t<T>::value == 0);
+      CHECK(empty_t<T>::value);
+      SAME_TYPE(begin_t<T>, l_iter<list<>>);
+      SAME_TYPE(end_t<T>, l_iter<list<>>);
+      SAME_TYPE(begin_t<T>, end_t<T>);
+      // modifiers
+      SAME_TYPE(clear_t<T>, list<>);
+      SAME_TYPE(push_front_t<T, int>, list<int>);
+    }
+    // one item
+    {
+      using T = list<void>;
+      // observers
+      CHECK(sequence_size_t<T>::value == 1);
+      CHECK(empty_t<T>::value == false);
+      SAME_TYPE(begin_t<T>, l_iter<T>);
+      SAME_TYPE(end_t<T>, l_iter<list<>>);
+      SAME_TYPE(front_t<T>, void);
+      // modifiers
+      SAME_TYPE(clear_t<T>, list<>);
+      SAME_TYPE(push_front_t<T, int>, list<int, void>);
+      SAME_TYPE(pop_front_t<T>, list<>);
+    }
+    // multi item
+    {
+      using namespace elib::mp::placeholders;
+      using T = list<_1, _2, _3, _4, _5>;
+      // observers
+      CHECK(sequence_size_t<T>::value == 5);
+      CHECK(empty_t<T>::value == false);
+      SAME_TYPE(begin_t<T>, l_iter<T>);
+      SAME_TYPE(end_t<T>, l_iter<list<>>);
+      SAME_TYPE(front_t<T>, _1);
+      // modifiers
+      SAME_TYPE(clear_t<T>, list<>);
+      SAME_TYPE(push_front_t<T, void>, list<void, _1, _2, _3, _4, _5>);
+      SAME_TYPE(pop_front_t<T>, list<_2, _3, _4, _5>);
+    }
+    // TODO insert & erase
+  }                                                      // mp_list_intrinsics
+
+  BOOST_AUTO_TEST_CASE(mp_list_iterator_intrinsics)
+  {
+    // category
+    {
+      using T = list_c<int, 1, 2, 3>;
+      using B = begin_t<T>;
+      using E = end_t<T>;
+      SAME_TYPE(typename B::category, forward_iterator_tag);
+      SAME_TYPE(typename B::category, typename E::category);
+    }
+    // empty
+    {
+      using T = list<>;
+      using B = begin_t<T>;
+      using E = end_t<T>;
+      
+      SAME_TYPE(B, l_iter<T>);
+      SAME_TYPE(E, l_iter<list<>>);
+      SAME_TYPE(B, E);
+      
+      CHECK(distance_t<B, E>::value == 0);
+    }
+    // size = 1
+    {
+      using T = list_c<bool, true>;
+      using B = begin_t<T>;
+      using E = end_t<T>;
+      SAME_TYPE(B, l_iter<T>);
+      SAME_TYPE(E, l_iter<list<>>);
+      // deref
+      SAME_TYPE(deref_t<B>, true_);
+      // next
+      SAME_TYPE(next_t<B>, E);
+      // advance
+      SAME_TYPE(advance_t<B, long_<0>>, B);
+      SAME_TYPE(advance_c_t<B, 1>, E);
+      SAME_TYPE(advance_c_t<E, 0>, E);
+      // distance
+      CHECK(distance_t<B, B>::value == 0);
+      CHECK(distance_t<E, E>::value == 0);
+      CHECK(distance_t<B, E>::value == 1);
+      CHECK(distance_t<E, B>::value == -1);
+    }
+    // multi
+    {
+      using namespace elib::mp::placeholders;
+      using T = list<_1, _2, _3>;
+      using B = begin_t<T>;
+      using E = end_t<T>;
+      SAME_TYPE(B, l_iter<T>);
+      SAME_TYPE(E, l_iter<list<>>);
+      // deref and next
+      SAME_TYPE(deref_t<B>, _1);
+      using B1 = next_t<B>;
+      SAME_TYPE(B1, l_iter<list<_2, _3>>);
+      SAME_TYPE(deref_t<B1>, _2);
+      using B2 = next_t<B1>;
+      SAME_TYPE(B2, l_iter<list<_3>>);
+      SAME_TYPE(deref_t<B2>, _3);
+      using B3 = next_t<B2>;
+      SAME_TYPE(B3, E);
+      // advance
+      SAME_TYPE(advance_t<B, long_<0>>, B);
+      SAME_TYPE(advance_c_t<B, 1>, B1);
+      SAME_TYPE(advance_t<B1, long_<2>>, B3);
+      // distance
+      CHECK(distance_t<B, E>::value == 3);
+      CHECK(distance_t<B1, B2>::value == 1);
+      CHECK(distance_t<B3, B1>::value == -2);
+      CHECK(distance_t<B, B>::value == 0);
+    }
+  }                                              // mp_list_iterator_intrinsics
+  
+  
+  
+BOOST_AUTO_TEST_SUITE_END()

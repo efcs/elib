@@ -12,8 +12,10 @@ if (CONFIG_MY_BUILD)
 
   if (CONFIG_ALL_WARNINGS)
   
+     #add_flags( LIBRARY_FLAGS -Weffc++)
+
      add_flags( LIBRARY_FLAGS 
-      -Wall -Weffc++ -pedantic  
+      -Wall  -pedantic  
       -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
       -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
       -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 

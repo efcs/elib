@@ -4,7 +4,6 @@
 # include <elib/mp/list/fwd.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/get_impl.hpp>
-# include <cstddef>
 
 namespace elib 
 {
@@ -12,25 +11,23 @@ namespace elib
   {
     
     template <class ...Args>
-    struct list 
+    struct list
     {
-      using list = type;
+      using type = list;
       
-      static_assert( sizeof...(Args) == 0, "Overload resolution check");
+      static_assert(sizeof...(Args) == 0, "Overload resolution check");
     };
     
     
     template <class T, class ...Args>
-    struct list
+    struct list<T, Args...>
     {
       using type = list;
-      using item = T;
-      using next = list<Args...>;
     };
-
     
-    template <class Integral, Integral ...Values>
-    using list_c = list< integral_constant<Integral, Values>... >;
+    
+    template <class T, T ...Values>
+    using list_c = list< integral_constant<T, Values>... >;
     
     
     template <class ...Args>

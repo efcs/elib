@@ -4,7 +4,8 @@
 # include <elib/mp/list/fwd.hpp>
 # include <elib/mp/list/list.hpp>
 # include <elib/mp/list/iterator.hpp>
-# include <elib/mp/optimization.hpp>
+# include <elib/mp/sequence.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {
@@ -15,72 +16,53 @@ namespace elib
       
       struct list_intrinsics
       {
+        template <class S> struct front;
+        template <class S> struct sequence_size;
+        template <class S> struct empty;
+        //template <class S> struct begin;
+        //template <class S> struct end;
+        //template <class S> struct clear;
+        template <class S, class T> struct push_front;
+        template <class S> struct pop_front;
         
-        // fwd
-        template <class List> struct begin;
-        template <class List> struct end;
-        template <class List> struct size;
-        template <class List> struct empty;
-        template <class List> struct front;
-        //TODO
-        // template <...> struct insert;
-        // template <...> struct insert_range;
-        // template <...> struct erase;
-        template <class List> struct clear;
-        template <class List, class T> struct push_front;
-        template <class List> struct pop_front;
-        
-        // optimizations
-        using O1_SIZE_OPTIMIZATION = optimization_tag;
-        
-        // impl
-        
-        template <class List> 
-        struct begin
+        template <class First, class ...Rest>
+        struct front< list<First, Rest...> >
         {
-          using type = list_iterator<List>;
-        };
-        
-        template <class List>
-        struct end
-        {
-          using type = list_iterator< list<> >;
+          using type = First;
         };
         
         template <class ...Args>
-        struct size< list<Args...> >
-        {
-          using type = size_type<sizeof...(Args)>;
-        };
+        struct sequence_size< list<Args...> > 
+          : size_type<sizeof...(Args)>
+        {};
+        
+        template <class List>
+        using O1_size = sequence_size<List>;
         
         template <class ...Args>
         struct empty< list<Args...> >
-        {
-          using type = bool_< (sizeof...(Args) == 0) >;
-        };
+          : bool_<sizeof...(Args) == 0>
+        {};
         
         template <class List>
-        struct front
-        {
-          using type = typename List::item;
-        };
+        using begin = list_iterator<List>;
         
         template <class List>
-        struct clear
+        using end = list_iterator<list<>>;
+        
+        template <class>
+        using clear = list<>;
+        
+        template <class ...Args, class T>
+        struct push_front< list<Args...>, T>
         {
-          using type = list<>;
+          using type = list<T, Args...>;
         };
         
-        template <class ...ListArgs, class T>
-        struct push_front< list<ListArgs...>, T >
+        template <class First, class ...Rest>
+        struct pop_front< list<First, Rest...> >
         {
-          using type = list<T, ListArgs...>;
-        };
-        
-        template <class List>
-        struct pop_front
-        {
-          using type = typename List::next;
+          using type = list<Rest...>;
         };
         
         

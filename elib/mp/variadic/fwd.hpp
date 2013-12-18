@@ -8,19 +8,35 @@ namespace elib
   namespace mp
   {
     
-    template <std::size_t N, class Pack>
-    struct get_nth;
+    struct variadic_sequence_tag {};
     
-    template <class Pack>
+    template <class Seq, std::size_t N>
+    struct variadic_iterator;
     
-    template <std::size_t N, class Pack>
-    struct drop;
+    // implementations are not in namespace detail since they
+    // are meant to be generic for any variadic template
+    struct variadic_intrinsics;
+    struct variadic_iterator_intrinsics;
     
-    template <std::size_t N, class ...Args>
-    struct take;
+    template <template <class...> class Seq, class T, std::size_t N>
+    struct fill_variadic;
     
-    template <std::size_t First, std::size_t Last, class ...Args>
-    struct slice;
+    namespace detail
+    {
+      
+      template <class Seq> struct variadic_at_impl;
+      
+      template <class Seq> struct variadic_drop_impl;
+      
+      template <class To, class From, std::size_t N> struct variadic_take_impl;
+      
+      template <class Left, class Right> struct variadic_join_impl;
+      
+      template <class Seq, class ...Args> struct variadic_append_impl;
+      
+      template <class Seq, class ...Args> struct variadic_prepend_impl;
+      
+    }                                                       // namespace detail
     
   }                                                         // namespace mp
 }                                                           // namespace elib

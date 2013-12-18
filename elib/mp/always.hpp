@@ -9,7 +9,7 @@ namespace elib
     template <class T>
     struct always
     {
-      template <class ...Args>
+      template <class ...>
       struct apply
       {
         using type = T;

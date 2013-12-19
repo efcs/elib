@@ -25,17 +25,6 @@ namespace elib
     template <>
     struct is_empty_base< empty_base > : true_
     {};
-  
-  //-------------------------------- is_not_empty_base ----------------------// 
-    
-    template <class T>
-    struct is_not_empty_base : true_
-    {};
-    
-    template <>
-    struct is_not_empty_base<empty_base> : false_
-    {};
-    
   }                                                         // namespace mp
 }                                                           // namespace elib
 

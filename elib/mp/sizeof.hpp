@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_SIZEOF_HPP
 #define ELIB_MP_SIZEOF_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/detail/integral_constant.hpp>
 
 namespace elib 
 {
@@ -9,12 +9,7 @@ namespace elib
   {
     
     template <class T>
-    struct sizeof_ 
-      : integral_c<
-          decltype(sizeof(T))
-          , sizeof(T) 
-        >
-    {};
+    using sizeof_ = integral_constant< decltype(sizeof(T)) , sizeof(T) >;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

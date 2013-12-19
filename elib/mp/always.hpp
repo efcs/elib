@@ -1,6 +1,8 @@
 #ifndef ELIB_MP_ALWAYS_HPP
 #define ELIB_MP_ALWAYS_HPP
 
+# include <elib/mp/identity.hpp>
+
 namespace elib 
 {
   namespace mp
@@ -10,10 +12,7 @@ namespace elib
     struct always
     {
       template <class ...>
-      struct apply
-      {
-        using type = T;
-      };
+      using apply = identity< T >;
     };
     
   }                                                         // namespace mp

@@ -1,7 +1,6 @@
 #ifndef ELIB_MP_BITWISE_HPP
 #define ELIB_MP_BITWISE_HPP
 
-# include <elib/mp/config.hpp>
 # include <elib/mp/integral_constant.hpp>
 
 namespace elib 
@@ -14,12 +13,11 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
     
     template <class T>
-    struct bitnegate_ 
-      : integral_c<
-          decltype( ~T::value )
-          , ~T::value  
-        >
-    {};
+    using bitnegate_ =
+      integral_constant<
+        decltype( ~T::value )
+        , ~T::value  
+      >;
     
   ////////////////////////////////////////////////////////////////////////////////
   //                       BITAND                                                   
@@ -37,8 +35,8 @@ namespace elib
       
       template <class A1, class A2>
       struct bitand_impl<A1, A2> 
-        : integral_c<
-            decltype( A1::value & A2::value)
+        : integral_constant<
+            decltype(A1::value & A2::value)
             , A1::value & A2::value
           >
       {};
@@ -54,8 +52,11 @@ namespace elib
     }                                                       // namespace detail
     
     template <class A1, class A2, class ...Rest>
-    struct bitand_ : detail::bitand_impl<A1, A2, Rest...>
-    {};
+    using bitand_ = detail::bitand_impl<A1, A2, Rest...>;
+    
+    
+    template <class A1, class A2, class ...Rest>
+    using bitand_t = typename detail::bitand_impl<A1, A2, Rest...>;
     
     
   ////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ namespace elib
       
       template <class A1, class A2>
       struct bitor_impl<A1, A2> 
-        : integral_c<
+        : integral_constant<
             decltype( A1::value | A2::value)
             , A1::value | A2::value
           >
@@ -92,8 +93,10 @@ namespace elib
     
     
     template <class A1, class A2, class ...Rest>
-    struct bitor_ : detail::bitor_impl<A1, A2, Rest...>
-    {};
+    using bitor_ = detail::bitor_impl<A1, A2, Rest...>;
+    
+    template <class A1, class A2, class ...Rest>
+    using bitor_t = typename detail::bitor_impl<A1, A2, Rest...>;
     
     
   ////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +115,7 @@ namespace elib
       
       template <class A1, class A2>
       struct bitxor_impl<A1, A2> 
-        : integral_c<
+        : integral_constant<
             decltype( A1::value ^ A2::value)
             , A1::value ^ A2::value
           >
@@ -129,21 +132,25 @@ namespace elib
     }                                                       // namespace detail
     
     template <class A1, class A2, class ...Rest>
-    struct bitxor_ : detail::bitxor_impl<A1, A2, Rest...>
-    {};
+    using bitxor_ = detail::bitxor_impl<A1, A2, Rest...>;
+    
+    template <class A1, class A2, class ...Rest>
+    using bitxor_t = typename detail::bitxor_impl<A1, A2, Rest...>;
     
   ////////////////////////////////////////////////////////////////////////////////
   //                          SHIFT LEFT                                                
   ////////////////////////////////////////////////////////////////////////////////
   
   
-   template <class C, class Shift>
-   struct shift_left 
-     : integral_c<
+    template <class C, class Shift>
+    using shift_left =
+      integral_constant<
         decltype(C::value << Shift::value)
         , (C::value << Shift::value)
-      >
-  {};
+      >;
+      
+    template <class C, class Shift>
+    using shift_left_t = shift_left<C, Shift>;
     
   ////////////////////////////////////////////////////////////////////////////////
   //                         SHIFT RIGHT                                                 
@@ -151,12 +158,14 @@ namespace elib
   
     
     template <class C, class Shift>
-    struct shift_right 
-      : integral_c<
+    using shift_right =
+      integral_constant<
           decltype(C::value >> Shift::value)
           , (C::value >> Shift::value) 
-        >
-    {};
+        >;
+        
+    template <class C, class Shift>
+    using shift_right_t = shift_right<C, Shift>;
   
   }                                                         // namespace mp
 }                                                           // namespace elib

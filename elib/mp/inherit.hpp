@@ -71,8 +71,7 @@ namespace elib
   //-------------------------------- inherit --------------------------------// 
     
     template <class B1, class B2, class ...Bases>
-    struct inherit : detail::inherit_impl<B1, B2, Bases...>
-    {};
+    using inherit = detail::inherit_impl<B1, B2, Bases...>;
     
     template <class B1, class B2, class ...Bases>
     using inherit_t = typename detail::inherit_impl<B1, B2, Bases...>::type;

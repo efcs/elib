@@ -5,23 +5,27 @@
 # include <elib/mp/vector/item.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/get_impl.hpp>
-# include <elib/mp/na.hpp>
+# include <elib/mp/void.hpp>
 
 namespace elib 
 {
   namespace mp
   {
-    
+
     template <class ...Args>
     struct vector
     {
       using type = vector;
       
+      /* for sequence_traits */
+      using class_type = vector_tag;
+      using category = mpl_random_access_sequence_tag;
+      
       using lower_bound_ = size_type<32767>;
       using upper_bound_ = lower_bound_;
       using size = size_type<0>;
       
-      static na index_lookup(...);
+      static void_ index_lookup(...);
       
       static_assert(sizeof...(Args) == 0,  
                     "Overload resolution check");

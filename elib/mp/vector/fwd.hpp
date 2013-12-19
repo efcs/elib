@@ -8,6 +8,8 @@ namespace elib
   namespace mp
   {
     
+    struct vector_tag {};
+    
     template <class ...Args>
     struct vector;
     

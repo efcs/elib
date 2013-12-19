@@ -15,22 +15,14 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
     
     template <class T>
-    struct not_ : bool_<!T::type::value>
-    {};
+    using not_ = bool_<!T::type::value>;
     
     template <class T>
     using not_t = typename not_<T>::type;
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                            NOT_C                                              
-  ////////////////////////////////////////////////////////////////////////////////
-  
-  
     template <long V>
-    struct not_c : bool_<!V>
-    {};
-    
-    
+    using not_c = bool_<!V>;
+
   ////////////////////////////////////////////////////////////////////////////////
   //                          AND                                                   
   ////////////////////////////////////////////////////////////////////////////////
@@ -58,9 +50,8 @@ namespace elib
     }                                                       // namespace detail
     
     template <class P1, class P2, class ...Rest>
-    struct and_ 
-      : detail::and_impl<static_cast<bool>(P1::type::value), P2, Rest...>
-    {};
+    using and_ = 
+      detail::and_impl<static_cast<bool>(P1::type::value), P2, Rest...>;
     
     
     template <class P1, class P2, class ...Rest>
@@ -87,8 +78,7 @@ namespace elib
     
     
     template <bool P1, bool P2, bool ...Preds>
-    struct and_c : detail::and_c_impl<P1, P2, Preds...>
-    {};
+    using and_c = detail::and_c_impl<P1, P2, Preds...>;
     
     
   ////////////////////////////////////////////////////////////////////////////////
@@ -116,9 +106,8 @@ namespace elib
     }                                                       // namespace detail
     
     template <class P1, class P2, class ...Rest>
-    struct or_ 
-      : detail::or_impl<static_cast<bool>(P1::type::value), P2, Rest...>
-    {};
+    using or_ = 
+      detail::or_impl<static_cast<bool>(P1::type::value), P2, Rest...>;
     
     
     template <class P1, class P2, class ...Rest>
@@ -144,8 +133,7 @@ namespace elib
     
     
     template <bool P1, bool P2, bool ...Rest>
-    struct or_c : detail::or_c_impl<P1, P2, Rest...>
-    {};
+    using or_c = detail::or_c_impl<P1, P2, Rest...>;
     
   }                                                         //  namespace mp
 }                                                           // namespace elib

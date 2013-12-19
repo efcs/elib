@@ -12,63 +12,63 @@ namespace elib
   //-------------------------------- negate --------------------------------// 
 
     template <class T>
-    struct negate 
-      : integral_c<
-          decltype( -T::value )
-          , -T::value
-        >
-    {};
+     using negate =
+      integral_constant<
+        decltype( -T::value )
+        , -T::value
+      >;
     
     
     template <class T>
-    using negate_t = typename negate<T>::type;
+    using negate_t = negate<T>;
     
   //-------------------------------- add --------------------------------// 
   
     namespace detail
     {
       
-      template <class ...Args>
+      template <class ...As>
       struct add_impl;
       
       
-      template <class Arg>
-      struct add_impl<Arg> : Arg
+      template <class A>
+      struct add_impl<A> : A
       {};
         
         
-      template <class Arg1, class Arg2>
-      struct add_impl<Arg1, Arg2>
-        : integral_c<
-            decltype(Arg1::value + Arg2::value)
-            , Arg1::value + Arg2::value 
+      template <class A1, class A2>
+      struct add_impl<A1, A2>
+        : integral_constant<
+            decltype(A1::value + A2::value)
+            , A1::value + A2::value 
           >
       {};
       
       
-      template <class Arg1, class Arg2, class Arg3, class ...Args>
-      struct add_impl<Arg1, Arg2, Arg3, Args...>
+      template <class A1, class A2, class A3, class ...As>
+      struct add_impl<A1, A2, A3, As...>
         : add_impl<
-            add_impl<Arg1, Arg2>
-            , add_impl<Arg3, Args...> 
+            add_impl<A1, A2>
+            , add_impl<A3, As...> 
           >
       {};
       
     }                                                       // namespace detail
-  
-    
+
     
     template <class LHS, class RHS, class ...Rest>
-    struct add : detail::add_impl<LHS, RHS, Rest...>
-    {};
+    using add = detail::add_impl<LHS, RHS, Rest...>;
     
     template <class LHS, class RHS, class ...Rest>
     using add_t = typename add<LHS, RHS, Rest...>::type;
     
     
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
-    template <class ...Args>
-    using plus = add<Args...>;
+    template <class ...As>
+    using plus = add<As...>;
+    
+    template <class ...As>
+    using plus_t = add_t<As...>;
 # endif                                     // ELIB_MP_BOOST_COMPATIBLE_NAMES
     
   //-------------------------------- subtract ------------------------------// 
@@ -76,26 +76,26 @@ namespace elib
     namespace detail
     {
       
-      template <class ...Args>
+      template <class ...As>
       struct subtract_impl;
         
-      template <class Arg>
-      struct subtract_impl<Arg> : Arg
+      template <class A>
+      struct subtract_impl<A> : A
       {};
         
-      template <class Arg1, class Arg2>
-      struct subtract_impl<Arg1, Arg2>
-        : integral_c<
-            decltype(Arg1::value - Arg2::value)
-            , Arg1::value - Arg2::value 
+      template <class A1, class A2>
+      struct subtract_impl<A1, A2>
+        : integral_constant<
+            decltype(A1::value - A2::value)
+            , A1::value - A2::value 
           >
       {};
         
-      template <class Arg1, class Arg2, class Arg3, class ...Args>
-      struct subtract_impl<Arg1, Arg2, Arg3, Args...>
+      template <class A1, class A2, class A3, class ...As>
+      struct subtract_impl<A1, A2, A3, As...>
         : subtract_impl<
-              subtract_impl<Arg1, Arg2>
-            , Arg3, Args...
+              subtract_impl<A1, A2>
+            , A3, As...
           >
       {};
       
@@ -103,46 +103,48 @@ namespace elib
     
     
     template <class LHS, class RHS, class ...Rest>
-    struct subtract : detail::subtract_impl<LHS, RHS, Rest...>
-    {};
+    using subtract = detail::subtract_impl<LHS, RHS, Rest...>;
     
     template <class LHS, class RHS, class ...Rest>
     using subtract_t = typename subtract<LHS, RHS, Rest...>::type;
     
     
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
-    template <class ...Args>
-    using minus = subtract<Args...>;
+    template <class ...As>
+    using minus = subtract<As...>;
+    
+    template <class ...As>
+    using minus_t = subtract_t<As...>;
 # endif
     
   //-------------------------------- multiply --------------------------------// 
     namespace detail
     {
       
-      template <class ...Args>
+      template <class ...As>
       struct multiply_impl;
         
         
-      template <class Arg>
-      struct multiply_impl<Arg> 
-        : Arg
+      template <class A>
+      struct multiply_impl<A> 
+        : A
       {};
         
         
-      template <class Arg1, class Arg2>
-      struct multiply_impl<Arg1, Arg2>
-        : integral_c<
-            decltype(Arg1::value * Arg2::value)
-          , Arg1::value * Arg2::value 
+      template <class A1, class A2>
+      struct multiply_impl<A1, A2>
+        : integral_constant<
+            decltype(A1::value * A2::value)
+          , A1::value * A2::value 
           >
       {};
         
         
-      template <class Arg1, class Arg2, class Arg3, class ...Args>
-      struct multiply_impl<Arg1, Arg2, Arg3, Args...>
+      template <class A1, class A2, class A3, class ...As>
+      struct multiply_impl<A1, A2, A3, As...>
         : multiply_impl<
-            multiply_impl<Arg1, Arg2>
-          , multiply_impl<Arg3, Args...> 
+            multiply_impl<A1, A2>
+          , multiply_impl<A3, As...> 
           >
       {};
     
@@ -150,8 +152,7 @@ namespace elib
     
     
     template <class LHS, class RHS, class ...Rest>
-    struct multiply : detail::multiply_impl<LHS, RHS, Rest...>
-    {};
+    using multiply = detail::multiply_impl<LHS, RHS, Rest...>;
     
     
     template <class LHS, class RHS, class ...Rest>
@@ -159,8 +160,11 @@ namespace elib
     
     
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
-    template <class ...Args>
-    using times = multiply<Args...>;
+    template <class ...As>
+    using times = multiply<As...>;
+    
+    template <class ...As>
+    using times_t = multiply_t<As...>;
 # endif
   
   //-------------------------------- divide --------------------------------// 
@@ -168,26 +172,26 @@ namespace elib
     namespace detail
     {
       
-      template <class ...Args>
+      template <class ...As>
       struct divide_impl;
         
-      template <class Arg>
-      struct divide_impl<Arg> : Arg
+      template <class A>
+      struct divide_impl<A> : A
       {};
         
-      template <class Arg1, class Arg2>
-      struct divide_impl<Arg1, Arg2>
-        : integral_c<
-            decltype(Arg1::value / Arg2::value)
-            , Arg1::value / Arg2::value 
+      template <class A1, class A2>
+      struct divide_impl<A1, A2>
+        : integral_constant<
+            decltype(A1::value / A2::value)
+            , A1::value / A2::value 
           >
       {};
         
-      template <class Arg1, class Arg2, class Arg3, class ...Args>
-      struct divide_impl<Arg1, Arg2, Arg3, Args...>
+      template <class A1, class A2, class A3, class ...As>
+      struct divide_impl<A1, A2, A3, As...>
         : divide_impl<
-            divide_impl<Arg1, Arg2>
-            , Arg3, Args...
+            divide_impl<A1, A2>
+            , A3, As...
           >
       {};
       
@@ -195,8 +199,7 @@ namespace elib
     
     
     template <class LHS, class RHS, class ...Rest>
-    struct divide : detail::divide_impl<LHS, RHS, Rest...>
-    {};
+    using divide = detail::divide_impl<LHS, RHS, Rest...>;
     
     
     template <class LHS, class RHS, class ...Rest>
@@ -204,23 +207,25 @@ namespace elib
     
     
 # if ELIB_MP_BOOST_COMPATIBLE_NAMES
-    template <class ...Args>
-    using divides = divide<Args...>;
+    template <class ...As>
+    using divides = divide<As...>;
+    
+    template <class ...As>
+    using divides_t = divide_t<As...>;
 # endif
   
   //-------------------------------- modulus --------------------------------// 
   
-    template <class Arg1, class Arg2>
-    struct modulus 
-      : integral_c<
-          decltype(Arg1::value % Arg2::value)
-          , Arg1::value % Arg2::value
-        >
-    {};
+    template <class A1, class A2>
+    using modulus = 
+      integral_constant<
+        decltype(A1::value % A2::value)
+        , A1::value % A2::value
+      >;
     
     
     template <class LHS, class RHS>
-    using modulus_t = typename modulus<LHS, RHS>::type;
+    using modulus_t = modulus<LHS, RHS>;
   
   }                                                         // namespace mp
 }                                                           // namespace elib

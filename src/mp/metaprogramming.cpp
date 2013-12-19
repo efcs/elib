@@ -9,7 +9,6 @@
 #include <elib/mp/identity.hpp>
 #include <elib/mp/if.hpp>
 #include <elib/mp/index_sequence.hpp>
-#include <elib/mp/inherit.hpp>
 #include <elib/mp/integral_constant.hpp>
 #include <elib/mp/lambda.hpp>
 #include <elib/mp/logical.hpp>
@@ -21,4 +20,3 @@
 #include <elib/mp/pack.hpp>
 #include <elib/mp/list.hpp>
 #include <elib/mp/vector.hpp>
-#include <elib/mp/concepts.hpp>

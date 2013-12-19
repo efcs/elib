@@ -1,10 +1,7 @@
 #ifndef ELIB_MP_PROTECT_HPP
-# define ELIB_MP_PROTECT_HPP
+#define ELIB_MP_PROTECT_HPP
 
-# include <elib/mp/config.hpp>
-# include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/bind.hpp>
-
 
 namespace elib 
 {
@@ -22,13 +19,8 @@ namespace elib
     {
       
       template <class ...ApplyArgs>
-      struct apply 
-        : apply_wrap< 
-            bind<F, Args...>
-            , ApplyArgs...
-          >
-      {};
-      
+      using apply = typename
+          bind<F, Args...>::template apply< ApplyArgs... >;
     };                                                      // struct protect
     
     

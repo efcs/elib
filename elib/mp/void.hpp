@@ -1,22 +1,22 @@
-#ifndef ELIB_MP_NA_HPP
-#define ELIB_MP_NA_HPP
+#ifndef ELIB_MP_VOID_HPP
+#define ELIB_MP_VOID_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/detail/integral_constant.hpp>
 # include <elib/mp/same_type.hpp>
 
 namespace elib 
 {
   namespace mp
   {
-   
-    struct na {};
+    
+    struct void_ { using type = void_; };
     
     template <class T>
-    using is_na = same_type<T, na>;
+    using is_void = same_type<T, void_>;
     
     template <class T>
-    using is_na_t = typename same_type<T, na>::type;
-   
+    using is_void_t = typename same_type<T, void_>::type;
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_NA_HPP */
+#endif /* ELIB_MP_VOID_HPP */

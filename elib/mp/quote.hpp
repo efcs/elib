@@ -3,7 +3,8 @@
 
 # include <elib/mp/config.hpp>
 # include <elib/mp/integral_constant.hpp>
-# include <elib/mp/detail/has_type.hpp>
+# include <elib/mp/typedef_detector.hpp>
+# include <elib/mp/identity.hpp>
 
 namespace elib 
 {
@@ -11,38 +12,22 @@ namespace elib
   {
     namespace detail
     {
-     
-      //-------------------------------- quote_impl -------------------------// 
-      
-      template <
-        class F
-        , class = typename has_type<F>::type
-      >
-      struct quote_impl
-      {
-        using type = F;
-      };
-      
+
+      template <class F>
+      auto quote_impl(void*) -> typename F::type;
       
       template <class F>
-      struct quote_impl< F, true_ >
-      {
-        using type = typename F::type;
-      };
+      auto quote_impl(...) -> F;
       
     }                                                       // namespace detail
-    
-    //-------------------------------- quote --------------------------------// 
-    template <
-      template <class...> class F
-    >
+   
+   template <template <class...> class F>
     struct quote
     {
       template <class ...Args>
-      struct apply
-      {
-        using type = typename detail::quote_impl<F<Args...>>::type;
-      };
+      using apply = identity< 
+        decltype( detail::quote_impl<F<Args...>>(0) ) 
+        >;
     };
     
     

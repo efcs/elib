@@ -28,34 +28,22 @@ namespace elib
       
       //-------------------------------- make_lambda ------------------------// 
       
-      template <
-        bool IsPHE
-        , template <class...> class F
-        , class ...Args
-      >
-      struct make_lambda
+      template <bool isPHE, template <class...> class F, class ...Args>
+      struct make_lambda;
+      
+      template <template <class...> class F, class ...Args>
+      struct make_lambda<false, F, Args...>
       {
         using raw_type_ = F<typename Args::type...>;
         using type = raw_type_;
-        
-        // Implementation check: this overload should only
-        // be selected when isPHE is false
-        static_assert(IsPHE == false,
-          "Incorrect overload selected for make_lambda");
       };
       
       
-      template < 
-        template <class...> class F
-        , class ...Args
-      >
+      template <template <class...> class F, class ...Args>
       struct make_lambda<true, F, Args...>
       {
         using raw_type_ = 
-          bind< 
-            quote<F>
-            , typename Args::raw_type_...
-          >;
+          bind< quote<F>, typename Args::raw_type_...>;
         
         using type = protect<raw_type_>;
       };

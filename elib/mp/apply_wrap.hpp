@@ -1,41 +1,39 @@
 #ifndef ELIB_MP_APPLY_WRAP_HPP
 #define ELIB_MP_APPLY_WRAP_HPP
 
-# include <elib/mp/config.hpp>
-# include <elib/mp/integral_constant.hpp>
-# include <elib/mp/detail/has_apply.hpp>
+
+# include <elib/mp/detail/integral_constant.hpp>
+
 
 namespace elib 
 {
   namespace mp
   {
+    
     namespace detail
     {
-      
-      template <class F, class = typename has_apply<F>::type >
-      struct apply_wrap0 : F::template apply<>
-      {};
+      template <class F>
+      auto detect_apply_type() -> typename F::apply;
       
       template <class F>
-      struct apply_wrap0<F, true_> : F::apply
-      {};
-      
+      auto detect_apply_type() -> typename F::template apply<>;
     }                                                       // namespace detail
     
-    /* Base template: used in case where Args is empty */
     template <class F, class ...Args>
-    struct apply_wrap
+    struct apply_wrap;
+    
+    
+    template <class F, class First, class ...Rest>
+    struct apply_wrap<F, First, Rest...>
     {
-      static_assert(sizeof...(Args) == 0, "param pack must be empty");
-      typedef typename detail::apply_wrap0<F>::type type;
+      using type = typename F::template apply<First, Rest...>::type;
     };
     
     
-    /* overload for 1 or more args */
-    template <class F, class T, class ...Args>
-    struct apply_wrap<F, T, Args...>
+    template <class F>
+    struct apply_wrap<F>
     {
-      typedef typename F::template apply<T, Args...>::type type;
+      using type = typename decltype(detail::detect_apply_type<F>())::type;
     };
     
     

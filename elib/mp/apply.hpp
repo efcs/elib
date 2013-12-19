@@ -12,12 +12,12 @@ namespace elib
     template <class F, class ...Args>
     struct apply
     {
-      using type = apply_wrap_t<lambda_t<F>, Args...>;
+      using type = typename lambda_t<F>::template apply<Args...>::type;
     };
     
     
     template <class F, class ...Args>
-    using apply_t = typename apply<F, Args...>::type;
+    using apply_t = typename lambda_t<F>::template apply<Args...>::type;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

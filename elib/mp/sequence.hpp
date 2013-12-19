@@ -8,15 +8,65 @@ namespace elib
 {
   namespace mp
   {
-    struct forward_sequence_tag {};
-    struct bidirectional_sequence_tag : forward_sequence_tag {};
-    struct random_access_sequence_tag : bidirectional_sequence_tag {};
-    struct associative_sequence_tag {};
     
-    struct front_extensible_sequence_tag {};
-    struct back_extensible_sequence_tag {};
-    struct variadic_extensible_sequence_tag {};
-    struct associative_extensible_sequence_tag {};
+  //-------------------------------- concept tags ----------------------------// 
+    
+    struct sequence_tag {};
+    
+    struct forward_sequence_tag 
+      : sequence_tag 
+    {};
+    
+    struct bidirectional_sequence_tag 
+      : forward_sequence_tag 
+    {};
+    
+    struct random_access_sequence_tag 
+      : bidirectional_sequence_tag 
+    {};
+    
+    struct variadic_sequence_tag 
+      : random_access_sequence_tag
+    {};
+    
+    struct variadic_list_tag 
+      : forward_sequence_tag 
+    {};
+    
+    struct associative_sequence_tag 
+      : sequence_tag
+    {};
+    
+    
+  //-------------------------------- mpl concept tags -----------------------// 
+    
+    struct mpl_sequence_tag 
+      : sequence_tag {};
+      
+    struct mpl_forward_sequence_tag
+      : mpl_sequence_tag, forward_sequence_tag
+    {};
+    
+    struct mpl_bidirectional_sequence_tag
+      : mpl_sequence_tag, bidirectional_sequence_tag
+    {};
+    
+    struct mpl_random_access_sequence_tag
+      : mpl_sequence_tag, random_access_sequence_tag
+    {};
+  
+    struct mpl_variadic_sequence_tag 
+      : mpl_sequence_tag, variadic_sequence_tag
+    {};
+  
+    struct mpl_variadic_list_tag
+      : mpl_sequence_tag, variadic_list_tag
+    {};
+    
+    struct mpl_associative_sequence_tag
+      : mpl_sequence_tag, associative_sequence_tag
+    {};
+    
     
   ////////////////////////////////////////////////////////////////////////////////
   //                            FORWARD SEQUENCE                                              

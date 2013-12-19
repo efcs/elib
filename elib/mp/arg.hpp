@@ -2,6 +2,8 @@
 #define ELIB_MP_ARG_HPP
 
 # include <elib/mp/pack.hpp>
+# include <elib/mp/sequence.hpp>
+# include <elib/mp/detail/integral_constant.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -9,20 +11,22 @@ namespace elib
   namespace mp
   {
     
-    /* arg is one indexed, get_arg is zero indexed
-     * so we have to account for the OBOB */
     template <std::size_t N>
     struct arg
     {
       template <class ...Args>
-      struct apply
-      {
-        using type = at_c_t<pack<Args...>, N>;
-      };
+      using apply = at_c<pack<Args...>, N - 1>;
       
       static_assert(N != 0, "0 is not a valid arg index (one indexed)");
     };
+
     
+    template <class S> 
+    struct is_placeholder : false_ {};
+    
+    template <std::size_t N> 
+    struct is_placeholder< arg<N> > : true_ {};
+
     
     namespace placeholders
     {

@@ -13,9 +13,6 @@ namespace elib
     { using type = T; };
     
     
-    template <class T>
-    using identity_t = typename identity<T>::type;
-    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_IDENTITY_HPP */

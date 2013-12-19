@@ -1,6 +1,8 @@
 #ifndef ELIB_MP_PAIR_HPP
 #define ELIB_MP_PAIR_HPP
 
+# include <elib/mp/identity.hpp>
+
 namespace elib 
 {
   namespace mp
@@ -17,10 +19,7 @@ namespace elib
   //-------------------------------- first ----------------------------------// 
     
     template <class Pair>
-    struct first
-    {
-      using type = typename Pair::first;
-    };
+    using first = identity< typename Pair::first >;
     
     template <class Pair>
     using first_t = typename Pair::first;
@@ -28,10 +27,7 @@ namespace elib
   //-------------------------------- second ---------------------------------//
   
     template <class Pair>
-    struct second
-    {
-      using type = typename Pair::second;
-    };
+    using second = identity< typename Pair::second >;
     
     template <class Pair>
     using second_t = typename Pair::second;

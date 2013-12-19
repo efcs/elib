@@ -8,9 +8,6 @@ namespace elib
   namespace mp
   {
     
-    struct variadic_sequence_tag {};
-    struct variadic_list_tag {};
-    
     template <class Seq, std::size_t N>
     struct variadic_sequence_iterator;
     
@@ -20,19 +17,21 @@ namespace elib
     // implementations are not in namespace detail since they
     // are meant to be generic for any variadic template
     template <
-      template <class, std::size_t> class IteratorType 
-        = variadic_sequence_iterator
+        template <class, std::size_t> class IteratorType
+          = variadic_sequence_iterator
       >
     struct variadic_sequence_intrinsics;
     
     struct variadic_sequence_iterator_intrinsics;
     
+    
     template <
-      template <class...> class IteratorType = variadic_list_iterator
+      template <class...> class IteratorType = variadic_list_iterator 
       >
     struct variadic_list_intrinsics;
-    struct variadic_list_iterator_intrinsics;
     
+    struct variadic_list_iterator_intrinsics;
+
     template <template <class...> class Seq, class T, std::size_t N>
     struct fill_variadic;
     

@@ -57,7 +57,7 @@ namespace elib
     template <class T>
     struct lambda
     {
-      using is_phe_ = false_;
+      using is_le_ = false_;
       using raw_type_ = T;
       using type = raw_type_;
     };
@@ -67,7 +67,7 @@ namespace elib
     template <std::size_t N>
     struct lambda< arg<N> >
     {
-      using is_phe_ = true_;
+      using is_le_ = true_;
       using raw_type_ = arg<N>;
       using type = raw_type_;
     };
@@ -76,7 +76,7 @@ namespace elib
     template <class F, class ...Args>
     struct lambda< bind<F, Args...> >
     {
-      using is_phe_ = false_;
+      using is_le_ = false_;
       using raw_type_ = bind<F, Args...>;
       using type = raw_type_;
     };
@@ -85,7 +85,7 @@ namespace elib
     template <class T>
     struct lambda< protect<T> >
     {
-      using is_phe_ = false_;
+      using is_le_ = false_;
       using raw_type_ = protect<T>;
       using type = raw_type_;
     };
@@ -101,11 +101,11 @@ namespace elib
     {
       // detail::or_impl is used since it accepts 0 or more parameters.
       // mp::or_ requires at least 2
-      using is_phe_ =  detail::lambda_or<typename lambda<Args>::is_phe_...>;
+      using is_le_ =  detail::lambda_or<typename lambda<Args>::is_le_...>;
       
       using lambda_result_ = 
         detail::make_lambda<
-          is_phe_::value
+          is_le_::value
           , F
           , lambda<Args>...
         >;
@@ -120,13 +120,7 @@ namespace elib
     
     
     template <class T>
-    using is_placeholder_expression = typename lambda<T>::is_phe_;
-    
-    
-# if ELIB_MP_BOOST_COMPATIBLE_NAMES    
-    template <class T>
-    using is_lambda_expression = is_placeholder_expression<T>;
-# endif
+    using is_lambda_expression = typename lambda<T>::is_le_;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

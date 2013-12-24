@@ -151,7 +151,7 @@ namespace elib
       template <class S, class ...Args>
       using prepend = detail::variadic_prepend_impl<S, Args...>;
       
-    };                                          // variadic_sequence_intrinsics
+    };                                                      // variadic_sequence_intrinsics
     
   }                                                         // namespace mp
 }                                                           // namespace elib

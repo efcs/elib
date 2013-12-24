@@ -3,6 +3,7 @@
 
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/lambda.hpp>
+# include <elib/mp/identity.hpp>
 
 namespace elib 
 {
@@ -10,14 +11,11 @@ namespace elib
   {
     
     template <class F, class ...Args>
-    struct apply
-    {
-      using type = typename lambda_t<F>::template apply<Args...>::type;
-    };
+    using apply_t = typename lambda_t<F>::template apply<Args...>::type;
     
     
     template <class F, class ...Args>
-    using apply_t = typename lambda_t<F>::template apply<Args...>::type;
+    using apply = identity< apply_t<F, Args...> >;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

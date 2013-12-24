@@ -5,6 +5,7 @@
 # include <elib/mp/fill_variadic.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/mp/sequence_traits.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <cstddef>
 
@@ -21,8 +22,8 @@ namespace elib
     {
       using type = pack;
       
-      using class_tag = pack_tag;
-      using category = mpl_variadic_sequence_tag;
+      using class_type = pack_tag;
+      using model_type = model::mpl_variadic_sequence;
     };
     
     
@@ -47,8 +48,6 @@ namespace elib
     {
       using type = variadic_sequence_intrinsics<>;
     };
-    
-    
     
   }                                                         // namespace pack
 }                                                           // namespace elib

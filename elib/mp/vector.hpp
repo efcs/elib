@@ -3,3 +3,4 @@
 #include <elib/mp/vector/iterator.hpp>
 #include <elib/mp/vector/intrinsics.hpp>
 #include <elib/mp/vector/iterator_intrinsics.hpp>
+#include <elib/mp/sequence_traits.hpp>

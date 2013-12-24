@@ -29,7 +29,7 @@ namespace elib
     
     
     template <class T, template <class> class Test>
-    using typedef_detected = typename typedef_detector<T, Test>::type;
+    using has_typedef = typename typedef_detector<T, Test>::type;
     
     template <class T, template <class> class Test>
     using detected_typedef_t = typename typedef_detector<T, Test>::value_type;
@@ -45,7 +45,7 @@ namespace elib
     using name##_typedef_test = typename T::name;     \
   }                                                   \
   template <class T> using has_##name##_typedef =     \
-    typedef_detected<T, detail::name##_typedef_test>; \
+    has_typedef<T, detail::name##_typedef_test>; \
                                                       \
   template <class T> using name##_typedef =           \
     detected_typedef<T, detail::name##_typedef_test>; \

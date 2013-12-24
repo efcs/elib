@@ -32,7 +32,6 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
     SAME_TYPE(typename T2::type, T2);
   }                                                     // mp_pack_construction
 
-  
   BOOST_AUTO_TEST_CASE(mp_pack_intrinsics)
   {
     // empty
@@ -233,5 +232,32 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
       SAME_TYPE(advance_t<E, long_<-1>>, advance_c_t<B, 3>);
     }
   }                                              // mp_pack_iterator_intrinsics
+  
+  
+#define CHECK_TRAITS(...)                                                  \
+  do {                                                                     \
+    using T = __VA_ARGS__;                                                 \
+    using Traits = sequence_traits<T>;                                     \
+    SAME_TYPE( typename Traits::class_type, pack_tag );                    \
+    SAME_TYPE( typename Traits::model_type, model::mpl_variadic_sequence); \
+    SAME_TYPE( typename Traits::class_type, class_type_t<T> );             \
+    SAME_TYPE( typename Traits::model_type, model_type_t<T> );             \
+    CHECK( is_mpl_sequence<T>::value );                                    \
+    CHECK( is_mpl_variadic<T>::value );                                    \
+    CHECK( has_O1_size<T>::value );                                        \
+    CHECK( has_O1_unpack<T>::value );                                      \
+  } while (false)
+#
+  
+  BOOST_AUTO_TEST_CASE(mp_pack_sequence_traits)
+  {
+    // empty
+    CHECK_TRAITS( pack<> );
+    // non-empty
+    CHECK_TRAITS( pack<int> );
+  }                                                  // mp_pack_sequence_traits
+  
+#undef CHECK_TRAITS
+
   
 BOOST_AUTO_TEST_SUITE_END()

@@ -29,6 +29,7 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
     SAME_TYPE(typename T2::type, T2);
   }                                                     // mp_list_construction
   
+
   BOOST_AUTO_TEST_CASE(mp_list_intrinsics)
   {
     // empty
@@ -149,6 +150,34 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
     }
   }                                              // mp_list_iterator_intrinsics
   
+    
+#define CHECK_TRAITS(...)                                              \
+  do {                                                                 \
+    using T = __VA_ARGS__;                                             \
+    using Traits = sequence_traits<T>;                                 \
+    SAME_TYPE( typename Traits::class_type, list_tag );                \
+    SAME_TYPE( typename Traits::model_type, model::mpl_variadic_list); \
+    SAME_TYPE( typename Traits::class_type, class_type_t<T> );         \
+    SAME_TYPE( typename Traits::model_type, model_type_t<T> );         \
+    CHECK( is_mpl_sequence<T>::value );                                \
+    CHECK( is_mpl_variadic<T>::value );                                \
+    CHECK( has_O1_size<T>::value );                                    \
+    CHECK( has_O1_unpack<T>::value );                                  \
+  } while (false)
+  
+  BOOST_AUTO_TEST_CASE(mp_list_sequence_traits)
+  {
+    // empty
+    CHECK_TRAITS(list<>);
+    // one elem
+    CHECK_TRAITS(list<int>);
+    // after insert
+    CHECK_TRAITS(push_front_t<list<void>, int>);
+    // after erase
+    CHECK_TRAITS( pop_front_t<list<int>> );
+  }                                                  // mp_list_sequence_traits
+  
+#undef CHECK_TRAITS
   
   
 BOOST_AUTO_TEST_SUITE_END()

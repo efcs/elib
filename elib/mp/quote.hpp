@@ -21,7 +21,7 @@ namespace elib
       
     }                                                       // namespace detail
    
-   template <template <class...> class F>
+    template <template <class...> class F>
     struct quote
     {
       template <class ...Args>

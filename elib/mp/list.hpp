@@ -4,7 +4,8 @@
 # include <elib/mp/variadic_list.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/sequence_traits.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {
@@ -20,7 +21,7 @@ namespace elib
       
       /* for sequence_traits */
       using class_type = list_tag;
-      using category = mpl_variadic_list_tag;
+      using model_type = model::mpl_variadic_list;
     };
     
     

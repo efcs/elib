@@ -8,65 +8,76 @@ namespace elib
 {
   namespace mp
   {
-    
+   
+   namespace model
+   {
   //-------------------------------- concept tags ----------------------------// 
     
-    struct sequence_tag {};
+    struct sequence {};
     
-    struct forward_sequence_tag 
-      : sequence_tag 
+    struct variadic
+      : sequence
     {};
     
-    struct bidirectional_sequence_tag 
-      : forward_sequence_tag 
+    struct forward_sequence 
+      : sequence 
     {};
     
-    struct random_access_sequence_tag 
-      : bidirectional_sequence_tag 
+    struct bidirectional_sequence 
+      : forward_sequence 
     {};
     
-    struct variadic_sequence_tag 
-      : random_access_sequence_tag
+    struct random_access_sequence 
+      : bidirectional_sequence 
     {};
     
-    struct variadic_list_tag 
-      : forward_sequence_tag 
+    struct variadic_sequence 
+      : variadic, random_access_sequence
     {};
     
-    struct associative_sequence_tag 
-      : sequence_tag
+    struct variadic_list 
+      : variadic, forward_sequence 
+    {};
+    
+    struct associative_sequence 
+      : sequence
     {};
     
     
   //-------------------------------- mpl concept tags -----------------------// 
     
-    struct mpl_sequence_tag 
-      : sequence_tag {};
+    struct mpl_sequence 
+      : sequence {};
       
-    struct mpl_forward_sequence_tag
-      : mpl_sequence_tag, forward_sequence_tag
+    struct mpl_variadic
+      : mpl_sequence, variadic
+    {};
+      
+    struct mpl_forward_sequence
+      : mpl_sequence, forward_sequence
     {};
     
-    struct mpl_bidirectional_sequence_tag
-      : mpl_sequence_tag, bidirectional_sequence_tag
+    struct mpl_bidirectional_sequence
+      : mpl_sequence, bidirectional_sequence
     {};
     
-    struct mpl_random_access_sequence_tag
-      : mpl_sequence_tag, random_access_sequence_tag
+    struct mpl_random_access_sequence
+      : mpl_sequence, random_access_sequence
     {};
   
-    struct mpl_variadic_sequence_tag 
-      : mpl_sequence_tag, variadic_sequence_tag
+    struct mpl_variadic_sequence 
+      : mpl_variadic, variadic_sequence
     {};
   
-    struct mpl_variadic_list_tag
-      : mpl_sequence_tag, variadic_list_tag
+    struct mpl_variadic_list
+      : mpl_variadic, variadic_list
     {};
     
-    struct mpl_associative_sequence_tag
-      : mpl_sequence_tag, associative_sequence_tag
+    struct mpl_associative_sequence
+      : mpl_sequence, associative_sequence
     {};
     
+   }                                                        // namespace model
     
   ////////////////////////////////////////////////////////////////////////////////
   //                            FORWARD SEQUENCE                                              

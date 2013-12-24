@@ -19,7 +19,7 @@ namespace elib
       
       /* for sequence_traits */
       using class_type = vector_tag;
-      using category = mpl_random_access_sequence_tag;
+      using model_type = model::mpl_random_access_sequence;
       
       using lower_bound_ = size_type<32767>;
       using upper_bound_ = lower_bound_;

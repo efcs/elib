@@ -1,14 +1,15 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-
-#include <elib/mp/arithmetic.hpp>
-#include <elib/mp/bitwise.hpp>
-#include <elib/mp/logical.hpp>
-#include <elib/mp/void.hpp>
-#include <elib/mp/detail/integral_constant.hpp>
-#include <elib/pp/overload.hpp>
+#include "elib/mp/arithmetic.hpp"
+#include "elib/mp/bitwise.hpp"
+#include "elib/mp/logical.hpp"
+#include "elib/mp/comparison.hpp"
+#include "elib/mp/void.hpp"
+#include "elib/mp/detail/integral_constant.hpp"
+#include "elib/pp/overload.hpp"
 #include "mp_test_helper.hpp"
+
 
 #define V_(x) x::type::value 
 #
@@ -19,11 +20,12 @@
 #define EXPAND_EXPR_4(a1, a2, a3, a4) V_(a1) OP V_(a2) OP V_(a3) OP V_(a4)
 #define EXPAND_EXPR_5(a1, a2, a3, a4, a5) V_(a1) OP V_(a2) OP V_(a3) OP V_(a4) OP V_(a5)
 #define EXPAND_EXPR_6(a1, a2, a3, a4, a5, a6) V_(a1) OP V_(a2) OP V_(a3) OP V_(a4) OP V_(a5) OP V_(a6)
-
+#
 #
 #define CHECK_RESULT(R, CT, result)                                       \
   CHECK( std::is_same<typename R::type::value_type, CT>::type::value ); \
   CHECK( R::type::value == result )
+#
 #
 #define TEST_OP(etype, eval, ...)                    \
   do {                                               \
@@ -34,6 +36,7 @@
     CHECK_RESULT(R, etype, eval);                    \
   } while (false)
 #
+#
 #define TEST_SIGNED_TYPES(e, x, y)       \
   TEST_OP(int, e, char_<x>, char_<y>);   \
   TEST_OP(int, e, short_<x>, short_<y>); \
@@ -41,21 +44,26 @@
   TEST_OP(long, e, long_<x>, long_<y>);  \
   TEST_OP(long long, e, llong_<x>, llong_<y>)
 #
+#
 #define TEST_UNSIGNED_TYPES(e, x, y)               \
   TEST_OP(unsigned, e, uint_<x>, uint_<y>);        \
   TEST_OP(unsigned long, e, ulong_<x>, ulong_<y>); \
   TEST_OP(unsigned long long, e, ullong_<x>, ullong_<y>)
 #
+#
 #define TEST_BOOL(e, x, y)  \
   TEST_OP(int, e, bool_<x>, bool_<y>)
+#
 #
 #define TEST_TYPES(e, x, y)   \
   TEST_SIGNED_TYPES(e, x, y); \
   TEST_UNSIGNED_TYPES(e, x, y)
 #
+#
 #define TEST_ALL_TYPES(e, x, y) \
   TEST_BOOL(e, x, y);           \
   TEST_TYPES(e, x, y)                                   
+#
 #
 #define TEST_CONVERSIONS(e, x, y)                        \
   /* bool */                                             \
@@ -101,6 +109,8 @@
   TEST_OP(unsigned long long, e, ulong_<x>, llong_<y>);  \
   TEST_OP(unsigned long long, e, ullong_<x>, ulong_<y>)
 #
+
+
 BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -410,5 +420,92 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 
   }                                                         // mp_logical_or
 
+////////////////////////////////////////////////////////////////////////////////
+//                            COMPARISON                                              
+////////////////////////////////////////////////////////////////////////////////
+
+
+#define EQUAL_TO(...)                    \
+  CHECK( equal_to<__VA_ARGS__>() );      \
+  CHECK( greater_equal<__VA_ARGS__>() ); \
+  CHECK( less_equal<__VA_ARGS__>() );    \
+  CHECK( !greater<__VA_ARGS__>() );      \
+  CHECK( !less<__VA_ARGS__>() );         \
+  CHECK( !not_equal_to<__VA_ARGS__>() )
+#
+#
+#define NOT_EQUAL_TO(...)                                          \
+  CHECK( not_equal_to<__VA_ARGS__>() );                            \
+  CHECK( (less<__VA_ARGS__>() && less_equal<__VA_ARGS__>()         \
+          && !greater_equal<__VA_ARGS__>())                        \
+        || (greater<__VA_ARGS__>() && greater_equal<__VA_ARGS__>() \
+            && !less_equal<__VA_ARGS__>())                         \
+        );                                                         \
+  CHECK( !equal_to<__VA_ARGS__>() )
+#
+#
+#define LESS(...)                                            \
+  CHECK( less<__VA_ARGS__>() && less_equal<__VA_ARGS__>() ); \
+  CHECK( not_equal_to<__VA_ARGS__>() && !equal_to<__VA_ARGS__>() ); \
+  CHECK( !greater<__VA_ARGS__>() && !greater_equal<__VA_ARGS__>() )
+#
+#
+#define LESS_EQUAL(...)                                         \
+  CHECK( less_equal<__VA_ARGS__>() );                           \
+  CHECK( (equal_to<__VA_ARGS__>() && !less<__VA_ARGS__>())      \
+        || (not_equal_to<__VA_ARGS__>() && less<__VA_ARGS__>()) \
+        );                                                      \
+  CHECK( !greater<__VA_ARGS__>() );                             \
+  CHECK( equal_to<__VA_ARGS__>() == greater_equal<__VA_ARGS__>() )
+#
+#
+#define GREATER(...)                                                \
+  CHECK( greater<__VA_ARGS__>() && greater_equal<__VA_ARGS__>() );  \
+  CHECK( not_equal_to<__VA_ARGS__>() && !equal_to<__VA_ARGS__>() ); \
+  CHECK( !less<__VA_ARGS__>() && !less_equal<__VA_ARGS__>() )
+#
+#
+#define GREATER_EQUAL(...)                                         \
+  CHECK( greater_equal<__VA_ARGS__>() );                           \
+  CHECK( (equal_to<__VA_ARGS__>() && !greater<__VA_ARGS__>())      \
+        || (not_equal_to<__VA_ARGS__>() && greater<__VA_ARGS__>()) \
+      );                                                           \
+  CHECK( less_equal<__VA_ARGS__>() == equal_to<__VA_ARGS__>() );   \
+  CHECK( !less<__VA_ARGS__>() )
+#
+  
+  
+ BOOST_AUTO_TEST_CASE(mp_comparision_test)
+  {
+    // LHS == RHS
+    EQUAL_TO(true_, true_);
+    EQUAL_TO(int_<1>, int_<1>);
+    EQUAL_TO(char_<2>, long_<2>);
+    EQUAL_TO(short_<10>, uint_<10>);
+    // LHS != RHS
+    NOT_EQUAL_TO(true_, false_);
+    NOT_EQUAL_TO(short_<-10>, ullong_<10>);
+    NOT_EQUAL_TO(int_<-1>, uint_<0>);
+    // LHS < RHS
+    LESS(false_, true_);
+    LESS(int_<0>, int_<1>);
+    LESS(short_<-1>, short_<1>);
+    LESS(uint_<1>, uint_<10>);
+    LESS(long_<0>, char_<2>);
+    LESS(false_, ullong_<10>);
+    // LHS <= RHS
+    LESS_EQUAL(false_, false_);
+    LESS_EQUAL(true_, true_);
+    LESS_EQUAL(int_<-1>, int_<-1>);
+    LESS_EQUAL(uint_<0>, int_<0>);
+    // LHS > RHS
+    GREATER(true_, false_);
+    GREATER(int_<10>, char_<1>);
+    GREATER(short_<100>, ullong_<99>);
+    // LHS >= RHS
+    GREATER_EQUAL(true_, true_);
+    GREATER_EQUAL(false_, false_);
+    GREATER_EQUAL(char_<10>, uint_<10>);
+  }                                                  // mp_comparision_equality
   
 BOOST_AUTO_TEST_SUITE_END()

@@ -98,7 +98,7 @@
                                                      \
   ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR_ALIAS(name, tname, impl)
 #
-/* unary expression */
+#/* unary expression */
 #
 # define ELIB_MP_UNARY_INTEGRAL_EXPR(name, tname, op) \
   template <class T>                                  \
@@ -107,7 +107,7 @@
   template <class T>                                  \
   using tname = ELIB_MP_AUTO_INTC( op T::value )
 #
-/* binary expression */
+#/* binary expression */
 #
 # define ELIB_MP_BINARY_INTEGRAL_EXPR(name, tname, op)    \
   template <class T, class U>                             \

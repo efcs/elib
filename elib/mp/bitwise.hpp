@@ -1,171 +1,36 @@
 #ifndef ELIB_MP_BITWISE_HPP
 #define ELIB_MP_BITWISE_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/detail/integral_expression.hpp>
 
 namespace elib 
 {
   namespace mp
   {
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                            BITNEGATE
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    template <class T>
-    using bitnegate_ =
-      integral_constant<
-        decltype( ~T::value )
-        , ~T::value  
-      >;
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                       BITAND                                                   
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    namespace detail 
-    {
-      
-      template <class ...Args>
-      struct bitand_impl;
-      
-      template <class T>
-      struct bitand_impl<T> : T
-      {};
-      
-      template <class A1, class A2>
-      struct bitand_impl<A1, A2> 
-        : integral_constant<
-            decltype(A1::value & A2::value)
-            , A1::value & A2::value
-          >
-      {};
-      
-      template <class A1, class A2, class A3, class ...Args>
-      struct bitand_impl<A1, A2, A3, Args...>
-        : bitand_impl<
-            bitand_impl<A1, A2>
-            , bitand_impl<A3, Args...>
-          >
-      {};
-      
-    }                                                       // namespace detail
-    
-    template <class A1, class A2, class ...Rest>
-    using bitand_ = detail::bitand_impl<A1, A2, Rest...>;
-    
-    
-    template <class A1, class A2, class ...Rest>
-    using bitand_t = typename detail::bitand_impl<A1, A2, Rest...>;
-    
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                           BITOR                                               
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    namespace detail
-    {
-        
-      template <class ...Args>
-      struct bitor_impl;
-      
-      template <class T>
-      struct bitor_impl<T> : T
-      {};
-      
-      template <class A1, class A2>
-      struct bitor_impl<A1, A2> 
-        : integral_constant<
-            decltype( A1::value | A2::value)
-            , A1::value | A2::value
-          >
-      {};
-      
-      template <class A1, class A2, class A3, class ...Args>
-      struct bitor_impl<A1, A2, A3, Args...>
-        : bitor_impl<
-            bitor_impl<A1, A2>
-            , bitor_impl<A3, Args...>
-          >
-      {};
-      
-    }                                                       // namespace detail
-    
-    
-    template <class A1, class A2, class ...Rest>
-    using bitor_ = detail::bitor_impl<A1, A2, Rest...>;
-    
-    template <class A1, class A2, class ...Rest>
-    using bitor_t = typename detail::bitor_impl<A1, A2, Rest...>;
-    
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                               BITXOR                                           
-  ////////////////////////////////////////////////////////////////////////////////
-    
-    namespace detail
-    {
-      
-      template <class ...Args>
-      struct bitxor_impl;
-      
-      template <class T>
-      struct bitxor_impl<T> : T
-      {};
-      
-      template <class A1, class A2>
-      struct bitxor_impl<A1, A2> 
-        : integral_constant<
-            decltype( A1::value ^ A2::value)
-            , A1::value ^ A2::value
-          >
-      {};
-      
-      template <class A1, class A2, class A3, class ...Args>
-      struct bitxor_impl<A1, A2, A3, Args...>
-        : bitxor_impl<
-            bitxor_impl<A1, A2>
-            , bitxor_impl<A3, Args...>
-          >
-      {};
-      
-    }                                                       // namespace detail
-    
-    template <class A1, class A2, class ...Rest>
-    using bitxor_ = detail::bitxor_impl<A1, A2, Rest...>;
-    
-    template <class A1, class A2, class ...Rest>
-    using bitxor_t = typename detail::bitxor_impl<A1, A2, Rest...>;
-    
-  ////////////////////////////////////////////////////////////////////////////////
-  //                          SHIFT LEFT                                                
-  ////////////////////////////////////////////////////////////////////////////////
+  //-------------------------------- bitnegate_ -----------------------------// 
   
-  
-    template <class C, class Shift>
-    using shift_left =
-      integral_constant<
-        decltype(C::value << Shift::value)
-        , (C::value << Shift::value)
-      >;
-      
-    template <class C, class Shift>
-    using shift_left_t = shift_left<C, Shift>;
+    ELIB_MP_UNARY_INTEGRAL_EXPR(bitnegate_, bitnegate_t, ~);
     
-  ////////////////////////////////////////////////////////////////////////////////
-  //                         SHIFT RIGHT                                                 
-  ////////////////////////////////////////////////////////////////////////////////
-  
+  //-------------------------------- bitand_ --------------------------------// 
     
-    template <class C, class Shift>
-    using shift_right =
-      integral_constant<
-          decltype(C::value >> Shift::value)
-          , (C::value >> Shift::value) 
-        >;
-        
-    template <class C, class Shift>
-    using shift_right_t = shift_right<C, Shift>;
+    ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR(bitand_, bitand_t, bitand_impl, &);
+  
+  //-------------------------------- bitor_ ---------------------------------// 
+    
+    ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR(bitor_, bitor_t, bitor_impl, |);
+    
+  //-------------------------------- bitxor_ --------------------------------// 
+    
+    ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR(bitxor_, bitxor_t, bitxor_impl, ^);
+    
+  //-------------------------------- shift_left -----------------------------// 
+    
+    ELIB_MP_BINARY_INTEGRAL_EXPR(shift_left, shift_left_t, <<);
+  
+  //-------------------------------- shift_right ----------------------------// 
+  
+    ELIB_MP_BINARY_INTEGRAL_EXPR(shift_right, shift_right_t, >>);
   
   }                                                         // namespace mp
 }                                                           // namespace elib

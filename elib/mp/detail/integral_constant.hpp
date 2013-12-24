@@ -5,7 +5,7 @@
 # include <cstddef>
 
 # define ELIB_MP_AUTO_INTC(...) \
-    ::elib::mp::integral_constant<decltype(__VA_ARGS__), __VA_ARGS__>
+    ::elib::mp::integral_constant<decltype(__VA_ARGS__), (__VA_ARGS__)>
 
 namespace elib 
 {

@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.7)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
+option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
@@ -88,7 +88,7 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
-set( CMAKE_BUILD_TYPE RELEASE)
+set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )

@@ -5,38 +5,12 @@
 #include <elib/mp/arithmetic.hpp>
 #include <elib/mp/bitwise.hpp>
 #include <elib/mp/logical.hpp>
+#include <elib/mp/void.hpp>
 #include <elib/mp/detail/integral_constant.hpp>
 #include <elib/pp/overload.hpp>
 #include "mp_test_helper.hpp"
 
 #define V_(x) x::type::value 
-#
-#define BOOL(v) static_cast<bool>(v)
-#define BOOL_(v) bool_<BOOL(v)>
-#
-#define CHAR(v) static_cast<char>(v)
-#define CHAR_(v) char_<CHAR(v)>
-#
-#define SHORT(v) static_cast<short>(v)
-#define SHORT_(v) short_<SHORT(v)>
-#
-#define INT(v) static_cast<int>(v)
-#define INT_(v) int_<INT(v)>
-#
-#define UINT(v) static_cast<unsigned>(v)
-#define UINT_(v) uint_<UINT(v)>
-#
-#define LONG(v) static_cast<long>(v)
-#define LONG_(v) long_<LONG(v)>
-#
-#define ULONG(v) static_cast<unsigned long>(v)
-#define ULONG_(v) ulong_<ULONG(v)>
-#
-#define LLONG(v) static_cast<long long>(v)
-#define LLONG_(v) llong_<LLONG(v)>
-#
-#define ULLONG(v) static_cast<unsigned long long>(v)
-#define ULLONG_(v) ullong_<ULLONG(v)>
 #
 #define EXPAND_EXPR(...) ELIB_PP_OVERLOAD(EXPAND_EXPR_, __VA_ARGS__)(__VA_ARGS__)
 #define EXPAND_EXPR_1(a) OP V_(a)
@@ -144,10 +118,10 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
     TEST_OP(int, -1, int_<1>);
     TEST_OP(int, 1, int_<-1>);
     TEST_OP(unsigned, 0u, uint_<0>);
-    TEST_OP(unsigned, UINT(-1), uint_<1>);
-    TEST_OP(long, 0l, long_<0>);
-    TEST_OP(long, 1l, long_<-1>);
-    TEST_OP(long, -1l, long_<1>);
+    TEST_OP(unsigned, -1u, uint_<1>);
+    TEST_OP(long, 0, long_<0>);
+    TEST_OP(long, 1, long_<-1>);
+    TEST_OP(long, -1, long_<1>);
   }
   
 #undef OP
@@ -351,8 +325,6 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
     TEST_TYPES(2, 1, 1);
     TEST_TYPES(4, 1, 2);
     TEST_TYPES(4, 2, 1);
-    // mixed
-    
   }                                                    // mp_bitwise_shift_left
   
 #undef OP
@@ -365,9 +337,78 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(0, 0, 1);
+    TEST_TYPES(1, 2, 1);
+    TEST_TYPES(1, 4, 2);
+    TEST_TYPES(2, 4, 1);
   }                                                   // mp_bitwise_shift_right
 
 #undef OP
 #undef FN
 
+////////////////////////////////////////////////////////////////////////////////
+//                            LOGICAL                                              
+////////////////////////////////////////////////////////////////////////////////
+
+
+  BOOST_AUTO_TEST_CASE(mp_logical_not)
+  {
+    SAME_TYPE(false_, not_t<true_>);
+    SAME_TYPE(true_, not_t<false_>);
+    SAME_TYPE(true_, not_t<int_<0>>);
+    SAME_TYPE(true_, not_t<ullong_<0>>);
+    SAME_TYPE(false_, not_t<char_<1>>);
+    SAME_TYPE(false_, not_t<short_<-1>>);
+    // or_c
+    SAME_TYPE(false_, not_c_t<true>);
+    SAME_TYPE(true_, not_c_t<false>);
+    SAME_TYPE(true_, not_c_t<0>);
+    SAME_TYPE(true_, not_c_t<0u>);
+    SAME_TYPE(true_, not_c_t<0l>);
+    SAME_TYPE(true_, not_c_t<static_cast<unsigned long long>(0)>);
+    SAME_TYPE(false_, not_c_t<1>);
+    SAME_TYPE(false_, not_c_t<static_cast<unsigned>(-1)>);
+  }                                                         // mp_logical_not
+  
+  BOOST_AUTO_TEST_CASE(mp_logical_and)
+  {
+    SAME_TYPE(true_, and_t<true_, true_>);
+    SAME_TYPE(true_, and_t<true_, true_, true_>);
+    SAME_TYPE(false_, and_t<true_, false_>);
+    SAME_TYPE(false_, and_t<false_, true_>);
+    SAME_TYPE(false_, and_t<false_, false_>);
+    SAME_TYPE(false_, and_t<true_, true_, false_>);
+    // short circuit test
+    SAME_TYPE(false_, and_t<true_, false_, void_>);
+    // and_c
+    SAME_TYPE(true_, and_c_t<true, true>);
+    SAME_TYPE(true_, and_c_t<true, true, true>);
+    SAME_TYPE(false_, and_c_t<true, false>);
+    SAME_TYPE(false_, and_c_t<false, true>);
+    SAME_TYPE(false_, and_c_t<false, false>);
+    SAME_TYPE(false_, and_c_t<true, true, false>);
+  }                                                         // mp_logical_and
+
+
+  BOOST_AUTO_TEST_CASE(mp_logical_or)
+  {
+    SAME_TYPE(true_, or_t<true_, true_>);
+    SAME_TYPE(true_, or_t<true_, true_, true_>);
+    SAME_TYPE(true_, or_t<false_, true_>);
+    SAME_TYPE(true_, or_t<true_, false_>);
+    SAME_TYPE(true_, or_t<false_, false_, false_, true_>);
+    SAME_TYPE(false_, or_t<false_, false_>);
+    SAME_TYPE(false_, or_t<false_, false_, false_>);
+    // short circuit test
+    SAME_TYPE(true_, or_t<false_, true_, void_>);
+    // or_c
+    SAME_TYPE(false_, or_c_t<false, false>);
+    SAME_TYPE(false_, or_c_t<false, false, false>);
+    SAME_TYPE(true_, or_c_t<true, false>);
+    SAME_TYPE(true_, or_c_t<false, true>);
+    SAME_TYPE(true_, or_c_t<true, true>);
+    SAME_TYPE(true_, or_c_t<false, false, true>);
+
+  }                                                         // mp_logical_or
+
+  
 BOOST_AUTO_TEST_SUITE_END()

@@ -22,6 +22,9 @@ namespace elib
     
     template <long V>
     using not_c = bool_<!V>;
+    
+    template <long V>
+    using not_c_t = bool_<!V>;
 
   ////////////////////////////////////////////////////////////////////////////////
   //                          AND                                                   
@@ -81,6 +84,10 @@ namespace elib
     using and_c = detail::and_c_impl<P1, P2, Preds...>;
     
     
+    template <bool P1, bool P2, bool ...Preds>
+    using and_c_t = detail::and_c_impl<P1, P2, Preds...>;
+    
+    
   ////////////////////////////////////////////////////////////////////////////////
   //                             OR                                             
   ////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +141,10 @@ namespace elib
     
     template <bool P1, bool P2, bool ...Rest>
     using or_c = detail::or_c_impl<P1, P2, Rest...>;
+    
+    
+    template <bool P1, bool P2, bool ...Rest>
+    using or_c_t = detail::or_c_impl<P1, P2, Rest...>;
     
   }                                                         //  namespace mp
 }                                                           // namespace elib

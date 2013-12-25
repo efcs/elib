@@ -24,7 +24,7 @@ namespace elib
        * lambda needs 0 or more and false on 0.
        * detail::or_impl provides this. */
       template <bool ...Values>
-      using lambda_or = or_c<false, Values...>;
+      using lambda_or = or_c<false, false, Values...>;
       
       //-------------------------------- make_lambda ------------------------// 
       

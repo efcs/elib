@@ -86,7 +86,7 @@
 #
 # define ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR_ALIAS(name, tname, impl) \
   template <class A1, class A2, class ...Rest>                     \
-  using name = detail::impl<A1, A2, Rest...>;                      \
+  struct name : detail::impl<A1, A2, Rest...> {};                  \
                                                                    \
   template <class A1, class A2, class ...Rest>                     \
   using tname = typename detail::impl<A1, A2, Rest...>::type 

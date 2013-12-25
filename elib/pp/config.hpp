@@ -3,11 +3,9 @@
 # 
 # include <elib/config.hpp>
 # 
-# // Range for integrals
-# define ELIB_PP_CFG_MIN_VALUE 0
-# define ELIB_PP_CFG_MAX_VALUE 256
+#
+# define ELIB_PP_ARITHMETIC_LIMIT 256
+# define ELIB_PP_ARITY_LIMIT 15
 # 
-# // Max function arity
-# define ELIB_PP_CFG_MAX_ARITY 10
-# 
+#
 #endif /* ELIB_PP_CONFIG_HPP */

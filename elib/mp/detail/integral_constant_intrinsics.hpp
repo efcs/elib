@@ -16,10 +16,15 @@ namespace elib
       
       struct integral_constant_intrinsics
       {
+        template <class IntC> struct deref;
         template <class IntC> struct next;
         template <class IntC> struct prior;
         template <class IntC> struct value_type;
         
+        
+        template <class IntC>
+        struct deref : IntC
+        {};
         
         template <class IntC>
         struct next 
@@ -52,7 +57,7 @@ namespace elib
     
     
     template <class T, T Value>
-    struct get_impl<integral_constant<T, Value>>
+    struct get_impl< integral_constant<T, Value> >
     {
       using type = detail::integral_constant_intrinsics;
     };

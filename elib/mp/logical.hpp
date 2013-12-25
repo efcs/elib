@@ -15,10 +15,10 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
     
     template <class T>
-    using not_ = bool_<!T::type::value>;
+    struct not_ : bool_<!T::type::value> {};
     
     template <class T>
-    using not_t = typename not_<T>::type;
+    using not_t = bool_<!T::type::value>;
     
     template <long V>
     using not_c = bool_<!V>;
@@ -34,31 +34,42 @@ namespace elib
     {
     //-------------------------------- and_impl ---------------------------// 
       
-      template <bool B, class ...Rest>
-      struct and_impl;
-      
-      template <class ...Args>
-      struct and_impl<false, Args...> : false_
-      {};
-      
-      template <>
-      struct and_impl<true> : true_
-      {};
+      template <bool Done, bool Val> struct and_impl;
       
       template <class First, class ...Rest>
-      struct and_impl<true, First, Rest...>
-        : and_impl<static_cast<bool>(First::type::value), Rest...>
-      {};
+      using and_impl_apply = typename 
+          and_impl< 
+              sizeof...(Rest) == 0 || 
+                !static_cast<bool>(First::type::value)
+            ,  static_cast<bool>(First::type::value)
+            >::template apply<Rest...>;
+      
+      
+      template <bool Val>
+      struct and_impl<false, Val>
+      {
+        template <class First, class ...Rest>
+        using apply = and_impl_apply<First, Rest...>;
+      };
+      
+      template <bool Val>
+      struct and_impl<true, Val>
+      {
+        template <class ...Args>
+        using apply = bool_<Val>;
+      };
 
     }                                                       // namespace detail
     
     template <class P1, class P2, class ...Rest>
-    using and_ = 
-      detail::and_impl<static_cast<bool>(P1::type::value), P2, Rest...>;
+    struct and_  
+      : detail::and_impl_apply<P1, P2, Rest...>
+    {};
     
     
     template <class P1, class P2, class ...Rest>
-    using and_t = typename and_<P1, P2, Rest...>::type;
+    using and_t = typename detail::and_impl_apply<P1, P2, Rest...>::type;
+    
     
   ////////////////////////////////////////////////////////////////////////////////
   //                            AND_C                                              
@@ -92,33 +103,46 @@ namespace elib
   //                             OR                                             
   ////////////////////////////////////////////////////////////////////////////////
     
-    namespace detail
+     namespace detail
     {
-        
-      template <bool B, class ...Args>
-      struct or_impl : false_
-      {
-        static_assert(!B, "B must be false");
-      };
+    //-------------------------------- or_impl ---------------------------// 
       
-      template <class ...Args>
-      struct or_impl<true, Args...> : true_
-      {};
+      template <bool Done, bool Val> struct or_impl;
       
       template <class First, class ...Rest>
-      struct or_impl<false, First, Rest...> 
-        : or_impl<static_cast<bool>(First::type::value), Rest...>
-      {};
+      using or_impl_apply = typename 
+          or_impl< 
+              sizeof...(Rest) == 0 || 
+                static_cast<bool>(First::type::value)
+            ,  static_cast<bool>(First::type::value)
+            >::template apply<Rest...>;
       
+      
+      template <bool Val>
+      struct or_impl<false, Val>
+      {
+        template <class First, class ...Rest>
+        using apply = or_impl_apply<First, Rest...>;
+      };
+      
+      template <bool Val>
+      struct or_impl<true, Val>
+      {
+        template <class ...Args>
+        using apply = bool_<Val>;
+      };
+
     }                                                       // namespace detail
     
     template <class P1, class P2, class ...Rest>
-    using or_ = 
-      detail::or_impl<static_cast<bool>(P1::type::value), P2, Rest...>;
+    struct or_  
+      : detail::or_impl_apply<P1, P2, Rest...>
+    {};
     
     
     template <class P1, class P2, class ...Rest>
-    using or_t = typename or_<P1, P2, Rest...>::type;
+    using or_t = typename detail::or_impl_apply<P1, P2, Rest...>::type;
+
     
   ////////////////////////////////////////////////////////////////////////////////
   //                            OR_C                                              

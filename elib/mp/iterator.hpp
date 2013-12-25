@@ -14,53 +14,63 @@ namespace elib
     
     
     template <class Iter>
-    using iterator_category = 
-      typename get_impl_t<Iter>::template iterator_category<Iter>;
+    using iterator_category_t = 
+      typename get_impl_t<Iter>::template iterator_category<Iter>::type;
       
     template <class Iter>
-    using iterator_category_t = typename iterator_category<Iter>::type;
+    struct iterator_category : get_impl_t<Iter>::template iterator_category<Iter>
+    {};
     
     
     template <class Iter> 
-    using deref = typename get_impl_t<Iter>::template deref<Iter>;
+    using deref_t = typename get_impl_t<Iter>::template deref<Iter>::type;
     
     template <class Iter>
-    using deref_t = typename deref<Iter>::type;
+    struct deref : get_impl_t<Iter>::template deref<Iter>
+    {};
     
     
     template <class Iter, class N>
-    using advance = typename get_impl_t<Iter>::template advance<Iter, N>;
+    using advance_t = 
+      typename get_impl_t<Iter>::template advance<Iter, N>::type;
     
     template <class Iter, class N>
-    using advance_t = typename advance<Iter, N>::type;
+    struct advance : get_impl_t<Iter>::template advance<Iter, N>
+    {};
     
     
     template <class Iter, long N>
-    using advance_c = typename get_impl_t<Iter>::template advance_c<Iter, N>;
+    using advance_c_t = 
+      typename get_impl_t<Iter>::template advance_c<Iter, N>::type;
     
     template <class Iter, long N>
-    using advance_c_t = typename advance_c<Iter, N>::type;
+    struct advance_c : get_impl_t<Iter>::template advance_c<Iter, N>
+    {};
     
     
     template <class First, class Last>
-    using distance = typename get_impl_t<First>::template distance<First, Last>;
+    using distance_t = 
+      typename get_impl_t<First>::template distance<First, Last>::type;
     
     template <class First, class Last>
-    using distance_t = typename distance<First, Last>::type;
+    struct distance : get_impl_t<First>::template distance<First, Last>
+    {};
     
     
     template <class Iter>
-    using next = typename get_impl_t<Iter>::template next<Iter>;
+    using next_t = typename get_impl_t<Iter>::template next<Iter>::type;
     
     template <class Iter>
-    using next_t = typename next<Iter>::type;
+    struct next : get_impl_t<Iter>::template next<Iter>
+    {};
     
     
     template <class Iter>
-    using prior = typename get_impl_t<Iter>::template prior<Iter>;
+    using prior_t = typename get_impl_t<Iter>::template prior<Iter>::type;
     
     template <class Iter>
-    using prior_t = typename prior<Iter>::type;
+    struct prior : get_impl_t<Iter>::template prior<Iter>
+    {};
     
   }                                                         // namespace mp
 }                                                           // namespace elib

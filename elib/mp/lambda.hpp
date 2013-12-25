@@ -16,23 +16,23 @@ namespace elib
   namespace mp
   {
     
-    template <class> struct lambda;
+    template <class> struct make_lambda;
     
     namespace detail
     {
       /* mp::or_ only accepts 2 or more params,
        * lambda needs 0 or more and false on 0.
        * detail::or_impl provides this. */
-      template <class ...Args>
-      using lambda_or = detail::or_impl<false, Args...>;
+      template <bool ...Values>
+      using lambda_or = or_c<false, Values...>;
       
       //-------------------------------- make_lambda ------------------------// 
       
       template <bool isPHE, template <class...> class F, class ...Args>
-      struct make_lambda;
+      struct make_lambda_impl;
       
       template <template <class...> class F, class ...Args>
-      struct make_lambda<false, F, Args...>
+      struct make_lambda_impl<false, F, Args...>
       {
         using raw_type_ = F<typename Args::type...>;
         using type = raw_type_;
@@ -40,7 +40,7 @@ namespace elib
       
       
       template <template <class...> class F, class ...Args>
-      struct make_lambda<true, F, Args...>
+      struct make_lambda_impl<true, F, Args...>
       {
         using raw_type_ = 
           bind< quote<F>, typename Args::raw_type_...>;
@@ -55,7 +55,7 @@ namespace elib
     
     // base case
     template <class T>
-    struct lambda
+    struct make_lambda
     {
       using is_le_ = false_;
       using raw_type_ = T;
@@ -65,7 +65,7 @@ namespace elib
     // special cases
     
     template <std::size_t N>
-    struct lambda< arg<N> >
+    struct make_lambda< arg<N> >
     {
       using is_le_ = true_;
       using raw_type_ = arg<N>;
@@ -74,7 +74,7 @@ namespace elib
     
     
     template <class F, class ...Args>
-    struct lambda< bind<F, Args...> >
+    struct make_lambda< bind<F, Args...> >
     {
       using is_le_ = false_;
       using raw_type_ = bind<F, Args...>;
@@ -83,7 +83,7 @@ namespace elib
     
     
     template <class T>
-    struct lambda< protect<T> >
+    struct make_lambda< protect<T> >
     {
       using is_le_ = false_;
       using raw_type_ = protect<T>;
@@ -97,17 +97,17 @@ namespace elib
       template <class...> class F
       , class ...Args
     >
-    struct lambda< F<Args...> >
+    struct make_lambda< F<Args...> >
     {
       // detail::or_impl is used since it accepts 0 or more parameters.
       // mp::or_ requires at least 2
-      using is_le_ =  detail::lambda_or<typename lambda<Args>::is_le_...>;
+      using is_le_ =  detail::lambda_or<make_lambda<Args>::is_le_::value...>;
       
       using lambda_result_ = 
-        detail::make_lambda<
-          is_le_::value
+        detail::make_lambda_impl<
+          is_le_::type::value
           , F
-          , lambda<Args>...
+          , make_lambda<Args>...
         >;
         
       using raw_type_ = typename lambda_result_::raw_type_;
@@ -116,11 +116,14 @@ namespace elib
     
     
     template <class T>
-    using lambda_t = typename lambda<T>::type;
+    using make_lambda_t = typename make_lambda<T>::type;
+    
+    template <class T>
+    using lambda = typename make_lambda<T>::type;
     
     
     template <class T>
-    using is_lambda_expression = typename lambda<T>::is_le_;
+    using is_lambda_expression = typename make_lambda<T>::is_le_;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

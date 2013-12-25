@@ -38,7 +38,7 @@ namespace elib
       template <std::size_t N, typename ...Args>
       struct resolve_bind_arg<arg<N>, Args...>
       {
-        using type = apply_wrap<arg<N>, Args...>;
+        using type = apply_wrap_t<arg<N>, Args...>;
       };
       
       //--------------------- resolve_bind_arg_t ----------------------------// 

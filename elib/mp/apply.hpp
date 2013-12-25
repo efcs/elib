@@ -11,7 +11,7 @@ namespace elib
   {
     
     template <class F, class ...Args>
-    using apply_t = typename lambda_t<F>::template apply<Args...>::type;
+    using apply_t = typename lambda<F>::template apply<Args...>::type;
     
     
     template <class F, class ...Args>

@@ -49,6 +49,23 @@ namespace elib
   
     ELIB_MP_BINARY_INTEGRAL_EXPR(modulus, modulus_t, %);
   
+  
+  //-------------------------------- increment --------------------------------// 
+    
+    template <class T>
+    using increment = integral_constant< typename T::value_type, T::value + 1 >;
+    
+    template <class T>
+    using increment_t = increment<T>;
+    
+  //-------------------------------- decrement --------------------------------// 
+  
+    template <class T>
+    using decrement = integral_constant< typename T::value_type, T::value - 1 >;
+    
+    template <class T>
+    using decrement_t = decrement<T>;
+  
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_ARITHMETIC_HPP */

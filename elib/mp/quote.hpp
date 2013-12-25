@@ -2,8 +2,6 @@
 #define ELIB_MP_QUOTE_HPP
 
 # include <elib/mp/config.hpp>
-# include <elib/mp/integral_constant.hpp>
-# include <elib/mp/typedef_detector.hpp>
 # include <elib/mp/identity.hpp>
 
 namespace elib 
@@ -14,7 +12,7 @@ namespace elib
     {
 
       template <class F>
-      auto quote_impl(void*) -> typename F::type;
+      auto quote_impl(int) -> typename F::type;
       
       template <class F>
       auto quote_impl(...) -> F;

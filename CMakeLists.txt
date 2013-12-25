@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.7)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
+option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
 option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
@@ -98,7 +98,7 @@ set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
-add_definitions( -std=c++11 -Wall -Wextra -pedantic)
+add_definitions( -std=c++11 -Wall -Wextra -pedantic -ferror-limit=5)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)

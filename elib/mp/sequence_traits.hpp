@@ -4,7 +4,7 @@
 # include <elib/mp/detail/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/identity.hpp>
-# include <elib/mp/typedef_detector.hpp>
+# include <elib/mp/member_type_detector.hpp>
 # include <elib/mp/if.hpp>
 # include <type_traits>
 
@@ -45,6 +45,7 @@ namespace elib
     using model_type_t = typename sequence_traits<T>::model_type;
     
     
+    
     template <class T, class Tag>
     using is_model_of = 
       std::is_base_of<
@@ -65,6 +66,7 @@ namespace elib
     template <class T>
     using is_variadic = is_model_of<T, model::variadic>;
     
+    
     namespace detail
     {
       template <class T>
@@ -74,19 +76,21 @@ namespace elib
       using has_O1_unpack_typedef_test = typename T::has_O1_unpack;
     }                                                       // namespace detail
     
+    
     template <class T>
     using has_O1_size = 
       if_t< 
-          has_typedef<sequence_traits<T>, detail::has_O1_size_typedef_test>
-        , detected_typedef_t<sequence_traits<T>, detail::has_O1_size_typedef_test>
+          has_member_type<sequence_traits<T>, detail::has_O1_size_typedef_test>
+        , member_type_t<sequence_traits<T>, detail::has_O1_size_typedef_test>
         , false_
         >;
-        
+    
+    
     template <class T>
     using has_O1_unpack =
       if_t<
-          has_typedef<sequence_traits<T>, detail::has_O1_unpack_typedef_test>
-        , detected_typedef_t<sequence_traits<T>, detail::has_O1_unpack_typedef_test>
+          has_member_type<sequence_traits<T>, detail::has_O1_unpack_typedef_test>
+        , member_type_t<sequence_traits<T>, detail::has_O1_unpack_typedef_test>
         , false_
         >;
  }                                                          // namespace mp

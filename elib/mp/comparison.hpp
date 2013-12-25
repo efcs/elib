@@ -9,26 +9,32 @@ namespace elib
   {
     
     template <class LHS, class RHS>
-    using equal_to = bool_<LHS::value == RHS::value>;
+    struct equal_to : bool_<LHS::type::value == RHS::type::value>
+    {};
     
     template <class LHS, class RHS>
-    using not_equal_to = bool_<LHS::value != RHS::value>;
-    
-    
-    template <class LHS, class RHS>
-    using less = bool_<(LHS::value < RHS::value)>;
+    struct not_equal_to : bool_<LHS::type::value != RHS::type::value>
+    {};
     
     
     template <class LHS, class RHS>
-    using less_equal = bool_<(LHS::value <= RHS::value)>;
+    struct less : bool_<(LHS::type::value < RHS::type::value)>
+    {};
     
     
     template <class LHS, class RHS>
-    using greater = bool_<(LHS::value > RHS::value)>;
+    struct less_equal : bool_<(LHS::type::value <= RHS::type::value)>
+    {};
     
     
     template <class LHS, class RHS>
-    using greater_equal = bool_<(LHS::value >= RHS::value)>;
+    struct greater : bool_<(LHS::type::value > RHS::type::value)>
+    {};
+    
+    
+    template <class LHS, class RHS>
+    struct greater_equal : bool_<(LHS::type::value >= RHS::type::value)>
+    {};
     
     
   }                                                         // namespace mp

@@ -1,12 +1,9 @@
 #ifndef ELIB_PP_INC_HPP
 #define ELIB_PP_INC_HPP
-# 
-# include <elib/pp/cat.hpp>
-# 
-# 
-# define ELIB_PP_INC(v) ELIB_PP_CAT(ELIB_PP_INC_, v)
-# 
-# 
+#
+#
+# define ELIB_PP_INC(x) ELIB_PP_INC_##x
+#
 # define ELIB_PP_INC_0 1 
 # define ELIB_PP_INC_1 2 
 # define ELIB_PP_INC_2 3 
@@ -262,9 +259,8 @@
 # define ELIB_PP_INC_252 253 
 # define ELIB_PP_INC_253 254 
 # define ELIB_PP_INC_254 255 
-# define ELIB_PP_INC_255 256
-# /* special case */
+# define ELIB_PP_INC_255 256 
 # define ELIB_PP_INC_256 256
-# 
-# 
-# endif /* ELIB_PP_INC_HPP */
+#
+#
+#endif /* ELIB_PP_INC_HPP */

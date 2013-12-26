@@ -50,8 +50,6 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
         using Void = advance_c_t<B, 3>;
         using E = end_t<T>;
         
-        static_assert( is_lambda_expression< deref_wrapper<same_type<int, _1>> >::value, 
-                      " must me lambda expression ");
         using Pred1 = not_< same_type<int, _1> >;
         using FVoid = find_if_t<T, Pred1>;
         SAME_TYPE(Void, FVoid);
@@ -75,10 +73,6 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
     // pack
     {
       using T = pack<int, int, int, char, char, bool, int, int>;
-      using IntC = int_<5>;
-      using CharC = int_<2>;
-      using BoolC = int_<1>;
-      using VoidC = int_<0>;
       
       CHECK( 5 == count_t<T, int >() );
       CHECK( 2 == count_t<T, char>() );
@@ -86,15 +80,11 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
       CHECK( 0 == count_t<T, void>() );
       
       using TE = pack<>;
-      CHECK( 0 == count_t<T, void>() );
+      CHECK( 0 == count_t<TE, void>() );
     }
     // vector
     {
       using T = vector<int, int, int, char, char, bool, int, int>;
-      using IntC = int_<5>;
-      using CharC = int_<2>;
-      using BoolC = int_<1>;
-      using VoidC = int_<0>;
       
       CHECK( 5 == count_if_t<T, same_type<int, _1> >() );
       CHECK( 7 == count_if_t<T, not_<same_type<bool, _1>> >() );

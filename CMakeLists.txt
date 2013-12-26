@@ -88,7 +88,7 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
-set( CMAKE_BUILD_TYPE DEBUG)
+set( CMAKE_BUILD_TYPE RELEASE)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )

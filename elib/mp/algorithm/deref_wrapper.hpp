@@ -16,12 +16,25 @@ namespace elib
       using apply = apply_wrap<F, State, deref_t<Iter>>;
     };
 
-    template <class Pred>
+
+    template <class F>
     struct binary_deref_wrapper
     {
       template <class State, class Iter>
-      using apply = apply_wrap<Pred, deref_t<State>, deref_t<Iter>>;
+      using apply = apply_wrap<F, deref_t<State>, deref_t<Iter>>;
     };
+    
+    
+    template <class F>
+    struct first_deref_wrapper
+    {
+      template <class First, class Second>
+      using apply = apply_wrap<F, deref_t<First>, Second>;
+    };
+    
+    
+    template <class F>
+    using second_deref_wrapper = deref_wrapper<F>;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

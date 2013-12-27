@@ -89,12 +89,16 @@ namespace elib
         using state3 = iter_foldl_if_next<state2, F, Pred>;
         using state4 = iter_foldl_if_next<state3, F, Pred>;
         
-        using type = 
-          eval_if_t< 
+        using result_ =
+          if_t< 
             typename state4::is_last
           , state4
           , iter_foldl_if_rec<state4, F, Pred>
           >;
+        
+        using iterator = typename result_::iterator;
+        using state = typename result_::state;
+        using type = state;
       };
       
       

@@ -26,4 +26,9 @@
 # include <elib/mp/algorithm/min_element.hpp>
 # include <elib/mp/algorithm/max_element.hpp>
 #
+# include <elib/mp/algorithm/sequence_equal.hpp>
+# 
+# include <elib/mp/algorithm/lower_bound.hpp>
+# include <elib/mp/algorithm/upper_bound.hpp>
+# 
 #endif /* ELIB_MP_ALGORITHM_HPP */

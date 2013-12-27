@@ -60,6 +60,7 @@ namespace elib
         template <class State, class F, class Pred, class ...Args>
         struct apply
         {
+          using state = State;
           using type = State;
         };
       };

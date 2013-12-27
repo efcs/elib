@@ -21,6 +21,7 @@ namespace elib
         template < class State, class F, std::size_t N, class ...Args>
         struct apply 
         {
+          using state = State;
           using type = State;
           static_assert(N == 0, "sanity check");
         };
@@ -65,6 +66,7 @@ namespace elib
                     
       static_assert( N <= sizeof...(Args), "N must <= size<Seq>");
     };
+    
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_ALGORITHM_VARIADIC_FOLDL_N_HPP */

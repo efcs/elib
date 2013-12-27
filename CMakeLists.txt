@@ -1,8 +1,12 @@
 cmake_minimum_required (VERSION 2.7)
 
+################################################################################
+#                   Toolchain config
+################################################################################
+
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
+option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
 option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
@@ -14,15 +18,6 @@ option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
-
-option(CONFIG_UNIT_TESTS "build unit tests" ON)
-
-# Options to select what parts to build
-option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
-option(CONFIG_LIB_MPL "Build MPL" ON)
-option(CONFIG_LIB_LOG "Build Log" ON)
-option(CONFIG_LIB_UTILITY "Build Utility" ON)
-option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
               
 if (CONFIG_USE_GCC_49)
   set(CMAKE_C_COMPILER /opt/gcc4.9/bin/gcc)
@@ -40,11 +35,29 @@ if(CONFIG_USE_CLANG)
 endif()
 
 ################################################################################
+#                         Elib Parts
+################################################################################
+
+option(CONFIG_UNIT_TESTS "build unit tests" ON)
+
+# Options to select what parts to build
+option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
+option(CONFIG_LIB_MPL "Build MPL" ON)
+option(CONFIG_LIB_LOG "Build Log" ON)
+option(CONFIG_LIB_UTILITY "Build Utility" ON)
+option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
+
+################################################################################
 #                         PROJECT ELIB
 ################################################################################
 
 # we need C to get the pthreads library 
 project(EricsLibrary CXX C)
+
+
+################################################################################
+#                       Toolchain config (Post-project)
+################################################################################
 
 # Turn off filesystem on Win32
 if ( WIN32 )
@@ -56,28 +69,37 @@ if ( WIN32 )
 
 endif()
 
+
 if (CONFIG_USE_LIBCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
 endif()
 
+
 if (CONFIG_USE_OPT_LIBSTDCXX)
   set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
 endif()
+
 
 if (CONFIG_ASAN)
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS}  -O1 -fsanitize=address ")
 endif()
 
+
 if (CONFIG_TSAN)
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=thread ")
 endif() 
 
+
 if (CONFIG_MSAN)
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -O2 -fsanitize=memory -fno-omit-frame-pointer ")
 endif() 
+
+################################################################################
+#                          Build & Installation Config
+################################################################################
 
 if (CONFIG_MY_BUILD)
 	# I like to install in weird places 
@@ -103,12 +125,6 @@ add_definitions( -std=c++11 -Wall -Wextra -pedantic)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
-
-################################################################################
-#                           Additional config
-################################################################################
-
-
 
 ################################################################################
 #                           Macros & Functions
@@ -152,6 +168,9 @@ macro(include_library_if Pred CFile)
   endif()
 endmacro(include_library_if)
 
+################################################################################
+#
+################################################################################
 
 add_subdirectory(src)
 #add_subdirectory(test_main)

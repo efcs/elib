@@ -31,7 +31,11 @@ namespace elib
       struct variadic_foldl_impl<true>
       {
         template <class State, class F>
-        using apply = identity<State>;
+        struct apply
+        {
+          using state = State;
+          using type = State;
+        };
       };
       
     }                                                       // namespace detail

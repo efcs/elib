@@ -56,7 +56,7 @@ namespace elib
         
         using type = typename 
           variadic_foldl_n_impl<N == 0>::template 
-            apply<State, F, N, Args...>;
+            apply<State, F, N, Args...>::type;
             
             
         static_assert( is_variadic<S<Args...>>::value,
@@ -65,7 +65,7 @@ namespace elib
         static_assert( N <= sizeof...(Args), "N must <= size<Seq>");
       };
     
-        
+    
     }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib

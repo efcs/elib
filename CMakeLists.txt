@@ -6,7 +6,7 @@ cmake_minimum_required (VERSION 2.7)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
+option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
@@ -110,7 +110,7 @@ if (CONFIG_MY_BUILD)
 	endif()
 endif()
 	
-set( CMAKE_BUILD_TYPE RELEASE)
+set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
@@ -120,7 +120,7 @@ set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 find_package( Threads REQUIRED )
-add_definitions( -std=c++11 -Wall -Wextra -pedantic -ferror-limit=3)
+add_definitions( -std=c++11 -Wall -Wextra -pedantic)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)

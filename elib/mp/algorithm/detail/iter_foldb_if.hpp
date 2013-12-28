@@ -4,6 +4,7 @@
 # include <elib/mp/algorithm/detail/identity_iter_op.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/if.hpp>
+# include <elib/mp/logical.hpp>
 # include <elib/mp/detail/integral_constant.hpp>
 
 namespace elib 
@@ -87,21 +88,23 @@ namespace elib
         
         template <
             class FStep,  class FPred 
-          , class BStep, class StateOp
-          , class IterOp, class Pred
+          , class BStep,  class StateOp
+          , class IterOp, class BPred
         >
         using forward_iter_take_backward_step = typename 
           iter_take_step_impl<
-              apply_wrap_t<
-                  Pred
-                , typename BStep::state
-                , typename FStep::iterator
-                >::value
-              && apply_wrap_t<
-                  FPred
-                , typename FStep::state
-                , typename FStep::iterator
-                >::value
+            and_<
+                apply_wrap<
+                    FPred
+                  , typename FStep::state
+                  , typename FStep::iterator
+                  >
+              , apply_wrap<
+                    BPred
+                  , typename BStep::state
+                  , typename FStep::iterator
+                  >
+              >::value
             >::template
             apply<
                 typename FStep::iterator
@@ -113,21 +116,23 @@ namespace elib
         
         template <
             class FStep,  class FPred 
-          , class BStep, class StateOp
+          , class BStep,  class StateOp
           , class IterOp, class BPred
         >
         using bidirectional_iter_take_backward_step = typename
           iter_take_step_impl<
-              apply_wrap_t<
-                  BPred
-                , typename BStep::state
-                , typename BStep::iterator
-                >::value
-              && apply_wrap_t<
-                  FPred
-                , typename FStep::state
-                , typename FStep::iterator
-                >::value
+              and_<
+                apply_wrap<
+                    FPred
+                  , typename FStep::state
+                  , typename FStep::iterator
+                  >
+              , apply_wrap<
+                    BPred
+                  , typename BStep::state
+                  , typename BStep::iterator
+                  >
+              >::value
             >::template
             apply<
                 typename BStep::iterator

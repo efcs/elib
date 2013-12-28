@@ -64,7 +64,7 @@ namespace elib
             class Seq
           , class State
           , class StateOp
-          , class Pred = always_true
+          , class Pred 
           >
         using apply =
           detail::iter_fold_if<
@@ -83,7 +83,7 @@ namespace elib
             class Seq
           , class State
           , class StateOp
-          , class Pred = always_true
+          , class Pred
           >
         using apply =
           detail::forward_iter_foldb_if<
@@ -91,9 +91,9 @@ namespace elib
             , State
             , identity_state_op
             , lambda< next<_1> >
-            , lambda< not_<same_type<end_t<Seq>, _2>> >
+            , lambda< not_< same_type<end_t<Seq>, _2> > >
             , lambda< StateOp >
-            , lambda<Pred>
+            , lambda< Pred >
           >;
       };
       

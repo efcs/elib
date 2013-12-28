@@ -21,7 +21,7 @@ namespace elib
       
       
       template <>
-      struct select_foldl_n_impl<true>
+      struct select_foldl_n_impl<false>
       {
         template <class Seq, class State, class StateOp, std::size_t N>
         using apply =
@@ -34,7 +34,7 @@ namespace elib
       
       
       template <>
-      struct select_foldl_n_impl<false>
+      struct select_foldl_n_impl<true>
       {
         template <class Seq, class State, class StateOp, std::size_t N>
         using apply = variadic_foldl_n<Seq, State, StateOp, N>; 
@@ -57,19 +57,28 @@ namespace elib
     }                                                       // namespace detail
     
     
-    template <class Seq, class State, class StateOp, std::size_t N>
+    template <
+        class Seq, class State
+      , class StateOp, std::size_t N = sequence_size_t<Seq>::value
+      >
     struct foldl_n 
       : detail::dispatch_foldl_n<Seq, State, StateOp, N>
     {};
     
     
-    template <class Seq, class State, class StateOp, std::size_t N>
+    template <
+        class Seq, class State
+      , class StateOp, std::size_t N = sequence_size_t<Seq>::value
+      >
     using foldl_n_t = typename 
       detail::dispatch_foldl_n<Seq, State, StateOp, N>::type;
     
     
     
-    template <class Seq, class State, class StateOp, std::size_t N>
+    template <
+        class Seq, class State
+      , class StateOp, std::size_t N = sequence_size_t<Seq>::value
+      >
     struct foldr_n 
       : iter_foldr_n<
             Seq, State
@@ -79,7 +88,10 @@ namespace elib
     {};
     
     
-    template <class Seq, class State, class StateOp, std::size_t N>
+    template <
+        class Seq, class State
+      , class StateOp, std::size_t N = sequence_size_t<Seq>::value 
+      >
     using foldr_n_t = typename
       iter_foldr_n<
           Seq, State

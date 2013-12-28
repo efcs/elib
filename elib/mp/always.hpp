@@ -2,6 +2,7 @@
 #define ELIB_MP_ALWAYS_HPP
 
 # include <elib/mp/identity.hpp>
+# include <elib/mp/protect.hpp>
 # include <elib/mp/detail/integral_constant.hpp>
 
 namespace elib 
@@ -17,8 +18,8 @@ namespace elib
     };
     
     
-    using always_true = always<true_>;
-    using always_false = always<false_>;
+    using always_true = protect< always<true_> >;
+    using always_false = protect< always<false_> >;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

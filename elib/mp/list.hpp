@@ -14,6 +14,12 @@ namespace elib
     
     struct list_tag {};
     
+    struct list_model_tag 
+      : model::mpl_sequence
+      , model::variadic_list
+      , model::front_extensible_variadic_sequence
+    {};
+    
     template <class ...Args>
     struct list
     {
@@ -21,7 +27,7 @@ namespace elib
       
       /* for sequence_traits */
       using class_type = list_tag;
-      using model_type = model::mpl_variadic_list;
+      using model_type = list_model_tag;
     };
     
     

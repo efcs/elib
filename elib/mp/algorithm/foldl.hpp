@@ -10,7 +10,7 @@
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/algorithm/variadic_foldl.hpp>
 # include <elib/mp/algorithm/iter_foldl.hpp>
-# include <elib/mp/algorithm/iter_foldl_n.hpp>
+# include <elib/mp/algorithm/iter_fold_n.hpp>
 # include <elib/mp/algorithm/deref_wrapper.hpp>
 
 namespace elib 

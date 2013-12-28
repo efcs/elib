@@ -1,11 +1,8 @@
 #ifndef ELIB_MP_ALGORITHM_ITER_FOLDL_HPP
 #define ELIB_MP_ALGORITHM_ITER_FOLDL_HPP
 
-
 # include <elib/mp/always.hpp>
-# include <elib/mp/integral_constant.hpp>
-# include <elib/mp/algorithm/iter_foldl_if.hpp>
-
+# include <elib/mp/algorithm/iter_fold_if.hpp>
 
 namespace elib 
 {

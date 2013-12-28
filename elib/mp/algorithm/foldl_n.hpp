@@ -4,7 +4,7 @@
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
 # include <elib/mp/if.hpp>
-# include <elib/mp/algorithm/iter_foldl_n.hpp>
+# include <elib/mp/algorithm/iter_fold_n.hpp>
 # include <elib/mp/algorithm/variadic_foldl_n.hpp>
 # include <elib/mp/algorithm/deref_wrapper.hpp>
 # include <cstddef>

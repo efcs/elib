@@ -10,6 +10,7 @@
 # include <elib/mp/logical.hpp>
 # include <elib/mp/same_type.hpp>
 # include <elib/mp/lambda.hpp>
+# include <elib/mp/algorithm/detail/iter_fold_if.hpp>
 
 
 namespace elib 
@@ -104,8 +105,8 @@ namespace elib
       
     }                                                       // namespace detail
     
-    
-    template <class Seq, class State, class F, class Pred = always<true_>>
+  
+    template <class Seq, class State, class F, class Pred = always_true>
     struct iter_foldl_if 
       : detail::iter_foldl_if_impl<
             begin_t<Seq>
@@ -115,10 +116,12 @@ namespace elib
         >
     {};
     
-    
-    template <class Seq, class State, class F, class Pred = always<true_>>
+
+    template <class Seq, class State, class F, class Pred = always_true>
     using iter_foldl_if_t = typename iter_foldl_if<Seq, State, F, Pred>::type;
+   
     
+
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_ALGORITHM_ITER_FOLDL_IF_HPP */

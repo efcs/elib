@@ -1,18 +1,14 @@
-#ifndef ELIB_MP_IDENTITY_HPP
-#define ELIB_MP_IDENTITY_HPP
+#ifndef ELIB_MP_ALGORITHM_FOLDR_HPP
+# define ELIB_MP_ALGORITHM_FOLDR_HPP
+
+# include <elib/mp/algorithm/detail/iter_foldb_if.hpp>
 
 namespace elib 
 {
   namespace mp
   {
     
-    template <class T>
-    struct identity
-    { 
-      using type = T; 
-    };
-    
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_IDENTITY_HPP */
+#endif /* ELIB_MP_ALGORITHM_FOLDR_HPP */

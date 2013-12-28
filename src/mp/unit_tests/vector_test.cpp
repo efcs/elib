@@ -242,18 +242,17 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
   }                                            // mp_vector_iterator_intrinsics
   
   
-# define CHECK_TRAITS(...)                                                     \
-  do {                                                                         \
-    using T = __VA_ARGS__;                                                     \
-    using Traits = sequence_traits<T>;                                         \
-    SAME_TYPE(typename Traits::class_type, vector_tag);                        \
-    SAME_TYPE(typename Traits::model_type, model::mpl_random_access_sequence); \
-    SAME_TYPE(typename Traits::class_type, class_type_t<T>);                   \
-    SAME_TYPE(typename Traits::model_type, model_type_t<T>);                   \
-    CHECK(is_mpl_sequence<T>::value);                                          \
-    CHECK(is_mpl_variadic<T>::value == false);                                 \
-    CHECK(has_O1_size<T>::value);                                              \
-    CHECK(has_O1_unpack<T>::value == false);                                   \
+# define CHECK_TRAITS(...)                                    \
+  do {                                                        \
+    using T = __VA_ARGS__;                                    \
+    using Traits = sequence_traits<T>;                        \
+    SAME_TYPE(typename Traits::class_type, vector_tag);       \
+    SAME_TYPE(typename Traits::model_type, vector_model_tag); \
+    SAME_TYPE(typename Traits::class_type, class_type_t<T>);  \
+    SAME_TYPE(typename Traits::model_type, model_type_t<T>);  \
+    CHECK(is_mpl_sequence<T>::value);                         \
+    CHECK(is_mpl_variadic<T>::value == false);                \
+    CHECK(has_O1_size<T>::value);                             \
   } while (false)
 #
  

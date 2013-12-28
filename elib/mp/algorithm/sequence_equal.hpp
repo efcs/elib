@@ -2,7 +2,7 @@
 #define ELIB_MP_ALGORITHM_SEQUENCE_EQUAL_HPP
 
 # include <elib/mp/algorithm/deref_wrapper.hpp>
-# include <elib/mp/algorithm/iter_foldl_if.hpp>
+# include <elib/mp/algorithm/iter_fold_if.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/if.hpp>

@@ -4,6 +4,8 @@
 #include <elib/mp/pack.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
+#include <elib/mp/sequence.hpp>
+#include <elib/mp/sequence_traits.hpp>
 #include "mp_test_helper.hpp"
 
 
@@ -234,18 +236,17 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
   }                                              // mp_pack_iterator_intrinsics
   
   
-#define CHECK_TRAITS(...)                                                  \
-  do {                                                                     \
-    using T = __VA_ARGS__;                                                 \
-    using Traits = sequence_traits<T>;                                     \
-    SAME_TYPE( typename Traits::class_type, pack_tag );                    \
-    SAME_TYPE( typename Traits::model_type, model::mpl_variadic_sequence); \
-    SAME_TYPE( typename Traits::class_type, class_type_t<T> );             \
-    SAME_TYPE( typename Traits::model_type, model_type_t<T> );             \
-    CHECK( is_mpl_sequence<T>::value );                                    \
-    CHECK( is_mpl_variadic<T>::value );                                    \
-    CHECK( has_O1_size<T>::value );                                        \
-    CHECK( has_O1_unpack<T>::value );                                      \
+#define CHECK_TRAITS(...)                                      \
+  do {                                                         \
+    using T = __VA_ARGS__;                                     \
+    using Traits = sequence_traits<T>;                         \
+    SAME_TYPE( typename Traits::class_type, pack_tag );        \
+    SAME_TYPE( typename Traits::model_type, pack_model_tag);   \
+    SAME_TYPE( typename Traits::class_type, class_type_t<T> ); \
+    SAME_TYPE( typename Traits::model_type, model_type_t<T> ); \
+    CHECK( is_mpl_sequence<T>::value );                        \
+    CHECK( is_mpl_variadic<T>::value );                        \
+    CHECK( has_O1_size<T>::value );                            \
   } while (false)
 #
   

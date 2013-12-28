@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_ALGORITHM_FIND_IF_HPP
 #define ELIB_MP_ALGORITHM_FIND_IF_HPP
 
-# include <elib/mp/algorithm/iter_foldl_if.hpp>
+# include <elib/mp/algorithm/iter_fold_if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/metafunctions.hpp>
 # include <elib/mp/sequence.hpp>

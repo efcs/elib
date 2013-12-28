@@ -15,67 +15,75 @@ namespace elib
     
     struct sequence {};
     
+    
     struct variadic
       : sequence
     {};
+    
     
     struct forward_sequence 
       : sequence 
     {};
     
+    
     struct bidirectional_sequence 
       : forward_sequence 
     {};
+    
     
     struct random_access_sequence 
       : bidirectional_sequence 
     {};
     
+    
     struct variadic_sequence 
       : variadic, random_access_sequence
     {};
     
+    
     struct variadic_list 
       : variadic, forward_sequence 
     {};
+    
     
     struct associative_sequence 
       : sequence
     {};
     
     
+    struct extensible_sequence
+      : forward_sequence
+    {};
+    
+    
+    struct front_extensible_sequence
+      : extensible_sequence
+    {};
+    
+    
+    struct back_extensible_sequence
+      : extensible_sequence
+    {};
+    
+    
+    struct front_extensible_variadic_sequence
+      : variadic, front_extensible_sequence
+    {};
+    
+    
+    struct back_extensible_variadic_sequence
+      : front_extensible_variadic_sequence, back_extensible_sequence
+    {};
+    
+    
+    struct associative_extensible_sequence
+      : associative_sequence
+    {};
+    
+    
   //-------------------------------- mpl concept tags -----------------------// 
     
-    struct mpl_sequence 
-      : sequence {};
-      
-    struct mpl_variadic
-      : mpl_sequence, variadic
-    {};
-      
-    struct mpl_forward_sequence
-      : mpl_sequence, forward_sequence
-    {};
-    
-    struct mpl_bidirectional_sequence
-      : mpl_sequence, bidirectional_sequence
-    {};
-    
-    struct mpl_random_access_sequence
-      : mpl_sequence, random_access_sequence
-    {};
-  
-    struct mpl_variadic_sequence 
-      : mpl_variadic, variadic_sequence
-    {};
-  
-    struct mpl_variadic_list
-      : mpl_variadic, variadic_list
-    {};
-    
-    struct mpl_associative_sequence
-      : mpl_sequence, associative_sequence
-    {};
+    struct mpl_sequence {};
     
    }                                                        // namespace model
     

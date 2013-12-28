@@ -3,6 +3,7 @@
 
 # include <elib/mp/vector/fwd.hpp>
 # include <elib/mp/vector/item.hpp>
+# include <elib/mp/sequence.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/void.hpp>
@@ -12,6 +13,15 @@ namespace elib
   namespace mp
   {
 
+    
+    struct vector_model_tag
+      : model::mpl_sequence
+      , model::random_access_sequence
+      , model::front_extensible_sequence
+      , model::back_extensible_sequence
+    {};
+    
+  
     template <class ...Args>
     struct vector
     {
@@ -19,7 +29,7 @@ namespace elib
       
       /* for sequence_traits */
       using class_type = vector_tag;
-      using model_type = model::mpl_random_access_sequence;
+      using model_type = vector_model_tag;
       
       using lower_bound_ = size_type<32767>;
       using upper_bound_ = lower_bound_;

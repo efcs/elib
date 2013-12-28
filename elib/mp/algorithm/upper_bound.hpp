@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_ALGORITHM_UPPER_BOUND_HPP
 #define ELIB_MP_ALGORITHM_UPPER_BOUND_HPP
 
-# include <elib/mp/algorithm/iter_foldl_if.hpp>
+# include <elib/mp/algorithm/iter_fold_if.hpp>
 # include <elib/mp/algorithm/deref_wrapper.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>

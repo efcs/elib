@@ -6,7 +6,7 @@
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/algorithm/deref_wrapper.hpp>
 # include <elib/mp/algorithm/variadic_foldl_if.hpp>
-# include <elib/mp/algorithm/iter_foldl_if.hpp>
+# include <elib/mp/algorithm/iter_fold_if.hpp>
 
 
 namespace elib 
@@ -30,6 +30,7 @@ namespace elib
       
     }                                                       // namespace detail
     
+
     template <class Seq, class State, class F, class Pred>
     struct foldl_if  
       : detail::select_foldl_if_t<Seq, State, F, Pred>

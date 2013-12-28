@@ -14,7 +14,15 @@
 
 #include "mp_test_helper.hpp"
 
+#include <iostream>
+#include <boost/mpl/print.hpp>
+
 BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
+
+
+////////////////////////////////////////////////////////////////////////////////
+//                            Querying                                              
+////////////////////////////////////////////////////////////////////////////////
 
 //-------------------------------- find & find_if ------------------------// 
 
@@ -333,5 +341,33 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
       SAME_TYPE( upper_bound_t<ET, int_<10>>, begin_t<ET> );
     }
   }                                            // mp_algorithm_upper_bound_test
+  
+  
+////////////////////////////////////////////////////////////////////////////////
+//                            Transforming                                            
+////////////////////////////////////////////////////////////////////////////////
+
+  BOOST_AUTO_TEST_CASE(mp_algorithm_copy_test)
+  {
+    BOOST_CHECK(true);
+    /*
+    // copy test
+    {
+      using P = pack   <int, char, void>;
+      using V = vector <int, char, void>;
+      using L = list   <int, char, void>;
+      
+      using CP = copy_t<P>;
+      std::cout << sequence_size<CP>() << std::endl;
+      SAME_TYPE( front_t<CP>, void );
+      SAME_TYPE( at_c_t<CP, 1>,  );
+      SAME_TYPE( at_c_t<CP, 2>, void );
+      
+      CHECK( sequence_equal_t<copy_t<P>, P>() );
+      CHECK( sequence_equal_t<copy_t<V>, V>() );
+      CHECK( sequence_equal_t<copy_t<L>, L>() );
+    }
+    */
+  }                                                   // mp_algorithm_copy_test
   
 BOOST_AUTO_TEST_SUITE_END()

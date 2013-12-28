@@ -19,7 +19,8 @@ namespace elib
   //-------------------------------- first ----------------------------------// 
     
     template <class Pair>
-    using first = identity< typename Pair::first >;
+    struct first : identity< typename Pair::first >
+    {};
     
     template <class Pair>
     using first_t = typename Pair::first;
@@ -27,7 +28,7 @@ namespace elib
   //-------------------------------- second ---------------------------------//
   
     template <class Pair>
-    using second = identity< typename Pair::second >;
+    struct second : identity< typename Pair::second > {};
     
     template <class Pair>
     using second_t = typename Pair::second;

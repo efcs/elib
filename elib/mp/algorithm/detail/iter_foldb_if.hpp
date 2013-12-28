@@ -14,7 +14,15 @@ namespace elib
     {
       namespace iter_foldb_if_detail
       {
-        
+       
+        template <class Iter, class State>
+        struct null_step
+        {
+          using iterator = Iter;
+          using state = State;
+        };
+       
+       
         template <bool TakeStep>
         struct iter_take_step_impl;
         
@@ -30,8 +38,6 @@ namespace elib
             >
           struct apply
           {
-            using is_last = false_;
-            
             using iterator = apply_wrap_t<IterOp, Iter>;
             using state = apply_wrap_t<StateOp, State, Iter>;
           };
@@ -49,8 +55,6 @@ namespace elib
             >
           struct apply
           {
-            using is_last = true_;
-            
             using iterator = Iter;
             using state = State;
           };
@@ -81,7 +85,11 @@ namespace elib
             >;
         
         
-        template <class FStep, class BStep, class StateOp, class IterOp, class Pred>
+        template <
+            class FStep,  class FPred 
+          , class BStep, class StateOp
+          , class IterOp, class Pred
+        >
         using forward_iter_take_backward_step = typename 
           iter_take_step_impl<
               apply_wrap_t<
@@ -89,7 +97,11 @@ namespace elib
                 , typename BStep::state
                 , typename FStep::iterator
                 >::value
-              && !FStep::is_last::value
+              && apply_wrap_t<
+                  FPred
+                , typename FStep::state
+                , typename FStep::iterator
+                >::value
             >::template
             apply<
                 typename FStep::iterator
@@ -99,15 +111,23 @@ namespace elib
             >;
         
         
-        template <class FStep, class BStep, class StateOp, class IterOp, class Pred>
+        template <
+            class FStep,  class FPred 
+          , class BStep, class StateOp
+          , class IterOp, class BPred
+        >
         using bidirectional_iter_take_backward_step = typename
           iter_take_step_impl<
               apply_wrap_t<
-                  Pred
+                  BPred
                 , typename BStep::state
                 , typename BStep::iterator
                 >::value
-                && !FStep::is_last::value
+              && apply_wrap_t<
+                  FPred
+                , typename FStep::state
+                , typename FStep::iterator
+                >::value
             >::template
             apply<
                 typename BStep::iterator
@@ -125,31 +145,39 @@ namespace elib
           >
         struct iter_foldb_if_impl
         {
-          using fstep1 = take_step<Iter, State, FOp, FIterOp, FPred>;
+          using fstep0 = null_step<Iter, State>;
+          using fstep1 = take_next_step<fstep0, FOp, FIterOp, FPred>;
           using fstep2 = take_next_step<fstep1, FOp, FIterOp, FPred>;
           using fstep3 = take_next_step<fstep2, FOp, FIterOp, FPred>;
           using fstep4 = take_next_step<fstep3, FOp, FIterOp, FPred>;
+          using fstep5 = take_next_step<fstep4, FOp, FIterOp, FPred>;
           
           using rest_ = 
             if_t<
-                typename fstep4::is_last
-              , fstep4
-              , iter_foldb_if_impl<
-                    typename fstep4::iterator
+                apply_wrap_t<
+                    FPred
                   , typename fstep4::state
+                  , typename fstep4::iterator
+                  >
+              , iter_foldb_if_impl<
+                    typename fstep5::iterator
+                  , typename fstep5::state
                   , FOp, FIterOp, FPred
                   , BOp, BIterOp, BPred
                   , BackwardStep
                   >
+              , fstep4
             >;
-            
-          using bstep4 = BackwardStep<fstep4, rest_, BOp,  BIterOp, BPred>;
-          using bstep3 = BackwardStep<fstep3, bstep4, BOp, BIterOp, BPred>;
-          using bstep2 = BackwardStep<fstep2, bstep3, BOp, BIterOp, BPred>;
-          using bstep1 = BackwardStep<fstep1, bstep2, BOp, BIterOp, BPred>;
           
-          using iterator = typename bstep1::iterator;
-          using state = typename bstep1::state;
+   
+          using bstep4 = BackwardStep<fstep4, FPred, rest_,  BOp, BIterOp, BPred>;
+          using bstep3 = BackwardStep<fstep3, FPred, bstep4, BOp, BIterOp, BPred>;
+          using bstep2 = BackwardStep<fstep2, FPred, bstep3, BOp, BIterOp, BPred>;
+          using bstep1 = BackwardStep<fstep1, FPred, bstep2, BOp, BIterOp, BPred>;
+          using bstep0 = BackwardStep<fstep0, FPred, bstep1, BOp, BIterOp, BPred>;
+          
+          using iterator = typename bstep0::iterator;
+          using state = typename bstep0::state;
           using type = state;
         };
         

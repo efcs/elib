@@ -52,6 +52,8 @@ namespace elib
     namespace detail
     {
       
+      
+      
       template <bool IsForward, bool IsBidir>
       struct select_iter_foldr_if_impl;
       

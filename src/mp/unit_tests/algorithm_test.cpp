@@ -17,8 +17,95 @@
 #include <iostream>
 #include <boost/mpl/print.hpp>
 
+template <class T>
+struct IterCountOpImpl
+{
+  template <class State, class Iter>
+  using apply = 
+    eval_if_< 
+        same_type<T, deref_t<Iter>>
+      , next<State>
+      , State
+      >;
+};
+
+template <class T>
+using IterCountOp = protect< IterCountOpImpl<T> >;
+
+template <class P, class T>
+using iter_foldl_n_count = iter_foldl_n_t<P, int_<0>, IterCountOp<T>>;
+    
+template <class P, class T>
+using iter_foldr_n_count = iter_foldr_n_t<P, int_<0>, IterCountOp<T>>;
+    
+    
+
+
 BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
 
+
+////////////////////////////////////////////////////////////////////////////////
+//                            Iteration                                              
+////////////////////////////////////////////////////////////////////////////////
+
+
+//---------------------------- iter_fold_n ----------------------------------// 
+
+  BOOST_AUTO_TEST_CASE(mp_iter_foldl_n)
+  {
+    
+    // pack
+    {
+      using T = pack<int, int, void, int, void, char>;
+      CHECK( iter_foldl_n_count<T, int>()  == 3 );
+      CHECK( iter_foldl_n_count<T, void>() == 2 );
+      CHECK( iter_foldl_n_count<T, char>() == 1 );
+      CHECK( iter_foldl_n_count<T, long>() == 0 );
+      
+      CHECK( iter_foldl_n_count<T, int>()  == iter_foldr_n_count<T, int >() );
+      CHECK( iter_foldl_n_count<T, void>() == iter_foldr_n_count<T, void>() );
+      CHECK( iter_foldl_n_count<T, char>() == iter_foldr_n_count<T, char>() );
+      CHECK( iter_foldl_n_count<T, long>() == iter_foldr_n_count<T, long>() );
+      
+      using ET = pack<>;
+      CHECK( iter_foldl_n_count<ET, void>() == 0);
+      CHECK( iter_foldl_n_count<ET, void>() == iter_foldr_n_count<ET, void>());
+    }
+    // vector
+    {
+      using T = vector<int, int, void, int, void, char>;
+      CHECK( iter_foldl_n_count<T, int>()  == 3 );
+      CHECK( iter_foldl_n_count<T, void>() == 2 );
+      CHECK( iter_foldl_n_count<T, char>() == 1 );
+      CHECK( iter_foldl_n_count<T, long>() == 0 );
+      
+      CHECK( iter_foldl_n_count<T, int>()  == iter_foldr_n_count<T, int >() );
+      CHECK( iter_foldl_n_count<T, void>() == iter_foldr_n_count<T, void>() );
+      CHECK( iter_foldl_n_count<T, char>() == iter_foldr_n_count<T, char>() );
+      CHECK( iter_foldl_n_count<T, long>() == iter_foldr_n_count<T, long>() );
+      
+      using ET = vector<>;
+      CHECK( iter_foldl_n_count<ET, void>() == 0);
+      CHECK( iter_foldl_n_count<ET, void>() == iter_foldr_n_count<ET, void>());
+    }
+    // list
+    {
+      using T = list<int, int, void, int, void, char>;
+      CHECK( iter_foldl_n_count<T, int>()  == 3 );
+      CHECK( iter_foldl_n_count<T, void>() == 2 );
+      CHECK( iter_foldl_n_count<T, char>() == 1 );
+      CHECK( iter_foldl_n_count<T, long>() == 0 );
+      
+      CHECK(  iter_foldr_n_count<T, int >() == 3 );
+      CHECK(  iter_foldr_n_count<T, void>() == 2 );
+      CHECK(  iter_foldr_n_count<T, char>() == 1 );
+      CHECK(  iter_foldr_n_count<T, long>() == 0 );
+      
+      using ET = list<>;
+      CHECK( iter_foldl_n_count<ET, void>() == 0);
+      CHECK( iter_foldl_n_count<ET, void>() == iter_foldr_n_count<ET, void>());
+    }
+  }
 
 ////////////////////////////////////////////////////////////////////////////////
 //                            Querying                                              

@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_ALGORITHM_COPY_HPP
 #define ELIB_MP_ALGORITHM_COPY_HPP
 
-# include <elib/mp/algorithm/copy_if.hpp>
+
 # include <elib/mp/algorithm/inserter.hpp>
 # include <elib/mp/always.hpp>
 # include <elib/mp/protect.hpp>

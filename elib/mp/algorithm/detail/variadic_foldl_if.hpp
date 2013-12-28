@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_ALGORITHM_VARIADIC_FOLDL_IF_HPP
-#define ELIB_MP_ALGORITHM_VARIADIC_FOLDL_IF_HPP
+#ifndef ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_IF_HPP
+#define ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_IF_HPP
 
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/iterator.hpp>
@@ -65,50 +65,48 @@ namespace elib
         };
       };
       
-    }                                                       // namespace detail
     
-    
-    
-    template <class Seq, class State, class F, class Pred>
-    struct variadic_foldl_if;
-    
-    
-    template <
-        template <class...> class S
-      , class State, class F, class Pred
-    >
-    struct variadic_foldl_if<S<>, State, F, Pred>
-    {
-      using type = State;
+      template <class Seq, class State, class F, class Pred>
+      struct variadic_foldl_if;
       
-      static_assert(is_model_of<S<>, model::variadic>::type::value, 
-                    "must be model of variadic");
-    };
-    
-    
-    template <
-        template <class...> class S, class First, class ...Rest
-      , class State, class F, class Pred
+      
+      template <
+          template <class...> class S
+        , class State, class F, class Pred
       >
-    struct variadic_foldl_if<S<First, Rest...>, State, F, Pred>
-    {
+      struct variadic_foldl_if<S<>, State, F, Pred>
+      {
+        using type = State;
+        
+        static_assert(is_model_of<S<>, model::variadic>::type::value, 
+                      "must be model of variadic");
+      };
       
-      using type = typename
-        detail::variadic_foldl_if_apply<
-            State
-          , lambda<F>
-          , lambda<Pred>
-          , First, Rest...>::type;
       
-      static_assert( is_model_of<S<First, Rest...>, model::variadic>::type::value, 
-                    "must me model of variadic");
-    };
-    
-    
-    template <class Seq, class State, class F, class Pred>
-    using variadic_foldl_if_t = 
-      typename variadic_foldl_if<Seq, State, F, Pred>::type;
-    
+      template <
+          template <class...> class S, class First, class ...Rest
+        , class State, class F, class Pred
+        >
+      struct variadic_foldl_if<S<First, Rest...>, State, F, Pred>
+      {
+        
+        using type = typename
+          variadic_foldl_if_apply<
+              State
+            , lambda<F>
+            , lambda<Pred>
+            , First, Rest...>::type;
+        
+        static_assert( is_variadic<S<First, Rest...>>::value, 
+                      "must me model of variadic");
+      };
+      
+      
+      template <class Seq, class State, class F, class Pred>
+      using variadic_foldl_if_t = 
+        typename variadic_foldl_if<Seq, State, F, Pred>::type;
+  
+    }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_ALGORITHM_VARIADIC_FOLDL_IF_HPP */
+#endif /* ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_IF_HPP */

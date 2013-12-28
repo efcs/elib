@@ -1,7 +1,8 @@
-#ifndef ELIB_MP_ALGORITHM_VARIADIC_FOLDL_N_HPP
-#define ELIB_MP_ALGORITHM_VARIADIC_FOLDL_N_HPP
+#ifndef ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_N_HPP
+#define ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_N_HPP
 
 # include <elib/mp/apply_wrap.hpp>
+# include <elib/mp/sequence_traits.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -41,32 +42,31 @@ namespace elib
       };
       
       
-    }                                                       // namespace detail
-    
-    
-    template <class Seq, class State, class F, std::size_t N>
-    struct variadic_foldl_n;
-    
-    
-    template <
-        template <class...> class S, class ...Args
-      , class State, class F
-      , std::size_t N
-      >
-    struct variadic_foldl_n<S<Args...>, State, F, N>
-    {
+      template <class Seq, class State, class F, std::size_t N>
+      struct variadic_foldl_n;
       
-      using type = typename 
-        detail::variadic_foldl_n_impl<N == 0>::template 
-          apply<State, F, N, Args...>;
-          
-          
-      static_assert( is_model_of<S<Args...>, model::variadic>::value,
-                    " must be model of variadic");
-                    
-      static_assert( N <= sizeof...(Args), "N must <= size<Seq>");
-    };
+      
+      template <
+          template <class...> class S, class ...Args
+        , class State, class F
+        , std::size_t N
+        >
+      struct variadic_foldl_n<S<Args...>, State, F, N>
+      {
+        
+        using type = typename 
+          variadic_foldl_n_impl<N == 0>::template 
+            apply<State, F, N, Args...>;
+            
+            
+        static_assert( is_variadic<S<Args...>>::value,
+                      " must be model of variadic");
+                      
+        static_assert( N <= sizeof...(Args), "N must <= size<Seq>");
+      };
     
+        
+    }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_ALGORITHM_VARIADIC_FOLDL_N_HPP */
+#endif /* ELIB_MP_ALGORITHM_VARIADIC_DETAIL_FOLDL_N_HPP */

@@ -1,6 +1,6 @@
 /* Implementation stolen from githup/Idionne */
-#ifndef ELIB_ALGORITHM_VARIADIC_FOLDL_HPP
-#define ELIB_ALGORITHM_VARIADIC_FOLDL_HPP
+#ifndef ELIB_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP
+#define ELIB_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP
 
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/lambda.hpp>
@@ -37,25 +37,24 @@ namespace elib
           using type = State;
         };
       };
+
+      
+      template <class Seq, class State, class F>
+      struct variadic_foldl;
+      
+      
+      template <template <class...> class S, class ...Args, class State, class F>
+      struct variadic_foldl< S<Args...>, State, F >
+        : variadic_foldl_impl<
+            sizeof...(Args) == 0
+          >::template 
+          apply<
+            State, lambda<F>
+          , Args...
+          >
+      {};
       
     }                                                       // namespace detail
-
-    
-    template <class Seq, class State, class F>
-    struct variadic_foldl;
-    
-    
-    template <template <class...> class S, class ...Args, class State, class F>
-    struct variadic_foldl< S<Args...>, State, F >
-    : detail::variadic_foldl_impl<
-        sizeof...(Args) == 0
-      >::template 
-      apply<
-        State, lambda<F>
-      , Args...
-      >
-    {};
-    
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_ALGORITHM_VARIADIC_FOLDL_HPP */
+#endif /* ELIB_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP */

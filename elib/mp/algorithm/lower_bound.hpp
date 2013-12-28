@@ -2,15 +2,10 @@
 #define ELIB_MP_ALGORITHM_LOWER_BOUND_HPP
 
 # include <elib/mp/algorithm/iter_fold_if.hpp>
-# include <elib/mp/algorithm/deref_wrapper.hpp>
+# include <elib/mp/algorithm/detail/deref_lambda.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/if.hpp>
-# include <elib/mp/iterator.hpp>
-# include <elib/mp/lambda.hpp>
-# include <elib/mp/logical.hpp>
-# include <elib/mp/pair.hpp>
-# include <elib/mp/protect.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/same_type.hpp>
 
@@ -24,7 +19,7 @@ namespace elib
       template <class T, class Pred>
       using lower_bound_state_op =
         if_<
-            apply_wrap< first_deref_wrapper<lambda<Pred>>, _2, T>
+            apply_wrap< detail::first_deref_lambda<Pred>, _2, T>
           , _1
           , _2
           >;

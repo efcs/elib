@@ -1,8 +1,8 @@
 #ifndef ELIB_MP_ALGORITHM_SEQUENCE_EQUAL_HPP
 #define ELIB_MP_ALGORITHM_SEQUENCE_EQUAL_HPP
 
-# include <elib/mp/algorithm/deref_wrapper.hpp>
 # include <elib/mp/algorithm/iter_fold_if.hpp>
+# include <elib/mp/algorithm/detail/deref_lambda.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/if.hpp>
@@ -30,7 +30,7 @@ namespace elib
           and_<
               not_< same_type<Iter, end_t<Seq1>> >
             , not_< same_type<State, end_t<Seq2>> >
-            , apply_wrap< binary_deref_wrapper<lambda<Pred>>, State, Iter>
+            , apply_wrap< detail::binary_deref_lambda<Pred>, State, Iter >
           >;
       };
       

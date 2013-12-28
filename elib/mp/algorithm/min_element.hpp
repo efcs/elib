@@ -1,8 +1,8 @@
 #ifndef ELIB_MP_ALGORITHM_MIN_ELEMENT_HPP
 #define ELIB_MP_ALGORITHM_MIN_ELEMENT_HPP
 
-# include <elib/mp/algorithm/iter_foldl.hpp>
-# include <elib/mp/algorithm/deref_wrapper.hpp>
+# include <elib/mp/algorithm/iter_fold.hpp>
+# include <elib/mp/algorithm/detail/deref_lambda.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/sequence.hpp>
@@ -25,7 +25,7 @@ namespace elib
       : iter_foldl<
           begin_t<Seq>
         , begin_t<Seq>
-        , if_< binary_deref_wrapper< lambda<Pred> >
+        , if_< detail::binary_deref_lambda<Pred>
             , _1
             , _2
           >

@@ -94,10 +94,36 @@ namespace elib
             , lambda<Pred>
           >;
       };
-    
+      
+      
+      template <
+          class Seq
+        , class State
+        , class StateOp
+        , class Pred 
+        >
+      using dispatch_iter_foldr_if = typename 
+        select_iter_foldr_if_impl<
+            is_forward_sequence<Seq>::value
+          , is_bidirectional_sequence<Seq>::value
+          >::template
+        apply<
+          Seq, State
+        , StateOp, Pred
+        >;
+        
     }                                                       // namespace detail
     
     
+    template <
+        class Seq
+      , class State
+      , class StateOp
+      , class Pred = always_true
+      >
+    struct iter_foldr_if 
+      : detail::dispatch_iter_foldr_if<Seq, State, StateOp, Pred>
+    {};
     
     
     template <
@@ -107,14 +133,9 @@ namespace elib
       , class Pred = always_true
       >
     using iter_foldr_if_t = typename 
-      detail::select_iter_foldr_if_impl<
-          is_forward_sequence<Seq>::value
-        , is_bidirectional_sequence<Seq>::value
-        >::template
-      apply<
-        Seq, State
-      , StateOp, Pred
-      >::type;
+      detail::dispatch_iter_foldr_if<Seq, State, StateOp, Pred>::type;
+    
+    
     
   }                                                         // namespace mp
 }                                                           // namespace elib

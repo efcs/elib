@@ -147,7 +147,6 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
       CHECK( iter_foldl_n_count<T, long>() == 0 );
       
       CHECK(  iter_foldr_n_count<T, int >() == 3 );
-      /*
       CHECK(  iter_foldr_n_count<T, void>() == 2 );
       CHECK(  iter_foldr_n_count<T, char>() == 1 );
       CHECK(  iter_foldr_n_count<T, long>() == 0 );
@@ -155,7 +154,7 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
       using ET = list<>;
       CHECK( iter_foldl_n_count<ET, void>() == 0);
       CHECK( iter_foldl_n_count<ET, void>() == iter_foldr_n_count<ET, void>());
-      */
+      
     }
   }
 
@@ -448,8 +447,6 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
       CHECK( foldl_count<ET, void>() == foldr_count<ET, void>());
     }
   }
-  
-  
   
   
   

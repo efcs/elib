@@ -130,19 +130,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 #                           Macros & Functions
 ################################################################################
 
-#real    0m43.367s
-#user    0m39.408s
-#sys     0m3.890s
-
-#real    0m43.005s
-#user    0m39.141s
-#sys     0m3.837s
-
-#real    0m44.787s
-#user    0m40.872s
-#sys     0m3.861s
-
-
 
 macro(set_dot_dir)
   set(dotDir ${CMAKE_CURRENT_LIST_DIR})

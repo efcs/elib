@@ -43,7 +43,7 @@ namespace elib
         protect< unary_transform_op_impl<In, Transform> >;
         
         
-      template <class In, class Transform, class Next = lambda<next<_1>>>
+      template <class In, class Transform>
       struct binary_transform_op_impl
       {
         using Op = lambda<typename In::operation>;

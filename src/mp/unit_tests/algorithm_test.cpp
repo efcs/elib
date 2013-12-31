@@ -899,5 +899,37 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
   }                                                // mp_algorithm_transform_test
   
   
+  template <class N>
+  struct is_odd : bool_<(N::value % 2)>
+  {};
+  
+  
+  template <class P, class P1>
+  using pair_equal_t = 
+    and_t< 
+      sequence_equal<first_t<P>, first_t<P1>>
+    , sequence_equal<second_t<P>, second_t<P1>>
+    >;
+  
+  
+  BOOST_AUTO_TEST_CASE(mp_algorithm_partition_test)
+  {
+    using P = pack_c   <int, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10>;
+    using V = vector_c <int, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10>;
+    using L = list_c   <int, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10>;
+    
+    using E1 = pack_c<int, 1, 3, 5, 7, 9>;
+    using E2 = pack_c<int, 2, 4, 6, 8, 10>;
+    using EP = pair< E1, E2 >;
+    
+    CHECK( pair_equal_t<partition_t<P, is_odd<_1>>, EP>() );
+    CHECK( pair_equal_t<partition_t<V, is_odd<_1>>, EP>() );
+    CHECK( pair_equal_t<partition_t<L, is_odd<_1>>, EP>() );
+    
+    CHECK( pair_equal_t<reverse_partition_t<P, is_odd<_1>>, EP>() );
+    CHECK( pair_equal_t<reverse_partition_t<V, is_odd<_1>>, EP>() );
+    CHECK( pair_equal_t<reverse_partition_t<L, is_odd<_1>>, EP>() );
+  }                                              // mp_algorithm_partition_test
+  
   
 BOOST_AUTO_TEST_SUITE_END()

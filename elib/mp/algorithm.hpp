@@ -29,6 +29,7 @@
 # /*------------------------ Transform Algorithms ---------------------------*/
 # 
 # include <elib/mp/algorithm/copy.hpp>
+# include <elib/mp/algorithm/partition.hpp>
 # include <elib/mp/algorithm/remove.hpp>
 # include <elib/mp/algorithm/replace.hpp>
 # include <elib/mp/algorithm/transform.hpp>

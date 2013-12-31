@@ -22,7 +22,7 @@ namespace elib
       struct vector_intrinsics;
       struct vector_iterator_intrinsics;
       
-      template <class Tag, class T, class Vector>
+      template <class Tag, class Vector, class ...Args>
       struct vector_item;
       
       template <class Tag, class Vector>

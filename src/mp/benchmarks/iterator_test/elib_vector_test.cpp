@@ -3,16 +3,16 @@
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/sequence.hpp>
 
+#include "../elib_containers.hpp"
 #include "../benchmark_helper.hpp"
 
 using namespace elib::mp;
 
 int main()
 {
-  using T = vector<ENUM_50(int)>;
+  using T = ElibVector1000;
   using B = begin_t<T>;
-  using E = advance_t<B, int_<49>>;
+  using E = advance_t<B, int_<99>>;
   
-  E e{};
-  unused(e);
+  unused(E{});
 }

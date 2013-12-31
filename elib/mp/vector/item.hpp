@@ -52,7 +52,6 @@ namespace elib
         : Vector
       {
         using type = vector_mask;
-        
         using lower_bound_ = size_type< Vector::lower_bound_::value + 1>;
         using upper_bound_ = typename Vector::upper_bound_;
       
@@ -69,7 +68,6 @@ namespace elib
         : Vector
       {
         using type = vector_mask;
-        
         using lower_bound_ = typename Vector::lower_bound_;
         using upper_bound_ = size_type<Vector::upper_bound_::value - 1>;
         

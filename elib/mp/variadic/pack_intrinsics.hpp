@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP
+#ifndef ELIB_MP_VARIADIC_PACK_INTRINSICS_HPP
+#define ELIB_MP_VARIADIC_PACK_INTRINSICS_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
 # include <elib/mp/variadic/append.hpp>
@@ -19,7 +19,7 @@ namespace elib
   {
     
     template <template <class, std::size_t> class IteratorType>
-    struct variadic_sequence_intrinsics
+    struct variadic_pack_intrinsics
     {
       
     //-------------------------- sequence_size -----------------------------// 
@@ -122,8 +122,8 @@ namespace elib
       template <class S, class ...Args>
       using prepend = variadic_prepend<S, Args...>;
       
-    };                                                      // variadic_sequence_intrinsics
+    };                                                      // variadic_pack_intrinsics
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP */
+#endif /* ELIB_MP_VARIADIC_PACK_INTRINSICS_HPP */

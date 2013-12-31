@@ -41,14 +41,118 @@ namespace elib
                     "Overload resolution check");
     };
     
-    
+   
     template <class First, class ...Rest>
     struct vector<First,  Rest...>
-      : detail::vector_item<
-          detail::vector_front_tag, First, vector<Rest...>
-        >
+      : vector<Rest...>
     {
       using type = vector;
+      using base = vector<Rest...>;
+      
+      using lower_bound_ = size_type<base::lower_bound_::value - 1>;
+      using upper_bound_ = typename base::upper_bound_;
+      
+      using size = size_type< base::size::value + 1 >;
+      using index_ = lower_bound_;
+      
+      static First index_lookup(index_);
+      using base::index_lookup;
+    };
+    
+    
+    template <class A1, class A2, class ...Rest>
+    struct vector<A1, A2, Rest...>
+      : vector<Rest...>
+    {
+      using type = vector;
+      using base = vector<Rest...>;
+      
+      using lower_bound_ = size_type< base::lower_bound_::value - 2 >;
+      using upper_bound_ = typename base::upper_bound_;
+      
+      using size = size_type< base::size::value + 2 >;
+      
+      using index_1 = lower_bound_;
+      using index_2 = size_type< lower_bound_::value + 1>;
+      
+      static A1 index_lookup(index_1);
+      static A2 index_lookup(index_2);
+      using base::index_lookup;
+    };
+    
+    
+    template <class A1, class A2, class A3, class ...Rest>
+    struct vector<A1, A2, A3, Rest...>
+      : vector<Rest...>
+    {
+      using type = vector;
+      using base = vector<Rest...>;
+      
+      using lower_bound_ = size_type<base::lower_bound_::value - 3>;
+      using upper_bound_ = typename base::upper_bound_;
+      
+      using size = size_type< base::size::value +  3>;
+      
+      using index_1 = lower_bound_;
+      using index_2 = size_type< lower_bound_::value + 1>;
+      using index_3 = size_type< lower_bound_::value + 2 >;
+      
+      static A1 index_lookup(index_1);
+      static A2 index_lookup(index_2);
+      static A3 index_lookup(index_3);
+      using base::index_lookup;
+    };
+    
+    template <class A1, class A2, class A3, class A4, class ...Rest>
+    struct vector<A1, A2, A3, A4, Rest...>
+      : vector<Rest...>
+    {
+      using type = vector;
+      using base = vector<Rest...>;
+      
+      using lower_bound_ = size_type< base::lower_bound_::value - 4 >;
+      using upper_bound_ = typename base::upper_bound_;
+      
+      using size = size_type< base::size::value +  4>;
+      
+      using index_1 = lower_bound_;
+      using index_2 = size_type< lower_bound_::value + 1 >;
+      using index_3 = size_type< lower_bound_::value + 2 >;
+      using index_4 = size_type< lower_bound_::value + 3 >;
+      
+      static A1 index_lookup(index_1);
+      static A2 index_lookup(index_2);
+      static A3 index_lookup(index_3);
+      static A4 index_lookup(index_4);
+      
+      using base::index_lookup;
+    };
+    
+    
+    template <class A1, class A2, class A3, class A4, class A5, class ...Rest>
+    struct vector<A1, A2, A3, A4, A5, Rest...>
+      : vector<Rest...>
+    {
+      using type = vector;
+      using base = vector<Rest...>;
+      
+      using lower_bound_ = size_type< base::lower_bound_::value - 5 >;
+      using upper_bound_ = typename base::upper_bound_;
+      
+      using size = size_type< base::size::value +  5 >;
+      
+      using index_1 = lower_bound_;
+      using index_2 = size_type< lower_bound_::value + 1 >;
+      using index_3 = size_type< lower_bound_::value + 2 >;
+      using index_4 = size_type< lower_bound_::value + 3 >;
+      using index_5 = size_type< lower_bound_::value + 4 >;
+      
+      static A1 index_lookup(index_1);
+      static A2 index_lookup(index_2);
+      static A3 index_lookup(index_3);
+      static A4 index_lookup(index_4);
+      static A5 index_lookup(index_5);
+      using base::index_lookup;
     };
     
     

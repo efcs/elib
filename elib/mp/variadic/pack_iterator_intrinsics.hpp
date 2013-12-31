@@ -1,10 +1,10 @@
-#ifndef ELIB_MP_VARIADIC_SEQUENCE_ITERATOR_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_SEQUENCE_ITERATOR_INTRINSICS_HPP
+#ifndef ELIB_MP_VARIADIC_PACK_ITERATOR_INTRINSICS_HPP
+#define ELIB_MP_VARIADIC_PACK_ITERATOR_INTRINSICS_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/sequence_iterator.hpp>
-# include <elib/mp/variadic/sequence_intrinsics.hpp>
-# include <elib/mp/sequence.hpp>
+# include <elib/mp/variadic/pack_iterator.hpp>
+# include <elib/mp/variadic/pack_intrinsics.hpp>
+# include <elib/mp/pack.hpp>
 # include <elib/mp/identity.hpp>
 # include <cstddef>
 
@@ -13,7 +13,7 @@ namespace elib
   namespace mp
   {
     
-    struct variadic_sequence_iterator_intrinsics
+    struct variadic_pack_iterator_intrinsics
     {
       
     //-------------------------------- deref --------------------------------//
@@ -65,8 +65,8 @@ namespace elib
         : llong_< static_cast<long long>(NR - NL) >
       {};
       
-    };                                // variadic_sequence_iterator_intrinsics
+    };                                // variadic_pack_iterator_intrinsics
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_SEQUENCE_ITERATOR_INTRINSICS_HPP */
+#endif /* ELIB_MP_VARIADIC_PACK_ITERATOR_INTRINSICS_HPP */

@@ -12,6 +12,8 @@
 # 
 # define ENUM_100(x) ENUM_50(x), ENUM_50(x)
 # 
+# define ENUM_150(x) ENUM_100(x), ENUM_50(x)
+# 
 # define ENUM_200(x) ENUM_100(x), ENUM_100(x)
 # 
 # define ENUM_250(x) ENUM_100(x), ENUM_100(x), ENUM_50(x)

@@ -5,14 +5,14 @@
 #include <boost/mpl/begin.hpp>
 #include <boost/mpl/integral_c.hpp>
 
+#include "../boost_vector.hpp"
 #include "../benchmark_helper.hpp"
 
 using namespace boost::mpl;
 
 int main()
 {
-  using T = vector<ENUM_50(int)>;
-  using B = typename begin<T>::type;
+  using B = typename begin<BoostVector50>::type;
   using E = typename advance<B, int_<49>>::type;
   
   E e{};

@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_PACK_HPP
 #define ELIB_MP_PACK_HPP
 
-# include <elib/mp/variadic_sequence.hpp>
+# include <elib/mp/variadic_pack.hpp>
 # include <elib/mp/fill_variadic.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
@@ -37,7 +37,7 @@ namespace elib
     
     
     template <class Pack, std::size_t N>
-    using pack_iterator = variadic_sequence_iterator<Pack, N>;
+    using pack_iterator = variadic_pack_iterator<Pack, N>;
     
     
     template <class T, std::size_t N>
@@ -51,7 +51,7 @@ namespace elib
     template <class ...Args>
     struct get_impl< pack<Args...> >
     {
-      using type = variadic_sequence_intrinsics<>;
+      using type = variadic_pack_intrinsics<>;
     };
     
   }                                                         // namespace pack

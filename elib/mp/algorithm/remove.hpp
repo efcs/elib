@@ -1,30 +1,31 @@
-#ifndef ELIB_MP_ALGORITHM_COPY_HPP
-#define ELIB_MP_ALGORITHM_COPY_HPP
+#ifndef ELIB_MP_ALGORITHM_REMOVE_HPP
+#define ELIB_MP_ALGORITHM_REMOVE_HPP
 
 # include <elib/mp/algorithm/inserter.hpp>
 # include <elib/mp/algorithm/iter_fold.hpp>
 # include <elib/mp/algorithm/detail/inserter_op.hpp>
 # include <elib/mp/arg.hpp>
-# include <elib/mp/always.hpp>
 # include <elib/mp/lambda.hpp>
+# include <elib/mp/logical.hpp>
+# include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
-
 
 namespace elib 
 {
   namespace mp
   {
-
+   
+   
     template <
         class Seq
       , class Pred
       , class In = back_inserter<clear_t<Seq>>
       >
-    struct copy_if
+    struct remove_if
       : iter_foldl<
           Seq
         , typename In::state
-        , detail::inserter_op_if< In, lambda<Pred> >
+        , detail::inserter_op_if<In, lambda<not_<Pred>> >
         >
     {};
     
@@ -34,69 +35,67 @@ namespace elib
       , class Pred
       , class In = back_inserter<clear_t<Seq>>
       >
-    using copy_if_t = typename copy_if<Seq, Pred, In>::type;
+    using remove_if_t = typename remove_if<Seq, Pred, In>::type;
     
     
     template <
         class Seq
       , class Pred
-      , class In = back_inserter<clear_t<Seq>>
+      , class In = front_inserter<clear_t<Seq>>
       >
-    struct reverse_copy_if
-      : iter_foldr<
-            Seq
-          , typename In::state
-          , detail::inserter_op_if< In, lambda<Pred> >
-        >
-    {};
-    
-    
-    template <
-        class Seq
-      , class Pred
-      , class In = back_inserter<clear_t<Seq>>
-      >
-    using reverse_copy_if_t = typename reverse_copy_if<Seq, Pred, In>::type;
-    
-    
-    template <
-        class Seq
-      , class In = back_inserter<clear_t<Seq>>
-      >
-    struct copy
-      : iter_foldl<
-          Seq
-        , typename In::state
-        , detail::inserter_op< In >
-        >
-    {};
-    
-    
-    template <
-        class Seq
-      , class In = back_inserter<clear_t<Seq>>
-      >
-    using copy_t = typename copy<Seq, In>::type;
-    
-    
-    template <
-        class Seq
-      , class In = back_inserter<clear_t<Seq>>
-      >
-    struct reverse_copy
+    struct reverse_remove_if
       : iter_foldr<
           Seq
         , typename In::state
-        , detail::inserter_op< In >
+        , detail::inserter_op_if<In, lambda<not_<Pred>> >
         >
     {};
     
+    
     template <
         class Seq
+      , class Pred
+      , class In = front_inserter<clear_t<Seq>>
+      >
+    using reverse_remove_if_t = typename reverse_remove_if<Seq, Pred, In>::type;
+    
+    
+    
+    template <
+        class Seq
+      , class T
       , class In = back_inserter<clear_t<Seq>>
       >
-    using reverse_copy_t = typename reverse_copy_if<Seq, always_true, In>::type;
+    struct remove
+      : remove_if<Seq, same_type<_1, T>, In>
+    {};
     
+    
+    template <
+        class Seq, 
+        class T
+      , class In = back_inserter<clear_t<Seq>>
+      >
+    using remove_t = typename remove<Seq, T, In>::type;
+    
+    
+    template <
+        class Seq
+      , class T
+      , class In = front_inserter<clear_t<Seq>>
+      >
+    struct reverse_remove
+      : reverse_remove_if<Seq, same_type<_1, T>, In>
+    {};
+    
+   
+    template <
+        class Seq, 
+        class T
+      , class In = front_inserter<clear_t<Seq>>
+      >
+    using reverse_remove_t = typename reverse_remove<Seq, T, In>::type;
+   
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_ALGORITHM_COPY_HPP */
+#endif /* ELIB_MP_ALGORITHM_REMOVE_HPP */

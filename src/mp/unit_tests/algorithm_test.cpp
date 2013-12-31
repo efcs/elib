@@ -779,25 +779,125 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
 
   BOOST_AUTO_TEST_CASE(mp_algorithm_copy_test)
   {
-    BOOST_CHECK(true);
-    /*
     // copy test
     {
       using P = pack   <int, char, void>;
       using V = vector <int, char, void>;
       using L = list   <int, char, void>;
       
-      using CP = copy_t<P>;
-      std::cout << sequence_size<CP>() << std::endl;
-      SAME_TYPE( front_t<CP>, void );
-      SAME_TYPE( at_c_t<CP, 1>,  );
-      SAME_TYPE( at_c_t<CP, 2>, void );
+      using R = pack<void, char, int>;
       
       CHECK( sequence_equal_t<copy_t<P>, P>() );
       CHECK( sequence_equal_t<copy_t<V>, V>() );
       CHECK( sequence_equal_t<copy_t<L>, L>() );
+      
+      CHECK( sequence_equal_t<reverse_copy_t<P>, R>() );
+      CHECK( sequence_equal_t<reverse_copy_t<V>, R>() );
+      CHECK( sequence_equal_t<reverse_copy_t<L>, R>() );
     }
-    */
   }                                                   // mp_algorithm_copy_test
+  
+  BOOST_AUTO_TEST_CASE(mp_algorithm_remove_test)
+  {
+    using P = pack  <int, void, void, int, int, void, int>;
+    using V = vector<int, void, void, int, int, void, int>;
+    using L = list  <int, void, void, int, int, void, int>;
+    
+    using E = pack<void, void, void>;
+    
+    CHECK( sequence_equal_t<remove_t<P, int>, E>() );
+    CHECK( sequence_equal_t<remove_t<V, int>, E>() );
+    CHECK( sequence_equal_t<remove_t<L, int>, E>() );
+    
+    CHECK( sequence_equal_t<reverse_remove_t<P, int>, E>() );
+    CHECK( sequence_equal_t<reverse_remove_t<V, int>, E>() );
+    CHECK( sequence_equal_t<reverse_remove_t<L, int>, E>() );
+  }                                                 // mp_algorithm_remove_test
+  
+  
+  BOOST_AUTO_TEST_CASE(mp_algorithm_replace_test)
+  {
+    using P = pack  <int, void, void, int, int, void, int>;
+    using V = vector<int, void, void, int, int, void, int>;
+    using L = list  <int, void, void, int, int, void, int>;
+    
+    using E = pack  <long, void, void, long, long, void, long>;
+    
+    CHECK( sequence_equal_t<replace_t<P, int, long>, E>() );
+    CHECK( sequence_equal_t<replace_t<V, int, long>, E>() );
+    CHECK( sequence_equal_t<replace_t<L, int, long>, E>() );
+    
+    CHECK( sequence_equal_t<reverse_replace_t<P, int, long>, E>() );
+    CHECK( sequence_equal_t<reverse_replace_t<V, int, long>, E>() );
+    CHECK( sequence_equal_t<reverse_replace_t<L, int, long>, E>() );
+  }                                                 // mp_algorithm_replace_test
+  
+  
+  BOOST_AUTO_TEST_CASE(mp_algorithm_unique_test)
+  {
+    using P = pack< int, long, long, long, void, void, char, void >;
+    using V = vector< int, long, long, long, void, void, char, void >;
+    using L = list< int, long, long, long, void, void, char, void >;
+    
+    using E = pack< int, long, void, char, void >;
+    CHECK( sequence_equal_t<unique_t<P, not_<same_type<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<unique_t<V, not_<same_type<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<unique_t<L, not_<same_type<_1, _2>>>, E>() );
+    
+    
+    CHECK( sequence_equal_t<reverse_unique_t<P, not_<same_type<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<reverse_unique_t<V, not_<same_type<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<reverse_unique_t<L, not_<same_type<_1, _2>>>, E>() );
+  }                                                // mp_algorithm_unique_test
+  
+  BOOST_AUTO_TEST_CASE(mp_algorithm_transform_test)
+  {
+    // unary
+    {
+      using P = pack  < int, int, int, int, void, void, int, void >;
+      using V = vector< int, int, int, int, void, void, int, void >;
+      using L = list  < int, int, int, int, void, void, int, void >;
+      
+      using E = pack< void, void, void, void, int, int, void, int >;
+      
+      using Tr = 
+        if_<
+            same_type<int, _1>
+          , void
+          , int
+        >;
+      
+      CHECK( sequence_equal_t<transform_t<P, Tr>, E>() );
+      CHECK( sequence_equal_t<transform_t<V, Tr>, E>() );
+      CHECK( sequence_equal_t<transform_t<L, Tr>, E>() );
+      
+      CHECK( sequence_equal_t<reverse_transform_t<P, Tr>, E>() );
+      CHECK( sequence_equal_t<reverse_transform_t<V, Tr>, E>() );
+      CHECK( sequence_equal_t<reverse_transform_t<L, Tr>, E>() );
+    }
+    // binary
+    {
+      using P = pack  < int, char, long, void >;
+      using V = vector< int, char, long, void >;
+      using L = list  < int, char, long, void >;
+      
+      using E = 
+        pack<
+          pair<int, int>, pair<char, char>
+        , pair<long, long>, pair<void, void>
+        >;
+        
+      using Tr = pair<_1, _2>;
+      CHECK( sequence_equal_t<transform_t<P, P, Tr>, E>() );
+      CHECK( sequence_equal_t<transform_t<V, L, Tr>, E>() );
+      CHECK( sequence_equal_t<transform_t<L, P, Tr>, E>() );
+      
+      CHECK( sequence_equal_t<reverse_transform_t<P, V, Tr>, E>() );
+      CHECK( sequence_equal_t<reverse_transform_t<V, P, Tr>, E>() );
+      CHECK( sequence_equal_t<reverse_transform_t<L, V, Tr>, E>() );
+    }
+  }                                                // mp_algorithm_transform_test
+  
+  
   
 BOOST_AUTO_TEST_SUITE_END()

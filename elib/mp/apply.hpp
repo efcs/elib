@@ -15,7 +15,9 @@ namespace elib
     
     
     template <class F, class ...Args>
-    using apply = identity< apply_t<F, Args...> >;
+    struct apply 
+      : lambda<F>::template apply<Args...>
+    {};
     
   }                                                         // namespace mp
 }                                                           // namespace elib

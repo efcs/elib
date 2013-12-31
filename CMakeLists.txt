@@ -6,11 +6,11 @@ cmake_minimum_required (VERSION 2.7)
 
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
-option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
+option(CONFIG_USE_CLANG "use clang instead of gcc" ON)
 option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 
-option(CONFIG_USE_GCC_49 "use gcc 4.9" ON)
+option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" OFF)
 
 option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)

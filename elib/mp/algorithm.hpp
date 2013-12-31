@@ -29,6 +29,10 @@
 # /*------------------------ Transform Algorithms ---------------------------*/
 # 
 # include <elib/mp/algorithm/copy.hpp>
+# include <elib/mp/algorithm/remove.hpp>
+# include <elib/mp/algorithm/replace.hpp>
+# include <elib/mp/algorithm/transform.hpp>
+# include <elib/mp/algorithm/unique.hpp>
 # 
 # 
 #endif /* ELIB_MP_ALGORITHM_HPP */

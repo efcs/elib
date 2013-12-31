@@ -2,14 +2,12 @@
 #define ELIB_MP_VARIADIC_SEQUENCE_INTRINSICS_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/sequence_iterator.hpp>
-# include <elib/mp/variadic/fill_variadic.hpp>
-# include <elib/mp/variadic/detail/at_impl.hpp>
-# include <elib/mp/variadic/detail/drop_impl.hpp>
-# include <elib/mp/variadic/detail/take_impl.hpp>
-# include <elib/mp/variadic/detail/join_impl.hpp>
-# include <elib/mp/variadic/detail/append_impl.hpp>
-# include <elib/mp/variadic/detail/prepend_impl.hpp>
+# include <elib/mp/variadic/append.hpp>
+# include <elib/mp/variadic/at.hpp>
+# include <elib/mp/variadic/drop.hpp>
+# include <elib/mp/variadic/prepend.hpp>
+# include <elib/mp/variadic/slice.hpp>
+# include <elib/mp/variadic/take.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/sequence.hpp>
@@ -49,21 +47,11 @@ namespace elib
       
     //-------------------------------- at -----------------------------------// 
       
-      template <class S, std::size_t N> struct at_c;
+      template <class S, class N>
+      using at = variadic_at<S, N::type::value>;
       
-      template <template <class...> class S, class ...Args, std::size_t N>
-      struct at_c< S<Args...>, N> 
-      {
-        using type = decltype(
-          detail::variadic_at_impl< 
-            fill_variadic_t<S, decltype(nullptr), N>
-          >::eval((identity<Args>*)nullptr...)
-        );
-      };
-      
-      template <class Seq, class N>
-      using at = at_c<Seq, N::type::value>;
-      
+      template <class S, std::size_t N>
+      using at_c = variadic_at<S, N>;
       
     //-------------------------------- front --------------------------------//
     
@@ -90,20 +78,19 @@ namespace elib
     //-------------------------------- push & pop back ----------------------// 
       
       template <class S, class T>
-      using push_back = detail::variadic_append_impl<S, T>;
+      using push_back = variadic_append<S, T>;
       
       template <class S>
       using pop_back = 
-        detail::variadic_take_impl<
-            typename clear<S>::type
-          , S
+          variadic_take<
+            S
           , sequence_size<S>::type::value - 1
         >;
       
     //-------------------------------- push & pop front ---------------------//
     
       template <class S, class T>
-      using push_front = detail::variadic_prepend_impl<S, T>;
+      using push_front = variadic_prepend<S, T>;
       
       
       template <class S> struct pop_front;
@@ -116,40 +103,24 @@ namespace elib
     //------------------------ take & drop & slice --------------------------// 
     
       template <class S, std::size_t N>
-      using take = detail::variadic_take_impl<typename clear<S>::type, S, N>;
+      using take = variadic_take<S, N>;
       
-      
-      template <class S, std::size_t N> struct drop;
-      
-      
-      template <template <class...> class S, class ...Args, std::size_t N>
-      struct drop<S<Args...>, N>
-      {
-        using type = decltype(
-          detail::variadic_drop_impl< fill_variadic_t<S, decltype(nullptr), N> >
-            ::eval((identity<Args>*)nullptr...)
-        );
-      };
-      
+      template <class S, std::size_t N>
+      using drop = variadic_drop<S, N>;
       
       template <class Seq, std::size_t First, std::size_t Last>
-      using slice = 
-        take<
-            typename drop<Seq, First>::type
-          , Last - First
-        >;
-      
+      using slice = variadic_slice<Seq, First, Last>;
       
     //------------------------ join & append & prepend ----------------------// 
     
       template <class Left, class Right>
-      using join = detail::variadic_join_impl<Left, Right>;
+      using join = variadic_join<Left, Right>;
     
       template <class S, class ...Args>
-      using append = detail::variadic_append_impl<S, Args...>;
+      using append = variadic_append<S, Args...>;
       
       template <class S, class ...Args>
-      using prepend = detail::variadic_prepend_impl<S, Args...>;
+      using prepend = variadic_prepend<S, Args...>;
       
     };                                                      // variadic_sequence_intrinsics
     

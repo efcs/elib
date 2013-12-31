@@ -4,12 +4,13 @@
 # include <elib/mp/variadic/fwd.hpp>
 # include <elib/mp/variadic/list_iterator.hpp>
 # include <elib/mp/variadic/fill_variadic.hpp>
-# include <elib/mp/variadic/detail/drop_impl.hpp>
-# include <elib/mp/variadic/detail/join_impl.hpp>
-# include <elib/mp/variadic/detail/append_impl.hpp>
-# include <elib/mp/variadic/detail/prepend_impl.hpp>
+# include <elib/mp/variadic/drop.hpp>
+# include <elib/mp/variadic/join.hpp>
+# include <elib/mp/variadic/append.hpp>
+# include <elib/mp/variadic/prepend.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/identity.hpp>
+# include <elib/mp/iterator.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <cstddef>
 
@@ -21,6 +22,18 @@ namespace elib
     template <template <class...> class IteratorType>
     struct variadic_list_intrinsics
     {
+      
+      template <class List, class N> 
+      using at = variadic_at<List, N::type::value>;
+      
+      template <class List, class N>
+      using at_t = typename variadic_at<List, N::type::value>::type;
+      
+      template <class List, std::size_t N>
+      using at_c = variadic_at<List, N>;
+      
+      template <class List, std::size_t N>
+      using at_c_t = typename variadic_at<List, N>::type;
       
     //-------------------------------- size --------------------------------// 
       
@@ -88,27 +101,19 @@ namespace elib
       
     //-------------------------------- drop --------------------------------// 
     
-      template <class List, std::size_t N> struct drop;
-      
-      template <template <class...> class List, class ...Args, std::size_t N>
-      struct drop< List<Args...>, N> 
-      {
-        using type = decltype(
-          detail::variadic_drop_impl< fill_variadic_t<List, decltype(nullptr), N> >
-            ::eval((identity<Args>*)nullptr...)
-        );
-      };
+      template <class List, std::size_t N>
+      using drop = variadic_drop<List, N>;
       
     //---------------------- join append prepend ----------------------------// 
     
       template <class Left, class Right>
-      using join = detail::variadic_join_impl<Left, Right>;
+      using join = variadic_join<Left, Right>;
       
       template <class List, class ...Args>
-      using append = detail::variadic_append_impl<List, Args...>;
+      using append = variadic_append<List, Args...>;
       
       template <class List, class ...Args>
-      using prepend = detail::variadic_prepend_impl<List, Args...>;
+      using prepend = variadic_prepend<List, Args...>;
       
     };                                                      // variadic_list_intrinsics
     

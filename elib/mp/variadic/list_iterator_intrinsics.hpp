@@ -2,9 +2,9 @@
 #define ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
+# include <elib/mp/variadic/drop.hpp>
 # include <elib/mp/variadic/list_iterator.hpp>
 # include <elib/mp/variadic/list_intrinsics.hpp>
-# include <elib/mp/variadic/detail/list_advance_impl.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -34,10 +34,10 @@ namespace elib
     //-------------------------------- advance --------------------------------// 
     
       template <class S, class N>
-      using advance = detail::variadic_list_advance_impl<S, N::type::value>;
+      using advance = variadic_drop<S, N::type::value>;
       
       template <class S, std::size_t N>
-      using advance_c = detail::variadic_list_advance_impl<S, N>;
+      using advance_c = variadic_drop<S, N>;
     
     //-------------------------------- distance --------------------------------// 
     

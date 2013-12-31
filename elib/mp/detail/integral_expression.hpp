@@ -3,85 +3,85 @@
 #
 # include <elib/mp/detail/integral_constant.hpp>
 #
-# define ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR_IMPL(name, op)                     \
-  template <class ...> struct name;                                          \
-                                                                             \
-  template <class A>                                                         \
-  struct name<A> : A {};                                                     \
-                                                                             \
-  template <class A1, class A2>                                              \
-  struct name<A1, A2>                                                        \
-    : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value )                            \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3>                                    \
-  struct name<A1, A2, A3>                                                    \
-    : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value )               \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4>                          \
-  struct name<A1, A2, A3, A4>                                                \
+# define ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR_IMPL(name, op)                                             \
+  template <class ...> struct name;                                                                  \
+                                                                                                     \
+  template <class A>                                                                                 \
+  struct name<A> : A {};                                                                             \
+                                                                                                     \
+  template <class A1, class A2>                                                                      \
+  struct name<A1, A2>                                                                                \
+    : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value )                                        \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3>                                                            \
+  struct name<A1, A2, A3>                                                                            \
+    : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value )                     \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4>                                                  \
+  struct name<A1, A2, A3, A4>                                                                        \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value )  \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5>                \
-  struct name<A1, A2, A3, A4, A5>                                            \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5>                                        \
+  struct name<A1, A2, A3, A4, A5>                                                                    \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value    \
-                         op A5::type::value )                                      \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5, class A6>      \
-  struct name<A1, A2, A3, A4, A5, A6>                                        \
+                         op A5::type::value )                                                        \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5, class A6>                              \
+  struct name<A1, A2, A3, A4, A5, A6>                                                                \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value    \
-                         op A5::type::value op A6::type::value )                         \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5                 \
-    , class A6, class A7                                                     \
-  >                                                                          \
-  struct name<A1, A2, A3, A4, A5, A6, A7>                                    \
+                         op A5::type::value op A6::type::value )                                     \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5                                         \
+    , class A6, class A7                                                                             \
+  >                                                                                                  \
+  struct name<A1, A2, A3, A4, A5, A6, A7>                                                            \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value    \
-                         op A5::type::value op A6::type::value op A7::type::value )            \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5                 \
-    , class A6, class A7, class A8                                           \
-  >                                                                          \
-  struct name<A1, A2, A3, A4, A5, A6, A7, A8>                                \
+                         op A5::type::value op A6::type::value op A7::type::value )                  \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5                                         \
+    , class A6, class A7, class A8                                                                   \
+  >                                                                                                  \
+  struct name<A1, A2, A3, A4, A5, A6, A7, A8>                                                        \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value    \
-                         op A5::type::value op A6::type::value op A7::type::value              \
-                         op A8::type::value )                                      \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5                 \
-    , class A6, class A7, class A8, class A9                                 \
-  >                                                                          \
-  struct name<A1, A2, A3, A4, A5, A6, A7, A8, A9>                            \
+                         op A5::type::value op A6::type::value op A7::type::value                    \
+                         op A8::type::value )                                                        \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5                                         \
+    , class A6, class A7, class A8, class A9                                                         \
+  >                                                                                                  \
+  struct name<A1, A2, A3, A4, A5, A6, A7, A8, A9>                                                    \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value    \
-                         op A5::type::value op A6::type::value op A7::type::value              \
-                         op A8::type::value op A9::type::value)                          \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5                 \
-    , class A6, class A7, class A8, class A9, class A10                      \
-  >                                                                          \
-  struct name<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>                       \
+                         op A5::type::value op A6::type::value op A7::type::value                    \
+                         op A8::type::value op A9::type::value)                                      \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5                                         \
+    , class A6, class A7, class A8, class A9, class A10                                              \
+  >                                                                                                  \
+  struct name<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>                                               \
     : ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value    \
-                         op A5::type::value op A6::type::value op A7::type::value              \
-                         op A8::type::value op A9::type::value op A10::type::value)            \
-  {};                                                                        \
-                                                                             \
-  template <class A1, class A2, class A3, class A4, class A5                 \
-    , class A6, class A7, class A8, class A9, class A10, class A11           \
-    , class ...Rest                                                          \
-  >                                                                          \
-  struct name<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Rest...>         \
-    : name<                                                                  \
+                         op A5::type::value op A6::type::value op A7::type::value                    \
+                         op A8::type::value op A9::type::value op A10::type::value)                  \
+  {};                                                                                                \
+                                                                                                     \
+  template <class A1, class A2, class A3, class A4, class A5                                         \
+    , class A6, class A7, class A8, class A9, class A10, class A11                                   \
+    , class ...Rest                                                                                  \
+  >                                                                                                  \
+  struct name<A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, Rest...>                                 \
+    : name<                                                                                          \
         ELIB_MP_AUTO_INTC( A1::type::value op A2::type::value op A3::type::value op A4::type::value  \
                          op A5::type::value op A6::type::value op A7::type::value op A8::type::value \
-                         op A9::type::value op A10::type::value op A11::type::value)           \
-      , Rest...                                                              \
-      >                                                                      \
+                         op A9::type::value op A10::type::value op A11::type::value)                 \
+      , Rest...                                                                                      \
+      >                                                                                              \
   {}
 #
 # define ELIB_MP_LEFT_ASSOC_INTEGRAL_EXPR_ALIAS(name, tname, impl) \

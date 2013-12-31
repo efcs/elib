@@ -8,6 +8,76 @@ namespace elib
   namespace mp
   {
     
+    namespace detail
+    { 
+      template <class ...> struct basic_pack {};
+    }
+    
+    template <
+        class Seq
+      , std::size_t N
+      , template <class...> class Pack = detail::basic_pack
+      >
+    struct variadic_at;
+    
+    
+    template <
+        class Seq, std::size_t N
+      , template <class...> class Pack = detail::basic_pack
+      >
+    struct variadic_drop;
+    
+    
+    template <
+      class Seq, std::size_t N
+      >
+    struct variadic_take;
+    
+    
+    template <
+        class Seq
+      , std::size_t First
+      , std::size_t Last
+      >
+    struct variadic_slice;
+    
+    
+    template <
+        class LHS
+      , class RHS
+      >
+    struct variadic_join;
+    
+    
+    template <
+        class Seq
+      , class ...Args
+      >
+    struct variadic_append;
+    
+    
+    template <
+        class Seq
+      , class ...Args
+      >
+    struct variadic_prepend;
+    
+    
+    namespace detail
+    {
+      template <class Seq> struct variadic_at_impl;
+      
+      template <class Seq, template <class...> class To> 
+      struct variadic_drop_impl;
+      
+      template <class To, std::size_t N, bool = (N > 4)> 
+      struct variadic_take_impl;
+    }
+    
+  ////////////////////////////////////////////////////////////////////////////////
+  //                            Sequence                                              
+  ////////////////////////////////////////////////////////////////////////////////
+    
     template <class Seq, std::size_t N>
     struct variadic_sequence_iterator;
     
@@ -23,7 +93,11 @@ namespace elib
     struct variadic_sequence_intrinsics;
     
     struct variadic_sequence_iterator_intrinsics;
-    
+  
+  
+  ////////////////////////////////////////////////////////////////////////////////
+  //                            List                                              
+  ////////////////////////////////////////////////////////////////////////////////
     
     template <
       template <class...> class IteratorType = variadic_list_iterator 
@@ -34,26 +108,7 @@ namespace elib
 
     template <template <class...> class Seq, class T, std::size_t N>
     struct fill_variadic;
-    
-    namespace detail
-    {
-      
-      template <class Seq> struct variadic_at_impl;
-      
-      template <class Seq> struct variadic_drop_impl;
-      
-      template <class To, class From, std::size_t N> struct variadic_take_impl;
-      
-      template <class Left, class Right> struct variadic_join_impl;
-      
-      template <class Seq, class ...Args> struct variadic_append_impl;
-      
-      template <class Seq, class ...Args> struct variadic_prepend_impl;
-      
-      template <class Seq, std::size_t N> struct variadic_list_advance_impl;
-      
-    }                                                       // namespace detail
-    
+
   }                                                         // namespace mp
 }                                                           // namespace elib
 #endif /* ELIB_MP_VARIADIC_FWD_HPP */

@@ -154,7 +154,7 @@ namespace elib
     };
     
     
-    template <class T, bool Begin>
+    template <class T, std::size_t Begin>
     struct get_impl< single_view_iterator<T, Begin> >
     {
       using type = detail::single_view_iterator_intrinsics;

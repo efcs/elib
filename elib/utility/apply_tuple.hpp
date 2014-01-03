@@ -33,7 +33,7 @@ namespace elib
   template <
         class F
       , class Tuple
-      , class IndexSeq = make_index_seq<std::tuple_size<Tuple>::value>
+      , class IndexSeq = make_index_seq<std::tuple_size<typename std::decay<Tuple>::type>::value>
   >
   auto apply_unpacked_tuple(F&& f, Tuple&& t, IndexSeq())
   -> decltype(

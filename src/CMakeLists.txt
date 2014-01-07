@@ -8,48 +8,43 @@
 set(LIBRARY_FLAGS "")
 set(UNIT_TEST_FLAGS "")
 
-if (CONFIG_MY_BUILD)
 
-  if (CONFIG_ALL_WARNINGS)
+if (CONFIG_ALL_WARNINGS)
   
-     #add_flags( LIBRARY_FLAGS -Weffc++)
+  #add_flags( LIBRARY_FLAGS -Weffc++)
 
-     add_flags( LIBRARY_FLAGS 
-      -Wall  -pedantic  
-      -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
-      -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
-      -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 
-      -Wformat-nonliteral -Wformat-security  -Wformat-y2k -Wimport  -Winit-self  
-      -Winline -Winvalid-pch -Wlong-long -Wmissing-braces 
-      -Wmissing-field-initializers -Wmissing-format-attribute 
-      -Wmissing-include-dirs -Wmissing-noreturn -Wpacked  -Wpadded -Wparentheses
-      -Wpointer-arith -Wredundant-decls -Wreturn-type -Wsequence-point  -Wshadow 
-      -Wsign-compare  -Wstack-protector -Wstrict-aliasing -Wstrict-aliasing=2 
-      -Wswitch  -Wswitch-default -Wswitch-enum -Wtrigraphs  -Wuninitialized 
-      -Wunknown-pragmas  -Wunreachable-code -Wunused -Wunused-function  
-      -Wunused-label  -Wunused-parameter -Wunused-value  -Wunused-variable  
-      -Wvariadic-macros -Wvolatile-register-var  -Wwrite-strings
+  add_flags( LIBRARY_FLAGS 
+    -Wall  -pedantic  
+    -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
+    -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
+    -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 
+    -Wformat-nonliteral -Wformat-security  -Wformat-y2k -Wimport  -Winit-self  
+    -Winline -Winvalid-pch -Wlong-long -Wmissing-braces 
+    -Wmissing-field-initializers -Wmissing-format-attribute 
+    -Wmissing-include-dirs -Wmissing-noreturn -Wpacked  -Wpadded -Wparentheses
+    -Wpointer-arith -Wredundant-decls -Wreturn-type -Wsequence-point  -Wshadow 
+    -Wsign-compare  -Wstack-protector -Wstrict-aliasing -Wstrict-aliasing=2 
+    -Wswitch  -Wswitch-default -Wswitch-enum -Wtrigraphs  -Wuninitialized 
+    -Wunknown-pragmas  -Wunreachable-code -Wunused -Wunused-function  
+    -Wunused-label  -Wunused-parameter -Wunused-value  -Wunused-variable  
+    -Wvariadic-macros -Wvolatile-register-var  -Wwrite-strings
+  )
+  
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_flags( LIBRARY_FLAGS
+      -Weverything -Wno-c++98-compat 
+      -Wno-c++98-compat-pedantic -Wno-newline-eof 
     )
-  
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-      
-      add_flags( LIBRARY_FLAGS
-        -Weverything -Wno-c++98-compat 
-        -Wno-c++98-compat-pedantic -Wno-newline-eof 
-      )
-      
-    else()
-                       
-      add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
-
-    endif()
-  
-    add_flags( LIBRARY_FLAGS 
-      -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long
-    )
-  
+  else()
+    add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
   endif()
+  
+  add_flags( LIBRARY_FLAGS 
+    -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long
+  )
+  
 endif()
+
 
 
 add_flags(LIBRARY_FLAGS -fPIC)

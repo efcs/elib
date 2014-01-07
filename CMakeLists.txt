@@ -4,8 +4,6 @@ cmake_minimum_required (VERSION 2.7)
 #                   Toolchain config
 ################################################################################
 
-option(CONFIG_MY_BUILD "turn on personal configurations" ON)
-
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
 option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
@@ -103,14 +101,12 @@ endif()
 #                          Build & Installation Config
 ################################################################################
 
-if (CONFIG_MY_BUILD)
-	# I like to install in weird places 
-	if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-		set(CMAKE_INSTALL_PREFIX "/usr" 
-			CACHE PATH "library install prefix" FORCE)
-		MESSAGE(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
-	endif()
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "/usr" 
+    CACHE PATH "library install prefix" FORCE)
+  MESSAGE(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 endif()
+
 	
 set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )

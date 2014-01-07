@@ -3,6 +3,7 @@
 
 # include <elib/mp/variadic/fwd.hpp>
 # include <elib/mp/iterator.hpp>
+# include <elib/mp/iterator/default_random_access_iterator.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <cstddef>
 
@@ -12,16 +13,7 @@ namespace elib
   {
     
     template <class Seq, std::size_t N>
-    struct variadic_pack_iterator
-    {
-      using model_type = model::default_random_access_iterator;
-    };
-    
-    template <class Seq, std::size_t N>
-    struct get_impl< variadic_pack_iterator<Seq, N> >
-    {
-      using type = variadic_pack_iterator_intrinsics;
-    };
+    using variadic_pack_iterator = default_random_access_iterator<Seq, N>;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

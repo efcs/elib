@@ -1,6 +1,7 @@
 #ifndef ELIB_MP_VARIADIC_FWD_HPP
 #define ELIB_MP_VARIADIC_FWD_HPP
 
+# include <elib/mp/iterator/fwd.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -82,16 +83,12 @@ namespace elib
   //                            Sequence                                              
   ////////////////////////////////////////////////////////////////////////////////
     
-    template <class Seq, std::size_t N>
-    struct variadic_pack_iterator;
-    
-    
     
     // implementations are not in namespace detail since they
     // are meant to be generic for any variadic template
     template <
         template <class, std::size_t> class IteratorType
-          = variadic_pack_iterator
+          = default_random_access_iterator
       >
     struct variadic_pack_intrinsics;
     

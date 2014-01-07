@@ -155,17 +155,24 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
       , pack_c<int, 1, 2, 3>
       >;
   
+    /*
     using EV = vector< 
         vector_c<int, 1, 2, 3>
       , vector_c<int, 1, 2, 3>
       , vector_c<int, 1, 2, 3>
       >;
+    */
     
     using EL = list< 
         list_c<int, 1, 2, 3>
       , list_c<int, 1, 2, 3>
       , list_c<int, 1, 2, 3>
       >;
+
+    CHECK( sequence_size_t<P>() == 3 );
+    CHECK( sequence_size_t<V>() == 3 );
+    CHECK( sequence_size_t<L>() == 3 );
+    
     
     CHECK( sequence_equal_t<P, EP>() );
     //CHECK( sequence_equal_t<V, EV>() );

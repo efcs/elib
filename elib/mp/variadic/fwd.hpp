@@ -92,7 +92,6 @@ namespace elib
       >
     struct variadic_pack_intrinsics;
     
-    struct variadic_pack_iterator_intrinsics;
   
   
   ////////////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,27 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     SAME_TYPE(advance_c_t<B, 0>, E );
   }
 
+  BOOST_AUTO_TEST_CASE(mp_view_filter_view_test)
+  {
+    using P1 = pack< float, int, int, float, float, int, float>;
+    using P = filter_view<P1, same_type<float, _1>>;
+    using V1 = vector< float, int, int, float, float, int, float>;
+    using V = filter_view<V1, same_type<float, _1>>;
+    using L1 = list< float, int, int, float, float, int, float>;
+    using L = filter_view<L1, same_type<float, _1>>;
+    
+    using E = pack<float, float, float, float>;
+    
+    CHECK( sequence_size_t<P>() == 4 );
+    CHECK( sequence_size_t<V>() == 4 );
+    CHECK( sequence_size_t<L>() == 4 );
+    
+    CHECK( sequence_equal_t<P, E>() );
+    CHECK( sequence_equal_t<V, E>() );
+    CHECK( sequence_equal_t<L, E>() );
+  }                                                 // mp_view_filter_view_test
+  
+  
   BOOST_AUTO_TEST_CASE(mp_view_single_view_test)
   {
     using T = single_view<true_>;
@@ -109,9 +130,6 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     CHECK( sequence_equal_t< L, E >() );
   }                                              // mp_view_transform_view_test
   
-  
-  template <class T>
-  struct not_def;
   
   
   BOOST_AUTO_TEST_CASE(mp_view_zip_view_test)

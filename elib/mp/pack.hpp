@@ -6,6 +6,7 @@
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/get_impl.hpp>
+# include <elib/mp/iterator/default_random_access_iterator.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -37,7 +38,7 @@ namespace elib
     
     
     template <class Pack, std::size_t N>
-    using pack_iterator = variadic_pack_iterator<Pack, N>;
+    using pack_iterator = default_random_access_iterator<Pack, N>;
     
     
     template <class T, std::size_t N>

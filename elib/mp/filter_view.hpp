@@ -72,7 +72,7 @@ namespace elib
               filter_view_iterator<
                   find_if_t<
                     typename Seq::seq_
-                  , not_<typename Seq::pred_>
+                  , typename Seq::pred_
                   >
                 , end_t<typename Seq::seq_>
                 , typename Seq::pred_
@@ -109,8 +109,8 @@ namespace elib
           identity<
             filter_view_iterator<
                 find_if_t<
-                  iterator_range<typename It::it_, typename It::end_>
-                , not_<typename It::pred_>
+                  iterator_range<next_t<typename It::it_>, typename It::end_>
+                , typename It::pred_
                 >
               , typename It::end_
               , typename It::pred_

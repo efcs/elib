@@ -76,6 +76,11 @@ namespace elib
         using at_c = at<S, long_<N>>;
       };
       
+      template <>
+      struct iterator_range_intrinsics<model::default_random_access_iterator>
+        : iterator_range_intrinsics< model::random_access_iterator>
+      {};
+      
       
     }                                                       // namespace detail
     

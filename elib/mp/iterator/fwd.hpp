@@ -54,6 +54,7 @@ namespace elib
     template <class Model> struct iterator_intrinsics;
     template <> struct iterator_intrinsics< model::forward_iterator >;
     template <> struct iterator_intrinsics< model::bidirectional_iterator >;
+    template <> struct iterator_intrinsics< model::random_access_iterator >;
     template <> struct iterator_intrinsics< model::default_random_access_iterator >;
     
     using forward_iterator_intrinsics = 
@@ -61,6 +62,9 @@ namespace elib
     
     using bidirectional_iterator_intrinsics =
       iterator_intrinsics< model::bidirectional_iterator >;
+      
+    using random_access_iterator_intrinsics = 
+      iterator_intrinsics< model::random_access_iterator >;
       
     using default_random_access_iterator_intrinsics = 
       iterator_intrinsics< model::default_random_access_iterator >;

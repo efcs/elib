@@ -59,7 +59,10 @@ namespace elib
 
       
       template <class List>
-      using end = IteratorType<>;
+      using end = 
+        identity< 
+          IteratorType<>
+        >;
       
     //-------------------------------- front --------------------------------// 
     

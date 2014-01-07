@@ -39,11 +39,17 @@ namespace elib
     //------------------------------ begin & end ----------------------------// 
     
       template <class S>
-      using begin = IteratorType<S, 0>;
+      using begin = 
+        identity<
+          IteratorType<S, 0>
+        >;
       
       
       template <class S>
-      using end = IteratorType<S, sequence_size<S>::type::value>;
+      using end =
+        identity<
+          IteratorType<S, sequence_size<S>::type::value>
+        >;
       
     //-------------------------------- at -----------------------------------// 
       

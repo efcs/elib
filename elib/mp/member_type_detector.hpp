@@ -1,10 +1,10 @@
 #ifndef ELIB_MP_MEMBER_TYPE_DETECTOR_HPP
 #define ELIB_MP_MEMBER_TYPE_DETECTOR_HPP
 
-# include <elib/mp/detail/integral_constant.hpp>
-# include <elib/mp/pair.hpp>
 # include <elib/mp/identity.hpp>
+# include <elib/mp/pair.hpp>
 # include <elib/mp/void.hpp>
+# include <elib/mp/detail/integral_constant.hpp>
 
 namespace elib 
 {
@@ -66,11 +66,9 @@ namespace elib
     ELIB_MP_DETECT_HELPER_(type);
     ELIB_MP_DETECT_HELPER_(value_type);
     ELIB_MP_DETECT_HELPER_(result_type);
+    ELIB_MP_DETECT_HELPER_(class_type);
+    ELIB_MP_DETECT_HELPER_(model_type);
     ELIB_MP_DETECT_HELPER_(item);
-    ELIB_MP_DETECT_HELPER_(base);
-    ELIB_MP_DETECT_HELPER_(tag);
-    ELIB_MP_DETECT_HELPER_(category);
-    ELIB_MP_DETECT_HELPER_(apply);
     ELIB_MP_DETECT_HELPER_(next);
     ELIB_MP_DETECT_HELPER_(prior);
     ELIB_MP_DETECT_HELPER_(begin);

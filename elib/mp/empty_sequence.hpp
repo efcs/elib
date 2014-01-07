@@ -1,9 +1,10 @@
 #ifndef ELIB_MP_VIEW_EMPTY_SEQUENCE_HPP
 #define ELIB_MP_VIEW_EMPTY_SEQUENCE_HPP
 
+# include <elib/mp/identity.hpp>
+# include <elib/mp/iterator.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/iterator.hpp>
 # include <elib/mp/detail/integral_constant.hpp>
 
 namespace elib 
@@ -28,7 +29,7 @@ namespace elib
     
     struct empty_sequence_iterator
     {
-      using tag = random_access_iterator_tag;
+      using model_type = model::random_access_iterator;
     };
     
     

@@ -13,8 +13,7 @@ namespace elib
     template <class ...Args> 
     struct variadic_list_iterator
     {
-      using type = variadic_list_iterator;
-      using category = forward_iterator_tag;
+      using model_type = model::forward_iterator;
     };
     
     

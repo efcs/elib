@@ -13,6 +13,7 @@
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/protect.hpp>
+# include <elib/mp/unpack.hpp>
 # include <elib/mp/quote.hpp>
 # include <elib/mp/same_type.hpp>
 # include <elib/mp/sizeof.hpp>

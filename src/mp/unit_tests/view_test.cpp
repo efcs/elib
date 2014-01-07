@@ -7,10 +7,8 @@
 #include <elib/mp/metafunctions.hpp>
 #include <elib/mp/integral_constant.hpp>
 #include <elib/mp/algorithm/sequence_equal.hpp>
-#include <elib/mp/single_view.hpp>
-#include <elib/mp/empty_sequence.hpp>
-#include <elib/mp/iterator_range.hpp>
-#include <elib/mp/joint_view.hpp>
+#include <elib/mp/views.hpp>
+#include <elib/mp/print.hpp>
 
 #include "mp_test_helper.hpp"
 
@@ -91,5 +89,70 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
   }                                                  // mp_view_joint_view_test
   
   
+  BOOST_AUTO_TEST_CASE(mp_view_transform_view_test)
+  {
+    using P1 = pack  < char, short, int, long, long long >;
+    using P = transform_view<P1, sizeof_<_1>>;
+    using V1 = vector< char, short, int, long, long long >;
+    using V = transform_view<V1, sizeof_<_1>>;
+    using L1 = list  < char, short, int, long, long long >;
+    using L = transform_view<L1, sizeof_<_1>>;
+    
+    using E = pack< 
+        sizeof_t<char>, sizeof_t<short>
+      , sizeof_t<int>, sizeof_t<long>
+      , sizeof_t<long long>
+      >;
+    
+    CHECK( sequence_equal_t< P, E >() );
+    CHECK( sequence_equal_t< V, E >() );
+    CHECK( sequence_equal_t< L, E >() );
+  }                                              // mp_view_transform_view_test
+  
+  
+  template <class T>
+  struct not_def;
+  
+  
+  BOOST_AUTO_TEST_CASE(mp_view_zip_view_test)
+  {
+    using P1 = pack_c<int, 1, 1, 1>;
+    using P2 = pack_c<int, 2, 2, 2>;
+    using P3 = pack_c<int, 3, 3, 3>;
+    using P = zip_view< pack<P1, P2, P3> >;
+    
+    using V1 = vector_c<int, 1, 1, 1>;
+    using V2 = vector_c<int, 2, 2, 2>;
+    using V3 = vector_c<int, 3, 3, 3>;
+    using V = zip_view< vector<V1, V2, V3> >;
+    
+    using L1 = list_c<int, 1, 1, 1>;
+    using L2 = list_c<int, 2, 2, 2>;
+    using L3 = list_c<int, 3, 3, 3>;
+    using L = zip_view< list<L1, L2, L3> >;
+    
+    using EP = pack< 
+        pack_c<int, 1, 2, 3>
+      , pack_c<int, 1, 2, 3>
+      , pack_c<int, 1, 2, 3>
+      >;
+  
+    using EV = vector< 
+        vector_c<int, 1, 2, 3>
+      , vector_c<int, 1, 2, 3>
+      , vector_c<int, 1, 2, 3>
+      >;
+    
+    using EL = list< 
+        list_c<int, 1, 2, 3>
+      , list_c<int, 1, 2, 3>
+      , list_c<int, 1, 2, 3>
+      >;
+    
+    CHECK( sequence_equal_t<P, EP>() );
+    //CHECK( sequence_equal_t<V, EV>() );
+    CHECK( sequence_equal_t<L, EL>() );
+    
+  }                                                    // mp_view_zip_view_test
 
 BOOST_AUTO_TEST_SUITE_END()

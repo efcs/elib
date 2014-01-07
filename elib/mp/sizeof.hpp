@@ -9,7 +9,11 @@ namespace elib
   {
     
     template <class T>
-    using sizeof_ = integral_constant< decltype(sizeof(T)) , sizeof(T) >;
+    struct sizeof_ : size_type< sizeof(T) >
+    {};
+    
+    template <class T>
+    using sizeof_t = size_type< sizeof(T) >;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

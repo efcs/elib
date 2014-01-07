@@ -25,7 +25,7 @@ struct IterCountOpImpl
     eval_if_< 
         same_type<T, deref_t<Iter>>
       , next<State>
-      , State
+      , identity< State >
       >;
 };
 
@@ -62,7 +62,7 @@ struct CountOpImpl
     eval_if_< 
         same_type<T, Item>
       , next<State>
-      , State
+      , identity< State >
       >;
 };
 

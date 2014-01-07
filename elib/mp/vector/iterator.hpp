@@ -15,8 +15,7 @@ namespace elib
     template <class Vector, std::size_t Pos>
     struct vector_iterator
     {
-      using type = vector_iterator;
-      using category = random_access_iterator_tag;
+      using model_type = model::default_random_access_iterator;
     };
     
     

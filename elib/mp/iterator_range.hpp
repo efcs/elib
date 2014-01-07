@@ -36,7 +36,7 @@ namespace elib
       
       
       template <>
-      struct iterator_range_intrinsics<forward_iterator_tag>
+      struct iterator_range_intrinsics<model::forward_iterator>
       {
         template <class S>
         using begin = identity< typename S::begin >;
@@ -57,8 +57,8 @@ namespace elib
       
       
       template <>
-      struct iterator_range_intrinsics<bidirectional_iterator_tag>
-        : iterator_range_intrinsics<forward_iterator_tag>
+      struct iterator_range_intrinsics<model::bidirectional_iterator>
+        : iterator_range_intrinsics<model::forward_iterator>
       {
         template <class S>
         using back = deref< prior_t<typename S::end> >;
@@ -66,8 +66,8 @@ namespace elib
       
       
       template <>
-      struct iterator_range_intrinsics<random_access_iterator_tag>
-        : iterator_range_intrinsics<bidirectional_iterator_tag>
+      struct iterator_range_intrinsics<model::random_access_iterator>
+        : iterator_range_intrinsics<model::bidirectional_iterator>
       {
         template <class S, class N>
         using at = deref< advance_t<typename S::begin, N> >;
@@ -83,7 +83,7 @@ namespace elib
     template <class Begin, class End>
     struct get_impl< iterator_range<Begin, End> >
     {
-      using type = detail::iterator_range_intrinsics<typename Begin::tag>;
+      using type = detail::iterator_range_intrinsics<typename Begin::model_type>;
     };
     
     

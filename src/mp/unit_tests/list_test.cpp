@@ -79,13 +79,13 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
 
   BOOST_AUTO_TEST_CASE(mp_list_iterator_intrinsics)
   {
-    // category
+    // model_of
     {
       using T = list_c<int, 1, 2, 3>;
       using B = begin_t<T>;
       using E = end_t<T>;
-      SAME_TYPE(typename B::category, forward_iterator_tag);
-      SAME_TYPE(typename B::category, typename E::category);
+      SAME_TYPE(typename B::model_type, model::forward_iterator);
+      SAME_TYPE(typename B::model_type, typename E::model_type);
     }
     // empty
     {
@@ -158,7 +158,6 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
     SAME_TYPE( typename Traits::class_type, list_tag );        \
     SAME_TYPE( typename Traits::model_type, list_model_tag);   \
     SAME_TYPE( typename Traits::class_type, class_type_t<T> ); \
-    SAME_TYPE( typename Traits::model_type, model_type_t<T> ); \
     CHECK( is_mpl_sequence<T>::value );                        \
     CHECK( is_mpl_variadic<T>::value );                        \
     CHECK( has_O1_size<T>::value );                            \

@@ -44,7 +44,7 @@ namespace elib
       using type_ = T;
       using pos_ = long_<0>;
       
-      using tag = random_access_iterator_tag;
+      using model_type = model::random_access_iterator;
     };
     
     
@@ -54,7 +54,7 @@ namespace elib
       using type_ = T;
       using pos_ = long_<1>;
       
-      using tag = random_access_iterator_tag;
+      using model_type = model::random_access_iterator;
     };
     
     

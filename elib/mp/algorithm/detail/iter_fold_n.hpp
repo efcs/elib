@@ -1,5 +1,8 @@
 #ifndef ELIB_MP_ALGORITHM_DETAIL_ITER_FOLD_N_HPP
-# define ELIB_MP_ALGORITHM_DETAIL_ITER_FOLD_N_HPP
+#define ELIB_MP_ALGORITHM_DETAIL_ITER_FOLD_N_HPP
+
+# include <elib/mp/apply_wrap.hpp>
+# include <cstddef>
 
 namespace elib 
 {

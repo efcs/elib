@@ -148,13 +148,13 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
 
   BOOST_AUTO_TEST_CASE(mp_pack_iterator_intrinsics)
   {
-    // category test
+    // model_type test
     {
       using T = pack<int, long, char>;
       using B = begin_t<T>;
       using E = end_t<T>;
-      SAME_TYPE(typename B::category, random_access_iterator_tag);
-      SAME_TYPE(typename B::category, typename E::category);
+      SAME_TYPE(typename B::model_type, model::default_random_access_iterator);
+      SAME_TYPE(typename B::model_type, typename E::model_type);
     }
     // empty
     {
@@ -243,7 +243,6 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
     SAME_TYPE( typename Traits::class_type, pack_tag );        \
     SAME_TYPE( typename Traits::model_type, pack_model_tag);   \
     SAME_TYPE( typename Traits::class_type, class_type_t<T> ); \
-    SAME_TYPE( typename Traits::model_type, model_type_t<T> ); \
     CHECK( is_mpl_sequence<T>::value );                        \
     CHECK( is_mpl_variadic<T>::value );                        \
     CHECK( has_O1_size<T>::value );                            \

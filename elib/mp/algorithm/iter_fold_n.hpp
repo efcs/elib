@@ -1,6 +1,7 @@
 #ifndef ELIB_MP_ALGORITHM_ITER_FOLD_N_HPP
 #define ELIB_MP_ALGORITHM_ITER_FOLD_N_HPP
 
+# include <elib/mp/algorithm/detail/identity_state_op.hpp>
 # include <elib/mp/algorithm/detail/iter_fold_n.hpp>
 # include <elib/mp/algorithm/detail/iter_foldb_if.hpp>
 # include <elib/mp/algorithm/detail/reverse_begin.hpp>
@@ -12,6 +13,7 @@
 # include <elib/mp/pair.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/mp/sequence_traits.hpp>
 # include <cstddef>
 
 namespace elib 

@@ -2,6 +2,7 @@
 # define ELIB_MP_SEQUENCE_TRAITS_HPP
 
 # include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/model_of.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/member_type_detector.hpp>
@@ -62,40 +63,23 @@ namespace elib
       using type = class_type_t<T>;
     };
 
-
-    template <class T>
-    using model_type_t = typename sequence_traits<T>::model_type;
-
-    template <class T>
-    struct model_type
-    {
-      using type = model_type_t<T>;
-    };
-
-
-    template <class T, class Tag>
-    using is_model_of_t = 
-      bool_<
-        std::is_base_of<
-            Tag
-          , typename sequence_traits<T>::model_type
-        >::type::value
-      >;
-
-    template <class T, class Tag>
-    struct is_model_of 
-      : is_model_of_t<T, Tag>
-    {};
-
     
-    template <class T>
-    using is_sequence_t =
-      is_model_of_t<T, model::sequence>;
+    
     
     template <class T>
     struct is_sequence 
-      : is_model_of_t<T, model::sequence>
+      : and_<
+          has_model_type_member_type<T>
+        , is_model_of<T, model::sequence>
+        >
     {};
+    
+    template <class T>
+    using is_sequence_t = typename 
+      and_< 
+        has_model_type_member_type<T>
+      , is_model_of<T, model::sequence>
+      >::type;
     
     
     template <class T>

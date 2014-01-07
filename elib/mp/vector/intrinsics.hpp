@@ -4,6 +4,7 @@
 # include <elib/mp/vector/fwd.hpp>
 # include <elib/mp/vector/vector.hpp>
 # include <elib/mp/vector/iterator.hpp>
+# include <elib/mp/identity.hpp>
 # include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
 # include <cstddef>
@@ -59,10 +60,16 @@ namespace elib
         using empty = bool_< Vector::size::value == 0>;
         
         template <class Vector>
-        using begin = vector_iterator<Vector, 0>;
+        using begin = 
+          identity<
+            vector_iterator<Vector, 0>
+          >;
         
         template <class Vector>
-        using end = vector_iterator<Vector, Vector::size::value>;
+        using end = 
+          identity<
+            vector_iterator<Vector, Vector::size::value>
+          >;
         
         template <class Vector, class N>
         using at = vector_at_impl<Vector, N::type::value>;

@@ -4,6 +4,8 @@
 #include <elib/mp/vector.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
+#include <elib/mp/sequence.hpp>
+#include <elib/mp/sequence_traits.hpp>
 #include "mp_test_helper.hpp"
 #include <cstddef>
 
@@ -165,13 +167,13 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
   
   BOOST_AUTO_TEST_CASE(mp_vector_iterator_intrinsics)
   {
-    // category
+    // model_type
     {
       using T = vector_c<bool, true, true, false>;
       using B = begin_t<T>;
       using E = end_t<T>;
-      SAME_TYPE(typename B::category, random_access_iterator_tag);
-      SAME_TYPE(typename B::category, typename E::category);
+      SAME_TYPE(typename B::model_type, model::default_random_access_iterator);
+      SAME_TYPE(typename B::model_type, typename E::model_type);
     }
     // empty
     {
@@ -249,7 +251,6 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
     SAME_TYPE(typename Traits::class_type, vector_tag);       \
     SAME_TYPE(typename Traits::model_type, vector_model_tag); \
     SAME_TYPE(typename Traits::class_type, class_type_t<T>);  \
-    SAME_TYPE(typename Traits::model_type, model_type_t<T>);  \
     CHECK(is_mpl_sequence<T>::value);                         \
     CHECK(is_mpl_variadic<T>::value == false);                \
     CHECK(has_O1_size<T>::value);                             \

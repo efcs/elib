@@ -14,8 +14,7 @@ namespace elib
     template <class Seq, std::size_t N>
     struct variadic_pack_iterator
     {
-      using type = variadic_pack_iterator;
-      using category = random_access_iterator_tag;
+      using model_type = model::default_random_access_iterator;
     };
     
     template <class Seq, std::size_t N>

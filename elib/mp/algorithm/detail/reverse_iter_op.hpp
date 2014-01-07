@@ -22,7 +22,7 @@ namespace elib
       {
         template <class Iter>
         using apply = 
-          eval_if_t<
+          if_t<
               or_<
                   same_type<Begin, Iter>
                 , same_type<End, Iter>

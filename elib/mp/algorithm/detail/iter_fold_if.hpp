@@ -2,6 +2,7 @@
 #define ELIB_MP_ALGORITHM_DETAIL_ITER_FOLD_IF_HPP
 
 # include <elib/mp/apply_wrap.hpp>
+# include <elib/mp/identity.hpp>
 
 namespace elib 
 {

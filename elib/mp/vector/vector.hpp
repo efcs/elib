@@ -14,11 +14,11 @@ namespace elib
   {
 
     
-    struct vector_model_tag
-      : model::mpl_sequence
-      , model::random_access_sequence
+    struct vector_model
+      : model::random_access_sequence
       , model::front_extensible_sequence
       , model::back_extensible_sequence
+      , model::O1_size
     {};
     
   
@@ -29,7 +29,7 @@ namespace elib
       
       /* for sequence_traits */
       using class_type = vector_tag;
-      using model_type = vector_model_tag;
+      using model_type = vector_model;
       
       using lower_bound_ = size_type<32767>;
       using upper_bound_ = lower_bound_;

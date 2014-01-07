@@ -15,7 +15,8 @@ namespace elib
     struct empty_sequence_tag {};
     
     struct empty_sequence_model
-      : model::mpl_sequence, model::random_access_sequence
+      : model::random_access_sequence
+      , model::O1_size
     {};
     
     

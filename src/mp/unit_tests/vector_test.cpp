@@ -244,16 +244,11 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
   }                                            // mp_vector_iterator_intrinsics
   
   
-# define CHECK_TRAITS(...)                                    \
-  do {                                                        \
-    using T = __VA_ARGS__;                                    \
-    using Traits = sequence_traits<T>;                        \
-    SAME_TYPE(typename Traits::class_type, vector_tag);       \
-    SAME_TYPE(typename Traits::model_type, vector_model_tag); \
-    SAME_TYPE(typename Traits::class_type, class_type_t<T>);  \
-    CHECK(is_mpl_sequence<T>::value);                         \
-    CHECK(is_mpl_variadic<T>::value == false);                \
-    CHECK(has_O1_size<T>::value);                             \
+# define CHECK_TRAITS(...)                           \
+  do {                                               \
+    using T = __VA_ARGS__;                           \
+    SAME_TYPE(typename T::class_type, vector_tag);   \
+    SAME_TYPE(typename T::model_type, vector_model); \
   } while (false)
 #
  
@@ -267,6 +262,21 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
     CHECK_TRAITS(push_front_t<vector<>, void>);
     // vector_mask
     CHECK_TRAITS(pop_front_t<vector<void, int>>);
+    // all 
+    {
+      using T = vector<>;
+      CHECK( is_sequence_t<T>() );
+      CHECK( !is_variadic_t<T>() );
+      CHECK( is_forward_sequence_t<T>() );
+      CHECK( is_bidirectional_sequence_t<T>() );
+      CHECK( is_random_access_sequence_t<T>() );
+      CHECK( !is_associative_sequence_t<T>() );
+      CHECK( is_front_extensible_sequence<T>() );
+      CHECK( !is_front_extensible_variadic_sequence_t<T>() );
+      CHECK( is_back_extensible_sequence<T>() );
+      CHECK( !is_back_extensible_variadic_sequence_t<T>() );
+      CHECK( !is_associative_extensible_sequence_t<T>() );
+    }
   }
   
 # undef CHECK_TRAITS

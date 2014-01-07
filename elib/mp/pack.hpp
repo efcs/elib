@@ -16,10 +16,12 @@ namespace elib
    
     struct pack_tag {};
     
-    struct pack_model_tag
-      : model::mpl_sequence
-      , model::variadic_sequence
+    struct pack_model
+      : model::variadic
+      , model::random_access_sequence
+      , model::front_extensible_variadic_sequence
       , model::back_extensible_variadic_sequence
+      , model::O1_size
     {};
    
     
@@ -29,7 +31,7 @@ namespace elib
       using type = pack;
       
       using class_type = pack_tag;
-      using model_type = pack_model_tag;
+      using model_type = pack_model;
     };
     
     

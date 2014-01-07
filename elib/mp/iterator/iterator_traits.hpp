@@ -2,9 +2,13 @@
 #define ELIB_MP_ITERATOR_ITERATOR_TRAITS_HPP
 
 # include <elib/mp/iterator/fwd.hpp>
+# include <elib/mp/enable_if.hpp>
+# include <elib/mp/if.hpp>
 # include <elib/mp/model_of.hpp>
 # include <elib/mp/member_type_detector.hpp>
 # include <elib/mp/logical.hpp>
+# include <elib/mp/void.hpp>
+# include <elib/mp/detail/integral_constant.hpp>
 # include <type_traits>
 
 namespace elib 
@@ -13,24 +17,27 @@ namespace elib
   {
     
     template <class T>
-    struct is_iterator
-      : and_<
-          has_model_type_member_type<T>
-        , is_model_of<T, model::iterator>
-        >
+    struct iterator_traits
+    {
+      using model_type = typename T::model_type;
+    };
+    
+    
+    template <class T>
+    struct is_iterator : is_model_of_t<T, model::iterator>
     {};
-    
-    
+
+
     template <class T>
     using is_iterator_t = is_model_of_t<T, model::iterator>;
     
     
     template <class T>
     struct is_forward_iterator 
-      : is_model_of<T, model::forward_iterator>
+      : is_model_of_t<T, model::forward_iterator>
     {};
 
-    
+
     template <class T>
     using is_forward_iterator_t = 
       is_model_of_t<T, model::forward_iterator>;
@@ -38,10 +45,10 @@ namespace elib
     
     template <class T>
     struct is_bidirectional_iterator 
-      : is_model_of<T, model::bidirectional_iterator>
+      : is_model_of_t<T, model::bidirectional_iterator>
     {};
 
-    
+
     template <class T>
     using is_bidirectional_iterator_t = 
       is_model_of_t<T, model::bidirectional_iterator>;
@@ -49,10 +56,10 @@ namespace elib
     
     template <class T>
     struct is_random_access_iterator 
-      : is_model_of<T, model::random_access_iterator>
+      : is_model_of_t<T, model::random_access_iterator>
     {};
 
-    
+
     template <class T>
     using is_random_access_iterator_t = 
       is_model_of_t<T, model::random_access_iterator>;
@@ -60,13 +67,14 @@ namespace elib
     
     template <class T>
     struct is_default_random_access_iterator 
-      : is_model_of<T, model::default_random_access_iterator>
+      : is_model_of_t<T, model::default_random_access_iterator>
     {};
 
-    
+
     template <class T>
     using is_default_random_access_iterator_t = 
       is_model_of_t<T, model::default_random_access_iterator>;
+      
     
     
     template <class T> 

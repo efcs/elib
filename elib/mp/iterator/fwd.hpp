@@ -75,6 +75,7 @@ namespace elib
     
   //-------------------------------- traits --------------------------------// 
   
+    template <class T> struct iterator_traits;
     template <class T> struct is_iterator;
     template <class T> struct is_forward_iterator;
     template <class T> struct is_bidirectional_iterator;

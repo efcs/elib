@@ -77,6 +77,7 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
     // TODO insert & erase
   }                                                      // mp_list_intrinsics
 
+  
   BOOST_AUTO_TEST_CASE(mp_list_iterator_intrinsics)
   {
     // model_of
@@ -151,16 +152,11 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
   }                                              // mp_list_iterator_intrinsics
   
     
-#define CHECK_TRAITS(...)                                      \
-  do {                                                         \
-    using T = __VA_ARGS__;                                     \
-    using Traits = sequence_traits<T>;                         \
-    SAME_TYPE( typename Traits::class_type, list_tag );        \
-    SAME_TYPE( typename Traits::model_type, list_model_tag);   \
-    SAME_TYPE( typename Traits::class_type, class_type_t<T> ); \
-    CHECK( is_mpl_sequence<T>::value );                        \
-    CHECK( is_mpl_variadic<T>::value );                        \
-    CHECK( has_O1_size<T>::value );                            \
+#define CHECK_TRAITS(...)                                        \
+  do {                                                           \
+    using T = __VA_ARGS__;                                       \
+    SAME_TYPE( typename T::class_type, list_tag );               \
+    SAME_TYPE( typename T::model_type, list_model);              \
   } while (false)
   
   BOOST_AUTO_TEST_CASE(mp_list_sequence_traits)
@@ -173,6 +169,21 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
     CHECK_TRAITS(push_front_t<list<void>, int>);
     // after erase
     CHECK_TRAITS( pop_front_t<list<int>> );
+    // all 
+    {
+      using T = list<>;
+      CHECK( is_sequence_t<T>() );
+      CHECK( is_variadic_t<T>() );
+      CHECK( is_forward_sequence_t<T>() );
+      CHECK( !is_bidirectional_sequence_t<T>() );
+      CHECK( !is_random_access_sequence_t<T>() );
+      CHECK( !is_associative_sequence_t<T>() );
+      CHECK( is_front_extensible_sequence<T>() );
+      CHECK( is_front_extensible_variadic_sequence_t<T>() );
+      CHECK( !is_back_extensible_sequence<T>() );
+      CHECK( !is_back_extensible_variadic_sequence_t<T>() );
+      CHECK( !is_associative_extensible_sequence_t<T>() );
+    }
   }                                                  // mp_list_sequence_traits
   
 #undef CHECK_TRAITS

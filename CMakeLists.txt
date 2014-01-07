@@ -7,10 +7,10 @@ cmake_minimum_required (VERSION 2.7)
 option(CONFIG_MY_BUILD "turn on personal configurations" ON)
 
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_TRUNK " use /opt/llvm/bin/clang" OFF)
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
-
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
 option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
+
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" OFF)
 
 option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
@@ -24,9 +24,9 @@ if (CONFIG_USE_GCC_49)
   set(CMAKE_CXX_COMPILER /opt/gcc4.9/bin/g++)
 endif()
 
-if (CONFIG_USE_CLANG_TRUNK)
-  set(CMAKE_C_COMPILER /opt/llvm/bin/clang)
-  set(CMAKE_CXX_COMPILER /opt/llvm/bin/clang++)
+if (CONFIG_USE_CLANG_34)
+  set(CMAKE_C_COMPILER /opt/clang3.4/bin/clang)
+  set(CMAKE_CXX_COMPILER /opt/clang3.4/bin/clang++)
 endif()
       
 if(CONFIG_USE_CLANG)
@@ -52,12 +52,14 @@ option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 ################################################################################
 
 # we need C to get the pthreads library 
-project(EricsLibrary CXX C)
+project(EricsLibrary CXX)
 
 
 ################################################################################
 #                       Toolchain config (Post-project)
 ################################################################################
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -pedantic ")
 
 # Turn off filesystem on Win32
 if ( WIN32 )
@@ -82,7 +84,7 @@ endif()
 
 if (CONFIG_ASAN)
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
-  set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS}  -O1 -fsanitize=address ")
+  set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS} -fsanitize=address ")
 endif()
 
 
@@ -94,7 +96,7 @@ endif()
 
 if (CONFIG_MSAN)
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
-  set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -O2 -fsanitize=memory -fno-omit-frame-pointer ")
+  set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=memory ")
 endif() 
 
 ################################################################################
@@ -118,9 +120,6 @@ set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 
 set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
-
-find_package( Threads REQUIRED )
-add_definitions( -std=c++11 -Wall -Wextra -pedantic)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)

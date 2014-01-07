@@ -73,6 +73,9 @@ set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
     
 ################################################################################
   #create static & shared libraries
+
+#find_package( Threads REQUIRED )
+
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
 add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
 

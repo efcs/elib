@@ -70,7 +70,7 @@ Build Options (CMake):
     Build the unit tests
     Default: ON
   
-  ## Select what parts to build ##
+### Select what parts to build
   
   CONFIG_LIB_ENUMERATION:
     build enumeration library

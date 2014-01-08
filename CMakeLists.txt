@@ -4,19 +4,43 @@ cmake_minimum_required (VERSION 2.7)
 #                   Toolchain config
 ################################################################################
 
+
+# Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
-option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
+option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
+# Standard Library config
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
-option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" ON)
+option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
-option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
+# C++ Version Config
+option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
+# Sanitizers
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
-              
+
+# Misc
+option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
+
+# Elib Parts
+option(CONFIG_UNIT_TESTS "build unit tests" ON)
+
+# Options to select what parts to build
+option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
+option(CONFIG_LIB_MPL "Build MPL" ON)
+option(CONFIG_LIB_LOG "Build Log" ON)
+option(CONFIG_LIB_UTILITY "Build Utility" ON)
+option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
+
+# Toolchain Configuration
+if(CONFIG_USE_CLANG)
+    set(CMAKE_C_COMPILER /usr/bin/clang)
+    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+endif()
+        
 if (CONFIG_USE_GCC_49)
   set(CMAKE_C_COMPILER /opt/gcc4.9/bin/gcc)
   set(CMAKE_CXX_COMPILER /opt/gcc4.9/bin/g++)
@@ -26,24 +50,7 @@ if (CONFIG_USE_CLANG_34)
   set(CMAKE_C_COMPILER /opt/clang3.4/bin/clang)
   set(CMAKE_CXX_COMPILER /opt/clang3.4/bin/clang++)
 endif()
-      
-if(CONFIG_USE_CLANG)
-    set(CMAKE_C_COMPILER /usr/bin/clang)
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-endif()
 
-################################################################################
-#                         Elib Parts
-################################################################################
-
-option(CONFIG_UNIT_TESTS "build unit tests" ON)
-
-# Options to select what parts to build
-option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
-option(CONFIG_LIB_MPL "Build MPL" ON)
-option(CONFIG_LIB_LOG "Build Log" ON)
-option(CONFIG_LIB_UTILITY "Build Utility" ON)
-option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 
 ################################################################################
 #                         PROJECT ELIB
@@ -57,42 +64,120 @@ project(EricsLibrary CXX C)
 #                       Toolchain config (Post-project)
 ################################################################################
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -pedantic ")
-
 # Turn off filesystem on Win32
 if ( WIN32 )
+  message( FATAL_ERROR "Windows not supported!" )
+endif()
 
-  if ( CONFIG_LIB_FILESYSTEM )
-    message(WARNING "Disabling Filesystem build on windows (On by default)")
-    set( CONFIG_LIB_FILESYSTEM OFF CACHE BOOL "" FORCE)
+if ( ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" )
+  message(STATUS "Configuring for GCC")
+  set( CXX_COMPILER_GCC TRUE )
+  set( CXX_COMPILER_CLANG FALSE )
+elseif( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" )
+  message(STATUS "Configuring for Clang")
+  set( CXX_COMPILER_GCC FALSE )
+  set( CXX_COMPILER_CLANG TRUE )
+else()
+  message( FATAL_ERROR "Compiler not supported! (${CMAKE_CXX_COMPILER_ID})" )
+endif()
+
+
+# Flag Config
+if (NOT CONFIG_CXX1Y)
+  set(CXX_VERSION_FLAGS " -std=c++11 ")
+else()
+  set(CXX_VERSION_FLAGS " -std=c++1y ")
+endif()
+
+set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
+
+set(CMAKE_CXX_FLAGS 
+      "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}"
+    )
+
+
+set( CMAKE_BUILD_TYPE DEBUG )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
+set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
+set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
+set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
+
+
+if ( CONFIG_ASAN OR CONFIG_TSAN OR CONFIG_MSAN )
+  if (NOT CMAKE_BUILD_TYPE MATCHES "DEBUG")
+    message( WARNING "Build configuration forced to DEBUG when using sanitizers")
   endif()
+  set(CMAKE_BUILD_TYPE DEBUG CACHE STRING "Build configuration" FORCE)
+endif()
+
+
+########################## GCC Configuration ###################################
+if ( CXX_COMPILER_GCC )
+
+  # check min version
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7.0")
+    message(FATAL_ERROR "Insufficient GCC Version")
+  elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
+  endif()
+
+  # Check C++1y config
+  if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9.0")
+    message(FATAL_ERROR "Insufficient GCC Version for C++1y")
+  endif()
+
+  set(CXX_GCC_FLAGS " -fmax-errors=3 " )
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
+
+####################### Clang Configuration ####################################
+elseif( CXX_COMPILER_CLANG )
+  
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.3")
+    message(FATAL_ERROR "Insufficient Clang Version")
+  endif()
+
+  if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.4")
+    message(FATAL_ERROR "Insufficient Clang Version for C++1y")
+  endif()
+
+  set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 
 endif()
 
 
 if (CONFIG_USE_LIBCXX)
+  if (NOT CXX_COMPILER_CLANG)
+    message( FATAL_ERROR "Cannot use libc++ with GNU" )
+  endif()
+
+  message( STATUS "Using libc++ with Clang" )
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
 endif()
 
 
 if (CONFIG_USE_OPT_LIBSTDCXX)
+  message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
   set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
 endif()
 
 
 if (CONFIG_ASAN)
+  message( STATUS "Compiling with address sanitizer")
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS} -fsanitize=address ")
 endif()
 
 
 if (CONFIG_TSAN)
+  message( STATUS "Compiling with thread sanitizer")
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=thread ")
 endif() 
 
 
 if (CONFIG_MSAN)
+  message( STATUS "Compiling with memory sanitizer")
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=memory ")
 endif() 
@@ -107,11 +192,7 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   MESSAGE(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 endif()
 
-set( CMAKE_BUILD_TYPE DEBUG)
-set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
-set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
+
 
 set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
@@ -162,6 +243,7 @@ macro(include_library_if Pred CFile)
     add_definitions( -DELIB_${Pred} )
   endif()
 endmacro(include_library_if)
+
 
 ################################################################################
 #

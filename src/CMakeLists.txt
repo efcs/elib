@@ -8,6 +8,7 @@
 set(LIBRARY_FLAGS "")
 set(UNIT_TEST_FLAGS "")
 
+add_flags(LIBRARY_FLAGS -fPIC)
 
 if (CONFIG_ALL_WARNINGS)
   
@@ -30,13 +31,13 @@ if (CONFIG_ALL_WARNINGS)
     -Wvariadic-macros -Wvolatile-register-var  -Wwrite-strings
   )
   
-  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  if (CXX_COMPILER_GCC)
+    add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
+  elseif (CXX_COMPILER_CLANG)
     add_flags( LIBRARY_FLAGS
       -Weverything -Wno-c++98-compat 
       -Wno-c++98-compat-pedantic -Wno-newline-eof 
     )
-  else()
-    add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
   endif()
   
   add_flags( LIBRARY_FLAGS 
@@ -47,7 +48,7 @@ endif()
 
 
 
-add_flags(LIBRARY_FLAGS -fPIC)
+
 
 
 set(LIBRARY_SRC "")
@@ -98,16 +99,16 @@ if(CONFIG_UNIT_TESTS)
 	add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
 	
   add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
-  add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj>)
+  add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj> )
 
 
-  target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
-                        ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
+ target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
+                       ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
                       )
                       
   target_link_libraries(elib_test_shared elib 
                         ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT}
-                        ${Boost_LIBRARIES}
+                        ${Boost_LIBRARIES} 
                        )
                             
 endif()

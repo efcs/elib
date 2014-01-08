@@ -1,6 +1,6 @@
 # Elib
 
-elib is a personal C\\+\\+ library and an excuse to learn/practice more parts of C\\+\\+.
+elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
 
 WARNING: This file is update very infrequently
 LAST UPDATE: Jan 7th 2014
@@ -51,8 +51,8 @@ Requirements (Library specific):
     Boost Filesystem (Unit Test Only)
 
 
-Build Options (CMake)
-: These options are found in CMakeLists.txt. 
+## Build Options (CMake)
+  These options are found in CMakeLists.txt. 
   Not all options are documented here. 
 
   * CONFIG_USE_CLANG 

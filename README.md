@@ -60,7 +60,7 @@ Requirements (Library specific):
   Default: OFF
 
   * CONFIG_ALL_WARNINGS 
-: Turn on all* warnings for the compiler
+: Turn on all warnings for the compiler
   Default: ON
 
   * CONFIG_UNIT_TESTS
@@ -79,7 +79,8 @@ Requirements (Library specific):
 
   * CONFIG_LIB_MP
 : build the MPL* (header-only, only builds unit_tests and dummy file)
-  Default: ON
+
+   Default: ON  
 
   * CONFIG_LIB_FILESYSTEM
 : build the filesystem library

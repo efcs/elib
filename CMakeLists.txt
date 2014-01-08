@@ -50,7 +50,7 @@ option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 ################################################################################
 
 # we need C to get the pthreads library 
-project(EricsLibrary CXX)
+project(EricsLibrary CXX C)
 
 
 ################################################################################

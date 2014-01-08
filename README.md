@@ -78,7 +78,7 @@ Requirements (Library specific):
   Default: ON
 
   * CONFIG_LIB_MP
-: build the MPL* (header-only, only builds unit_tests and dummy file)
+   : build the MPL* (header-only, only builds unit_tests and dummy file)
 
    Default: ON  
 

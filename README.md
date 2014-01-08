@@ -78,9 +78,8 @@ Requirements (Library specific):
   Default: ON
 
   * CONFIG_LIB_MP
-: 
-   build the MPL* (header-only, only builds unit_tests and dummy file)
-   Default: ON  
+: build the MPL (header-only, only builds unit_tests and dummy file)
+  Default: ON
 
   * CONFIG_LIB_FILESYSTEM
 : build the filesystem library
@@ -89,7 +88,7 @@ Requirements (Library specific):
   * CONFIG_LIB_UTILITY
 : build the utility library
   Default: ON
-  
+
     
 ## Makefile Commands
 

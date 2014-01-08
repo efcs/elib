@@ -1,9 +1,9 @@
 # Elib
 
-elib is a personal C++ library and an excuse to learn/practice more parts of C++.
+elib is a personal C\\+\\+ library and an excuse to learn/practice more parts of C\\+\\+.
 
 WARNING: This file is update very infrequently
-LAST UPDATE: November 19 2013
+LAST UPDATE: Jan 7th 2014
 
 ## Library Summary
 

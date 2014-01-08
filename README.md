@@ -3,11 +3,10 @@ elib is a personal C++ library and an excuse to learn/practice more parts of C++
 WARNING: This file is update very infrequently
 LAST UPDATE: November 19 2013
 
-LIBRARY_SUMMARY
+Library Summary
 ===============
 
 Enumeration:
-
   A header-only library for dealing with C++11 scoped enumerations.
   It is a way to provide checked casting, string casting, iteration
   and non-default operators
@@ -36,7 +35,7 @@ Utility:
     -size_type: A helper for using a "size_type" and its npos value
 
 
-BUILDING
+Building
 ========
 
 Note: Requirements marked with (Unit Test Only) are obviously only required
@@ -94,7 +93,7 @@ Build Options (CMake):
     Default: ON
   
     
-MAKEFILE
+Makefile
 =======
 
 Commands:

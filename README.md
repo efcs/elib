@@ -25,7 +25,8 @@ Filesystem
 
 Utility
 : misc functionality that is frequently needed.
-  it includes
+  it includes:
+
 * fmt: used to format varargs strings 
 * lexical_cast: For casting between strings and integral types
 * scoped_exit: uses lambdas to provide scoped exit functionality

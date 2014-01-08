@@ -1,5 +1,5 @@
-#ifndef ELIB_SCOPED_EXIT_H
-#define ELIB_SCOPED_EXIT_H
+#ifndef ELIB_SCOPED_EXIT_HPP
+#define ELIB_SCOPED_EXIT_HPP
 
 
 # include <functional>
@@ -47,4 +47,4 @@ namespace elib
   
   
 }                                                           // namespace elib
-#endif                                                     // ELIB_SCOPED_EXIT_H
+#endif /* ELIB_SCOPED_EXIT_HPP */

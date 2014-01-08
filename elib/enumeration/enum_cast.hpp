@@ -1,5 +1,5 @@
 #ifndef ELIB_ENUMERATION_ENUM_CAST_HPP
-# define ELIB_ENUMERATION_ENUM_CAST_HPP
+#define ELIB_ENUMERATION_ENUM_CAST_HPP
 
 # include <elib/config.hpp>
 

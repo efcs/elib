@@ -1,5 +1,5 @@
 #ifndef ELIB_FS_DIRECTORY_ITERATOR_HPP
-# define ELIB_FS_DIRECTORY_ITERATOR_HPP
+#define ELIB_FS_DIRECTORY_ITERATOR_HPP
 
 # include <elib/pragma.hpp>
 # include <elib/fs/path.hpp>

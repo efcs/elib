@@ -1,5 +1,5 @@
-#ifndef ELIB__STATIC_STRING_HPP
-#define ELIB__STATIC_STRING_HPP
+#ifndef ELIB_UTILITY_DETAIL__STATIC_STRING_HPP
+#define ELIB_UTILITY_DETAIL__STATIC_STRING_HPP
 
 
 #ifndef ELIB_STATIC_STRING_HPP
@@ -71,4 +71,4 @@ basic_static_string<N>::str() const
 
 
 } /* namespace elib */
-#endif /* ELIB__STATIC_STRING_HPP */
+#endif /* ELIB_UTILITY_DETAIL__STATIC_STRING_HPP */

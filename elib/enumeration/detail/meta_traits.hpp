@@ -1,5 +1,5 @@
-#ifndef ELIB_ENUMERATION_META_TRAITS_HPP
-# define ELIB_ENUMERATION_META_TRAITS_HPP
+#ifndef ELIB_ENUMERATION_DETAIL_META_TRAITS_HPP
+#define ELIB_ENUMERATION_DETAIL_META_TRAITS_HPP
 
 # include <elib/config.hpp>
 # include <elib/enumeration/detail/enum_fields.hpp>
@@ -94,4 +94,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                    // namespace enumeration
 }                                                           // namespace elib
-#endif /* ELIB_ENUMERATION_META_TRAITS_HPP */
+#endif /* ELIB_ENUMERATION_DETAIL_META_TRAITS_HPP */

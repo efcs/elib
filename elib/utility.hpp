@@ -1,5 +1,5 @@
 #ifndef ELIB_UTILITY_HPP
-# define ELIB_UTILITY_HPP
+#define ELIB_UTILITY_HPP
 # 
 # include <elib/utility/apply_tuple.hpp>
 # include <elib/utility/fmt.hpp>

@@ -1,5 +1,5 @@
 #ifndef ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
-# define ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
+#define ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
 
 # include <elib/config.hpp>
 # include <elib/enumeration/enum_helper.hpp>

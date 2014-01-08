@@ -1,5 +1,5 @@
 #ifndef ELIB_FS_FILE_STATUS_HPP
-# define ELIB_FS_FILE_STATUS_HPP
+#define ELIB_FS_FILE_STATUS_HPP
 
 
 namespace elib

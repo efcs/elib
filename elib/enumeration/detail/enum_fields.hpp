@@ -1,5 +1,5 @@
-#ifndef ELIB_ENUMERATION_ENUM_FIELDS_HPP
-# define ELIB_ENUMERATION_ENUM_FIELDS_HPP
+#ifndef ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP
+#define ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP
 
 # include <elib/config.hpp>
 
@@ -107,4 +107,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                    // namespace enumeration
 }                                                           // namespace elib
-#endif /* ELIB_ENUMERATION_ENUM_FIELDS_HPP */
+#endif /* ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP */

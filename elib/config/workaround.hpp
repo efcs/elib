@@ -1,5 +1,5 @@
 #ifndef ELIB_WORKAROUND_HPP
-# define ELIB_WORKAROUND_HPP
+#define ELIB_WORKAROUND_HPP
 # 
 # define ELIB_WORKAROUND(compiler, test) \
   ( ( compiler ) && ( ELIB_WORKAROUND_ ## test ) )

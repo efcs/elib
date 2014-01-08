@@ -1,5 +1,5 @@
 #ifndef ELIB_ENUMERATION_ENUM_HELPER_HPP
-# define ELIB_ENUMERATION_ENUM_HELPER_HPP
+#define ELIB_ENUMERATION_ENUM_HELPER_HPP
 
 # include <elib/config.hpp>
 

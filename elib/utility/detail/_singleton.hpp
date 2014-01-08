@@ -1,5 +1,5 @@
-#ifndef ELIB__SINGLETON_HPP
-#define ELIB__SINGLETON_HPP
+#ifndef ELIB_UTILITY_DETAIL__SINGLETON_HPP
+#define ELIB_UTILITY_DETAIL__SINGLETON_HPP
 
 
 #ifndef ELIB_SINGLETON_HPP
@@ -125,4 +125,4 @@ static_singleton<T>::good()
 }   
     
 } /* namespace elib */
-#endif /* ELIB__SINGLETON_HPP */
+#endif /* ELIB_UTILITY_DETAIL__SINGLETON_HPP */

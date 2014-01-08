@@ -36,11 +36,11 @@ Utility
 ## Building
 
 Note: Requirements marked with (Unit Test Only) are obviously only required
-      to build the unit tests. 
+  to build the unit tests. 
 
 Requirements (General):
-  C++11 compiler (GCC >= 4.7 is ussualy suffient)
-  Boost Unit Test Framework (Unit Test Only)
+  * C++11 compiler (GCC >= 4.7 is ussualy suffient)
+  * Boost Unit Test Framework (Unit Test Only)
 
 Requirements (Library specific):
   Log:
@@ -51,21 +51,21 @@ Requirements (Library specific):
     Boost Filesystem (Unit Test Only)
 
 
-Build Options (CMake):
-  These options are found in CMakeLists.txt. 
+Build Options (CMake)
+: These options are found in CMakeLists.txt. 
   Not all options are documented here. 
 
-  CONFIG_USE_CLANG: 
-    use /bin/clang and /bin/clang++ to compile
-    Default: OFF
+  * CONFIG_USE_CLANG 
+: use /bin/clang and /bin/clang++ to compile
+  Default: OFF
 
-  CONFIG_ALL_WARNINGS: 
-    Turn on all* warnings for the compiler
-    Default: ON
+  * CONFIG_ALL_WARNINGS 
+: Turn on all* warnings for the compiler
+  Default: ON
 
-  CONFIG_UNIT_TESTS:
-    Build the unit tests
-    Default: ON
+  * CONFIG_UNIT_TESTS
+: Build the unit tests
+  Default: ON
   
 ### Select what parts to build
   

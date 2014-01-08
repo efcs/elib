@@ -97,8 +97,7 @@ Makefile
 =======
 
 Commands:
-
-  all: 
+* all: 
     build libraries and unit tests
 
   clean:

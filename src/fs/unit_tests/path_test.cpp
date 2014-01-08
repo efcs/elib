@@ -14,7 +14,6 @@
 #include <iostream>
 
 
-
 namespace bfs {
   using namespace boost::filesystem;
   using boost::system::error_code;
@@ -102,6 +101,7 @@ void append_test(const std::string& lhs, const std::string& rhs)
   BOOST_CHECK(e == b);
 }
 
+
 BOOST_AUTO_TEST_CASE(path_append_test)
 {
   append_test("",  "");
@@ -112,7 +112,6 @@ BOOST_AUTO_TEST_CASE(path_append_test)
   append_test("/foo", "bar");
   append_test("//net",  "/");
 }
-
 
 
 void iter_test(const std::string& str)
@@ -276,5 +275,4 @@ BOOST_AUTO_TEST_CASE(path_table)
 #endif /* table */
 
 BOOST_AUTO_TEST_SUITE_END()
-
 

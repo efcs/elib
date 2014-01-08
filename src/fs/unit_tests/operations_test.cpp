@@ -10,7 +10,6 @@
 #include <system_error>
 #include <vector>
 
-
 namespace bfs { 
 using namespace boost::filesystem;
 using boost::system::error_code;

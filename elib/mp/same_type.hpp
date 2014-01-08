@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_SAME_TYPE_HPP
 #define ELIB_MP_SAME_TYPE_HPP
 
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/enable_if.hpp>
 
 namespace elib 

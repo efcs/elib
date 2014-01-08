@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_SEQUENCE_SEQUENCE_TRAITS_HPP
 #define ELIB_MP_SEQUENCE_SEQUENCE_TRAITS_HPP
 
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/model_of.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/identity.hpp>

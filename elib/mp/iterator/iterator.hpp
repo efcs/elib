@@ -3,6 +3,9 @@
 
 # include <elib/mp/iterator/fwd.hpp>
 # include <elib/mp/get_impl.hpp>
+// to get iterable functionality for integral_constant
+# include <elib/mp/integral_constant.hpp>
+# include <elib/mp/detail/integral_constant_intrinsics.hpp>
 
 namespace elib 
 {

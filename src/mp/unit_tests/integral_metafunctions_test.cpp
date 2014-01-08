@@ -6,7 +6,7 @@
 #include "elib/mp/logical.hpp"
 #include "elib/mp/comparison.hpp"
 #include "elib/mp/void.hpp"
-#include "elib/mp/detail/integral_constant.hpp"
+#include "elib/mp/integral_constant.hpp"
 #include "elib/pp/overload.hpp"
 #include "mp_test_helper.hpp"
 

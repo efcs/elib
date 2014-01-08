@@ -2,7 +2,7 @@
 #define ELIB_MP_APPLY_WRAP_HPP
 
 
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 
 namespace elib 

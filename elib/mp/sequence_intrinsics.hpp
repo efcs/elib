@@ -5,7 +5,7 @@
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/algorithm/count.hpp>
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 
 namespace elib 

@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_VOID_HPP
 #define ELIB_MP_VOID_HPP
 
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/same_type.hpp>
 
 namespace elib 

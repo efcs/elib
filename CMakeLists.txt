@@ -5,11 +5,11 @@ cmake_minimum_required (VERSION 2.7)
 ################################################################################
 
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
 option(CONFIG_USE_GCC_49 "use gcc 4.9" OFF)
 
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
-option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" OFF)
+option(CONFIG_USE_OPT_LIBSTDCXX "use newer libstdc++" ON)
 
 option(CONFIG_ALL_WARNINGS "turn on all warnings for either GCC on clang" ON)
 
@@ -107,7 +107,6 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   MESSAGE(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 endif()
 
-	
 set( CMAKE_BUILD_TYPE DEBUG)
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )

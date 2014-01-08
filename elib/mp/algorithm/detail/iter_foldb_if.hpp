@@ -5,7 +5,7 @@
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/if.hpp>
 # include <elib/mp/logical.hpp>
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {

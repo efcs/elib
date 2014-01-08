@@ -8,7 +8,7 @@
 # include <elib/mp/member_type_detector.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/void.hpp>
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 # include <type_traits>
 
 namespace elib 

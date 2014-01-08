@@ -9,7 +9,7 @@
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/algorithm/min_element.hpp>
 # include <elib/mp/algorithm/transform.hpp>
-# include <elib/mp/detail/integral_constant.hpp>
+# include <elib/mp/integral_constant.hpp>
 
 namespace elib 
 {

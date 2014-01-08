@@ -1,42 +1,38 @@
+# Elib
+
 elib is a personal C++ library and an excuse to learn/practice more parts of C++.
 
 WARNING: This file is update very infrequently
 LAST UPDATE: November 19 2013
 
-Library Summary
-===============
+## Library Summary
 
 Enumeration:
-  A header-only library for dealing with C++11 scoped enumerations.
+: A header-only library for dealing with C++11 scoped enumerations.
   It is a way to provide checked casting, string casting, iteration
   and non-default operators
 
-Log:
+Log
+: Exactly what it sounds like. A basic message logging library.
 
-  Exactly what it sounds like. A basic message logging library.
-
-MP:
-
-  A meta-programming library inspired by boosts mpl. It generally
+MP
+: A meta-programming library inspired by boosts mpl. It generally
   has the same structure, files and iterface as boost::mpl
 
-Filesystem:
-
-  A posix only implementation of the C++14 filesystem library.
+Filesystem
+: A posix only implementation of the C++14 filesystem library.
   This library will not compile on windows.
 
-Utility:
+Utility
+: misc functionality that is frequently needed.
+  it includes
+* fmt: used to format varargs strings 
+* lexical_cast: For casting between strings and integral types
+* scoped_exit: uses lambdas to provide scoped exit functionality
+* size_type: A helper for using a "size_type" and its npos value
 
-  misc functionality that is frequently needed.
-  it includes:
-    -fmt: used to format varargs strings 
-    -lexical_cast: For casting between strings and integral types
-    -scoped_exit: uses lambdas to provide scoped exit functionality
-    -size_type: A helper for using a "size_type" and its npos value
 
-
-Building
-========
+## Building
 
 Note: Requirements marked with (Unit Test Only) are obviously only required
       to build the unit tests. 
@@ -97,7 +93,7 @@ Makefile
 =======
 
 Commands:
-  *   all: 
+  * all: 
     build libraries and unit tests
 
   clean:

@@ -27,10 +27,10 @@ Utility
 : misc functionality that is frequently needed.
   it includes:
 
-* fmt: used to format varargs strings 
-* lexical_cast: For casting between strings and integral types
-* scoped_exit: uses lambdas to provide scoped exit functionality
-* size_type: A helper for using a "size_type" and its npos value
+  * fmt: used to format varargs strings 
+  * lexical_cast: For casting between strings and integral types
+  * scoped_exit: uses lambdas to provide scoped exit functionality
+  * size_type: A helper for using a "size_type" and its npos value
 
 
 ## Building
@@ -69,56 +69,54 @@ Build Options (CMake)
   
 ### Select what parts to build
   
-  CONFIG_LIB_ENUMERATION:
-    build enumeration library
-    Default: ON
+  * CONFIG_LIB_ENUMERATION
+: build enumeration library
+  Default: ON
 
-  CONFIG_LIB_LOG:
-    build logging library
-    Default: ON
+  * CONFIG_LIB_LOG
+: build logging library
+  Default: ON
 
-  CONFIG_LIB_MP:
-    build the MPL* (header-only, only builds unit_tests and dummy file)
-    Default: ON
+  * CONFIG_LIB_MP
+: build the MPL* (header-only, only builds unit_tests and dummy file)
+  Default: ON
 
-  CONFIG_LIB_FILESYSTEM:
-    build the filesystem library
-    Default: ON (Except on windows)
+  * CONFIG_LIB_FILESYSTEM
+: build the filesystem library
+  Default: ON (Except on windows)
 
-  CONFIG_LIB_UTILITY:
-    build the utility library
-    Default: ON
+  * CONFIG_LIB_UTILITY
+: build the utility library
+  Default: ON
   
     
-Makefile
-=======
+## Makefile Commands
 
-Commands:
-  * all: 
-    build libraries and unit tests
+  * all 
+: build libraries and unit tests
 
-  clean:
-    Clean build files
+  * clean
+: Clean build files
 
-  distclean:
-    Clean all generated files.
+  * distclean
+: Clean all generated files.
 
-  redep:
-    execute Cmake
+  * redep
+: execute Cmake
 
-  install:
-    install using the generated Cmake command
+  * install
+: install using the generated Cmake command
 
-  e:
-    A helper command. equivalent to:
-      make distclean
-      make redep
-      make 
+  * e
+: A helper command. equivalent to
+    make distclean
+    make redep
+    make 
 
-  ej:
-    A helper command. It is the same as 'e' except it runs
-    make -j2 as the last command
+  * ej
+: A helper command. It is the same as 'e' except it runs
+  make -j2 as the last command
 
-  check:
-    Run the unit tests
+  * check
+: Run the unit tests
 

@@ -80,7 +80,6 @@ Requirements (Library specific):
   * CONFIG_LIB_MP
 : 
    build the MPL* (header-only, only builds unit_tests and dummy file)
-
    Default: ON  
 
   * CONFIG_LIB_FILESYSTEM

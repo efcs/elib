@@ -44,6 +44,7 @@ namespace elib
       static constexpr bool value = true;
   };
 
+  
   /* cast one lexical type to another, generally either to or from a string 
   * ex: string -> float
   *     bool -> string

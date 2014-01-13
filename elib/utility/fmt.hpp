@@ -1,5 +1,5 @@
-#ifndef ELIB_FMT_HPP
-#define ELIB_FMT_HPP
+#ifndef ELIB_UTILITY_FMT_HPP
+#define ELIB_UTILITY_FMT_HPP
 
 # include <elib/config.hpp>
 # include <elib/pragma.hpp>
@@ -69,4 +69,4 @@ ELIB_PRAGMA_DIAG_POP()
   }
    
 }                                                            // namespace elib
-#endif                                                       // ELIB_FMT_HPP
+#endif                                                  // ELIB_UTILITY_FMT_HPP

@@ -36,7 +36,9 @@ if (CONFIG_ALL_WARNINGS)
   elseif (CXX_COMPILER_CLANG)
     add_flags( LIBRARY_FLAGS
       -Weverything -Wno-c++98-compat 
-      -Wno-c++98-compat-pedantic -Wno-newline-eof 
+      -Wno-c++98-compat-pedantic -Wno-newline-eof
+      -Wno-weak-vtables -Wno-global-constructors
+      -Wno-exit-time-destructors
     )
   endif()
   
@@ -59,6 +61,7 @@ include_library_if(CONFIG_LIB_FILESYSTEM fs/build.cmake)
 include_library_if(CONFIG_LIB_LOG log/build.cmake)
 include_library_if(CONFIG_LIB_MPL mp/build.cmake)
 include_library_if(CONFIG_LIB_UTILITY utility/build.cmake)
+include_library_if(CONFIG_LIB_CEXP cexp/build.cmake)
 
 # compile into objects
 

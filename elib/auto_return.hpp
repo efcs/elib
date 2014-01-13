@@ -17,7 +17,7 @@
   }
 #   
 #   
-#   define ELIB_RETURN_NOTEXCEPT(...)                              \
+#   define ELIB_RETURN_NOEXCEPT(...)                               \
   noexcept(noexcept(                                               \
       decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
   ))                                                               \
@@ -28,8 +28,22 @@
 # /* workaround for GCC */
 # if ! ELIB_WORKAROUND(ELIB_GNU, GCC_NOEXCEPT_THIS_BUG)
 #   
-#   define ELIB_AUTO_RETURN(...)  ELIB_AUTO_RETURN_NOEXCEPT(__VA_ARGS__)
-#   define ELIB_RETURN(...)       ELIB_RETURN_NOTEXCEPT(__VA_ARGS__)
+#   define ELIB_AUTO_RETURN(...)                                 \
+  noexcept(noexcept(                                             \
+    decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
+  )) -> decltype(__VA_ARGS__)                                    \
+  {                                                              \
+    return (__VA_ARGS__);                                        \
+  }
+#   
+#   
+#   define ELIB_RETURN(...)                                        \
+  noexcept(noexcept(                                               \
+      decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
+  ))                                                               \
+  {                                                                \
+    return (__VA_ARGS__);                                          \
+  }
 #   
 # else /* gcc bug */
 #   

@@ -34,6 +34,7 @@ option(CONFIG_LIB_MPL "Build MPL" ON)
 option(CONFIG_LIB_LOG "Build Log" ON)
 option(CONFIG_LIB_UTILITY "Build Utility" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
+option(CONFIG_LIB_CEXP "Build Create Expression Library" ON)
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)

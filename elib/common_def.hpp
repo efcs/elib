@@ -20,14 +20,14 @@
 # /* used to clearly have exposition for code we don't want to compile */
 # define ELIB_EXPO(...) 
 # 
-# define ELIB_DEFAULT_CLASS(Name)           \
+# define ELIB_DEFAULT_CLASS(Class)          \
   Class() = default;                        \
                                             \
   Class(const Class&) = default;            \
   Class(Class&&) = default;                 \
                                             \
   Class& operator=(const Class&) = default; \
-  Class& operator(Class&&) = default
+  Class& operator=(Class&&) = default
 # 
 #
 #endif /* ELIB_COMMON_DEF_HPP */

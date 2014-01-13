@@ -4,6 +4,8 @@
 # if defined(__clang__)
 #   define ELIB_CLANG 1
 #   define ELIB_GNU 0
+#   define ELIB_MINGW 0
+#   define ELIB_MSVC 0
 #   define ELIB_COMPILER_NAME clang
 #   /* __GNUC__ must come after clang since clang also defines it */
 # elif defined(__GNUC__) 

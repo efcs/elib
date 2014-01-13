@@ -1,0 +1,3 @@
+[submodule "elib/cexp"]
+	path = elib/cexp
+	url = git@code.efcs.ca:ewfiseli/cexp

@@ -44,11 +44,11 @@ namespace elib
     
     
     template <class T, std::size_t N>
-    using make_pack = fill_variadic<pack, T, N>;
+    using make_pack = variadic_fill<N, T, pack<>>;
     
     
     template <class T, std::size_t N>
-    using make_pack_t = typename fill_variadic<pack, T, N>::type;
+    using make_pack_t = typename variadic_fill<N, T, pack<>>::type;
     
     
     template <class ...Args>

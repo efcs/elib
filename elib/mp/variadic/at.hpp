@@ -14,7 +14,7 @@ namespace elib
     
     template <
         class Seq, std::size_t N
-      , template <class...> class Pack /* = detail::basic_pack */
+      , class Pack /* = detail::basic_pack<> */
       >
     struct variadic_at;
       
@@ -23,23 +23,37 @@ namespace elib
         template <class...> class Seq
       , class ...Args
       , std::size_t N
-      , template <class...> class Pack
+      , class Pack
       >
     struct variadic_at< Seq<Args...>, N, Pack>
     {
       using type = decltype(
         detail::variadic_at_impl< 
-            fill_variadic_t<Pack, decltype(nullptr), N>
+            variadic_fill_t<N, decltype(nullptr), Pack>
           >
           ::eval((identity<Args>*)nullptr...)
         );
     };
       
+    template <
+        class Seq, class ...As
+      , std::size_t N
+      , class Pack
+    >
+    struct variadic_at< Seq(As...), N, Pack >
+    {
+      using type = decltype(
+          detail::variadic_at_impl<
+              variadic_fill_t<N, decltype(nullptr), Pack>
+            >
+            ::eval((identity<As>*)nullptr...)
+        );
+    };
       
     template <
         class Seq
       , std::size_t N
-      , template <class...> class Pack = detail::basic_pack
+      , class Pack = detail::basic_pack<>
       >
     using variadic_at_t = typename variadic_at<Seq, N, Pack>::type;
       

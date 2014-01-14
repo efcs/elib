@@ -7,7 +7,7 @@ cmake_minimum_required (VERSION 2.7)
 
 # Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
 option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
 # Standard Library config
@@ -34,7 +34,7 @@ option(CONFIG_LIB_MPL "Build MPL" ON)
 option(CONFIG_LIB_LOG "Build Log" ON)
 option(CONFIG_LIB_UTILITY "Build Utility" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
-option(CONFIG_LIB_CEXP "Build Create Expression Library" ON)
+option(CONFIG_LIB_CEXPR "Build Create Expression Library" ON)
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)

@@ -22,6 +22,11 @@ namespace elib
       using type = Seq<SeqArgs..., Args...>;
     };
     
+    template <class Seq, class ...As, class ...Args>
+    struct variadic_append< Seq(As...), Args... >
+    {
+      using type = Seq(As..., Args...);
+    };
     
     template <class Seq, class ...Args>
     using variadic_append_t = typename variadic_append<Seq, Args...>::type;

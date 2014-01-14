@@ -15,7 +15,7 @@ namespace elib
     
     template <
         class Seq, std::size_t N
-      , template <class...> class Pack /* = detail::basic_pack */
+      , class Pack /* = detail::basic_pack<> */
       >
     struct variadic_drop;
     
@@ -24,24 +24,45 @@ namespace elib
         template <class...> class Seq
       , class ...Args
       , std::size_t N
-      , template <class...> class Pack
+      , class Pack
       >
     struct variadic_drop< Seq<Args...>, N, Pack>
     {
       using type = decltype(
         detail::variadic_drop_impl< 
-            fill_variadic_t<Pack, decltype(nullptr), N>
-          , Seq
+            variadic_fill_t<N, decltype(nullptr), Pack>
+          , Seq<>
           >
         ::eval((identity<Args>*)nullptr...)
       );
     };
     
+    template <
+        class Seq, class ...As
+      , std::size_t N
+      , class Pack
+    >
+    struct variadic_drop< Seq(As...), N, Pack >
+    {
+      using result_ = decltype(
+        detail::variadic_drop_impl<
+            variadic_fill_t<N, decltype(nullptr), Pack>
+          , detail::basic_pack<>
+        >
+        ::eval((identity<As>*)nullptr...)
+      );
+    
+      using type = typename 
+        detail::variadic_drop_function_helper<
+            result_, Seq
+        >::type;
+        
+    };
     
     template <
         class Seq
       , std::size_t N
-      , template <class...> class Pack = detail::basic_pack
+      , class Pack = detail::basic_pack<>
       >
     using variadic_drop_t = typename variadic_drop<Seq, N, Pack>::type;
     
@@ -54,12 +75,22 @@ namespace elib
         , class ...Ignored
         , template <class...> class To
         >
-      struct variadic_drop_impl< Seq<Ignored...>, To>
+      struct variadic_drop_impl<Seq<Ignored...>, To<>>
       {
         template <class ...Back>
           static To<typename Back::type...>
         eval(eat_pod<Ignored>..., Back*...);
       };
+      
+      template <
+          class ...Args
+        , class Ret
+      >
+      struct variadic_drop_function_helper< basic_pack<Args...>, Ret>
+      {
+        using type = Ret(Args...);
+      };
+      
       
     }                                                       // namespace detail
   }                                                         // namespace mp

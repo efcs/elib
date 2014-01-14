@@ -8,93 +8,86 @@ namespace elib
 {
   namespace mp
   {
+  
+    template <std::size_t N, class T, class List = detail::basic_pack<>>
+    using variadic_fill_t = typename variadic_fill<N, T, List>::type;
     
-    template <template <class...> class Seq, class T, std::size_t N>
-    struct fill_variadic;
-    
-    template <template <class...> class Seq, class T, std::size_t N>
-    using fill_variadic_t = typename fill_variadic<Seq, T, N>::type;
-    
-    
-    template <template <class...> class Seq, class T, std::size_t N>
-    struct fill_variadic
+    template <std::size_t N, class T, class Seq>
+    struct variadic_fill
       : variadic_join<
-          fill_variadic_t<Seq, T, (N / 2)>
-        , fill_variadic_t<Seq, T, (N - (N / 2))>
+          variadic_fill_t<(N / 2), T, Seq>
+        , variadic_fill_t<(N - (N/2)), T, Seq>
         >
     {};
     
   //-------------------------------- base cases -----------------------------// 
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 0>
+    template <class T, class Seq>
+    struct variadic_fill<0, T, Seq>
     {
-      using type = Seq<>;
+      using type = Seq;
     };
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 1>
+    template <class T, template <class...> class Seq>
+    struct variadic_fill<1, T, Seq<>>
     {
       using type = Seq<T>;
     };
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 2>
+    template <class T, class Seq>
+    struct variadic_fill<1, T, Seq()>
+    {
+      using type = Seq(T);
+    };
+    
+    template <class T, template <class...> class Seq>
+    struct variadic_fill<2, T, Seq<>>
     {
       using type = Seq<T, T>;
     };
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 3>
+    template <class T, class Seq>
+    struct variadic_fill<2, T, Seq()>
+    {
+      using type = Seq(T, T);
+    };
+    
+    template <class T, template <class...> class Seq>
+    struct variadic_fill<3, T, Seq<>>
     {
       using type = Seq<T, T, T>;
     };
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 4>
+    template <class T, class Seq>
+    struct variadic_fill<3, T, Seq()>
+    {
+      using type = Seq(T, T, T);
+    };
+    
+    template <class T, template <class...> class Seq>
+    struct variadic_fill<4, T, Seq<>>
     {
       using type = Seq<T, T, T, T>;
     };
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 5>
+    template <class T, class Seq>
+    struct variadic_fill<4, T, Seq()>
+    {
+      using type = Seq(T, T, T, T);
+    };
+    
+    template <class T, template <class...> class Seq>
+    struct variadic_fill<5, T, Seq<>>
     {
       using type = Seq<T, T, T, T, T>;
     };
     
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 6>
+    template <class T, class Seq>
+    struct variadic_fill<5, T, Seq()>
     {
-      using type = Seq<T, T, T, T, T, T>;
+      using type = Seq(T, T, T, T, T);
     };
     
-    
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 7>
-    {
-      using type = Seq<T, T, T, T, T, T, T>;
-    };
-    
-    
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 8>
-    {
-      using type = Seq<T, T, T, T, T, T, T, T>;
-    };
-    
-    
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 9>
-    {
-      using type = Seq<T, T, T, T, T, T, T, T, T>;
-    };
-    
-    
-    template <template <class...> class Seq, class T>
-    struct fill_variadic<Seq, T, 10>
-    {
-      using type = Seq<T, T, T, T, T, T, T, T, T, T>;
-    };
     
   }                                                         // namespace mp
 }                                                           // namespace elib

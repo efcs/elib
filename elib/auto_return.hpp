@@ -10,7 +10,7 @@
  */
 #   define ELIB_AUTO_RETURN_NOEXCEPT(...)                        \
   noexcept(noexcept(                                             \
-    decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
+    decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
   )) -> decltype(__VA_ARGS__)                                    \
   {                                                              \
     return (__VA_ARGS__);                                        \
@@ -19,7 +19,7 @@
 #   
 #   define ELIB_RETURN_NOEXCEPT(...)                               \
   noexcept(noexcept(                                               \
-      decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
+      decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
   ))                                                               \
   {                                                                \
     return (__VA_ARGS__);                                          \
@@ -30,7 +30,7 @@
 #   
 #   define ELIB_AUTO_RETURN(...)                                 \
   noexcept(noexcept(                                             \
-    decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
+    decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
   )) -> decltype(__VA_ARGS__)                                    \
   {                                                              \
     return (__VA_ARGS__);                                        \
@@ -39,7 +39,7 @@
 #   
 #   define ELIB_RETURN(...)                                        \
   noexcept(noexcept(                                               \
-      decltype(__VA_ARGS__)(std::declval<decltype(__VA_ARGS__)>()) \
+      decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
   ))                                                               \
   {                                                                \
     return (__VA_ARGS__);                                          \

@@ -4,6 +4,7 @@
 # include <elib/mp/variadic/fwd.hpp>
 # include <elib/mp/variadic/append.hpp>
 # include <elib/mp/variadic/at.hpp>
+# include <elib/mp/variadic/concat.hpp>
 # include <elib/mp/variadic/drop.hpp>
 # include <elib/mp/variadic/prepend.hpp>
 # include <elib/mp/variadic/slice.hpp>
@@ -120,7 +121,7 @@ namespace elib
     //------------------------ join & append & prepend ----------------------// 
     
       template <class Left, class Right>
-      using join = variadic_join<Left, Right>;
+      using concat = variadic_concat<Left, Right>;
     
       template <class S, class ...Args>
       using append = variadic_append<S, Args...>;

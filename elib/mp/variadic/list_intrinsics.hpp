@@ -2,11 +2,11 @@
 #define ELIB_MP_VARIADIC_LIST_INTRINSICS_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/list_iterator.hpp>
-# include <elib/mp/variadic/fill_variadic.hpp>
-# include <elib/mp/variadic/drop.hpp>
-# include <elib/mp/variadic/join.hpp>
 # include <elib/mp/variadic/append.hpp>
+# include <elib/mp/variadic/concat.hpp>
+# include <elib/mp/variadic/drop.hpp>
+# include <elib/mp/variadic/fill.hpp>
+# include <elib/mp/variadic/list_iterator.hpp>
 # include <elib/mp/variadic/prepend.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/identity.hpp>
@@ -110,7 +110,7 @@ namespace elib
     //---------------------- join append prepend ----------------------------// 
     
       template <class Left, class Right>
-      using join = variadic_join<Left, Right>;
+      using concat = variadic_concat<Left, Right>;
       
       template <class List, class ...Args>
       using append = variadic_append<List, Args...>;

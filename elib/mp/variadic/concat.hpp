@@ -1,5 +1,5 @@
-#ifndef ELIB_MP_VARIADIC_JOIN_HPP
-# define ELIB_MP_VARIADIC_JOIN_HPP
+#ifndef ELIB_MP_VARIADIC_CONCAT_HPP
+#define ELIB_MP_VARIADIC_CONCAT_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
 
@@ -10,13 +10,13 @@ namespace elib
   {
     
     template <class LHS, class RHS>
-    struct variadic_join;
+    struct variadic_concat;
     
     template <
         template <class...> class L0, class ...A0
       , template <class...> class L1, class ...A1
     >
-    struct variadic_join< L0<A0...>, L1<A1...> >
+    struct variadic_concat< L0<A0...>, L1<A1...> >
     {
       using type = L0<A0..., A1...>;
     };
@@ -25,7 +25,7 @@ namespace elib
         template <class...> class L0, class ...A0
       , class L1, class ...A1
     >
-    struct variadic_join< L0<A0...>, L1(A1...) >
+    struct variadic_concat< L0<A0...>, L1(A1...) >
     {
       using type = L0<A0..., A1...>;
     };
@@ -34,7 +34,7 @@ namespace elib
         class L0, class ...A0
       , template <class...> class L1, class ...A1
     >
-    struct variadic_join< L0(A0...), L1<A1...> >
+    struct variadic_concat< L0(A0...), L1<A1...> >
     {
       using type = L0(A0..., A1...);
     };
@@ -43,15 +43,15 @@ namespace elib
         class L0, class ...A0
       , class L1, class ...A1
     >
-    struct variadic_join< L0(A0...), L1(A1...) >
+    struct variadic_concat< L0(A0...), L1(A1...) >
     {
       using type = L0(A0..., A1...);
     };
     
     
     template <class LHS, class RHS>
-    using variadic_join_t = typename variadic_join<LHS, RHS>::type;
+    using variadic_concat_t = typename variadic_concat<LHS, RHS>::type;
     
   }
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_JOIN_HPP */
+#endif /* ELIB_MP_VARIADIC_CONCAT_HPP */

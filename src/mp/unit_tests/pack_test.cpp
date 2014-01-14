@@ -48,8 +48,8 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
       SAME_TYPE(clear_t<T>, pack<>);
       SAME_TYPE(push_back_t<T, int>, pack<int>);
       SAME_TYPE(push_front_t<T, long>, pack<long>);
-      SAME_TYPE(join_t<T, pack<>>, pack<>);
-      SAME_TYPE(join_t<T, pack<bool>>, pack<bool>);
+      SAME_TYPE(concat_t<T, pack<>>, pack<>);
+      SAME_TYPE(concat_t<T, pack<bool>>, pack<bool>);
     }
     // single item
     {

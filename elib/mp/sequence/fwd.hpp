@@ -97,7 +97,7 @@ namespace elib
     template <class Seq, std::size_t N> struct drop;
     template <class Seq, std::size_t N> struct take;
     template <class Seq, std::size_t First, std::size_t Last> struct slice;
-    template <class Left, class Right> struct join;
+    template <class Left, class Right> struct concat;
     template <class S, class ...Args> struct append;
     template <class S, class ...Args> struct prepend;
     

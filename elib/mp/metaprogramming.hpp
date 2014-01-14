@@ -13,6 +13,7 @@
 # include <elib/mp/pair.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
+# include <elib/mp/variadic.hpp>
 # include <elib/mp/void.hpp>
 # 
 #endif /* ELIB_MP_METAPROGRAMMING_HPP */

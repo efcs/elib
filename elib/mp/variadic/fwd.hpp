@@ -14,53 +14,50 @@ namespace elib
       template <class ...> struct basic_pack {};
     }
     
-    template <
-        class Seq
-      , std::size_t N
-      , class Pack = detail::basic_pack<>
-      >
+    template <class Seq>
+    struct variadic_size;
+    
+    template <class Seq>
+    struct variadic_empty;
+    
+    template <class Seq, std::size_t N, class Pack = detail::basic_pack<>>
     struct variadic_at;
     
+    template <class Seq>
+    struct variadic_front;
     
-    template <
-        class Seq, std::size_t N
-      , class Pack = detail::basic_pack<>
-      >
+    template <class Seq>
+    struct variadic_back;
+    
+    template <class Seq>
+    struct variadic_pop_back;
+    
+    template <class Seq>
+    struct variadic_pop_front;
+    
+    template <class Seq, std::size_t N, class Pack = detail::basic_pack<>>
     struct variadic_drop;
-    
     
     template <class Seq, std::size_t N>
     struct variadic_take;
     
-    
-    template <
-        class Seq
-      , std::size_t First
-      , std::size_t Last
-      >
+    template <class Seq, std::size_t First, std::size_t Last>
     struct variadic_slice;
+
+    template <class LHS, class RHS>
+    struct variadic_concat;
     
+    template <class Seq, class T>
+    struct variadic_push_back;
     
-    template <
-        class LHS
-      , class RHS
-      >
-    struct variadic_join;
+    template <class Seq, class T>
+    struct variadic_push_front;
     
-    
-    template <
-        class Seq
-      , class ...Args
-      >
+    template <class Seq, class ...Args>
     struct variadic_append;
     
-    
-    template <
-        class Seq
-      , class ...Args
-      >
+    template <class Seq, class ...Args>
     struct variadic_prepend;
-    
     
     template <std::size_t N, class T, class List = detail::basic_pack<>>
     struct variadic_fill;

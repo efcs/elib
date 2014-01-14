@@ -250,11 +250,11 @@ namespace elib
     
     
     template <class Left, class Right>
-    struct join : get_impl_t<Left>::template join<Left, Right>
+    struct concat : get_impl_t<Left>::template concat<Left, Right>
     {};
     
     template <class Left, class Right>
-    using join_t = typename get_impl_t<Left>::template join<Left, Right>::type;
+    using concat_t = typename get_impl_t<Left>::template concat<Left, Right>::type;
     
     
     template <class S, class ...Args>

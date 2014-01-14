@@ -1,8 +1,8 @@
-#ifndef ELIB_MP_VARIADIC_FILL_VARIADIC_HPP
-#define ELIB_MP_VARIADIC_FILL_VARIADIC_HPP
+#ifndef ELIB_MP_VARIADIC_FILL_HPP
+#define ELIB_MP_VARIADIC_FILL_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/join.hpp>
+# include <elib/mp/variadic/concat.hpp>
 
 namespace elib 
 {
@@ -14,7 +14,7 @@ namespace elib
     
     template <std::size_t N, class T, class Seq>
     struct variadic_fill
-      : variadic_join<
+      : variadic_concat<
           variadic_fill_t<(N / 2), T, Seq>
         , variadic_fill_t<(N - (N/2)), T, Seq>
         >
@@ -91,4 +91,4 @@ namespace elib
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_FILL_VARIADIC_HPP */
+#endif /* ELIB_MP_VARIADIC_FILL_HPP */

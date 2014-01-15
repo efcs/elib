@@ -5,17 +5,17 @@ cmake_minimum_required (VERSION 2.7)
 ################################################################################
 
 
+# C++ Version Config 
+option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
+
 # Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
 option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
 # Standard Library config
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
-
-# C++ Version Config
-option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Sanitizers
 option(CONFIG_ASAN "address sanitizer" OFF)
@@ -87,6 +87,7 @@ endif()
 if (NOT CONFIG_CXX1Y)
   set(CXX_VERSION_FLAGS " -std=c++11 ")
 else()
+  message( STATUS "Using c++1y standard")
   set(CXX_VERSION_FLAGS " -std=c++1y ")
 endif()
 
@@ -116,7 +117,7 @@ endif()
 if ( CXX_COMPILER_GCC )
 
   # check min version
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7.0")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
     message(FATAL_ERROR "Insufficient GCC Version")
   elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
@@ -157,8 +158,9 @@ if (CONFIG_USE_LIBCXX)
 endif()
 
 
-if (CONFIG_USE_OPT_LIBSTDCXX)
+if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
   message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdinc++ -I/opt/gcc4.9/include/c++/4.9.0/ -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/")
   set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
 endif()
 

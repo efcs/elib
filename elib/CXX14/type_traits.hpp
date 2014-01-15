@@ -7,7 +7,8 @@
 
 namespace std
 {
-  
+# if __cplusplus < 201300
+
   template <typename T>
   using remove_const_t = typename remove_const<T>::type; 
   
@@ -80,8 +81,8 @@ namespace std
   
   template <typename T>
   using result_of_t = typename result_of<T>::type;
-  
-  
+#   endif
+   
 }                                                           // namespace std 
    
 #endif /* ELIB_CXX14_TYPE_TRAITS_HPP */

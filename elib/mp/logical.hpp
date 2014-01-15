@@ -15,13 +15,17 @@ namespace elib
   ////////////////////////////////////////////////////////////////////////////////
     
     template <class T>
-    struct not_ : bool_<!T::type::value> {};
+    struct not_ 
+      : bool_<!T::type::value> 
+    {};
     
     template <class T>
     using not_t = bool_<!T::type::value>;
     
     template <long V>
-    using not_c = bool_<!V>;
+    struct not_c 
+      : bool_<!V>
+    {};
     
     template <long V>
     using not_c_t = bool_<!V>;
@@ -92,7 +96,9 @@ namespace elib
     
     
     template <bool P1, bool P2, bool ...Preds>
-    using and_c = detail::and_c_impl<P1, P2, Preds...>;
+    struct and_c
+      : detail::and_c_impl<P1, P2, Preds...>
+    {};
     
     
     template <bool P1, bool P2, bool ...Preds>
@@ -164,7 +170,9 @@ namespace elib
     
     
     template <bool P1, bool P2, bool ...Rest>
-    using or_c = detail::or_c_impl<P1, P2, Rest...>;
+    struct or_c :
+      detail::or_c_impl<P1, P2, Rest...>
+    {};
     
     
     template <bool P1, bool P2, bool ...Rest>

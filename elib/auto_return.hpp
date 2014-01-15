@@ -8,57 +8,43 @@
  * Workaround for GCC not excepting "this" in noexcept clauses 
  * added by me (just remove the noexcept clause until GCC gets there shit together)
  */
-#   define ELIB_AUTO_RETURN_NOEXCEPT(...)                        \
-  noexcept(noexcept(                                             \
-    decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
-  )) -> decltype(__VA_ARGS__)                                    \
-  {                                                              \
-    return (__VA_ARGS__);                                        \
-  }
-#   
-#   
-#   define ELIB_RETURN_NOEXCEPT(...)                               \
+   
+# define ELIB_AUTO_RETURN(...)                                     \
   noexcept(noexcept(                                               \
-      decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
-  ))                                                               \
+    decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+  )) -> decltype(__VA_ARGS__)                                      \
   {                                                                \
     return (__VA_ARGS__);                                          \
   }
 #   
-# /* workaround for GCC */
-# if ! ELIB_WORKAROUND(ELIB_GNU, GCC_NOEXCEPT_THIS_BUG)
 #   
-#   define ELIB_AUTO_RETURN(...)                                 \
-  noexcept(noexcept(                                             \
-    decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
-  )) -> decltype(__VA_ARGS__)                                    \
-  {                                                              \
-    return (__VA_ARGS__);                                        \
-  }
-#   
-#   
-#   define ELIB_RETURN(...)                                        \
-  noexcept(noexcept(                                               \
+# define ELIB_RETURN(...)                                            \
+  noexcept(noexcept(                                                 \
       decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
-  ))                                                               \
-  {                                                                \
-    return (__VA_ARGS__);                                          \
+  ))                                                                 \
+  {                                                                  \
+    return (__VA_ARGS__);                                            \
+  }
+# 
+# /* noexcept workaround for when "this" is used with GCC */
+# if ELIB_WORKAROUND(ELIB_GNU, GCC_NOEXCEPT_THIS_BUG)
+#   
+#   define ELIB_AUTO_RETURN_WORKAROUND(...) \
+  -> decltype(__VA_ARGS__)                  \
+  {                                         \
+    return (__VA_ARGS__);                   \
   }
 #   
-# else /* gcc bug */
+#   define ELIB_RETURN_WORKAROUND(...) \
+  {                                    \
+    return (__VA_ARGS__);              \
+  }
 #   
-#   define ELIB_AUTO_RETURN(...) \
-      -> decltype(__VA_ARGS__)   \
-      {                          \
-        return (__VA_ARGS__);    \
-      }
+# else /* non-workaround support (same as AUTO_RETURN and RETURN) */
 #   
-#   /* this version makes no sense with the workaround */
-#   define ELIB_RETURN(...) \
-    {                       \
-      return (__VA_ARGS__); \
-    }
+#   define ELIB_AUTO_RETURN_WORKAROUND ELIB_AUTO_RETURN
+#   define ELIB_RETURN_WORKAROUND ELIB_RETURN
 #   
-# endif /* workaround for gcc */
+# endif
 # 
 #endif /* ELIB_AUTO_RETURN_HPP */

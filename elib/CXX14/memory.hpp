@@ -7,7 +7,9 @@
 
 namespace std
 {
-  
+ 
+# if __cplusplus < 201300L
+
   template <typename T> 
   struct _Unique_if 
   {
@@ -46,5 +48,6 @@ namespace std
   typename _Unique_if<T>::_Known_bound
   make_unique(Args&&...) = delete;
   
+# endif
 }                                                           // namespace std
 #endif                                                 // ELIB_CXX14_MEMORY_HPP

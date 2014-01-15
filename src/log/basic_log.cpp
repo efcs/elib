@@ -1,18 +1,16 @@
 #include "elib/log/basic_log.hpp"
-#include "elib/utility/fmt.hpp"
-
+#include <elib/fmt.hpp>
 #include <ostream>
 #include <cstdarg>
 
-
-#define _FMT_ARGS()  \
+#define ELIB_LOG_FMT_ARGS()  \
     va_list __args; \
     va_start(__args, msg); \
     std::string __str = fmt(msg, __args); \
     va_end(__args)
     
     
-#define LOG_FUNC_HANDLER(level) _FMT_ARGS(); \
+#define ELIB_LOG_FUNC_HANDLER(level) ELIB_LOG_FMT_ARGS(); \
     _log(level, __str)
 
     
@@ -69,7 +67,7 @@ basic_log::level()
 void 
 basic_log::print(level_e xlevel, const char *msg, ... ) 
 {
-    LOG_FUNC_HANDLER(xlevel);
+    ELIB_LOG_FUNC_HANDLER(xlevel);
 }
 
 void 
@@ -81,7 +79,7 @@ basic_log::print(level_e xlevel, const std::string &msg)
 void 
 basic_log::debug(const char *msg, ... )
 {
-    LOG_FUNC_HANDLER(level_e::debug);
+    ELIB_LOG_FUNC_HANDLER(level_e::debug);
 }
 
 void 
@@ -93,7 +91,7 @@ basic_log::debug(const std::string & s)
 void 
 basic_log::info(const char *msg, ... )
 {
-    LOG_FUNC_HANDLER(level_e::info);
+    ELIB_LOG_FUNC_HANDLER(level_e::info);
 }
 
 void 
@@ -105,7 +103,7 @@ basic_log::info(const std::string & s)
 void 
 basic_log::step(const char *msg, ... )
 {
-    LOG_FUNC_HANDLER(level_e::step);
+    ELIB_LOG_FUNC_HANDLER(level_e::step);
 }
 
 void 
@@ -117,7 +115,7 @@ basic_log::step(const std::string & s)
 void 
 basic_log::warn(const char *msg, ... )
 {
-    LOG_FUNC_HANDLER(level_e::warn);
+    ELIB_LOG_FUNC_HANDLER(level_e::warn);
 }
 
 void 
@@ -129,7 +127,7 @@ basic_log::warn(const std::string & s)
 void 
 basic_log::err(const char *msg, ... )
 {
-    LOG_FUNC_HANDLER(level_e::err);
+    ELIB_LOG_FUNC_HANDLER(level_e::err);
 }
 
 void 
@@ -141,7 +139,7 @@ basic_log::err(const std::string & s)
 void 
 basic_log::fatal(const char *msg, ...)
 {
-    LOG_FUNC_HANDLER(level_e::fatal);
+    ELIB_LOG_FUNC_HANDLER(level_e::fatal);
 }
 
 void 
@@ -153,7 +151,7 @@ basic_log::fatal(const std::string & s)
 void 
 basic_log::raw_out(const char *msg, ...)
 {
-    LOG_FUNC_HANDLER(level_e::raw_out);
+    ELIB_LOG_FUNC_HANDLER(level_e::raw_out);
 }
 
 void 
@@ -165,7 +163,7 @@ basic_log::raw_out(const std::string &msg)
 void 
 basic_log::raw_err(const char *msg, ...)
 {
-    LOG_FUNC_HANDLER(level_e::raw_err);
+    ELIB_LOG_FUNC_HANDLER(level_e::raw_err);
 }
 
 void

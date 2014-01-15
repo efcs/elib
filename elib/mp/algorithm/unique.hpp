@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_ALGORITHM_UNIQUE_HPP
-# define ELIB_MP_ALGORITHM_UNIQUE_HPP
+#define ELIB_MP_ALGORITHM_UNIQUE_HPP
 
 # include <elib/mp/algorithm/copy.hpp>
 # include <elib/mp/algorithm/inserter.hpp>
@@ -12,9 +12,9 @@
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/pair.hpp>
-# include <elib/mp/na.hpp>
 # include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/mp/detail/na.hpp>
 
 namespace elib 
 {
@@ -59,7 +59,7 @@ namespace elib
       : first<
           iter_foldl_t<
               Seq
-            , pair<typename In::state, na>
+            , pair<typename In::state, detail::na>
             , detail::unique_op< In, lambda<Pred> >
             >
         >
@@ -83,7 +83,7 @@ namespace elib
       : first<
           iter_foldr_t<
             Seq
-          , pair< typename In::state, na >
+          , pair< typename In::state, detail::na >
           , detail::unique_op< In, lambda<Pred> >
           >
         >

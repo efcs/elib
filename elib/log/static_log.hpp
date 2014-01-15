@@ -3,7 +3,7 @@
 
 #include <elib/log/log_level.hpp>
 #include <elib/log/log.hpp>
-#include <elib/utility/fmt.hpp>
+#include <elib/fmt.hpp>
 #include <elib/pragma.hpp>
 
 #include <cstdarg>
@@ -14,7 +14,6 @@ namespace elib
 {
   namespace log 
   {
-
           
     /* global logging class, it logs to std::cout and std::cerr,
     * while it does not inherit from basic_log it implements

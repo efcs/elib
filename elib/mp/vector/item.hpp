@@ -3,7 +3,6 @@
 
 # include <elib/mp/vector/fwd.hpp>
 # include <elib/mp/integral_constant.hpp>
-# include <elib/mp/na.hpp>
 
 namespace elib 
 {
@@ -59,7 +58,7 @@ namespace elib
         using index_ = typename Vector::lower_bound_;
         using size = size_type< Vector::size::value - 1>;
         
-        static na index_lookup(index_);
+        static void index_lookup(index_);
         using Vector::index_lookup;
       };
     
@@ -74,7 +73,7 @@ namespace elib
         using index_ = upper_bound_;
         using size = size_type<Vector::size::value - 1>;
         
-        static na index_lookup(index_);
+        static void index_lookup(index_);
         using Vector::index_lookup;
       };
     

@@ -1,10 +1,10 @@
-#ifndef ELIB_UTILITY_FMT_HPP
-#define ELIB_UTILITY_FMT_HPP
+#ifndef ELIB_FMT_HPP
+#define ELIB_FMT_HPP
 
 # include <elib/config.hpp>
 # include <elib/pragma.hpp>
 # include <elib/assert.hpp>
-# include <elib/utility/lexical_cast.hpp>
+# include <elib/lexical_cast.hpp>
 # include <elib/CXX14/memory.hpp> /* for std::make_unique */
 
 # include <string>
@@ -69,4 +69,4 @@ ELIB_PRAGMA_DIAG_POP()
   }
    
 }                                                            // namespace elib
-#endif                                                  // ELIB_UTILITY_FMT_HPP
+#endif                                                  // ELIB_FMT_HPP

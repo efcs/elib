@@ -1,5 +1,5 @@
-#ifndef ELIB_UTILITY_LEXICAL_CAST_HPP
-#define ELIB_UTILITY_LEXICAL_CAST_HPP
+#ifndef ELIB_LEXICAL_CAST_HPP
+#define ELIB_LEXICAL_CAST_HPP
 
 # include <elib/pragma.hpp>
 
@@ -116,4 +116,4 @@ namespace elib
   }
 
 }                                                            // namespace elib
-#endif /* ELIB_UTILITY_LEXICAL_CAST_HPP */
+#endif /* ELIB_LEXICAL_CAST_HPP */

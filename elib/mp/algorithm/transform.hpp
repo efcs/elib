@@ -14,7 +14,7 @@
 # include <elib/mp/protect.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
-# include <elib/mp/na.hpp>
+# include <elib/mp/detail/na.hpp>
 
 namespace elib 
 {
@@ -174,8 +174,8 @@ namespace elib
     template <
         class Seq
       , class SeqOrOp
-      , class OpOrIn = na
-      , class InOrNA = na
+      , class OpOrIn = detail::na
+      , class InOrNA = detail::na
       >
     using transform =
       eval_if_t<
@@ -184,12 +184,12 @@ namespace elib
           , is_sequence<SeqOrOp>
           >
         , if_<
-            is_na<InOrNA>
+            detail::is_na<InOrNA>
           , binary_transform<Seq, SeqOrOp, OpOrIn>
           , binary_transform<Seq, SeqOrOp, OpOrIn, InOrNA>
           >
         , if_<
-            is_na<OpOrIn>
+            detail::is_na<OpOrIn>
           , unary_transform<Seq, SeqOrOp>
           , unary_transform<Seq, SeqOrOp, OpOrIn>
           >
@@ -199,8 +199,8 @@ namespace elib
     template <
         class Seq
       , class SeqOrOp
-      , class OpOrIn = na
-      , class InOrNA = na
+      , class OpOrIn = detail::na
+      , class InOrNA = detail::na
       >
     using transform_t = typename transform<Seq, SeqOrOp, OpOrIn, InOrNA>::type;
     
@@ -208,8 +208,8 @@ namespace elib
     template <
         class Seq
       , class SeqOrOp
-      , class OpOrIn = na
-      , class InOrNA = na
+      , class OpOrIn = detail::na
+      , class InOrNA = detail::na
       >
     using reverse_transform =
       eval_if_t<
@@ -218,12 +218,12 @@ namespace elib
           , is_sequence<SeqOrOp>
           >
         , if_<
-            is_na<InOrNA>
+            detail::is_na<InOrNA>
           , reverse_binary_transform<Seq, SeqOrOp, OpOrIn>
           , reverse_binary_transform<Seq, SeqOrOp, OpOrIn, InOrNA>
           >
         , if_<
-            is_na<OpOrIn>
+            detail::is_na<OpOrIn>
           , reverse_unary_transform<Seq, SeqOrOp>
           , reverse_unary_transform<Seq, SeqOrOp, OpOrIn>
           >
@@ -233,8 +233,8 @@ namespace elib
     template <
         class Seq
       , class SeqOrOp
-      , class OpOrIn = na
-      , class InOrNA = na
+      , class OpOrIn = detail::na
+      , class InOrNA = detail::na
       >
     using reverse_transform_t = typename 
       reverse_transform<Seq, SeqOrOp, OpOrIn, InOrNA>::type;

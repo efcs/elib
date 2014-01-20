@@ -37,9 +37,17 @@
 #   define ELIB_TODO(msg) ((void)0)
 # endif
 # 
+# 
+# // noexcept copy clause
+# define ELIB_NOEXCEPT(...)                                            \
+    noexcept(noexcept(                                                 \
+        decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+    ))
+# 
+# 
 # // Implementation taken from eric_niebler proto-0x
 # // Workaround for GCC not excepting "this" in noexcept clauses 
-# // (just remove the noexcept clause until GCC gets there shit together)
+# // (just remove the noexcept clause until GCC gets their shit together)
 # define ELIB_AUTO_RETURN_NOEXCEPT(...)                            \
   noexcept(noexcept(                                               \
     decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \

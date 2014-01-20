@@ -579,7 +579,7 @@ BOOST_AUTO_TEST_CASE(test_enum_operators)
       BOOST_CHECK(ret == (clhs != crhs));
       BOOST_CHECK(ret == (clhs != rhs));
       
-# if ! ELIB_WORKAROUND(ELIB_CLANG, CLANG_ENUMERATION_COMPARE_BUG)
+# if ! ELIB_WORKAROUND(ELIB_CONFIG_CLANG, CLANG_ENUMERATION_COMPARE_BUG)
       ret = lhs < rhs;
       BOOST_CHECK(ret == (clhs < crhs));
       BOOST_CHECK(ret == (clhs < rhs));

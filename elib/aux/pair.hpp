@@ -3,10 +3,13 @@
 
 # include <elib/aux/pair_fwd.hpp>
 # include <elib/aux/tuple_fwd.hpp>
+# include <elib/aux/apply_tuple.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/move.hpp>
 # include <elib/aux/piecewise_construct.hpp>
+# include <elib/functional.hpp>
 # include <functional>
+# include <tuple>
 # include <utility>
 # include <cstddef>
 
@@ -84,11 +87,21 @@ namespace elib { namespace aux
             : first(aux::move(p.first)), second(aux::move(p.second))
         {}
         
-        //TODO
         template <class ...Args1, class ...Args2>
         pair( piecewise_construct_t, 
               tuple<Args1...> first_args
-            , tuple<Args2...> second_args );
+            , tuple<Args2...> second_args )
+          : first{ apply_tuple(functional::construct<First>{}, first_args) }
+          , second{ apply_tuple(functional::construct<Second>{}, second_args) }
+        {}
+        
+        template <class ...Args1, class ...Args2>
+        pair( std::piecewise_construct_t
+              , std::tuple<Args1...> first_args
+              , std::tuple<Args2...> second_args)
+          : first{ apply_tuple(functional::construct<First>{}, first_args) }
+          , second{ apply_tuple(functional::construct<Second>{}, second_args) }
+        {}
         
         pair( pair const& ) = default;
         pair( pair&& ) = default;

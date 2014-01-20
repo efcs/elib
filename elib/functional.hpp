@@ -1,7 +1,9 @@
-#ifndef ELIB_FUNCTIONAL_CXX_HPP
-#define ELIB_FUNCTIONAL_CXX_HPP
+#ifndef ELIB_FUNCTIONAL_HPP
+#define ELIB_FUNCTIONAL_HPP
 
-# include <elib/aux.hpp>
+# include <elib/aux/any.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/integral_constant.hpp>
 # include <type_traits>
 # include <utility>
 # include <cstddef>
@@ -1402,4 +1404,4 @@ namespace elib
         };
     }                                                      // namespace functional
 }                                                          // namespace elib
-#endif /* ELIB_FUNCTIONAL_CXX_HPP */
+#endif /* ELIB_FUNCTIONAL_HPP */

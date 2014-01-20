@@ -4,7 +4,9 @@
 # include <elib/aux/integer_sequence.hpp>
 # include <elib/aux/move.hpp>
 # include <elib/aux/type_traits.hpp>
+# include <elib/aux/tuple_fwd.hpp>
 # include <tuple>
+# include <cstddef>
 
 namespace elib 
 {
@@ -12,6 +14,7 @@ namespace elib
     {
         namespace detail
         {
+            // TODO ADL lookup for get<I>
             ////////////////////////////////////////////////////////////////////
             // detail::apply_tuple_impl
             template <
@@ -22,7 +25,7 @@ namespace elib
             auto apply_tuple_impl(F&& f, Tuple&& t, index_sequence<I...>)
             ELIB_AUTO_RETURN_NOEXCEPT(
                 static_cast<F &&>(f)(
-                    std::get<I>(static_cast<Tuple &&>(t))... 
+                  get<I>(static_cast<Tuple &&>(t))... 
                 )
             )
         }                                                   // namespace detail
@@ -32,9 +35,9 @@ namespace elib
         template <
             class F
           , class Tuple
-          , class IndexSeq = make_index_sequence<std::tuple_size< decay<Tuple> >::value>
+          , class IndexSeq = make_index_sequence<std::tuple_size< decay_<Tuple> >::value>
         >
-        auto apply_unpacked_tuple(F&& f, Tuple&& t, IndexSeq())
+        auto apply_tuple(F&& f, Tuple&& t, IndexSeq())
         ELIB_AUTO_RETURN_NOEXCEPT(
             detail::apply_tuple_impl(
                 static_cast<F &&>(f), static_cast<Tuple &&>(t), IndexSeq{}

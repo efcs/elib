@@ -3,19 +3,17 @@
 
 # include <elib/config.hpp>
 # include <elib/aux/type_traits.hpp>
-# include <type_traits>
-# include <utility>
 
 // noexcept copy clause
 # define ELIB_NOEXCEPT(...)                                            \
     noexcept(                                                          \
-        decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+        decltype(__VA_ARGS__)(::elib::aux::declval<decltype(__VA_ARGS__)>()) \
     )
 # 
 # 
 # define ELIB_NOEXCEPT_2(...)                                          \
     noexcept((                                                         \
-        decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+        decltype(__VA_ARGS__)(::elib::aux::declval<decltype(__VA_ARGS__)>()) \
     ))
 # 
 # // Implementation taken from eric_niebler proto-0x
@@ -23,7 +21,7 @@
 # // (just remove the noexcept clause until GCC gets their shit together)
 # define ELIB_AUTO_RETURN_NOEXCEPT(...)                            \
   noexcept(noexcept(                                               \
-    decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+    decltype(__VA_ARGS__)(::elib::aux::declval<decltype(__VA_ARGS__)>()) \
   )) -> decltype(__VA_ARGS__)                                      \
   {                                                                \
     return (__VA_ARGS__);                                          \
@@ -32,7 +30,7 @@
 #   
 # define ELIB_RETURN_NOEXCEPT(...)                                   \
   noexcept(noexcept(                                                 \
-      decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+      decltype(__VA_ARGS__)(::elib::aux::declval<decltype(__VA_ARGS__)>()) \
   ))                                                                 \
   {                                                                  \
     return (__VA_ARGS__);                                            \
@@ -89,8 +87,8 @@ namespace elib
         // move_if_noexcept
         template <class T> constexpr 
         conditional_c_<
-            !std::is_nothrow_move_constructible<T>::value 
-            && std::is_copy_constructible<T>::value
+            !is_nothrow_move_constructible<T>::value 
+            && is_copy_constructible<T>::value
           , const T&
           , T&&
         >

@@ -1,8 +1,7 @@
 #ifndef ELIB_LEXICAL_CAST_HPP
 #define ELIB_LEXICAL_CAST_HPP
 
-# include <elib/pragma.hpp>
-
+# include <elib/config.hpp>
 # include <stdexcept>
 # include <string>
 # include <type_traits>
@@ -10,10 +9,12 @@
 
 namespace elib 
 {
-  
-  ELIB_PRAGMA_DIAG_PUSH()
-  ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
-      
+
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
+
   /* bad_cast error for lexical casts */
   class bad_lexical_cast : public std::runtime_error {
   public:
@@ -22,9 +23,10 @@ namespace elib
           : std::runtime_error("bad lexical cast")
       { }
   };
-
-  ELIB_PRAGMA_DIAG_POP()
-
+  
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic pop
+# endif
 
   /* static type-traits style struct to
   * check if a type is convertible using a lexical cast */

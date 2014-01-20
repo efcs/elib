@@ -1,5 +1,5 @@
 #ifndef ELIB_MP_LIST_HPP
-# define ELIB_MP_LIST_HPP
+#define ELIB_MP_LIST_HPP
 
 # include <elib/mp/variadic_list.hpp>
 # include <elib/mp/get_impl.hpp>

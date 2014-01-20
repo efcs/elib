@@ -1,9 +1,8 @@
 #ifndef ELIB_FS_FILESYSTEM_ERROR_HPP
 #define ELIB_FS_FILESYSTEM_ERROR_HPP
 
-# include <elib/pragma.hpp>
-# include <elib/config.hpp>
 # include <elib/fs/path.hpp>
+# include <elib/config.hpp>
 
 # include <system_error>
 # include <memory>
@@ -16,13 +15,15 @@ namespace elib
   namespace fs
   {
 
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
-
-    class filesystem_error : public std::system_error {
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+#   endif
+    class filesystem_error 
+      : public std::system_error 
+    {
     public:
-      
-      //TODO
+
       filesystem_error(const std::string& what_arg, std::error_code ec)
           : std::system_error{ec}, m_impl{std::make_shared<impl_t>()}
       {
@@ -42,7 +43,6 @@ ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
       {
         m_impl->p2 = p2;
       }
-        
         
       const path&
       path1() const noexcept
@@ -69,10 +69,11 @@ ELIB_PRAGMA_IGNORE_WEAK_VTABLES()
       };
         
       std::shared_ptr<impl_t> m_impl;
-      
-    };                                                // class filesystem_error
+    };
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic pop
+# endif
 
-ELIB_PRAGMA_DIAG_POP()
     
     ////////////////////////////////////////////////////////////////////////////////
     //                      MISC ERROR HELPERS                                                      

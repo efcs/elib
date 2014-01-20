@@ -9,7 +9,7 @@ namespace elib
   {
     namespace model
     {
-    
+
       struct sequence_ {};
       
       struct variadic {};

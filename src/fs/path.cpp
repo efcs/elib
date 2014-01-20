@@ -25,6 +25,12 @@ namespace elib
       constexpr const value_type preferred_separator = path::preferred_separator;
       constexpr const value_type* dot = ".";
       constexpr const value_type* double_dot = "..";
+      
+      // suppress unused warning for double_dot
+      static constexpr const struct ignore_double_dot_unused 
+      { 
+        explicit constexpr ignore_double_dot_unused(const char*) {}
+      } ignore_double_dot_unused_obj { double_dot };
     
     
       //NOTE: the following functions are marked as inline to prevent

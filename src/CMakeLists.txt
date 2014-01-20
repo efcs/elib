@@ -12,9 +12,9 @@ add_flags(LIBRARY_FLAGS -fPIC)
 
 if (CONFIG_ALL_WARNINGS)
   
-  #add_flags( LIBRARY_FLAGS -Weffc++)
+    
 
-  add_flags( LIBRARY_FLAGS 
+    add_flags( LIBRARY_FLAGS 
     -Wall  -pedantic  
     -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
@@ -33,12 +33,11 @@ if (CONFIG_ALL_WARNINGS)
   
   if (CXX_COMPILER_GCC)
     add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
+    #add_flags( LIBRARY_FLAGS -Weffc++)
   elseif (CXX_COMPILER_CLANG)
     add_flags( LIBRARY_FLAGS
       -Weverything -Wno-c++98-compat 
       -Wno-c++98-compat-pedantic -Wno-newline-eof
-      -Wno-weak-vtables -Wno-global-constructors
-      -Wno-exit-time-destructors
     )
   endif()
   
@@ -47,11 +46,6 @@ if (CONFIG_ALL_WARNINGS)
   )
   
 endif()
-
-
-
-
-
 
 set(LIBRARY_SRC "")
 set(UNIT_TEST_SRC "")
@@ -62,14 +56,13 @@ include_library_if(CONFIG_LIB_LOG log/build.cmake)
 include_library_if(CONFIG_LIB_MPL mp/build.cmake)
 include_library_if(CONFIG_LIB_UTILITY utility/build.cmake)
 include_library_if(CONFIG_LIB_CEXPR cexpr/build.cmake)
+include_library_if(CONFIG_LIB_FUNCTIONAL functional/build.cmake)
 
 # compile into objects
 
 add_library(ObjLib OBJECT ${LIBRARY_SRC})
 set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
 
-
-    
 ################################################################################
   #create static & shared libraries
 

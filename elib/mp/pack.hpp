@@ -15,7 +15,7 @@ namespace elib
   {
    
     struct pack_tag {};
-    
+
     struct pack_model
       : model::variadic
       , model::random_access_sequence
@@ -24,7 +24,6 @@ namespace elib
       , model::O1_size
     {};
    
-    
     template <class ...Args>
     struct pack
     {

@@ -1,11 +1,10 @@
 #ifndef ELIB_ENUMERATION_OPERATORS_HPP
 #define ELIB_ENUMERATION_OPERATORS_HPP
 
-# include <elib/config.hpp>
 # include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/enum_traits.hpp>
 
-# include <elib/pragma.hpp>
+# include <elib/utility.hpp>
 # include <elib/CXX14/type_traits.hpp>
 
 namespace elib 
@@ -142,7 +141,6 @@ namespace elib
       {
         return v;
       }
-      
 
     }                                                       // namespace detail
     
@@ -251,40 +249,30 @@ namespace elib
       }
       
     // Increment & Decrement
-      
-      ELIB_PRAGMA_DIAG_PUSH()
-      ELIB_PRAGMA_IGNORE_EFFCXX()
-    
-      template <class LHS>
-      constexpr std::enable_if_t<detail::is_arithmetic<LHS>::value, LHS>
-      operator++(LHS lhs, int) noexcept
+      template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)>
+      constexpr LHS operator++(LHS lhs, int) noexcept
       {
         return static_cast<LHS>(underlying_cast(lhs) + 1);
       }
       
-      template <class LHS>
-      std::enable_if_t<detail::is_arithmetic<LHS>::value, LHS&>
-      operator++(LHS& lhs) noexcept
+      template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)>
+      LHS& operator++(LHS& lhs) noexcept
       {
         return lhs = lhs++;
       }
       
-      template <class LHS>
-      constexpr std::enable_if_t<detail::is_arithmetic<LHS>::value, LHS>
-      operator--(LHS lhs, int) noexcept
+      template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)>
+      constexpr LHS operator--(LHS lhs, int) noexcept
       {
         return static_cast<LHS>(underlying_cast(lhs) - 1);
       }
       
-      template <class LHS>
-      std::enable_if_t<detail::is_arithmetic<LHS>::value, LHS&>
-      operator--(LHS& lhs) noexcept
+      template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)>
+      LHS& operator--(LHS& lhs) noexcept
       {
         return lhs = lhs--;
       }
-      
-      ELIB_PRAGMA_DIAG_POP()
-      
+
     // Add, Sub, Mul, Div, Mod
       template <class LHS, class RHS>
       constexpr detail::enable_if_arithmetic_t<LHS, RHS>
@@ -360,10 +348,7 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////////
     //                        Logical                                                  
     ////////////////////////////////////////////////////////////////////////////////
-      
-      ELIB_PRAGMA_DIAG_PUSH()
-      ELIB_PRAGMA_IGNORE_EFFCXX()
-      
+
       template <class LHS>
       constexpr std::enable_if_t<detail::is_arithmetic<LHS>::value, bool>
       operator!(LHS lhs) noexcept
@@ -375,23 +360,16 @@ namespace elib
       constexpr detail::enable_if_logical_t<LHS, RHS, bool>
       operator&&(LHS lhs, RHS rhs) noexcept
       {
-        return 
-          (!detail::opt_cast(lhs)) 
-            ? false 
-            : detail::opt_cast(rhs);
+        return (detail::opt_cast(lhs) && detail::opt_cast(rhs));
       }
       
       template <class LHS, class RHS>
       constexpr detail::enable_if_logical_t<LHS, RHS, bool>
       operator||(LHS lhs, RHS rhs) noexcept
       {
-        return detail::opt_cast(lhs) 
-          ? true 
-          : detail::opt_cast(rhs);
+        return (detail::opt_cast(lhs) || detail::opt_cast(rhs));
       }
-      
-      ELIB_PRAGMA_DIAG_POP()
-      
+
     ////////////////////////////////////////////////////////////////////////////////
     //                     Mixed Comparible                                                     
     ////////////////////////////////////////////////////////////////////////////////

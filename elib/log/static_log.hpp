@@ -1,13 +1,12 @@
 #ifndef ELIB_LOG_STATIC_LOG_HPP
 #define ELIB_LOG_STATIC_LOG_HPP
 
-#include <elib/log/log_level.hpp>
-#include <elib/log/log.hpp>
-#include <elib/fmt.hpp>
-#include <elib/pragma.hpp>
-
-#include <cstdarg>
-#include <string>
+# include <elib/log/log_level.hpp>
+# include <elib/log/log.hpp>
+# include <elib/fmt.hpp>
+# include <elib/config.hpp>
+# include <cstdarg>
+# include <string>
 
 
 namespace elib 
@@ -99,15 +98,21 @@ namespace elib
         static bool 
         on();
     };
-    
-    ELIB_PRAGMA_DIAG_PUSH()
-    ELIB_PRAGMA_IGNORE_GLOBAL_CONSTRUCTORS()
-    ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
-          
-      template <typename Tag>
-      log static_log<Tag>::m_impl;
 
-    ELIB_PRAGMA_DIAG_POP()
+      
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wexit-time-destructors"
+#   pragma clang diagnostic ignored "-Wglobal-constructors"
+# endif
+
+    template <typename Tag>
+    log static_log<Tag>::m_impl;
+    
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic pop
+# endif
+
     
     #define ELIB_LOG_FUNC_HANDLER(level) \
         va_list __args; \

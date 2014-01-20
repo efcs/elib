@@ -9,7 +9,6 @@ namespace elib
   {
     namespace model
     {
-      
       struct iterator 
       {};
       
@@ -34,7 +33,6 @@ namespace elib
       struct default_random_access_iterator
         : random_access_iterator
       {};
-      
     }                                                       // namespace model
     
   //-------------------------------- iterator --------------------------------// 

@@ -1,6 +1,5 @@
-#include "elib/config.hpp"
 #include "elib/log/log_level.hpp"
-#include "elib/pragma.hpp"
+#include "elib/config.hpp"
 
 namespace elib
 {
@@ -9,10 +8,11 @@ namespace elib
       
 #ifdef ELIB_CONFIG_LIB_ENUMERATION
 
-      ELIB_PRAGMA_DIAG_PUSH()
-      ELIB_PRAGMA_IGNORE_GLOBAL_CONSTRUCTORS()
-      ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
-      
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wexit-time-destructors"
+#   pragma clang diagnostic ignored "-Wglobal-constructors"
+# endif
       enum_map_t<log::level_e>
       basic_enum_traits<log::level_e>::name_map =
           { {log::level_e::debug, "debug"},
@@ -25,7 +25,9 @@ namespace elib
             {log::level_e::raw_err, "raw_err"}
           };
           
-      ELIB_PRAGMA_DIAG_POP()
+# if ELIB_CONFIG_CLANG
+#   pragma clang diagnostic pop
+# endif
       
 # endif
     

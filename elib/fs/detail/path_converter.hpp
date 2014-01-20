@@ -1,8 +1,6 @@
 #ifndef ELIB_FS_CONVERSION_HPP
 #define ELIB_FS_CONVERSION_HPP
 
-# include <elib/pragma.hpp>
-
 #include <locale>
 #include <string>
 #include <cwchar>
@@ -16,16 +14,10 @@ namespace elib
   namespace fs 
   {
     
-
     class directory_entry;    
 
-        
     namespace detail 
     {
-
-      ELIB_PRAGMA_DIAG_PUSH()
-      ELIB_PRAGMA_IGNORE_EFFCXX()
-          
       template <typename T>
       struct is_convertible : public std::false_type { };
 
@@ -54,9 +46,8 @@ namespace elib
               is_convertible<typename std::decay<T>::type>::value
               , Ret
             >
-      { };
-
-      ELIB_PRAGMA_DIAG_POP()
+     {};
+     
 
       template <typename T, typename Ret=void>
       using enable_if_convertible_t = 

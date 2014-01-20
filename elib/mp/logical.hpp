@@ -22,12 +22,12 @@ namespace elib
     template <class T>
     using not_t = bool_<!T::type::value>;
     
-    template <long V>
+    template <unsigned long long V>
     struct not_c 
       : bool_<!V>
     {};
     
-    template <long V>
+    template <unsigned long long V>
     using not_c_t = bool_<!V>;
 
   ////////////////////////////////////////////////////////////////////////////////

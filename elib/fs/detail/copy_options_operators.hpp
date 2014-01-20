@@ -1,10 +1,7 @@
 #ifndef ELIB_FS_COPY_OPTIONS_OPERATORS_HPP
 #define ELIB_FS_COPY_OPTIONS_OPERATORS_HPP
 
-// definition for copy_options must already be available
-# include <elib/pragma.hpp>
-#include <type_traits>
-
+# include <type_traits>
 
 namespace elib
 {
@@ -76,10 +73,6 @@ namespace elib
     //            LOGICAL OPERATORS                               
     ////////////////////////////////////////////////////////////////////////////////
     
-/* suppress warning about always evaluating both sides */
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_EFFCXX()
-
     constexpr bool operator!(copy_options lhs) noexcept
     { return ! cp_detail::bc(lhs); }
     
@@ -95,12 +88,6 @@ ELIB_PRAGMA_IGNORE_EFFCXX()
     constexpr bool operator||(copy_options lhs, bool rhs) noexcept
     { return cp_detail::bc(lhs) || rhs; }
 
-    
-ELIB_PRAGMA_DIAG_POP()
-
-    
   } // namespace fs
 } // namespace elib 
-        
-        
 #endif /* ELIB_FS_COPY_OPTIONS_OPERATORS_HPP */

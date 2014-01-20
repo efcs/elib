@@ -4,13 +4,12 @@ cmake_minimum_required (VERSION 2.7)
 #                   Toolchain config
 ################################################################################
 
-
 # C++ Version Config 
-option(CONFIG_CXX1Y "Compile using c++1y standard" ON)
+option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
 option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
 # Standard Library config
@@ -35,6 +34,7 @@ option(CONFIG_LIB_LOG "Build Log" ON)
 option(CONFIG_LIB_UTILITY "Build Utility" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" ON)
+option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)
@@ -160,7 +160,7 @@ endif()
 
 if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
   message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdinc++ -I/opt/gcc4.9/include/c++/4.9.0/ -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdinc++ -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ -I/opt/gcc4.9/include/c++/4.9.0/")
   set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
 endif()
 

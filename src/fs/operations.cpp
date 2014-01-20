@@ -2,10 +2,9 @@
 #include "elib/fs/directory_iterator.hpp"
 #include "elib/fs/filesystem_error.hpp"
 
+#include "elib/CXX14/memory.hpp"
 #include "elib/assert.hpp"
-#include "elib/pragma.hpp"
 
-#include <memory>
 #include <cstdlib>
 #include <climits>
 #include <fstream>
@@ -236,7 +235,7 @@ namespace elib
         detail::clear_error(ec);
         errno = 0;
         auto size = pathconf(".", _PC_PATH_MAX);
-        std::unique_ptr<char[]> buff{new char[size]};
+        auto buff = std::make_unique<char[]>( static_cast<std::size_t>(size) );
         char* ret = ::getcwd(buff.get(), static_cast<size_t>(size));
         if (ret == nullptr) 
         {
@@ -500,10 +499,7 @@ namespace elib
       
     } // namespace detail 
   
-    
-    
-    
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     //                        DETAIL::OPERATORS DEFINITIONS                                                        
     ////////////////////////////////////////////////////////////////////////////////
@@ -991,9 +987,7 @@ namespace elib
       
       
     //-------------------------------- random_hex_char --------------------------------// 
-     
-     ELIB_PRAGMA_DIAG_PUSH()
-      ELIB_PRAGMA_IGNORE_EXIT_TIME_DESTRUCTORS()
+
       
       inline char random_hex_char()
       {
@@ -1003,7 +997,6 @@ namespace elib
         return to_hex( mrand(rd) );
       }                                                     // random_char
       
-      ELIB_PRAGMA_DIAG_POP()
       
     //-------------------------------- unique_path --------------------------------// 
       

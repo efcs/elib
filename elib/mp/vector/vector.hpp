@@ -13,14 +13,12 @@ namespace elib
   namespace mp
   {
 
-    
     struct vector_model
       : model::random_access_sequence
       , model::front_extensible_sequence
       , model::back_extensible_sequence
       , model::O1_size
     {};
-    
   
     template <class ...Args>
     struct vector

@@ -1,19 +1,18 @@
 #ifndef ELIB_CONFIG_COMPILER_CONFIG_HPP
 #define ELIB_CONFIG_COMPILER_CONFIG_HPP
 # 
+# define ELIB_CONFIG_CLANG 0
+# define ELIB_CONFIG_GNU 0
+# 
 # if defined(__clang__)
+#   undef ELIB_CONFIG_CLANG
 #   define ELIB_CONFIG_CLANG 1
 #   define ELIB_CONFIG_COMPILER_NAME clang
 #   /* __GNUC__ must come after clang since clang also defines it */
-# elif defined(__GNUC__) 
-#   define ELIB_CONFIG_GNU   1
-#   define ELIB_CONFIG_COMPILER_NAME GCC
-# elif defined(__MINGW32__)
-#   define ELIB_CONFIG_MINGW 1
-#   define ELIB_CONFIG_COMPILER_NAME mingw
-# elif _MSC_VER
-#   define ELIB_CONFIG_MSVC  1
-#   define ELIB_CONFIG_COMPILER_NAME MSVC
+# elif (defined(__GNUG__) && !defined(__clang__))
+#   undef ELIB_CONFIG_GNU
+#   define ELIB_CONFIG_GNU 1
+#   define ELIB_CONFIG_COMPILER_NAME GNU
 # else
 #   error ELIB cannot find compiler information
 # endif

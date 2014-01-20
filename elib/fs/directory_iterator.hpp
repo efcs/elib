@@ -1,7 +1,6 @@
 #ifndef ELIB_FS_DIRECTORY_ITERATOR_HPP
 #define ELIB_FS_DIRECTORY_ITERATOR_HPP
 
-# include <elib/pragma.hpp>
 # include <elib/fs/path.hpp>
 # include <elib/fs/file_status.hpp>
 # include <elib/fs/operations.hpp>
@@ -178,15 +177,10 @@ namespace elib
     
     
     }                                                       // namespace detail
-    
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_EFFCXX()
-    
+
     class directory_iterator
       : public std::iterator<std::input_iterator_tag, directory_entry>
     {
-      
-ELIB_PRAGMA_DIAG_POP()
     public:
     //ctor & dtor 
       directory_iterator() noexcept
@@ -258,7 +252,6 @@ ELIB_PRAGMA_DIAG_POP()
     };                                                 // class directory_entry
     
     
-    
     // enable directory_iterator range-based for statements
     inline const directory_iterator& begin(const directory_iterator& iter) noexcept
     { return iter; }
@@ -270,17 +263,10 @@ ELIB_PRAGMA_DIAG_POP()
   ////////////////////////////////////////////////////////////////////////////////
   //                    class recursive_directory_iterator                                                               
   ////////////////////////////////////////////////////////////////////////////////
-    
-    
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_EFFCXX()
 
     class recursive_directory_iterator
       : public std::iterator<std::input_iterator_tag,  directory_entry>
     {
-  
-ELIB_PRAGMA_DIAG_POP()
-  
     public:
       // constructors and destructor
       recursive_directory_iterator() noexcept
@@ -381,14 +367,10 @@ ELIB_PRAGMA_DIAG_POP()
       bool operator!=(const recursive_directory_iterator& other) const noexcept
         { return !(*this == other);}
         
-        
-      
-     
       //
     private:
       //
      
-  
       recursive_directory_iterator(const path& p, directory_options opt, 
                                   std::error_code *ec);
       

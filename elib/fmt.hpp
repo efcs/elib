@@ -1,8 +1,6 @@
 #ifndef ELIB_FMT_HPP
 #define ELIB_FMT_HPP
 
-# include <elib/config.hpp>
-# include <elib/pragma.hpp>
 # include <elib/assert.hpp>
 # include <elib/lexical_cast.hpp>
 # include <elib/CXX14/memory.hpp> /* for std::make_unique */
@@ -24,8 +22,11 @@ namespace elib
       return tmp;
   }
 
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL()
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wformat-nonliteral"
+# endif
+
 
   inline std::string fmt(const std::string& msg, va_list& args)
   {
@@ -58,7 +59,9 @@ ELIB_PRAGMA_IGNORE_FORMAT_NONLITERAL()
       return { buff_ptr.get() };
   }
     
-ELIB_PRAGMA_DIAG_POP()
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
   
   template <typename T>
   std::string fmt(T&& value)

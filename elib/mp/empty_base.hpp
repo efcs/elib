@@ -2,10 +2,6 @@
 #define ELIB_MP_EMPTY_BASE_HPP
 
 # include <elib/mp/integral_constant.hpp>
-# include <elib/pragma.hpp>
-
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_EFFCXX()
 
 namespace elib
 {
@@ -27,6 +23,4 @@ namespace elib
     {};
   }                                                         // namespace mp
 }                                                           // namespace elib
-
-ELIB_PRAGMA_DIAG_POP()
 #endif /* ELIB_MP_EMPTY_BASE_HPP */

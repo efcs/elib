@@ -1,8 +1,6 @@
 #ifndef ELIB_FS_PATH_HPP
 #define ELIB_FS_PATH_HPP
 
-# include <elib/config.hpp>
-# include <elib/pragma.hpp>
 # include <elib/fs/detail/path_converter.hpp>
 
 # include <string>
@@ -443,18 +441,10 @@ namespace elib
 //                        path::iterator                                                 
 ////////////////////////////////////////////////////////////////////////////////
 
-// suppress g++ effc++ warning for std::iterator
-// not having a virtual destructor
-ELIB_PRAGMA_DIAG_PUSH()
-ELIB_PRAGMA_IGNORE_EFFCXX()
-
     class path::iterator 
       : public std::iterator<std::bidirectional_iterator_tag, path> 
     {
-      
-ELIB_PRAGMA_DIAG_POP()
-
-      public:
+    public:
         
       // ctor & dtor
         iterator() = default;

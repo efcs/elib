@@ -1,11 +1,11 @@
-#ifndef ELIB_UTILITY_INTEGER_SEQUENCE_HPP
-#define ELIB_UTILITY_INTEGER_SEQUENCE_HPP
+#ifndef ELIB_AUX_INTEGER_SEQUENCE_HPP
+#define ELIB_AUX_INTEGER_SEQUENCE_HPP
 
 # include <cstddef>
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         
         template<class T, T ...Seq> 
@@ -87,6 +87,6 @@ namespace elib
 
         template<class... T>
         using to_index_sequence = make_index_sequence<sizeof...(T)>;
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_INTEGER_SEQUENCE_HPP */
+#endif /* ELIB_AUX_INTEGER_SEQUENCE_HPP */

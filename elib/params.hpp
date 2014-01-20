@@ -1,7 +1,7 @@
 #ifndef ELIB_PARAMS_HPP
 #define ELIB_PARAMS_HPP
 
-# include <elib/utility.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 
@@ -33,17 +33,17 @@ namespace elib
 
         template <template <class...> class Pack, class ...As>
         struct _size< Pack<As...> > 
-            : utility::size_type_<sizeof...(As)>
+            : aux::size_type_<sizeof...(As)>
         {};
 
         template <class Pack, class ...As>
         struct _size< Pack(As...) >
-            : utility::size_type_<sizeof...(As)>
+            : aux::size_type_<sizeof...(As)>
         {};
 
         template <template <class Tv, Tv...> class Pack, class T, T ...Values>
         struct _size< Pack<T, Values...> > 
-            : utility::size_type_<sizeof...(Values)>
+            : aux::size_type_<sizeof...(Values)>
         {};
 
         ////////////////////////////////////////////////////////////////////
@@ -58,17 +58,17 @@ namespace elib
 
         template <template <class...> class Pack, class ...As>
         struct _empty< Pack<As...> > 
-            : utility::bool_<sizeof...(As) == 0>
+            : aux::bool_<sizeof...(As) == 0>
         {};
 
         template <class Pack, class ...As>
         struct _empty< Pack(As...) >
-            : utility::bool_<sizeof...(As) == 0>
+            : aux::bool_<sizeof...(As) == 0>
         {};
 
         template <template <class Tv, Tv...> class Pack, class T, T ...Values>
         struct _empty< Pack<T, Values...> > 
-            : utility::bool_<sizeof...(Values) == 0>
+            : aux::bool_<sizeof...(Values) == 0>
         {};
 
         ////////////////////////////////////////////////////////////////////
@@ -289,14 +289,14 @@ namespace elib
             {
                 template <class T, class ...Rest>
                 static typename T::type 
-                eval(utility::any_pod<Ignored>..., T*, Rest*...); 
+                eval(aux::any_pod<Ignored>..., T*, Rest*...); 
             };
 
             template <std::size_t N, class ...Args>
             using at_impl = 
                 decltype(
                     at_impl_1_< typename fill<N, decltype(nullptr)>::type >
-                        ::eval( (utility::no_decay<Args>*)nullptr... )
+                        ::eval( (aux::no_decay<Args>*)nullptr... )
                 );
 
         }                                               // namespace detail
@@ -381,7 +381,7 @@ namespace elib
             struct take_impl<0>
             {
                 template <class Pack, class ...Args>
-                using apply = utility::no_decay< Pack >;
+                using apply = aux::no_decay< Pack >;
             };
 
             template <>
@@ -456,7 +456,7 @@ namespace elib
             {
                 template <class ...Back>
                 static append< Pack, typename Back::type... > 
-                eval(utility::any_pod<Ignored...>, Back*...);
+                eval(aux::any_pod<Ignored...>, Back*...);
             };
 
             ////////////////////////////////////////////////////////////////
@@ -465,7 +465,7 @@ namespace elib
             using drop_impl = 
                 decltype(
                     drop_impl_1_< Pack, typename fill<N, decltype(nullptr)>::type >
-                        ::eval((utility::no_decay<Args>*)nullptr...)
+                        ::eval((aux::no_decay<Args>*)nullptr...)
                 );
         }                                               // namespace detail
 
@@ -534,6 +534,6 @@ namespace elib
         template <class P, std::size_t First, std::size_t Second>
         using slice = typename _slice<P, First, Second>::type;
         
-    }                                                   // namespace params
+    }                                                       // namespace params
 }                                                           // namespace elib
 #endif /* ELIB_PARAMS_HPP */

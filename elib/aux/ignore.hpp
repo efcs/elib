@@ -1,9 +1,9 @@
-#ifndef ELIB_UTILITY_IGNORE_HPP
-#define ELIB_UTILITY_IGNORE_HPP
+#ifndef ELIB_AUX_IGNORE_HPP
+#define ELIB_AUX_IGNORE_HPP
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
 # if __cplusplus < 201300
         template <class ...T>
@@ -14,6 +14,6 @@ namespace elib
         constexpr void ignore(T &&...) noexcept
         {}
 # endif
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_IGNORE_HPP */
+#endif /* ELIB_AUX_IGNORE_HPP */

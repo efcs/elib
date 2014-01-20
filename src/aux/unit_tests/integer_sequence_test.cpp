@@ -1,16 +1,14 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/utility.hpp"
-#include <type_traits>
+#include "elib/aux.hpp"
 
 
 BOOST_AUTO_TEST_SUITE(utility_integer_sequence_test_suite)
 
 BOOST_AUTO_TEST_CASE(utility_integer_sequence_test)
 {
-  using namespace elib::utility;
-  using std::is_same;
+  using namespace elib::aux;
   
   BOOST_CHECK((
     is_same<

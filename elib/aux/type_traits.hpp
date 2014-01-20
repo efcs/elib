@@ -1,8 +1,8 @@
-#ifndef ELIB_UTILITY_TYPE_TRAITS_HPP
-#define ELIB_UTILITY_TYPE_TRAITS_HPP
+#ifndef ELIB_AUX_TYPE_TRAITS_HPP
+#define ELIB_AUX_TYPE_TRAITS_HPP
 
 # include <elib/config.hpp>
-# include <elib/utility/static_const.hpp>
+# include <elib/aux/static_const.hpp>
 # include <type_traits>
 
 /* thanks to Matt Calabrese for new style enable if 
@@ -10,17 +10,17 @@
 */
 # define ELIB_ENABLE_IF(...)                                              \
   typename ::std::enable_if<static_cast<bool>(__VA_ARGS__)>::type* const& = \
-    ::elib::utility::static_const<void*>::value
+    ::elib::aux::static_const<void*>::value
 # 
 # 
 # define ELIB_ENABLE_IF_VALID_EXPR(...)              \
   decltype(static_cast<void>(__VA_ARGS__))* const& = \
-    ::elib::utility::static_const<void*>::value
+    ::elib::aux::static_const<void*>::value
 #
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         ////////////////////////////////////////////////////////////////////////
         // Primary Type Categories
@@ -324,6 +324,6 @@ namespace elib
         
         template <class T>
         using result_of = typename std::result_of<T>::type;
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_TYPE_TRAITS_HPP */
+#endif /* ELIB_AUX_TYPE_TRAITS_HPP */

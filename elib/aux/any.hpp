@@ -1,9 +1,9 @@
-#ifndef ELIB_UTILITY_ANY_HPP
-#define ELIB_UTILITY_ANY_HPP
+#ifndef ELIB_AUX_ANY_HPP
+#define ELIB_AUX_ANY_HPP
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         namespace detail
         {
@@ -34,6 +34,6 @@ namespace elib
         {
             any_pod(...);
         };
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_ANY_HPP */
+#endif /* ELIB_AUX_ANY_HPP */

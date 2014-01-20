@@ -1,12 +1,12 @@
-#ifndef ELIB_UTILITY_LOGICAL_HPP
-#define ELIB_UTILITY_LOGICAL_HPP
+#ifndef ELIB_AUX_LOGICAL_HPP
+#define ELIB_AUX_LOGICAL_HPP
 
-# include <elib/utility/integral_constant.hpp>
-# include <elib/utility/none.hpp>
+# include <elib/aux/integral_constant.hpp>
+# include <elib/aux/none.hpp>
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         namespace detail
         {
@@ -109,6 +109,6 @@ namespace elib
             detail::and_impl< !static_cast<bool>(A0::type::value) >
               ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>
         {};
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_LOGICAL_HPP */
+#endif /* ELIB_AUX_LOGICAL_HPP */

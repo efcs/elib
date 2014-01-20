@@ -1,11 +1,11 @@
-#ifndef ELIB_UTILITY_SCOPED_EXIT_HPP
-#define ELIB_UTILITY_SCOPED_EXIT_HPP
+#ifndef ELIB_AUX_SCOPED_EXIT_HPP
+#define ELIB_AUX_SCOPED_EXIT_HPP
 
 # include <functional>
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         
         ////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,6 @@ namespace elib
         private:
             std::function<void()> m_fn;
         };
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_SCOPED_EXIT_HPP */
+#endif /* ELIB_AUX_SCOPED_EXIT_HPP */

@@ -1,5 +1,5 @@
-#ifndef ELIB_UTILITY_INTEGRAL_CONSTANT_HPP
-#define ELIB_UTILITY_INTEGRAL_CONSTANT_HPP
+#ifndef ELIB_AUX_INTEGRAL_CONSTANT_HPP
+#define ELIB_AUX_INTEGRAL_CONSTANT_HPP
 
 # include <type_traits>
 # include <cstddef>
@@ -11,7 +11,7 @@
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         template <bool V>
         using bool_ = std::integral_constant<bool, V>;
@@ -42,6 +42,6 @@ namespace elib
         
         template <std::size_t V>
         using size_type_ = std::integral_constant<std::size_t, V>;
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_INTEGRAL_CONSTANT_HPP */
+#endif /* ELIB_AUX_INTEGRAL_CONSTANT_HPP */

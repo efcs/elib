@@ -1,5 +1,5 @@
-#ifndef ELIB_UTILITY_TODO_HPP
-#define ELIB_UTILITY_TODO_HPP
+#ifndef ELIB_AUX_TODO_HPP
+#define ELIB_AUX_TODO_HPP
 # 
 # include <elib/assert.hpp>
 # 
@@ -16,4 +16,4 @@
 #   define ELIB_TODO(msg) ((void)0)
 # endif
 # 
-#endif /* ELIB_UTILITY_TODO_HPP */
+#endif /* ELIB_AUX_TODO_HPP */

@@ -54,7 +54,7 @@ include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake)
 include_library_if(CONFIG_LIB_FILESYSTEM fs/build.cmake)
 include_library_if(CONFIG_LIB_LOG log/build.cmake)
 include_library_if(CONFIG_LIB_MPL mp/build.cmake)
-include_library_if(CONFIG_LIB_UTILITY utility/build.cmake)
+include_library_if(CONFIG_LIB_AUX aux/build.cmake)
 include_library_if(CONFIG_LIB_CEXPR cexpr/build.cmake)
 include_library_if(CONFIG_LIB_FUNCTIONAL functional/build.cmake)
 

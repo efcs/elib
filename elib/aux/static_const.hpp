@@ -1,15 +1,15 @@
-#ifndef ELIB_UTILITY_STATIC_CONST_HPP
-#define ELIB_UTILITY_STATIC_CONST_HPP
+#ifndef ELIB_AUX_STATIC_CONST_HPP
+#define ELIB_AUX_STATIC_CONST_HPP
 
 /* for use with ELIB_ENABLE_IF and ELIB_ENABLE_IF_VALID_EXPR in
- * <elib/utility/type_traits.hpp>
+ * <elib/aux/type_traits.hpp>
  */
 # define ELIB_ENABLER_TYPE void* const&
-# define ELIB_ENABLER ::elib::utility::enabler
+# define ELIB_ENABLER ::elib::aux::enabler
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         template <class T>
         struct static_const
@@ -22,8 +22,8 @@ namespace elib
         
         namespace 
         {
-            constexpr void *const &enabler = utility::static_const<void*>::value;
+            constexpr void *const &enabler = static_const<void*>::value;
         }
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_STATIC_CONST_HPP */
+#endif /* ELIB_AUX_STATIC_CONST_HPP */

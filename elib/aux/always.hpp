@@ -1,11 +1,11 @@
-#ifndef ELIB_UTILITY_ALWAYS_HPP
-#define ELIB_UTILITY_ALWAYS_HPP
+#ifndef ELIB_AUX_ALWAYS_HPP
+#define ELIB_AUX_ALWAYS_HPP
 
-# include <elib/utility/integral_constant.hpp>
+# include <elib/aux/integral_constant.hpp>
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         namespace detail
         {
@@ -24,6 +24,6 @@ namespace elib
         
         template <class ...T>
         using always_void = typename detail::_always<void, T...>::type;
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_ALWAYS_HPP */
+#endif /* ELIB_AUX_ALWAYS_HPP */

@@ -1,8 +1,8 @@
-#ifndef ELIB_UTILITY_MOVE_HPP
-#define ELIB_UTILITY_MOVE_HPP
+#ifndef ELIB_AUX_MOVE_HPP
+#define ELIB_AUX_MOVE_HPP
 
 # include <elib/config.hpp>
-# include <elib/utility/type_traits.hpp>
+# include <elib/aux/type_traits.hpp>
 # include <type_traits>
 # include <utility>
 
@@ -56,7 +56,7 @@
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         ////////////////////////////////////////////////////////////////////////
         // forward
@@ -91,13 +91,13 @@ namespace elib
         >
         move_if_noexcept(T& x) noexcept
         {
-            return utility::move(x);
+            return aux::move(x);
         }
         
         ////////////////////////////////////////////////////////////////////////
         // declval
         template <class T>
         add_rvalue_ref<T> declval();
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_MOVE_HPP */
+#endif /* ELIB_AUX_MOVE_HPP */

@@ -1,14 +1,14 @@
-#ifndef ELIB_UTILITY_APPLY_TUPLE_HPP
-#define ELIB_UTILITY_APPLY_TUPLE_HPP
+#ifndef ELIB_AUX_APPLY_TUPLE_HPP
+#define ELIB_AUX_APPLY_TUPLE_HPP
 
-# include <elib/utility/integer_sequence.hpp>
-# include <elib/utility/move.hpp>
-# include <elib/utility/type_traits.hpp>
+# include <elib/aux/integer_sequence.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/type_traits.hpp>
 # include <tuple>
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         namespace detail
         {
@@ -41,6 +41,6 @@ namespace elib
             )
         )
         
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_APPLY_TUPLE_HPP */
+#endif /* ELIB_AUX_APPLY_TUPLE_HPP */

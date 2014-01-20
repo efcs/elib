@@ -1,7 +1,7 @@
 #ifndef ELIB_FUNCTIONAL_CXX_HPP
 #define ELIB_FUNCTIONAL_CXX_HPP
 
-# include <elib/utility.hpp>
+# include <elib/aux.hpp>
 # include <type_traits>
 # include <utility>
 # include <cstddef>
@@ -27,7 +27,7 @@ namespace elib
         template <>
         struct unary_plus<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -53,7 +53,7 @@ namespace elib
         template <>
         struct negate<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -84,7 +84,7 @@ namespace elib
         template <>
         struct pre_increment<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -110,7 +110,7 @@ namespace elib
         template <>
         struct post_increment<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -136,7 +136,7 @@ namespace elib
         template <>
         struct pre_decrement<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const 
@@ -162,7 +162,7 @@ namespace elib
         template <>
         struct post_decrement<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -189,7 +189,7 @@ namespace elib
         template <>
         struct plus<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -216,7 +216,7 @@ namespace elib
         template <>
         struct plus_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -243,7 +243,7 @@ namespace elib
         template <>
         struct minus<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -270,7 +270,7 @@ namespace elib
         template <>
         struct minus_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -297,7 +297,7 @@ namespace elib
         template <>
         struct multiplies<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -324,7 +324,7 @@ namespace elib
         template <>
         struct multiplies_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -351,7 +351,7 @@ namespace elib
         template <>
         struct divides<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -378,7 +378,7 @@ namespace elib
         template <>
         struct divides_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -405,7 +405,7 @@ namespace elib
         template <>
         struct modulus<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -432,7 +432,7 @@ namespace elib
         template <>
         struct modulus_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -459,7 +459,7 @@ namespace elib
         template <>
         struct equal_to<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -486,7 +486,7 @@ namespace elib
         template <>
         struct not_equal_to<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -513,7 +513,7 @@ namespace elib
         template <>
         struct greater<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -540,7 +540,7 @@ namespace elib
         template <>
         struct less<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -567,7 +567,7 @@ namespace elib
         template <>
         struct greater_equal<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -594,7 +594,7 @@ namespace elib
         template <>
         struct less_equal<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -621,7 +621,7 @@ namespace elib
         template <>
         struct logical_not<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -648,7 +648,7 @@ namespace elib
         template <>
         struct logical_and<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -675,7 +675,7 @@ namespace elib
         template <>
         struct logical_or<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -702,7 +702,7 @@ namespace elib
         template <>
         struct bit_and<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -729,7 +729,7 @@ namespace elib
         template <>
         struct bit_and_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -756,7 +756,7 @@ namespace elib
         template <>
         struct bit_or<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -783,7 +783,7 @@ namespace elib
         template <>
         struct bit_or_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -810,7 +810,7 @@ namespace elib
         template <>
         struct bit_xor<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -837,7 +837,7 @@ namespace elib
         template <>
         struct bit_xor_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -863,7 +863,7 @@ namespace elib
         template <>
         struct complement<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(const T& t) const
@@ -890,7 +890,7 @@ namespace elib
         template <>
         struct shift_left<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -917,7 +917,7 @@ namespace elib
         template <>
         struct shift_left_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -944,7 +944,7 @@ namespace elib
         template <>
         struct shift_right<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -971,7 +971,7 @@ namespace elib
         template <>
         struct shift_right_assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -1002,7 +1002,7 @@ namespace elib
         template <>
         struct address_of<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -1029,7 +1029,7 @@ namespace elib
         template <>
         struct assign<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -1056,7 +1056,7 @@ namespace elib
         template <>
         struct comma<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -1087,7 +1087,7 @@ namespace elib
         template <>
         struct dereference<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             constexpr auto operator()(T && t) const
@@ -1122,7 +1122,7 @@ namespace elib
         template <>
         struct function<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class Fn, class ...Args>
             constexpr auto operator()(Fn && fn, Args &&... args) const
@@ -1134,7 +1134,7 @@ namespace elib
             template <class Ret, class Class, class Obj>
             constexpr auto operator()(Ret Class::*, Obj &&) const
             ELIB_AUTO_RETURN_NOEXCEPT(
-                utility::any{}
+                aux::any{}
             )
             
             //TODO
@@ -1144,7 +1144,7 @@ namespace elib
             >
             constexpr auto operator()(Ret (Class::*)(Args...), Obj&&, T&&...) const
             ELIB_AUTO_RETURN_NOEXCEPT(
-                utility::any{}
+                aux::any{}
             )
         };
         
@@ -1167,7 +1167,7 @@ namespace elib
         template <>
         struct if_else<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U, class V>
             constexpr auto operator()(T && pred, U && lhs, V && rhs) const
@@ -1214,7 +1214,7 @@ namespace elib
         template <>
         struct subscript<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T, class U>
             constexpr auto operator()(T && lhs, U && rhs) const
@@ -1321,7 +1321,7 @@ namespace elib
         template <>
         struct throw_<void>
         {
-            using is_transparent = utility::true_;
+            using is_transparent = aux::true_;
             
             template <class T>
             [[noreturn]] void operator()(T && t) const

@@ -1,11 +1,11 @@
-#ifndef ELIB_UTILITY_NONE_HPP
-#define ELIB_UTILITY_NONE_HPP
+#ifndef ELIB_AUX_NONE_HPP
+#define ELIB_AUX_NONE_HPP
 
-# include <elib/utility/integral_constant.hpp>
+# include <elib/aux/integral_constant.hpp>
 
 namespace elib 
 {
-    namespace utility
+    namespace aux
     {
         struct none {};
         
@@ -18,6 +18,6 @@ namespace elib
         struct is_none< none >
           : true_
         {};
-    }                                                       // namespace utility
+    }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_UTILITY_NONE_HPP */
+#endif /* ELIB_AUX_NONE_HPP */

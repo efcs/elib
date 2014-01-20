@@ -1,5 +1,5 @@
-#ifndef ELIB_UTILITY_DEFAULT_CLASS_HPP
-#define ELIB_UTILITY_DEFAULT_CLASS_HPP
+#ifndef ELIB_AUX_DEFAULT_CLASS_HPP
+#define ELIB_AUX_DEFAULT_CLASS_HPP
 #
 #  /* default constructor macro */
 # define ELIB_DEFAULT_CLASS(Class)          \
@@ -12,4 +12,4 @@
   Class& operator=(Class&&) = default
 # 
 # 
-#endif /* ELIB_UTILITY_DEFAULT_CLASS_HPP */
+#endif /* ELIB_AUX_DEFAULT_CLASS_HPP */

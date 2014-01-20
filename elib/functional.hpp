@@ -127,10 +127,10 @@ namespace elib
             using result_type = T&;
             using argument_type = T&;
             
-            constexpr T& operator()(T & t) const
-            ELIB_RETURN_NOEXCEPT(
-                -- t
-            )
+            constexpr T& operator()(T & t) const noexcept(noexcept(--t))
+            {
+                return (--t);
+            }
         };
         
         template <>

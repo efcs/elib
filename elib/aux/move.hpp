@@ -8,10 +8,15 @@
 
 // noexcept copy clause
 # define ELIB_NOEXCEPT(...)                                            \
-    noexcept(noexcept(                                                 \
+    noexcept(                                                          \
+        decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
+    )
+# 
+# 
+# define ELIB_NOEXCEPT_2(...)                                          \
+    noexcept((                                                         \
         decltype(__VA_ARGS__)(::std::declval<decltype(__VA_ARGS__)>()) \
     ))
-# 
 # 
 # // Implementation taken from eric_niebler proto-0x
 # // Workaround for GCC not excepting "this" in noexcept clauses 
@@ -61,13 +66,13 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         // forward
         template <class T>
-        constexpr T&& forward(remove_ref<T>& t) noexcept
+        constexpr T&& forward(remove_ref_<T>& t) noexcept
         { 
             return static_cast<T&&>(t);
         }
 
         template <class T>
-        constexpr T&& forward(remove_ref<T>&& t) noexcept
+        constexpr T&& forward(remove_ref_<T>&& t) noexcept
         {
             return static_cast<T &&>(t);
         }
@@ -75,15 +80,15 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         // move
         template <class T>
-        constexpr remove_ref<T> && move(T&& t) noexcept
+        constexpr remove_ref_<T> && move(T&& t) noexcept
         {
-            return static_cast<remove_ref<T> &&>(t);
+            return static_cast<remove_ref_<T> &&>(t);
         }
         
         ////////////////////////////////////////////////////////////////////////
         // move_if_noexcept
         template <class T> constexpr 
-        conditional<
+        conditional_c_<
             !std::is_nothrow_move_constructible<T>::value 
             && std::is_copy_constructible<T>::value
           , const T&
@@ -97,7 +102,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         // declval
         template <class T>
-        add_rvalue_ref<T> declval();
+        add_rvalue_ref_<T> declval();
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_MOVE_HPP */

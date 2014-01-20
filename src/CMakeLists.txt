@@ -11,8 +11,6 @@ set(UNIT_TEST_FLAGS "")
 add_flags(LIBRARY_FLAGS -fPIC)
 
 if (CONFIG_ALL_WARNINGS)
-  
-    
 
     add_flags( LIBRARY_FLAGS 
     -Wall  -pedantic  
@@ -57,6 +55,7 @@ include_library_if(CONFIG_LIB_MPL mp/build.cmake)
 include_library_if(CONFIG_LIB_AUX aux/build.cmake)
 include_library_if(CONFIG_LIB_CEXPR cexpr/build.cmake)
 include_library_if(CONFIG_LIB_FUNCTIONAL functional/build.cmake)
+include_library_if(CONFIG_LIB_FUSE fuse/build.cmake)
 
 # compile into objects
 

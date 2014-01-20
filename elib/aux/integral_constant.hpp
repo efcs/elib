@@ -1,47 +1,64 @@
 #ifndef ELIB_AUX_INTEGRAL_CONSTANT_HPP
 #define ELIB_AUX_INTEGRAL_CONSTANT_HPP
 
-# include <type_traits>
 # include <cstddef>
 
-# /* type deduction macro for std::integral_constant */
+# /* type deduction macro for integral_constant */
 # define ELIB_AUTO_INTC(...) \
-    ::std::integral_constant<decltype(__VA_ARGS__), __VA_ARGS__>
+    ::elib::aux::integral_constant<decltype(__VA_ARGS__), __VA_ARGS__>
 # 
 
 namespace elib 
 {
     namespace aux
     {
+        template <class T, T Val>
+        struct integral_constant
+        {
+            using type = integral_constant;
+            using value_type = T;
+            
+            static constexpr T value = Val;
+            
+            constexpr operator value_type() const noexcept
+            { return Val; }
+            
+            constexpr T operator()() const noexcept
+            { return Val; }
+        };
+        
+        template <class T, T Val>
+        constexpr T integral_constant<T, Val>::value;
+        
         template <bool V>
-        using bool_ = std::integral_constant<bool, V>;
+        using bool_ = integral_constant<bool, V>;
         
         using true_ = bool_<true>;
         using false_ = bool_<false>;
         
         template <char V>
-        using char_ = std::integral_constant<char, V>;
+        using char_ = integral_constant<char, V>;
         
         template <int V>
-        using int_ = std::integral_constant<bool, V>;
+        using int_ = integral_constant<bool, V>;
         
         template <unsigned V>
-        using uint_ = std::integral_constant<unsigned, V>;
+        using uint_ = integral_constant<unsigned, V>;
         
         template <long V>
-        using long_ = std::integral_constant<long, V>;
+        using long_ = integral_constant<long, V>;
         
         template <unsigned long V>
-        using ulong_ = std::integral_constant<unsigned long, V>;
+        using ulong_ = integral_constant<unsigned long, V>;
         
         template <long long V>
-        using llong_ = std::integral_constant<long long, V>;
+        using llong_ = integral_constant<long long, V>;
         
         template <unsigned long long V>
-        using ullong_ = std::integral_constant<unsigned long long, V>;
+        using ullong_ = integral_constant<unsigned long long, V>;
         
         template <std::size_t V>
-        using size_type_ = std::integral_constant<std::size_t, V>;
+        using size_type_ = integral_constant<std::size_t, V>;
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_INTEGRAL_CONSTANT_HPP */

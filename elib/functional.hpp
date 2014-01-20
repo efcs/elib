@@ -20,7 +20,7 @@ namespace elib
             
             constexpr T operator()(const T& t) const
             ELIB_RETURN_NOEXCEPT(
-                + t
+                +t
             )
         };
         
@@ -46,7 +46,7 @@ namespace elib
             
             constexpr T operator()(const T& t) const
             ELIB_RETURN_NOEXCEPT(
-                - t
+                -t
             )
         };
         
@@ -72,10 +72,10 @@ namespace elib
             
             constexpr T& operator()(T& t) const noexcept(noexcept(++t))
             {
-                return ( ++ t );
+                return (++t);
                 
                 static_assert(
-                    std::is_lvalue_reference<decltype( ++ t )>::value
+                    aux::is_lvalue_reference<decltype(++t)>::value
                   , "Return type must be lvalue reference"
                 );
             }
@@ -99,7 +99,7 @@ namespace elib
         struct post_increment
         {
             using result_type = T;
-            using argument_type = T&;
+            using argument_type = T &;
             
             constexpr T operator()(T & t) const 
             ELIB_RETURN_NOEXCEPT(
@@ -124,12 +124,17 @@ namespace elib
         template <class T = void>
         struct pre_decrement
         {
-            using result_type = T&;
-            using argument_type = T&;
+            using result_type = T &;
+            using argument_type = T &;
             
             constexpr T& operator()(T & t) const noexcept(noexcept(--t))
             {
                 return (--t);
+                
+                static_assert(
+                    aux::is_lvalue_reference<decltype(--t)>::value
+                  , "Must be lvalue reference"
+                );
             }
         };
         
@@ -155,7 +160,7 @@ namespace elib
             
             constexpr T operator()(T& t) const
             ELIB_RETURN_NOEXCEPT(
-                t --
+                t--
             )
         };
         
@@ -207,10 +212,15 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T & lhs, const T & rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs += rhs
-            )
+            constexpr T& operator()(T & lhs, const T & rhs) const noexcept(noexcept(lhs += rhs))
+            {
+                return (lhs += rhs);
+                
+                static_assert(
+                    aux::is_lvalue_reference<decltype(lhs += rhs)>::value
+                  , "Must be lvalue reference"
+                );
+            }
         };
         
         template <>
@@ -261,10 +271,15 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T & lhs, const T & rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs -= rhs
-            )
+            constexpr T& operator()(T & lhs, const T & rhs) const noexcept(noexcept(lhs -= rhs))
+            {
+                return (lhs -= rhs);
+                
+                static_assert(
+                    aux::is_lvalue_reference<decltype(lhs -= rhs)>::value
+                  , "Must be lvalue reference"
+                );
+            }
         };
         
         template <>
@@ -315,10 +330,15 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T & lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs *= rhs
-            )
+            constexpr T& operator()(T & lhs, const T& rhs) const noexcept(noexcept(lhs *= rhs))
+            {
+                return (lhs *= rhs);
+                
+                static_assert(
+                    aux::is_lvalue_reference<decltype(lhs *= rhs)>::value
+                  , "Must be lvalue reference"
+                );
+            }
         };
         
         template <>
@@ -369,10 +389,15 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T& lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs /= rhs
-            )
+            constexpr T& operator()(T& lhs, const T& rhs) const noexcept(noexcept(lhs /= rhs))
+            {
+                return (lhs /= rhs);
+                
+                static_assert(
+                    aux::is_lvalue_reference<decltype(lhs /= rhs)>::value
+                  , "Must be lvalue reference"
+                );
+            }
         };
         
         template <>
@@ -423,10 +448,15 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T& lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs %= rhs
-            )
+            constexpr T& operator()(T& lhs, const T& rhs) const noexcept(noexcept(lhs %= rhs))
+            {
+                return (lhs %= rhs);
+                
+                static_assert(
+                    aux::is_lvalue_reference<decltype(lhs %= rhs)>::value
+                  , "Must be lvalue reference"
+                );
+            }
         };
         
         template <>
@@ -450,10 +480,15 @@ namespace elib
             using first_argument_type = T;
             using second_argument_type = T;
             
-            constexpr bool operator()(const T& lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs == rhs
-            )
+            constexpr bool operator()(const T& lhs, const T& rhs) const noexcept(noexcept(lhs == rhs))
+            {
+                return (lhs == rhs);
+                
+                static_assert(
+                    aux::is_same<decltype(lhs == rhs), bool>::value
+                  , "Must be boolean expression"
+                );
+            }
         };
         
         template <>
@@ -477,10 +512,15 @@ namespace elib
             using first_argument_type = T;
             using second_argument_type = T;
             
-            constexpr bool operator()(const T& lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs != rhs
-            )
+            constexpr bool operator()(const T& lhs, const T& rhs) const noexcept(noexcept(lhs != rhs))
+            {
+                return (lhs != rhs);
+                
+                static_assert(
+                    aux::is_same<decltype(lhs != rhs), bool>::value
+                  , "Must be boolean expression"
+                );
+            }
         };
         
         template <>
@@ -504,10 +544,15 @@ namespace elib
             using first_argument_type = T;
             using second_argument_type = T;
             
-            constexpr bool operator()(const T& lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs > rhs
-            )
+            constexpr bool operator()(const T& lhs, const T& rhs) const noexcept(noexcept(lhs > rhs))
+            {
+                return (lhs > rhs);
+                
+                static_assert(
+                    aux::is_same<decltype(lhs>rhs), bool>::value
+                  , "Must be boolean expression"
+                );
+            }
         };
         
         template <>
@@ -988,15 +1033,25 @@ namespace elib
             using result_type = T*;
             using argument_type = T;
             
-            constexpr const T* operator()(const T& arg) const
-            ELIB_RETURN_NOEXCEPT(
-                & arg
-            )
+            constexpr const T* operator()(const T& arg) const noexcept(noexcept(&arg))
+            {
+                return (&arg);
+                
+                static_assert(
+                    aux::is_same<decltype(&arg), T*>::value
+                  , "Must be lvalue reference expression"
+                );
+            }
             
-            constexpr T* operator()(T& arg) const
-            ELIB_RETURN_NOEXCEPT(
-                & arg
-            )
+            constexpr T* operator()(T& arg) const noexcept(noexcept(&arg))
+            {
+                return (&arg);
+                
+                static_assert(
+                    aux::is_same<decltype(&arg), T*>::value
+                  , "Must be lvalue reference expression"
+                );
+            }
         };
         
         template <>
@@ -1020,10 +1075,16 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T& lhs, const T& rhs) const
-            ELIB_RETURN_NOEXCEPT(
-                lhs = rhs
-            )
+            constexpr T& operator()(T& lhs, const T& rhs) const noexcept(noexcept(lhs = rhs))
+             {
+                return (lhs = rhs);
+                
+                static_assert(
+                    aux::is_same<decltype(lhs = rhs), T&>::value
+                  , "Must be lvalue reference expression"
+                );
+            }
+            
         };
         
         template <>
@@ -1073,15 +1134,25 @@ namespace elib
             using result_type = T&;
             using argument_type = T*;
             
-            constexpr const T& operator()(const T* t) const
-            ELIB_RETURN_NOEXCEPT(
-                * t
-            )
+            constexpr const T& operator()(const T* t) const noexcept(noexcept(*t))
+            {
+                return (*t);
+                
+                static_assert(
+                    aux::is_same<decltype(*t), T&>::value
+                  , "Must be lvalue reference expression"
+                );
+            }
             
-            constexpr T& operator()(T* t) const
-            ELIB_RETURN_NOEXCEPT(
-                * t
-            )
+            constexpr T& operator()(T* t) const noexcept(noexcept(*t))
+            {
+                return (*t);
+                
+                static_assert(
+                    aux::is_same<decltype(*t), T&>::value
+                  , "Must be lvalue reference expression"
+                );
+            }
         };
         
         template <>
@@ -1206,7 +1277,7 @@ namespace elib
             )
             
             static_assert(
-                std::is_lvalue_reference<result_type>::value
+                aux::is_lvalue_reference<result_type>::value
               , "Return type of subscript must be lvalue reference"
             );
         };
@@ -1301,18 +1372,18 @@ namespace elib
         {
             using result_type = T;
             
-            [[noreturn]] void operator()(const T& t) const
+            [[noreturn]] void operator()(const T& t) const noexcept(false)
             {
                 throw t;
             }
             
-            [[noreturn]] void operator()(T& t) const
+            [[noreturn]] void operator()(T& t) const noexcept(false)
             {
                 throw t;
             }
             
             template <class U>
-            [[noreturn]] void operator()(U && u) const
+            [[noreturn]] void operator()(U && u) const noexcept(false)
             {
                 throw static_cast<T>(u);
             }
@@ -1324,7 +1395,7 @@ namespace elib
             using is_transparent = aux::true_;
             
             template <class T>
-            [[noreturn]] void operator()(T && t) const
+            [[noreturn]] void operator()(T && t) const noexcept(false)
             {
                 throw static_cast<T &&>(t);
             }

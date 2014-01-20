@@ -2,17 +2,16 @@
 #define ELIB_AUX_PAIR_HPP
 
 # include <elib/aux/pair_fwd.hpp>
+# include <elib/aux/tuple_fwd.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/move.hpp>
-# include <elib/aux/tuple_fwd.hpp>
 # include <elib/aux/piecewise_construct.hpp>
+# include <functional>
+# include <utility>
 # include <cstddef>
 
 namespace elib { namespace aux
 {
-    template <class First, class Second>
-    struct pair;
-    
     ////////////////////////////////////////////////////////////////////////////
     // aux::tuple_size
     template <class T, class U>
@@ -57,7 +56,11 @@ namespace elib { namespace aux
             : first(f), second(s)
         {}
         
-        template <class T, class U>
+        template <
+            class T, class U
+          , ELIB_ENABLE_IF(is_convertible<First, T>::value
+                        && is_convertible<Second, U>::value)
+        >
         constexpr pair(T && t, U && u) 
             : first(static_cast<T &&>(t))
             , second(static_cast<U &&>(u))
@@ -78,7 +81,7 @@ namespace elib { namespace aux
                         && is_convertible<Second, U>::value)
         >
         constexpr pair( pair<T, U> && p )
-            : first(move(p.first)), second(move(p.second))
+            : first(aux::move(p.first)), second(aux::move(p.second))
         {}
         
         //TODO
@@ -119,8 +122,8 @@ namespace elib { namespace aux
                       && is_nothrow_move_assignable<Second>::value)
         
         {
-            first = move(p.first);
-            second = move(p.second);
+            first = aux::move(p.first);
+            second = aux::move(p.second);
             return *this;
         }
         
@@ -131,8 +134,8 @@ namespace elib { namespace aux
         >
         pair& operator=(pair<T, U> && p)
         {
-            first = move(p.first);
-            second = move(p.second);
+            first = aux::move(p.first);
+            second = aux::move(p.second);
         }
         
         void swap(pair& p) 
@@ -224,7 +227,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     // aux::swap(pair, pair)
     template <class T, class U>
-    void swap(pair<T, U> & lhs, pair<T, U> & rhs) noexcept(noexcept(lhs.swap(rhs)))
+    inline void swap(pair<T, U> & lhs, pair<T, U> & rhs) noexcept(noexcept(lhs.swap(rhs)))
     {
         lhs.swap(rhs);
     }
@@ -288,7 +291,7 @@ namespace elib { namespace aux
     )
     
     template <class T, class U>
-    constexpr auto get( pair<T, U>&& p) noexcept
+    constexpr auto get( pair<T, U>&& p ) noexcept
     ELIB_AUTO_RETURN(
         detail::pair_get_impl<0>()(static_cast<pair<T, U> &&>(p))
     )

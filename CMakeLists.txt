@@ -57,9 +57,8 @@ endif()
 #                         PROJECT ELIB
 ################################################################################
 
-# we need C to get the pthreads library 
+# need C to get the pthreads library 
 project(EricsLibrary CXX C)
-
 
 ################################################################################
 #                       Toolchain config (Post-project)

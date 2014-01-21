@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_TUPLE_ITEM_HPP
 #define ELIB_AUX_TUPLE_ITEM_HPP
 
+# include <elib/config.hpp>
 # include <elib/aux/tuple/fwd.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/move.hpp>
@@ -17,6 +18,15 @@ namespace elib { namespace aux
         
         template <class Index, class T, bool IsEmpty>
         struct tuple_item;
+        
+        template <class T>
+        struct is_tuple_item : false_
+        {};
+        
+        template <class Index, class T, bool IsEmpty>
+        struct is_tuple_item< tuple_item<Index, T, IsEmpty> >
+          : true_
+        {};
         
         ////////////////////////////////////////////////////////////////////////
         // tuple_detail::swap(tuple_item)
@@ -37,10 +47,27 @@ namespace elib { namespace aux
             
             tuple_item& operator=(tuple_item const&) = delete;
             
+            /* since we allow for explicit conversions to type, we need
+             * to disallow recursive storage
+             */
+            static_assert(
+                !is_tuple_item<Type>::value
+              , "cannot store a tuple item in a tuple item"
+              );
         public:
             
             using index = Index;
             using value_type = Type;
+            
+            /* const cast to fix implicit const for constexpr function */
+            explicit constexpr operator value_type&() 
+            { return const_cast<value_type &>(m_value); }
+            
+            explicit constexpr operator value_type const&() const 
+            { return m_value; }
+            
+            explicit constexpr operator value_type && ()
+            { return static_cast<value_type &&>(m_value); }
             
             constexpr tuple_item() 
                     noexcept(is_nothrow_default_constructible<Type>::value)

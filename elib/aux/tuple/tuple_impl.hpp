@@ -26,64 +26,6 @@ namespace elib { namespace aux
         struct tuple_impl< tuple_indexes<Indexes...>, Types...>
           : tuple_item_c<Indexes, Types>...
         {
-            template <class Index, class Value>
-            static tuple_item<Index, Value>
-            item_at_index_switch(tuple_item<Index, Value> const&);
-            
-            template <std::size_t Index>
-            struct item_at_index
-            {
-                using result = 
-                    decltype(item_at_index_switch<size_type_<Index>>(
-                                aux::declval<tuple_impl>()
-                            ));
-                    
-                using type = typename result::value_type;
-                using index = typename result::index;
-                    
-                static constexpr type& call_ref(tuple_impl& t) noexcept
-                {
-                    return static_cast<result &>(t).get();
-                }
-                
-                static constexpr type const& call_cref(tuple_impl const& t) noexcept
-                {
-                    return static_cast<result const &>(t).get();
-                }
-                
-                static constexpr type && call_move(tuple_impl && t) noexcept
-                {
-                    return aux::move( static_cast<result &&>(t).get() );
-                }
-            };
-            
-            template <class Key, class Index>
-            static tuple_item<Index, Key> 
-            item_at_key_switch(tuple_item<Index, Key> const&);
-            
-            template <class T>
-            struct item_at_key
-            {
-                using result = decltype(item_at_key_switch<T>(aux::declval<tuple_impl>()));
-                using type = typename result::value_type;
-                using index = typename result::index;
-                
-                static constexpr T& call_ref(tuple_impl & t) noexcept
-                {
-                    return static_cast<result &>(t).get();
-                }
-                
-                static constexpr T const& call_cref(tuple_impl const& t) noexcept
-                {
-                    return static_cast<result const &>(t).get();
-                }
-                
-                static constexpr T && call_move(tuple_impl && t) noexcept
-                {
-                    return aux::move( static_cast<result &&>(t).get() );
-                }
-            };
-            
             template <
                 std::size_t ...I0, class ...Ts0
               , std::size_t ...I1, class ...Ts1

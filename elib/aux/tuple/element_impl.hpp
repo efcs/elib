@@ -11,7 +11,6 @@ namespace elib { namespace aux
 {
     namespace tuple_detail
     {
-        
         ////////////////////////////////////////////////////////////////////////
         // tuple_detail::tuple_element_impl
         template <std::size_t I, class T>

@@ -18,9 +18,7 @@
 # include <cstddef>
 
 namespace elib { namespace aux
-{
-
-    
+{    
     ////////////////////////////////////////////////////////////////////////////
     // aux::get(tuple)
     template <std::size_t I, class ...Ts>
@@ -54,30 +52,22 @@ namespace elib { namespace aux
     constexpr Key & 
     get(tuple<Ts...> & t) noexcept
     {
-        using Impl = decltype(t.m_impl);
-        using AtKey = typename Impl::template item_at_key<Key>;
         
-        return AtKey::call_ref(t.m_impl);
+       return static_cast<Key &>(t.m_impl);
     }
     
     template <class Key, class ...Ts>
     constexpr Key const& 
     get(tuple<Ts...> const& t) noexcept
     {
-        using Impl = decltype(t.m_impl);
-        using AtKey = typename Impl::template item_at_key<Key>;
-        
-        return AtKey::call_cref(t.m_impl);
+       return static_cast<Key const &>(t.m_impl);
     }
     
     template <class Key, class ...Ts>
     constexpr Key && 
     get(tuple<Ts...> && t) noexcept
     {
-        using Impl = decltype(t.m_impl);
-        using AtKey = typename Impl::template item_at_key<Key>;
-        
-        return AtKey::call_move(aux::move(t.m_impl));
+        return static_cast<Key &&>( std::move(t.m_impl) );
     }
     
     ////////////////////////////////////////////////////////////////////////////

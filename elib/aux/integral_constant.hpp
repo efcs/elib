@@ -59,6 +59,12 @@ namespace elib
         
         template <std::size_t V>
         using size_type_ = integral_constant<std::size_t, V>;
+        
+        template <class To, class From>
+        using intc_cast = integral_constant<To, static_cast<To>(From::type::value)>;
+        
+        template <class From>
+        using bool_cast = integral_constant<bool, static_cast<bool>(From::type::value)>;
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_INTEGRAL_CONSTANT_HPP */

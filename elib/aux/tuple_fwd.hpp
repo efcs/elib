@@ -22,5 +22,11 @@ namespace elib { namespace aux
     
     template <std::size_t I, class T>
     constexpr tuple_element_<I, T>& get(T && t) noexcept;
+    
+    namespace detail
+    {
+        template <std::size_t I, class T>
+        struct tuple_item;
+    }                                                       // namespace detail
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_TUPLE_FWD_HPP */

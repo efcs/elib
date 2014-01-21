@@ -14,7 +14,6 @@ namespace elib
     {
         namespace detail
         {
-            // TODO ADL lookup for get<I>
             ////////////////////////////////////////////////////////////////////
             // detail::apply_tuple_impl
             template <
@@ -35,7 +34,7 @@ namespace elib
         template <
             class F
           , class Tuple
-          , class IndexSeq = make_index_sequence<std::tuple_size< decay_<Tuple> >::value>
+          , class IndexSeq = make_index_sequence<tuple_size< decay_t<Tuple> >::value>
         >
         auto apply_tuple(F&& f, Tuple&& t, IndexSeq())
         ELIB_AUTO_RETURN_NOEXCEPT(

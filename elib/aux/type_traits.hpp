@@ -144,13 +144,13 @@ namespace elib
         using std::remove_cv;
         
         template <class T>
-        using remove_const_ = typename remove_const<T>::type;
+        using remove_const_t = typename remove_const<T>::type;
       
         template <class T>
-        using remove_volatile_ = typename remove_volatile<T>::type;
+        using remove_volatile_t = typename remove_volatile<T>::type;
        
         template <class T>
-        using remove_cv_ = typename remove_cv<T>::type;
+        using remove_cv_t = typename remove_cv<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_const, aux::add_volatile, aux::add_cv
@@ -159,79 +159,79 @@ namespace elib
         using std::add_cv;
 
         template <class T>
-        using add_const_ = typename add_const<T>::type;
+        using add_const_t = typename add_const<T>::type;
         
         template <class T>
-        using add_volatile_ = typename add_volatile<T>::type;
+        using add_volatile_t = typename add_volatile<T>::type;
         
         template <class T>
-        using add_cv_ = typename add_cv<T>::type;
+        using add_cv_t = typename add_cv<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::remove_reference
         using std::remove_reference;
         
         template <class T>
-        using remove_reference_ = typename remove_reference<T>::type;
+        using remove_reference_t = typename remove_reference<T>::type;
         
         template <class T>
         using remove_ref = remove_reference<T>;
         
         template <class T>
-        using remove_ref_ = typename remove_reference<T>::type;
+        using remove_ref_t = typename remove_reference<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::remove_const_ref, aux::remove_volatile_ref, aux::remove_cv_ref
         template <class T>
-        using remove_const_ref = remove_const< remove_ref_<T> >;
+        using remove_const_ref = remove_const< remove_ref_t<T> >;
         
         template <class T>
-        using remove_const_ref_ = remove_const_< remove_ref_<T> >;
+        using remove_const_ref_t = remove_const_t< remove_ref_t<T> >;
         
         template <class T>
-        using remove_volatile_ref = remove_volatile< remove_ref_<T> >;
+        using remove_volatile_ref = remove_volatile< remove_ref_t<T> >;
         
         template <class T>
-        using remove_volatile_ref_ = remove_volatile_< remove_ref_<T> >;
+        using remove_volatile_ref_t = remove_volatile_t< remove_ref_t<T> >;
         
         template <class T>
-        using remove_cv_ref = remove_cv< remove_ref_<T> >;
+        using remove_cv_ref = remove_cv< remove_ref_t<T> >;
         
         template <class T>
-        using remove_cv_ref_ = remove_cv_< remove_ref_<T> >;
+        using remove_cv_ref_t = remove_cv_t< remove_ref_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_lvalue_reference, aux::add_lvalue_ref
         using std::add_lvalue_reference;
         
         template <class T>
-        using add_lvalue_reference_ = typename add_lvalue_reference<T>::type;
+        using add_lvalue_reference_t = typename add_lvalue_reference<T>::type;
         
         template <class T>
         using add_lvalue_ref = add_lvalue_reference<T>;
         
         template <class T>
-        using add_lvalue_ref_ = typename add_lvalue_reference<T>::type;
+        using add_lvalue_ref_t = typename add_lvalue_reference<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_const_lvalue_ref, aux::add_volatile_lvalue_ref, aux::add_cv_lvalue_ref
         template <class T>
-        using add_const_lvalue_ref = add_const< add_lvalue_ref_<T> >;
+        using add_const_lvalue_ref = add_const< add_lvalue_ref_t<T> >;
         
         template <class T>
-        using add_const_lvalue_ref_ = add_const_< add_lvalue_ref_<T> >;
+        using add_const_lvalue_ref_t = add_const_t< add_lvalue_ref_t<T> >;
         
         template <class T>
-        using add_volatile_lvalue_ref = add_volatile< add_lvalue_ref_<T> >;
+        using add_volatile_lvalue_ref = add_volatile< add_lvalue_ref_t<T> >;
         
         template <class T>
-        using add_volatile_lvalue_ref_ = add_volatile_< add_lvalue_ref_<T> >;
+        using add_volatile_lvalue_ref_t = add_volatile_t< add_lvalue_ref_t<T> >;
         
         template <class T>
-        using add_cv_lvalue_ref = add_cv< add_lvalue_ref_<T> >;
+        using add_cv_lvalue_ref = add_cv< add_lvalue_ref_t<T> >;
         
         template <class T>
-        using add_cv_lvalue_ref_ = add_cv_< add_lvalue_ref_<T> >;
+        using add_cv_lvalue_ref_t = add_cv_t< add_lvalue_ref_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_ref
@@ -239,147 +239,147 @@ namespace elib
         using add_ref = add_lvalue_reference<T>;
         
         template <class T>
-        using add_ref_ = typename add_lvalue_reference<T>::type;
+        using add_ref_t = typename add_lvalue_reference<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_const_ref, aux::add_volatile_ref, aux::add_cv_ref
         template <class T>
-        using add_const_ref = add_const< add_ref_<T> >;
+        using add_const_ref = add_const< add_ref_t<T> >;
         
         template <class T>
-        using add_const_ref_ = add_const_< add_ref_<T> >;
+        using add_const_ref_t = add_const_t< add_ref_t<T> >;
         
         template <class T>
-        using add_volatile_ref = add_volatile< add_ref_<T> >;
+        using add_volatile_ref = add_volatile< add_ref_t<T> >;
         
         template <class T>
-        using add_cv_ref = add_cv< add_ref_<T> >;
+        using add_cv_ref = add_cv< add_ref_t<T> >;
         
         template <class T>
-        using add_cv_ref_ = add_cv_< add_ref_<T> >;
+        using add_cv_ref_t = add_cv_t< add_ref_t<T> >;
 
         ////////////////////////////////////////////////////////////////////////
         // aux::add_rvalue_reference, aux::add_rvalue_ref
         using std::add_rvalue_reference;
         
         template <class T>
-        using add_rvalue_reference_ = typename add_rvalue_reference<T>::type;
+        using add_rvalue_reference_t = typename add_rvalue_reference<T>::type;
         
         template <class T>
         using add_rvalue_ref = add_rvalue_reference<T>;
         
         template <class T>
-        using add_rvalue_ref_ = typename add_rvalue_reference<T>::type;
+        using add_rvalue_ref_t = typename add_rvalue_reference<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_const_rvalue_ref, aux::add_volatile_rvalue_ref, aux::add_cv_rvalue_ref
         template <class T>
-        using add_const_rvalue_ref = add_const< add_rvalue_ref_<T> >;
+        using add_const_rvalue_ref = add_const< add_rvalue_ref_t<T> >;
         
         template <class T>
-        using add_const_rvalue_ref_ = add_const_< add_rvalue_ref_<T> >;
+        using add_const_rvalue_ref_t = add_const_t< add_rvalue_ref_t<T> >;
         
         template <class T>
-        using add_volatile_rvalue_ref = add_volatile< add_rvalue_ref_<T> >;
+        using add_volatile_rvalue_ref = add_volatile< add_rvalue_ref_t<T> >;
         
         template <class T>
-        using add_volatile_rvalue_ref_ = add_volatile_< add_rvalue_ref_<T> >;
+        using add_volatile_rvalue_ref_t = add_volatile_t< add_rvalue_ref_t<T> >;
         
         template <class T>
-        using add_cv_rvalue_ref = add_cv< add_rvalue_ref_<T> >;
+        using add_cv_rvalue_ref = add_cv< add_rvalue_ref_t<T> >;
         
         template <class T>
-        using add_cv_rvalue_ref_ = add_cv_< add_rvalue_ref_<T> >;
+        using add_cv_rvalue_ref_t = add_cv_t< add_rvalue_ref_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::remove_pointer, aux::remove_ptr
         using std::remove_pointer;
         
         template <class T>
-        using remove_pointer_ = typename remove_pointer<T>::type;
+        using remove_pointer_t = typename remove_pointer<T>::type;
         
         template <class T>
         using remove_ptr = remove_pointer<T>;
         
         template <class T>
-        using remove_ptr_ = typename remove_pointer<T>::type;
+        using remove_ptr_t = typename remove_pointer<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::remove_const_ptr, aux::remove_volatile_ptr, aux::remove_cv_ptr
         template <class T>
-        using remove_const_ptr = remove_const< remove_ptr_<T> >;
+        using remove_const_ptr = remove_const< remove_ptr_t<T> >;
         
         template <class T>
-        using remove_const_ptr_ = remove_const_< remove_ptr_<T> >;
+        using remove_const_ptr_t = remove_const_t< remove_ptr_t<T> >;
         
         template <class T>
-        using remove_volatile_ptr = remove_volatile< remove_ptr_<T> >;
+        using remove_volatile_ptr = remove_volatile< remove_ptr_t<T> >;
         
         template <class T>
-        using remove_volatile_ptr_ = remove_volatile_< remove_ptr_<T> >;
+        using remove_volatile_ptr_t = remove_volatile_t< remove_ptr_t<T> >;
         
         template <class T>
-        using remove_cv_ptr = remove_cv< remove_ptr_<T> >;
+        using remove_cv_ptr = remove_cv< remove_ptr_t<T> >;
         
         template <class T>
-        using remove_cv_ptr_ = remove_cv_< remove_ptr_<T> >;
+        using remove_cv_ptr_t = remove_cv_t< remove_ptr_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_pointer, aux::add_ptr
         using std::add_pointer;
         
         template <class T>
-        using add_pointer_ = typename add_pointer<T>::type;
+        using add_pointer_t = typename add_pointer<T>::type;
         
         template <class T>
         using add_ptr = add_pointer<T>;
         
         template <class T>
-        using add_ptr_ = typename add_pointer<T>::type;
+        using add_ptr_t = typename add_pointer<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::add_const_ptr, aux::add_volatile_ptr, aux::add_cv_ptr
         template <class T>
-        using add_const_ptr = add_const< add_ptr_<T> >;
+        using add_const_ptr = add_const< add_ptr_t<T> >;
         
         template <class T>
-        using add_const_ptr_ = add_const_< add_ptr_<T> >;
+        using add_const_ptr_t = add_const_t< add_ptr_t<T> >;
         
         template <class T>
-        using add_volatile_ptr = add_volatile< add_ptr_<T> >;
+        using add_volatile_ptr = add_volatile< add_ptr_t<T> >;
         
         template <class T>
-        using add_volatile_ptr_ = add_volatile_< add_ptr_<T> >;
+        using add_volatile_ptr_t = add_volatile_t< add_ptr_t<T> >;
         
         template <class T>
-        using add_cv_ptr = add_cv< add_ptr_<T> >;
+        using add_cv_ptr = add_cv< add_ptr_t<T> >;
         
         template <class T>
-        using add_cv_ptr_ = add_cv_< add_ptr_<T> >;
+        using add_cv_ptr_t = add_cv_t< add_ptr_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::make_signed, aux::make_unsigned
         using std::make_signed;
         
         template <class T>
-        using make_signed_ = typename make_signed<T>::type;
+        using make_signed_t = typename make_signed<T>::type;
         
         using std::make_unsigned;
         
         template <class T>
-        using make_unsigned_ = typename make_unsigned<T>::type;
+        using make_unsigned_t = typename make_unsigned<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::remove_extent, aux::remove_all_extents
         using std::remove_extent;
         
         template <class T>
-        using remove_extent_ = typename remove_extent<T>::type;
+        using remove_extent_t = typename remove_extent<T>::type;
         
         using std::remove_all_extents;
         
         template <class T>
-        using remove_all_extents_ = typename remove_all_extents<T>::type;
+        using remove_all_extents_t = typename remove_all_extents<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::aligned_storage, aux::aligned_union
@@ -403,13 +403,13 @@ namespace elib
             std::size_t Len
           , std::size_t Align = static_cast<std::size_t>(-1)
         >
-        using aligned_storage_ = typename aligned_storage<Len, Align>::type;
+        using aligned_storage_t = typename aligned_storage<Len, Align>::type;
         
 # if !ELIB_WORKAROUND(ELIB_CONFIG_LIBSTDCXX, LIBSTDCXX_LIMITED_TYPE_TRAITS)
         using std::aligned_union;
         
         template <std::size_t Len, class ...T>
-        using aligned_union_ = typename aligned_union<Len, T...>::type;
+        using aligned_union_t = typename aligned_union<Len, T...>::type;
 # endif
 
         ////////////////////////////////////////////////////////////////////////
@@ -417,7 +417,7 @@ namespace elib
         using std::decay;
         
         template <class T>
-        using decay_ = typename decay<T>::type;
+        using decay_t = typename decay<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::enable_if, aux::enable_if_c
@@ -428,27 +428,27 @@ namespace elib
             >::type;
             
         template <class Pred, class T = void>
-        using enable_if_ = typename enable_if<Pred, T>::type;
+        using enable_if_t = typename enable_if<Pred, T>::type;
         
         template <bool Pred, class T = void>
         using enable_if_c = std::enable_if<Pred, T>;
         
         template <bool Pred, class T = void>
-        using enable_if_c_ = typename std::enable_if<Pred, T>::type;
+        using enable_if_c_t = typename std::enable_if<Pred, T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::lazy_enable_if, aux::lazy_enable_if_c
         template <class Pred, class T = no_decay<void>>
-        using lazy_enable_if = enable_if_<Pred, T>;
+        using lazy_enable_if = enable_if_t<Pred, T>;
         
         template <class Pred, class T = no_decay<void>>
-        using lazy_enable_if_ = typename enable_if_<Pred, T>::type;
+        using lazy_enable_if_t = typename enable_if_t<Pred, T>::type;
         
         template <bool Pred, class T = no_decay<void>>
-        using lazy_enable_if_c = enable_if_c_<Pred, T>;
+        using lazy_enable_if_c = enable_if_c_t<Pred, T>;
         
         template <bool Pred, class T = no_decay<void>>
-        using lazy_enable_if_c_ = typename enable_if_c_<Pred, T>::type;
+        using lazy_enable_if_c_t = typename enable_if_c_t<Pred, T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::disable_if, aux::disable_if_c
@@ -456,78 +456,52 @@ namespace elib
         using disable_if = std::enable_if<!static_cast<bool>(Pred::type::value), T>;
         
         template <class Pred, class T = void>
-        using disable_if_ = typename 
+        using disable_if_t = typename 
             std::enable_if<!static_cast<bool>(Pred::type::value), T>::type;
         
         template <bool Pred, class T = void>
         using disable_if_c = std::enable_if<!Pred, T>;
         
         template <bool Pred, class T = void>
-        using disable_if_c_ = typename std::enable_if<!Pred, T>::type;
+        using disable_if_c_t = typename std::enable_if<!Pred, T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::lazy_disable_if, aux::lazy_disable_if_c
         template <class Pred, class T = no_decay<void>>
-        using lazy_disable_if = disable_if_<Pred, T>;
+        using lazy_disable_if = disable_if_t<Pred, T>;
         
         template <class Pred, class T = no_decay<void>>
-        using lazy_disable_if_ = typename disable_if_<Pred, T>::type;
+        using lazy_disable_if_t = typename disable_if_t<Pred, T>::type;
         
         template<bool Pred, class T = no_decay<void>>
-        using lazy_disable_if_c = disable_if_c_<Pred, T>;
+        using lazy_disable_if_c = disable_if_c_t<Pred, T>;
         
         template <bool Pred, class T = no_decay<void>>
-        using lazy_disable_if_c_ = typename disable_if_c_<Pred, T>::type;
+        using lazy_disable_if_c_t = typename disable_if_c_t<Pred, T>::type;
         
         ////////////////////////////////////////////////////////////////////////
-        // aux::conditional, aux::conditional_c
-        template <class Pred, class Then, class Else>
-        using conditional = 
-            std::conditional<
-                static_cast<bool>(Pred::type::value)
-              , Then, Else
-            >;
-            
-        template <class Pred, class Then, class Else>
-        using conditional_ = typename conditional<Pred, Then, Else>::type;
+        // aux::conditional
+        using std::conditional;
         
         template <bool Pred, class Then, class Else>
-        using conditional_c = std::conditional<Pred, Then, Else>;
-        
-        template <bool Pred, class Then, class Else>
-        using conditional_c_ = typename std::conditional<Pred, Then, Else>::type;
-        
-        
-        ////////////////////////////////////////////////////////////////////////
-        // aux::lazy_conditional, aux::lazy_conditional_c
-        template <class Pred, class Then, class Else>
-        using lazy_conditional = conditional_<Pred, Then, Else>;
-        
-        template <class Pred, class Then, class Else>
-        using lazy_conditional_ = typename conditional_<Pred, Then, Else>::type;
-        
-        template <bool Pred, class Then, class Else>
-        using lazy_conditional_c = conditional_c_<Pred, Then, Else>;
-        
-        template <bool Pred, class Then, class Else>
-        using lazy_conditional_c_ = typename conditional_c_<Pred, Then, Else>::type;
+        using conditional_t = typename conditional<Pred, Then, Else>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::common_type, aux::underlying_type, aux::result_of
         using std::common_type;
         
         template <class ...T>
-        using common_type_ = typename common_type<T...>::type;
+        using common_type_t = typename common_type<T...>::type;
         
         using std::underlying_type;
         
         template <class T>
-        using underlying_type_ = typename underlying_type<T>::type;
+        using underlying_type_t = typename underlying_type<T>::type;
         
         using std::result_of;
         
         template <class T>
-        using result_of_ = typename result_of<T>::type;
+        using result_of_t = typename result_of<T>::type;
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_TYPE_TRAITS_HPP */

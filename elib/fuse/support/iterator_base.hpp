@@ -1,6 +1,8 @@
 #ifndef ELIB_FUSE_SUPPORT_ITERATOR_BASE_HPP
 #define ELIB_FUSE_SUPPORT_ITERATOR_BASE_HPP
 
+# include <elib/fuse/support/support_fwd.hpp>
+
 namespace elib { namespace fuse
 {
     struct iterator_root 

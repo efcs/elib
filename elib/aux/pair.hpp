@@ -22,6 +22,11 @@ namespace elib { namespace aux
       : size_type_<2>
     {};
     
+    template <class T, class U>
+    struct tuple_size< std::pair<T, U> >
+      : size_type_<2>
+    {};
+    
     ////////////////////////////////////////////////////////////////////////////
     // aux::tuple_element
     template <class T, class U>
@@ -35,6 +40,11 @@ namespace elib { namespace aux
     {
         using type = U;
     };
+    
+    template <std::size_t I, class T, class U>
+    struct tuple_element<I, std::pair<T, U> >
+      : std::tuple_element<I, std::pair<T, U>>
+    {};
     
     ////////////////////////////////////////////////////////////////////////////
     // aux::pair
@@ -175,7 +185,7 @@ namespace elib { namespace aux
         };
         
         template <class T>
-        using decay_strip = typename strip_ref_wrapper< decay_<T> >::type;
+        using decay_strip = typename strip_ref_wrapper< decay_t<T> >::type;
         
         template <class T, class U>
         using decay_strip_pair = pair<decay_strip<T>, decay_strip<U>>;

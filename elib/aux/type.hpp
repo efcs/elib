@@ -6,7 +6,7 @@ namespace elib
     namespace aux
     {
         template <class T>
-        using type_ = typename T::type;
+        using type_t = typename T::type;
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_TYPE_HPP */

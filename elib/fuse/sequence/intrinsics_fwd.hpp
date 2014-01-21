@@ -1,7 +1,9 @@
 #ifndef ELIB_FUSE_SEQUENCE_INTRINSICS_FWD_HPP
 #define ELIB_FUSE_SEQUENCE_INTRINSICS_FWD_HPP
 
-# include <elib/aux.hpp>
+# include <elib/fuse/support/traits.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/type_traits.hpp>
 
 namespace elib { namespace fuse
 {
@@ -46,7 +48,7 @@ namespace elib { namespace fuse
         struct at;
         
         template <class Seq, class N>
-        using at_ = typename at<Seq, N>::type;
+        using at_t = typename at<Seq, N>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::at_c
@@ -54,7 +56,7 @@ namespace elib { namespace fuse
         struct at_c;
         
         template <class Seq, int N>
-        using at_c_ = typename at_c<Seq, N>::type;
+        using at_c_t = typename at_c<Seq, N>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::back
@@ -62,7 +64,7 @@ namespace elib { namespace fuse
         struct back;
         
         template <class Seq>
-        using back_ = typename back<Seq>::type;
+        using back_t = typename back<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::begin
@@ -70,7 +72,7 @@ namespace elib { namespace fuse
         struct begin;
         
         template <class Seq>
-        using begin_ = typename begin<Seq>::type;
+        using begin_t = typename begin<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::empty
@@ -78,7 +80,7 @@ namespace elib { namespace fuse
         struct empty;
         
         template <class Seq>
-        using empty_ = typename empty<Seq>::type;
+        using empty_t = typename empty<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::end
@@ -86,7 +88,7 @@ namespace elib { namespace fuse
         struct end;
         
         template <class Seq>
-        using end_ = typename end<Seq>::type;
+        using end_t = typename end<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::front
@@ -94,7 +96,7 @@ namespace elib { namespace fuse
         struct front;
         
         template <class Seq>
-        using front_ = typename front<Seq>::type;
+        using front_t = typename front<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::has_key
@@ -102,7 +104,7 @@ namespace elib { namespace fuse
         struct has_key;
         
         template <class Seq, class Key>
-        using has_key_ = typename has_key<Seq, Key>::type;
+        using has_key_t = typename has_key<Seq, Key>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::segments
@@ -110,7 +112,7 @@ namespace elib { namespace fuse
         struct segments;
         
         template <class Seq>
-        using segments_ = typename segments<Seq>::type;
+        using segments_t = typename segments<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::size
@@ -118,7 +120,7 @@ namespace elib { namespace fuse
         struct size;
         
         template <class Seq>
-        using size_ = typename size<Seq>::type;
+        using size_t = typename size<Seq>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::value_at
@@ -126,7 +128,7 @@ namespace elib { namespace fuse
         struct value_at;
         
         template <class Seq, class N>
-        using value_at_ = typename value_at<Seq, N>::type;
+        using value_at_t = typename value_at<Seq, N>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::value_at_c
@@ -134,7 +136,7 @@ namespace elib { namespace fuse
         struct value_at_c;
         
         template <class Seq, int N>
-        using value_at_c_ = typename value_at_c<Seq, N>::type;
+        using value_at_c_t = typename value_at_c<Seq, N>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::at_key
@@ -142,7 +144,7 @@ namespace elib { namespace fuse
         struct at_key;
         
         template <class Seq, class Key>
-        using at_key_ = typename at_key<Seq, Key>::type;
+        using at_key_t = typename at_key<Seq, Key>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // result_of::value_at_key
@@ -150,9 +152,129 @@ namespace elib { namespace fuse
         struct value_at_key;
         
         template <class Seq, class N>
-        using value_at_key_ = typename value_at_key<Seq, N>::type;
+        using value_at_key_t = typename value_at_key<Seq, N>::type;
     }                                                       // namespace result_of
     
-
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::at(seq)
+    template <class N, class Seq>
+    aux::lazy_disable_if_t<
+        aux::is_const<Seq>
+      , result_of::at<Seq, N>
+    >
+    at(Seq& seq);
+    
+    template <class N, class Seq>
+    result_of::at_t<Seq const, N>
+    at(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::at_c(seq)
+    template <int N, class Seq>
+    aux::lazy_disable_if_t<
+        aux::is_const<Seq>
+      , result_of::at_c<Seq, N>
+    >
+    at_c(Seq & seq);
+    
+    template <int N, class Seq>
+    result_of::at_c_t<Seq const, N>
+    at_c(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::back(seq)
+    template <class Seq>
+    result_of::back_t<Seq>
+    back(Seq & seq);
+    
+    template <class Seq>
+    result_of::back_t<Seq const>
+    back(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::begin(seq)
+    template <class Seq>
+    aux::lazy_enable_if_t<
+        traits::is_sequence<Seq>
+      , result_of::begin<Seq>
+    > const
+    begin(Seq & seq);
+    
+    template <class Seq>
+    aux::lazy_disable_if_t<
+        traits::is_sequence<Seq>
+      , result_of::begin<Seq const>
+    > const
+    begin(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::empty(seq)
+    template <class Seq>
+    result_of::empty_t<Seq>
+    empty(Seq const&);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::end(seq)
+    template <class Seq>
+    aux::lazy_enable_if_t<
+        traits::is_sequence<Seq>
+      , result_of::end<Seq>
+    > const
+    end(Seq & seq);
+    
+    template <class Seq>
+    aux::lazy_enable_if_t<
+        traits::is_sequence<Seq>
+      , result_of::end<Seq const>
+    > const
+    end(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::front(seq)
+    template <class Seq>
+    result_of::front_t<Seq>
+    front(Seq & seq);
+    
+    template <class Seq>
+    result_of::front_t<Seq const>
+    front(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::has_key(seq)
+    template <class Key, class Seq>
+    result_of::has_key_t<Seq, Key>
+    has_key(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::segments(seq)
+    template <class Seq>
+    aux::lazy_disable_if_t<
+        aux::is_const<Seq>
+      , result_of::segments<Seq>
+    >
+    segments(Seq & seq);
+    
+    template <class Seq>
+    result_of::segments_t<Seq const>
+    segments(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::size(seq)
+    template <class Seq>
+    result_of::size_t<Seq>
+    size(Seq const& seq);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // fuse::at_key(seq)
+    template <class Key, class Seq>
+    aux::lazy_disable_if_t<
+        aux::is_const<Seq>
+      , result_of::at_key<Seq, Key>
+    >
+    at_key(Seq & seq);
+    
+    template <class Key, class Seq>
+    result_of::at_key_t<Seq const, Key>
+    at_key(Seq const& seq);
 }}                                                          // namespace elib
 #endif /* ELIB_FUSE_SEQUENCE_INTRINSICS_FWD_HPP */

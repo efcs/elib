@@ -33,22 +33,27 @@ namespace elib { namespace aux
             template <std::size_t Index>
             struct item_at_index
             {
-                using type = 
-                    decltype(item_at_index_switch<size_type_<Index>>(aux::declval<tuple_impl>()));
+                using result = 
+                    decltype(item_at_index_switch<size_type_<Index>>(
+                                aux::declval<tuple_impl>()
+                            ));
+                    
+                using type = typename result::value_type;
+                using index = typename result::index;
                     
                 static constexpr type& call_ref(tuple_impl& t) noexcept
                 {
-                    return static_cast<type &>(t);
+                    return static_cast<result &>(t).get();
                 }
                 
                 static constexpr type const& call_cref(tuple_impl const& t) noexcept
                 {
-                    return static_cast<type const &>(t);
+                    return static_cast<result const &>(t).get();
                 }
                 
                 static constexpr type && call_move(tuple_impl && t) noexcept
                 {
-                    return aux::move( static_cast<type &&>(t) );
+                    return aux::move( static_cast<result &&>(t).get() );
                 }
             };
             
@@ -59,21 +64,23 @@ namespace elib { namespace aux
             template <class T>
             struct item_at_key
             {
-                using type = decltype(item_at_key_switch<T>(aux::declval<tuple_impl>()));
+                using result = decltype(item_at_key_switch<T>(aux::declval<tuple_impl>()));
+                using type = typename result::value_type;
+                using index = typename result::index;
                 
-                static constexpr type& call_ref(tuple_impl & t) noexcept
+                static constexpr T& call_ref(tuple_impl & t) noexcept
                 {
-                    return static_cast<type &>(t);
+                    return static_cast<result &>(t).get();
                 }
                 
-                static constexpr type const& call_cref(tuple_impl const& t) noexcept
+                static constexpr T const& call_cref(tuple_impl const& t) noexcept
                 {
-                    return static_cast<type const &>(t);
+                    return static_cast<result const &>(t).get();
                 }
                 
-                static constexpr type && call_move(tuple_impl && t) noexcept
+                static constexpr T && call_move(tuple_impl && t) noexcept
                 {
-                    return aux::move( static_cast<type &&>(t) );
+                    return aux::move( static_cast<result &&>(t).get() );
                 }
             };
             

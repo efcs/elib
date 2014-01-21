@@ -16,6 +16,18 @@ namespace elib { namespace aux
     {
         ////////////////////////////////////////////////////////////////////////////
         // detail::index_of_impl
+        template <class Key, T>
+        struct index_of_impl<Key, T const> : index_of_impl<Key, T>
+        {};
+        
+        template <class Key, T>
+        struct index_of_impl<Key, T volatile> : index_of_impl<Key, T>
+        {};
+        
+        template <class Key, T>
+        struct index_of_impl<Key, T const volatile> : index_of_impl<Key, T>
+        {};
+        
         template <class Key, class ...Args>
         struct index_of_impl<Key, tuple<Args...>>
         {

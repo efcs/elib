@@ -34,15 +34,15 @@ namespace elib { namespace aux
         friend struct tuple_detail::tuple_element_impl;
         
         template <std::size_t I, class ...Ts>
-        friend tuple_element_t<I, tuple<Ts...>>&
-        get(tuple<Ts...> & t);
+        friend constexpr tuple_element_t<I, tuple<Ts...>>&
+        get(tuple<Ts...> & t) noexcept;
         
         template <std::size_t I, class ...Ts>
-        friend tuple_element_t<I, tuple<Ts...>> const &
-        get(tuple<Ts...> const& t);
+        friend constexpr tuple_element_t<I, tuple<Ts...>> const &
+        get(tuple<Ts...> const& t) noexcept;
         
         template <std::size_t I, class ...Ts>
-        friend tuple_element_t<I, tuple<Ts...>>&&
+        friend constexpr tuple_element_t<I, tuple<Ts...>>&&
         get_tuple(tuple<Ts...> && t);
         
         template <class Key, class ...Ts>

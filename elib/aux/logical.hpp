@@ -97,18 +97,34 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         //
         template <class A0, class A1, class ...As>
-        struct or_ :
-            detail::or_impl<static_cast<bool>(A0::type::value)>
-              ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>
-        {};
+        struct or_ 
+          : detail::or_impl<static_cast<bool>(A0::type::value)>
+            ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>::type
+        {
+            using type = or_;
+            
+            using result = typename
+                detail::or_impl<static_cast<bool>(A0::type::value)>
+                ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>;
+                
+            using which = typename result::which;
+        };
         
         ////////////////////////////////////////////////////////////////////////
         //
         template <class A0, class A1, class ...As>
         struct and_ :
             detail::and_impl< !static_cast<bool>(A0::type::value) >
-              ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>
-        {};
+              ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>::type
+        {
+            using type = and_;
+            
+            using result = typename
+                detail::and_impl< !static_cast<bool>(A0::type::value) >
+              ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>;
+              
+            using which = typename result::which;
+        };
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_LOGICAL_HPP */

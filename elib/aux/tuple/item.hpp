@@ -47,7 +47,7 @@ namespace elib { namespace aux
               : m_value()
             {
                 static_assert(
-                    !is_ref<Type>::value_type
+                    !is_ref<Type>::value
                   , "Attempting to default construct a reference element in a"
                     " tuple"
                 );
@@ -67,7 +67,6 @@ namespace elib { namespace aux
               , ELIB_ENABLE_IF(is_constructible<Type, T>::value)
             >
             explicit constexpr tuple_item(T&& t) 
-                    ELIB_NOEXCEPT_2(m_value(static_cast<T &&>(t)))
                 : m_value(static_cast<T &&>(t))
             {
                 static_assert(
@@ -95,7 +94,6 @@ namespace elib { namespace aux
             
             template <class T>
             explicit constexpr tuple_item(tuple_item<Index, T> const& t)
-                    ELIB_NOEXCEPT_2(m_value(t.get()))
                 : m_value(t.get()) 
             {}
             
@@ -106,7 +104,7 @@ namespace elib { namespace aux
                 return *this;
             }
             
-            int swap(tuple_item& t) 
+            int swap(tuple_item& t) noexcept
             {
                 tuple_detail::swap(*this, t);
                 return 1;

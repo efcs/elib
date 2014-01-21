@@ -57,7 +57,7 @@ namespace elib { namespace aux
         using Impl = decltype(t.m_impl);
         using AtKey = typename Impl::template item_at_key<Key>;
         
-        return AtKey::call_ref(t).get();
+        return AtKey::call_ref(t.m_impl);
     }
     
     template <class Key, class ...Ts>
@@ -67,7 +67,7 @@ namespace elib { namespace aux
         using Impl = decltype(t.m_impl);
         using AtKey = typename Impl::template item_at_key<Key>;
         
-        return AtKey::call_cref(t).get();
+        return AtKey::call_cref(t.m_impl);
     }
     
     template <class Key, class ...Ts>
@@ -77,7 +77,7 @@ namespace elib { namespace aux
         using Impl = decltype(t.m_impl);
         using AtKey = typename Impl::template item_at_key<Key>;
         
-        return aux::move( AtKey::call_move(aux::move(t)).get() );
+        return AtKey::call_move(aux::move(t.m_impl));
     }
     
     ////////////////////////////////////////////////////////////////////////////

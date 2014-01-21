@@ -202,6 +202,11 @@ namespace elib
         using remove_cv_ref_t = remove_cv_t< remove_ref_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
+        // aux::uncvref
+        template <class T>
+        using uncvref = remove_cv_t< remove_ref_t<T> >;
+        
+        ////////////////////////////////////////////////////////////////////////
         // aux::add_lvalue_reference, aux::add_lvalue_ref
         using std::add_lvalue_reference;
         

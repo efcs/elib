@@ -24,7 +24,7 @@ namespace elib { namespace aux
         // does it make sense to have this? 
         template <class T>
         constexpr auto by_val_impl(T const& t, long)
-        ELIB_AUTO_RETURN_NOEXCEPT(t);
+        ELIB_AUTO_RETURN_NOEXCEPT(t)
     }
     
     struct by_val_

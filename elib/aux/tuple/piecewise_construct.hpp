@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_PIECWISE_CONSTRUCT_HPP
-#define ELIB_AUX_PIECWISE_CONSTRUCT_HPP
+#ifndef ELIB_AUX_TUPLE_PIECWISE_CONSTRUCT_HPP
+#define ELIB_AUX_TUPLE_PIECWISE_CONSTRUCT_HPP
 
 namespace elib { namespace aux
 {
@@ -8,4 +8,4 @@ namespace elib { namespace aux
     
     constexpr piecewise_construct_t piecewise_construct = piecewise_construct_t();
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_PIECWISE_CONSTRUCT_HPP */
+#endif /* ELIB_AUX_TUPLE_PIECWISE_CONSTRUCT_HPP */

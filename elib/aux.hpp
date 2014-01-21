@@ -9,7 +9,6 @@
 # include <elib/aux/expo.hpp>
 # include <elib/aux/get_pointer.hpp>
 # include <elib/aux/if.hpp>
-# include <elib/aux/ignore.hpp>
 # include <elib/aux/integer_sequence.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/logical.hpp>
@@ -21,6 +20,7 @@
 # include <elib/aux/pass_by.hpp>
 # include <elib/aux/scoped_exit.hpp>
 # include <elib/aux/static_const.hpp>
+# include <elib/aux/swallow.hpp>
 # include <elib/aux/todo.hpp>
 # include <elib/aux/tuple.hpp>
 # include <elib/aux/type.hpp>

@@ -5,6 +5,8 @@
 # include <elib/fuse/support/sequence_base.hpp>
 # include <elib/fuse/support/tags.hpp>
 # include <elib/aux/integral_constant.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/type_traits.hpp>
 # include <elib/aux/none.hpp>
 
 namespace elib { namespace fuse 
@@ -56,9 +58,28 @@ namespace elib { namespace fuse
         Front front;
         Back back;
         
-        cons()
+        cons() noexcept(aux::is_nothrow_default_constructible<Front>::value
+                     && aux::is_nothrow_default_constructible<Back>::value)
           : front(), back()
         {}
+        
+        explicit cons(Front f) 
+            : front(f), back()
+        {}
+        
+        explicit cons(Front && f)
+            : front(aux::move(f)), back()
+        {}
+        
+        cons(Front f, Back b)
+            : front(f), back(b)
+        {}
+        
+        cons(Front && f, Back && b)
+          : front(aux::move(f)), back(aux::move(b))
+        {}
+        
+        cons(
         
     };
           

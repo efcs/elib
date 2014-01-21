@@ -102,7 +102,8 @@ namespace elib
         using std::is_default_constructible;
         using std::is_copy_constructible;
         using std::is_move_constructible;
-
+    
+        using std::is_assignable;
         using std::is_copy_assignable;
         using std::is_move_assignable;
         

@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_IGNORE_HPP
-#define ELIB_AUX_IGNORE_HPP
+#ifndef ELIB_AUX_SWALLOW_HPP
+#define ELIB_AUX_SWALLOW_HPP
 
 namespace elib 
 {
@@ -7,13 +7,13 @@ namespace elib
     {
 # if __cplusplus < 201300
         template <class ...T>
-        inline void ignore(T &&...) noexcept
+        inline void swallow(T &&...) noexcept
         {}
 # else
         template <class ...T>
-        constexpr void ignore(T &&...) noexcept
+        constexpr void swallow(T &&...) noexcept
         {}
 # endif
     }                                                       // namespace aux
 }                                                           // namespace elib
-#endif /* ELIB_AUX_IGNORE_HPP */
+#endif /* ELIB_AUX_SWALLOW_HPP */

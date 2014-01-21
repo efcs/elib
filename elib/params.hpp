@@ -51,7 +51,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::size_
         template <class P>
-        using size_ = typename size<P>::type;
+        using size_t = typename size<P>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::empty
@@ -76,7 +76,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::empty
         template <class P>
-        using empty_ = typename empty<P>::type;
+        using empty_t = typename empty<P>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::concat
@@ -132,7 +132,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::concat_
         template <class LHS, class RHS>
-        using concat_ = typename concat<LHS, RHS>::type;
+        using concat_t = typename concat<LHS, RHS>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::append
@@ -157,7 +157,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::append_
         template <class Pack, class ...Args>
-        using append_ = typename append<Pack, Args...>::type;
+        using append_t = typename append<Pack, Args...>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::append_c
@@ -176,7 +176,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::append_c_
         template <class Pack, class T, T ...Values>
-        using append_c_ = typename append_c<Pack, T, Values...>::type;
+        using append_c_t = typename append_c<Pack, T, Values...>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::prepend
@@ -201,7 +201,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::prepend
         template <class Pack, class ...Args>
-        using prepend_ = typename prepend<Pack, Args...>::type;
+        using prepend_t = typename prepend<Pack, Args...>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::prepend_c
@@ -220,7 +220,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::prepend_c_
         template <class Pack, class T, T ...Values>
-        using prepend_c_ = typename prepend_c<Pack, T, Values...>::type;
+        using prepend_c_t = typename prepend_c<Pack, T, Values...>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::push_back
@@ -230,7 +230,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::push_back_
         template <class P, class A>
-        using push_back_ = append_<P, A>;
+        using push_back_t = append_t<P, A>;
 
         ////////////////////////////////////////////////////////////////////
         // params::push_front
@@ -240,7 +240,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::push_front_
         template <class P, class A>
-        using push_front_ = prepend_<P, A>;
+        using push_front_t = prepend_t<P, A>;
 
         ////////////////////////////////////////////////////////////////////
         // params::fill
@@ -279,7 +279,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::fill_
         template <std::size_t N, class T, class Pack = param_pack<>>
-        using fill_ = typename fill<N, T, Pack>::type;
+        using fill_t = typename fill<N, T, Pack>::type;
 
         namespace detail
         {
@@ -350,7 +350,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::at_
         template <class Pack, std::size_t N>
-        using at_ = typename at<Pack, N>::type;
+        using at_t = typename at<Pack, N>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::front
@@ -360,7 +360,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::front_
         template <class P>
-        using front_ = at_<P, 0>;
+        using front_t = at_t<P, 0>;
 
         ////////////////////////////////////////////////////////////////////
         // params::back
@@ -370,7 +370,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::back_
         template <class P>
-        using back_ = at_<P, params::size<P>::value - 1>;
+        using back_t = at_t<P, params::size<P>::value - 1>;
 
         namespace detail
         {
@@ -390,21 +390,21 @@ namespace elib
             struct take_impl<1>
             {
                 template <class Pack, class A0, class ...Args>
-                using type = append_<Pack, A0>;
+                using type = append_t<Pack, A0>;
             };
 
             template <>
             struct take_impl<2>
             {
                 template <class Pack, class A0, class A1, class ...Args>
-                using type = append_<Pack, A0, A1>;
+                using type = append_t<Pack, A0, A1>;
             };
 
             template <>
             struct take_impl<3>
             {
                 template <class Pack, class A0, class A1, class A2, class ...Args>
-                using apply = append_<Pack, A0, A1, A2>;
+                using apply = append_t<Pack, A0, A1, A2>;
             };
 
             template <std::size_t N>
@@ -417,7 +417,7 @@ namespace elib
                   >
                 using apply = typename take_impl<N-4>::template
                     apply< 
-                        append_<Pack, A0, A1, A2, A3>
+                        append_t<Pack, A0, A1, A2, A3>
                       , Args...
                     >;
             };
@@ -444,7 +444,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::take_
         template <class Pack, std::size_t N>
-        using take_ = typename take<Pack, N>::type;
+        using take_t = typename take<Pack, N>::type;
 
         namespace detail
         {
@@ -457,7 +457,7 @@ namespace elib
             struct drop_impl_1_< Pack, param_pack<Ignored...> >
             {
                 template <class ...Back>
-                static append_< Pack, typename Back::type... > 
+                static append_t< Pack, typename Back::type... > 
                 eval(aux::any_pod<Ignored...>, Back*...);
             };
 
@@ -466,7 +466,7 @@ namespace elib
             template <std::size_t N, class Pack, class ...Args>
             using drop_impl = 
                 decltype(
-                    drop_impl_1_< Pack, fill_<N, decltype(nullptr)>>
+                    drop_impl_1_< Pack, fill_t<N, decltype(nullptr)>>
                         ::eval((aux::no_decay<Args>*)nullptr...)
                 );
         }                                               // namespace detail
@@ -502,7 +502,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::drop
         template <class Pack, std::size_t N>
-        using drop_ = typename drop<Pack, N>::type;
+        using drop_t = typename drop<Pack, N>::type;
 
         ////////////////////////////////////////////////////////////////////
         // params::pop_front
@@ -512,7 +512,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::pop_front_
         template <class P>
-        using pop_front_ = drop_<P, 1>;
+        using pop_front_t = drop_t<P, 1>;
 
         ////////////////////////////////////////////////////////////////////
         // params::pop_back
@@ -522,19 +522,19 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::pop_back_
         template <class P>
-        using pop_back_ = take_<P, params::size<P>::value - 1>;
+        using pop_back_t = take_t<P, params::size<P>::value - 1>;
 
         ////////////////////////////////////////////////////////////////////
         // params::slice
         template <class P, std::size_t First, std::size_t Last>
         struct slice
-            : take< drop_<P, First>, (Last - First) >
+            : take< drop_t<P, First>, (Last - First) >
         {};
 
         ////////////////////////////////////////////////////////////////////
         // params::slice_
         template <class P, std::size_t First, std::size_t Second>
-        using slice_ = typename slice<P, First, Second>::type;
+        using slice_t = typename slice<P, First, Second>::type;
         
     }                                                       // namespace params
 }                                                           // namespace elib

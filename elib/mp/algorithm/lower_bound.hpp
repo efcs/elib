@@ -6,7 +6,6 @@
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/aux.hpp>
 
 namespace elib 
@@ -26,7 +25,7 @@ namespace elib
         
         
       template <class Seq>
-      using lower_bound_pred_op = same_type< end_t<Seq>, _1>;
+      using lower_bound_pred_op = aux::same_type< end_t<Seq>, _1>;
     }                                                       // namespace detail
       
       

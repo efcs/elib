@@ -6,12 +6,12 @@
 # include <tuple>
 # include <utility>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_size_impl
+        // detail::tuple_size_impl
         template <class T>
         struct tuple_size_impl
           : std::tuple_size<T>
@@ -38,15 +38,15 @@ namespace elib { namespace aux
         {};
         
         template <class ...Types>
-        struct tuple_size_impl< aux::tuple<Types...> >
+        struct tuple_size_impl< tuple<Types...> >
           : size_type_<sizeof...(Types)>
         {};
         
         template <class First, class Second>
-        struct tuple_size_impl< aux::pair<First, Second>>
+        struct tuple_size_impl< pair<First, Second>>
           : size_type_<2>
         {};
         
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_SIZE_IMPL_HPP */

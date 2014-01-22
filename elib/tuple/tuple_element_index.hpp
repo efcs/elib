@@ -5,11 +5,11 @@
 # include <elib/tuple/element_index_impl.hpp>
 # include <elib/aux.hpp>
 
-namespace elib { namespace aux 
+namespace elib { namespace tuples 
 {
     template <class Value, class Tuple>
     struct tuple_element_index
-      : tuple_detail::tuple_element_index_impl< Value, uncvref<Tuple> >
+      : detail::tuple_element_index_impl< Value, aux::uncvref<Tuple> >
     {};
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_TUPLE_ELEMENT_INDEX_HPP */

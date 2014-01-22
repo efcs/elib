@@ -4,7 +4,7 @@
 # include <elib/aux.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     ////////////////////////////////////////////////////////////////////////////
     // tuple
@@ -18,7 +18,9 @@ namespace elib { namespace aux
     
     ////////////////////////////////////////////////////////////////////////////
     // piecewise_construct_t
-    struct piecewise_construct_t;
+    struct piecewise_construct_t {};
+    
+    constexpr piecewise_construct_t piecewise_construct = piecewise_construct_t();
     
     ////////////////////////////////////////////////////////////////////////////
     // tuple_size
@@ -176,8 +178,7 @@ namespace elib { namespace aux
     template <class ...Ts>
     void swap(tuple<Ts...> & lhs, tuple<Ts...> & rhs);
     
-    
-    namespace tuple_detail
+    namespace detail
     {
 
 # define ELIB_TUPLE_IS_FINAL(v) false
@@ -188,10 +189,10 @@ namespace elib { namespace aux
 #   endif
 # endif
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_item
+        // detail::tuple_item
         template <
             class Index, class T
-          , bool IsEmpty = is_empty<T>::value && ! ELIB_TUPLE_IS_FINAL(T)
+          , bool IsEmpty = aux::is_empty<T>::value && ! ELIB_TUPLE_IS_FINAL(T)
         >
         struct tuple_item;
         
@@ -201,15 +202,15 @@ namespace elib { namespace aux
 # undef ELIB_TUPLE_IS_FINAL
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_size_impl
+        // detail::tuple_size_impl
         template <class T>
         struct tuple_size_impl;
         
         template <class T>
-        using tuple_size_uncvref = tuple_size_impl< uncvref<T> >;
+        using tuple_size_uncvref = tuple_size_impl< aux::uncvref<T> >;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_element_impl
+        // detail::tuple_element_impl
         template <std::size_t I, class T>
         struct tuple_element_impl;
         
@@ -217,16 +218,16 @@ namespace elib { namespace aux
         using tuple_element_impl_t = typename tuple_element_impl<I, T>::type;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_index_of_impl
+        // detail::tuple_index_of_impl
         template <class Key, class T>
         struct tuple_element_index_impl;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::make_tuple_indexes
+        // detail::make_tuple_indexes
         template <std::size_t Start, class Indexes, std::size_t End>
         struct make_tuple_indexes_impl;
         
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     template <std::size_t End, std::size_t Start = 0>
     struct make_tuple_indexes;
@@ -234,63 +235,63 @@ namespace elib { namespace aux
     template <std::size_t End, std::size_t Start = 0>
     using make_tuple_indexes_t = typename make_tuple_indexes<End, Start>::type;
         
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::make_tuple_types
+        // detail::make_tuple_types
         template <
             class TupleTypes, class Tuple
           , std::size_t Start, std::size_t End
         >
         struct make_tuple_types_impl;
         
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     template <
         class Tuple
-      , std::size_t End = tuple_detail::tuple_size_impl<remove_ref_t<Tuple>>::value
+      , std::size_t End = detail::tuple_size_impl<aux::remove_ref_t<Tuple>>::value
       , std::size_t Start = 0
     >
     struct make_tuple_types;
         
     template <
         class Tuple
-      , std::size_t End = tuple_detail::tuple_size_impl<remove_ref_t<Tuple>>::value
+      , std::size_t End = detail::tuple_size_impl<aux::remove_ref_t<Tuple>>::value
       , std::size_t Start = 0
     >
     using make_tuple_types_t = typename make_tuple_types<Tuple, End, Start>::type;
     
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_impl
+        // detail::tuple_impl
         template <class Indexes, class ...Types>
         struct tuple_impl;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_same_size
+        // detail::tuple_same_size
         template <class T, class U>
         using is_tuple_same_size = 
             bool_<
-                tuple_size_impl<remove_ref_t<T>>::value
-                  == tuple_size_impl<remove_ref_t<U>>::value
+                tuple_size_impl<aux::remove_ref_t<T>>::value
+                  == tuple_size_impl<aux::remove_ref_t<U>>::value
             >;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_like_impl
+        // detail::tuple_like_impl
         template <class T>
         struct tuple_like_impl;        
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////////
     // aux::is_tuple_like
     template <class T>
-    using is_tuple_like = tuple_detail::tuple_like_impl< uncvref<T> >;
+    using is_tuple_like = detail::tuple_like_impl< aux::uncvref<T> >;
             
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_convertible
+        // detail::tuple_convertible
         template <bool SameSize, class From, class To>
         struct tuple_convertible_impl;
         
@@ -302,7 +303,7 @@ namespace elib { namespace aux
         struct tuple_convertible;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_assignable
+        // detail::tuple_assignable
         template <bool SameSize, class Target, class From>
         struct tuple_assignable_impl;
         
@@ -314,21 +315,50 @@ namespace elib { namespace aux
         struct tuple_assignable;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_equal
+        // detail::tuple_equal
         template <std::size_t I>
         struct tuple_equal;
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_less
+        // detail::tuple_less
         template <std::size_t I>
         struct tuple_less;
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     template <class From, class To>
-    using is_tuple_convertible = tuple_detail::tuple_convertible<From, To>;
+    using is_tuple_convertible = detail::tuple_convertible<From, To>;
     
     template <class Target, class From>
-    using is_tuple_assignable = tuple_detail::tuple_assignable<Target, From>;
+    using is_tuple_assignable = detail::tuple_assignable<Target, From>;
     
-}}                                                          // namespace elib
+}                                                           // namespace tuples
+
+using tuples::tuple;
+using tuples::pair;
+
+using tuples::get;
+
+using tuples::piecewise_construct_t;
+using tuples::piecewise_construct;
+
+using tuples::tuple_size;
+using tuples::tuple_size_t;
+using tuples::tuple_element;
+using tuples::tuple_element_t;
+using tuples::tuple_element_index;
+using tuples::tuple_element_index_t;
+
+using tuples::tuple_indexes;
+using tuples::tuple_types;
+
+using tuples::make_tuple_indexes;
+using tuples::make_tuple_indexes_t;
+using tuples::make_tuple_types;
+using tuples::make_tuple_types_t;
+    
+using tuples::is_tuple_like;
+using tuples::is_tuple_convertible;
+using tuples::is_tuple_assignable;
+    
+}                                                           // namespace elib
 #endif /* ELIB_TUPLE_FWD_HPP */

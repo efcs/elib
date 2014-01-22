@@ -11,7 +11,6 @@
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/pair.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/detail/na.hpp>
 # include <elib/aux.hpp>

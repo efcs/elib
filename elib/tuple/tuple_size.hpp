@@ -6,12 +6,12 @@
 # include <elib/tuple/is_tuple_like.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     ////////////////////////////////////////////////////////////////////////////
-    // aux::tuple_size
+    // tuple_size
     template <class T>
-    struct tuple_size : tuple_detail::tuple_size_impl<uncvref<T>>
+    struct tuple_size : detail::tuple_size_impl<aux::uncvref<T>>
     {
         static_assert(
             is_tuple_like<T>::value

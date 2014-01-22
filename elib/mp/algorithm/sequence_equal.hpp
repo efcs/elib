@@ -11,7 +11,6 @@
 # include <elib/mp/pair.hpp>
 # include <elib/mp/protect.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/aux.hpp>
 
 namespace elib 
@@ -27,8 +26,8 @@ namespace elib
         template <class State, class Iter>
         using apply = 
           and_<
-              not_< same_type<Iter, end_t<Seq1>> >
-            , not_< same_type<State, end_t<Seq2>> >
+              not_< aux::same_type<Iter, end_t<Seq1>> >
+            , not_< aux::same_type<State, end_t<Seq2>> >
             , apply_wrap< detail::binary_deref_lambda<Pred>, State, Iter >
           >;
       };
@@ -51,8 +50,8 @@ namespace elib
         
         using type = 
           and_<
-              same_type<typename result_::iterator, end_t<Seq1> >
-            , same_type<typename result_::state, end_t<Seq2> >
+              aux::same_type<typename result_::iterator, end_t<Seq1> >
+            , aux::same_type<typename result_::state, end_t<Seq2> >
             >;
       };
       
@@ -62,7 +61,7 @@ namespace elib
     template <
         class Seq1
       , class Seq2
-      , class Pred = same_type<_1, _2>
+      , class Pred = aux::same_type<_1, _2>
     >
     struct sequence_equal 
       : detail::sequence_equal_impl< Seq1, Seq2, Pred >::type
@@ -72,7 +71,7 @@ namespace elib
     template <
         class Seq1
       , class Seq2
-      , class Pred = same_type<_1, _2>
+      , class Pred = aux::same_type<_1, _2>
       >
     using sequence_equal_t = typename
       detail::sequence_equal_impl<Seq1, Seq2, Pred>::type;

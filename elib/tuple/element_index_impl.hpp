@@ -9,9 +9,9 @@
 # include <utility>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
-    namespace tuple_detail
+    namespace detail
     {
         template <class Value, class T>
         struct tuple_element_index_impl;
@@ -42,7 +42,7 @@ namespace elib { namespace aux
         struct tuple_element_index_impl<Value, pair<Value, Value>>
         {
             static_assert(
-                never<Value>::value
+                aux::never<Value>::value
               , "tuple_element_index: pair has same types"
             );
         };
@@ -63,12 +63,12 @@ namespace elib { namespace aux
         struct tuple_element_index_impl<Value, std::pair<Value, Value>>
         {
             static_assert(
-                never<Value>::value
+                aux::never<Value>::value
               , "tuple_element_index: pair has same types"
             );
         };
         
         
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_ELEMENT_INDEX_IMPL_HPP */

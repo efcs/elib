@@ -15,9 +15,9 @@
 # include <utility>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
-    namespace tuple_detail
+    namespace detail
     {
         template <class T>
         struct strip_ref_wrapper
@@ -32,18 +32,18 @@ namespace elib { namespace aux
         };
         
         template <class T>
-        using decay_strip = typename strip_ref_wrapper< decay_t<T> >::type;
+        using decay_strip = typename strip_ref_wrapper< aux::decay_t<T> >::type;
         
         template <class T, class U>
         using decay_strip_pair = pair<decay_strip<T>, decay_strip<U>>;
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////////
     // aux::make_pair
     template <class T, class U>
-    constexpr tuple_detail::decay_strip_pair<T, U> make_pair(T && t, U && u)
+    constexpr detail::decay_strip_pair<T, U> make_pair(T && t, U && u)
     {
-        return tuple_detail::decay_strip_pair<T, U>(
+        return detail::decay_strip_pair<T, U>(
                     static_cast<T &&>(t), static_cast<U &&>(u));
     }
     
@@ -108,7 +108,7 @@ namespace elib { namespace aux
         lhs.swap(rhs);
     }
     
-    namespace tuple_detail
+    namespace detail
     {
         template <std::size_t N>
         struct pair_get_impl;
@@ -164,24 +164,21 @@ namespace elib { namespace aux
     constexpr tuple_element_t<I, pair<First, Second>>&
     get(pair<First, Second> & t) noexcept
     {
-        static_assert(
-            !is_const<tuple_element_t<I, pair<First, Second>>>::value
-          , "Shit");
-        return tuple_detail::pair_get_impl<I>::get(t);
+        return detail::pair_get_impl<I>::get(t);
     }
     
     template <std::size_t I, class First, class Second>
     constexpr tuple_element_t<I, pair<First, Second>> const&
     get(pair<First, Second> const& t) noexcept
     {
-        return tuple_detail::pair_get_impl<I>::get(t);
+        return detail::pair_get_impl<I>::get(t);
     }
     
     template <std::size_t I, class First, class Second>
     constexpr tuple_element_t<I, pair<First, Second>>&&
     get(pair<First, Second> && t) noexcept
     {
-        return tuple_detail::pair_get_impl<I>::get(elib::move(t)); 
+        return detail::pair_get_impl<I>::get(elib::move(t)); 
     }
     
     template <class First, class Second>

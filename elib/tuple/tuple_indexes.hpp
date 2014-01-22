@@ -4,7 +4,7 @@
 # include <elib/tuple/fwd.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     ////////////////////////////////////////////////////////////////////////
     // tuple_indexes
@@ -12,10 +12,10 @@ namespace elib { namespace aux
     struct tuple_indexes {};
     
     
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::make_tuple_indexes_impl
+        // detail::make_tuple_indexes_impl
         template <std::size_t Start, class Indexes, std::size_t End>
         struct make_tuple_indexes_impl;
         
@@ -35,7 +35,7 @@ namespace elib { namespace aux
         {
             using type = tuple_indexes<Indexes...>;
         };
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////
     // make_tuple_indexes
@@ -43,7 +43,7 @@ namespace elib { namespace aux
     struct make_tuple_indexes
     {
         using type = typename 
-            tuple_detail::make_tuple_indexes_impl<Start, tuple_indexes<>, End>::type;
+            detail::make_tuple_indexes_impl<Start, tuple_indexes<>, End>::type;
                 
         static_assert(
             Start <= End

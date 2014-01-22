@@ -5,11 +5,11 @@
 # include <elib/tuple/index_of_impl.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     template <class Key, class T>
     struct tuple_index_of
-      : tuple_detail::tuple_index_of_impl<Key, T>
+      : detail::tuple_index_of_impl<Key, T>
     {};
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_TUPLE_INDEX_OF_HPP *

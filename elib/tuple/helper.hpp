@@ -7,23 +7,23 @@
 # include <elib/aux.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_convertible_impl
+        // detail::tuple_convertible_impl
         template <bool IsSameSize, class From, class To>
         struct tuple_convertible_impl : false_
         {};
         
         template <class ...From, class ...To>
         struct tuple_convertible_impl<true, tuple_types<From...>, tuple_types<To...>>
-          : and_< true_, true_, is_convertible<From, To>... >
+          : and_< true_, true_, aux::is_convertible<From, To>... >
         {};
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_convertible
+        // detail::tuple_convertible
         template <
             class From, class To
           , bool /* = is_tuple_like<From>::value */
@@ -42,18 +42,18 @@ namespace elib { namespace aux
         {};
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_assignable_impl
+        // detail::tuple_assignable_impl
         template <bool IsSameSize, class Target, class From>
         struct tuple_assignable_impl : false_
         {};
         
         template <class ...Target, class ...From>
         struct tuple_assignable_impl<true, tuple_types<Target...>, tuple_types<From...>>
-          : and_< true_, true_, is_assignable<Target, From>... >
+          : and_< true_, true_, aux::is_assignable<Target, From>... >
         {};
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_assignable
+        // detail::tuple_assignable
         template <
             class Target, class From
           , bool /* = is_tuple_like<Target>::value */
@@ -72,7 +72,7 @@ namespace elib { namespace aux
         {};
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_equal
+        // detail::tuple_equal
         template <std::size_t I>
         struct tuple_equal
         {
@@ -93,7 +93,7 @@ namespace elib { namespace aux
         };
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_less
+        // detail::tuple_less
         template <std::size_t I>
         struct tuple_less
         {
@@ -114,6 +114,6 @@ namespace elib { namespace aux
             bool operator()(Tp1 const&, Tp2 const&) noexcept
             { return false; }
         };
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
 }}                                                          // namespace elib
 # endif /* ELIB_TUPLE_HELPER_HPP */

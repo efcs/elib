@@ -11,13 +11,13 @@
 # include <utility>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
-    namespace tuple_detail
+    namespace detail
     {
         
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_impl
+        // detail::tuple_impl
         template <class Indexes, class ...Types>
         struct tuple_impl;
         
@@ -32,7 +32,7 @@ namespace elib { namespace aux
             item_at_index_lookup(tuple_item<Index, Value> const&);
             
             template <class Index>
-            static none item_at_index_lookup(...);
+            static aux::none item_at_index_lookup(...);
             
             ////////////////////////////////////////////////////////////////////
             //
@@ -44,7 +44,7 @@ namespace elib { namespace aux
                 );
                 
                 static_assert(
-                    !is_same<result, none>::value
+                    !aux::is_same<result, aux::none>::value
                   , "Index lookup failed"
                   );
                 
@@ -80,7 +80,7 @@ namespace elib { namespace aux
             item_at_value_lookup(tuple_item<Index, Value> const&);
             
             template<class Value>
-            static none item_at_value_lookup(...);
+            static aux::none item_at_value_lookup(...);
             
             ////////////////////////////////////////////////////////////////////
             //
@@ -92,7 +92,7 @@ namespace elib { namespace aux
                   );
                 
                 static_assert( 
-                    !is_same<result, none>::value
+                    !aux::is_same<result, aux::none>::value
                   , "item at value lookup failed"
                   );
                 
@@ -137,7 +137,7 @@ namespace elib { namespace aux
             item_at_key_lookup(tuple_item<Index, pair<Key, Value>> const&);
             
             template <class Key>
-            static none item_at_key_lookup(...);
+            static aux::none item_at_key_lookup(...);
             
             ////////////////////////////////////////////////////////////////////
             //
@@ -149,7 +149,7 @@ namespace elib { namespace aux
                   );
                 
                 static_assert( 
-                    !is_same<result, none>::value
+                    !aux::is_same<result, aux::none>::value
                   , "item at key lookup failed"
                   );
                 
@@ -239,6 +239,6 @@ namespace elib { namespace aux
                 );
             }
         };
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_TUPLE_IMPL_HPP */

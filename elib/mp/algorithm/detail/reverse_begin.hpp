@@ -3,7 +3,6 @@
 
 # include <elib/mp/identity.hpp>
 # include <elib/mp/iterator.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/aux.hpp>
 
@@ -23,7 +22,7 @@ namespace elib
         
         using type = 
           eval_if_t<
-              same_type<begin_, end_>
+              aux::same_type<begin_, end_>
             , identity< end_ >
             , prior< end_ >
           >;
@@ -32,8 +31,6 @@ namespace elib
       
       template <class Seq>
       using reverse_begin_t = typename reverse_begin<Seq>::type;
-      
-      
       
     }                                                       // namespace detail
   }                                                         // namespace mp

@@ -3,15 +3,14 @@
 
 # include <elib/tuple/fwd.hpp>
 # include <elib/tuple/apply_tuple.hpp>
-# include <elib/tuple/piecewise_construct.hpp>
 # include <elib/aux.hpp>
 # include <elib/functional.hpp>
 # include <utility>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     ////////////////////////////////////////////////////////////////////////////
-    // aux::pair
+    // pair
     template <class First, class Second>
     struct pair
     {
@@ -22,26 +21,26 @@ namespace elib { namespace aux
         Second second;
         
         constexpr pair() 
-                noexcept(is_nothrow_default_constructible<First>::value
-                      && is_nothrow_default_constructible<Second>::value)
+                noexcept(aux::is_nothrow_default_constructible<First>::value
+                      && aux::is_nothrow_default_constructible<Second>::value)
           : first(), second()
         {
             static_assert(
-                !is_ref<First>::value && !is_ref<Second>::value
+                !aux::is_ref<First>::value && !aux::is_ref<Second>::value
               , "Attempting to default construct a reference type in pair"
             );
         }
         
         constexpr pair(const First& f, const Second& s)
-                noexcept(is_nothrow_copy_constructible<First>::value
-                      && is_nothrow_copy_constructible<Second>::value)
+                noexcept(aux::is_nothrow_copy_constructible<First>::value
+                      && aux::is_nothrow_copy_constructible<Second>::value)
             : first(f), second(s)
         {}
         
         template <
             class T, class U
-          , ELIB_ENABLE_IF(is_convertible<First, T>::value
-                        && is_convertible<Second, U>::value)
+          , ELIB_ENABLE_IF(aux::is_convertible<First, T>::value
+                        && aux::is_convertible<Second, U>::value)
         >
         constexpr pair(T && t, U && u) 
             : first(static_cast<T &&>(t))
@@ -50,8 +49,8 @@ namespace elib { namespace aux
         
         template <
             class T, class U
-          , ELIB_ENABLE_IF(is_convertible<First, T>::value
-                        && is_convertible<Second, U>::value)
+          , ELIB_ENABLE_IF(aux::is_convertible<First, T>::value
+                        && aux::is_convertible<Second, U>::value)
         >
         constexpr pair( pair<T, U> const& p) 
             : first(p.first), second(p.second)
@@ -59,8 +58,8 @@ namespace elib { namespace aux
         
         template <
             class T, class U
-          , ELIB_ENABLE_IF(is_convertible<First, T>::value
-                        && is_convertible<Second, U>::value)
+          , ELIB_ENABLE_IF(aux::is_convertible<First, T>::value
+                        && aux::is_convertible<Second, U>::value)
         >
         constexpr pair( pair<T, U> && p )
             : first(elib::move(p.first)), second(elib::move(p.second))
@@ -86,8 +85,8 @@ namespace elib { namespace aux
         pair( pair&& ) = default;
         
         pair& operator=( pair const& p ) 
-                noexcept(is_nothrow_copy_assignable<First>::type
-                      && is_nothrow_copy_assignable<Second>::type)
+                noexcept(aux::is_nothrow_copy_assignable<First>::type
+                      && aux::is_nothrow_copy_assignable<Second>::type)
         {
             if (this != &p)
             {
@@ -99,8 +98,8 @@ namespace elib { namespace aux
         
         template <
             class T, class U
-          , ELIB_ENABLE_IF(is_convertible<First, T>::value
-                        && is_convertible<Second, U>::value)
+          , ELIB_ENABLE_IF(aux::is_convertible<First, T>::value
+                        && aux::is_convertible<Second, U>::value)
         >
         pair& operator=( pair<T, U> const& p)
         {
@@ -110,8 +109,8 @@ namespace elib { namespace aux
         }
         
         pair& operator=(pair && p)
-                noexcept(is_nothrow_move_assignable<First>::value
-                      && is_nothrow_move_assignable<Second>::value)
+                noexcept(aux::is_nothrow_move_assignable<First>::value
+                      && aux::is_nothrow_move_assignable<Second>::value)
         
         {
             first = elib::move(p.first);
@@ -121,8 +120,8 @@ namespace elib { namespace aux
         
         template <
             class T, class U
-          , ELIB_ENABLE_IF(is_convertible<First, T>::value 
-                        && is_convertible<Second, U>::value)
+          , ELIB_ENABLE_IF(aux::is_convertible<First, T>::value 
+                        && aux::is_convertible<Second, U>::value)
         >
         pair& operator=(pair<T, U> && p)
         {

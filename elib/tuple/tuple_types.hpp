@@ -6,7 +6,7 @@
 # include <elib/aux.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     
     ////////////////////////////////////////////////////////////////////////
@@ -15,10 +15,10 @@ namespace elib { namespace aux
     struct tuple_types {};
     
     
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::make_tuple_types_impl
+        // detail::make_tuple_types_impl
         template <
             class TupleTypes, class Tuple
           , std::size_t Start, std::size_t End
@@ -31,10 +31,10 @@ namespace elib { namespace aux
         >
         struct make_tuple_types_impl<tuple_types<Types...>, Tuple, Start, End>
         {
-            using TupleType = remove_ref_t<Tuple>;
+            using TupleType = aux::remove_ref_t<Tuple>;
             using ElementType =
                 if_t<
-                    is_lvalue_ref<Tuple>
+                    aux::is_lvalue_ref<Tuple>
                   , tuple_element_impl_t<Start, TupleType>&
                   , tuple_element_impl_t<Start, TupleType>
                   >;
@@ -55,19 +55,19 @@ namespace elib { namespace aux
         {
             using type = tuple_types<Types...>;
         };
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////
     // make_tuple_types
     template <
         class Tuple
-      , std::size_t End /* = tuple_size_impl<remove_ref_t<Tuple>>::value */
+      , std::size_t End /* = tuple_size_impl<aux::remove_ref_t<Tuple>>::value */
       , std::size_t Start /* = 0 */
     >
     struct make_tuple_types
     {
         using type = typename
-            tuple_detail::make_tuple_types_impl<tuple_types<>, Tuple, Start, End>::type;
+            detail::make_tuple_types_impl<tuple_types<>, Tuple, Start, End>::type;
                 
         static_assert( Start <= End, "make_tuple_types: invalid params");
     };

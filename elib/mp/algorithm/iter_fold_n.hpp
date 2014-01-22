@@ -123,7 +123,7 @@ namespace elib
             , pair<State, size_type_<N>>
             , identity_state_op
             , lambda< next<_1> >
-            , lambda< not_<same_type<end_t<Seq>, _2>> >
+            , lambda< not_<aux::same_type<end_t<Seq>, _2>> >
             , iter_foldr_n_pair_first_lambda< StateOp >
             , iter_foldr_n_pred
             >::type

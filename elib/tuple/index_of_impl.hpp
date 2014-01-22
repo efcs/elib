@@ -9,9 +9,9 @@
 # include <utility>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////////
         // detail::index_of_impl
@@ -59,6 +59,6 @@ namespace elib { namespace aux
         {
             using type = size_type_<1>;
         };
-    }                                                       // namespace tuple_detail
+    }                                                       // namespace detail
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_INDEX_OF_IMPL_HPP */

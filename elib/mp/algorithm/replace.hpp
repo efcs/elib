@@ -67,7 +67,7 @@ namespace elib
       , class In = back_inserter<clear_t<Seq>>
       >
     struct replace
-      : replace_if<Seq, same_type<Old, _1>, New, In>
+      : replace_if<Seq, aux::same_type<Old, _1>, New, In>
     {};
     
     
@@ -108,7 +108,7 @@ namespace elib
       , class In = front_inserter<clear_t<Seq>>
       >
     struct reverse_replace
-      : reverse_replace_if<Seq, same_type<Old, _1>, New, In>
+      : reverse_replace_if<Seq, aux::same_type<Old, _1>, New, In>
     {};
     
     

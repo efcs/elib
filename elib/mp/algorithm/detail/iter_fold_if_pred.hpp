@@ -4,7 +4,7 @@
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/protect.hpp>
-# include <elib/mp/same_type.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {
@@ -19,7 +19,7 @@ namespace elib
         template <class State, class Iter>
         using apply = 
           and_<
-              not_<same_type<Iter, End>>
+              not_<aux::same_type<Iter, End>>
             , apply_wrap<Pred, State, Iter> 
           >;
       };

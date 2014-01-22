@@ -2,11 +2,10 @@
 #define ELIB_MP_ALGORITHM_DETAIL_REVERSE_ITER_OP_HPP
 
 # include <elib/mp/identity.hpp>
-
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/protect.hpp>
-# include <elib/mp/same_type.hpp>
+# include <elib/aux.hpp>
 
 
 namespace elib 
@@ -24,8 +23,8 @@ namespace elib
         using apply = 
           if_t<
               or_<
-                  same_type<Begin, Iter>
-                , same_type<End, Iter>
+                  aux::same_type<Begin, Iter>
+                , aux::same_type<End, Iter>
               >
             , identity< End >
             , prior< Iter >

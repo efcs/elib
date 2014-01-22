@@ -7,7 +7,6 @@
 # include <elib/mp/arg.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
 
 namespace elib 
@@ -67,7 +66,7 @@ namespace elib
       , class In = back_inserter<clear_t<Seq>>
       >
     struct remove
-      : remove_if<Seq, same_type<_1, T>, In>
+      : remove_if<Seq, aux::same_type<_1, T>, In>
     {};
     
     
@@ -85,7 +84,7 @@ namespace elib
       , class In = front_inserter<clear_t<Seq>>
       >
     struct reverse_remove
-      : reverse_remove_if<Seq, same_type<_1, T>, In>
+      : reverse_remove_if<Seq, aux::same_type<_1, T>, In>
     {};
     
    

@@ -17,9 +17,7 @@ namespace elib
     
     
     template <class Seq, class State, class F, class Pred = always_true>
-    struct iter_foldr_if_impl<
-      
-    >
+    struct iter_foldr_if_impl<>
     
   }                                                         // namespace mp
 }                                                           // namespace elib

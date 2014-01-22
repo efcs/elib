@@ -16,7 +16,7 @@
 # include <elib/aux.hpp>
 # include <cstddef>
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {    
     ////////////////////////////////////////////////////////////////////////////
     // aux::get(tuple)
@@ -25,7 +25,7 @@ namespace elib { namespace aux
     get(tuple<Ts...> & t) noexcept
     {
         using Type = tuple_element_t<I, tuple<Ts...>>;
-        return static_cast<tuple_detail::tuple_item_c<I, Type> &>(t.m_impl).get();
+        return static_cast<detail::tuple_item_c<I, Type> &>(t.m_impl).get();
     }
     
     template <std::size_t I, class ...Ts>
@@ -33,7 +33,7 @@ namespace elib { namespace aux
     get(tuple<Ts...> const& t) noexcept
     {
         using Type = tuple_element_t<I, tuple<Ts...>>;
-        return static_cast<tuple_detail::tuple_item_c<I, Type> const &>(t.m_impl).get();
+        return static_cast<detail::tuple_item_c<I, Type> const &>(t.m_impl).get();
     }
     
     template <std::size_t I, class ...Ts>
@@ -43,7 +43,7 @@ namespace elib { namespace aux
         using Type = tuple_element_t<I, tuple<Ts...>>;
         return 
             static_cast<Type &&>(
-                static_cast<tuple_detail::tuple_item_c<I, Type> &&>(t.m_impl).get()
+                static_cast<detail::tuple_item_c<I, Type> &&>(t.m_impl).get()
             );
     }
     
@@ -75,7 +75,7 @@ namespace elib { namespace aux
     // aux::operator==, aux::operator!=, aux::operator<
     template <class ...Ts1, class ...Ts2>
     constexpr bool operator==(tuple<Ts1...> const& t1, tuple<Ts2...> const& t2)
-    { return tuple_detail::tuple_equal<sizeof...(Ts1)>()(t1, t2); }
+    { return detail::tuple_equal<sizeof...(Ts1)>()(t1, t2); }
     
     template <class ...Ts1, class ...Ts2>
     constexpr bool operator!=(tuple<Ts1...> const& t1, tuple<Ts2...> const& t2)
@@ -83,7 +83,7 @@ namespace elib { namespace aux
     
     template <class ...Ts1, class ...Ts2>
     constexpr bool operator<(tuple<Ts1...> const& t1, tuple<Ts2...> const& t2)
-    { return tuple_detail::tuple_less<sizeof...(Ts1)>()(t1, t2); }
+    { return detail::tuple_less<sizeof...(Ts1)>()(t1, t2); }
     
     template <class ...Ts1, class ...Ts2>
     constexpr bool operator>(tuple<Ts1...> const& t1, tuple<Ts2...> const& t2)

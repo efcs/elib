@@ -6,7 +6,6 @@
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/lambda.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/aux.hpp>
 
@@ -25,7 +24,7 @@ namespace elib
             , _2 
             , _1
           >
-        , same_type<end_t<Seq>, _1>
+        , aux::same_type<end_t<Seq>, _1>
       >;
     
     
@@ -35,7 +34,7 @@ namespace elib
     
     
     template <class Seq, class T>
-    struct find : find_if<Seq, same_type<T, _1>>
+    struct find : find_if<Seq, aux::same_type<T, _1>>
     {};
     
     template <class Seq, class T>

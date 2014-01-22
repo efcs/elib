@@ -1497,6 +1497,41 @@ namespace elib
         
         template <class T>
         using result_of_t = typename result_of<T>::type;
+        
+        ////////////////////////////////////////////////////////////////////////
+        // same_type
+        namespace detail
+        {
+            template <class T, class U>
+            struct same_type_impl : false_ {};
+            
+            template <class T>
+            struct same_type_impl<T, T> : true_ {};
+        }                                                   // namespace detail
+        
+        template <class T, class U>
+        struct same_type 
+          : detail::same_type_impl< uncvref<T>, uncvref<U> >
+        {};
+        
+        ////////////////////////////////////////////////////////////////////////
+        // same_intc
+        namespace detail
+        {
+            template <class T0, T0 V0, class T1, T1 V1>
+            struct same_intc_impl : false_ {};
+            
+            template <class T, T V>
+            struct same_intc_impl<T, V, T, V> : true_ {};
+        }                                                   // namespace detail
+        
+        template <class T, class U>
+        struct same_inc 
+          : detail::same_intc_impl<
+              typename T::value_type, T::value
+            , typename U::value_type, U::value
+            >
+        {};
     }                                                       // namespace aux
 }                                                            // namespace elib
 #endif /* ELIB_AUX_HPP */

@@ -5,7 +5,6 @@
 #include "elib/mp/identity.hpp"
 #include "elib/mp/pair.hpp"
 #include "elib/mp/void.hpp"
-#include "elib/mp/same_type.hpp"
 #
 #include "mp_test_helper.hpp"
 #include "elib/aux.hpp"
@@ -45,11 +44,11 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
 
   BOOST_AUTO_TEST_CASE(mp_if_test)
   {
-    CHECK( if_t<same_type<_1, _1>, true_, false_>() );
-    CHECK( if_t<same_type<_1, _2>, false_, true_>() );
+    CHECK( if_t<aux::same_type<_1, _1>, true_, false_>() );
+    CHECK( if_t<aux::same_type<_1, _2>, false_, true_>() );
     CHECK( if_c_t<true, true_, false_>() );
     CHECK( if_c_t<false, false_, true_>() );
-    CHECK( eval_if_t<same_type<_1, _1>, identity<true_>, identity<false_>>() );
+    CHECK( eval_if_t<aux::same_type<_1, _1>, identity<true_>, identity<false_>>() );
     CHECK( eval_if_t<false_, identity<false_>, identity<true_>>() );
     CHECK( eval_if_c_t<true, identity<true_>, void>() );
     CHECK( eval_if_c_t<false, void, identity<true_>>() );

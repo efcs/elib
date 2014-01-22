@@ -13,7 +13,6 @@
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
-# include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
 # include <elib/aux.hpp>
@@ -91,7 +90,7 @@ namespace elib
             , State
             , identity_state_op
             , lambda< next<_1> >
-            , lambda< not_< same_type<end_t<Seq>, _2> > >
+            , lambda< not_< aux::same_type<end_t<Seq>, _2> > >
             , lambda< StateOp >
             , lambda< Pred >
           >;

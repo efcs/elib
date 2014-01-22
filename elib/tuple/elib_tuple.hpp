@@ -10,16 +10,16 @@
 # include <cstddef>
 
 
-namespace elib { namespace aux
+namespace elib { namespace tuples
 {
     ////////////////////////////////////////////////////////////////////////////
-    // aux::tuple
+    // tuple
     template <class ...Types>
     struct tuple
     {
     private:
         using Impl = 
-            tuple_detail::tuple_impl<
+            detail::tuple_impl<
                 make_tuple_indexes_t<sizeof...(Types)>
               , Types...
             >;
@@ -27,10 +27,10 @@ namespace elib { namespace aux
         Impl m_impl;
         
         template <class Key, class T>
-        friend struct tuple_detail::tuple_element_index_impl;
+        friend struct detail::tuple_element_index_impl;
         
         template<std::size_t I, class T>
-        friend struct tuple_detail::tuple_element_impl;
+        friend struct detail::tuple_element_impl;
         
         template <std::size_t I, class ...Ts>
         friend constexpr tuple_element_t<I, tuple<Ts...>>&
@@ -117,7 +117,7 @@ namespace elib { namespace aux
     };
     
     ////////////////////////////////////////////////////////////////////////////
-    // aux::tuple<> (Empty)
+    // tuple<> (Empty)
     template <>
     struct tuple<>
     {

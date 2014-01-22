@@ -7,12 +7,12 @@
 # include <tuple>
 # include <cstddef>
 
-namespace elib { namespace aux 
+namespace elib { namespace tuples 
 {
-    namespace tuple_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
-        // tuple_detail::tuple_element_impl
+        // detail::tuple_element_impl
         template <std::size_t I, class T>
         struct tuple_element_impl
           : std::tuple_element<I, T>
@@ -24,67 +24,67 @@ namespace elib { namespace aux
         {};
         
         template <std::size_t I, class ...Args>
-        struct tuple_element_impl<I, aux::tuple<Args...>>
-          : params::at<aux::tuple<Args...>, I>
+        struct tuple_element_impl<I, tuple<Args...>>
+          : params::at<tuple<Args...>, I>
         {};
         
         template <std::size_t I, class ...Args>
-        struct tuple_element_impl<I, aux::tuple<Args...> const>
+        struct tuple_element_impl<I, tuple<Args...> const>
         {
             using type = 
-                add_const_t<
-                    params::at_t<aux::tuple<Args...>, I>
+                aux::add_const_t<
+                    params::at_t<tuple<Args...>, I>
                 >;  
         };
         
         template <std::size_t I, class ...Args>
-        struct tuple_element_impl<I, aux::tuple<Args...> volatile>
+        struct tuple_element_impl<I, tuple<Args...> volatile>
         {
             using type =
-                add_volatile_t<
-                    params::at_t<aux::tuple<Args...>, I>
+                aux::add_volatile_t<
+                    params::at_t<tuple<Args...>, I>
                 >;
         };
         
         template <std::size_t I, class ...Args>
-        struct tuple_element_impl<I, aux::tuple<Args...> const volatile>
+        struct tuple_element_impl<I, tuple<Args...> const volatile>
         {
             using type = 
-                add_cv_t<
-                    params::at_t<aux::tuple<Args...>, I>
+                aux::add_cv_t<
+                    params::at_t<tuple<Args...>, I>
                   >;
         };
         
         template <std::size_t I, class First, class Second>
-        struct tuple_element_impl<I, aux::pair<First, Second>>
+        struct tuple_element_impl<I, pair<First, Second>>
         {
-            using type = params::at_t<aux::pair<First, Second>, I>;
+            using type = params::at_t<pair<First, Second>, I>;
         };
         
         template <std::size_t I, class First, class Second>
-        struct tuple_element_impl<I, aux::pair<First, Second> const>
+        struct tuple_element_impl<I, pair<First, Second> const>
         {
             using type = 
-                add_const_t<
-                    params::at_t<aux::pair<First, Second>, I>
+                aux::add_const_t<
+                    params::at_t<pair<First, Second>, I>
                 >;
         };
         
         template <std::size_t I, class First, class Second>
-        struct tuple_element_impl<I, aux::pair<First, Second> volatile>
+        struct tuple_element_impl<I, pair<First, Second> volatile>
         {
             using type = 
-                add_volatile_t<
-                    params::at_t<aux::pair<First, Second>, I>
+                aux::add_volatile_t<
+                    params::at_t<pair<First, Second>, I>
                 >;
         };
         
         template <std::size_t I, class First, class Second>
-        struct tuple_element_impl<I, aux::pair<First, Second> const volatile>
+        struct tuple_element_impl<I, pair<First, Second> const volatile>
         {
             using type = 
-                add_cv_t<
-                    params::at_t<aux::pair<First, Second>, I>
+                aux::add_cv_t<
+                    params::at_t<pair<First, Second>, I>
                 >;
         };        
     }

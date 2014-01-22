@@ -9,11 +9,11 @@ namespace elib
   {
     
     template <class T>
-    struct sizeof_ : size_type< sizeof(T) >
+    struct sizeof_ : size_type_< sizeof(T) >
     {};
     
     template <class T>
-    using sizeof_t = size_type< sizeof(T) >;
+    using sizeof_t = size_type_< sizeof(T) >;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

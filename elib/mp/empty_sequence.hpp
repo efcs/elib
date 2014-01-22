@@ -41,7 +41,7 @@ namespace elib
       {
         
         template <class Seq>
-        using sequence_size = size_type<0>;
+        using sequence_size = size_type_<0>;
         
         template <class Seq>
         using empty = true_;

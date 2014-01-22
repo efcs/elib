@@ -97,7 +97,7 @@ namespace elib
         
         
         template <class S>
-        using sequence_size = size_type<1>;
+        using sequence_size = size_type_<1>;
         
         
         template <class S>

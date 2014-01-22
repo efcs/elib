@@ -21,7 +21,7 @@ namespace elib
       {
         using type = decltype( 
           Vector::index_lookup(
-            size_type<Vector::lower_bound_::value + N>()
+            size_type_<Vector::lower_bound_::value + N>()
           )
         );
       };

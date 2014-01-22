@@ -29,7 +29,7 @@ namespace elib
       
       // type sequence
       template <template <class...> class S, class ...Args>
-      struct sequence_size< S<Args...> > : size_type<sizeof...(Args)>
+      struct sequence_size< S<Args...> > : size_type_<sizeof...(Args)>
       {};
       
     //-------------------------------- empty --------------------------------// 

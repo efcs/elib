@@ -48,27 +48,27 @@
                                                                                              \
         template <class A1>                                                                  \
         struct apply<A1>                                                                     \
-          : ELIB_MP_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1))                                    \
+          : ELIB_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1))                                    \
         {};                                                                                  \
                                                                                              \
         template <class A1, class A2>                                                        \
         struct apply<A1, A2>                                                                 \
-          : ELIB_MP_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2))                                \
+          : ELIB_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2))                                \
         {};                                                                                  \
                                                                                              \
         template <class A1, class A2, class A3>                                              \
         struct apply<A1, A2, A3>                                                             \
-          : ELIB_MP_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2, A3))                            \
+          : ELIB_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2, A3))                            \
         {};                                                                                  \
                                                                                              \
         template <class A1, class A2, class A3, class A4>                                    \
         struct apply<A1, A2, A3, A4>                                                         \
-          : ELIB_MP_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2, A3, A4))                        \
+          : ELIB_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2, A3, A4))                        \
         {};                                                                                  \
                                                                                              \
         template <class A1, class A2, class A3, class A4, class A5>                          \
         struct apply<A1, A2, A3, A4, A5>                                                     \
-          : ELIB_MP_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2, A3, A4, A5))                    \
+          : ELIB_AUTO_INTC(Val op ELIB_MP_EXPAND(op, A1, A2, A3, A4, A5))                    \
         {};                                                                                  \
                                                                                              \
         template <                                                                           \
@@ -76,7 +76,7 @@
           , class A6                                                                         \
         >                                                                                    \
         struct apply<A1, A2, A3, A4, A5, A6>                                                 \
-          : ELIB_MP_AUTO_INTC(Val op                                                            \
+          : ELIB_AUTO_INTC(Val op                                                            \
                 ELIB_MP_EXPAND(op, A1, A2, A3, A4, A5, A6)                                   \
             )                                                                                \
         {};                                                                                  \
@@ -86,7 +86,7 @@
           , class A6, class A7                                                               \
         >                                                                                    \
         struct apply<A1, A2, A3, A4, A5, A6, A7>                                             \
-          : ELIB_MP_AUTO_INTC(Val op                                                            \
+          : ELIB_AUTO_INTC(Val op                                                            \
                 ELIB_MP_EXPAND(op, A1, A2, A3, A4, A5, A6, A7)                               \
             )                                                                                \
         {};                                                                                  \
@@ -96,7 +96,7 @@
           , class A6, class A7, class A8                                                     \
         >                                                                                    \
         struct apply<A1, A2, A3, A4, A5, A6, A7, A8>                                         \
-          : ELIB_MP_AUTO_INTC(Val op                                                            \
+          : ELIB_AUTO_INTC(Val op                                                            \
                 ELIB_MP_EXPAND(op, A1, A2, A3, A4, A5, A6, A7, A8)                           \
             )                                                                                \
         {};                                                                                  \
@@ -106,7 +106,7 @@
           , class A6, class A7, class A8, class A9                                           \
         >                                                                                    \
         struct apply<A1, A2, A3, A4, A5, A6, A7, A8, A9>                                     \
-          : ELIB_MP_AUTO_INTC(Val op                                                            \
+          : ELIB_AUTO_INTC(Val op                                                            \
                 ELIB_MP_EXPAND(op, A1, A2, A3, A4, A5, A6, A7, A8, A9)                       \
             )                                                                                \
         {};                                                                                  \

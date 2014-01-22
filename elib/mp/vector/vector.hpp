@@ -29,9 +29,9 @@ namespace elib
       using class_type = vector_tag;
       using model_type = vector_model;
       
-      using lower_bound_ = size_type<32767>;
+      using lower_bound_ = size_type_<32767>;
       using upper_bound_ = lower_bound_;
-      using size = size_type<0>;
+      using size = size_type_<0>;
       
       static void_ index_lookup(...);
       
@@ -47,10 +47,10 @@ namespace elib
       using type = vector;
       using base = vector<Rest...>;
       
-      using lower_bound_ = size_type<base::lower_bound_::value - 1>;
+      using lower_bound_ = size_type_<base::lower_bound_::value - 1>;
       using upper_bound_ = typename base::upper_bound_;
       
-      using size = size_type< base::size::value + 1 >;
+      using size = size_type_< base::size::value + 1 >;
       using index_ = lower_bound_;
       
       static First index_lookup(index_);
@@ -65,13 +65,13 @@ namespace elib
       using type = vector;
       using base = vector<Rest...>;
       
-      using lower_bound_ = size_type< base::lower_bound_::value - 2 >;
+      using lower_bound_ = size_type_< base::lower_bound_::value - 2 >;
       using upper_bound_ = typename base::upper_bound_;
       
-      using size = size_type< base::size::value + 2 >;
+      using size = size_type_< base::size::value + 2 >;
       
       using index_1 = lower_bound_;
-      using index_2 = size_type< lower_bound_::value + 1>;
+      using index_2 = size_type_< lower_bound_::value + 1>;
       
       static A1 index_lookup(index_1);
       static A2 index_lookup(index_2);
@@ -86,14 +86,14 @@ namespace elib
       using type = vector;
       using base = vector<Rest...>;
       
-      using lower_bound_ = size_type<base::lower_bound_::value - 3>;
+      using lower_bound_ = size_type_<base::lower_bound_::value - 3>;
       using upper_bound_ = typename base::upper_bound_;
       
-      using size = size_type< base::size::value +  3>;
+      using size = size_type_< base::size::value +  3>;
       
       using index_1 = lower_bound_;
-      using index_2 = size_type< lower_bound_::value + 1>;
-      using index_3 = size_type< lower_bound_::value + 2 >;
+      using index_2 = size_type_< lower_bound_::value + 1>;
+      using index_3 = size_type_< lower_bound_::value + 2 >;
       
       static A1 index_lookup(index_1);
       static A2 index_lookup(index_2);
@@ -108,15 +108,15 @@ namespace elib
       using type = vector;
       using base = vector<Rest...>;
       
-      using lower_bound_ = size_type< base::lower_bound_::value - 4 >;
+      using lower_bound_ = size_type_< base::lower_bound_::value - 4 >;
       using upper_bound_ = typename base::upper_bound_;
       
-      using size = size_type< base::size::value +  4>;
+      using size = size_type_< base::size::value +  4>;
       
       using index_1 = lower_bound_;
-      using index_2 = size_type< lower_bound_::value + 1 >;
-      using index_3 = size_type< lower_bound_::value + 2 >;
-      using index_4 = size_type< lower_bound_::value + 3 >;
+      using index_2 = size_type_< lower_bound_::value + 1 >;
+      using index_3 = size_type_< lower_bound_::value + 2 >;
+      using index_4 = size_type_< lower_bound_::value + 3 >;
       
       static A1 index_lookup(index_1);
       static A2 index_lookup(index_2);
@@ -134,16 +134,16 @@ namespace elib
       using type = vector;
       using base = vector<Rest...>;
       
-      using lower_bound_ = size_type< base::lower_bound_::value - 5 >;
+      using lower_bound_ = size_type_< base::lower_bound_::value - 5 >;
       using upper_bound_ = typename base::upper_bound_;
       
-      using size = size_type< base::size::value +  5 >;
+      using size = size_type_< base::size::value +  5 >;
       
       using index_1 = lower_bound_;
-      using index_2 = size_type< lower_bound_::value + 1 >;
-      using index_3 = size_type< lower_bound_::value + 2 >;
-      using index_4 = size_type< lower_bound_::value + 3 >;
-      using index_5 = size_type< lower_bound_::value + 4 >;
+      using index_2 = size_type_< lower_bound_::value + 1 >;
+      using index_3 = size_type_< lower_bound_::value + 2 >;
+      using index_4 = size_type_< lower_bound_::value + 3 >;
+      using index_5 = size_type_< lower_bound_::value + 4 >;
       
       static A1 index_lookup(index_1);
       static A2 index_lookup(index_2);

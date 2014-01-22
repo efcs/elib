@@ -11,11 +11,11 @@ namespace elib
   //-------------------------------- bitnegate_ -----------------------------// 
   
     template <class T>
-    struct bitnegate_ : ELIB_MP_AUTO_INTC( ~ T::type::value )
+    struct bitnegate_ : ELIB_AUTO_INTC( ~ T::type::value )
     {};
     
     template <class T>
-    using bitnegate_t = ELIB_MP_AUTO_INTC( ~ T::type::value );
+    using bitnegate_t = ELIB_AUTO_INTC( ~ T::type::value );
     
   //-------------------------------- bitand_ --------------------------------// 
     
@@ -32,21 +32,21 @@ namespace elib
   //-------------------------------- shift_left -----------------------------// 
     
     template <class T, class U>
-    struct shift_left : ELIB_MP_AUTO_INTC( T::type::value << U::type::value )
+    struct shift_left : ELIB_AUTO_INTC(T::type::value << U::type::value)
     {};
     
     template <class T, class U>
-    using shift_left_t = ELIB_MP_AUTO_INTC( T::type::value << U::type::value );
+    using shift_left_t = ELIB_AUTO_INTC( T::type::value << U::type::value );
     
   
   //-------------------------------- shift_right ----------------------------// 
   
     template <class T, class U>
-    struct shift_right : ELIB_MP_AUTO_INTC( T::type::value >> U::type::value )
+    struct shift_right : ELIB_AUTO_INTC(( T::type::value >> U::type::value ))
     {};
     
     template <class T, class U>
-    using shift_right_t = ELIB_MP_AUTO_INTC( T::type::value >> U::type::value );
+    using shift_right_t = ELIB_AUTO_INTC(( T::type::value >> U::type::value ));
     
   }                                                         // namespace mp
 }                                                           // namespace elib

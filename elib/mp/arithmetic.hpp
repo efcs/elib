@@ -11,11 +11,11 @@ namespace elib
   //-------------------------------- negate --------------------------------// 
 
     template <class T>
-    struct negate : ELIB_MP_AUTO_INTC(- T::type::value )
+    struct negate : ELIB_AUTO_INTC(- T::type::value )
     {};
     
     template <class T>
-    using negate_t = ELIB_MP_AUTO_INTC( - T::type::value );
+    using negate_t = ELIB_AUTO_INTC( - T::type::value );
 
   //-------------------------------- add ------------------------------------// 
    
@@ -53,11 +53,11 @@ namespace elib
   //-------------------------------- modulus --------------------------------// 
   
     template <class T, class U>
-    struct modulus : ELIB_MP_AUTO_INTC( T::type::value % U::type::value )
+    struct modulus : ELIB_AUTO_INTC( T::type::value % U::type::value )
     {};
     
     template <class T, class U>
-    using modulus_t = ELIB_MP_AUTO_INTC( T::type::value % U::type::value );
+    using modulus_t = ELIB_AUTO_INTC( T::type::value % U::type::value );
   
   //-------------------------------- increment --------------------------------// 
     

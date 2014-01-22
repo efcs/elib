@@ -48,7 +48,7 @@ namespace elib
       template <class Last, std::size_t N>
       struct distance_impl<Last, Last, N>
       {
-        using type = size_type<N>;
+        using type = size_type_<N>;
       };
       
       

@@ -80,7 +80,7 @@ namespace elib
       {
         template <class State, class Iter>
         using apply = 
-          greater< second_t<State>, size_type<0> >;
+          greater< second_t<State>, size_type_<0> >;
       };
       
       
@@ -120,7 +120,7 @@ namespace elib
             typename 
             detail::forward_iter_foldb_if<
               begin_t<Seq>
-            , pair<State, size_type<N>>
+            , pair<State, size_type_<N>>
             , identity_state_op
             , lambda< next<_1> >
             , lambda< not_<same_type<end_t<Seq>, _2>> >

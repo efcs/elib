@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
     SAME_TYPE(T0, C0);
     SAME_TYPE(typename T0::type, T0);
     
-    using T1 = vector<size_type<0>>;
+    using T1 = vector<size_type_<0>>;
     using C1 = vector_c<std::size_t, 0>;
     SAME_TYPE(T1, C1);
     SAME_TYPE(typename T1::type, T1);

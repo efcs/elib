@@ -123,7 +123,7 @@ namespace elib
         
         
         template <class It, std::size_t N>
-        using advance_c = advance< It, size_type<N> >;
+        using advance_c = advance< It, size_type_<N> >;
         
         
         template <class First, class Last>

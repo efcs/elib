@@ -21,13 +21,13 @@ namespace elib
       , class ...As
     >
     struct variadic_size< Seq<As...> >
-      : size_type< sizeof...(As) >
+      : size_type_< sizeof...(As) >
     {};
     
     
     template <class Seq, class ...As>
     struct variadic_size< Seq(As...) >
-      : size_type< sizeof...(As) >
+      : size_type_< sizeof...(As) >
     {};
     
   }                                                         // namespace mp

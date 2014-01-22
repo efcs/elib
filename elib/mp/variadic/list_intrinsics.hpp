@@ -40,7 +40,7 @@ namespace elib
       template <class List> struct sequence_size;
       
       template <template <class...> class List, class ...Args>
-      struct sequence_size< List<Args...> > : size_type< sizeof...(Args) >
+      struct sequence_size< List<Args...> > : size_type_< sizeof...(Args) >
       {};
       
     //-------------------------------- empty --------------------------------// 

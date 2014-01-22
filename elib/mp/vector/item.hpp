@@ -18,11 +18,11 @@ namespace elib
       {
         using type = vector_item;
         
-        using lower_bound_ = size_type<Vector::lower_bound_::value - 1>;
+        using lower_bound_ = size_type_<Vector::lower_bound_::value - 1>;
         using upper_bound_ = typename Vector::upper_bound_;
         
         using index = lower_bound_;
-        using size = size_type< Vector::size::value + 1>;
+        using size = size_type_< Vector::size::value + 1>;
         
         static T index_lookup(index);
         using Vector::index_lookup;
@@ -36,10 +36,10 @@ namespace elib
         using type = vector_item;
         
         using lower_bound_ = typename Vector::lower_bound_;
-        using upper_bound_ = size_type< Vector::upper_bound_::value + 1>;
+        using upper_bound_ = size_type_< Vector::upper_bound_::value + 1>;
         
         using index = typename Vector::upper_bound_;
-        using size = size_type< Vector::size::value + 1>;
+        using size = size_type_< Vector::size::value + 1>;
         
         static T index_lookup(index);
         using Vector::index_lookup;
@@ -51,12 +51,12 @@ namespace elib
         : Vector
       {
         using type = vector_mask;
-        using lower_bound_ = size_type< Vector::lower_bound_::value + 1>;
+        using lower_bound_ = size_type_< Vector::lower_bound_::value + 1>;
         using upper_bound_ = typename Vector::upper_bound_;
       
         // note: not 'index' since it is not a valid entry 
         using index_ = typename Vector::lower_bound_;
-        using size = size_type< Vector::size::value - 1>;
+        using size = size_type_< Vector::size::value - 1>;
         
         static void index_lookup(index_);
         using Vector::index_lookup;
@@ -68,10 +68,10 @@ namespace elib
       {
         using type = vector_mask;
         using lower_bound_ = typename Vector::lower_bound_;
-        using upper_bound_ = size_type<Vector::upper_bound_::value - 1>;
+        using upper_bound_ = size_type_<Vector::upper_bound_::value - 1>;
         
         using index_ = upper_bound_;
-        using size = size_type<Vector::size::value - 1>;
+        using size = size_type_<Vector::size::value - 1>;
         
         static void index_lookup(index_);
         using Vector::index_lookup;

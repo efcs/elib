@@ -39,8 +39,14 @@ namespace elib
         template <char V>
         using char_ = integral_constant<char, V>;
         
+        template <short V>
+        using short_ = integral_constant<short, V>;
+        
+        template <unsigned short V>
+        using ushort_ = integral_constant<unsigned short, V>;
+        
         template <int V>
-        using int_ = integral_constant<bool, V>;
+        using int_ = integral_constant<int, V>;
         
         template <unsigned V>
         using uint_ = integral_constant<unsigned, V>;

@@ -255,7 +255,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 ////////////////////////////////////////////////////////////////////////////////
 
 #define OP ~
-#define FN bitnegate_t
+#define FN bitnegate_
 
   BOOST_AUTO_TEST_CASE(mp_bitwise_negate)
   {
@@ -272,7 +272,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #undef FN
 
 #define OP &
-#define FN bitand_t
+#define FN bitand_
   
   BOOST_AUTO_TEST_CASE(mp_bitwise_and)
   {
@@ -289,7 +289,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #undef FN
 
 #define OP |
-#define FN bitor_t
+#define FN bitor_
 
   BOOST_AUTO_TEST_CASE(mp_bitwise_or)
   {
@@ -306,7 +306,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #undef FN
 
 #define OP ^
-#define FN bitxor_t
+#define FN bitxor_
 
   BOOST_AUTO_TEST_CASE(mp_bitwise_xor)
   {
@@ -324,7 +324,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #undef FN
 
 #define OP << 
-#define FN shift_left_t
+#define FN shift_left
   
   BOOST_AUTO_TEST_CASE(mp_bitwise_shift_left)
   {
@@ -341,7 +341,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #undef FN
 
 #define OP >>
-#define FN shift_right_t
+#define FN shift_right
   
   BOOST_AUTO_TEST_CASE(mp_bitwise_shift_right)
   {
@@ -362,61 +362,61 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 
   BOOST_AUTO_TEST_CASE(mp_logical_not)
   {
-    SAME_TYPE(false_, not_t<true_>);
-    SAME_TYPE(true_, not_t<false_>);
-    SAME_TYPE(true_, not_t<int_<0>>);
-    SAME_TYPE(true_, not_t<ullong_<0>>);
-    SAME_TYPE(false_, not_t<char_<1>>);
-    SAME_TYPE(false_, not_t<short_<-1>>);
+    SAME_TYPE(false_, not_<true_>);
+    SAME_TYPE(true_, not_<false_>);
+    SAME_TYPE(true_, not_<int_<0>>);
+    SAME_TYPE(true_, not_<ullong_<0>>);
+    SAME_TYPE(false_, not_<char_<1>>);
+    SAME_TYPE(false_, not_<short_<-1>>);
     // or_c
-    SAME_TYPE(false_, not_c_t<true>);
-    SAME_TYPE(true_, not_c_t<false>);
-    SAME_TYPE(true_, not_c_t<0>);
-    SAME_TYPE(true_, not_c_t<0u>);
-    SAME_TYPE(true_, not_c_t<0l>);
-    SAME_TYPE(true_, not_c_t<static_cast<unsigned long long>(0)>);
-    SAME_TYPE(false_, not_c_t<1>);
-    SAME_TYPE(false_, not_c_t<static_cast<unsigned>(-1)>);
+    SAME_TYPE(false_, not_c<true>);
+    SAME_TYPE(true_, not_c<false>);
+    SAME_TYPE(true_, not_c<0>);
+    SAME_TYPE(true_, not_c<0u>);
+    SAME_TYPE(true_, not_c<0l>);
+    SAME_TYPE(true_, not_c<static_cast<unsigned long long>(0)>);
+    SAME_TYPE(false_, not_c<1>);
+    SAME_TYPE(false_, not_c<static_cast<unsigned>(-1)>);
   }                                                         // mp_logical_not
   
   BOOST_AUTO_TEST_CASE(mp_logical_and)
   {
-    SAME_TYPE(true_, and_t<true_, true_>);
-    SAME_TYPE(true_, and_t<true_, true_, true_>);
-    SAME_TYPE(false_, and_t<true_, false_>);
-    SAME_TYPE(false_, and_t<false_, true_>);
-    SAME_TYPE(false_, and_t<false_, false_>);
-    SAME_TYPE(false_, and_t<true_, true_, false_>);
+    SAME_TYPE(true_, and_<true_, true_>);
+    SAME_TYPE(true_, and_<true_, true_, true_>);
+    SAME_TYPE(false_, and_<true_, false_>);
+    SAME_TYPE(false_, and_<false_, true_>);
+    SAME_TYPE(false_, and_<false_, false_>);
+    SAME_TYPE(false_, and_<true_, true_, false_>);
     // short circuit test
-    SAME_TYPE(false_, and_t<true_, false_, void_>);
+    SAME_TYPE(false_, and_<true_, false_, void_>);
     // and_c
-    SAME_TYPE(true_, and_c_t<true, true>);
-    SAME_TYPE(true_, and_c_t<true, true, true>);
-    SAME_TYPE(false_, and_c_t<true, false>);
-    SAME_TYPE(false_, and_c_t<false, true>);
-    SAME_TYPE(false_, and_c_t<false, false>);
-    SAME_TYPE(false_, and_c_t<true, true, false>);
+    SAME_TYPE(true_, and_c<true, true>);
+    SAME_TYPE(true_, and_c<true, true, true>);
+    SAME_TYPE(false_, and_c<true, false>);
+    SAME_TYPE(false_, and_c<false, true>);
+    SAME_TYPE(false_, and_c<false, false>);
+    SAME_TYPE(false_, and_c<true, true, false>);
   }                                                         // mp_logical_and
 
 
   BOOST_AUTO_TEST_CASE(mp_logical_or)
   {
-    SAME_TYPE(true_, or_t<true_, true_>);
-    SAME_TYPE(true_, or_t<true_, true_, true_>);
-    SAME_TYPE(true_, or_t<false_, true_>);
-    SAME_TYPE(true_, or_t<true_, false_>);
-    SAME_TYPE(true_, or_t<false_, false_, false_, true_>);
-    SAME_TYPE(false_, or_t<false_, false_>);
-    SAME_TYPE(false_, or_t<false_, false_, false_>);
+    SAME_TYPE(true_, or_<true_, true_>);
+    SAME_TYPE(true_, or_<true_, true_, true_>);
+    SAME_TYPE(true_, or_<false_, true_>);
+    SAME_TYPE(true_, or_<true_, false_>);
+    SAME_TYPE(true_, or_<false_, false_, false_, true_>);
+    SAME_TYPE(false_, or_<false_, false_>);
+    SAME_TYPE(false_, or_<false_, false_, false_>);
     // short circuit test
-    SAME_TYPE(true_, or_t<false_, true_, void_>);
+    SAME_TYPE(true_, or_<false_, true_, void_>);
     // or_c
-    SAME_TYPE(false_, or_c_t<false, false>);
-    SAME_TYPE(false_, or_c_t<false, false, false>);
-    SAME_TYPE(true_, or_c_t<true, false>);
-    SAME_TYPE(true_, or_c_t<false, true>);
-    SAME_TYPE(true_, or_c_t<true, true>);
-    SAME_TYPE(true_, or_c_t<false, false, true>);
+    SAME_TYPE(false_, or_c<false, false>);
+    SAME_TYPE(false_, or_c<false, false, false>);
+    SAME_TYPE(true_, or_c<true, false>);
+    SAME_TYPE(true_, or_c<false, true>);
+    SAME_TYPE(true_, or_c<true, true>);
+    SAME_TYPE(true_, or_c<false, false, true>);
 
   }                                                         // mp_logical_or
 

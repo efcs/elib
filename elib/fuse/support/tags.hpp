@@ -18,6 +18,14 @@ namespace elib { namespace fuse
     struct std_tuple_tag {};
     struct std_pair_tag {};
     
+    struct iterator_facade_tag {};
+    struct elib_pair_iterator_tag {};
+    struct elib_tuple_iterator_tag {};
+    struct std_pair_iterator_tag {};
+    struct std_tuple_iterator_tag {};
+    struct std_array_iterator_tag {};
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     // Models
     namespace model
@@ -29,6 +37,8 @@ namespace elib { namespace fuse
         struct forward : single_pass {};
         struct bidirectional : forward {};
         struct random_access : bidirectional {};
+        
+        struct associative {};
     }                                                       // namespace model
 }}                                                          // namespace elib
 #endif /* ELIB_FUSE_SUPPORT_TAGS_HPP */

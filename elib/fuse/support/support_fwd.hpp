@@ -14,9 +14,16 @@ namespace elib { namespace fuse
     
     struct elib_tuple_tag;
     struct elib_pair_tag;
-    struct std_array_tag;
     struct std_tuple_tag;
     struct std_pair_tag;
+    struct std_array_tag;
+    
+    struct iterator_facade_tag;
+    struct elib_pair_iterator_tag;
+    struct elib_tuple_iterator_tag;
+    struct std_pair_iterator_tag;
+    struct std_tuple_iterator_tag;
+    struct std_array_iterator_tag;
     
     namespace model
     {

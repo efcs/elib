@@ -11,6 +11,34 @@
 
 namespace elib { namespace fuse
 {
+    template <class Seq, class T>
+    using disable_if_const =
+        aux::lazy_disable_if<
+            aux::is_const<Seq>
+          , T
+        >;
+        
+    template <class Seq, class T>
+    using disable_if_const_t = 
+        aux::lazy_disable_if_t<
+            aux::is_const<Seq>
+          , T
+        >;
+        
+    template <class Seq, class T>
+    using enable_if_seq = 
+        aux::lazy_enable_if<
+            traits::is_sequence<Seq>
+          , T
+        >;
+        
+    template <class Seq, class T>
+    using enable_if_seq_t =
+        aux::lazy_enable_if_t<
+            traits::is_sequence<Seq>
+          , T
+        >;
+    
     namespace detail
     {
         template <class T>
@@ -58,9 +86,12 @@ namespace elib { namespace fuse
     namespace detail
     {
         template <class T>
-        struct normalized_tag_of
-            : traits::tag_of< aux::remove_const_t<T> >
+        struct get_tag_of
+            : traits::tag_of< aux::uncvref<T> >
         {};
+        
+        template <class T>
+        using get_tag_of_t = typename traits::tag_of< aux::uncvref<T> >::type;
         
         // TODO
         // fix for mpl sequences? 

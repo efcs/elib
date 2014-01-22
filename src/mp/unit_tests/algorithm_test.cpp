@@ -906,7 +906,7 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
   
   template <class P, class P1>
   using pair_equal_t = 
-    and_t< 
+    and_< 
       sequence_equal<first_t<P>, first_t<P1>>
     , sequence_equal<second_t<P>, second_t<P1>>
     >;

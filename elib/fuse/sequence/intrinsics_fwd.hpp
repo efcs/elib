@@ -158,117 +158,131 @@ namespace elib { namespace fuse
     ////////////////////////////////////////////////////////////////////////////
     // fuse::at(seq)
     template <class N, class Seq>
-    result_of::at_t<Seq, N>
+    constexpr 
+        aux::lazy_disable_if_t<
+            aux::is_const<Seq>
+          , result_of::at<Seq, N>
+        >
     at(Seq& seq);
     
     template <class N, class Seq>
-    result_of::at_t<Seq const, N>
+    constexpr result_of::at_t<Seq const, N>
     at(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::at_c(seq)
     template <int N, class Seq>
-    result_of::at_c_t<Seq, N>
+    constexpr 
+        aux::lazy_disable_if_t<
+            aux::is_const<Seq>
+          , result_of::at_c<Seq, N>
+        >
     at_c(Seq & seq);
     
     template <int N, class Seq>
-    result_of::at_c_t<Seq const, N>
+    constexpr result_of::at_c_t<Seq const, N>
     at_c(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::back(seq)
     template <class Seq>
-    result_of::back_t<Seq>
+    constexpr result_of::back_t<Seq>
     back(Seq & seq);
     
     template <class Seq>
-    result_of::back_t<Seq const>
+    constexpr result_of::back_t<Seq const>
     back(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::begin(seq)
     template <class Seq>
-    aux::lazy_enable_if_t<
-        traits::is_sequence<Seq>
-      , result_of::begin<Seq>
-    > const
+    constexpr
+        aux::lazy_enable_if_t<
+            traits::is_sequence<Seq>
+          , result_of::begin<Seq>
+        > const
     begin(Seq & seq);
     
     template <class Seq>
-    aux::lazy_disable_if_t<
-        traits::is_sequence<Seq>
-      , result_of::begin<Seq const>
-    > const
+    constexpr
+        aux::lazy_enable_if_t<
+            traits::is_sequence<Seq>
+          , result_of::begin<Seq const>
+        > const
     begin(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::empty(seq)
     template <class Seq>
-    result_of::empty_t<Seq>
+    constexpr result_of::empty_t<Seq>
     empty(Seq const&);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::end(seq)
     template <class Seq>
-    aux::lazy_enable_if_t<
-        traits::is_sequence<Seq>
-      , result_of::end<Seq>
-    > const
+    constexpr
+        aux::lazy_enable_if_t<
+            traits::is_sequence<Seq>
+          , result_of::end<Seq>
+        > const
     end(Seq & seq);
     
     template <class Seq>
-    aux::lazy_enable_if_t<
-        traits::is_sequence<Seq>
-      , result_of::end<Seq const>
-    > const
+    constexpr
+        aux::lazy_enable_if_t<
+            traits::is_sequence<Seq>
+          , result_of::end<Seq const>
+        > const
     end(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::front(seq)
     template <class Seq>
-    result_of::front_t<Seq>
+    constexpr result_of::front_t<Seq>
     front(Seq & seq);
     
     template <class Seq>
-    result_of::front_t<Seq const>
+    constexpr result_of::front_t<Seq const>
     front(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::has_key(seq)
     template <class Key, class Seq>
-    result_of::has_key_t<Seq, Key>
+    constexpr result_of::has_key_t<Seq, Key>
     has_key(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::segments(seq)
     template <class Seq>
-    aux::lazy_disable_if_t<
-        aux::is_const<Seq>
-      , result_of::segments<Seq>
-    >
+    constexpr
+        aux::lazy_disable_if_t<
+            aux::is_const<Seq>
+          , result_of::segments<Seq>
+        >
     segments(Seq & seq);
     
     template <class Seq>
-    result_of::segments_t<Seq const>
+    constexpr result_of::segments_t<Seq const>
     segments(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::size(seq)
     template <class Seq>
-    result_of::size_t<Seq>
+    constexpr result_of::size_t<Seq>
     size(Seq const& seq);
     
     ////////////////////////////////////////////////////////////////////////////
     // fuse::at_key(seq)
     template <class Key, class Seq>
-    aux::lazy_disable_if_t<
-        aux::is_const<Seq>
-      , result_of::at_key<Seq, Key>
-    >
+    constexpr
+        aux::lazy_disable_if_t<
+            aux::is_const<Seq>
+          , result_of::at_key<Seq, Key>
+        >
     at_key(Seq & seq);
     
     template <class Key, class Seq>
-    result_of::at_key_t<Seq const, Key>
+    constexpr result_of::at_key_t<Seq const, Key>
     at_key(Seq const& seq);
 }}                                                          // namespace elib
 #endif /* ELIB_FUSE_SEQUENCE_INTRINSICS_FWD_HPP */

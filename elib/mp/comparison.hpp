@@ -1,42 +1,15 @@
 #ifndef ELIB_MP_COMPARISON_HPP
 #define ELIB_MP_COMPARISON_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux/comparison.hpp>
 
-namespace elib 
+namespace elib { namespace mp
 {
-  namespace mp
-  {
-    
-    template <class LHS, class RHS>
-    struct equal_to : bool_<LHS::type::value == RHS::type::value>
-    {};
-    
-    template <class LHS, class RHS>
-    struct not_equal_to : bool_<LHS::type::value != RHS::type::value>
-    {};
-    
-    
-    template <class LHS, class RHS>
-    struct less : bool_<(LHS::type::value < RHS::type::value)>
-    {};
-    
-    
-    template <class LHS, class RHS>
-    struct less_equal : bool_<(LHS::type::value <= RHS::type::value)>
-    {};
-    
-    
-    template <class LHS, class RHS>
-    struct greater : bool_<(LHS::type::value > RHS::type::value)>
-    {};
-    
-    
-    template <class LHS, class RHS>
-    struct greater_equal : bool_<(LHS::type::value >= RHS::type::value)>
-    {};
-    
-    
-  }                                                         // namespace mp
-}                                                           // namespace elib
+    using aux::equal_to;
+    using aux::not_equal_to;
+    using aux::less;
+    using aux::greater;
+    using aux::less_equal;
+    using aux::greater_equal;
+}}                                                          // namespace elib
 #endif /* ELIB_MP_COMPARISON_HPP */

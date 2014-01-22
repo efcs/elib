@@ -51,7 +51,7 @@ namespace elib
           >;                       
         
         using type = 
-          and_t<
+          and_<
               same_type<typename result_::iterator, end_t<Seq1> >
             , same_type<typename result_::state, end_t<Seq2> >
             >;

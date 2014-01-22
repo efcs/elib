@@ -33,7 +33,7 @@ namespace elib
     
     template <class T, class Tag>
     using is_model_of_t = 
-      and_t<
+      and_<
           has_model_of<T>
         , detail::is_model_of_impl<T, Tag>
         >;

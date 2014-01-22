@@ -1,9 +1,7 @@
 #ifndef ELIB_TUPLE_FWD_HPP
 #define ELIB_TUPLE_FWD_HPP
 
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/type_traits.hpp>
-# include <elib/aux/no_decay.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

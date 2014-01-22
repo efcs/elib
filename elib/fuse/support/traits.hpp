@@ -4,9 +4,7 @@
 # include <elib/fuse/support/support_fwd.hpp>
 # include <elib/fuse/support/iterator_base.hpp>
 # include <elib/fuse/support/sequence_base.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/aux.hpp>
 # include <functional>
 
 namespace elib { namespace fuse

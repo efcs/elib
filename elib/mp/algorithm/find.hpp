@@ -4,11 +4,11 @@
 # include <elib/mp/algorithm/iter_fold_if.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/apply_wrap.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

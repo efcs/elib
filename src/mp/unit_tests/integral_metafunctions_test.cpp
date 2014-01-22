@@ -6,10 +6,17 @@
 #include "elib/mp/logical.hpp"
 #include "elib/mp/comparison.hpp"
 #include "elib/mp/void.hpp"
-#include "elib/mp/integral_constant.hpp"
 #include "elib/pp/overload.hpp"
 #include "mp_test_helper.hpp"
 
+using aux::char_;
+using aux::short_;
+using aux::ushort_;
+using aux::uint_;
+using aux::long_;
+using aux::ulong_;
+using aux::llong_;
+using aux::ullong_;
 
 #define V_(x) x::type::value 
 #
@@ -359,67 +366,70 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 //                            LOGICAL                                              
 ////////////////////////////////////////////////////////////////////////////////
 
+#define SAME_INTC(v, ...) BOOST_CHECK((v() == __VA_ARGS__()));
 
   BOOST_AUTO_TEST_CASE(mp_logical_not)
   {
-    SAME_TYPE(false_, not_<true_>);
-    SAME_TYPE(true_, not_<false_>);
-    SAME_TYPE(true_, not_<int_<0>>);
-    SAME_TYPE(true_, not_<ullong_<0>>);
-    SAME_TYPE(false_, not_<char_<1>>);
-    SAME_TYPE(false_, not_<short_<-1>>);
+    SAME_INTC(false_, not_<true_>);
+    SAME_INTC(true_, not_<false_>);
+    SAME_INTC(true_, not_<int_<0>>);
+    SAME_INTC(true_, not_<ullong_<0>>);
+    SAME_INTC(false_, not_<char_<1>>);
+    SAME_INTC(false_, not_<short_<-1>>);
     // or_c
-    SAME_TYPE(false_, not_c<true>);
-    SAME_TYPE(true_, not_c<false>);
-    SAME_TYPE(true_, not_c<0>);
-    SAME_TYPE(true_, not_c<0u>);
-    SAME_TYPE(true_, not_c<0l>);
-    SAME_TYPE(true_, not_c<static_cast<unsigned long long>(0)>);
-    SAME_TYPE(false_, not_c<1>);
-    SAME_TYPE(false_, not_c<static_cast<unsigned>(-1)>);
+    SAME_INTC(false_, not_c<true>);
+    SAME_INTC(true_, not_c<false>);
+    SAME_INTC(true_, not_c<0>);
+    SAME_INTC(true_, not_c<0u>);
+    SAME_INTC(true_, not_c<0l>);
+    SAME_INTC(true_, not_c<static_cast<unsigned long long>(0)>);
+    SAME_INTC(false_, not_c<1>);
+    SAME_INTC(false_, not_c<static_cast<unsigned>(-1)>);
   }                                                         // mp_logical_not
   
   BOOST_AUTO_TEST_CASE(mp_logical_and)
   {
-    SAME_TYPE(true_, and_<true_, true_>);
-    SAME_TYPE(true_, and_<true_, true_, true_>);
-    SAME_TYPE(false_, and_<true_, false_>);
-    SAME_TYPE(false_, and_<false_, true_>);
-    SAME_TYPE(false_, and_<false_, false_>);
-    SAME_TYPE(false_, and_<true_, true_, false_>);
+    SAME_INTC(true_, and_<true_, true_>);
+    SAME_INTC(true_, and_<true_, true_, true_>);
+    SAME_INTC(false_, and_<true_, false_>);
+    SAME_INTC(false_, and_<false_, true_>);
+    SAME_INTC(false_, and_<false_, false_>);
+    SAME_INTC(false_, and_<true_, true_, false_>);
     // short circuit test
-    SAME_TYPE(false_, and_<true_, false_, void_>);
+    SAME_INTC(false_, and_<true_, false_, void_>);
     // and_c
-    SAME_TYPE(true_, and_c<true, true>);
-    SAME_TYPE(true_, and_c<true, true, true>);
-    SAME_TYPE(false_, and_c<true, false>);
-    SAME_TYPE(false_, and_c<false, true>);
-    SAME_TYPE(false_, and_c<false, false>);
-    SAME_TYPE(false_, and_c<true, true, false>);
+    SAME_INTC(true_, and_c<true, true>);
+    SAME_INTC(true_, and_c<true, true, true>);
+    SAME_INTC(false_, and_c<true, false>);
+    SAME_INTC(false_, and_c<false, true>);
+    SAME_INTC(false_, and_c<false, false>);
+    SAME_INTC(false_, and_c<true, true, false>);
   }                                                         // mp_logical_and
 
 
   BOOST_AUTO_TEST_CASE(mp_logical_or)
   {
-    SAME_TYPE(true_, or_<true_, true_>);
-    SAME_TYPE(true_, or_<true_, true_, true_>);
-    SAME_TYPE(true_, or_<false_, true_>);
-    SAME_TYPE(true_, or_<true_, false_>);
-    SAME_TYPE(true_, or_<false_, false_, false_, true_>);
-    SAME_TYPE(false_, or_<false_, false_>);
-    SAME_TYPE(false_, or_<false_, false_, false_>);
+    SAME_INTC(true_, or_<true_, true_>);
+    SAME_INTC(true_, or_<true_, true_, true_>);
+    SAME_INTC(true_, or_<false_, true_>);
+    SAME_INTC(true_, or_<true_, false_>);
+    SAME_INTC(true_, or_<false_, false_, false_, true_>);
+    SAME_INTC(false_, or_<false_, false_>);
+    SAME_INTC(false_, or_<false_, false_, false_>);
     // short circuit test
-    SAME_TYPE(true_, or_<false_, true_, void_>);
+    SAME_INTC(true_, or_<false_, true_, void_>);
     // or_c
-    SAME_TYPE(false_, or_c<false, false>);
-    SAME_TYPE(false_, or_c<false, false, false>);
-    SAME_TYPE(true_, or_c<true, false>);
-    SAME_TYPE(true_, or_c<false, true>);
-    SAME_TYPE(true_, or_c<true, true>);
-    SAME_TYPE(true_, or_c<false, false, true>);
+    SAME_INTC(false_, or_c<false, false>);
+    SAME_INTC(false_, or_c<false, false, false>);
+    SAME_INTC(true_, or_c<true, false>);
+    SAME_INTC(true_, or_c<false, true>);
+    SAME_INTC(true_, or_c<true, true>);
+    SAME_INTC(true_, or_c<false, false, true>);
 
   }                                                         // mp_logical_or
 
+#undef SAME_INTC
+  
 ////////////////////////////////////////////////////////////////////////////////
 //                            COMPARISON                                              
 ////////////////////////////////////////////////////////////////////////////////

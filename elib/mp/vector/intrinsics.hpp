@@ -5,8 +5,8 @@
 # include <elib/mp/vector/vector.hpp>
 # include <elib/mp/vector/iterator.hpp>
 # include <elib/mp/identity.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 

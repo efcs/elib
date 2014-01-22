@@ -3,7 +3,6 @@
 
 # include <elib/mp/apply.hpp>
 # include <elib/mp/identity.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/iterator_intrinsics.hpp>
 # include <elib/mp/iterator_range.hpp>
@@ -12,7 +11,7 @@
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/algorithm/count.hpp>
 # include <elib/mp/algorithm/find.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

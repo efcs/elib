@@ -7,6 +7,7 @@
 # include <elib/mp/vector/iterator.hpp>
 # include <elib/mp/vector/intrinsics.hpp>
 # include <elib/mp/iterator.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -69,7 +70,7 @@ namespace elib
             vector_iterator<Left, LeftPos>
           , vector_iterator<Right, RightPos>
           > 
-            : long_<static_cast<long>(RightPos - LeftPos)>
+            : aux::long_<static_cast<long>(RightPos - LeftPos)>
         {};
       
       };                                   // struct vector_iterator_intrinsics

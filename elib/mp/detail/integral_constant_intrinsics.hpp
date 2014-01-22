@@ -1,10 +1,10 @@
 #ifndef ELIB_MP_DETAIL_INTEGRAL_CONSTANT_INTRINSICS_HPP
 #define ELIB_MP_DETAIL_INTEGRAL_CONSTANT_INTRINSICS_HPP
 
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/iterator.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

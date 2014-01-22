@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_ARITHMETIC_HPP
 #define ELIB_MP_ARITHMETIC_HPP
 
-# include <elib/aux/arithmetic.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace mp
 {

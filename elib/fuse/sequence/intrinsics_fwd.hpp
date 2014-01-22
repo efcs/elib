@@ -2,8 +2,7 @@
 #define ELIB_FUSE_SEQUENCE_INTRINSICS_FWD_HPP
 
 # include <elib/fuse/support/traits.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace fuse
 {

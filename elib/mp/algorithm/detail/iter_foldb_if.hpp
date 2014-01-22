@@ -3,9 +3,7 @@
 
 # include <elib/mp/algorithm/detail/identity_iter_op.hpp>
 # include <elib/mp/apply_wrap.hpp>
-# include <elib/mp/if.hpp>
-# include <elib/mp/logical.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

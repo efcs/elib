@@ -5,8 +5,7 @@
 # include <elib/fuse/support/support_fwd.hpp>
 # include <elib/fuse/support/tags.hpp>
 # include <elib/fuse/support/traits.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace fuse
 {

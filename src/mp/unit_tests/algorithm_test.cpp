@@ -10,19 +10,19 @@
 #include "elib/mp/vector.hpp"
 #include "elib/mp/void.hpp"
 #include "elib/mp/identity.hpp"
-#include "elib/mp/integral_constant.hpp"
 
 #include "mp_test_helper.hpp"
 
 #include <iostream>
 
+using namespace elib;
 
 template <class T>
 struct IterCountOpImpl
 {
   template <class State, class Iter>
   using apply = 
-    eval_if_< 
+    eval_if< 
         same_type<T, deref_t<Iter>>
       , next<State>
       , identity< State >
@@ -59,7 +59,7 @@ struct CountOpImpl
 {
   template <class State, class Item>
   using apply = 
-    eval_if_< 
+    eval_if< 
         same_type<T, Item>
       , next<State>
       , identity< State >

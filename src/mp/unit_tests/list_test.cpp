@@ -6,6 +6,8 @@
 #include <elib/mp/iterator.hpp>
 #include "mp_test_helper.hpp"
 
+using aux::long_;
+
 template <class ...Args>
 using l_iter = list_iterator<Args...>;
 

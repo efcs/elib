@@ -2,10 +2,10 @@
 #define ELIB_MP_ALGORITHM_DETAIL_REVERSE_BEGIN_HPP
 
 # include <elib/mp/identity.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/same_type.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

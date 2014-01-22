@@ -2,14 +2,11 @@
 #define ELIB_MP_ITERATOR_ITERATOR_TRAITS_HPP
 
 # include <elib/mp/iterator/fwd.hpp>
-# include <elib/mp/enable_if.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/model_of.hpp>
 # include <elib/mp/member_type_detector.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/void.hpp>
-# include <elib/mp/integral_constant.hpp>
-# include <type_traits>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

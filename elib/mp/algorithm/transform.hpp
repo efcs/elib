@@ -7,7 +7,6 @@
 # include <elib/mp/algorithm/iter_fold_if.hpp>
 # include <elib/mp/algorithm/detail/reverse_begin.hpp>
 # include <elib/mp/apply_wrap.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/pair.hpp>
@@ -15,6 +14,7 @@
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
 # include <elib/mp/detail/na.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

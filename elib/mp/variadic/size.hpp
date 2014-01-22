@@ -2,7 +2,7 @@
 #define ELIB_MP_VARIADIC_SIZE_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 

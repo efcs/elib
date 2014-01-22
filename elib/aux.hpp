@@ -1,10 +1,11 @@
 #ifndef ELIB_AUX_HPP
 #define ELIB_AUX_HPP
-
+# 
+# include <elib/config.hpp>
+# include <elib/assert.hpp>
 # include <type_traits>
 # include <cstddef>
 # 
-# include <elib/assert.hpp>
 # 
 # /* ELIB_TODO can be used to locate TODO 's in code */
 # if defined( ELIB_STATIC_ASSERT_TODO )
@@ -118,7 +119,7 @@
     struct Impl                                                           \
     {                                                                     \
         template <class ...Empty>                                         \
-        struct apply : ::elib::aux::integral_constant<ValType, Val> {};   \
+        struct apply : ::elib::integral_constant<ValType, Val> {};   \
                                                                           \
         template <class A1>                                               \
         struct apply<A1> : ELIB_AUTO_INTC(Val Op A1::type::value) {};     \
@@ -218,6 +219,49 @@
         
 namespace elib
 {
+    ////////////////////////////////////////////////////////////////////////
+    // forward
+    template <class T>
+    constexpr T&& forward(typename std::remove_reference<T>::type& t) noexcept
+    { 
+        return static_cast<T&&>(t);
+    }
+
+    template <class T>
+    constexpr T&& forward(typename std::remove_reference<T>::type&& t) noexcept
+    {
+        return static_cast<T &&>(t);
+    }
+        
+    ////////////////////////////////////////////////////////////////////////
+    // move
+    template <class T>
+    constexpr typename std::remove_reference<T>::type&& move(T&& t) noexcept
+    {
+        return static_cast<typename std::remove_reference<T>::type &&>(t);
+    }
+        
+    ////////////////////////////////////////////////////////////////////////
+    // move_if_noexcept
+    template <class T> 
+    constexpr 
+        typename std::conditional<
+            ! std::is_nothrow_move_constructible<T>::value 
+            && std::is_copy_constructible<T>::value
+          , const T&
+          , T&&
+        >::type
+    move_if_noexcept(T& x) noexcept
+    {
+        return elib::move(x);
+    }
+        
+    ////////////////////////////////////////////////////////////////////////
+    // declval
+    template <class T>
+    typename std::add_rvalue_reference<T>::type 
+    declval();
+    
     ////////////////////////////////////////////////////////////////////////////
     // integral_constant
     template <class T, T Val>
@@ -292,6 +336,165 @@ namespace elib
     
     namespace aux
     {
+        ////////////////////////////////////////////////////////////////////////
+        //
+        template <class T, class ...Args>
+        using apply_ = typename T::template apply<Args...>;
+        
+        template <class T, class ...Args>
+        using apply_t = typename T::template apply<Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        template <class T>
+        using type_t = typename T::type;
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        template <class T>
+        struct no_decay { using type = T; };
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        struct none {};
+        
+        template <class T>
+        struct is_none : false_ {};
+        
+        template <>
+        struct is_none< none > : true_ {};
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        template <class ...Args>
+        struct not_defined;
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        namespace detail
+        {
+            template <class Always, class ...Ignored>
+            struct _always
+            {
+                using type = Always;
+            };
+        }                                                   // namespace detail
+
+        template <class ...T>
+        using always = typename aux::detail::_always<true_, T...>::type;
+
+        template <class ...T>
+        using never = typename aux::detail::_always<false_, T...>::type;
+
+        template <class ...T>
+        using always_void = typename aux::detail::_always<void, T...>::type;
+        
+        namespace detail
+        {
+            ////////////////////////////////////////////////////////////////////
+            // detail::any
+            template <class Ignored = decltype(nullptr)>
+            struct any
+            {
+                any() = default;
+
+                template <typename T>
+                constexpr any(T const &) noexcept
+                {}
+
+                template <class T>
+                operator T &&() const noexcept;
+            };
+        }                                                   // namespace detail
+
+        ////////////////////////////////////////////////////////////////////////
+        // any
+        using any = detail::any<>;
+
+        ////////////////////////////////////////////////////////////////////////
+        // any_pod
+        template <class Ignored = decltype(nullptr)>
+        struct any_pod
+        {
+            any_pod(...);
+        };
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+# if __cplusplus < 201300
+        template <class ...T>
+        inline void swallow(T &&...) noexcept {}
+# else
+        template <class ...T>
+        constexpr void swallow(T &&...) noexcept {}
+# endif
+        
+        /////////////////////////////////////////////////////////////////////////
+        //
+        template <class T>
+        struct static_const
+        { 
+            static constexpr T value{}; 
+        };
+        
+        template <class T>
+        constexpr T static_const<T>::value;
+
+        namespace 
+        {
+            constexpr void *const &enabler = static_const<void*>::value;
+        }
+        
+        namespace detail
+        {
+            ////////////////////////////////////////////////////////////////////////
+            //
+            template <class T>
+            constexpr auto by_val_impl(T & t, int)
+            ELIB_AUTO_RETURN_NOEXCEPT( T(t) )
+            
+            template <class T>
+            constexpr auto by_val_impl(T const& t, int)
+            ELIB_AUTO_RETURN_NOEXCEPT( T(t) )
+            
+            template <class T>
+            constexpr auto by_val_impl(T && t, int)
+            ELIB_AUTO_RETURN_NOEXCEPT( T(static_cast<T &&>(t)) )
+            
+            // TODO
+            // does it make sense to have this? 
+            template <class T>
+            constexpr auto by_val_impl(T const& t, long)
+            ELIB_AUTO_RETURN_NOEXCEPT(t)
+        }                                                   // namespace detail
+    
+        ////////////////////////////////////////////////////////////////////////
+        //
+        struct by_val_
+        {
+            template <class T>
+            constexpr auto operator()(T && t) const
+            ELIB_AUTO_RETURN_NOEXCEPT(
+                detail::by_val_impl(static_cast<T &&>(t), 1)
+            )
+        };
+        
+        constexpr const by_val_ by_val{};
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        struct by_ref_
+        {
+            template <class T>
+            constexpr T const& operator()(T && t) const noexcept
+            { return t;}
+        };
+        
+        constexpr const by_ref_ by_ref{};
+    }                                                       // namespace aux    
+
+    namespace aux
+    {
         ////////////////////////////////////////////////////////////////////////////
         // aux::if_c
         template <bool Pred, class Then, class Else>
@@ -317,9 +520,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////////
         // aux::if_
         template <class Pred, class Then, class Else>
-        struct if_ 
-        : if_c<static_cast<bool>(Pred::type::value), Then, Else>
-        {};
+        struct if_ : if_c<static_cast<bool>(Pred::type::value), Then, Else> {};
         
         ////////////////////////////////////////////////////////////////////////////
         // aux::if_t
@@ -451,48 +652,426 @@ namespace elib
     using aux::lazy_disable_if_c;
     using aux::lazy_disable_if_c_t;
     
-    ////////////////////////////////////////////////////////////////////////
-    // forward
-    template <class T>
-    constexpr T&& forward(typename std::remove_reference<T>::type& t) noexcept
-    { 
-        return static_cast<T&&>(t);
-    }
+    
+    
+    namespace aux
+    {
+        namespace detail
+        {
+            template <class ...Args>
+            true_ fast_and_impl(Args*...);
+        
+            false_ fast_and_impl(...);
+        
+            template <class ...Args>
+            false_ fast_or_impl(Args*...);
+        
+            true_ fast_or_impl(...);
+        }                                                       // namespace detail
 
-    template <class T>
-    constexpr T&& forward(typename std::remove_reference<T>::type&& t) noexcept
-    {
-        return static_cast<T &&>(t);
-    }
+        ////////////////////////////////////////////////////////////////////////////
+        // fast_and
+        template <class ...Preds>
+        using fast_and = decltype( 
+            detail::fast_and_impl(if_t<Preds, int*, int>{}...) 
+        );
+
+        template <bool ...Preds>
+        using fast_and_c = decltype(
+            detail::fast_and_impl(if_c_t<Preds, int*, int>{}...)
+        );
+
+        ////////////////////////////////////////////////////////////////////////////
+        // fast_or
+        template <class ...Preds>
+        using fast_or = decltype(
+            detail::fast_or_impl(if_t<Preds, int, int*>{}...)
+        );
+
+        template <bool ...Preds>
+        using fast_or_c = decltype(
+            detail::fast_or_impl(if_c_t<Preds, int, int*>{}...)
+        );
         
-    ////////////////////////////////////////////////////////////////////////
-    // move
-    template <class T>
-    constexpr typename std::remove_reference<T>::type&& move(T&& t) noexcept
-    {
-        return static_cast<typename std::remove_reference<T>::type &&>(t);
-    }
+        ////////////////////////////////////////////////////////////////////////
+        // not_
+        template <class T>
+        struct not_ : bool_<!T::type::value> {};
+
+        template <long V>
+        struct not_c : bool_<!V> {};
         
-    ////////////////////////////////////////////////////////////////////////
-    // move_if_noexcept
-    template <class T> 
-    constexpr 
-        if_c_t<
-            ! std::is_nothrow_move_constructible<T>::value 
-            && std::is_copy_constructible<T>::value
-          , const T&
-          , T&&
-        >
-    move_if_noexcept(T& x) noexcept
-    {
-        return elib::move(x);
-    }
+        namespace detail
+        {
+            ////////////////////////////////////////////////////////////////////
+            // and_impl
+            template <bool Done>
+            struct and_impl;
+
+            template <>
+            struct and_impl<true>
+            {
+                template <bool Last, class Head, class ...Tail>
+                struct apply;
+
+                template <class Head, class ...Tail>
+                struct apply<true, Head, Tail...>
+                {
+                    using type = true_;
+                    using which = none;
+                };
+
+                template <class Head, class ...Tail>
+                struct apply<false, Head, Tail...>
+                {
+                    using type = false_;
+                    using which = Head;
+                };
+            };
+
+            template <>
+            struct and_impl<false>
+            {
+                template <bool Last, class Head, class Next, class ...Tail>
+                using apply = typename 
+                    and_impl<sizeof...(Tail) == 0 || !Next::type::value>
+                    ::template apply<
+                        static_cast<bool>(Next::type::value)
+                        , Next, Tail...
+                    >;
+            };
+        }                                                       // namespace detail
         
-    ////////////////////////////////////////////////////////////////////////
-    // declval
-    template <class T>
-    typename std::add_rvalue_reference<T>::type 
-    declval();
+        ///////////////////////////////////////////////////////////////////////
+        // and_
+        template <class A0, class A1, class ...As>
+        struct and_ 
+        : detail::and_impl< !static_cast<bool>(A0::type::value) >
+            ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>::type
+        {
+            using type = and_;
+
+            using result = typename
+                detail::and_impl< !static_cast<bool>(A0::type::value) >
+                ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>;
+
+            using which = typename result::which;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // and_c
+        template <bool B1, bool B2, bool ...Rest>
+        using and_c = fast_and_c<B1, B2, Rest...>;
+        
+        namespace detail
+        {
+            ////////////////////////////////////////////////////////////////////
+            // or_impl
+            template <bool Done>
+            struct or_impl;
+
+            template <>
+            struct or_impl<true>
+            {
+                template <bool Last, class Head, class ...Tail>
+                struct apply;
+
+                template <class Head, class ...Tail>
+                struct apply<true, Head, Tail...>
+                {
+                    using type = true_;
+                    using which = none;
+                };
+
+                template <class Head, class ...Tail>
+                struct apply<false, Head, Tail...>
+                {
+                    using type = false_;
+                    using which = Head;
+                };
+            };
+
+            template <>
+            struct or_impl<false>
+            {
+                template <bool Last, class Head, class Next, class ...Tail>
+                using apply = typename
+                    or_impl< sizeof...(Tail) == 0 || Next::type::value >
+                    ::template apply< 
+                        static_cast<bool>(Next::type::value)
+                    , Next, Tail...
+                    >;
+            };
+        }                                                   // namespace detail
+
+        ////////////////////////////////////////////////////////////////////////
+        // or_
+        template <class A0, class A1, class ...As>
+        struct or_ 
+        : detail::or_impl<static_cast<bool>(A0::type::value)>
+            ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>::type
+        {
+            using type = or_;
+
+            using result = typename
+                detail::or_impl<static_cast<bool>(A0::type::value)>
+                ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>;
+
+            using which = typename result::which;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // or_c
+        template <bool B0, bool B1, bool ...Rest>
+        using or_c = fast_or_c<B0, B1, Rest...>;
+    }                                                       // namespace aux
+    
+    using aux::not_;
+    using aux::not_c;
+    using aux::and_;
+    using aux::and_c;
+    using aux::or_;
+    using aux::or_c;
+    
+    namespace aux
+    {
+        namespace detail
+        {
+            ELIB_AUX_LEFT_ASSOC_EXPR(add_apply, add_impl, +);
+            ELIB_AUX_LEFT_ASSOC_EXPR(subtract_apply, subtract_impl, -);
+            ELIB_AUX_LEFT_ASSOC_EXPR(multiply_apply, multiply_impl, *);
+            ELIB_AUX_LEFT_ASSOC_EXPR(divide_apply, divide_impl, /);
+        }                                                       // namespace detail
+        
+        ////////////////////////////////////////////////////////////////////////////
+        template <class T>
+        struct negate : ELIB_AUTO_INTC(- T::type::value ) {};
+        
+        template <class T>
+        using negate_t = ELIB_AUTO_INTC( - T::type::value );
+
+        ////////////////////////////////////////////////////////////////////////////
+        template <class A0, class A1, class ...Args>
+        struct add : detail::add_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using add_t = typename detail::add_apply<A0, A1, Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // subtract
+        template <class A0, class A1, class ...Args>
+        struct subtract : detail::subtract_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using subtract_t = typename detail::subtract_apply<A0, A1, Args...>::type;
+        
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // multiply
+        template <class A0, class A1, class ...Args>
+        struct multiply : detail::multiply_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using multiply_t = typename detail::multiply_apply<A0, A1, Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // divide
+        template <class A0, class A1, class ...Args>
+        struct divide : detail::divide_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using divide_t = typename detail::divide_apply<A0, A1, Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // modulus
+        template <class T, class U>
+        struct modulus : ELIB_AUTO_INTC( T::type::value % U::type::value ) {};
+        
+        template <class T, class U>
+        using modulus_t = ELIB_AUTO_INTC( T::type::value % U::type::value );
+    
+        ////////////////////////////////////////////////////////////////////////////
+        // increment
+        template <class T>
+        using increment = integral_constant< typename T::value_type, T::value + 1 >;
+        
+        template <class T>
+        using increment_t = increment<T>;
+        
+        template <class T>
+        using decrement = integral_constant< typename T::value_type, T::value - 1 >;
+        
+        template <class T>
+        using decrement_t = decrement<T>;
+    }                                                       // namespace aux
+    
+    namespace aux
+    {
+        namespace detail
+        {
+            ELIB_AUX_LEFT_ASSOC_EXPR(bitand_apply, bitand_impl, &);
+            ELIB_AUX_LEFT_ASSOC_EXPR(bitor_apply, bitor_impl, |);
+            ELIB_AUX_LEFT_ASSOC_EXPR(bitxor_apply, bitxor_impl, ^);
+        }                                                       // namespace detail
+
+        ////////////////////////////////////////////////////////////////////////////
+        // bitnegate_
+        template <class T>
+        struct bitnegate_ : ELIB_AUTO_INTC( ~ T::type::value ) {};
+        
+        template <class T>
+        using bitnegate_t = ELIB_AUTO_INTC( ~ T::type::value );
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // bitand_
+        template <class A0, class A1, class ...Args>
+        struct bitand_ : detail::bitand_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using bitand_t = typename detail::bitand_apply<A0, A1, Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // bitor_
+        template <class A0, class A1, class ...Args>
+        struct bitor_ : detail::bitor_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using bitor_t = typename detail::bitor_apply<A0, A1, Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // bitxor_
+        template <class A0, class A1, class ...Args>
+        struct bitxor_ : detail::bitxor_apply<A0, A1, Args...> {};
+        
+        template <class A0, class A1, class ...Args>
+        using bitxor_t = typename detail::bitxor_apply<A0, A1, Args...>::type;
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // shift_left
+        template <class T, class U>
+        struct shift_left : ELIB_AUTO_INTC(T::type::value << U::type::value) {};
+        
+        template <class T, class U>
+        using shift_left_t = ELIB_AUTO_INTC( T::type::value << U::type::value );
+        
+        ////////////////////////////////////////////////////////////////////////////
+        // shift_right
+        template <class T, class U>
+        struct shift_right : ELIB_AUTO_INTC(( T::type::value >> U::type::value )) {};
+        
+        template <class T, class U>
+        using shift_right_t = ELIB_AUTO_INTC(( T::type::value >> U::type::value ));
+        
+    }                                                     // namespace aux
+    
+    namespace aux
+    {
+        template <class LHS, class RHS>
+        struct equal_to : bool_<LHS::type::value == RHS::type::value> {};
+        
+        template <class LHS, class RHS>
+        struct not_equal_to : bool_<LHS::type::value != RHS::type::value> {};
+        
+        template <class LHS, class RHS>
+        struct less : bool_<(LHS::type::value < RHS::type::value)> {};
+        
+        template <class LHS, class RHS>
+        struct less_equal : bool_<(LHS::type::value <= RHS::type::value)> {};
+        
+        template <class LHS, class RHS>
+        struct greater : bool_<(LHS::type::value > RHS::type::value)> {};
+        
+        template <class LHS, class RHS>
+        struct greater_equal : bool_<(LHS::type::value >= RHS::type::value)> {};
+    
+    }                                                       // namespace aux
+    
+    namespace aux
+    {
+        
+        template<class T, T ...Seq> 
+        struct integer_sequence
+        {
+            using type = integer_sequence;
+            
+            using value_type = T;
+            
+            static constexpr T size = sizeof...(Seq);
+
+            using next = integer_sequence<T, Seq..., sizeof...(Seq)>;
+        };
+
+        template<int... I>
+        using int_sequence = integer_sequence<int, I...>;
+        
+        template<size_t... I>
+        using index_sequence = integer_sequence<std::size_t, I...>;
+
+        namespace detail
+        {
+            ////////////////////////////////////////////////////////////////////
+            //
+            template <class LHS, class RHS>
+            struct integer_seq_join;
+           
+            template <class T, T ...Vs0, T ...Vs1>
+            struct integer_seq_join<
+                integer_sequence<T, Vs0...>
+              , integer_sequence<T, Vs1...>
+            >
+            {
+                using type = integer_sequence<T, Vs0..., (Vs1 + sizeof...(Vs0))...>;
+            };
+           
+            //////////////////////////////////////////////////////////////////////
+            //
+            template <class T, std::size_t N>
+            struct integer_seq_impl
+              : integer_seq_join<
+                    typename integer_seq_impl<T, (N / 2)>::type
+                  , typename integer_seq_impl<T, (N - (N/2))>::type
+                >
+            {};
+            
+            template <class T>
+            struct integer_seq_impl<T, 0>
+            {
+                using type = integer_sequence<T>;
+            };
+            
+            template <class T>
+            struct integer_seq_impl<T, 1>
+            {
+                using type = integer_sequence<T, 0>;
+            };
+        }                                                   // namespace detail
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
+        template<class T, T N>
+        using make_integer_sequence = typename 
+            detail::integer_seq_impl<
+                T
+              , static_cast<std::size_t>(N)
+            >::type;
+
+        template<int N>
+        using make_int_sequence = make_integer_sequence<int, N>;
+
+        template<size_t N>
+        using make_index_sequence = make_integer_sequence<std::size_t, N>;
+
+        ////////////////////////////////////////////////////////////////////////
+        //
+        template<class... T>
+        using to_int_sequence = make_int_sequence<sizeof...(T)>;
+
+        template<class... T>
+        using to_index_sequence = make_index_sequence<sizeof...(T)>;
+        
+    }                                                       // namespace aux
+    
+    
     
     namespace aux 
     { 
@@ -918,475 +1497,6 @@ namespace elib
         
         template <class T>
         using result_of_t = typename result_of<T>::type;
-        
     }                                                       // namespace aux
-     
-    namespace aux
-    {
-        template <class T, class ...Args>
-        using apply_ = typename T::template apply<Args...>;
-        
-        template <class T, class ...Args>
-        using apply_t = typename T::template apply<Args...>::type;
-        
-        template <class T>
-        using type_t = typename T::type;
-        
-        namespace detail
-        {
-            template <class Always, class ...Ignored>
-            struct _always
-            {
-                using type = Always;
-            };
-        }                                                   // namespace detail
-
-        template <class ...T>
-        using always = typename aux::detail::_always<true_, T...>::type;
-
-        template <class ...T>
-        using never = typename aux::detail::_always<false_, T...>::type;
-
-        template <class ...T>
-        using always_void = typename aux::detail::_always<void, T...>::type;
-        
-        template <class T>
-        struct no_decay { using type = T; };
-        
-        struct none {};
-        
-        template <class T>
-        struct is_none : false_ {};
-        
-        template <>
-        struct is_none< none > : true_ {};
-        
-        template <class ...Args>
-        struct not_defined;
-        
-        namespace detail
-        {
-            ////////////////////////////////////////////////////////////////////
-            // detail::any
-            template <class Ignored = decltype(nullptr)>
-            struct any
-            {
-                any() = default;
-
-                template <typename T>
-                constexpr any(T const &) noexcept
-                {}
-
-                template <class T>
-                operator T &&() const noexcept;
-            };
-        }                                                   // namespace detail
-
-        ////////////////////////////////////////////////////////////////////////
-        // any
-        using any = detail::any<>;
-
-        ////////////////////////////////////////////////////////////////////////
-        // any_pod
-        template <class Ignored = decltype(nullptr)>
-        struct any_pod
-        {
-            any_pod(...);
-        };
-        
-# if __cplusplus < 201300
-        template <class ...T>
-        inline void swallow(T &&...) noexcept {}
-# else
-        template <class ...T>
-        constexpr void swallow(T &&...) noexcept {}
-# endif
-        
-        template <class T>
-        struct static_const
-        { static constexpr T value{}; };
-        
-        template <class T>
-        constexpr T static_const<T>::value;
-        
-        namespace 
-        {
-            constexpr void *const &enabler = static_const<void*>::value;
-        }
-        
-        namespace detail
-        {
-            template <class T>
-            constexpr auto by_val_impl(T & t, int)
-            ELIB_AUTO_RETURN_NOEXCEPT( T(t) )
-            
-            template <class T>
-            constexpr auto by_val_impl(T const& t, int)
-            ELIB_AUTO_RETURN_NOEXCEPT( T(t) )
-            
-            template <class T>
-            constexpr auto by_val_impl(T && t, int)
-            ELIB_AUTO_RETURN_NOEXCEPT( T(static_cast<T &&>(t)) )
-            
-            // TODO
-            // does it make sense to have this? 
-            template <class T>
-            constexpr auto by_val_impl(T const& t, long)
-            ELIB_AUTO_RETURN_NOEXCEPT(t)
-        }
-    
-        struct by_val_
-        {
-            template <class T>
-            constexpr auto operator()(T && t) const
-            ELIB_AUTO_RETURN_NOEXCEPT(
-                detail::by_val_impl(static_cast<T &&>(t), 1)
-            )
-        };
-        
-        constexpr const by_val_ by_val{};
-        
-        struct by_ref_
-        {
-            template <class T>
-            constexpr T const& operator()(T && t) const noexcept
-            { return t;}
-        };
-        
-        constexpr const by_ref_ by_ref{};
-    }                                                       // namespace aux
-    
-    namespace aux
-    {
-        namespace detail
-        {
-            template <class ...Args>
-            true_ fast_and_impl(Args*...);
-        
-            false_ fast_and_impl(...);
-        
-            template <class ...Args>
-            false_ fast_or_impl(Args*...);
-        
-            true_ fast_or_impl(...);
-        }                                                       // namespace detail
-
-        ////////////////////////////////////////////////////////////////////////////
-        // fast_and
-        template <class ...Preds>
-        using fast_and = decltype( 
-            detail::fast_and_impl(if_t<Preds, int*, int>{}...) 
-        );
-
-        template <bool ...Preds>
-        using fast_and_c = decltype(
-            detail::fast_and_impl(if_c_t<Preds, int*, int>{}...)
-        );
-
-        ////////////////////////////////////////////////////////////////////////////
-        // fast_or
-        template <class ...Preds>
-        using fast_or = decltype(
-            detail::fast_or_impl(if_t<Preds, int, int*>{}...)
-        );
-
-        template <bool ...Preds>
-        using fast_or_c = decltype(
-            detail::fast_or_impl(if_c_t<Preds, int, int*>{}...)
-        );
-        
-        ////////////////////////////////////////////////////////////////////////
-        // not_
-        template <class T>
-        struct not_ : bool_<!T::type::value> {};
-
-        template <long V>
-        struct not_c : bool_<!V> {};
-        
-        namespace detail
-        {
-            ////////////////////////////////////////////////////////////////////
-            // and_impl
-            template <bool Done>
-            struct and_impl;
-
-            template <>
-            struct and_impl<true>
-            {
-                template <bool Last, class Head, class ...Tail>
-                struct apply;
-
-                template <class Head, class ...Tail>
-                struct apply<true, Head, Tail...>
-                {
-                    using type = true_;
-                    using which = none;
-                };
-
-                template <class Head, class ...Tail>
-                struct apply<false, Head, Tail...>
-                {
-                    using type = false_;
-                    using which = Head;
-                };
-            };
-
-            template <>
-            struct and_impl<false>
-            {
-                template <bool Last, class Head, class Next, class ...Tail>
-                using apply = typename 
-                    and_impl<sizeof...(Tail) == 0 || !Next::type::value>
-                    ::template apply<
-                        static_cast<bool>(Next::type::value)
-                        , Next, Tail...
-                    >;
-            };
-        }                                                       // namespace detail
-        
-        ///////////////////////////////////////////////////////////////////////
-        // and_
-        template <class A0, class A1, class ...As>
-        struct and_ 
-        : detail::and_impl< !static_cast<bool>(A0::type::value) >
-            ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>::type
-        {
-            using type = and_;
-
-            using result = typename
-                detail::and_impl< !static_cast<bool>(A0::type::value) >
-                ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>;
-
-            using which = typename result::which;
-        };
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // and_c
-        template <bool B1, bool B2, bool ...Rest>
-        using and_c = fast_and_c<B1, B2, Rest...>;
-        
-        namespace detail
-        {
-            ////////////////////////////////////////////////////////////////////
-            // or_impl
-            template <bool Done>
-            struct or_impl;
-
-            template <>
-            struct or_impl<true>
-            {
-                template <bool Last, class Head, class ...Tail>
-                struct apply;
-
-                template <class Head, class ...Tail>
-                struct apply<true, Head, Tail...>
-                {
-                    using type = true_;
-                    using which = none;
-                };
-
-                template <class Head, class ...Tail>
-                struct apply<false, Head, Tail...>
-                {
-                    using type = false_;
-                    using which = Head;
-                };
-            };
-
-            template <>
-            struct or_impl<false>
-            {
-                template <bool Last, class Head, class Next, class ...Tail>
-                using apply = typename
-                    or_impl< sizeof...(Tail) == 0 || Next::type::value >
-                    ::template apply< 
-                        static_cast<bool>(Next::type::value)
-                    , Next, Tail...
-                    >;
-            };
-        }                                                   // namespace detail
-
-        ////////////////////////////////////////////////////////////////////////
-        // or_
-        template <class A0, class A1, class ...As>
-        struct or_ 
-        : detail::or_impl<static_cast<bool>(A0::type::value)>
-            ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>::type
-        {
-            using type = or_;
-
-            using result = typename
-                detail::or_impl<static_cast<bool>(A0::type::value)>
-                ::template apply<static_cast<bool>(A0::type::value), A0, A1, As...>;
-
-            using which = typename result::which;
-        };
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // or_c
-        template <bool B0, bool B1, bool ...Rest>
-        using or_c = fast_or_c<B0, B1, Rest...>;
-    }                                                       // namespace aux
-    
-    using aux::not_;
-    using aux::not_c;
-    using aux::and_;
-    using aux::and_c;
-    using aux::or_;
-    using aux::or_c;
-    
-    namespace aux
-    {
-        namespace detail
-        {
-            ELIB_AUX_LEFT_ASSOC_EXPR(add_apply, add_impl, +);
-            ELIB_AUX_LEFT_ASSOC_EXPR(subtract_apply, subtract_impl, -);
-            ELIB_AUX_LEFT_ASSOC_EXPR(multiply_apply, multiply_impl, *);
-            ELIB_AUX_LEFT_ASSOC_EXPR(divide_apply, divide_impl, /);
-        }                                                       // namespace detail
-        
-        ////////////////////////////////////////////////////////////////////////////
-        template <class T>
-        struct negate : ELIB_AUTO_INTC(- T::type::value ) {};
-        
-        template <class T>
-        using negate_t = ELIB_AUTO_INTC( - T::type::value );
-
-        ////////////////////////////////////////////////////////////////////////////
-        template <class A0, class A1, class ...Args>
-        struct add : detail::add_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using add_t = typename detail::add_apply<A0, A1, Args...>::type;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // subtract
-        template <class A0, class A1, class ...Args>
-        struct subtract : detail::subtract_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using subtract_t = typename detail::subtract_apply<A0, A1, Args...>::type;
-        
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // multiply
-        template <class A0, class A1, class ...Args>
-        struct multiply : detail::multiply_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using multiply_t = typename detail::multiply_apply<A0, A1, Args...>::type;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // divide
-        template <class A0, class A1, class ...Args>
-        struct divide : detail::divide_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using divide_t = typename detail::divide_apply<A0, A1, Args...>::type;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // modulus
-        template <class T, class U>
-        struct modulus : ELIB_AUTO_INTC( T::type::value % U::type::value ) {};
-        
-        template <class T, class U>
-        using modulus_t = ELIB_AUTO_INTC( T::type::value % U::type::value );
-    
-        ////////////////////////////////////////////////////////////////////////////
-        // increment
-        template <class T>
-        using increment = integral_constant< typename T::value_type, T::value + 1 >;
-        
-        template <class T>
-        using increment_t = increment<T>;
-        
-        template <class T>
-        using decrement = integral_constant< typename T::value_type, T::value - 1 >;
-        
-        template <class T>
-        using decrement_t = decrement<T>;
-    }                                                       // namespace aux
-    
-    namespace aux
-    {
-        namespace detail
-        {
-            ELIB_AUX_LEFT_ASSOC_EXPR(bitand_apply, bitand_impl, &);
-            ELIB_AUX_LEFT_ASSOC_EXPR(bitor_apply, bitor_impl, |);
-            ELIB_AUX_LEFT_ASSOC_EXPR(bitxor_apply, bitxor_impl, ^);
-        }                                                       // namespace detail
-
-        ////////////////////////////////////////////////////////////////////////////
-        // bitnegate_
-        template <class T>
-        struct bitnegate_ : ELIB_AUTO_INTC( ~ T::type::value ) {};
-        
-        template <class T>
-        using bitnegate_t = ELIB_AUTO_INTC( ~ T::type::value );
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // bitand_
-        template <class A0, class A1, class ...Args>
-        struct bitand_ : detail::bitand_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using bitand_t = typename detail::bitand_apply<A0, A1, Args...>::type;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // bitor_
-        template <class A0, class A1, class ...Args>
-        struct bitor_ : detail::bitor_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using bitor_t = typename detail::bitor_apply<A0, A1, Args...>::type;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // bitxor_
-        template <class A0, class A1, class ...Args>
-        struct bitxor_ : detail::bitxor_apply<A0, A1, Args...> {};
-        
-        template <class A0, class A1, class ...Args>
-        using bitxor_t = typename detail::bitxor_apply<A0, A1, Args...>::type;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // shift_left
-        template <class T, class U>
-        struct shift_left : ELIB_AUTO_INTC(T::type::value << U::type::value) {};
-        
-        template <class T, class U>
-        using shift_left_t = ELIB_AUTO_INTC( T::type::value << U::type::value );
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // shift_right
-        template <class T, class U>
-        struct shift_right : ELIB_AUTO_INTC(( T::type::value >> U::type::value )) {};
-        
-        template <class T, class U>
-        using shift_right_t = ELIB_AUTO_INTC(( T::type::value >> U::type::value ));
-        
-    }                                                     // namespace aux
-    
-    namespace aux
-    {
-        template <class LHS, class RHS>
-        struct equal_to : bool_<LHS::type::value == RHS::type::value> {};
-        
-        template <class LHS, class RHS>
-        struct not_equal_to : bool_<LHS::type::value != RHS::type::value> {};
-        
-        template <class LHS, class RHS>
-        struct less : bool_<(LHS::type::value < RHS::type::value)> {};
-        
-        template <class LHS, class RHS>
-        struct less_equal : bool_<(LHS::type::value <= RHS::type::value)> {};
-        
-        template <class LHS, class RHS>
-        struct greater : bool_<(LHS::type::value > RHS::type::value)> {};
-        
-        template <class LHS, class RHS>
-        struct greater_equal : bool_<(LHS::type::value >= RHS::type::value)> {};
-    }                                                       // namespace aux
-    
-    
 }                                                            // namespace elib
 #endif /* ELIB_AUX_HPP */

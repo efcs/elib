@@ -6,7 +6,7 @@
 # include <elib/mp/algorithms.hpp>
 # include <elib/mp/containers.hpp>
 # include <elib/mp/get_impl.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/member_template_detector.hpp>
 # include <elib/mp/member_type_detector.hpp>

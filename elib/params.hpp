@@ -1,11 +1,8 @@
 #ifndef ELIB_PARAMS_HPP
 #define ELIB_PARAMS_HPP
 
-# include <elib/aux/any.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/no_decay.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
-
 
 namespace elib 
 {
@@ -35,17 +32,17 @@ namespace elib
 
         template <template <class...> class Pack, class ...As>
         struct size< Pack<As...> > 
-            : aux::size_type_<sizeof...(As)>
+            : size_type_<sizeof...(As)>
         {};
 
         template <class Pack, class ...As>
         struct size< Pack(As...) >
-            : aux::size_type_<sizeof...(As)>
+            : size_type_<sizeof...(As)>
         {};
 
         template <template <class Tv, Tv...> class Pack, class T, T ...Values>
         struct size< Pack<T, Values...> > 
-            : aux::size_type_<sizeof...(Values)>
+            : size_type_<sizeof...(Values)>
         {};
 
         ////////////////////////////////////////////////////////////////////
@@ -339,7 +336,7 @@ namespace elib
           , std::size_t N
           >
         struct at< Pack<T, Values...>, N >
-            : detail::at_impl<N, aux::integral_constant<T, Values>...>::type
+            : detail::at_impl<N, integral_constant<T, Values>...>::type
         {
             static_assert( 
                 N < sizeof...(Values)

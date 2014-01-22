@@ -3,7 +3,7 @@
 
 # include <elib/mp/pack.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 

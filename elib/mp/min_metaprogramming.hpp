@@ -8,9 +8,7 @@
 # include <elib/mp/comparison.hpp>
 # include <elib/mp/enable_if.hpp>
 # include <elib/mp/identity.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/index_sequence.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/logical.hpp>
 # include <same_type.hpp>
 # include <elib/mp/sizeof.hpp>

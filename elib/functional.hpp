@@ -1,9 +1,7 @@
 #ifndef ELIB_FUNCTIONAL_HPP
 #define ELIB_FUNCTIONAL_HPP
 
-# include <elib/aux/any.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/integral_constant.hpp>
+# include <elib/aux.hpp>
 # include <type_traits>
 # include <utility>
 # include <cstddef>
@@ -1262,7 +1260,7 @@ namespace elib
         struct subscript
         {
             using result_type = decltype( 
-                std::declval<T>()[ std::declval<std::size_t>() ]
+                elib::declval<T>()[ elib::declval<std::size_t>() ]
             );
             
             using first_argument_type = T;

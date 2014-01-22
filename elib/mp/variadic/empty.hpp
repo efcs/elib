@@ -1,8 +1,8 @@
 #ifndef ELIB_MP_VARIADIC_EMPTY_HPP
-# define ELIB_MP_VARIADIC_EMPTY_HPP
+#define ELIB_MP_VARIADIC_EMPTY_HPP
 
 # include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

@@ -3,7 +3,7 @@
 
 # include <elib/mp/identity.hpp>
 # include <elib/mp/protect.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

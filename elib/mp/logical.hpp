@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_LOGICAL_HPP
 #define ELIB_MP_LOGICAL_HPP
 
-# include <elib/aux/logical.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace mp
 {

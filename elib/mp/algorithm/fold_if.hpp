@@ -5,9 +5,9 @@
 # include <elib/mp/algorithm/detail/deref_lambda.hpp>
 # include <elib/mp/algorithm/detail/variadic_foldl_if.hpp>
 # include <elib/mp/always.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/sequence_traits.hpp>
+# include <elib/aux.hpp>
 
 
 namespace elib 

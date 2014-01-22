@@ -1,9 +1,7 @@
 #ifndef ELIB_MP_APPLY_WRAP_HPP
 #define ELIB_MP_APPLY_WRAP_HPP
 
-
-# include <elib/mp/integral_constant.hpp>
-
+# include <elib/aux.hpp>
 
 namespace elib 
 {

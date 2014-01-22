@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_DETAIL_NA_HPP
 #define ELIB_MP_DETAIL_NA_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

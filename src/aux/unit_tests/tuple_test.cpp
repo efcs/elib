@@ -2,6 +2,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include "elib/aux.hpp"
+#include "elib/pair.hpp"
+#include "elib/tuple.hpp"
 #include <utility>
 #include <tuple>
 #include <string>

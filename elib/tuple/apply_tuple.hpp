@@ -1,12 +1,10 @@
 #ifndef ELIB_TUPLE_APPLY_TUPLE_HPP
 #define ELIB_TUPLE_APPLY_TUPLE_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/pair.hpp>
-# include <elib/aux/tuple/tuple.hpp>
-# include <elib/aux/integer_sequence.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/pair.hpp>
+# include <elib/tuple/tuple.hpp>
+# include <elib/aux.hpp>
 # include <tuple>
 # include <cstddef>
 

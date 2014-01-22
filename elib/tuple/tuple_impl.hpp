@@ -1,17 +1,13 @@
 #ifndef ELIB_TUPLE_TUPLE_IMPL_HPP
 #define ELIB_TUPLE_TUPLE_IMPL_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/element_impl.hpp>
-# include <elib/aux/tuple/item.hpp>
-# include <elib/aux/tuple/tuple_indexes.hpp>
-# include <elib/aux/tuple/tuple_types.hpp>
-# include <elib/aux/tuple/unique_value_helper.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/no_decay.hpp>
-# include <elib/aux/none.hpp>
-# include <elib/aux/swallow.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/element_impl.hpp>
+# include <elib/tuple/item.hpp>
+# include <elib/tuple/tuple_indexes.hpp>
+# include <elib/tuple/tuple_types.hpp>
+# include <elib/tuple/unique_value_helper.hpp>
+# include <elib/aux.hpp>
 # include <utility>
 # include <cstddef>
 
@@ -207,7 +203,7 @@ namespace elib { namespace aux
             template <class OtherT>
             tuple_impl(OtherT && t)
               : tuple_item_c<Indexes, Types>(
-                    aux::forward<
+                    elib::forward<
                         tuple_element_impl_t<Indexes,  make_tuple_types_t<OtherT>>
                 >(get<Indexes>(t)))...
             {}
@@ -217,7 +213,7 @@ namespace elib { namespace aux
             {
                 swallow(
                     tuple_item_c<Indexes, Types>::operator=(
-                        aux::forward<
+                        elib::forward<
                             tuple_element_impl_t<Indexes, make_tuple_types_t<OtherT>>
                         >(get<Indexes>(t))
                     )...

@@ -1,13 +1,10 @@
 #ifndef ELIB_TUPLE_UNIQUE_VALUE_HELPER_HPP
 #define ELIB_TUPLE_UNIQUE_VALUE_HELPER_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/tuple_indexes.hpp>
-# include <elib/aux/tuple/tuple_types.hpp>
-# include <elib/aux/if.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/logical.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/tuple_indexes.hpp>
+# include <elib/tuple/tuple_types.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

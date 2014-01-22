@@ -1,14 +1,12 @@
 #ifndef ELIB_MP_LAMBDA_HPP
 #define ELIB_MP_LAMBDA_HPP
 
-# include <elib/mp/config.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/bind.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/protect.hpp>
 # include <elib/mp/quote.hpp>
 # include <elib/mp/logical.hpp>
-
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 

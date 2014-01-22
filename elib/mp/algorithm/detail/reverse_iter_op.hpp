@@ -2,7 +2,7 @@
 #define ELIB_MP_ALGORITHM_DETAIL_REVERSE_ITER_OP_HPP
 
 # include <elib/mp/identity.hpp>
-# include <elib/mp/if.hpp>
+
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/protect.hpp>

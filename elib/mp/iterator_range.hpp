@@ -4,8 +4,8 @@
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/iterator.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {
@@ -73,7 +73,7 @@ namespace elib
         using at = deref< advance_t<typename S::begin, N> >;
         
         template <class S, long N>
-        using at_c = at<S, long_<N>>;
+        using at_c = at<S, aux::long_<N>>;
       };
       
       template <>

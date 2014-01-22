@@ -1,8 +1,8 @@
 #ifndef ELIB_TUPLE_ELEMENT_IMPL_HPP
 #define ELIB_TUPLE_ELEMENT_IMPL_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/aux.hpp>
 # include <elib/params.hpp>
 # include <tuple>
 # include <cstddef>

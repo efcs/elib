@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_SIZEOF_HPP
 #define ELIB_MP_SIZEOF_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

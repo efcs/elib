@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_COMPARISON_HPP
 #define ELIB_MP_COMPARISON_HPP
 
-# include <elib/aux/comparison.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace mp
 {

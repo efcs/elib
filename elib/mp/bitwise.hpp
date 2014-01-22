@@ -1,7 +1,7 @@
 #ifndef ELIB_MP_BITWISE_HPP
 #define ELIB_MP_BITWISE_HPP
 
-# include <elib/aux/bitwise.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace mp
 {

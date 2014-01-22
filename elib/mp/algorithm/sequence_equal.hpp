@@ -5,7 +5,6 @@
 # include <elib/mp/algorithm/detail/deref_lambda.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
@@ -13,7 +12,7 @@
 # include <elib/mp/protect.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/same_type.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

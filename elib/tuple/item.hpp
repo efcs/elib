@@ -2,11 +2,8 @@
 #define ELIB_TUPLE_ITEM_HPP
 
 # include <elib/config.hpp>
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/no_decay.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/aux.hpp>
 # include <utility>
 # include <cstddef>
 

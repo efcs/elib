@@ -1,9 +1,9 @@
 #ifndef ELIB_TUPLE_TUPLE_ELEMENT_HPP
 #define ELIB_TUPLE_TUPLE_ELEMENT_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/element_impl.hpp>
-# include <elib/aux/tuple/is_tuple_like.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/element_impl.hpp>
+# include <elib/tuple/is_tuple_like.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

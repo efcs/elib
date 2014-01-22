@@ -9,7 +9,6 @@
 # include <elib/mp/bind.hpp>
 # include <elib/mp/bitwise.hpp>
 # include <elib/mp/comparison.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/logical.hpp>
 # include <elib/mp/protect.hpp>

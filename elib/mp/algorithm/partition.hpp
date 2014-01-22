@@ -4,11 +4,11 @@
 # include <elib/mp/algorithm/inserter.hpp>
 # include <elib/mp/algorithm/iter_fold.hpp>
 # include <elib/mp/apply_wrap.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/pair.hpp>
 # include <elib/mp/protect.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

@@ -1,16 +1,14 @@
 #ifndef ELIB_TUPLE_PAIR_HPP
 #define ELIB_TUPLE_PAIR_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/elib_pair.hpp>
-# include <elib/aux/tuple/helper.hpp>
-# include <elib/aux/tuple/is_tuple_like.hpp>
-# include <elib/aux/tuple/tuple_element.hpp>
-# include <elib/aux/tuple/tuple_element_index.hpp>
-# include <elib/aux/tuple/tuple_size.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/always.hpp>
-# include <elib/aux/move.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/elib_pair.hpp>
+# include <elib/tuple/helper.hpp>
+# include <elib/tuple/is_tuple_like.hpp>
+# include <elib/tuple/tuple_element.hpp>
+# include <elib/tuple/tuple_element_index.hpp>
+# include <elib/tuple/tuple_size.hpp>
+# include <elib/aux.hpp>
 # include <elib/functional.hpp>
 # include <functional>
 # include <tuple>
@@ -133,7 +131,7 @@ namespace elib { namespace aux
             template <class T, class U>
             static constexpr T&& get(pair<T, U> && p) noexcept
             {
-                return aux::move(p.first);
+                return elib::move(p.first);
             }
         };
         
@@ -155,7 +153,7 @@ namespace elib { namespace aux
             template <class T, class U>
             static constexpr U&& get(pair<T, U> && p) noexcept
             {
-                return aux::move(p.second);
+                return elib::move(p.second);
             }
         };
     }
@@ -183,7 +181,7 @@ namespace elib { namespace aux
     constexpr tuple_element_t<I, pair<First, Second>>&&
     get(pair<First, Second> && t) noexcept
     {
-        return tuple_detail::pair_get_impl<I>::get(aux::move(t)); 
+        return tuple_detail::pair_get_impl<I>::get(elib::move(t)); 
     }
     
     template <class First, class Second>
@@ -204,7 +202,7 @@ namespace elib { namespace aux
     constexpr First&&
     get(pair<First, Second> && t) noexcept
     {
-        return aux::move(t.first);
+        return elib::move(t.first);
     }
     
     template <class Second, class First>
@@ -225,7 +223,7 @@ namespace elib { namespace aux
     constexpr Second &&
     get(pair<First, Second> && t) noexcept
     {
-        return aux::move(t.second);
+        return elib::move(t.second);
     }
     
 

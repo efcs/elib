@@ -3,8 +3,7 @@
 
 # include <elib/fuse/support/support_fwd.hpp>
 # include <elib/fuse/support/traits.hpp>
-# include <elib/aux/logical.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace fuse
 {

@@ -1,11 +1,10 @@
 #ifndef ELIB_TUPLE_ELIB_PAIR_HPP
 #define ELIB_TUPLE_ELIB_PAIR_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/apply_tuple.hpp>
-# include <elib/aux/tuple/piecewise_construct.hpp>
-# include <elib/aux/move.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/apply_tuple.hpp>
+# include <elib/tuple/piecewise_construct.hpp>
+# include <elib/aux.hpp>
 # include <elib/functional.hpp>
 # include <utility>
 
@@ -64,7 +63,7 @@ namespace elib { namespace aux
                         && is_convertible<Second, U>::value)
         >
         constexpr pair( pair<T, U> && p )
-            : first(aux::move(p.first)), second(aux::move(p.second))
+            : first(elib::move(p.first)), second(elib::move(p.second))
         {}
         
         template <class ...Args1, class ...Args2>
@@ -115,8 +114,8 @@ namespace elib { namespace aux
                       && is_nothrow_move_assignable<Second>::value)
         
         {
-            first = aux::move(p.first);
-            second = aux::move(p.second);
+            first = elib::move(p.first);
+            second = elib::move(p.second);
             return *this;
         }
         
@@ -127,8 +126,8 @@ namespace elib { namespace aux
         >
         pair& operator=(pair<T, U> && p)
         {
-            first = aux::move(p.first);
-            second = aux::move(p.second);
+            first = elib::move(p.first);
+            second = elib::move(p.second);
         }
         
         void swap(pair& p) 

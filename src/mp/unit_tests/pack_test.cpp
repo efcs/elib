@@ -180,10 +180,10 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
       SAME_TYPE(next_t<Begin>, End);
       SAME_TYPE(prior_t<End>, Begin);
       // advance & advance_c
-      SAME_TYPE(advance_t<Begin, long_<0>>, Begin);
-      SAME_TYPE(advance_t<Begin, long_<1>>, End);
-      SAME_TYPE(advance_t<End, long_<0>>, End);
-      SAME_TYPE(advance_t<End, long_<-1>>, Begin);
+      SAME_TYPE(advance_t<Begin, aux::long_<0>>, Begin);
+      SAME_TYPE(advance_t<Begin, aux::long_<1>>, End);
+      SAME_TYPE(advance_t<End, aux::long_<0>>, End);
+      SAME_TYPE(advance_t<End, aux::long_<-1>>, Begin);
       SAME_TYPE(advance_c_t<Begin, 0>, Begin);
       SAME_TYPE(advance_c_t<Begin, 1>, End);
       SAME_TYPE(advance_c_t<End, 0>, End);
@@ -227,11 +227,11 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
       using P4 = prior_t<P3>;
       SAME_TYPE(P4, B);
       // advance
-      SAME_TYPE(B, advance_t<B, long_<0>>);
+      SAME_TYPE(B, advance_t<B, aux::long_<0>>);
       SAME_TYPE(next_t<B>, advance_c_t<B, 1>);
-      SAME_TYPE(advance_t<B, long_<4>>, E);
+      SAME_TYPE(advance_t<B, aux::long_<4>>, E);
       SAME_TYPE(advance_c_t<E, -4>, B);
-      SAME_TYPE(advance_t<E, long_<-1>>, advance_c_t<B, 3>);
+      SAME_TYPE(advance_t<E, aux::long_<-1>>, advance_c_t<B, 3>);
     }
   }                                              // mp_pack_iterator_intrinsics
   

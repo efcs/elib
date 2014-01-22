@@ -2,7 +2,7 @@
 #define ELIB_MP_ALGORITHM_CONTAINS_HPP
 
 # include <elib/mp/algorithm/count.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

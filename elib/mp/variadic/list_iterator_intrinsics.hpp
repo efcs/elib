@@ -5,6 +5,7 @@
 # include <elib/mp/variadic/drop.hpp>
 # include <elib/mp/variadic/list_iterator.hpp>
 # include <elib/mp/variadic/list_intrinsics.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -45,7 +46,7 @@ namespace elib
       
       template <template <class...> class It, class ...Left, class ...Right>
       struct distance< It<Left...>, It<Right...> >
-        : llong_< static_cast<long long>(sizeof...(Left) - sizeof...(Right))>
+        : aux::llong_< static_cast<long long>(sizeof...(Left) - sizeof...(Right))>
       {};
       
     };                                                      // variadic_list_iterator_intrinsics

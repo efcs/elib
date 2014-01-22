@@ -5,10 +5,10 @@
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/containers.hpp>
 #include <elib/mp/metafunctions.hpp>
-#include <elib/mp/integral_constant.hpp>
 #include <elib/mp/algorithm/sequence_equal.hpp>
 #include <elib/mp/views.hpp>
 #include <elib/mp/print.hpp>
+#include <elib/aux.hpp>
 
 #include "mp_test_helper.hpp"
 

@@ -5,7 +5,7 @@
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {
@@ -75,10 +75,10 @@ namespace elib
         };
         
         template <class It, long N>
-        using advance_c = advance<It, long_<N>>;
+        using advance_c = advance<It, aux::long_<N>>;
         
         template <class It, class It1>
-        using distance = long_<0>;
+        using distance = aux::long_<0>;
       };
       
     }                                                       // namespace detail

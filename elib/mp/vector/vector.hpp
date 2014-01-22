@@ -4,9 +4,9 @@
 # include <elib/mp/vector/fwd.hpp>
 # include <elib/mp/vector/item.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/void.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

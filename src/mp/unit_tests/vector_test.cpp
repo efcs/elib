@@ -201,8 +201,8 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
       SAME_TYPE(deref_t<E1>, void);
       // advance
       SAME_TYPE(advance_c_t<B, 0>, B);
-      SAME_TYPE(advance_t<B, long_<1>>, E);
-      SAME_TYPE(advance_t<E, long_<-1>>, B);
+      SAME_TYPE(advance_t<B, aux::long_<1>>, E);
+      SAME_TYPE(advance_t<E, aux::long_<-1>>, B);
       // distance
       CHECK(distance_t<B, B>::value == 0);
       CHECK(distance_t<E, E>::value == 0);
@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
       SAME_TYPE(E3, B);
       // advance
       SAME_TYPE(advance_t<B, int_<2>>, B2);
-      SAME_TYPE(advance_t<E, long_<-3>>, B);
+      SAME_TYPE(advance_t<E, aux::long_<-3>>, B);
       SAME_TYPE(advance_c_t<E, -2>, B1);
       // distance
       CHECK(distance_t<B, E>::value == 3);

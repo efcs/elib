@@ -4,7 +4,7 @@
 # include <elib/mp/identity.hpp>
 # include <elib/mp/pair.hpp>
 # include <elib/mp/void.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

@@ -1,8 +1,8 @@
 #ifndef ELIB_TUPLE_IS_TUPLE_LIKE_HPP
 #define ELIB_TUPLE_IS_TUPLE_LIKE_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/integral_constant.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/aux.hpp>
 # include <array>
 # include <tuple>
 # include <utility>

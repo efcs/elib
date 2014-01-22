@@ -1,8 +1,8 @@
 #ifndef ELIB_TUPLE_TUPLE_INDEX_OF_HPP
 #define ELIB_TUPLE_TUPLE_INDEX_OF_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/index_of_impl.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/index_of_impl.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

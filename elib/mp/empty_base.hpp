@@ -1,13 +1,12 @@
 #ifndef ELIB_MP_EMPTY_BASE_HPP
 #define ELIB_MP_EMPTY_BASE_HPP
 
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib
 {
   namespace mp
   {
-  
   //-------------------------------- empty_base -----------------------------// 
     
     struct empty_base {};

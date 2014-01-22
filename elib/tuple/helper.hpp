@@ -1,12 +1,10 @@
 #ifndef ELIB_TUPLE_HELPER_HPP
 #define ELIB_TUPLE_HELPER_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/is_tuple_like.hpp>
-# include <elib/aux/tuple/tuple_types.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/logical.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/is_tuple_like.hpp>
+# include <elib/tuple/tuple_types.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

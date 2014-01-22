@@ -4,7 +4,7 @@
 # include <elib/mp/iterator/fwd.hpp>
 # include <elib/mp/iterator/iterator.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -69,7 +69,7 @@ namespace elib
         >
       struct distance< It1<Seq1, N1>, It2<Seq2, N2> >
       {
-        using type = long_< static_cast<long>(N2 - N1) >;
+        using type = aux::long_< static_cast<long>(N2 - N1) >;
       };
       
     };

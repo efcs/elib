@@ -1,9 +1,9 @@
 #ifndef ELIB_TUPLE_TUPLE_SIZE_HPP
 #define ELIB_TUPLE_TUPLE_SIZE_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/size_impl.hpp>
-# include <elib/aux/tuple/is_tuple_like.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/size_impl.hpp>
+# include <elib/tuple/is_tuple_like.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

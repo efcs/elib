@@ -1,10 +1,12 @@
 #ifndef ELIB_MP_UNIT_TESTS_MP_TEST_HELPER_HPP
 #define ELIB_MP_UNIT_TESTS_MP_TEST_HELPER_HPP
 
-# include <elib/mp/integral_constant.hpp>
+namespace elib { namespace mp { } }
+# include <elib/aux.hpp>
 
 # include <type_traits>
 
+using namespace elib;
 using namespace elib::mp;
 
 using std::is_same;

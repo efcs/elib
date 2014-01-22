@@ -3,11 +3,10 @@
 
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/iterator.hpp>
-# include <elib/mp/if.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
+# include <elib/aux.hpp>
 
 
 namespace elib 

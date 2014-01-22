@@ -4,7 +4,7 @@
 # include <elib/fuse/iterator/iterator_fwd.hpp>
 # include <elib/fuse/support/support_fwd.hpp>
 # include <elib/fuse/support/traits.hpp>
-# include <elib/aux/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace fuse
 {

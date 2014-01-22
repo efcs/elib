@@ -9,9 +9,9 @@
 # include <elib/mp/variadic/prepend.hpp>
 # include <elib/mp/variadic/slice.hpp>
 # include <elib/mp/variadic/take.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 

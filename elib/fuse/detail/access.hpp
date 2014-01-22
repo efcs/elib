@@ -1,7 +1,7 @@
 #ifndef ELIB_FUSE_DETAIL_ACCESS_HPP
 #define ELIB_FUSE_DETAIL_ACCESS_HPP
 
-# include <elib/aux/type_traits.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace fuse
 {

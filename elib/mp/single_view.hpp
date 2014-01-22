@@ -3,10 +3,9 @@
 
 # include <elib/mp/get_impl.hpp>
 # include <elib/mp/identity.hpp>
-# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {
@@ -43,7 +42,7 @@ namespace elib
     {
       using type = T;
       using type_ = T;
-      using pos_ = long_<0>;
+      using pos_ = aux::long_<0>;
       
       using model_type = model::random_access_iterator;
     };
@@ -53,7 +52,7 @@ namespace elib
     struct single_view_iterator<T, 1>
     {
       using type_ = T;
-      using pos_ = long_<1>;
+      using pos_ = aux::long_<1>;
       
       using model_type = model::random_access_iterator;
     };
@@ -138,11 +137,11 @@ namespace elib
         
         
         template <class It, long N>
-        using advance_c = advance<It, long_<N>>;
+        using advance_c = advance<It, aux::long_<N>>;
         
         
         template <class It1, class It2>
-        using distance = long_< It2::pos_::value - It1::pos_::value >;
+        using distance = aux::long_< It2::pos_::value - It1::pos_::value >;
       };
       
     }                                                       // namespace detail

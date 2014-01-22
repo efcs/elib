@@ -9,11 +9,11 @@
 # include <elib/mp/arg.hpp>
 # include <elib/mp/comparison.hpp>
 # include <elib/mp/iterator.hpp>
-# include <elib/mp/integral_constant.hpp>
 # include <elib/mp/pair.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/sequence_traits.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib 

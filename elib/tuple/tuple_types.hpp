@@ -1,10 +1,9 @@
 #ifndef ELIB_TUPLE_TUPLE_TYPES_HPP
 #define ELIB_TUPLE_TUPLE_TYPES_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/element_impl.hpp>
-# include <elib/aux/if.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/element_impl.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux

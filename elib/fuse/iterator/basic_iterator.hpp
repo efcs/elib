@@ -2,9 +2,7 @@
 #define ELIB_FUSE_ITERATOR_BASIC_ITERATOR_HPP
 
 # include <elib/fuse/iterator/iterator_fwd.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/logical.hpp>
-# include <elib/aux/type_traits.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace fuse
 {

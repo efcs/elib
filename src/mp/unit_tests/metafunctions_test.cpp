@@ -3,16 +3,17 @@
 #
 #include "elib/mp/metafunctions.hpp"
 #include "elib/mp/identity.hpp"
-#include "elib/mp/integral_constant.hpp"
 #include "elib/mp/pair.hpp"
 #include "elib/mp/void.hpp"
 #include "elib/mp/same_type.hpp"
 #
 #include "mp_test_helper.hpp"
+#include "elib/aux.hpp"
 #
 #include <type_traits>
 #include <utility>
 
+using namespace elib;
 using namespace elib::mp;
 using namespace elib::mp::placeholders;
 

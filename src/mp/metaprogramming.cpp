@@ -7,9 +7,7 @@
 #include <elib/mp/comparison.hpp>
 #include <elib/mp/empty_base.hpp>
 #include <elib/mp/identity.hpp>
-#include <elib/mp/if.hpp>
 #include <elib/mp/index_sequence.hpp>
-#include <elib/mp/integral_constant.hpp>
 #include <elib/mp/lambda.hpp>
 #include <elib/mp/logical.hpp>
 #include <elib/mp/pair.hpp>

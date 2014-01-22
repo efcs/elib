@@ -2,7 +2,7 @@
 #define ELIB_MP_VECTOR_ITEM_HPP
 
 # include <elib/mp/vector/fwd.hpp>
-# include <elib/mp/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib 
 {

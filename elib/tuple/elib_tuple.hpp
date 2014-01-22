@@ -1,13 +1,12 @@
 #ifndef ELIB_TUPLE_ELIB_TUPLE_HPP
 #define ELIB_TUPLE_ELIB_TUPLE_HPP
 
-# include <elib/aux/tuple/fwd.hpp>
-# include <elib/aux/tuple/helper.hpp>
-# include <elib/aux/tuple/tuple_impl.hpp>
-# include <elib/aux/tuple/tuple_indexes.hpp>
-# include <elib/aux/tuple/tuple_types.hpp>
-# include <elib/aux/integral_constant.hpp>
-# include <elib/aux/move.hpp>
+# include <elib/tuple/fwd.hpp>
+# include <elib/tuple/helper.hpp>
+# include <elib/tuple/tuple_impl.hpp>
+# include <elib/tuple/tuple_indexes.hpp>
+# include <elib/tuple/tuple_types.hpp>
+# include <elib/aux.hpp>
 # include <cstddef>
 
 

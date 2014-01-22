@@ -158,10 +158,7 @@ namespace elib { namespace fuse
     ////////////////////////////////////////////////////////////////////////////
     // fuse::at(seq)
     template <class N, class Seq>
-    aux::lazy_disable_if_t<
-        aux::is_const<Seq>
-      , result_of::at<Seq, N>
-    >
+    result_of::at_t<Seq, N>
     at(Seq& seq);
     
     template <class N, class Seq>
@@ -171,10 +168,7 @@ namespace elib { namespace fuse
     ////////////////////////////////////////////////////////////////////////////
     // fuse::at_c(seq)
     template <int N, class Seq>
-    aux::lazy_disable_if_t<
-        aux::is_const<Seq>
-      , result_of::at_c<Seq, N>
-    >
+    result_of::at_c_t<Seq, N>
     at_c(Seq & seq);
     
     template <int N, class Seq>

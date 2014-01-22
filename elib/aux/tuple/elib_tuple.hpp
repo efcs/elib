@@ -28,7 +28,7 @@ namespace elib { namespace aux
         Impl m_impl;
         
         template <class Key, class T>
-        friend struct tuple_detail::tuple_index_of_impl;
+        friend struct tuple_detail::tuple_element_index_impl;
         
         template<std::size_t I, class T>
         friend struct tuple_detail::tuple_element_impl;

@@ -22,7 +22,7 @@ namespace elib { namespace fuse
             return static_cast<Seq&>(*this);
         }
         
-        constexpr operator detail::from_sequence_convertible_type() const noexcept
+        constexpr explicit operator detail::from_sequence_convertible_type() const noexcept
         {
             return detail::from_sequence_convertible_type{};
         }

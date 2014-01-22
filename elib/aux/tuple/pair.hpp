@@ -6,8 +6,10 @@
 # include <elib/aux/tuple/helper.hpp>
 # include <elib/aux/tuple/is_tuple_like.hpp>
 # include <elib/aux/tuple/tuple_element.hpp>
+# include <elib/aux/tuple/tuple_element_index.hpp>
 # include <elib/aux/tuple/tuple_size.hpp>
 # include <elib/aux/integral_constant.hpp>
+# include <elib/aux/always.hpp>
 # include <elib/aux/move.hpp>
 # include <elib/functional.hpp>
 # include <functional>
@@ -117,19 +119,19 @@ namespace elib { namespace aux
         struct pair_get_impl<0>
         {
             template <class T, class U>
-            static constexpr T& get_ref(pair<T, U> & p) noexcept
+            static constexpr T& get(pair<T, U> & p) noexcept
             {
                 return p.first;
             }
             
             template <class T, class U>
-            static constexpr T const& get_cref(pair<T, U> const& p) noexcept
+            static constexpr T const& get(pair<T, U> const& p) noexcept
             {
                 return p.first;
             }
             
             template <class T, class U>
-            static constexpr T&& get_move(pair<T, U> && p) noexcept
+            static constexpr T&& get(pair<T, U> && p) noexcept
             {
                 return aux::move(p.first);
             }
@@ -139,19 +141,19 @@ namespace elib { namespace aux
         struct pair_get_impl<1>
         {
             template <class T, class U>
-            static constexpr U& get_ref(pair<T, U> & p) noexcept
+            static constexpr U& get(pair<T, U> & p) noexcept
             {
                 return p.second;
             }
             
             template <class T, class U>
-            static constexpr U const& get_cref(pair<T, U> const& p) noexcept
+            static constexpr U const& get(pair<T, U> const& p) noexcept
             {
                 return p.second;
             }
             
             template <class T, class U>
-            static constexpr U&& get_move(pair<T, U> && p) noexcept
+            static constexpr U&& get(pair<T, U> && p) noexcept
             {
                 return aux::move(p.second);
             }
@@ -164,21 +166,24 @@ namespace elib { namespace aux
     constexpr tuple_element_t<I, pair<First, Second>>&
     get(pair<First, Second> & t) noexcept
     {
-        return tuple_detail::pair_get_impl<I>::get_ref(t);
+        static_assert(
+            !is_const<tuple_element_t<I, pair<First, Second>>>::value
+          , "Shit");
+        return tuple_detail::pair_get_impl<I>::get(t);
     }
     
     template <std::size_t I, class First, class Second>
-    constexpr tuple_element_t<I, pair<First, Second>> const &
+    constexpr tuple_element_t<I, pair<First, Second>> const&
     get(pair<First, Second> const& t) noexcept
     {
-        return tuple_detail::pair_get_impl<I>::get_cref(t);
+        return tuple_detail::pair_get_impl<I>::get(t);
     }
     
     template <std::size_t I, class First, class Second>
     constexpr tuple_element_t<I, pair<First, Second>>&&
     get(pair<First, Second> && t) noexcept
     {
-        return tuple_detail::pair_get_impl<I>::get_move(aux::move(t)); 
+        return tuple_detail::pair_get_impl<I>::get(aux::move(t)); 
     }
     
     template <class First, class Second>

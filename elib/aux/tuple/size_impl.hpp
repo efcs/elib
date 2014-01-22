@@ -4,6 +4,7 @@
 # include <elib/aux/tuple/fwd.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <tuple>
+# include <utility>
 
 namespace elib { namespace aux
 {

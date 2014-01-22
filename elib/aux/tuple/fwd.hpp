@@ -41,10 +41,10 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     // tuple_index_of
     template <class Key, class T>
-    struct tuple_index_of;
+    struct tuple_element_index;
     
     template <class Key, class T>
-    using tuple_index_of_t = typename tuple_index_of<Key, T>::type;
+    using tuple_element_index_t = typename tuple_element_index<Key, T>::type;
     
     ////////////////////////////////////////////////////////////////////////////
     // tuple_indexes
@@ -221,8 +221,7 @@ namespace elib { namespace aux
         ////////////////////////////////////////////////////////////////////////
         // tuple_detail::tuple_index_of_impl
         template <class Key, class T>
-        struct tuple_index_of_impl;
-        
+        struct tuple_element_index_impl;
         
         ////////////////////////////////////////////////////////////////////////
         // tuple_detail::make_tuple_indexes

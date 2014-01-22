@@ -8,6 +8,7 @@
 # include <elib/aux/tuple/item.hpp>
 # include <elib/aux/tuple/size_impl.hpp>
 # include <elib/aux/tuple/tuple_element.hpp>
+# include <elib/aux/tuple/tuple_element_index.hpp>
 # include <elib/aux/tuple/tuple_impl.hpp>
 # include <elib/aux/tuple/tuple_indexes.hpp>
 # include <elib/aux/tuple/tuple_size.hpp>
@@ -48,26 +49,28 @@ namespace elib { namespace aux
             );
     }
     
-    template <class Key, class ...Ts>
-    constexpr Key & 
+    template <class Value, class ...Ts>
+    constexpr Value & 
     get(tuple<Ts...> & t) noexcept
     {
-        
-       return static_cast<Key &>(t.m_impl);
+        using AtVal = typename decltype(t.m_impl)::template item_at_value<Value>;
+        return AtVal::call(t);
     }
     
-    template <class Key, class ...Ts>
-    constexpr Key const& 
+    template <class Value, class ...Ts>
+    constexpr Value const& 
     get(tuple<Ts...> const& t) noexcept
     {
-       return static_cast<Key const &>(t.m_impl);
+        using AtVal = typename decltype(t.m_impl)::template item_at_value<Value>;
+        return AtVal::call(t);
     }
     
-    template <class Key, class ...Ts>
-    constexpr Key && 
+    template <class Value, class ...Ts>
+    constexpr Value && 
     get(tuple<Ts...> && t) noexcept
     {
-        return static_cast<Key &&>( std::move(t.m_impl) );
+        using AtVal = typename decltype(t.m_impl)::template item_at_value<Value>;
+        return AtVal::call(std::move(t));
     }
     
     ////////////////////////////////////////////////////////////////////////////

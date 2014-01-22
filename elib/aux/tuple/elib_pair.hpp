@@ -26,7 +26,12 @@ namespace elib { namespace aux
                 noexcept(is_nothrow_default_constructible<First>::value
                       && is_nothrow_default_constructible<Second>::value)
           : first(), second()
-        {}
+        {
+            static_assert(
+                !is_ref<First>::value && !is_ref<Second>::value
+              , "Attempting to default construct a reference type in pair"
+            );
+        }
         
         constexpr pair(const First& f, const Second& s)
                 noexcept(is_nothrow_copy_constructible<First>::value

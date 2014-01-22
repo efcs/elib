@@ -11,7 +11,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     // aux::tuple_size
     template <class T>
-    struct tuple_size : tuple_detail::tuple_size_impl<T>
+    struct tuple_size : tuple_detail::tuple_size_impl<uncvref<T>>
     {
         static_assert(
             is_tuple_like<T>::value

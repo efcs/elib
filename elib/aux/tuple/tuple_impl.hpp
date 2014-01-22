@@ -26,6 +26,8 @@ namespace elib { namespace aux
         struct tuple_impl< tuple_indexes<Indexes...>, Types...>
           : tuple_item_c<Indexes, Types>...
         {
+            
+            
             template <
                 std::size_t ...I0, class ...Ts0
               , std::size_t ...I1, class ...Ts1

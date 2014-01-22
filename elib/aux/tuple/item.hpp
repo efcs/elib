@@ -59,16 +59,6 @@ namespace elib { namespace aux
             using index = Index;
             using value_type = Type;
             
-            /* const cast to fix implicit const for constexpr function */
-            explicit constexpr operator value_type&() 
-            { return const_cast<value_type &>(m_value); }
-            
-            explicit constexpr operator value_type const&() const 
-            { return m_value; }
-            
-            explicit constexpr operator value_type && ()
-            { return static_cast<value_type &&>(m_value); }
-            
             constexpr tuple_item() 
                     noexcept(is_nothrow_default_constructible<Type>::value)
               : m_value()

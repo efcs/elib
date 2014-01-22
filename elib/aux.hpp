@@ -2,6 +2,7 @@
 #define ELIB_AUX_HPP
 # 
 # include <elib/aux/always.hpp>
+# include <elib/aux/arithmetic.hpp>
 # include <elib/aux/any.hpp>
 # include <elib/aux/apply.hpp>
 # include <elib/aux/apply_tuple.hpp>

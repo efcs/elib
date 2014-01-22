@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_LOGICAL_HPP
 #define ELIB_AUX_LOGICAL_HPP
 
+# include <elib/aux/if.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/none.hpp>
 
@@ -125,6 +126,51 @@ namespace elib
               
             using which = typename result::which;
         };
+        
+        namespace detail
+        {
+            template <class ...Args>
+            true_ all_pointers_test(Args*...);
+        
+            false_ all_pointers_test(...);
+        
+            template <class ...Args>
+            false_ not_all_pointers_test(Args*...);
+        
+            true_ not_all_pointers_test(...);
+        }                                                   // namespace detail
+
+        ////////////////////////////////////////////////////////////////////////////
+        // fast_not
+        template <class Pred>
+        using fast_not = bool_< static_cast<bool>(Pred::type::value) >;
+
+        template <bool Pred>
+        using fast_not_c = bool_< ! Pred >;
+
+        ////////////////////////////////////////////////////////////////////////////
+        // fast_and
+        template <class ...Preds>
+        using fast_and = decltype( 
+            detail::all_pointers_test(if_t<Preds, int*, int>{}...) 
+        );
+
+        template <bool ...Preds>
+        using fast_and_c = decltype(
+            detail::all_pointers_test(if_c_t<Preds, int*, int>{}...)
+        );
+
+        ////////////////////////////////////////////////////////////////////////////
+        // fast_or
+        template <class ...Preds>
+        using fast_or = decltype(
+            detail::not_all_pointers_test(if_t<Preds, int, int*>{}...)
+        );
+
+        template <bool ...Preds>
+        using fast_or_c = decltype(
+            detail::not_all_pointers_test(if_c_t<Preds, int, int*>{}...)
+        );
     }                                                       // namespace aux
 }                                                           // namespace elib
 #endif /* ELIB_AUX_LOGICAL_HPP */

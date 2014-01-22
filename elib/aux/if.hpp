@@ -1,6 +1,8 @@
 #ifndef ELIB_AUX_IF_HPP
 #define ELIB_AUX_IF_HPP
 
+# include <elib/aux/integral_constant.hpp>
+
 namespace elib { namespace aux
 {
     ////////////////////////////////////////////////////////////////////////////

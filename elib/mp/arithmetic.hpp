@@ -10,7 +10,12 @@ namespace elib
     
   //-------------------------------- negate --------------------------------// 
 
-    ELIB_MP_UNARY_INTEGRAL_EXPR(negate, negate_t, -);
+    template <class T>
+    struct negate : ELIB_MP_AUTO_INTC(- T::type::value )
+    {};
+    
+    template <class T>
+    using negate_t = ELIB_MP_AUTO_INTC( - T::type::value );
 
   //-------------------------------- add ------------------------------------// 
    
@@ -47,8 +52,12 @@ namespace elib
   
   //-------------------------------- modulus --------------------------------// 
   
-    ELIB_MP_BINARY_INTEGRAL_EXPR(modulus, modulus_t, %);
-  
+    template <class T, class U>
+    struct modulus : ELIB_MP_AUTO_INTC( T::type::value % U::type::value )
+    {};
+    
+    template <class T, class U>
+    using modulus_t = ELIB_MP_AUTO_INTC( T::type::value % U::type::value );
   
   //-------------------------------- increment --------------------------------// 
     

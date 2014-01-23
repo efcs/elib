@@ -2,17 +2,15 @@
 #define ELIB_TUPLE_TUPLE_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/tuple/elib_tuple.hpp>
-# include <elib/tuple/helper.hpp>
+# include <elib/tuple/bits/tuple.hpp>
+# include <elib/tuple/bits/tuple_impl.hpp>
+# include <elib/tuple/support.hpp>
 # include <elib/tuple/is_tuple_like.hpp>
-# include <elib/tuple/item.hpp>
-# include <elib/tuple/size_impl.hpp>
 # include <elib/tuple/tuple_element.hpp>
 # include <elib/tuple/tuple_element_index.hpp>
-# include <elib/tuple/tuple_impl.hpp>
-# include <elib/tuple/tuple_indexes.hpp>
+# include <elib/tuple/bits/tuple_indexes.hpp>
 # include <elib/tuple/tuple_size.hpp>
-# include <elib/tuple/tuple_types.hpp>
+# include <elib/tuple/bits/tuple_types.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
 

@@ -1,11 +1,11 @@
-#ifndef ELIB_TUPLE_ELIB_TUPLE_HPP
-#define ELIB_TUPLE_ELIB_TUPLE_HPP
+#ifndef ELIB_TUPLE_BITS_TUPLE_HPP
+#define ELIB_TUPLE_BITS_TUPLE_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/tuple/helper.hpp>
-# include <elib/tuple/tuple_impl.hpp>
-# include <elib/tuple/tuple_indexes.hpp>
-# include <elib/tuple/tuple_types.hpp>
+# include <elib/tuple/bits/tuple_impl.hpp>
+# include <elib/tuple/bits/tuple_indexes.hpp>
+# include <elib/tuple/bits/tuple_types.hpp>
+# include <elib/tuple/support.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
 
@@ -141,4 +141,4 @@ namespace elib { namespace tuples
         {}
     };                                                    
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_ELIB_TUPLE_HPP */
+#endif /* ELIB_TUPLE_BITS_TUPLE_HPP */

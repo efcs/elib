@@ -1,9 +1,9 @@
-#ifndef ELIB_TUPLE_UNIQUE_VALUE_HELPER_HPP
-#define ELIB_TUPLE_UNIQUE_VALUE_HELPER_HPP
+#ifndef ELIB_TUPLE_BITS_UNIQUE_VALUE_HELPER_HPP
+#define ELIB_TUPLE_BITS_UNIQUE_VALUE_HELPER_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/tuple/tuple_indexes.hpp>
-# include <elib/tuple/tuple_types.hpp>
+# include <elib/tuple/bits/tuple_indexes.hpp>
+# include <elib/tuple/bits/tuple_types.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
 
@@ -46,4 +46,4 @@ namespace elib { namespace tuples
         
     }                                                       // namespace detail
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_UNIQUE_VALUE_HELPER_HPP */
+#endif /* ELIB_TUPLE_BITS_UNIQUE_VALUE_HELPER_HPP */

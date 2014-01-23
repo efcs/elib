@@ -1071,9 +1071,7 @@ namespace elib
         
     }                                                       // namespace aux
     
-    
-    
-    namespace aux 
+    namespace aux { namespace traits
     { 
         ////////////////////////////////////////////////////////////////////////
         // Primary Type Categories
@@ -1532,7 +1530,12 @@ namespace elib
             , typename U::value_type, U::value
             >
         {};
-        
+    }}                                                      // namespace aux::traits
+    
+    namespace aux
+    {
+        using namespace ::elib::aux::traits;
     }                                                       // namespace aux
+    
 }                                                            // namespace elib
 #endif /* ELIB_AUX_HPP */

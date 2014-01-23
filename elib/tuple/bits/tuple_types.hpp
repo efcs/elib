@@ -1,8 +1,8 @@
-#ifndef ELIB_TUPLE_TUPLE_TYPES_HPP
-#define ELIB_TUPLE_TUPLE_TYPES_HPP
+#ifndef ELIB_TUPLE_BITS_TUPLE_TYPES_HPP
+#define ELIB_TUPLE_BITS_TUPLE_TYPES_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/tuple/element_impl.hpp>
+# include <elib/tuple/bits/tuple_element_impl.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
 
@@ -72,4 +72,4 @@ namespace elib { namespace tuples
         static_assert( Start <= End, "make_tuple_types: invalid params");
     };
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_TUPLE_TYPES_HPP */
+#endif /* ELIB_TUPLE_BITS_TUPLE_TYPES_HPP */

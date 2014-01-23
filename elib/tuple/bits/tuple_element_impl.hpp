@@ -1,5 +1,5 @@
-#ifndef ELIB_TUPLE_ELEMENT_IMPL_HPP
-#define ELIB_TUPLE_ELEMENT_IMPL_HPP
+#ifndef ELIB_TUPLE_BITS_TUPLE_ELEMENT_IMPL_HPP
+# define ELIB_TUPLE_BITS_TUPLE_ELEMENT_IMPL_HPP
 
 # include <elib/tuple/fwd.hpp>
 # include <elib/aux.hpp>
@@ -7,7 +7,7 @@
 # include <tuple>
 # include <cstddef>
 
-namespace elib { namespace tuples 
+namespace elib { namespace tuples
 {
     namespace detail
     {
@@ -87,6 +87,6 @@ namespace elib { namespace tuples
                     params::at_t<pair<First, Second>, I>
                 >;
         };        
-    }
+    }                                                       // namespace detail
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_ELEMENT_IMPL_HPP */
+#endif /* ELIB_TUPLE_BITS_TUPLE_ELEMENT_IMPL_HPP */

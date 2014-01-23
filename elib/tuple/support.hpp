@@ -1,16 +1,20 @@
-#ifndef ELIB_TUPLE_HELPER_HPP
-#define ELIB_TUPLE_HELPER_HPP
+#ifndef ELIB_TUPLE_SUPPORT_HPP
+#define ELIB_TUPLE_SUPPORT_HPP
 
 # include <elib/tuple/fwd.hpp>
 # include <elib/tuple/is_tuple_like.hpp>
-# include <elib/tuple/tuple_types.hpp>
+# include <elib/tuple/bits/tuple_types.hpp>
 # include <elib/aux.hpp>
+# include <array>
+# include <tuple>
+# include <utility>
 # include <cstddef>
 
 namespace elib { namespace tuples
 {
     namespace detail
     {
+        
         ////////////////////////////////////////////////////////////////////////
         // detail::tuple_convertible_impl
         template <bool IsSameSize, class From, class To>
@@ -116,4 +120,4 @@ namespace elib { namespace tuples
         };
     }                                                       // namespace detail
 }}                                                          // namespace elib
-# endif /* ELIB_TUPLE_HELPER_HPP */
+# endif /* ELIB_TUPLE_SUPPORT_HPP */

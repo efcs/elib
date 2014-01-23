@@ -1,5 +1,5 @@
-#ifndef ELIB_TUPLE_TUPLE_INDEXES_HPP
-#define ELIB_TUPLE_TUPLE_INDEXES_HPP
+#ifndef ELIB_TUPLE_BITS_TUPLE_INDEXES_HPP
+#define ELIB_TUPLE_BITS_TUPLE_INDEXES_HPP
 
 # include <elib/tuple/fwd.hpp>
 # include <cstddef>
@@ -52,4 +52,4 @@ namespace elib { namespace tuples
     };
     
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_TUPLE_INDEXES_HPP */
+#endif /* ELIB_TUPLE_BITS_TUPLE_INDEXES_HPP */

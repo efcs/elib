@@ -2,8 +2,8 @@
 #define ELIB_TUPLE_PAIR_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/tuple/elib_pair.hpp>
-# include <elib/tuple/helper.hpp>
+# include <elib/tuple/bits/pair.hpp>
+# include <elib/tuple/support.hpp>
 # include <elib/tuple/is_tuple_like.hpp>
 # include <elib/tuple/tuple_element.hpp>
 # include <elib/tuple/tuple_element_index.hpp>

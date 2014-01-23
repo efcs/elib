@@ -1,5 +1,5 @@
-#ifndef ELIB_TUPLE_ELIB_PAIR_HPP
-#define ELIB_TUPLE_ELIB_PAIR_HPP
+#ifndef ELIB_TUPLE_BITS_PAIR_HPP
+#define ELIB_TUPLE_BITS_PAIR_HPP
 
 # include <elib/tuple/fwd.hpp>
 # include <elib/tuple/apply_tuple.hpp>
@@ -138,4 +138,4 @@ namespace elib { namespace tuples
         }
     };
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_ELIB_PAIR_HPP */
+#endif /* ELIB_TUPLE_BITS_PAIR_HPP */

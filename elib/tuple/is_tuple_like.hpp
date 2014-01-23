@@ -2,7 +2,6 @@
 #define ELIB_TUPLE_IS_TUPLE_LIKE_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/aux.hpp>
 # include <array>
 # include <tuple>
 # include <utility>
@@ -41,6 +40,7 @@ namespace elib { namespace tuples
         template <class T, std::size_t N>
         struct tuple_like_impl<std::array<T, N>> : true_
         {};
+         
     }                                                       // namespace detail
 }}                                                          // namespace elib
 #endif /* ELIB_TUPLE_IS_TUPLE_LIKE_HPP */

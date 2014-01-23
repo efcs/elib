@@ -56,6 +56,7 @@ include_library_if(CONFIG_LIB_AUX aux/build.cmake)
 include_library_if(CONFIG_LIB_CEXPR cexpr/build.cmake)
 include_library_if(CONFIG_LIB_FUNCTIONAL functional/build.cmake)
 include_library_if(CONFIG_LIB_FUSE fuse/build.cmake)
+include_library_if(CONFIG_LIB_TUPLE tuple/build.cmake)
 
 # compile into objects
 

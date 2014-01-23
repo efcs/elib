@@ -36,6 +36,7 @@ option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
 option(CONFIG_LIB_FUSE "Build Fusion Library" ON)
+option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)

@@ -1,7 +1,7 @@
 #ifndef ELIB_FUSE_SUPPORT_SUPPORT_FWD_HPP
 #define ELIB_FUSE_SUPPORT_SUPPORT_FWD_HPP
 
-# define ELIB_FUSE_SUPPORT_EXPO 0
+# include <iosfwd>
 
 namespace elib { namespace fuse
 {
@@ -201,8 +201,6 @@ namespace elib { namespace fuse
         struct deduce_sequence;
     }                                                       // namespace traits
     
-   
-    
     struct iterator_root;
     
     template <class Iter>
@@ -221,7 +219,7 @@ namespace elib { namespace fuse
             segmented_fold_until<Seq, State, Fn>::type;
     }                                                       // namespace result_of
     
-# if ELIB_FUSE_SUPPORT_EXPO
+
     template <class Seq, class State, class Fn>
         result_of::segmented_fold_until_t<Seq, State, Fn>
     segmented_fold_until(Seq & seq,  State const& state, Fn const& fn);
@@ -229,7 +227,7 @@ namespace elib { namespace fuse
     template <class Seq, class State, class Fn>
         result_of::segmented_fold_until_t<Seq, State, Fn>
     segmented_fold_until(Seq const& seq, State const& state, Fn const& fn);
-# endif
+
     
     namespace detail
     {
@@ -246,12 +244,10 @@ namespace elib { namespace fuse
         struct unused_only;
     }                                                       // namespace detail
     
-# if ELIB_FUSE_SUPPORT_EXPO
     constexpr std::ostream& 
     operator<<(std::ostream & out, detail::unused_only const&) noexcept;
     
     constexpr std::istream& operator>>(std::istream&, unused_type&) noexcept;
-# endif
 
 }}                                                          // namespace elib
 #endif /* ELIB_FUSE_SUPPORT_SUPPORT_FWD_HPP */

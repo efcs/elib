@@ -2,7 +2,7 @@
 #define ELIB_FUSE_ITERATOR_ADVANCE_HPP
 
 # include <elib/fuse/iterator/iterator_fwd.hpp>
-# include <elib/fuse/support/support_fwd.hpp>
+# include <elib/fuse/support/tags.hpp>
 # include <elib/fuse/support/traits.hpp>
 # include <elib/aux.hpp>
 
@@ -58,7 +58,7 @@ namespace elib { namespace fuse
     constexpr result_of::advance_c_t<It, N> const
     advance_c(It const& it)
     {
-        return result_of::advance_c<It, N>::call(i);
+        return result_of::advance_c<It, N>::call(it);
     }
 }}                                                           // namespace elib
 #endif /* ELIB_FUSE_ITERATOR_ADVANCE_HPP */

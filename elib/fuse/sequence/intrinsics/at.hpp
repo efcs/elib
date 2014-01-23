@@ -2,9 +2,7 @@
 #define ELIB_FUSE_SEQUENCE_INTRINSICS_AT_HPP
 
 # include <elib/fuse/sequence/intrinsics_fwd.hpp>
-# include <elib/fuse/support/support_fwd.hpp>
-# include <elib/fuse/support/tags.hpp>
-# include <elib/fuse/support/traits.hpp>
+# include <elib/fuse/support.hpp>
 # include <elib/aux.hpp>
 
 namespace elib { namespace fuse
@@ -51,7 +49,7 @@ namespace elib { namespace fuse
     // fuse::at(seq)
     template <class N, class Seq>
     constexpr
-        aux::lazy_disable_if_t<
+        lazy_disable_if_t<
             aux::is_const<Seq>
           , result_of::at<Seq, N>
         >
@@ -71,7 +69,7 @@ namespace elib { namespace fuse
     // fuse::at_c(seq)
     template <int N, class Seq>
     constexpr
-        aux::lazy_disable_if_t<
+        lazy_disable_if_t<
             aux::is_const<Seq>
           , result_of::at_c<Seq, N>
         >

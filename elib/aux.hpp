@@ -1532,6 +1532,7 @@ namespace elib
             , typename U::value_type, U::value
             >
         {};
+        
     }                                                       // namespace aux
 }                                                            // namespace elib
 #endif /* ELIB_AUX_HPP */

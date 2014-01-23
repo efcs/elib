@@ -22,26 +22,10 @@ namespace elib { namespace fuse
     namespace iterator_operators
     {
         template <class It1, class It2>
-        constexpr 
-            aux::enable_if_t<
-                aux::and_<
-                    traits::is_fusion_iterator<It1>
-                  , traits::is_fusion_iterator<It2>
-                >
-              , bool
-            >
-        operator==(It1 const&, It2 const&);
+        constexpr bool operator==(It1 const&, It2 const&);
         
         template <class It1, class It2>
-        constexpr
-            aux::enable_if_t<
-                aux::and_<
-                    traits::is_fusion_iterator<It1>
-                  , traits::is_fusion_iterator<It2>
-                >
-              , bool
-            >
-        operator!=(It1 const&, It2 const&);
+        constexpr bool operator!=(It1 const&, It2 const&);
     }                                           // namespace iterator_operators
     
     using iterator_operators::operator==;
@@ -59,7 +43,6 @@ namespace elib { namespace fuse
         template <class Tag> struct prior_impl;
         template <class Tag> struct value_of_impl;
         template <class Tag> struct value_of_data_impl;
-        
     }                                                       // namespace extension
     
     namespace result_of

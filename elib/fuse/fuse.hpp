@@ -1,6 +1,7 @@
 #ifndef ELIB_FUSE_HPP
 #define ELIB_FUSE_HPP
 # 
+# include <elib/fuse/iterator.hpp>
 # include <elib/fuse/sequence.hpp>
 # include <elib/fuse/support.hpp>
 # /* detail */

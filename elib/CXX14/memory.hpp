@@ -13,7 +13,7 @@ namespace std
   template <typename T> 
   struct _unique_if 
   {
-    typedef unique_ptr<T> _Single_object;
+    typedef unique_ptr<T> _single_object;
   };
   
   template <typename T>
@@ -30,7 +30,7 @@ namespace std
   
   
   template <typename T, typename... Args>
-  typename _unique_if<T>::_Single_object
+  typename _unique_if<T>::_single_object
   make_unique(Args&&... args) 
   {
       return unique_ptr<T>(new T(std::forward<Args>(args)...));

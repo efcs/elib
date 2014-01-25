@@ -25,7 +25,7 @@ namespace std
   template <typename T, size_t N>
   struct _unique_if<T[N]>
   {
-    typedef void _Known_bound;
+    typedef void _known_bound;
   };
   
   
@@ -45,7 +45,7 @@ namespace std
   }
   
   template <typename T, typename... Args>
-  typename _unique_if<T>::_Known_bound
+  typename _unique_if<T>::_known_bound
   make_unique(Args&&...) = delete;
   
 # endif

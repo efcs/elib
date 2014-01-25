@@ -11,33 +11,33 @@ namespace std
 # if __cplusplus < 201300L
 
   template <typename T> 
-  struct _Unique_if 
+  struct _unique_if 
   {
     typedef unique_ptr<T> _Single_object;
   };
   
   template <typename T>
-  struct _Unique_if<T[]>
+  struct _unique_if<T[]>
   {
-    typedef unique_ptr<T[]> _Unknown_bound;
+    typedef unique_ptr<T[]> _unknown_bound;
   };
   
   template <typename T, size_t N>
-  struct _Unique_if<T[N]>
+  struct _unique_if<T[N]>
   {
     typedef void _Known_bound;
   };
   
   
   template <typename T, typename... Args>
-  typename _Unique_if<T>::_Single_object
+  typename _unique_if<T>::_Single_object
   make_unique(Args&&... args) 
   {
       return unique_ptr<T>(new T(std::forward<Args>(args)...));
   }
   
   template <typename T>
-  typename _Unique_if<T>::_Unknown_bound
+  typename _unique_if<T>::_unknown_bound
   make_unique(size_t n)
   {
     typedef typename remove_extent<T>::type U;
@@ -45,7 +45,7 @@ namespace std
   }
   
   template <typename T, typename... Args>
-  typename _Unique_if<T>::_Known_bound
+  typename _unique_if<T>::_Known_bound
   make_unique(Args&&...) = delete;
   
 # endif

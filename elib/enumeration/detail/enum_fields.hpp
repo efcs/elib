@@ -2,7 +2,6 @@
 #define ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP
 
 # include <elib/config.hpp>
-
 # include <elib/CXX14/type_traits.hpp>
 
 
@@ -21,15 +20,15 @@ namespace elib
       };
     
   
-      template <class T, template <class U> class FieldType, class Default>
+      template <class T, template <class> class FieldType, class Default>
       struct _field_extractor
       {
       private:
         
-        template <class _T>
-        static extracted_field<true, FieldType<_T>> test(FieldType<_T>*);
+        template <class T_>
+        static extracted_field<true, FieldType<T_>> test(FieldType<T_>*);
         
-        template <class _T>
+        template <class>
         static extracted_field<false, Default> test(...);
         
       public:

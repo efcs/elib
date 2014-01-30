@@ -107,9 +107,7 @@
   decltype(static_cast<void>(__VA_ARGS__))* const& = \
     ::elib::aux::static_const<void*>::value
 #
-/* for use with ELIB_ENABLE_IF and ELIB_ENABLE_IF_VALID_EXPR in
- * <elib/aux/type_traits.hpp>
- */
+/* for use with ELIB_ENABLE_IF and ELIB_ENABLE_IF_VALID_EXPR */
 # define ELIB_ENABLER_TYPE void* const&
 # define ELIB_ENABLER ::elib::aux::enabler
 # 
@@ -219,7 +217,7 @@
         
 namespace elib
 {
-    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     // forward
     template <class T>
     constexpr T&& forward(typename std::remove_reference<T>::type& t) noexcept
@@ -233,7 +231,7 @@ namespace elib
         return static_cast<T &&>(t);
     }
         
-    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     // move
     template <class T>
     constexpr typename std::remove_reference<T>::type&& move(T&& t) noexcept
@@ -241,7 +239,7 @@ namespace elib
         return static_cast<typename std::remove_reference<T>::type &&>(t);
     }
         
-    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     // move_if_noexcept
     template <class T> 
     constexpr 
@@ -256,7 +254,7 @@ namespace elib
         return elib::move(x);
     }
         
-    ////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     // declval
     template <class T>
     typename std::add_rvalue_reference<T>::type 
@@ -265,11 +263,11 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////
     // addressof
     template <class T>
-    constexpr T* addressof(T& arg) noexcept
+    constexpr T* addressof(T & t) noexcept
     {
         return reinterpret_cast<T*>(
                 & const_cast<char &>(
-                    reinterpret_cast<const volatile char &>(arg)
+                    reinterpret_cast<const volatile char &>(t)
                 ));
     }
     
@@ -332,10 +330,12 @@ namespace elib
         using size_type_ = integral_constant<std::size_t, V>;
 
         template <class To, class From>
-        using intc_cast = integral_constant<To, static_cast<To>(From::type::value)>;
+        using intc_cast = 
+            integral_constant<To, static_cast<To>(From::type::value)>;
 
         template <class From>
-        using bool_cast = integral_constant<bool, static_cast<bool>(From::type::value)>;
+        using bool_cast = 
+            integral_constant<bool, static_cast<bool>(From::type::value)>;
         
     }                                                       // namespace aux
     
@@ -432,7 +432,7 @@ namespace elib
         
         ////////////////////////////////////////////////////////////////////////
         //
-# if __cplusplus < 201300
+# if __cplusplus <= 201303L
         template <class ...T>
         inline void swallow(T &&...) noexcept {}
 # else
@@ -663,8 +663,6 @@ namespace elib
     using aux::lazy_disable_if_c;
     using aux::lazy_disable_if_c_t;
     
-    
-    
     namespace aux
     {
         namespace detail
@@ -709,7 +707,9 @@ namespace elib
         template <class T>
         struct not_ : bool_<!T::type::value> {};
 
-        template <long V>
+        //TODO
+        // Should I allow narrowing conversions? 
+        template <long long V>
         struct not_c : bool_<!V> {};
         
         namespace detail
@@ -875,7 +875,6 @@ namespace elib
         
         template <class A0, class A1, class ...Args>
         using subtract_t = typename detail::subtract_apply<A0, A1, Args...>::type;
-        
         
         ////////////////////////////////////////////////////////////////////////////
         // multiply
@@ -1115,7 +1114,7 @@ namespace elib
         template <class T>
         using is_mem_fn_ptr = std::is_member_function_pointer<T>;
         
-# if ELIB_CONFIG_CXX1Y || ELIB_CONFIG_CXX14
+# if __cplusplus >= 201303L
         using std::is_null_pointer;
         
         template <class T>

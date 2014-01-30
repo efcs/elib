@@ -8,14 +8,13 @@
 # include <elib/CXX14/type_traits.hpp>
 
 namespace elib 
-{
+{ 
   namespace enumeration
   {
     
-    /* To defeat ADL, elib::enumeration provides highly constrained operators
-     * which frequently need to be imported into another namespace
-     * these macros provide that
-     */
+/* To defeat ADL, elib::enumeration provides highly constrained operators
+ * which frequently need to be imported into another namespace
+ * these macros provide that */
 # define ELIB_ENUM_USING_OPERATORS() \
   using namespace ::elib::enumeration::operators;
     
@@ -23,8 +22,7 @@ namespace elib
     {
       
       template <class T, bool=std::is_enum<T>::value>
-      struct is_bitmask : std::false_type
-      {};
+      struct is_bitmask : std::false_type {};
       
       template <class T>
       struct is_bitmask<T, true>
@@ -415,7 +413,7 @@ namespace elib
       {
         return (lhs > rhs || lhs == rhs);
       }
- 
+
     }                                                    // namespace operators
   }                                                    // namespace enumeration
 }                                                            // namespace elib

@@ -252,8 +252,8 @@ namespace elib { namespace tuples
                 static constexpr type && call(tuple_impl && im) noexcept
                 {
                     return static_cast<type &&>(
-                            static_cast<result &&>(im).get()
-                          );
+                                static_cast<result &&>(im).get()
+                            );
                 }
             };
             
@@ -389,7 +389,8 @@ namespace elib { namespace tuples
               : tuple_item_c<Indexes, Types>(
                     elib::forward<
                         tuple_element_impl_t<Indexes,  make_tuple_types_t<OtherT>>
-                >(get<Indexes>(t)))...
+                    >(get<Indexes>(t))
+                )...
             {}
             
             template <class OtherT>

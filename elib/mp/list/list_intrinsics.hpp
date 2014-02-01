@@ -1,17 +1,12 @@
-#ifndef ELIB_MP_VARIADIC_LIST_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_LIST_INTRINSICS_HPP
+#ifndef ELIB_MP_LIST_LIST_INTRINSICS_HPP
+#define ELIB_MP_LIST_LIST_INTRINSICS_HPP
 
-# include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/append.hpp>
-# include <elib/mp/variadic/concat.hpp>
-# include <elib/mp/variadic/drop.hpp>
-# include <elib/mp/variadic/fill.hpp>
-# include <elib/mp/variadic/list_iterator.hpp>
-# include <elib/mp/variadic/prepend.hpp>
+# include <elib/mp/list/list_iterator.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/aux.hpp>
+# include <elib/params.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -19,21 +14,20 @@ namespace elib
   namespace mp
   {
     
-    template <template <class...> class IteratorType>
-    struct variadic_list_intrinsics
+    struct list_intrinsics
     {
       
       template <class List, class N> 
-      using at = variadic_at<List, N::type::value>;
+      using at = params::at<List, N::type::value>;
       
       template <class List, class N>
-      using at_t = typename variadic_at<List, N::type::value>::type;
+      using at_t = typename params::at<List, N::type::value>::type;
       
       template <class List, std::size_t N>
-      using at_c = variadic_at<List, N>;
+      using at_c = params::at<List, N>;
       
       template <class List, std::size_t N>
-      using at_c_t = typename variadic_at<List, N>::type;
+      using at_c_t = typename params::at<List, N>::type;
       
     //-------------------------------- size --------------------------------// 
       
@@ -54,14 +48,14 @@ namespace elib
       
       template <template <class...> class List, class ...Args>
       struct begin< List<Args...> > 
-        : identity< IteratorType<Args...> >
+        : identity< list_iterator<Args...> >
       {};
 
       
       template <class List>
       using end = 
         identity< 
-          IteratorType<>
+          list_iterator<>
         >;
       
     //-------------------------------- front --------------------------------// 
@@ -105,21 +99,21 @@ namespace elib
     //-------------------------------- drop --------------------------------// 
     
       template <class List, std::size_t N>
-      using drop = variadic_drop<List, N>;
+      using drop = params::drop<List, N>;
       
     //---------------------- join append prepend ----------------------------// 
     
       template <class Left, class Right>
-      using concat = variadic_concat<Left, Right>;
+      using concat = params::concat<Left, Right>;
       
       template <class List, class ...Args>
-      using append = variadic_append<List, Args...>;
+      using append = params::append<List, Args...>;
       
       template <class List, class ...Args>
-      using prepend = variadic_prepend<List, Args...>;
+      using prepend = params::prepend<List, Args...>;
       
-    };                                                      // variadic_list_intrinsics
+    };
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_LIST_INTRINSICS_HPP */
+#endif /* ELIB_MP_LIST_LIST_INTRINSICS_HPP */

@@ -1,11 +1,10 @@
-#ifndef ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP
+#ifndef ELIB_MP_LIST_ITERATOR_INTRINSICS_HPP
+#define ELIB_MP_LIST_ITERATOR_INTRINSICS_HPP
 
-# include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/drop.hpp>
-# include <elib/mp/variadic/list_iterator.hpp>
-# include <elib/mp/variadic/list_intrinsics.hpp>
+# include <elib/mp/list/list_iterator.hpp>
+# include <elib/mp/list/list_intrinsics.hpp>
 # include <elib/aux.hpp>
+# include <elib/params.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -13,7 +12,7 @@ namespace elib
   namespace mp
   {
     
-    struct variadic_list_iterator_intrinsics
+    struct list_iterator_intrinsics
     {
      
     //-------------------------------- deref --------------------------------// 
@@ -35,10 +34,10 @@ namespace elib
     //-------------------------------- advance --------------------------------// 
     
       template <class S, class N>
-      using advance = variadic_drop<S, N::type::value>;
+      using advance = params::drop<S, N::type::value>;
       
       template <class S, std::size_t N>
-      using advance_c = variadic_drop<S, N>;
+      using advance_c = params::drop<S, N>;
     
     //-------------------------------- distance --------------------------------// 
     
@@ -49,8 +48,8 @@ namespace elib
         : aux::llong_< static_cast<long long>(sizeof...(Left) - sizeof...(Right))>
       {};
       
-    };                                                      // variadic_list_iterator_intrinsics
+    };                                                      // list_iterator_intrinsics
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_LIST_ITERATOR_INTRINSICS_HPP */
+#endif /* ELIB_MP_LIST_ITERATOR_INTRINSICS_HPP */

@@ -1,17 +1,11 @@
-#ifndef ELIB_MP_VARIADIC_PACK_INTRINSICS_HPP
-#define ELIB_MP_VARIADIC_PACK_INTRINSICS_HPP
+#ifndef ELIB_MP_PACK_INTRINSICS_HPP
+#define ELIB_MP_PACK_INTRINSICS_HPP
 
-# include <elib/mp/variadic/fwd.hpp>
-# include <elib/mp/variadic/append.hpp>
-# include <elib/mp/variadic/at.hpp>
-# include <elib/mp/variadic/concat.hpp>
-# include <elib/mp/variadic/drop.hpp>
-# include <elib/mp/variadic/prepend.hpp>
-# include <elib/mp/variadic/slice.hpp>
-# include <elib/mp/variadic/take.hpp>
 # include <elib/mp/identity.hpp>
 # include <elib/mp/sequence.hpp>
+# include <elib/mp/iterator/default_random_access_iterator.hpp>
 # include <elib/aux.hpp>
+# include <elib/params.hpp>
 # include <cstddef>
 
 namespace elib 
@@ -19,8 +13,7 @@ namespace elib
   namespace mp
   {
     
-    template <template <class, std::size_t> class IteratorType>
-    struct variadic_pack_intrinsics
+    struct pack_intrinsics
     {
       
     //-------------------------- sequence_size -----------------------------// 
@@ -42,23 +35,23 @@ namespace elib
       template <class S>
       using begin = 
         identity<
-          IteratorType<S, 0>
+          default_random_access_iterator<S, 0>
         >;
       
       
       template <class S>
       using end =
         identity<
-          IteratorType<S, sequence_size<S>::type::value>
+          default_random_access_iterator<S, sequence_size<S>::type::value>
         >;
       
     //-------------------------------- at -----------------------------------// 
       
       template <class S, class N>
-      using at = variadic_at<S, N::type::value>;
+      using at = params::at<S, N::type::value>;
       
       template <class S, std::size_t N>
-      using at_c = variadic_at<S, N>;
+      using at_c = params::at<S, N>;
       
     //-------------------------------- front --------------------------------//
     
@@ -85,11 +78,11 @@ namespace elib
     //-------------------------------- push & pop back ----------------------// 
       
       template <class S, class T>
-      using push_back = variadic_append<S, T>;
+      using push_back = params::append<S, T>;
       
       template <class S>
       using pop_back = 
-          variadic_take<
+          params::take<
             S
           , sequence_size<S>::type::value - 1
         >;
@@ -97,7 +90,7 @@ namespace elib
     //-------------------------------- push & pop front ---------------------//
     
       template <class S, class T>
-      using push_front = variadic_prepend<S, T>;
+      using push_front = params::prepend<S, T>;
       
       
       template <class S> struct pop_front;
@@ -110,27 +103,27 @@ namespace elib
     //------------------------ take & drop & slice --------------------------// 
     
       template <class S, std::size_t N>
-      using take = variadic_take<S, N>;
+      using take = params::take<S, N>;
       
       template <class S, std::size_t N>
-      using drop = variadic_drop<S, N>;
+      using drop = params::drop<S, N>;
       
       template <class Seq, std::size_t First, std::size_t Last>
-      using slice = variadic_slice<Seq, First, Last>;
+      using slice = params::slice<Seq, First, Last>;
       
     //------------------------ join & append & prepend ----------------------// 
     
       template <class Left, class Right>
-      using concat = variadic_concat<Left, Right>;
+      using concat = params::concat<Left, Right>;
     
       template <class S, class ...Args>
-      using append = variadic_append<S, Args...>;
+      using append = params::append<S, Args...>;
       
       template <class S, class ...Args>
-      using prepend = variadic_prepend<S, Args...>;
+      using prepend = params::prepend<S, Args...>;
       
-    };                                                      // variadic_pack_intrinsics
+    };                                                      // pack_intrinsics
     
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_MP_VARIADIC_PACK_INTRINSICS_HPP */
+#endif /* ELIB_MP_PACK_INTRINSICS_HPP */

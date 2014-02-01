@@ -380,28 +380,28 @@ namespace elib
             struct take_impl<0>
             {
                 template <class Pack, class ...Args>
-                using apply = aux::no_decay< Pack >;
+                struct apply : aux::no_decay< Pack > {};
             };
 
             template <>
             struct take_impl<1>
             {
                 template <class Pack, class A0, class ...Args>
-                using type = append_t<Pack, A0>;
+                struct apply : append<Pack, A0> {};
             };
 
             template <>
             struct take_impl<2>
             {
                 template <class Pack, class A0, class A1, class ...Args>
-                using type = append_t<Pack, A0, A1>;
+                struct apply : append<Pack, A0, A1> {};
             };
 
             template <>
             struct take_impl<3>
             {
                 template <class Pack, class A0, class A1, class A2, class ...Args>
-                using apply = append_t<Pack, A0, A1, A2>;
+                struct apply : append<Pack, A0, A1, A2> {};
             };
 
             template <std::size_t N>
@@ -414,7 +414,7 @@ namespace elib
                   >
                 using apply = typename take_impl<N-4>::template
                     apply< 
-                        append_t<Pack, A0, A1, A2, A3>
+                        typename append<Pack, A0, A1, A2, A3>::type
                       , Args...
                     >;
             };
@@ -431,7 +431,9 @@ namespace elib
           >
         struct take< Pack<As...>, N >
             : detail::take_impl<N>::template apply<Pack<>, As...>
-        {};
+        {
+            static_assert(sizeof...(As) >= N, "Invalid params to take");
+        };
 
         template <class Pack, class ...As, std::size_t N>
         struct take< Pack(As...), N >
@@ -455,7 +457,7 @@ namespace elib
             {
                 template <class ...Back>
                 static append_t< Pack, typename Back::type... > 
-                eval(aux::any_pod<Ignored...>, Back*...);
+                eval(aux::any_pod<Ignored>..., Back*...);
             };
 
             ////////////////////////////////////////////////////////////////
@@ -478,8 +480,9 @@ namespace elib
           , std::size_t N
           >
         struct drop< Pack<As...>, N >
-            : detail::drop_impl<N, Pack<>, As...>
         {
+            using type = detail::drop_impl<N, Pack<>, As...>;
+            
             static_assert(
                 N <= sizeof...(As)
               , "Index out of range"
@@ -488,8 +491,9 @@ namespace elib
 
         template <class Pack, class ...As, std::size_t N>
         struct drop< Pack(As...), N >
-            : detail::drop_impl<N, Pack(), As...>
         {
+            using type = detail::drop_impl<N, Pack(), As...>;
+            
             static_assert(
                 N <= sizeof...(As)
               , "Index out of range"

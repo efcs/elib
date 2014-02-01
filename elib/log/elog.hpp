@@ -3,15 +3,11 @@
 
 # include <elib/log/static_log.hpp>
 
-namespace elib 
-{
-  namespace log 
-  {
-      
+namespace elib { namespace log 
+{      
     struct elog_tag_t {};
     
-    typedef static_log<elog_tag_t> elog;
+    using elog = static_log<elog_tag_t>;
 
-  }                                                         // namespace log
-}                                                           // namespace elib
+}}                                                          // namespace elib
 #endif /* ELIB_LOG_ELOG_HPP */

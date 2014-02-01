@@ -9,7 +9,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
 option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
 # Standard Library config

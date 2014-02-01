@@ -517,7 +517,7 @@ namespace elib
         using pop_back = take<P, params::size<P>::value - 1>;
 
         ////////////////////////////////////////////////////////////////////
-        // params::pop_back_
+        // params::pop_back_t
         template <class P>
         using pop_back_t = take_t<P, params::size<P>::value - 1>;
 
@@ -529,7 +529,7 @@ namespace elib
         {};
 
         ////////////////////////////////////////////////////////////////////
-        // params::slice_
+        // params::slice_t
         template <class P, std::size_t First, std::size_t Second>
         using slice_t = typename slice<P, First, Second>::type;
         

@@ -192,6 +192,7 @@ namespace elib
       
     // Compound operators
       template <class LHS, class RHS>
+      ELIB_CXX14_CONSTEXPR 
       detail::enable_if_bitmask_t<LHS, RHS>&
       operator&=(LHS& lhs, RHS rhs) noexcept
       {
@@ -199,6 +200,7 @@ namespace elib
       }
       
       template <class LHS, class RHS>
+      ELIB_CXX14_CONSTEXPR
       detail::enable_if_bitmask_t<LHS, RHS>&
       operator|=(LHS& lhs, RHS rhs) noexcept
       {
@@ -206,6 +208,7 @@ namespace elib
       }
       
       template <class LHS, class RHS>
+      ELIB_CXX14_CONSTEXPR
       detail::enable_if_bitmask_t<LHS, RHS>&
       operator^=(LHS& lhs, RHS rhs) noexcept
       {
@@ -213,6 +216,7 @@ namespace elib
       }
       
       template <class LHS, class RHS>
+      ELIB_CXX14_CONSTEXPR
       detail::enable_if_bitmask_t<LHS, RHS>&
       operator<<=(LHS& lhs, RHS rhs) noexcept
       {
@@ -220,6 +224,7 @@ namespace elib
       }
       
       template <class LHS, class RHS>
+      ELIB_CXX14_CONSTEXPR
       detail::enable_if_bitmask_t<LHS, RHS>&
       operator>>=(LHS& lhs, RHS rhs) noexcept
       {
@@ -253,7 +258,11 @@ namespace elib
         return static_cast<LHS>(underlying_cast(lhs) + 1);
       }
       
-      template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)>
+      template <
+          class LHS
+        , ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)
+      >
+      ELIB_CXX14_CONSTEXPR
       LHS& operator++(LHS& lhs) noexcept
       {
         return lhs = lhs++;

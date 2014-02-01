@@ -7,7 +7,7 @@
 # include <elib/tuple/is_tuple_like.hpp>
 # include <elib/tuple/tuple_element.hpp>
 # include <elib/tuple/tuple_element_index.hpp>
-# include <elib/tuple/tuple_size.hpp>
+# include <elib/tuple/bits/tuple_size.hpp>
 # include <elib/aux.hpp>
 # include <elib/functional.hpp>
 # include <functional>
@@ -17,33 +17,13 @@
 
 namespace elib { namespace tuples
 {
-    namespace detail
-    {
-        template <class T>
-        struct strip_ref_wrapper
-        {
-            using type = T;
-        };
-        
-        template <class T>
-        struct strip_ref_wrapper<std::reference_wrapper<T>>
-        {
-            using type = T &;
-        };
-        
-        template <class T>
-        using decay_strip = typename strip_ref_wrapper< aux::decay_t<T> >::type;
-        
-        template <class T, class U>
-        using decay_strip_pair = pair<decay_strip<T>, decay_strip<U>>;
-    }                                                       // namespace detail
-    
+
     ////////////////////////////////////////////////////////////////////////////
     // aux::make_pair
     template <class T, class U>
-    constexpr detail::decay_strip_pair<T, U> make_pair(T && t, U && u)
+    constexpr detail::make_pair_return_t<T, U> make_pair(T && t, U && u)
     {
-        return detail::decay_strip_pair<T, U>(
+        return detail::make_pair_return_t<T, U>(
                     static_cast<T &&>(t), static_cast<U &&>(u));
     }
     

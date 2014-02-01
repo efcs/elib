@@ -3,4 +3,4 @@
 	url = git@code.efcs.ca:ewfiseli/cexp
 [submodule "elib/cexpr"]
 	path = elib/cexpr
-	url = git@code.efcs.ca:ewfiseli/cexp.git
+	url = https://ewfiseli@bitbucket.org/ewfiseli/cexp.git

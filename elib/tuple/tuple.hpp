@@ -9,13 +9,40 @@
 # include <elib/tuple/tuple_element.hpp>
 # include <elib/tuple/tuple_element_index.hpp>
 # include <elib/tuple/bits/tuple_indexes.hpp>
-# include <elib/tuple/tuple_size.hpp>
+# include <elib/tuple/bits/tuple_size.hpp>
 # include <elib/tuple/bits/tuple_types.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
 
 namespace elib { namespace tuples
 {    
+    ////////////////////////////////////////////////////////////////////////////
+    // tuples::make_tuple    
+    template <class ...Ts>
+    constexpr detail::make_tuple_return_t<Ts...>
+    make_tuple(Ts&&... t)
+    {
+        return detail::make_tuple_return_t<Ts...>(elib::forward<Ts>(t)...);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // tuples::forward_as_tuple
+    template <class ...Ts>
+    constexpr tuple<Ts&&...>
+    forward_as_tuple(Ts&&... t)
+    {
+        return tuple<Ts&&...>(elib::forward<Ts>(t)...);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // tuples::tie(T...)
+    template <class ...Ts>
+    constexpr tuple<Ts&...> 
+    tie(Ts&... t)
+    {
+        return tuple<Ts&...>(t...);
+    }
+      
     ////////////////////////////////////////////////////////////////////////////
     // aux::get(tuple)
     template <std::size_t I, class ...Ts>

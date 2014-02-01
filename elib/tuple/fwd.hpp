@@ -4,6 +4,8 @@
 # include <elib/aux.hpp>
 # include <cstddef>
 
+# define ELIB_TUPLE_EXPO 0
+
 namespace elib { namespace tuples
 {
     ////////////////////////////////////////////////////////////////////////////
@@ -20,7 +22,7 @@ namespace elib { namespace tuples
     // piecewise_construct_t
     struct piecewise_construct_t {};
     
-    constexpr piecewise_construct_t piecewise_construct = piecewise_construct_t();
+    constexpr const piecewise_construct_t piecewise_construct{};
     
     ////////////////////////////////////////////////////////////////////////////
     // tuple_size
@@ -55,9 +57,25 @@ namespace elib { namespace tuples
     // tuple_types
     template <class ...>
     struct tuple_types;
-        
+    
     ////////////////////////////////////////////////////////////////////////////
-    // aux::get(pair)
+    // tuples::make_pair(pair)
+    namespace detail
+    {
+        template <class T, class U>
+        using make_pair_return_t = 
+            pair<
+                aux::strip_ref_wrapper_t< aux::decay_t<T> >
+              , aux::strip_ref_wrapper_t< aux::decay_t<U> >
+            >;
+    }                                                       // namespace detail
+    
+    template <class T, class U>
+    constexpr detail::make_pair_return_t<T, U>
+    make_pair(T && t, U && u);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // tuples::get(pair)
     template <std::size_t I, class First, class Second>
     constexpr tuple_element_t<I, pair<First, Second>>&
     get(pair<First, Second> & t) noexcept;
@@ -125,10 +143,31 @@ namespace elib { namespace tuples
     template <class T, class U>
     void swap(pair<T, U> const& lhs, pair<T, U> const& rhs) 
         noexcept(noexcept(lhs.swap(rhs)));
-        
+    
+
+    ////////////////////////////////////////////////////////////////////////////
+    // tuples::make_tuple, tuples::forward_as_tuple
+    namespace detail
+    {
+       template <class ...Ts>
+        using make_tuple_return_t = 
+            tuple< aux::strip_ref_wrapper_t< aux::decay_t<Ts> >... >; 
+    }                                                       // namespace detail
+
+    template <class ...Ts>
+    constexpr detail::make_tuple_return_t<Ts...>
+    make_tuple(Ts&&...);
+    
+    template <class ...Ts>
+    constexpr tuple<Ts&&...>
+    forward_as_tuple(Ts&&...);
+    
+    template <class ...Ts>
+    constexpr tuple<Ts&...>
+    tie(Ts&...);
     
     ////////////////////////////////////////////////////////////////////////////
-    // aux::get(tuple)
+    // tuples::get(tuple)
     template <std::size_t I, class ...Ts>
     constexpr tuple_element_t<I, tuple<Ts...>> &
     get(tuple<Ts...> & t) noexcept;
@@ -154,7 +193,7 @@ namespace elib { namespace tuples
     get(tuple<Ts...> && t) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
-    // aux::operator==(tuple), aux::operator!=(tuple), aux::operator<(tuple)
+    // tuples::operator==(tuple), tuples::operator!=(tuple), tuples::operator<(tuple)
     template <class ...Ts1, class ...Ts2>
     constexpr bool operator==(tuple<Ts1...> const& t1, tuple<Ts2...> const& t2);
     
@@ -174,7 +213,7 @@ namespace elib { namespace tuples
     constexpr bool operator>=(tuple<Ts1...> const& t1, tuple<Ts2...> const& t2);
     
     ////////////////////////////////////////////////////////////////////////////
-    // aux::swap(tuple)
+    // tuples::swap(tuple)
     template <class ...Ts>
     void swap(tuple<Ts...> & lhs, tuple<Ts...> & rhs);
     
@@ -337,6 +376,11 @@ using tuples::tuple;
 using tuples::pair;
 
 using tuples::get;
+using tuples::make_pair;
+using tuples::make_tuple;
+using tuples::tie;
+using tuples::forward_as_tuple;
+using tuples::tie;
 
 using tuples::piecewise_construct_t;
 using tuples::piecewise_construct;

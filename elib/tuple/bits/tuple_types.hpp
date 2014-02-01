@@ -14,7 +14,6 @@ namespace elib { namespace tuples
     template <class ...Types>
     struct tuple_types {};
     
-    
     namespace detail
     {
         ////////////////////////////////////////////////////////////////////////

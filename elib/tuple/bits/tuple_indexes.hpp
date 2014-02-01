@@ -11,7 +11,6 @@ namespace elib { namespace tuples
     template <std::size_t ...I>
     struct tuple_indexes {};
     
-    
     namespace detail
     {
         ////////////////////////////////////////////////////////////////////////

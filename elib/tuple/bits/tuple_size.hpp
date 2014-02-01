@@ -1,5 +1,5 @@
-#ifndef ELIB_TUPLE_TUPLE_SIZE_HPP
-#define ELIB_TUPLE_TUPLE_SIZE_HPP
+#ifndef ELIB_TUPLE_BITS_TUPLE_SIZE_HPP
+#define ELIB_TUPLE_BITS_TUPLE_SIZE_HPP
 
 # include <elib/tuple/fwd.hpp>
 # include <elib/tuple/is_tuple_like.hpp>
@@ -61,4 +61,4 @@ namespace elib { namespace tuples
         );
     };
 }}                                                          // namespace elib
-#endif /* ELIB_TUPLE_TUPLE_SIZE_HPP */
+#endif /* ELIB_TUPLE_BITS_TUPLE_SIZE_HPP */

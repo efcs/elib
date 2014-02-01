@@ -2,6 +2,7 @@
 #define ELIB_AUX_TRAITS_HPP
 
 # include <elib/config.hpp>
+# include <elib/aux/integral_constant.hpp>
 # include <type_traits>
 # include <functional>
 # include <cstddef>
@@ -25,6 +26,11 @@ namespace elib { namespace aux
         using std::is_rvalue_reference;
         using std::is_member_object_pointer;
         using std::is_member_function_pointer;
+        
+        template <class T>
+        using is_integral_enum = bool_<
+            is_integral<T>::value || is_enum<T>::value
+          >;
         
         template <class T>
         using is_ptr = std::is_pointer<T>;
@@ -430,6 +436,37 @@ namespace elib { namespace aux
         
         template <class T>
         using underlying_type_t = typename underlying_type<T>::type;
+        
+        namespace traits_detail
+        {
+            template <
+                class T
+              , bool IsEnum = is_enum<T>::value
+              , bool IsIntegral = is_integral<T>::value
+            >
+            struct sfinae_underlying_type_impl;
+            
+            template <class T>
+            struct sfinae_underlying_type_impl<T, true, false>
+            {
+                using type = underlying_type_t<T>;
+            };
+            
+            template <class T>
+            struct sfinae_underlying_type_impl<T, false, true>
+            {
+                using type = T;
+            };
+        }
+        
+        template <class T>
+        struct sfinae_underlying_type
+          : traits_detail::sfinae_underlying_type_impl<T>
+        {};
+        
+        template <class T>
+        using sfinae_underlying_type_t = typename
+            traits_detail::sfinae_underlying_type_impl<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::result_of

@@ -254,10 +254,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         // aux::enable_if, aux::enable_if_c
         template <class Pred, class T = void>
-        using enable_if = typename 
-            enable_if_c<
-                static_cast<bool>(Pred::type::value), T
-            >::type;
+        using enable_if = enable_if_c<static_cast<bool>(Pred::type::value), T>;
             
         template <class Pred, class T = void>
         using enable_if_t = typename enable_if<Pred, T>::type;

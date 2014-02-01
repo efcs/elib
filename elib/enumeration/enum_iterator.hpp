@@ -1,10 +1,10 @@
 #ifndef ELIB_ENUMERATION_ENUM_ITERATOR_HPP
 #define ELIB_ENUMERATION_ENUM_ITERATOR_HPP
 
-# include <elib/config.hpp>
 # include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/basic_enum_traits.hpp>
 # include <elib/enumeration/enum_traits.hpp>
+# include <elib/aux.hpp>
 
 # include <elib/CXX14/type_traits.hpp>
 
@@ -19,16 +19,15 @@ namespace elib
     {
       
       template <class T>
-      struct is_iterable : has_range<T>
-      {};
+      struct is_iterable : has_range<T> {};
       
-      template <class T, bool=std::is_enum<T>::value>
-      struct is_constexpr_range_iterable : std::false_type
+      template <class T, bool=aux::is_enum<T>::value>
+      struct is_constexpr_range_iterable : aux::false_
       {};
       
       template <class T>
       struct is_constexpr_range_iterable<T, true>
-        : std::integral_constant<bool, enum_traits<T>::has_constexpr_range>
+        : bool_<enum_traits<T>::has_constexpr_range>
       {};
       
       template <class T>
@@ -37,18 +36,18 @@ namespace elib
       
       template <class T>
       using enable_if_constexpr_iterable_t =
-        std::enable_if_t<is_constexpr_range_iterable<T>::value>;
+        aux::enable_if_t<is_constexpr_range_iterable<T>>;
         
       template <class T>
       using enable_if_name_map_iterable_t =
-        std::enable_if_t<
+        aux::enable_if_c_t<
           is_name_map_iterable<T>::value
             && !is_constexpr_range_iterable<T>::value
         >;
         
       template <class T>
       using enable_if_iterable_t =
-        std::enable_if_t<is_iterable<T>::value>;
+        aux::enable_if_t<is_iterable<T>>;
       
       
       template <class T, class=void>

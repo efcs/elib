@@ -1,5 +1,5 @@
 #ifndef ELIB_AUX_INTEGER_SEQUENCE_HPP
-# define ELIB_AUX_INTEGER_SEQUENCE_HPP
+#define ELIB_AUX_INTEGER_SEQUENCE_HPP
 
 # include <cstddef>
 
@@ -8,14 +8,21 @@ namespace elib { namespace aux
     template<class T, T ...Seq> 
     struct integer_sequence
     {
+        constexpr integer_sequence() noexcept {}
+        constexpr integer_sequence(integer_sequence const&) noexcept {}
+        constexpr integer_sequence(integer_sequence&&) noexcept {}
+        
         using type = integer_sequence;
 
         using value_type = T;
 
-        static constexpr T size = sizeof...(Seq);
+        static constexpr const std::size_t size = sizeof...(Seq);
 
         using next = integer_sequence<T, Seq..., sizeof...(Seq)>;
     };
+    
+    template <class T,  T ...Seq>
+    constexpr const std::size_t integer_sequence<T, Seq...>::size;
 
     template<int... I>
     using int_sequence = integer_sequence<int, I...>;

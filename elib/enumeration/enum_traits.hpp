@@ -78,6 +78,13 @@ namespace elib { namespace enumeration
         >
     {};
     
+    template <class T,  bool=aux::is_enum<T>::value>
+    struct has_constexpr_range : aux::false_ {};
+    
+    template <class T>
+    struct has_constexpr_range<T, true>
+      : bool_< enum_traits<T>::has_constexpr_range >
+    {};
 
     template <class T, ELIB_ENABLE_IF(enum_traits<T>::has_default_value)>
     constexpr T default_value() noexcept
@@ -183,7 +190,7 @@ namespace elib { namespace enumeration
       enum_traits<T>::has_constexpr_range
       , bool 
     >
-    in_range(T v) noexcept
+    constexpr in_range(T v) noexcept
     {
       return (first_value<T>() <= v && v <= last_value<T>());
     }

@@ -125,9 +125,7 @@ namespace elib { namespace enumeration
               , is_logical_enum_integral<LHS, RHS>
               , is_logical_enum_integral<RHS, LHS>
             >;
-            
-        
-
+    
     }                                                       // namespace detail
     
     namespace operators
@@ -189,7 +187,6 @@ namespace elib { namespace enumeration
           );                                                                \
     }
 # 
-
         ELIB_ENUM_ARITH_UNARY_OP(+)
         ELIB_ENUM_ARITH_UNARY_OP(-)
 
@@ -213,7 +210,7 @@ namespace elib { namespace enumeration
     template <class LHS, class RHS, ELIB_ENABLE_IF(detail::is_logical_expr<LHS, RHS>::value)> \
     constexpr bool ELIB_ENUM_BINARY_OP(Op, bool, LHS, RHS)
     
-        template <class LHS, ELIB_ENABLE_IF(detail::is_logical<LHS>::value)> \
+        template <class LHS, ELIB_ENABLE_IF(detail::is_logical<LHS>::value)>
         constexpr bool ELIB_ENUM_UNARY_OP(!, bool, LHS)
         
         ELIB_ENUM_LOGICAL_BINARY_OP(&&)
@@ -238,7 +235,6 @@ namespace elib { namespace enumeration
         ELIB_ENUM_COMPARE_BINARY_OP(>=)
         
 # undef ELIB_ENUM_COMPARE_BINARY_OP
-
 
 # undef ELIB_ENUM_UNARY_OP
 # undef ELIB_ENUM_BINARY_OP

@@ -195,11 +195,6 @@ namespace elib { namespace aux
         using remove_cv_ref_t = remove_cv_t< remove_ref_t<T> >;
         
         ////////////////////////////////////////////////////////////////////////
-        // aux::uncvref
-        template <class T>
-        using uncvref = remove_cv_t< remove_ref_t<T> >;
-        
-        ////////////////////////////////////////////////////////////////////////
         // aux::add_lvalue_reference, aux::add_lvalue_ref
         using std::add_lvalue_reference;
         
@@ -476,6 +471,16 @@ namespace elib { namespace aux
         using result_of_t = typename result_of<T>::type;
         
         ////////////////////////////////////////////////////////////////////////
+        // aux::uncvref
+        template <class T>
+        using uncvref = remove_cv_t< remove_ref_t<T> >;
+        
+        ////////////////////////////////////////////////////////////////////////
+        // aux::decay_uncvref
+        template <class T>
+        using decay_uncvref = remove_cv_t< remove_ref_t< decay_t<T> >>;
+        
+        ////////////////////////////////////////////////////////////////////////
         // same_type
         namespace traits_detail
         {
@@ -537,6 +542,8 @@ namespace elib { namespace aux
 
         template <class T>
         using decay_strip_t = strip_ref_wrapper_t< typename decay<T>::type >;
+        
+       
         
     }                                                       // namespace traits
     

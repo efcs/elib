@@ -179,7 +179,9 @@ namespace elib { namespace enumeration
     is_contigious()
     {
       return (size<T>() == 0 
-        || (underlying_cast(last_value<T>()) - underlying_cast(first_value<T>())
+        || (static_cast<std::size_t>(
+                underlying_cast(last_value<T>()) - underlying_cast(first_value<T>())
+          )
              == size<T>()
           ));
     }

@@ -1,93 +1,97 @@
 #ifndef ELIB_FS_COPY_OPTIONS_OPERATORS_HPP
 #define ELIB_FS_COPY_OPTIONS_OPERATORS_HPP
 
-# include <type_traits>
+# include <elib/aux.hpp>
 
-namespace elib
+namespace elib { namespace fs
 {
-  namespace fs
-  {
-    namespace cp_detail
-    {
-      
-      typedef typename std::underlying_type<copy_options>::type base_t;
-      
-      // upcast: base_t -> copy_options
-      constexpr copy_options uc(base_t src) noexcept
-      { return static_cast<copy_options>(src); }
-      
-      // downcast: copy_options -> base_t
-      constexpr base_t dc(copy_options p) noexcept
-      { return static_cast<base_t>(p); }
-      
-      //bool cast
-      constexpr bool bc(copy_options p) noexcept
-      { return static_cast<bool>(p); }
-      
-    }                                                    // namespace cp_detail
         
+////////////////////////////////////////////////////////////////////////////////
+//         BITWISE OPERATORS
+////////////////////////////////////////////////////////////////////////////////
+    
+# define ELIB_FS_COPY_OPTIONS_BITWISE_OP(Op)                                                      \
+    constexpr copy_options operator Op (copy_options lhs, copy_options rhs) noexcept                            \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<copy_options>;                                      \
+        return static_cast<copy_options>(                                                         \
+            static_cast<UnderT>(lhs) Op static_cast<UnderT>(rhs)                           \
+        );                                                                                 \
+    }                                                                                      \
+                                                                                           \
+    constexpr copy_options operator Op( copy_options lhs, aux::underlying_type_t<copy_options> rhs) noexcept    \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<copy_options>;                                      \
+        return static_cast<copy_options>(                                                         \
+                static_cast<UnderT>(lhs) Op rhs                                            \
+            );                                                                             \
+    }                                                                                      \
+                                                                                           \
+    inline copy_options& operator Op##= (copy_options & lhs, copy_options rhs) noexcept                         \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<copy_options>;                                      \
+        return reinterpret_cast<copy_options &>(                                                  \
+            reinterpret_cast<UnderT &>(lhs) Op##= static_cast<UnderT>(rhs)                 \
+          );                                                                               \
+    }                                                                                      \
+                                                                                           \
+    inline copy_options& operator Op##= (copy_options & lhs, aux::underlying_type_t<copy_options> rhs) noexcept \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<copy_options>;                                      \
+        return reinterpret_cast<copy_options &>(                                                  \
+            reinterpret_cast<UnderT &>(lhs) Op##= rhs                                      \
+          );                                                                               \
+    }
+# 
+                
     // pure operators (lhs & rhs) == copy_options
     constexpr copy_options operator~(copy_options lhs) noexcept
-    { return cp_detail::uc(~ cp_detail::dc(lhs)); }
-      
-    constexpr copy_options operator&(copy_options lhs, copy_options rhs) noexcept
-    { return cp_detail::uc(cp_detail::dc(lhs) & cp_detail::dc(rhs)); }
-      
-    constexpr copy_options operator|(copy_options lhs, copy_options rhs) noexcept
-    { return cp_detail::uc(cp_detail::dc(lhs) | cp_detail::dc(rhs)); }
-      
-    constexpr copy_options operator^(copy_options lhs, copy_options rhs) noexcept
-    { return cp_detail::uc(cp_detail::dc(lhs) ^ cp_detail::dc(rhs)); }
-      
-    inline copy_options& operator&=(copy_options& lhs, copy_options rhs) noexcept
-    { return lhs = lhs & rhs; }
-      
-    inline copy_options& operator|=(copy_options& lhs, copy_options rhs) noexcept
-    { return lhs = lhs | rhs; }
-      
-    inline copy_options& operator^=(copy_options& lhs, copy_options rhs) noexcept
-    { return lhs = lhs ^ rhs; }
-      
-    //mixed operators
-    constexpr copy_options operator&(copy_options lhs, cp_detail::base_t rhs) noexcept
-    { return cp_detail::uc(cp_detail::dc(lhs) & rhs); }
-      
-    constexpr copy_options operator|(copy_options lhs, cp_detail::base_t rhs) noexcept
-    { return cp_detail::uc(cp_detail::dc(lhs) | rhs); }
-      
-    constexpr copy_options operator^(copy_options lhs, cp_detail::base_t rhs) noexcept
-    { return cp_detail::uc(cp_detail::dc(lhs) ^ rhs); }
-      
-      
-    inline copy_options& operator&=(copy_options& lhs, cp_detail::base_t rhs) noexcept
-    { return lhs = lhs & rhs; }
-      
-    inline copy_options& operator|=(copy_options& lhs, cp_detail::base_t rhs) noexcept
-    { return lhs = lhs | rhs; }
-      
-    inline copy_options& operator^=(copy_options& lhs, cp_detail::base_t rhs) noexcept
-    { return lhs = lhs ^ rhs; }
+    {
+        using UnderT = aux::underlying_type_t<copy_options>;
+        return static_cast<copy_options>( 
+            ~ static_cast<UnderT>(lhs) 
+          ); 
+    }
     
+    ELIB_FS_COPY_OPTIONS_BITWISE_OP(&)
+    ELIB_FS_COPY_OPTIONS_BITWISE_OP(|)
+    ELIB_FS_COPY_OPTIONS_BITWISE_OP(^)
     
-    ////////////////////////////////////////////////////////////////////////////////
-    //            LOGICAL OPERATORS                               
-    ////////////////////////////////////////////////////////////////////////////////
+# undef ELIB_FS_COPY_OPTIONS_BITWISE_OP
     
+////////////////////////////////////////////////////////////////////////////////
+//        LOGICAL OPERATORS                   
+////////////////////////////////////////////////////////////////////////////////
+
     constexpr bool operator!(copy_options lhs) noexcept
-    { return ! cp_detail::bc(lhs); }
+    { 
+        using UnderT = aux::underlying_type_t<copy_options>;
+        return ! static_cast<UnderT>(lhs);
+    }
     
     constexpr bool operator&&(copy_options lhs, copy_options rhs) noexcept
-    { return cp_detail::bc(lhs) && cp_detail::bc(rhs); }
-    
-    constexpr bool operator||(copy_options lhs, copy_options rhs) noexcept
-    { return cp_detail::bc(lhs) || cp_detail::bc(rhs); }
+    {
+        using UnderT = aux::underlying_type_t<copy_options>;
+        return ( static_cast<UnderT>(lhs) && static_cast<UnderT>(rhs) );
+    }
     
     constexpr bool operator&&(copy_options lhs, bool rhs) noexcept
-    { return cp_detail::bc(lhs) && rhs; }
+    {
+        using UnderT = aux::underlying_type_t<copy_options>;
+        return ( static_cast<UnderT>(lhs) && rhs );
+    }
+    
+    constexpr bool operator||(copy_options lhs, copy_options rhs) noexcept
+    {
+        using UnderT = aux::underlying_type_t<copy_options>;
+        return ( static_cast<UnderT>(lhs) || static_cast<UnderT>(rhs) );
+    }
     
     constexpr bool operator||(copy_options lhs, bool rhs) noexcept
-    { return cp_detail::bc(lhs) || rhs; }
-
-  } // namespace fs
-} // namespace elib 
+    {
+        using UnderT = aux::underlying_type_t<copy_options>;
+        return ( static_cast<UnderT>(lhs) || rhs );
+    }
+    
+}}                                                          // namespace elib
 #endif /* ELIB_FS_COPY_OPTIONS_OPERATORS_HPP */

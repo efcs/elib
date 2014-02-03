@@ -4,7 +4,6 @@
 # include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/enum_traits.hpp>
 # include <elib/aux.hpp>
-# include <elib/CXX14/type_traits.hpp>
 # include <string>
 # include <stdexcept>
 

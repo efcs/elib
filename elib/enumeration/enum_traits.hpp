@@ -190,7 +190,7 @@ namespace elib { namespace enumeration
       enum_traits<T>::has_constexpr_range
       , bool 
     >
-    constexpr in_range(T v) noexcept
+    in_range(T v) noexcept
     {
       return (first_value<T>() <= v && v <= last_value<T>());
     }

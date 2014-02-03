@@ -1,98 +1,97 @@
 #ifndef ELIB_FS_PERMS_OPERATORS_HPP
 #define ELIB_FS_PERMS_OPERATORS_HPP
 
-# include <elib/config.hpp>
-# include <type_traits>
+# include <elib/aux.hpp>
 
-namespace elib
+namespace elib { namespace fs
 {
-  namespace fs
-  {
-    namespace perms_detail
-    {
-      
-      typedef typename std::underlying_type<perms>::type base_t;
-      
-      // upcast: base_t -> perms
-      constexpr perms uc(base_t src) noexcept
-      { return static_cast<perms>(src); }
-      
-      // downcast: perms -> base_t
-      constexpr base_t dc(perms p) noexcept
-      { return static_cast<base_t>(p); }
-      
-      // boolean cast
-      constexpr bool bc(perms p) noexcept
-      { return static_cast<bool>(p); }
-      
-    } // namespace perms_detail
+        
+////////////////////////////////////////////////////////////////////////////////
+//         BITWISE OPERATORS
+////////////////////////////////////////////////////////////////////////////////
     
-    ////////////////////////////////////////////////////////////////////////////////
-    //         BITWISE OPERATORS                       
-    ////////////////////////////////////////////////////////////////////////////////
+# define ELIB_FS_PERMS_BITWISE_OP(Op)                                                      \
+    constexpr perms operator Op (perms lhs, perms rhs) noexcept                            \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<perms>;                                      \
+        return static_cast<perms>(                                                         \
+            static_cast<UnderT>(lhs) Op static_cast<UnderT>(rhs)                           \
+        );                                                                                 \
+    }                                                                                      \
+                                                                                           \
+    constexpr perms operator Op( perms lhs, aux::underlying_type_t<perms> rhs) noexcept    \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<perms>;                                      \
+        return static_cast<perms>(                                                         \
+                static_cast<UnderT>(lhs) Op rhs                                            \
+            );                                                                             \
+    }                                                                                      \
+                                                                                           \
+    inline perms& operator Op##= (perms & lhs, perms rhs) noexcept                         \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<perms>;                                      \
+        return reinterpret_cast<perms &>(                                                  \
+            reinterpret_cast<UnderT &>(lhs) Op##= static_cast<UnderT>(rhs)                 \
+          );                                                                               \
+    }                                                                                      \
+                                                                                           \
+    inline perms& operator Op##= (perms & lhs, aux::underlying_type_t<perms> rhs) noexcept \
+    {                                                                                      \
+        using UnderT = aux::underlying_type_t<perms>;                                      \
+        return reinterpret_cast<perms &>(                                                  \
+            reinterpret_cast<UnderT &>(lhs) Op##= rhs                                      \
+          );                                                                               \
+    }
+# 
+                
     // pure operators (lhs & rhs) == perms
     constexpr perms operator~(perms lhs) noexcept
-    { return perms_detail::uc(~ perms_detail::dc(lhs)); }
+    {
+        using UnderT = aux::underlying_type_t<perms>;
+        return static_cast<perms>( 
+            ~ static_cast<UnderT>(lhs) 
+          ); 
+    }
     
-    constexpr perms operator&(perms lhs, perms rhs) noexcept
-    { return perms_detail::uc(perms_detail::dc(lhs) & perms_detail::dc(rhs)); }
+    ELIB_FS_PERMS_BITWISE_OP(&)
+    ELIB_FS_PERMS_BITWISE_OP(|)
+    ELIB_FS_PERMS_BITWISE_OP(^)
     
-    constexpr perms operator|(perms lhs, perms rhs) noexcept
-    { return perms_detail::uc(perms_detail::dc(lhs) | perms_detail::dc(rhs)); }
+# undef ELIB_FS_PERMS_BITWISE_OP
     
-    constexpr perms operator^(perms lhs, perms rhs) noexcept
-    { return perms_detail::uc(perms_detail::dc(lhs) ^ perms_detail::dc(rhs)); }
-    
-    inline perms& operator&=(perms& lhs, perms rhs) noexcept
-    { return lhs = lhs & rhs; }
-    
-    inline perms& operator|=(perms& lhs, perms rhs) noexcept
-    { return lhs = lhs | rhs; }
-    
-    inline perms& operator^=(perms& lhs, perms rhs) noexcept
-    { return lhs = lhs ^ rhs; }
-    
-    //mixed operators
-    
-    
-    constexpr perms operator&(perms lhs, perms_detail::base_t rhs) noexcept
-    { return perms_detail::uc(perms_detail::dc(lhs) & rhs); }
-    
-    constexpr perms operator|(perms lhs, perms_detail::base_t rhs) noexcept
-    { return perms_detail::uc(perms_detail::dc(lhs) | rhs); }
-    
-    constexpr perms operator^(perms lhs, perms_detail::base_t rhs) noexcept
-    { return perms_detail::uc(perms_detail::dc(lhs) ^ rhs); }
-    
-    inline perms& operator&=(perms& lhs, perms_detail::base_t rhs) noexcept
-    { return lhs = lhs & rhs; }
-    
-    inline perms& operator|=(perms& lhs, perms_detail::base_t rhs) noexcept
-    { return lhs = lhs | rhs; }
-    
-    inline perms& operator^=(perms& lhs, perms_detail::base_t rhs) noexcept
-    { return lhs = lhs ^ rhs; }
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    //        LOGICAL OPERATORS                   
-    ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//        LOGICAL OPERATORS                   
+////////////////////////////////////////////////////////////////////////////////
 
     constexpr bool operator!(perms lhs) noexcept
-    { return ! perms_detail::bc(lhs); }
+    { 
+        using UnderT = aux::underlying_type_t<perms>;
+        return ! static_cast<UnderT>(lhs);
+    }
     
     constexpr bool operator&&(perms lhs, perms rhs) noexcept
-    { return perms_detail::bc(lhs) && perms_detail::bc(rhs); }
-    
-    constexpr bool operator||(perms lhs, perms rhs) noexcept
-    { return perms_detail::bc(lhs) || perms_detail::bc(rhs); }
+    {
+        using UnderT = aux::underlying_type_t<perms>;
+        return ( static_cast<UnderT>(lhs) && static_cast<UnderT>(rhs) );
+    }
     
     constexpr bool operator&&(perms lhs, bool rhs) noexcept
-    { return perms_detail::bc(lhs) && rhs; }
+    {
+        using UnderT = aux::underlying_type_t<perms>;
+        return ( static_cast<UnderT>(lhs) && rhs );
+    }
+    
+    constexpr bool operator||(perms lhs, perms rhs) noexcept
+    {
+        using UnderT = aux::underlying_type_t<perms>;
+        return ( static_cast<UnderT>(lhs) || static_cast<UnderT>(rhs) );
+    }
     
     constexpr bool operator||(perms lhs, bool rhs) noexcept
-    { return perms_detail::bc(lhs) || rhs; }
+    {
+        using UnderT = aux::underlying_type_t<perms>;
+        return ( static_cast<UnderT>(lhs) || rhs );
+    }
     
-  } // namespace fs
-} // namespace elib 
-
+}}                                                          // namespace elib
 #endif /* ELIB_FS_PERMS_OPERATORS_HPP */

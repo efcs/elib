@@ -140,7 +140,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         // aux::addressof
         template <class T>
-        constexpr T* addressof(T & t) noexcept
+        inline T* addressof(T & t) noexcept
         {
             return reinterpret_cast<T*>(
                     & const_cast<char &>(

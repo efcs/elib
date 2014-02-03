@@ -141,7 +141,7 @@ namespace elib { namespace enumeration
     constexpr LHS ELIB_ENUM_BINARY_OP(Op, LHS, LHS, RHS)                            \
                                                                                     \
     template <class LHS, class RHS, ELIB_ENABLE_IF(detail::is_bitmask<LHS>::value)> \
-    constexpr LHS& ELIB_ENUM_BINARY_ASSIGN_OP(Op ##=, LHS, RHS)
+    inline LHS& ELIB_ENUM_BINARY_ASSIGN_OP(Op ##=, LHS, RHS)
       
         ELIB_ENUM_BITMASK_UNARY_OP(~)
         
@@ -167,12 +167,12 @@ namespace elib { namespace enumeration
     constexpr LHS ELIB_ENUM_BINARY_OP(Op, LHS, LHS, RHS)                               \
                                                                                        \
     template <class LHS, class RHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)> \
-    constexpr LHS& ELIB_ENUM_BINARY_ASSIGN_OP(Op ##= , LHS, RHS)
+    inline LHS& ELIB_ENUM_BINARY_ASSIGN_OP(Op ##= , LHS, RHS)
 # 
 
 # define ELIB_ENUM_ARITH_PREFIX_POSTFIX_OP(Op)                              \
     template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)> \
-    constexpr LHS & operator Op (LHS & lhs) noexcept                        \
+    inline LHS & operator Op (LHS & lhs) noexcept                           \
     {                                                                       \
         return reinterpret_cast<LHS & >(                                    \
                Op reinterpret_cast<aux::underlying_type_t<LHS> &>(lhs)      \
@@ -180,7 +180,7 @@ namespace elib { namespace enumeration
     }                                                                       \
                                                                             \
     template <class LHS, ELIB_ENABLE_IF(detail::is_arithmetic<LHS>::value)> \
-    constexpr LHS operator Op (LHS & lhs, int) noexcept                     \
+    inline LHS operator Op (LHS & lhs, int) noexcept                        \
     {                                                                       \
         return static_cast<LHS>(                                            \
             reinterpret_cast<aux::underlying_type_t<LHS> &>(lhs) Op         \

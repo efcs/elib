@@ -22,6 +22,10 @@ namespace elib { namespace enumeration
         using to_string_type_valid = aux::is_same< Str, std::string >;
     }                                                       // namespace detail
     
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
     ////////////////////////////////////////////////////////////////////////////
     //
     class bad_enum_cast 
@@ -29,6 +33,9 @@ namespace elib { namespace enumeration
     {
         using std::runtime_error::runtime_error;
     };
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
     
     ////////////////////////////////////////////////////////////////////////////
     // enum_cast: Enum -> Integral

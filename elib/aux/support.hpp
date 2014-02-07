@@ -20,6 +20,37 @@
   Class& operator=(const Class&) = default; \
   Class& operator=(Class&&) = default
 # 
+
+# define ELIB_DEFAULT_COPY(Class)   \
+    Class(Class const &) = default; \
+    Class & operator=(Class const &) = default
+# 
+
+# define ELIB_DEFAULT_MOVE(Class) \
+    Class(Class &&) = default;    \
+    Class & operator=(Class &&) = default
+# 
+    
+# define ELIB_DEFAULT_COPY_MOVE(Class) \
+    ELIB_DEFAULT_COPY(Class);          \
+    ELIB_DEFAULT_MOVE(Class)
+# 
+    
+# define ELIB_DELETE_COPY(Class)   \
+    Class(Class const &) = delete; \
+    Class & operator=(Class const &) = delete
+# 
+    
+# define ELIB_DELETE_MOVE(Class) \
+    Class(Class &&) = delete;    \
+    Class & operator=(Class &&) = delete
+# 
+    
+# define ELIB_DELETE_COPY_MOVE(Class) \
+    ELIB_DELETE_COPY(Class);          \
+    ELIB_DELETE_MOVE(Class)
+# 
+    
 ////////////////////////////////////////////////////////////////////////////////
 // 
 # /* used to clearly have exposition for code we don't want to compile */

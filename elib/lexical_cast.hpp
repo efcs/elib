@@ -1,16 +1,15 @@
 #ifndef ELIB_LEXICAL_CAST_HPP
 #define ELIB_LEXICAL_CAST_HPP
 
-# include <elib/config.hpp>
+# include <elib/aux.hpp>
 # include <stdexcept>
 # include <string>
-# include <type_traits>
 # include <sstream>
 
 namespace elib 
 {
-
-# if ELIB_CONFIG_CLANG
+    
+# if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
@@ -18,104 +17,90 @@ namespace elib
   /* bad_cast error for lexical casts */
   class bad_lexical_cast : public std::runtime_error {
   public:
-      inline
-      bad_lexical_cast()
-          : std::runtime_error("bad lexical cast")
-      { }
+      using std::runtime_error::runtime_error;
+      
+      ELIB_DEFAULT_COPY_MOVE(bad_lexical_cast);
+      
+      virtual ~bad_lexical_cast() noexcept {}
   };
   
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
 
-  /* static type-traits style struct to
-  * check if a type is convertible using a lexical cast */
-  template <typename T>
-  struct is_lexical {
-      static constexpr bool value = 
-          std::is_integral<T>::value ||
-          std::is_floating_point<T>::value;
-  };
+    template <class T>
+    using is_lexical = 
+        aux::or_<
+            aux::is_integral<T>
+          , aux::is_floating_point<T>
+          >;
 
-  /* specializations needed for strings
-  *  C strings can only be used as the source type
-  * in a lexical cast, so is_lexical is allowed to fail */
-  template <>
-  struct is_lexical<std::string>
-  {
-      static constexpr bool value = true;
-  };
-
-  
-  /* cast one lexical type to another, generally either to or from a string 
-  * ex: string -> float
-  *     bool -> string
-  *     int -> string
-  *     string -> bool */
-  template <typename ToType, typename FromType>
-  inline ToType lexical_cast(const FromType & from)
-  {
-      static_assert(is_lexical<ToType>::value, 
-                    "cannot lexical cast to type");
-      static_assert(is_lexical<FromType>::value,
-                    "cannot lexical cast from type");
-      
-      std::stringstream ss;
-      ToType val;
-      /* here is the trick, we basically write to
-      * and extract from a stringstream to do the cast,
-      * for booleans, we set std::boolalpha */
-      ss << from;
-      ss >> val;
-      if (! ss)
-          throw bad_lexical_cast();
-      
-      return val;
-  }
-
-  /* A wrapper to invoke the function via const char* */
-  template <typename ToType>
-  inline ToType
-  lexical_cast(const char* from)
-  {
-      return lexical_cast<ToType>(std::string(from));
-  }
-
-  /* see lexical_cast.h for a description of casting */
-  template <>
-  inline bool
-  lexical_cast(const std::string & from)
-  {
-      std::stringstream ss;
-      
-      if (from.size() >= 1 && (from[0] == 't' || from[0] == 'f'))
-          ss << std::boolalpha;
-      
-      bool val;
-      ss << from;
-      ss >> val;
-      if (! ss)
-          throw bad_lexical_cast();
-      
-      return val;
-  }
-
-
-  template <>
-  inline std::string
-  lexical_cast(const bool & b)
-  {
-      std::stringstream ss;
-      ss << std::boolalpha;
-      ss << b;
-      
-      std::string tmp;
-      ss >> tmp;
-      if (! ss)
-          throw bad_lexical_cast();
-      
-      return tmp;
-  }
-
+    template <
+        class To, class From
+      , ELIB_ENABLE_IF(aux::is_same<To, std::string>::value)
+      , ELIB_ENABLE_IF(is_lexical<From>::value)
+    >
+    To lexical_cast(From from)
+    {
+        std::stringstream ss;
+        if (aux::is_same<From, bool>::value)
+            ss.setf(std::ios_base::boolalpha);
+        ss << from;
+        return ss.str();
+    }
+    
+    template <
+        class To, class From
+      , ELIB_ENABLE_IF(is_lexical<To>::value)
+      , ELIB_ENABLE_IF(!aux::is_same<To, bool>::value)
+      , ELIB_ENABLE_IF(aux::is_string_type<From>::value)
+      >
+    To lexical_cast(From const & f)
+    {
+        To t{};
+        std::stringstream ss;  
+        
+        ss << f;
+        ss >> t;
+        
+        if (!ss) 
+            throw bad_lexical_cast{
+                std::string{"bad lexical cast from string: \""}
+                + f + "\""
+            };
+        
+        return t;
+    }
+    
+    /* Special case for str -> bool conversion */
+    template <
+        class To, class From
+      , ELIB_ENABLE_IF(aux::is_same<To, bool>::value)
+      , ELIB_ENABLE_IF(aux::is_string_type<From>::value)
+    >
+    To lexical_cast(From const & f)
+    {
+        bool b{};
+        std::stringstream ss;
+        
+        // try reading as "true" or "false"
+        ss << std::boolalpha << f;
+        ss >> b;
+        
+        // success on first try
+        // input string was "true" or "false"
+        if (ss) return b;
+    
+        // input string was a digit
+        ss.clear();
+        ss << std::noboolalpha;
+        ss >> b;
+        if (ss) return b;
+            
+        throw bad_lexical_cast(
+            std::string{"Bad lexical cast from string to bool: \""}
+            + f + "\""
+        );
+    }
 }                                                            // namespace elib
 #endif /* ELIB_LEXICAL_CAST_HPP */

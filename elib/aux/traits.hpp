@@ -3,8 +3,10 @@
 
 # include <elib/config.hpp>
 # include <elib/aux/integral_constant.hpp>
+
+# include <string> /* for is_string_type */
 # include <type_traits>
-# include <functional>
+# include <functional> /* for *strip_t */
 # include <cstddef>
 
 namespace elib { namespace aux
@@ -543,8 +545,47 @@ namespace elib { namespace aux
         template <class T>
         using decay_strip_t = strip_ref_wrapper_t< typename decay<T>::type >;
         
+        ////////////////////////////////////////////////////////////////////////
+        //
+        namespace traits_detail
+        {
+            // to avoid deps, implement own declval
+            template <class T>
+            add_rvalue_ref_t<T> declval();
+            
+            auto is_char_array_impl(const char[]) -> true_;
+            auto is_char_array_impl(...) -> false_;
+            
+            auto is_raw_string_impl(const char[]) -> true_;
+            auto is_raw_string_impl(const char* const) -> true_;
+            auto is_raw_string_impl(...) -> false_;
+            
+            auto is_string_type_impl(const char[]) -> true_;
+            auto is_string_type_impl(const char* const) -> true_;
+            auto is_string_type_impl(std::string) -> true_;
+            auto is_string_type_impl(...) -> false_;
+        }
        
+        template <class T>
+        using is_char_array = decltype(
+            traits_detail::is_char_array_impl(
+                traits_detail::declval<T>()
+              )
+          );
         
+        template <class T>
+        using is_raw_string = decltype(
+            traits_detail::is_raw_string_impl(
+                traits_detail::declval<T>()
+              )
+          );
+        
+        template <class T>
+        using is_string_type = decltype(
+            traits_detail::is_string_type_impl(
+                traits_detail::declval<T>()
+              )
+          );
     }                                                       // namespace traits
     
     using namespace ::elib::aux::traits;

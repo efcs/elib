@@ -14,7 +14,6 @@
 
 namespace elib 
 {
-  
     namespace fmt_detail
     {
         //////////////////////////////////////////////////////////////////////////
@@ -37,7 +36,7 @@ namespace elib
     }                                                       // namespace fmt_detail
       
     //////////////////////////////////////////////////////////////////////////
-    //
+    // 
     inline void check_fmt(const char *f)
     {
         for (; *f; ++f)
@@ -107,6 +106,9 @@ namespace elib
 # if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wformat-nonliteral"
+# elif defined(__GNUG__)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
 # endif
     inline std::string fmt_varargs(const char *msg, va_list args)
     {
@@ -143,6 +145,8 @@ namespace elib
     }
 # if defined(__clang__)
 #   pragma clang diagnostic pop
+# elif defined(__GNUG__)
+#   pragma GCC diagnostic pop
 # endif
 
     inline std::string fmt_varargs(const char *msg, ...) 
@@ -159,9 +163,9 @@ namespace elib
     template <class ...Ts>
     std::string fmt(const char *msg, Ts const &... ts)
     {
-# ifndef NDEBUG
+#   ifndef NDEBUG
         check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-# endif
+#   endif
         return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
     }
     
@@ -172,14 +176,18 @@ namespace elib
         return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
     }
    
+# if defined(__GNUG__) && !defined(__clang__)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+# endif
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class ...Ts>
     int eprintf(const char *msg, Ts const &... ts)
     {
-# ifndef NDEBUG
+#       ifndef NDEBUG
         check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-# endif
+#       endif
         return std::printf(msg, fmt_detail::normalize_arg(ts)...);
     }
     
@@ -188,10 +196,13 @@ namespace elib
     template <class ...Ts>
     int eprintf_err(const char *msg, Ts const &... ts)
     {
-# ifndef NDEBUG
+#       ifndef NDEBUG
         check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-# endif
+#       endif
         return std::fprintf(stderr, msg, fmt_detail::normalize_arg(ts)...);
     }
+# if defined(__GNUG__) && !defined(__clang__)
+#   pragma GCC diagnostic pop
+# endif
 }                                                            // namespace elib
 #endif                                                  // ELIB_FMT_HPP

@@ -553,15 +553,13 @@ namespace elib { namespace aux
             template <class T>
             add_rvalue_ref_t<T> declval();
             
-            auto is_char_array_impl(const char[]) -> true_;
+            auto is_char_array_impl(const volatile char[]) -> true_;
             auto is_char_array_impl(...) -> false_;
             
-            auto is_raw_string_impl(const char[]) -> true_;
-            auto is_raw_string_impl(const char* const) -> true_;
+            auto is_raw_string_impl(const volatile char* const) -> true_;
             auto is_raw_string_impl(...) -> false_;
             
-            auto is_string_type_impl(const char[]) -> true_;
-            auto is_string_type_impl(const char* const) -> true_;
+            auto is_string_type_impl(const volatile char* const) -> true_;
             auto is_string_type_impl(std::string) -> true_;
             auto is_string_type_impl(...) -> false_;
         }

@@ -19,9 +19,7 @@
   namespace bfs = boost::filesystem;
 # endif
 
-
 #include <unistd.h>
-
 
 #ifndef ELIB_CONFIGURE_FS_UNIT_TEST_PATH
 # error ELIB_CONFIGURE_FS_UNIT_TEST_PATH must be set to the directory of this file

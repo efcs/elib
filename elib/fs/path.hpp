@@ -11,30 +11,25 @@
 # include <iostream>
 # include <utility>
 
-namespace elib 
-{
-  namespace fs 
-  {
-    
+namespace elib { namespace fs 
+{    
     class path 
     {
-      public:
-        typedef char value_type;
-        typedef std::basic_string<value_type> string_type;
+    public:
+        using value_type = char;
+        using string_type = std::basic_string<value_type>;
         
-        static constexpr value_type preferred_separator = '/';
-        static constexpr value_type other_separator = '\\';
+        static constexpr const value_type preferred_separator = '/';
+        static constexpr const value_type other_separator = '\\';
         
         // ctor & dtor
         // can't be default for some reason
         path() : m_pathname{}
         {}
         
-        path(const path& p)
-        { m_pathname = p.m_pathname; }
+        path(const path& p) = default;
           
-        path(path&& p) noexcept 
-        { m_pathname = std::move(p.m_pathname); }
+        path(path&& p) noexcept = default;
         
         template <typename Source>
         path(const Source& src)
@@ -62,18 +57,14 @@ namespace elib
         template <typename InputIter>
         path(InputIter begin, InputIter end, const std::locale& loc);
 
-        ~path()=  default;
+        ~path() =  default;
         
       //assignments
-        path& operator=(const path& p)
-        {
-          m_pathname = p.m_pathname;
-          return *this;
-        }
+        path& operator=(const path& p) = default;
         
         path& operator=(path&& p) noexcept
         {
-          m_pathname = std::move(p.m_pathname);
+          m_pathname.swap(p.m_pathname);
           return *this;
         }
         
@@ -224,18 +215,21 @@ namespace elib
           return *this;
         } 
     
-    
-        path& remove_filename()
+        ////////////////////////////////////////////////////////////////////////
+        //
+        path & remove_filename()
         { return *this = parent_path(); }
         
-        
-        path& replace_filename(const path& replacement)
+        ////////////////////////////////////////////////////////////////////////
+        //
+        path & replace_filename(const path& replacement)
         {
           remove_filename();
           return (*this /= replacement);
         }
     
-    
+        ////////////////////////////////////////////////////////////////////////
+        //
         path& replace_extension(const path& replacement = path())
         {
           path p = extension();
@@ -250,27 +244,24 @@ namespace elib
           return *this;
         }
         
-        
+        ////////////////////////////////////////////////////////////////////////
+        //
         void swap(path& rhs) noexcept
         { m_pathname.swap(rhs.m_pathname); }
 
-      //native format observers
-    
+        ////////////////////////////////////////////////////////////////////////
+        //native format observers
         const string_type& native() const noexcept
         { return m_pathname; }
-        
-        // EXTENSION
+  
         const string_type& str() const noexcept
         { return m_pathname; }
-        
         
         const value_type* c_str() const noexcept
         { return m_pathname.c_str(); }
         
-        
         operator string_type() const
         { return m_pathname; }
-        
         
         template <class CharT
           , class Traits = std::char_traits<CharT>
@@ -279,34 +270,32 @@ namespace elib
           std::basic_string<CharT, Traits, Allocator>
         string(const Allocator& a = Allocator()) const; //TODO
         
-        
         std::string string() const
         { return m_pathname; }
-        
         
         std::wstring wstring() const; //TODO
         std::string u8string() const; //TODO
         std::u16string u16string() const; //TODO
         std::u32string u32string() const; //TODO
         
-    //generic format observers
-    
+        ////////////////////////////////////////////////////////////////////////
+        // generic format observers
         template <
-          class CharT
+            class CharT
           , class Traits = std::char_traits<CharT>
           , class Allocator = std::allocator<CharT>
-        >
-          std::basic_string<CharT, Traits, Allocator>
+          >
+        std::basic_string<CharT, Traits, Allocator>
         generic_string(const Allocator& a = Allocator()) const; //TODO
-        
+
         std::string generic_string() const; //TODO
         std::wstring generic_wstring() const; //TODO
         std::string generic_u8string() const; //TODO
         std::u16string generic_u16string() const; //TODO
         std::u32string generic_u32string() const; //TODO
         
-    // comparision
-    
+        ////////////////////////////////////////////////////////////////////////
+        // comparision
         int compare(const path& p) const noexcept;
         
         int compare(const string_type& xstr) const
@@ -315,8 +304,8 @@ namespace elib
         int compare(const value_type* xstr) const
         { return compare(path(xstr)); }
         
-    // decomp
-    
+        ////////////////////////////////////////////////////////////////////////
+        // decomp
         path root_name() const;
         path root_directory() const;
         path root_path() const;
@@ -326,66 +315,80 @@ namespace elib
         path stem() const;
         path extension() const;
         
-    // query
-    
+        ////////////////////////////////////////////////////////////////////////
+        // query
         bool empty() const noexcept
         { return m_pathname.empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_root_name() const
         { return !root_name().empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_root_directory() const
         { return !root_directory().empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_root_path() const
         { return !root_path().empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_relative_path() const
         { return !relative_path().empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_parent_path() const
         { return !parent_path().empty();}
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_filename() const
         { return !filename().empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_stem() const
         { return !stem().empty();}
-          
+        
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool has_extension() const
         { return !extension().empty(); }
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool is_absolute() const
         { return !root_directory().empty();}
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         bool is_relative() const
         { return !is_absolute(); }
         
-      // iterators
-      
+        ////////////////////////////////////////////////////////////////////////
+        // iterators
         class iterator;
-        typedef iterator const_iterator;
+        using const_iterator = iterator;
         
         iterator begin() const;
         iterator end() const;
         
-        //
-      private:
-        //
-      
+    private:
         string_type m_pathname{};
-      
-    }; // class path
+    };                                                       // class path
     
-
-////////////////////////////////////////////////////////////////////////////////
-//                        path functions                                                  
-////////////////////////////////////////////////////////////////////////////////
-
+    ////////////////////////////////////////////////////////////////////////////
+    //
     inline void swap(path& lhs, path& rhs) noexcept
       { lhs.swap(rhs); }
-
       
+    ////////////////////////////////////////////////////////////////////////////
+    //
     inline bool operator<(const path& lhs, const path& rhs) noexcept
       { return (lhs.compare(rhs) < 0); }
 
@@ -398,16 +401,20 @@ namespace elib
     inline bool operator>=(const path& lhs, const path& rhs) noexcept
       { return (lhs.compare(rhs) >= 0); }
       
+    ////////////////////////////////////////////////////////////////////////////
+    //
     inline bool operator==(const path& lhs, const path& rhs) noexcept
       { return (lhs.compare(rhs) == 0); }
       
     inline bool operator!=(const path& lhs, const path& rhs) noexcept
       { return (lhs.compare(rhs) != 0); }
 
-    
+    ////////////////////////////////////////////////////////////////////////////
+    //
     inline path operator/(const path& lhs, const path& rhs)
       { return path(lhs) /= rhs;}
 
+    ////////////////////////////////////////////////////////////////////////////
     //TODO 
     template <class CharT, class Traits>
       inline std::basic_ostream<CharT, Traits>&
@@ -417,6 +424,7 @@ namespace elib
       return os;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     //TODO
     template <class CharT, class Traits>
       inline std::basic_istream<CharT, Traits>&
@@ -428,54 +436,58 @@ namespace elib
       return is;
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class Source>
     path u8path(const Source& src);  //TODO
 
     template <class InputIter>
     path u8path(InputIter begin, InputIter end); //TODO
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     std::size_t hash_value(const path& p) noexcept; //TODO
 
-    
-////////////////////////////////////////////////////////////////////////////////
-//                        path::iterator                                                 
-////////////////////////////////////////////////////////////////////////////////
-
+    ////////////////////////////////////////////////////////////////////////////
+    //
     class path::iterator 
       : public std::iterator<std::bidirectional_iterator_tag, path> 
     {
     public:
-        
-      // ctor & dtor
+        ////////////////////////////////////////////////////////////////////////
+        // ctor & dtor
         iterator() = default;
         iterator(const iterator&) = default;
         iterator(iterator&&) noexcept = default;
         ~iterator() = default;
         
-      //assignments
+        ////////////////////////////////////////////////////////////////////////
+        //assignments
         iterator& operator=(const iterator&) = default;
         iterator& operator=(iterator&&) = default;
         
-      // iterator functionality
-        const path& operator*() const
+        ////////////////////////////////////////////////////////////////////////
+        // deref
+        const path & operator*() const
         { return m_element; }
         
         const path* operator->() const
         { return &m_element; }
         
-      // forward iterator requirements
-        iterator& operator++()
+        ////////////////////////////////////////////////////////////////////////
+        // forward iterator requirements
+        iterator & operator++()
         { return increment(); }
         
-        iterator
-        operator++(int)
+        iterator operator++(int)
         {
           iterator it{*this};
           increment();
           return it;
         }
         
-      // bidirectional iterator requirements
+        ////////////////////////////////////////////////////////////////////////
+        // bidirectional iterator requirements
         iterator& operator--()
         { return decrement(); }
         
@@ -486,11 +498,13 @@ namespace elib
           return it;
         }
         
+        ////////////////////////////////////////////////////////////////////////
         // logic for traversal is here
         iterator& increment();
         iterator& decrement();
 
-    // equality comparable     
+        ////////////////////////////////////////////////////////////////////////
+        // equality comparable     
         bool operator==(const iterator& other) const
         { 
           return (m_path_ptr == other.m_path_ptr && m_pos == other.m_pos);
@@ -501,9 +515,7 @@ namespace elib
           return !(this->operator==(other)); 
         }
         
-        //
       private:
-        //
         
         // for begin() and end()
         friend class path;
@@ -525,10 +537,7 @@ namespace elib
         path m_element {};
         const path *m_path_ptr{nullptr};
         std::size_t m_pos {};
-        
-    }; // class path::iterator
-   
+    };
     
-  } /* namespace fs */
-} /* namespace elib */
+}}                                                        // namespace elib::fs
 #endif /* ELIB_FS_PATH_HPP */

@@ -136,6 +136,10 @@ namespace elib
         forward(typename aux::remove_reference<T>::type&& t) noexcept
         {
             return static_cast<T &&>(t);
+            static_assert(
+                !aux::is_lvalue_reference<T>::value
+              , "elib::forward called with lvalue reference"
+              );
         }
             
         ////////////////////////////////////////////////////////////////////////

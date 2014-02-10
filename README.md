@@ -3,7 +3,12 @@
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
 
 WARNING: This file is update very infrequently
-LAST UPDATE: Jan 7th 2014
+LAST UPDATE: 9/12/2014
+
+## Platform Support
+Elib currently only supports Linux and OS X. Although most libraries would
+build on Windows (See Library Summary for specifics), the build system has
+no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
 
 ## Library Summary
 
@@ -21,9 +26,13 @@ MP
 
 Filesystem
 : A posix only implementation of the C++14 filesystem library.
-  This library will not compile on windows.
+  This library will not compile on windows. (No Windows Support)
 
-Utility
+Web
+: C++ Socket, HTTP parsing and other Web/Network utilities.
+  stripped from a class project (No Windows Support)
+
+Aux
 : misc functionality that is frequently needed.
   it includes:
 
@@ -39,7 +48,7 @@ Note: Requirements marked with (Unit Test Only) are obviously only required
   to build the unit tests. 
 
 Requirements (General):
-  * C++11 compiler (GCC >= 4.7 is ussualy suffient)
+  * C++11 compiler (GCC >= 4.7 is usualy suffient)
   * Boost Unit Test Framework (Unit Test Only)
 
 Requirements (Library specific):
@@ -47,8 +56,13 @@ Requirements (Library specific):
     Native library used by <mutex> (pthread on linux)
 
   Filesystem:
+    Posix filesystem headers
     Boost System (Unit Test Only)
     Boost Filesystem (Unit Test Only)
+
+  Web:
+    Posix thread headers
+    Support for <regex> (I'm looking at you GCC)
 
 
 ## Build Options (CMake)
@@ -85,10 +99,13 @@ Requirements (Library specific):
 : build the filesystem library
   Default: ON (Except on windows)
 
-  * CONFIG_LIB_UTILITY
+  * CONFIG_LIB_AUX
 : build the utility library
   Default: ON
 
+  * CONFIG_LIB_WEB
+: build web library
+  Default: OFF (until more support for <regex>)
     
 ## Makefile Commands
 

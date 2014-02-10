@@ -222,6 +222,10 @@ namespace elib { namespace tuples
 # define ELIB_TUPLE_IS_FINAL(v) false
 # if defined(__clang__)
 #   if __has_feature(is_final)
+/* I have no clue what this bug is, it just appeared overnight 
+ * but for some reason clang spits out: 
+ *    error: cannot yet mangle expression type UnaryTypeTraitExpr 
+ * TODO: Find a reproducer for the bug */
 #     if !ELIB_WORKAROUND(__clang__, CLANG_IS_FINAL_BUG)
 #       undef  ELIB_TUPLE_IS_FINAL
 #       define ELIB_TUPLE_IS_FINAL(v) __is_final(v)

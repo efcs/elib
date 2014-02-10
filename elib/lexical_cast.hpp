@@ -13,7 +13,6 @@ namespace elib
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
-
   /* bad_cast error for lexical casts */
   class bad_lexical_cast : public std::runtime_error {
   public:
@@ -23,11 +22,11 @@ namespace elib
       
       virtual ~bad_lexical_cast() noexcept {}
   };
-  
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
 
+    // TODO: rename this. 
     template <class T>
     using is_lexical = 
         aux::or_<
@@ -35,6 +34,8 @@ namespace elib
           , aux::is_floating_point<T>
           >;
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <
         class To, class From
       , ELIB_ENABLE_IF(aux::is_same<To, std::string>::value)
@@ -49,6 +50,8 @@ namespace elib
         return ss.str();
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <
         class To, class From
       , ELIB_ENABLE_IF(is_lexical<To>::value)
@@ -72,7 +75,8 @@ namespace elib
         return t;
     }
     
-    /* Special case for str -> bool conversion */
+    ////////////////////////////////////////////////////////////////////////////
+    // Special case for str -> bool conversion 
     template <
         class To, class From
       , ELIB_ENABLE_IF(aux::is_same<To, bool>::value)

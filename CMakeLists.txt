@@ -24,19 +24,22 @@ option(CONFIG_MSAN "memory sanitizer" OFF)
 # Misc
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
 
-# Elib Parts
+# Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
 
-# Options to select what parts to build
 option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
 option(CONFIG_LIB_MPL "Build MPL" ON)
 option(CONFIG_LIB_LOG "Build Log" ON)
 option(CONFIG_LIB_AUX "Build aux" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
-option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
-option(CONFIG_LIB_FUSE "Build Fusion Library" ON)
 option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
+# incomplete
+option(CONFIG_LIB_FUSE "Build Fusion Library" ON)
+# incomplete && GCC support lacking
+option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
+# off until GCC supports regex
+option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)

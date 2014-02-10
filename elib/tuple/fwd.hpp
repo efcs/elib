@@ -2,9 +2,8 @@
 #define ELIB_TUPLE_FWD_HPP
 
 # include <elib/aux.hpp>
+# include <elib/config.hpp> /* for ELIB_WORKAROUND */
 # include <cstddef>
-
-# define ELIB_TUPLE_EXPO 0
 
 namespace elib { namespace tuples
 {
@@ -223,8 +222,10 @@ namespace elib { namespace tuples
 # define ELIB_TUPLE_IS_FINAL(v) false
 # if defined(__clang__)
 #   if __has_feature(is_final)
+#     if !ELIB_WORKAROUND(__clang__, CLANG_IS_FINAL_BUG)
 #       undef  ELIB_TUPLE_IS_FINAL
 #       define ELIB_TUPLE_IS_FINAL(v) __is_final(v)
+#     endif
 #   endif
 # endif
         ////////////////////////////////////////////////////////////////////////

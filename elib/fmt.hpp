@@ -32,7 +32,11 @@ namespace elib
         
         inline const char* normalize_arg(std::string const & s) noexcept
         { return s.c_str(); }
-      
+        
+        // TODO: Other transformations as well? 
+        // - unwrap std::reference_wrapper
+        // - explicitly convertible to std::string
+        // - implicitly convertible to const char*
     }                                                       // namespace fmt_detail
       
     //////////////////////////////////////////////////////////////////////////
@@ -102,7 +106,9 @@ namespace elib
             "Too few format specifiers for format string"
             );
     }                                                   // check_fmt
-      
+     
+/* When you have to suppress two warnings for one function
+ * thats probably a bad function. I blame C. */
 # if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wformat-nonliteral"
@@ -116,6 +122,7 @@ namespace elib
         va_list args_cp;
         va_copy(args_cp, args);
         
+        //TODO, use std::array for first attempt to avoid one memory allocation
         // guess what the size might be
         std::size_t size = 256;
         auto buff_ptr = std::make_unique<char[]>(size);
@@ -185,9 +192,9 @@ namespace elib
     template <class ...Ts>
     int eprintf(const char *msg, Ts const &... ts)
     {
-#       ifndef NDEBUG
+#   ifndef NDEBUG
         check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-#       endif
+#   endif
         return std::printf(msg, fmt_detail::normalize_arg(ts)...);
     }
     
@@ -196,9 +203,9 @@ namespace elib
     template <class ...Ts>
     int eprintf_err(const char *msg, Ts const &... ts)
     {
-#       ifndef NDEBUG
+#   ifndef NDEBUG
         check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-#       endif
+#   endif
         return std::fprintf(stderr, msg, fmt_detail::normalize_arg(ts)...);
     }
 # if defined(__GNUG__) && !defined(__clang__)

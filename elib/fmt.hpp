@@ -186,6 +186,7 @@ namespace elib
 # if defined(__GNUG__) && !defined(__clang__)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+#   pragma GCC diagnostic ignored "-Wformat-security"
 # endif
     ////////////////////////////////////////////////////////////////////////////
     //

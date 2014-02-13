@@ -183,7 +183,10 @@ namespace elib
         return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
     }
    
-# if defined(__GNUG__) && !defined(__clang__)
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wformat-security"
+# elif defined(__GNUG__)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
 #   pragma GCC diagnostic ignored "-Wformat-security"
@@ -209,7 +212,9 @@ namespace elib
 #   endif
         return std::fprintf(stderr, msg, fmt_detail::normalize_arg(ts)...);
     }
-# if defined(__GNUG__) && !defined(__clang__)
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# elif defined(__GNUG__)
 #   pragma GCC diagnostic pop
 # endif
 }                                                            // namespace elib

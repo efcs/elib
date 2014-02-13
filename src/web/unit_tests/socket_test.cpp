@@ -21,6 +21,7 @@ namespace test
 {
     
 using namespace elib::web;
+
 using elib::web::socket;
 
 BOOST_AUTO_TEST_SUITE(prox_socket_test_suite)

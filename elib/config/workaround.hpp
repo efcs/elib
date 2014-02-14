@@ -13,7 +13,7 @@
 # //////////////////////////////////////////////////////////////////////////////
 # 
 # if ELIB_CONFIG_CLANG
-#   if __clang_major__ <= 3 && __clang_minor__ < 4
+#   if __clang_major__ <= 3 && __clang_minor__ <= 4
 #     /* Clang compares all enumerations as if they were unsigned */
 #     define ELIB_WORKAROUND_CLANG_ENUMERATION_COMPARE_BUG 1
 #   endif

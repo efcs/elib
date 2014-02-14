@@ -2,7 +2,7 @@
 #define ELIB_WEB_HPP
 # 
 # include <elib/web/fwd.hpp>
-# include <elib/web/basic_proxy_error.hpp>
+# include <elib/web/basic_prox_error.hpp>
 # include <elib/web/http.hpp>
 # include <elib/web/proxy.hpp>
 # include <elib/web/proxy_error.hpp>

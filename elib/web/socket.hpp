@@ -2,7 +2,7 @@
 #define ELIB_WEB_SOCKET_HPP
 
 # include <elib/web/fwd.hpp>
-# include <elib/web/basic_prox_error.hpp>
+# include <elib/web/basic_web_error.hpp>
 # include <elib/aux.hpp>
 
 # include <memory>
@@ -119,11 +119,11 @@ namespace elib { namespace web
     /////////////////////////////////////////////////////////////////////////////
     //
     class socket_error
-      : public basic_prox_error
+      : public basic_web_error
     {
     public:
         socket_error(std::string what_arg, std::error_code ec)
-          : basic_prox_error{static_cast<std::string &&>(what_arg)}
+          : basic_web_error{static_cast<std::string &&>(what_arg)}
           , m_ec{ec}
         {}
           

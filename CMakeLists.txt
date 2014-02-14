@@ -9,11 +9,11 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
+option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" ON)
 option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
 # Standard Library config
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
 # Sanitizers
@@ -39,7 +39,7 @@ option(CONFIG_LIB_FUSE "Build Fusion Library" ON)
 # incomplete && GCC support lacking
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 # off until GCC supports regex
-option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
+option(CONFIG_LIB_WEB "Build Web/Socket Library" ON)
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)

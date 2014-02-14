@@ -1,6 +1,6 @@
 #include <elib/web/fwd.hpp>
 #include <elib/web/http.hpp>
-#include <elib/web/basic_prox_error.hpp>
+#include <elib/web/basic_web_error.hpp>
 #include <elib/web/proxy_error.hpp>
 #include <elib/web/socket.hpp>
 
@@ -37,7 +37,7 @@ namespace elib { namespace web
             } catch (socket_error const & se) {
                 std::cout << "Socket error: " << se.what() << std::endl;
                 std::cout << se.error_code().message() << std::endl;
-            } catch (basic_prox_error const & be) {
+            } catch (basic_web_error const & be) {
                 std::cout << "Basic Prox Error: " << be.what() << std::endl;
             } catch (...) {
                 std::cout << "Unknown exception type!" << std::endl;

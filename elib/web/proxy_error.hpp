@@ -2,7 +2,7 @@
 #define ELIB_WEB_PROXY_ERROR_HPP
 
 # include <elib/web/fwd.hpp>
-# include <elib/web/basic_prox_error.hpp>
+# include <elib/web/basic_web_error.hpp>
 # include <elib/aux.hpp>
 
 # include <string>
@@ -16,10 +16,10 @@ namespace elib { namespace web
     ////////////////////////////////////////////////////////////////////////////
     //
     class proxy_error
-      : public basic_prox_error
+      : public basic_web_error
     {
     public:
-        using basic_prox_error::basic_prox_error;
+        using basic_web_error::basic_web_error;
         
         ELIB_DEFAULT_COPY_MOVE(proxy_error);
         

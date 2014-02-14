@@ -44,7 +44,7 @@ namespace elib { namespace web
     void proxy_term_handler();
     
     // most basic exception that all others must derive from
-    class basic_prox_error;
+    class basic_web_error;
  
 ////////////////////////////////////////////////////////////////////////////////
 //                            Socket

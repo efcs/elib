@@ -38,7 +38,18 @@ namespace elib { namespace enumeration
 # endif
     
     ////////////////////////////////////////////////////////////////////////////
-    // enum_cast: Enum -> Integral
+    // enum_cast: Enum -> Integral (safe)
+    template <
+        class To, class From
+      , ELIB_ENABLE_IF(aux::is_integral<To>::value
+                    && aux::is_enum<From>::value)
+    >
+    inline bool enum_cast(From v, To & t) noexcept
+    {
+        t = static_cast<To>(v);
+        return true;
+    }
+
     template <
         class To, class From
       , ELIB_ENABLE_IF(aux::is_integral<To>::value
@@ -51,6 +62,22 @@ namespace elib { namespace enumeration
     
     ////////////////////////////////////////////////////////////////////////////
     // enum_cast: Integral -> Enum, Enum -> Enum
+    template <
+        class To, class From
+      , ELIB_ENABLE_IF(aux::is_enum<To>::value 
+                    && aux::is_integral_enum<From>::value
+                    && has_range<To>::value)
+    >
+    inline bool enum_cast(From v, To & t) noexcept
+    {
+        if (enumeration::in_range(static_cast<To>(v)))
+        {
+            t = static_cast<To>(v);
+            return true;
+        }
+        return false;
+    }
+    
     template <
         class To, class From
       , ELIB_ENABLE_IF(aux::is_enum<To>::value 
@@ -87,18 +114,53 @@ namespace elib { namespace enumeration
                     && detail::to_string_type_valid<To>::value
                     && has_name_map<From>::value)
     >
-    To enum_cast(From v)
+    bool enum_cast(From v, To & t) noexcept
     {
         static_assert(has_name_map<From>::value, "must have name map");
         
         auto pos = basic_enum_traits<From>::name_map.find(v);
         if (pos != basic_enum_traits<From>::name_map.end())
-            return pos->second;
-        throw bad_enum_cast{"bad enum cast"};
+        {
+            t = pos->second;
+            return true;
+        }
+        return false;
+    }
+    
+    template <
+        class To, class From
+      , ELIB_ENABLE_IF(aux::is_enum<From>::value 
+                    && detail::to_string_type_valid<To>::value
+                    && has_name_map<From>::value)
+    >
+    To enum_cast(From v)
+    {
+        To s;
+        if (!enum_cast<To>(v, s)) throw bad_enum_cast{"bad enum cast"};
+        return s;
     }
     
     ////////////////////////////////////////////////////////////////////////////
     // enum_cast: String -> Enum
+    template<
+        class To, class From
+      , ELIB_ENABLE_IF(aux::is_enum<To>::value
+                    && detail::from_string_type_valid<From>::value
+                    && has_name_map<To>::value)
+    >
+    bool enum_cast(From && v, To & t) noexcept
+    {
+         for (auto& kv :  basic_enum_traits<To>::name_map)
+        {
+            if (kv.second == v)
+            {
+                t = kv.first;
+                return true;
+            }
+        }
+        return false;
+    }
+    
     template<
         class To, class From
       , ELIB_ENABLE_IF(aux::is_enum<To>::value

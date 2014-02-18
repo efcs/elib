@@ -9,11 +9,9 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Compiler Config
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-option(CONFIG_USE_CLANG_34 " use /opt/clang3.4/bin/clang" OFF)
-option(CONFIG_USE_GCC_49 "use /opt/gcc4.9/bin/gcc" OFF)
 
 # Standard Library config
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
 # Sanitizers
@@ -23,6 +21,8 @@ option(CONFIG_MSAN "memory sanitizer" OFF)
 
 # Misc
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
+option(CONFIG_ELIB_ASSERT_CONFIG 
+      "Ensure that a elib/config finds a valid configuration" OFF)
 
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
@@ -34,28 +34,20 @@ option(CONFIG_LIB_AUX "Build aux" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
 option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
+# off until GCC supports regex
+option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
 # incomplete
 option(CONFIG_LIB_FUSE "Build Fusion Library" OFF)
 # incomplete && GCC support lacking
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
-# off until GCC supports regex
-option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
+
 
 # Toolchain Configuration
 if(CONFIG_USE_CLANG)
     set(CMAKE_C_COMPILER /usr/bin/clang)
     set(CMAKE_CXX_COMPILER /usr/bin/clang++)
 endif()
-        
-if (CONFIG_USE_GCC_49)
-    set(CMAKE_C_COMPILER /opt/gcc4.9/bin/gcc)
-    set(CMAKE_CXX_COMPILER /opt/gcc4.9/bin/g++)
-endif()
 
-if (CONFIG_USE_CLANG_34)
-    set(CMAKE_C_COMPILER /opt/clang3.4/bin/clang)
-    set(CMAKE_CXX_COMPILER /opt/clang3.4/bin/clang++)
-endif()
 
 ################################################################################
 #                         PROJECT ELIB
@@ -69,6 +61,10 @@ project(EricsLibrary CXX C)
 ################################################################################
 
 set( CMAKE_BUILD_TYPE DEBUG )
+
+if (CONFIG_ELIB_ASSERT_CONFIG)
+    add_definitions( -DELIB_ASSERT_CONFIG=1 )
+endif()
 
 if ( WIN32 )
     message( FATAL_ERROR "Windows not supported!" )

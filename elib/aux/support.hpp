@@ -93,8 +93,8 @@
     }                          
 # 
 # /* noexcept workaround for when "this" is used with GCC */
-# if ELIB_WORKAROUND(ELIB_CONFIG_GNU, GCC_NOEXCEPT_THIS_BUG)
-#   
+# if ELIB_WORKAROUND(ELIB_CONFIG_GCC, GCC_NOEXCEPT_THIS_BUG)
+#
 #   define ELIB_AUTO_RETURN_WORKAROUND ELIB_AUTO_RETURN
 #   define ELIB_RETURN_WORKAROUND(...) { return (__VA_ARGS__); }
 #   

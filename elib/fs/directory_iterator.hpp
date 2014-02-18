@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_DIRECTORY_ITERATOR_HPP
 #define ELIB_FS_DIRECTORY_ITERATOR_HPP
 
+# include <elib/fs/config.hpp>
 # include <elib/fs/path.hpp>
 # include <elib/fs/file_status.hpp>
 # include <elib/fs/operations.hpp>

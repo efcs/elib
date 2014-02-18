@@ -1,9 +1,7 @@
 #ifndef ELIB_WEB_BASIC_WEB_ERROR_HPP
 #define ELIB_WEB_BASIC_WEB_ERROR_HPP
 
-# include <exception>
-# include <memory>
-# include <string>
+# include <elib/basic_error.hpp>
 
 namespace elib { namespace web
 {
@@ -12,31 +10,17 @@ namespace elib { namespace web
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
     class basic_web_error
-      : public std::exception
+      : public basic_error
     {
     public:
-        explicit basic_web_error(std::string s)
-          : m_impl{std::make_shared<std::string>(s)}
-        {}
-        
-        explicit basic_web_error(const char* s)
-          : m_impl{std::make_shared<std::string>(s)}
-        {}
+        using basic_error::basic_error;
         
         basic_web_error(basic_web_error const &) = default;
         basic_web_error(basic_web_error &&) = default;
         basic_web_error & operator=(basic_web_error const &) = default;
         basic_web_error & operator=(basic_web_error &&) = default;
         
-        virtual const char *what() const noexcept
-        {
-            return m_impl->c_str();
-        }
-        
         virtual ~basic_web_error() = default;
-
-    private:
-        std::shared_ptr<std::string> m_impl;
     };
 # if defined(__clang__)
 #   pragma clang diagnostic pop

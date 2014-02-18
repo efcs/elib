@@ -1,7 +1,12 @@
 #ifndef ELIB_WEB_HTTP_HPP
 #define ELIB_WEB_HTTP_HPP
 
-# include <elib/web/fwd.hpp>
+# include <elib/config.hpp>
+# if !defined(ELIB_CONFIG_HAS_REGEX)
+#   error "elib::web::http requires std::regex " \
+          "please use the CMake option CONFIG_LIB_WEB to disable this library"
+# endif
+
 # include <elib/aux.hpp>
 /* elib::enumeration is a side-project of mine. It provides checked casting
  * from strings to enums, and vis versa */
@@ -13,9 +18,161 @@
 # include <string>
 # include <vector>
 
-
+////////////////////////////////////////////////////////////////////////////////
+//                                HTTP
+////////////////////////////////////////////////////////////////////////////////
 namespace elib { namespace web
 {
+    
+     /* because \n just won't do the trick
+     * initialization format is needed to prevent extra null (i think?) */
+    constexpr const char http_newl[] = {'\r', '\n'};
+    
+    /* ONE_ZERO, ONE_ONE */
+    enum class http_version;
+    /* OPTIONS, GET, HEAD, ect. */
+    enum class http_method;
+    /* OK, BAD_REQUEST, FORBIDDEN, ect. */
+    enum class http_status;
+    
+    // Expects/returns format "HTTP/1.x"
+    const char* version_to_string(http_version);
+    http_version string_to_version(std::string const &);
+    
+    constexpr bool status_is_information(http_status) noexcept;
+    constexpr bool status_is_success(http_status) noexcept;
+    constexpr bool status_is_redirect(http_status) noexcept;
+    constexpr bool status_is_client_error(http_status) noexcept;
+    constexpr bool statis_is_server_error(http_status) noexcept;
+    constexpr bool status_is_error(http_status) noexcept;
+    
+    /* The idiomatic C++ void* */
+    using http_data = std::vector<char>;
+    
+    /* a single field. key and value*/
+    struct http_field;
+    
+    // the first line of the HTTP request/response
+    struct http_request_header;
+    struct http_response_header;
+    
+    // http_request and http_response
+    // have a header, a set of fields, and data
+    struct http_request;
+    struct http_response;
+   
+    ////////////////////////////////////////////////////////////////////////////
+    //                       HTTP Parsing
+    ////////////////////////////////////////////////////////////////////////////
+    /* at the top level, parse_http_request/parse_http_response parse the entire
+     * structure, converting it to its respective data types. 
+     * 
+     * Lower level functions, mostly for internal use, take the current range
+     * in consideration and attempt to parse their respective sections starting
+     * at that point. if parsing is succesful, the return value is an iterator
+     * pointing one past the end of the matched expression. otherwise begin is
+     * returned.
+     * 
+     * NOTE: The iterator must be a bidirectional iterator
+     * 
+     * The ad-hoc grammar used for parsing looks something like:
+     * 
+     * http_request_header:
+     *   ^METHOD \s+ ([^\s]+) \s+ HTTP/1.x\r\n
+     * 
+     * http_response_header:
+     *  ^HTTP/1.x \s+ (\d+) \s+ ([^\r]+)\r\n
+     * 
+     * field:
+     *   ^([a-Z][a-Z-]*):\s([^\r]*)\r\n
+     * 
+     * fields:
+     *      fields, field
+     *      field,
+     *      none
+     * 
+     * http_request:
+     *  http_request_header fields \r\n data
+     * 
+     * http_response:
+     *  http_response_header fields \r\n data
+     */
+    //========================================================================//
+    
+    bool parse_http_request(http_data const & dt, http_request & dest);
+
+    bool parse_http_response(http_data const & dt, http_response & dest);
+   
+    http_data::const_iterator
+    parse_http_newl(http_data::const_iterator begin
+                  , http_data::const_iterator const & end);
+                  
+    http_data::const_iterator 
+    parse_http_field(http_data::const_iterator begin
+                   , http_data::const_iterator const & end
+                   , http_field & dest);
+                   
+
+    http_data::const_iterator 
+    parse_http_fields(http_data::const_iterator begin
+                    , http_data::const_iterator const & end
+                    , std::vector<http_field> & dest);
+                    
+    http_data::const_iterator
+    parse_http_fields_and_newl(http_data::const_iterator begin
+                             , http_data::const_iterator const & end
+                             , std::vector<http_field> & dest);
+       
+       
+    http_data::const_iterator 
+    parse_http_request_header(http_data::const_iterator begin
+                            , http_data::const_iterator const & end
+                            , http_request_header & dest);
+         
+         
+    http_data::const_iterator
+    parse_http_response_header(http_data::const_iterator begin
+                             , http_data::const_iterator const & end
+                             , http_response_header & dest);
+    
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //                         Generation
+    ////////////////////////////////////////////////////////////////////////////
+    /* Generate a HTTP request/response from the internal representation
+     * most generate functions have a proxy parse function.*/
+    //========================================================================//
+    
+    http_data generate_http_field(http_field const &);
+    
+    http_data generate_http_fields(std::vector<http_field> const &);
+    
+    http_data generate_http_request_header(http_request_header const &);
+    
+    http_data generate_http_response_header(http_response_header const &);
+    
+    http_data generate_http_request(http_request const &);
+    
+    http_data generate_http_response(http_response const &);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    std::vector<http_field>::const_iterator
+    find_http_field(std::vector<http_field> const &, std::string const &);
+    
+    std::vector<http_field>::iterator
+    find_http_field(std::vector<http_field> &, std::string const &);
+    
+    bool
+    remove_http_field(std::vector<http_field> &, std::string const &);
+    
+    bool
+    replace_http_field(std::vector<http_field> &
+                     , std::string const &, std::string const &);
+    
+    template <http_status Status>
+    http_response generate_status_response();
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     enum class http_version

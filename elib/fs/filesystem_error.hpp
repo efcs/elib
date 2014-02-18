@@ -1,8 +1,8 @@
 #ifndef ELIB_FS_FILESYSTEM_ERROR_HPP
 #define ELIB_FS_FILESYSTEM_ERROR_HPP
 
+# include <elib/fs/config.hpp>
 # include <elib/fs/path.hpp>
-# include <elib/config.hpp>
 
 # include <system_error>
 # include <memory>
@@ -12,7 +12,7 @@
 namespace elib { namespace fs
 {
 
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
@@ -65,7 +65,7 @@ namespace elib { namespace fs
             
         std::shared_ptr<impl_t> m_impl;
     };
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
 

@@ -226,7 +226,7 @@ namespace elib { namespace tuples
  * but for some reason clang spits out: 
  *    error: cannot yet mangle expression type UnaryTypeTraitExpr 
  * TODO: Find a reproducer for the bug */
-#     if !ELIB_WORKAROUND(__clang__, CLANG_IS_FINAL_BUG)
+#     if !ELIB_WORKAROUND(ELIB_CONFIG_CLANG, CLANG_IS_FINAL_BUG)
 #       undef  ELIB_TUPLE_IS_FINAL
 #       define ELIB_TUPLE_IS_FINAL(v) __is_final(v)
 #     endif

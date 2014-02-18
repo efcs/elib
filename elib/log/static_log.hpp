@@ -4,7 +4,6 @@
 # include <elib/log/log_level.hpp>
 # include <elib/log/log.hpp>
 # include <elib/fmt.hpp>
-# include <elib/config.hpp>
 # include <cstdarg>
 # include <string>
 
@@ -100,7 +99,7 @@ namespace elib
     };
 
       
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wexit-time-destructors"
 #   pragma clang diagnostic ignored "-Wglobal-constructors"
@@ -109,7 +108,7 @@ namespace elib
     template <typename Tag>
     log static_log<Tag>::m_impl;
     
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
 

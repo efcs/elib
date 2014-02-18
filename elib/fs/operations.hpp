@@ -1,7 +1,7 @@
 #ifndef ELIB_OPERATIONS_HPP
 #define ELIB_OPERATIONS_HPP
 
-# include <elib/config.hpp>
+# include <elib/fs/config.hpp>
 # include <elib/fs/path.hpp>
 # include <elib/fs/file_status.hpp>
 

@@ -1,5 +1,4 @@
 #include "elib/log/log_level.hpp"
-#include "elib/config.hpp"
 
 namespace elib
 {
@@ -8,7 +7,7 @@ namespace elib
       
 #ifdef ELIB_CONFIG_LIB_ENUMERATION
 
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wexit-time-destructors"
 #   pragma clang diagnostic ignored "-Wglobal-constructors"
@@ -25,7 +24,7 @@ namespace elib
             {log::level_e::raw_err, "raw_err"}
           };
           
-# if ELIB_CONFIG_CLANG
+# if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
       

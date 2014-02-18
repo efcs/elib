@@ -1,7 +1,12 @@
 #ifndef ELIB_WEB_SOCKET_HPP
 #define ELIB_WEB_SOCKET_HPP
 
-# include <elib/web/fwd.hpp>
+# include <elib/config.hpp>
+# if !defined(ELIB_CONFIG_POSIX)
+#   error "elib::web::socket requires POSIX "\
+          "please use the CMake option CONFIG_LIB_WEB to disable this library"
+# endif
+
 # include <elib/web/basic_web_error.hpp>
 # include <elib/aux.hpp>
 
@@ -16,8 +21,173 @@
 # include <sys/types.h>
 # include <unistd.h>
 
+////////////////////////////////////////////////////////////////////////////////
+//                            Socket
+////////////////////////////////////////////////////////////////////////////////
 namespace elib { namespace web
 {
+    using sock_fd_t = int;
+    using message_t = struct msghdr;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    /* the C++ interface uses strongly typed enums to add type safety */
+    enum class sock_type;
+    enum class sock_option;
+    enum class msg_flags;
+    enum class sock_domain;
+    enum class sock_shut;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // 
+    /* Provides descriptive string and std::error_code for cause of exception */
+    class socket_error;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    /* C++ RAII exception safe wrapper around socket file descriptors.
+     * socket also handles non-const modifications to the file descriptor, 
+     * as well as providing error information about previous failures 
+     * and the state of the file descriptor */
+    class socket;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    /* TODO: should accept me a member of socket? I don't really think it should
+     * be because it should not change the state of socket */
+    socket accept(socket const &);
+    
+    template <class SockAddr>
+    socket accept(socket const &, SockAddr &);
+    
+    template <class SockAddr>
+    socket accept(socket const &, SockAddr &, socklen_t &);
+    
+    socket accept(socket const &, std::error_code & ec) noexcept;
+    
+    template <class SockAddr>
+    socket accept(socket const &, SockAddr &, std::error_code &) noexcept;
+    
+    template <class SockAddr>
+    socket accept(socket const &, SockAddr &, socklen_t &, std::error_code &) noexcept;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //                        Sending and Receiving
+    ////////////////////////////////////////////////////////////////////////////
+    /* all of the overloads are a futile attempt to provide a default
+     * value for msg_flags as well as providing throwing and non-throwing
+     * versions of the function. This pattern repeats itself throughout 
+     * the send and receive functions.
+     * 
+     * For each POSIX send/receive function, there is a proxy. Except
+     * for recvfrom. recvfrom requires that the user pass in an non-const lvalue
+     * integral "address_len". This would create a really akward translation
+     * to C++, so I'm ommiting it if I can avoid it.
+     *
+     * Functions that take std::error_code as their last argument report errors
+     * via that variable. Functions that don't throw a socket_error when they
+     * encounter a error. */
+    //========================================================================//
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    /* receive maps to recv. If no vector is supplied it attempts to 
+     * use a vector of size default_receive_length to store the data.
+     *  
+     * when a vector is return, it is sized to fit exactly the
+     * data that was inserted into it.
+     * HOWEVER: When ssize_t is return, the vector passed in DOES NOT have its 
+     * size modified
+     */
+    constexpr const std::size_t default_receive_length = 1024;
+    
+    std::vector<char>
+    receive(socket const &); 
+    
+    std::vector<char> 
+    receive(socket const &, msg_flags);
+    
+    std::vector<char>
+    receive(socket const &, std::error_code & ec) noexcept;
+    
+    std::vector<char>
+    receive(socket const &, msg_flags, std::error_code & ec) noexcept;
+    
+    ssize_t 
+    receive(socket const &, std::vector<char> &);
+    
+    ssize_t 
+    receive(socket const &, std::vector<char> &, msg_flags);
+    
+    ssize_t
+    receive(socket const &, std::vector<char> &, std::error_code & ec) noexcept;
+    
+    ssize_t
+    receive(socket const &, std::vector<char> &, msg_flags, std::error_code & ec) noexcept;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    ssize_t
+    receive_msg(socket const &, message_t &);
+    
+    ssize_t 
+    receive_msg(socket const &, message_t &, msg_flags);
+    
+    ssize_t 
+    receive_msg(socket const &, message_t &, msg_flags, std::error_code & ec) noexcept;
+    
+    ssize_t
+    receive_msg(socket const &, message_t &, std::error_code & ec) noexcept;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    ssize_t
+    send(socket const &, std::vector<char> const &);
+    
+    ssize_t
+    send(socket const &, std::vector<char> const &, msg_flags);
+    
+    ssize_t
+    send(socket const &, std::vector<char> const &, msg_flags, std::error_code & ec) noexcept;
+    
+    ssize_t
+    send(socket const &, std::vector<char> const &, std::error_code & ec) noexcept;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    ssize_t
+    send_msg(socket const &, message_t const &);
+    
+    ssize_t
+    send_msg(socket const &, message_t const &, msg_flags);
+    
+    ssize_t
+    send_msg(socket const &, message_t const &, msg_flags, std::error_code & ec) noexcept;
+    
+    ssize_t
+    send_msg(socket const &, message_t const &, std::error_code & ec) noexcept;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class SockAddr>
+    ssize_t
+    send_to(socket const &, std::vector<char> const &, SockAddr const &);
+    
+    template <class SockAddr>
+    ssize_t
+    send_to(socket const &, std::vector<char> const &, msg_flags
+          , SockAddr const &);
+          
+    template <class SockAddr>
+    ssize_t
+    send_to(socket const &, std::vector<char> const &, msg_flags
+          , SockAddr const &, std::error_code & ec) noexcept;
+          
+    template <class SockAddr>
+    ssize_t
+    send_to(socket const &, std::vector<char> const &
+            , SockAddr const &, std::error_code & ec) noexcept;
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     /* This is how the free function overloads are handled. Every free function

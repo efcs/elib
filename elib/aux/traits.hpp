@@ -55,6 +55,76 @@ namespace elib { namespace aux
         template <class T>
         using is_null_ptr = std::is_null_pointer<T>;
 # endif
+
+# if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
+        template <class T>
+        constexpr bool is_void_v = is_void<T>::value;
+        
+        template <class T>
+        constexpr bool is_integral_v = is_integral<T>::value;
+        
+        template <class T>
+        constexpr bool is_floating_point_v = is_floating_point<T>::value;
+        
+        template <class T>
+        constexpr bool is_array_v = is_array<T>::value;
+        
+        template <class T>
+        constexpr bool is_enum_v = is_enum<T>::value;
+        
+        template <class T>
+        constexpr bool is_class_v = is_class<T>::value;
+        
+        template <class T>
+        constexpr bool is_union_v = is_union<T>::value;
+        
+        template <class T>
+        constexpr bool is_function_v = is_function<T>::value;
+        
+        template <class T>
+        constexpr bool is_pointer_v = is_pointer<T>::value;
+        
+        template <class T>
+        constexpr bool is_lvalue_reference_v = is_lvalue_reference<T>::value;
+        
+        template <class T>
+        constexpr bool is_rvalue_reference_v = is_rvalue_reference<T>::value;
+        
+        template <class T>
+        constexpr bool is_member_object_pointer_v = 
+            is_member_object_pointer<T>::value;
+        
+        template <class T>
+        constexpr bool is_member_function_pointer_v = 
+            is_member_function_pointer<T>::value;
+            
+        template <class T>
+        constexpr bool is_integral_enum_v = is_integral_enum<T>::value;
+        
+        template <class T>
+        constexpr bool is_ptr_v = is_ptr<T>::value;
+        
+        template <class T>
+        constexpr bool is_lvalue_ref_v = is_lvalue_ref<T>::value;
+        
+        template <class T>
+        constexpr bool is_rvalue_ref_v = is_rvalue_ref<T>::value;
+        
+        template <class T>
+        constexpr bool is_mem_obj_ptr_v = is_mem_obj_ptr<T>::value;
+        
+        template <class T>
+        constexpr bool is_mem_fn_ptr_v = is_mem_fn_ptr<T>::value;
+
+#   if __cplusplus >= 201303L
+        template <class T>
+        constexpr bool is_null_pointer_v = is_null_pointer<T>::value;
+        
+        template <class T>
+        constexpr bool is_null_ptr_v = is_null_ptr<T>::value;
+# endif
+    
+# endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
         
         ////////////////////////////////////////////////////////////////////////
         // Composite Type Categories
@@ -72,16 +142,41 @@ namespace elib { namespace aux
         template <class T>
         using is_mem_ptr = std::is_member_pointer<T>;
         
+# if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
+        template <class T>
+        constexpr bool is_fundamental_v = is_fundamental<T>::value;
+        
+        template <class T>
+        constexpr bool is_arithmetic_v = is_arithmetic<T>::value;
+        
+        template <class T>
+        constexpr bool is_scalar_v = is_scalar<T>::value;
+        
+        template <class T>
+        constexpr bool is_object_v = is_object<T>::value;
+        
+        template <class T>
+        constexpr bool is_compound_v = is_compound<T>::value;
+        
+        template <class T>
+        constexpr bool is_reference_v = is_reference<T>::value;
+        
+        template <class T>
+        constexpr bool is_member_pointer_v = is_member_pointer<T>::value;
+        
+        template <class T>
+        constexpr bool is_ref_v = is_ref<T>::value;
+        
+        template <class T>
+        constexpr bool is_mem_ptr_v = is_mem_ptr<T>::value;
+# endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
+        
         ////////////////////////////////////////////////////////////////////////
         // Type Information
         using std::is_const;
         using std::is_volatile;
         using std::is_trivial;
         
-# if !ELIB_WORKAROUND(ELIB_CONFIG_LIBSTDCXX, LIBSTDCXX_LIMITED_TYPE_TRAITS)
-        using std::is_trivially_copyable;
-# endif
-   
         using std::is_standard_layout;
         using std::is_pod;
         using std::is_literal_type;
@@ -102,20 +197,12 @@ namespace elib { namespace aux
         using std::is_copy_assignable;
         using std::is_move_assignable;
         
-# if !ELIB_WORKAROUND(ELIB_CONFIG_LIBSTDCXX, LIBSTDCXX_LIMITED_TYPE_TRAITS)
-        using std::is_trivially_constructible;
-        using std::is_trivially_default_constructible;
-        using std::is_trivially_copy_constructible;
-        using std::is_trivially_move_constructible;
-        
-        using std::is_trivially_copy_assignable;
-        using std::is_trivially_move_assignable;
-# endif
         using std::is_nothrow_constructible;
         using std::is_nothrow_default_constructible;
         using std::is_nothrow_copy_constructible;
         using std::is_nothrow_move_constructible;
      
+        using std::is_nothrow_assignable;
         using std::is_nothrow_copy_assignable;
         using std::is_nothrow_move_assignable;
         
@@ -124,6 +211,155 @@ namespace elib { namespace aux
         using std::is_nothrow_destructible;
 
         using std::has_virtual_destructor;
+        
+# if !ELIB_WORKAROUND(ELIB_CONFIG_LIBSTDCXX, LIBSTDCXX_LIMITED_TYPE_TRAITS)
+        using std::is_trivially_copyable;
+        
+        using std::is_trivially_constructible;
+        using std::is_trivially_default_constructible;
+        using std::is_trivially_copy_constructible;
+        using std::is_trivially_move_constructible;
+        
+        using std::is_trivially_assignable;
+        using std::is_trivially_copy_assignable;
+        using std::is_trivially_move_assignable;
+# endif
+
+# if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
+        template <class T>
+        constexpr bool is_const_v = is_const<T>::value;
+        
+        template <class T>
+        constexpr bool is_volatile_v = is_volatile<T>::value;
+        
+        template <class T>
+        constexpr bool is_trivial_v = is_trivial<T>::value;
+        
+        template <class T>
+        constexpr bool is_standard_layout_v = is_standard_layout<T>::value;
+        
+        template <class T>
+        constexpr bool is_pod_v = is_pod<T>::value;
+        
+        template <class T>
+        constexpr bool is_literal_type_v = is_literal_type<T>::value;
+        
+        template <class T>
+        constexpr bool is_empty_v = is_empty<T>::value;
+        
+        template <class T>
+        constexpr bool is_polymorphic_v = is_polymorphic<T>::value;
+        
+        template <class T>
+        constexpr bool is_abstract_v = is_abstract<T>::value;
+        
+        template <class T>
+        constexpr bool is_signed_v = is_signed<T>::value;
+        
+        template <class T>
+        constexpr bool is_unsigned_v = is_unsigned<T>::value;
+        
+        template <class T, class ...Args>
+        constexpr bool is_constructible_v = is_constructible<T, Args...>::value;
+        
+        template <class T>
+        constexpr bool is_default_constructible_v = 
+            is_default_constructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_copy_constructible_v = 
+            is_copy_constructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_move_constructible_v = 
+            is_move_constructible<T>::value;
+            
+        template <class T, class ...Args>
+        constexpr bool is_assignable_v = is_assignable<T, Args...>::value;
+        
+        template <class T>
+        constexpr bool is_copy_assignable_v = is_copy_assignable<T>::value;
+        
+        template <class T>
+        constexpr bool is_move_assignable_v = is_move_assignable<T>::value;
+        
+        template <class T, class ...Args>
+        constexpr bool is_nothrow_constructible_v = 
+            is_nothrow_constructible<T, Args...>::value;
+        
+        template <class T>
+        constexpr bool is_nothrow_default_constructible_v = 
+            is_nothrow_default_constructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_nothrow_copy_constructible_v = 
+            is_nothrow_copy_constructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_nothrow_move_constructible_v = 
+            is_nothrow_move_constructible<T>::value;
+            
+        template <class T, class ...Args>
+        constexpr bool is_nothrow_assignable_v = 
+            is_nothrow_assignable<T, Args...>::value;
+        
+        template <class T>
+        constexpr bool is_nothrow_copy_assignable_v = 
+            is_nothrow_copy_assignable<T>::value;
+        
+        template <class T>
+        constexpr bool is_nothrow_move_assignable_v = 
+            is_nothrow_move_assignable<T>::value;
+        
+        template <class T>
+        constexpr bool is_destructible_v = is_destructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_nothrow_destructible_v = 
+            is_nothrow_destructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_trivially_destructible_v = 
+            is_trivially_destructible<T>::value;
+        
+        template <class T>
+        constexpr bool has_virtual_destructor_v = 
+            has_virtual_destructor<T>::value;
+            
+#   if !ELIB_WORKAROUND(ELIB_CONFIG_LIBSTDCXX, LIBSTDCXX_LIMITED_TYPE_TRAITS)
+        template <class T>
+        constexpr bool is_trivially_copyable_v = 
+            is_trivially_copyable<T>::value;
+        
+        template <class T, class ...Args>
+        constexpr bool is_trivially_constructible_v = 
+            is_trivially_constructible<T, Args...>::value;
+        
+        template <class T>
+        constexpr bool is_trivially_default_constructible_v = 
+            is_trivially_default_constructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_trivially_copy_constructible_v = 
+            is_trivially_copy_constructible<T>::value;
+        
+        template <class T>
+        constexpr bool is_trivially_move_constructible_v = 
+            is_trivially_move_constructible<T>::value;
+        
+        template <class T, class ...Args>
+        constexpr bool is_trivially_assignable_v = 
+            is_trivially_assignable<T, Args...>::value;
+        
+        template <class T>
+        constexpr bool is_trivially_copy_assignable_v = 
+            is_trivially_copy_assignable<T>::value;
+        
+        template <class T>
+        constexpr bool is_trivially_move_assignable_v = 
+            is_trivially_move_assignable<T>::value;
+#   endif /* ELIB_WORKAROUND */
+# endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
     
         using std::alignment_of;
         using std::rank;
@@ -132,6 +368,17 @@ namespace elib { namespace aux
         using std::is_same;
         using std::is_base_of;
         using std::is_convertible;
+        
+# if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
+        template <class T>
+        constexpr bool is_same_v = is_same<T>::value;
+        
+        template <class T>
+        constexpr bool is_base_of_v = is_base_of<T>::value;
+        
+        template <class T>
+        constexpr bool is_convertible_v = is_convertible<T>::value;
+# endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
 
         ////////////////////////////////////////////////////////////////////////
         // aux::remove_const, aux::remove_volatile, aux::remove_cv
@@ -584,6 +831,16 @@ namespace elib { namespace aux
                 traits_detail::declval<T>()
               )
           );
+# if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
+        template <class T>
+        constexpr bool is_char_array_v = is_char_array<T>::value;
+        
+        template <class T>
+        constexpr bool is_raw_string_v = is_raw_string<T>::value;
+        
+        template <class T>
+        constexpr bool is_string_type_v = is_string_type<T>::value;
+# endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
     }                                                       // namespace traits
     
     using namespace ::elib::aux::traits;

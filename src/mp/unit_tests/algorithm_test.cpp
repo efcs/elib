@@ -777,6 +777,8 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
 //                            Transforming                                            
 ////////////////////////////////////////////////////////////////////////////////
 
+/* For some reason, this section makes cov-build hang */
+#if !defined(ELIB_CONFIG_COVERITY_SCAN)
   BOOST_AUTO_TEST_CASE(mp_algorithm_copy_test)
   {
     // copy test
@@ -931,5 +933,5 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
     CHECK( pair_equal_t<reverse_partition_t<L, is_odd<_1>>, EP>() );
   }                                              // mp_algorithm_partition_test
   
-  
+#endif /* ELIB_CONFIG_COVERITY_SCAN_HPP */
 BOOST_AUTO_TEST_SUITE_END()

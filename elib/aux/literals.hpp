@@ -1,9 +1,9 @@
 #ifndef ELIB_AUX_LITERALS_HPP
 #define ELIB_AUX_LITERALS_HPP
 
+
 # include <elib/aux/integral_constant.hpp>
 # include <cstddef>
-
 
 namespace elib 
 { 
@@ -34,6 +34,8 @@ namespace elib
                 ::template apply<Ch...>;
     }}                                                 // namespace aux::detail
     
+// Scan doesn't like user defined literals
+# if !defined(ELIB_CONFIG_COVERITY_SCAN)
     template <char ...Ch>
     constexpr aux::detail::generate_literal_apply<int, Ch...>
     operator "" _int() noexcept
@@ -43,5 +45,6 @@ namespace elib
     constexpr aux::detail::generate_literal_apply<bool, Ch...>
     operator "" _bool() noexcept
     { return {}; }
+# endif /* ELIB_CONFIG_COVERITY_SCAN */
 }                                                           // namespace elib
 #endif /* ELIB_AUX_LITERALS_HPP */

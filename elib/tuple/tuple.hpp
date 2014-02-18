@@ -92,7 +92,8 @@ namespace elib { namespace tuples
     constexpr Value && 
     get(tuple<Ts...> && t) noexcept
     {
-        using AtVal = typename decltype(t.m_impl)::template item_at_value<Value>;
+        using Impl = decltype(t.m_impl);
+        using AtVal = typename Impl::template item_at_value<Value>;
         return AtVal::call(std::move(t));
     }
     

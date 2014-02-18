@@ -24,7 +24,7 @@ option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
 option(CONFIG_ELIB_ASSERT_CONFIG 
       "Ensure that a elib/config finds a valid configuration" OFF)
 option(CONFIG_ELIB_COVERITY_SCAN
-      "Setup build for when doing a build with coverity scan" OFF)
+      "Setup build for when doing a build with coverity scan" ON)
 
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)

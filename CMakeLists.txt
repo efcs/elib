@@ -11,7 +11,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 
 # Standard Library config
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
 # Sanitizers

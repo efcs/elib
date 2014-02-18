@@ -269,7 +269,7 @@ namespace elib
     {};
     
     template <class S, class ...Args>
-    using append_t = typename get_impl_t<S>::template append<S, Args...>::type;
+    using append_t = typename append<S, Args...>::type;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

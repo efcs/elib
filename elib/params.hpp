@@ -423,7 +423,13 @@ namespace elib
         ////////////////////////////////////////////////////////////////////
         // params::take
         template <class P, std::size_t N>
-        struct take;
+        struct take
+        {
+            static_assert(
+                aux::never<P>::value
+              , "Cannot instantiate default params::take"
+            );
+        };
 
         template <
             template <class...> class Pack, class ...As
@@ -456,7 +462,7 @@ namespace elib
             struct drop_impl_1_< Pack, param_pack<Ignored...> >
             {
                 template <class ...Back>
-                static append_t< Pack, typename Back::type... > 
+                static typename append< Pack, typename Back::type... >::type 
                 eval(aux::any_pod<Ignored>..., Back*...);
             };
 
@@ -465,8 +471,8 @@ namespace elib
             template <std::size_t N, class Pack, class ...Args>
             using drop_impl = 
                 decltype(
-                    drop_impl_1_< Pack, fill_t<N, decltype(nullptr)>>
-                        ::eval((aux::no_decay<Args>*)nullptr...)
+                    drop_impl_1_< Pack, typename fill<N, decltype(nullptr)>::type>
+                        ::eval(static_cast<aux::no_decay<Args>*>(nullptr)...)
                 );
         }                                               // namespace detail
 

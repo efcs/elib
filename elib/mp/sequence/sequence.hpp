@@ -237,7 +237,7 @@ namespace elib
     {};
     
     template <class Pack, std::size_t N>
-    using take_t = typename get_impl_t<Pack>::template take<Pack, N>::type;
+    using take_t = typename take<Pack, N>::type;
     
     
     template <class Pack, std::size_t First, std::size_t Second>
@@ -245,8 +245,7 @@ namespace elib
     {};
     
     template <class Pack, std::size_t First, std::size_t Last>
-    using slice_t = 
-      typename get_impl_t<Pack>::template slice<Pack, First, Last>::type;
+    using slice_t = typename slice<Pack, First, Last>::type;
     
     
     template <class Left, class Right>
@@ -254,7 +253,7 @@ namespace elib
     {};
     
     template <class Left, class Right>
-    using concat_t = typename get_impl_t<Left>::template concat<Left, Right>::type;
+    using concat_t = typename concat<Left, Right>::type;
     
     
     template <class S, class ...Args>

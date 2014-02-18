@@ -23,6 +23,8 @@ option(CONFIG_MSAN "memory sanitizer" OFF)
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
 option(CONFIG_ELIB_ASSERT_CONFIG 
       "Ensure that a elib/config finds a valid configuration" OFF)
+option(CONFIG_ELIB_COVERITY_SCAN
+      "Setup build for when doing a build with coverity scan" OFF)
 
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
@@ -64,6 +66,10 @@ set( CMAKE_BUILD_TYPE DEBUG )
 
 if (CONFIG_ELIB_ASSERT_CONFIG)
     add_definitions( -DELIB_ASSERT_CONFIG=1 )
+endif()
+
+if (CONFIG_ELIB_COVERITY_SCAN)
+    add_definitions( -DELIB_CONFIG_COVERITY_SCAN=1 )
 endif()
 
 if ( WIN32 )

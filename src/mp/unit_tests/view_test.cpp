@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     }
   }                                                 // mp_view_single_view_test
   
-  
+
   BOOST_AUTO_TEST_CASE(mp_view_joint_view_test)
   {
     // general
@@ -240,7 +240,6 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     }
   }                                                  // mp_view_joint_view_test
   
-  
   BOOST_AUTO_TEST_CASE(mp_view_transform_view_test)
   {
     // general
@@ -292,9 +291,9 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
       CHECK( !is_default_random_access_iterator_t<B>() );
     }
   }                                              // mp_view_transform_view_test
+
   
-  
-  
+# if !defined(ELIB_CONFIG_COVERITY_SCAN)
   BOOST_AUTO_TEST_CASE(mp_view_zip_view_test)
   {
     // general
@@ -376,5 +375,5 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
       CHECK( !is_default_random_access_iterator_t<B>() );
     }
   }                                                    // mp_view_zip_view_test
-
+# endif /* ELIB_CONFIG_COVERITY_SCAN */
 BOOST_AUTO_TEST_SUITE_END()

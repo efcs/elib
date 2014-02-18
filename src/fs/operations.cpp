@@ -3,7 +3,7 @@
 #include "elib/fs/filesystem_error.hpp"
 
 #include "elib/CXX14/memory.hpp"
-#include "elib/assert.hpp"
+#include "elib/aux.hpp"
 
 #include <cstdlib>
 #include <climits>
@@ -225,8 +225,12 @@ namespace elib
         detail::clear_error(ec);
         errno = 0;
         char *ret = getenv(s.c_str());
+        
         if (!ret)
+        {
           detail::handle_and_throw_errno("elib::fs::posix_getenv", ec);
+          return string_type{};
+        }
         return string_type{ret};
       }
       
@@ -235,6 +239,7 @@ namespace elib
         detail::clear_error(ec);
         errno = 0;
         auto size = pathconf(".", _PC_PATH_MAX);
+        ELIB_ASSERT(size >= 0);
         auto buff = std::make_unique<char[]>( static_cast<std::size_t>(size) );
         char* ret = ::getcwd(buff.get(), static_cast<size_t>(size));
         if (ret == nullptr) 

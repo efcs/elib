@@ -130,10 +130,15 @@ namespace elib { namespace tuples
             
             Type& get() noexcept
             { return m_value; }
-            
-            constexpr Type const& get() const noexcept
+       
+            // EDG outputs a warning when the object is a non-literal type
+            // The standard says constexpr should just be ignored
+            // TODO: Suppress error rather than remove constexpr
+# if !defined(ELIB_CONFIG_COVERITY_SCAN)
+            constexpr 
+# endif
+            Type const& get() const noexcept
             { return m_value; }
-
             
         };
         

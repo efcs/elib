@@ -106,9 +106,11 @@ namespace elib
         ss >> b;
         if (ss) return b;
             
-        std::string err_str = "Bad lexical cast from string to bool: \"";
-        err_str += f + '"';
-        throw bad_lexical_cast{err_str};
+        
+        throw bad_lexical_cast(
+                std::string{"Bad lexical cast from string to bool: \""}
+                    + f + '"'
+              );
     }
 }                                                            // namespace elib
 #endif /* ELIB_LEXICAL_CAST_HPP */

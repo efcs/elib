@@ -128,14 +128,14 @@ namespace elib
         auto buff_ptr = std::make_unique<char[]>(size);
         auto ret = vsnprintf(buff_ptr.get(), size, msg, args_cp);
         
+        va_end(args_cp);
+        
         // currently there is no error handling for failure, 
         // so this is hack
         ELIB_ASSERT(ret >= 0);
         
         // handle empty expansion 
         if (ret == 0) return std::string{};
-            
-        va_end(args_cp);
         
         // we did not provide a long enough buffer on our first attempt
         if (static_cast<std::size_t>(ret) >= size)

@@ -90,6 +90,7 @@ BOOST_AUTO_TEST_CASE(enum_v3_basic_enum_traits_detectors)
   BOOST_CHECK(has_name_map<C>::value == true);
 }
 
+
 BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
 {
   typedef detail::meta_basic_enum_traits<A> meta_A;
@@ -168,6 +169,7 @@ BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
   BOOST_CHECK(meta_B::is_mixed_comparible == false);
   BOOST_CHECK(meta_C::is_mixed_comparible == true);
 }
+
 
 BOOST_AUTO_TEST_CASE(intrusive_enum_traits_test)
 {
@@ -676,8 +678,5 @@ BOOST_AUTO_TEST_CASE(test_iter)
   BOOST_CHECK(cit != cend);
   
 }
-
-
-
 
 BOOST_AUTO_TEST_SUITE_END()

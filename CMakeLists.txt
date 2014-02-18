@@ -24,7 +24,7 @@ option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
 option(CONFIG_ELIB_ASSERT_CONFIG 
       "Ensure that a elib/config finds a valid configuration" OFF)
 option(CONFIG_ELIB_COVERITY_SCAN
-      "Setup build for when doing a build with coverity scan" ON)
+      "Setup build for when doing a build with coverity scan" OFF)
 
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
@@ -50,7 +50,6 @@ if(CONFIG_USE_CLANG)
     set(CMAKE_CXX_COMPILER /usr/bin/clang++)
 endif()
 
-
 ################################################################################
 #                         PROJECT ELIB
 ################################################################################
@@ -70,6 +69,7 @@ endif()
 
 if (CONFIG_ELIB_COVERITY_SCAN)
     add_definitions( -DELIB_CONFIG_COVERITY_SCAN=1 )
+    add_definitions( -include config/gcc_4_8_2_coverity_scan_missing_builtins.hpp)
 endif()
 
 if ( WIN32 )

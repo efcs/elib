@@ -1,7 +1,7 @@
 #ifndef ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP
 #define ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP
 
-# include <elib/aux/integral_constant.hpp>
+# include <elib/aux.hpp>
 
 namespace elib { namespace enumeration
 {
@@ -10,6 +10,7 @@ namespace elib { namespace enumeration
         template <bool Found, class FieldT>
         struct extracted_field 
         {
+            using type = extracted_field;
             using value_type = typename FieldT::value_type;
             
             static constexpr const bool found = Found;
@@ -27,8 +28,8 @@ namespace elib { namespace enumeration
         template <class Type, template <class> class FieldType, class Default>
         struct field_extractor_impl
         {
-            template <class T, class = FieldType<T>>
-            static extracted_field<true, FieldType<T>> test(int);
+            template <class T, class = typename FieldType<T>::type>
+            static extracted_field<true, typename FieldType<T>::type> test(int);
             
             template <class>
             static extracted_field<false, Default> test(...);
@@ -40,36 +41,19 @@ namespace elib { namespace enumeration
         template <class T, template <class> class FieldType, class Default>
         using field_extractor = typename field_extractor_impl<T, FieldType, Default>::type;
         
-        
         // TODO: For some reason EDG's frontend used by coverity scan
         // blows up on the decltype's
         template <class T>
-        using default_value_field_t = 
-            integral_constant<
-                decltype(T::ELIB_ENUM_DEFAULT_VALUE)
-              , T::ELIB_ENUM_DEFAULT_VALUE
-            >;
+        using default_value_field_t = ELIB_AUTO_INTC(T::ELIB_ENUM_DEFAULT_VALUE);
         
         template <class T>
-        using error_value_field_t = 
-            integral_constant<
-                decltype(T::ELIB_ENUM_ERROR_VALUE)
-              , T::ELIB_ENUM_ERROR_VALUE
-            >;
+        using error_value_field_t = ELIB_AUTO_INTC(T::ELIB_ENUM_ERROR_VALUE);
             
         template <class T>
-        using first_value_field_t = 
-            integral_constant<
-                decltype(T::ELIB_ENUM_FIRST_VALUE)
-              , T::ELIB_ENUM_FIRST_VALUE
-            >;
+        using first_value_field_t = ELIB_AUTO_INTC(T::ELIB_ENUM_FIRST_VALUE);
         
         template <class T>
-        using last_value_field_t = 
-            integral_constant<
-                decltype(T::ELIB_ENUM_LAST_VALUE)
-              , T::ELIB_ENUM_LAST_VALUE
-            >;
+        using last_value_field_t = ELIB_AUTO_INTC(T::ELIB_ENUM_LAST_VALUE);
         
         template <class T>
         using is_contigious_field_t = 

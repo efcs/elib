@@ -23,23 +23,29 @@ namespace elib { namespace enumeration
         constexpr const typename FieldT::value_type extracted_field<Found, FieldT>::value;
         
     
-        template <class T, template <class> class FieldType, class Default>
-        struct field_extractor_
+        template <template <class> class FieldType, class Default>
+        struct field_extractor_impl
         {
-        private:
-            template <class U>
-            static extracted_field<true, FieldType<U>> test(int);
+            template <class T, class = FieldType<T>>
+            static extracted_field<true, FieldType<T>> test(int);
             
             template <class>
-            static extracted_field<false, Default> test(long);
-            
-        public:
-            using type = decltype(test<T>(0));
+            static extracted_field<false, Default> test(...);
+        };
+        
+        template <class T, template <class> class FieldType, class Default>
+        struct field_extractor_ 
+        {
+            using Impl = field_extractor_impl<FieldType, Default>;
+            using type = decltype(Impl::template test<T>(0));
         };
         
         template <class T, template <class> class FieldType, class Default>
         using field_extractor = typename field_extractor_<T, FieldType, Default>::type;
         
+        
+        // TODO WORKAROUND: For some reason EDG's frontend used by coverity scan
+        // blows up on the ELIB_AUTO_INTC macro
         template <class T>
         using default_value_field_t = ELIB_AUTO_INTC(T::ELIB_ENUM_DEFAULT_VALUE);
         

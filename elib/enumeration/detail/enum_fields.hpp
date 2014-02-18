@@ -41,8 +41,8 @@ namespace elib { namespace enumeration
         using field_extractor = typename field_extractor_impl<T, FieldType, Default>::type;
         
         
-        // TODO WORKAROUND: For some reason EDG's frontend used by coverity scan
-        // blows up on the ELIB_AUTO_INTC macro
+        // TODO: For some reason EDG's frontend used by coverity scan
+        // blows up on the decltype's
         template <class T>
         using default_value_field_t = 
             integral_constant<

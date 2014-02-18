@@ -16,6 +16,11 @@ namespace elib
   /* bad_cast error for lexical casts */
   class bad_lexical_cast : public std::runtime_error {
   public:
+# if defined(ELIB_CONFIG_COVERITY_SCAN)
+      bad_lexical_cast(std::string && s)
+        : std::runtime_error(s)
+        {}
+# endif
       using std::runtime_error::runtime_error;
       
       ELIB_DEFAULT_COPY_MOVE(bad_lexical_cast);

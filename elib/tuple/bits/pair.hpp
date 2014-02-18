@@ -85,8 +85,8 @@ namespace elib { namespace tuples
         pair( pair&& ) = default;
         
         pair& operator=( pair const& p ) 
-                noexcept(aux::is_nothrow_copy_assignable<First>::type
-                      && aux::is_nothrow_copy_assignable<Second>::type)
+                noexcept(aux::is_nothrow_copy_assignable<First>::value
+                      && aux::is_nothrow_copy_assignable<Second>::value)
         {
             if (this != &p)
             {

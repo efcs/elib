@@ -30,18 +30,21 @@ if (CONFIG_ALL_WARNINGS)
   )
   
   if (CXX_COMPILER_GCC)
-    add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
-    #add_flags( LIBRARY_FLAGS -Weffc++)
+        add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
+        #add_flags( LIBRARY_FLAGS -Weffc++)
   elseif (CXX_COMPILER_CLANG)
-    add_flags( LIBRARY_FLAGS
-      -Weverything -Wno-c++98-compat 
-      -Wno-c++98-compat-pedantic -Wno-newline-eof
-    )
+        add_flags( LIBRARY_FLAGS
+            -Weverything -Wno-c++98-compat 
+            -Wno-c++98-compat-pedantic -Wno-newline-eof
+        )
   endif()
   
   add_flags( LIBRARY_FLAGS 
-    -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long
+        -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long
   )
+  if (CONFIG_ELIB_COVERITY_SCAN)
+    add_flags( LIBRARY_FLAGS -Wno-unknown-pragmas )
+  endif()
   
 endif()
 

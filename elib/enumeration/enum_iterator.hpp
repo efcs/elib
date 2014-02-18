@@ -113,8 +113,8 @@ namespace elib { namespace enumeration
             
             using btraits = basic_enum_traits<T>;
             
-            using map_iterator = 
-            typename decltype(btraits::name_map)::const_iterator;
+            using result = decltype(btraits::name_map);
+            using map_iterator = typename result::const_iterator;
             
         
         public:

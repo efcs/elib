@@ -31,7 +31,8 @@ namespace elib
     template <class F>
     struct apply_wrap<F>
     {
-      using type = typename decltype(detail::detect_apply_type<F>())::type;
+        using result = decltype(detail::detect_apply_type<F>());
+        using type = typename result::type;
     };
     
     

@@ -45,6 +45,12 @@ namespace elib { namespace options
       , options_description const &
     );
     
+    parsed_options
+    parse_command_line(
+        std::vector<std::string> const &
+      , options_description const &
+    );
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     std::vector< std::string >

@@ -3,11 +3,13 @@
 
 # include <vector>
 # include <string>
+# include <memory>
+
 
 namespace elib { namespace options
 {
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //                              Errors
     ////////////////////////////////////////////////////////////////////////////
     class error;
     class duplicate_option_error;
@@ -21,7 +23,7 @@ namespace elib { namespace options
     class validation_error;
     
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //                              Options
     ////////////////////////////////////////////////////////////////////////////
     enum class match_result
     {
@@ -37,7 +39,7 @@ namespace elib { namespace options
     class positional_options_description;
     
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //                              Values
     ////////////////////////////////////////////////////////////////////////////
     class value_semantic;
     class untyped_value;
@@ -47,25 +49,19 @@ namespace elib { namespace options
     class typed_value;
     
     template <class T>
-    typed_value<T>* value();
+    typed_value<T> value();
     
     template <class T>
-    typed_value<T>* value(T* v);
+    typed_value<T> value(T & v);
     
     typed_value<bool>* bool_switch();
     typed_value<bool>* bool_switch(bool * v);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //                              Parsers
     ////////////////////////////////////////////////////////////////////////////
     class command_line_parser;
     class parsed_options;
-    
-    parsed_options 
-    parse_command_line(
-        int argc, const char* const argv[]
-      , options_description const &
-    );
     
     enum class collect_unrecognized_mode
     {
@@ -73,11 +69,24 @@ namespace elib { namespace options
       , exclude_positional
     };
     
+    // avoid having to qualify names without losing type safety
     static constexpr collect_unrecognized_mode include_positional = 
         collect_unrecognized_mode::include_positional;
         
     static constexpr collect_unrecognized_mode exclude_positional =
         collect_unrecognized_mode::exclude_positional;
+    
+    parsed_options 
+    parse_command_line(
+        int argc, const char* const argv[]
+      , options_description const &
+    );
+    
+    parsed_options
+    parse_command_line(
+        std::vector<std::string> const &
+      , options_description const &
+    );
     
     std::vector< std::string >
     collect_unrecognized(
@@ -86,10 +95,9 @@ namespace elib { namespace options
     );
     
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //                           Storage
     ////////////////////////////////////////////////////////////////////////////
     class variable_map;
-    class variable_value;
     
     void store(parsed_options const &, variable_map &);
     void notify(variable_map &);

@@ -2,6 +2,7 @@
 #define ELIB_OPTIONS_OPTION_HPP
 
 # include <elib/options/fwd.hpp>
+# include <elib/aux.hpp>
 
 # include <string>
 # include <map>
@@ -15,20 +16,20 @@ namespace elib { namespace options
     class option
     {
     public:
-        option();
+        option() {}
         
         option(
-            std::string const & xstring_key
-          , std::vector< std::string > const & xvalue
-        );
+            std::string const & skey
+          , std::vector< std::string > const & val
+        ); 
         
-        std::string string_key;
-        int position_key;
+        std::string string_key{};
+        int position_key{-1};
         
-        std::vector< std::string > value;
-        std::vector< std::string > original_tokens;
+        std::vector< std::string > value{};
+        std::vector< std::string > original_tokens{};
         
-        bool unregistered;
+        bool unregistered{true};
     };
     
     ////////////////////////////////////////////////////////////////////////////
@@ -37,8 +38,8 @@ namespace elib { namespace options
     {
     public:
         option_description();
-        option_description(const char* name, const value_semantic* s);
-        option_description(const char* name, const value_semantic* s, const char* desc);
+        option_description(std::string name, value_semantic && s);
+        option_description(std::string name, value_semantic && s, std::string desc);
         
         virtual ~option_description();
         
@@ -48,10 +49,16 @@ namespace elib { namespace options
         
         std::string canonical_name() const;
         
-        std::string const & long_name() const;
-        std::string const & description() const;
+        bool has_short_name()  const { return !m_short_name.empty(); }
+        bool has_long_name()   const { return !m_long_name.empty(); }
+        bool has_description() const { return !m_desc.empty(); }
         
-        std::shared_ptr<const value_semantic> semantics() const;
+        std::string const & long_name()   const { return m_long_name; }
+        std::string const & short_name()  const { return m_short_name; }
+        std::string const & description() const { return m_desc; }
+        
+        std::shared_ptr<const value_semantic> semantics() const
+        { return m_semantics; }
         
         std::string format_name() const;
         std::string format_parameter() const;
@@ -67,20 +74,29 @@ namespace elib { namespace options
     //
     class option_description_init
     {
-    public:
-        option_description_init(option_description *owner);
-        
-        option_description_init &
-        operator()(const char* name, const char* desc);
-        
-        option_description_init &
-        operator()(const char* name, value_semantic const* s);
-        
-        option_description_init &
-        operator()(const char* name, value_semantic const* s, const char* desc);
-
     private:
-        option_description* m_owner;
+        friend class options_description;
+        
+        option_description_init(options_description & owner);
+        
+    public:
+        option_description_init &
+        operator()(std::string name, std::string desc)
+        {
+            m_owner.add(option_description(
+                name, untyped_value{}, desc
+            );
+            return *this;
+        }
+        
+        option_description_init &
+        operator()(std::string name, value_semantic && s)
+        
+        option_description_init &
+        operator()(std::string name, value_semantic && s, std::string desc);
+
+    private:        
+        options_description & m_owner;
     };
     
     ////////////////////////////////////////////////////////////////////////////

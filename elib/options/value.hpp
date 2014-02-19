@@ -2,6 +2,7 @@
 #define ELIB_OPTIONS_VALUE_HPP
 
 # include <elib/options/fwd.hpp>
+# include <elib/aux.hpp>
 # include <elib/any.hpp>
 
 # include <functional>
@@ -11,6 +12,10 @@
 
 namespace elib { namespace options
 {   
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
     ////////////////////////////////////////////////////////////////////////////
     //
     class value_semantic
@@ -35,6 +40,9 @@ namespace elib { namespace options
         
         virtual ~value_semantic() noexcept {}
     };
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
     
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -84,42 +92,123 @@ namespace elib { namespace options
       , public typed_value_base
     {
     public:
-        typed_value(T *store_to);
+        typed_value();
+        typed_value(T & store_to);
         
-        typed_value* default_value(T const & v);
-        typed_value* default_value(T const & v, std::string const & textual);
+        typed_value* default_value(T const & v)
+        {
+            m_default_value = v;
+            m_default_value_str = "";
+            return this;
+        }
         
-        typed_value* implicit_value(T const & v);
-        typed_value* implicit_value(T const & v, std::string const & textual);
+        typed_value* default_value(T const & v, std::string const & textual)
+        {
+            m_default_value = v;
+            m_default_value_str = textual;
+            return this;
+        }
         
-        typed_value* value_name(std::string const & name);
+        typed_value* implicit_value(T const & v)
+        {
+            m_implicit_value = v;
+            m_implicit_value_str = "";
+            return this;
+        }
         
-        typed_value* notifier(std::function<void(T const &)> f);
+        typed_value* implicit_value(T const & v, std::string const & textual)
+        {
+            m_implicit_value = v;
+            m_implicit_value_str = textual;
+            return this;
+        }
         
-        typed_value* composing();
-        typed_value* multitoken();
-        typed_value* zero_tokens();
-        typed_value* required();
+        typed_value* value_name(std::string const & name)
+        {
+            m_value_name = name;
+            return this;
+        }
+        
+        typed_value* notifier(std::function<void(T const &)> f)
+        {
+            m_notifier = f;
+            return this;
+        }
+        
+        typed_value* composing() 
+        {
+            m_composing = true;
+            return this;
+        }
+        
+        //TODO validate input
+        typed_value* multitoken()
+        {
+            m_multitoken = true;
+            return this;
+        }
+        
+        typed_value* zero_tokens()
+        {
+            m_zero_tokens = true;
+            return this;
+        }
+        
+        typed_value* required()
+        {
+            m_required = true;
+            return this;
+        }
 
     public:
         
-        std::string name() const;
+        //TODO whats the point of this
+        std::string name() const
+        {
+            return m_value_name;
+        }
         
-        bool is_composing() const;
-        unsigned min_tokens() const;
-        unsigned max_tokens() const;
+        bool is_composing() const noexcept { return m_composing; }
         
-        bool is_required() const;
+        unsigned min_tokens() const
+        {
+            if (m_zero_tokens) return 0;
+            return m_required;
+        }
+        
+        unsigned max_tokens() const
+        {
+            if (m_zero_tokens) return 0;
+            if (m_multitoken) return 10;
+            return 1;
+        }
+        
+        bool is_required() const noexcept 
+        { 
+            return m_required; 
+        }
         
         void parse(
             elib::any & store
           , std::vector<std::string> const & new_tokens
         ) const;
         
-        virtual bool apply_default(elib::any & store) const;
-        void notify(elib::any const & store) const;
+        virtual bool apply_default(elib::any & store) const
+        {
+            ELIB_ASSERT(m_default_value);
+            store = m_default_value;
+        }
         
-        std::type_info const & value_type() const;
+        void notify(elib::any const & store) const
+        {
+            if (!m_notifier) return;
+            m_notifier(any_cast<T const &>(store));
+        }
+        
+        std::type_info const & value_type() const noexcept
+        {
+            return typeid(T);
+        }
         
     private:
         std::string m_value_name;

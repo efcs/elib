@@ -10,30 +10,17 @@
 
 namespace elib { namespace except
 {
+    ////////////////////////////////////////////////////////////////////////////
+    //
     class exception;
-    class unknown_exception;
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class Tag, class T> 
     class error_info;
     
-    template <class E, class Tag, class T>
-    E const & operator<<(E const &, error_info<Tag, T> const &);
-    
-    template <class E, class ...Tags, class ...Types>
-    E const & operator<<(E const &, tuple<error_info<Tags, Types>...> const &);
-    
-    template <class E>
-    E * current_exception_cast();
-    
-    template <class E>
-    [[noreturn]] void throw_exception(E const &);
-    
-    template <class ErrorInfo, class E>
-    typename ErrorInfo::error_info::value_type const * get_error_info(E const &);
-    
-    template <class ErrorInfo, class E>
-    typename ErrorInfo::error_info::value_type * get_error_info(E &);
-    
+    ////////////////////////////////////////////////////////////////////////////
+    //
     namespace tags
     {
         struct api_function {};
@@ -50,10 +37,48 @@ namespace elib { namespace except
         struct throw_line {};
     }                                                       // namespace tags
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class E>
+    [[noreturn]] void throw_exception(E const &);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class E>
+    E * current_exception_cast();
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class E, class Tag, class T>
+    void set_error_info(E const &, error_info<Tag, T> const &);
+    
+    template <class E, class ...Tags, class ...Types>
+    void set_error_info(E const &, elib::tuple<error_info<Tags, Types>...> const &);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class ErrorInfo, class E>
+    typename ErrorInfo::error_info::value_type const * get_error_info(E const &);
+    
+    template <class ErrorInfo, class E>
+    typename ErrorInfo::error_info::value_type * get_error_info(E &);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class E, class Tag, class T>
+    E const & operator<<(E const &, error_info<Tag, T> const &);
+    
+    template <class E, class ...Tags, class ...Types>
+    E const & operator<<(E const &, elib::tuple<error_info<Tags, Types>...> const &);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
     using throw_func = error_info<tags::throw_func, const char*>;
     using throw_file = error_info<tags::throw_file, const char*>;
     using throw_line = error_info<tags::throw_line, int>;
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     using errinfo_api_function = error_info<tags::api_function, const char*>;
     using errinfo_at_line = error_info<tags::at_line, int>;
     using errinfo_errno = error_info<tags::errno_info, int>;

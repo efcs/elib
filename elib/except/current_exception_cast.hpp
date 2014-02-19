@@ -5,6 +5,7 @@
 
 namespace elib { namespace except
 {
-
+    template <class E>
+    E * current_exception_cast();
 }}                                                          // namespace elib
 #endif /* ELIB_EXCEPT_CURRENT_EXCEPTION_CAST_HPP */

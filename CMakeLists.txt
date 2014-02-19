@@ -8,18 +8,26 @@ cmake_minimum_required (VERSION 2.7)
 option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Compiler Config
+# DEPRECATED It is kept around to be able to ship versions of the
+# build pre-configured for clang and libc++
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
+if(CONFIG_USE_CLANG)
+    set(CMAKE_C_COMPILER /usr/bin/clang)
+    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+endif()
 
 # Standard Library config
+# TODO: Move the std library confige to enviroment variables.
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
-# Sanitizers
+# Address, Memory and Thread sanitizers
+# can be configured for newer versions of clang and GCC
+# They must be used in a mutually exclusive maner if at all.
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
 
-# Misc
 # Adds a ton of warnings to the build. 
 # NOTE: ALL CODE SHOULD COMPILE CLEANLY WITH THIS ON!
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
@@ -51,6 +59,9 @@ option(CONFIG_HEADER_ONLY_SOURCE
 ################################################################################
 ##                         Library Parts                                      ##
 ################################################################################
+# NOTE There are top level files that are not a member of any library part
+# config, any, fmt, lexical_cast, scope_guard are some examples.
+
 
 # TODO aux is header only and turning this option off doesn't do anything
 # except turn the unit tests off
@@ -90,14 +101,6 @@ option(CONFIG_LIB_FUSE "Build Fusion Library" OFF)
 # Stub. cexpr is currently empty
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 
-
-# Toolchain Configuration
-# DEPRECATED Environment variables ore the preferred method of setting
-# the compiler. 
-if(CONFIG_USE_CLANG)
-    set(CMAKE_C_COMPILER /usr/bin/clang)
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-endif()
 
 ################################################################################
 #                         PROJECT ELIB
@@ -247,23 +250,29 @@ macro(set_dot_dir)
     set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 endmacro(set_dot_dir)
 
+# adds all c++ file in the CWD
 macro(add_library_src)
     set_dot_dir()
     aux_source_directory(${dotDir} _src)
     list(APPEND LIBRARY_SRC ${_src})
 endmacro(add_library_src)
 
+# expect /unit_tests in CWD
 macro(add_unit_test_src)
     set_dot_dir()
     aux_source_directory(${dotDir}/unit_tests _test)
     list(APPEND UNIT_TEST_SRC ${_test})
 endmacro(add_unit_test_src)
 
+# Always add source and unit tests
 macro(add_src)
     add_library_src()
     add_unit_test_src()
 endmacro(add_src)
 
+# add source files to build only when
+# the build is configured for header only source
+# always add unit tests
 macro(add_header_only_src)
     if (CONFIG_HEADER_ONLY_SOURCE)
         add_library_src()
@@ -280,6 +289,8 @@ macro(add_flags to)
     set(${to} "${${to}} ${_TMP}")
 endmacro(add_flags)
 
+# Use the library configuration option to selectivly 
+# build build a library. 
 macro(include_library_if Pred CFile)
     if (${Pred})
         include(${CFile})

@@ -7,9 +7,16 @@
 
 set(LIBRARY_FLAGS "")
 set(UNIT_TEST_FLAGS "")
+set(LIBRARY_SRC "")
+set(UNIT_TEST_SRC "")
+
+find_package( Threads REQUIRED )
 
 add_flags(LIBRARY_FLAGS -fPIC)
 
+################################################################################
+##                               Warnings
+################################################################################
 if (CONFIG_ALL_WARNINGS)
 
     add_flags( LIBRARY_FLAGS 
@@ -47,10 +54,11 @@ if (CONFIG_ALL_WARNINGS)
   endif()
   
 endif()
+################################################################################
 
-set(LIBRARY_SRC "")
-set(UNIT_TEST_SRC "")
-
+################################################################################
+##                          Library Parts                                     ##
+################################################################################
 include(elib/build.cmake)
 include_library_if(CONFIG_LIB_EXCEPT except/build.cmake)
 include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake)
@@ -65,56 +73,47 @@ include_library_if(CONFIG_LIB_TUPLE tuple/build.cmake)
 include_library_if(CONFIG_LIB_WEB web/build.cmake)
 include_library_if(CONFIG_LIB_OPTIONS options/build.cmake)
 
-# compile into objects
-
+################################################################################
+##                                  Objects
+################################################################################
+# Compile source files into "Object Libraries"
 add_library(ObjLib OBJECT ${LIBRARY_SRC})
 set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
 
 ################################################################################
-  #create static & shared libraries
-
-find_package( Threads REQUIRED )
-
+##                               Libraries
+################################################################################
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
 add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
-
-target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} 
-                        ${STDLIB_LINK})
-                        
+target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 
+# Installation information
 install(TARGETS elib LIBRARY DESTINATION lib)
 install(TARGETS elib_static ARCHIVE DESTINATION lib)
 install(DIRECTORY ${headerDir} DESTINATION include)
   
-
-
 ################################################################################
-
+##                               Unit Tests
+################################################################################
 if(CONFIG_UNIT_TESTS) 
 
-	set(Boost_USE_STATIC_LIBS OFF)
-	set(Boost_USE_MULTITHREADED OFF)
-	set(Boost_USE_STATIC_RUNTIME OFF)
-	find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED OFF)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 	
-	include_directories(${Boost_INCLUDE_DIRS})
-	add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
-	
-  add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
-  add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj> )
+include_directories(${Boost_INCLUDE_DIRS})
+set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
-
- target_link_libraries(elib_test_static elib_static ${STDLIB_LINK}
-                       ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
-                      )
-                      
-  target_link_libraries(elib_test_shared elib 
-                        ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT}
-                        ${Boost_LIBRARIES} 
-                       )
-                            
+add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)	
+add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
+add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj> )
+target_link_libraries(elib_test_static elib_static ${ELIB_TEST_LINK_FLAGS})
+target_link_libraries(elib_test_shared elib ${ELIB_TEST_LINK_FLAGS})
+         
 endif()
+################################################################################
 
 
 

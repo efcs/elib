@@ -29,8 +29,8 @@ option(CONFIG_ELIB_COVERITY_SCAN
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
 option(CONFIG_HEADER_ONLY_SOURCE
-        " Build source files for header-only libraries. "
-        " The source files are usually just include tests. " OFF)
+        " Build source files for header-only libraries. 
+         The source files are usually just include tests. " OFF)
 
 
 option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)

@@ -42,7 +42,6 @@ Aux
   * lexical_cast: For casting between strings and integral types
   * scoped_exit: uses lambdas to provide scoped exit functionality
   * size_type: A helper for using a "size_type" and its npos value
-
   (Header Only)
 
 

@@ -27,7 +27,6 @@ BOOST_AUTO_TEST_CASE(string_to_int_test)
     BOOST_CHECK(x == dest);
 }
 
-
 BOOST_AUTO_TEST_CASE(string_to_float_test)
 {
     float x, dest;
@@ -36,12 +35,12 @@ BOOST_AUTO_TEST_CASE(string_to_float_test)
     x = 1.0;
     s = "1.0";
     dest = lexical_cast<float>(s);
-    BOOST_CHECK(x == dest);
+    BOOST_CHECK(x - dest <= 0.005f || x - dest >= 0.005f);
     
-    x = 1.234;
+    x = 1.234f;
     s = "1.234";
     dest = lexical_cast<float>(s);
-    BOOST_CHECK(x == dest);
+    BOOST_CHECK(x - dest <= 0.005f || x - dest >= 0.005f);
 }
 
 BOOST_AUTO_TEST_CASE(int_to_string_test)
@@ -60,7 +59,7 @@ BOOST_AUTO_TEST_CASE(float_to_string_test)
     float x;
     std::string dest, s;
     
-    x = 1.234;
+    x = 1.234f;
     s = "1.234";
     dest = lexical_cast<std::string>(x);
     BOOST_CHECK(s == dest);
@@ -78,7 +77,6 @@ BOOST_AUTO_TEST_CASE(bool_specialization_test)
     s = "false true";
     dest = lexical_cast<bool>(s);
     BOOST_CHECK(dest == false);
-    
     
     s = "1";
     dest = lexical_cast<bool>(s);

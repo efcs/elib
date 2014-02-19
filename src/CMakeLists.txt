@@ -7,6 +7,7 @@
 
 set(LIBRARY_FLAGS "")
 set(UNIT_TEST_FLAGS "")
+set(WARNING_FLAGS "")
 set(LIBRARY_SRC "")
 set(UNIT_TEST_SRC "")
 
@@ -19,7 +20,7 @@ add_flags(LIBRARY_FLAGS -fPIC)
 ################################################################################
 if (CONFIG_ALL_WARNINGS)
 
-    add_flags( LIBRARY_FLAGS 
+    add_flags( WARNING_FLAGS
     -Wall  -pedantic  
     -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
@@ -34,54 +35,56 @@ if (CONFIG_ALL_WARNINGS)
     -Wunknown-pragmas  -Wunreachable-code -Wunused -Wunused-function  
     -Wunused-label  -Wunused-parameter -Wunused-value  -Wunused-variable  
     -Wvariadic-macros -Wvolatile-register-var  -Wwrite-strings
-  )
+   )
   
   if (CXX_COMPILER_GCC)
-        add_flags( LIBRARY_FLAGS -Wunsafe-loop-optimizations )
-        #add_flags( LIBRARY_FLAGS -Weffc++)
+        add_flags( WARNING_FLAGS -Wunsafe-loop-optimizations )
+        #add_flags( WARNING_FLAGS -Weffc++)
   elseif (CXX_COMPILER_CLANG)
-        add_flags( LIBRARY_FLAGS
+        add_flags( WARNING_FLAGS
             -Weverything -Wno-c++98-compat 
-            -Wno-c++98-compat-pedantic -Wno-newline-eof
-        )
+            -Wno-c++98-compat-pedantic -Wno-newline-eof)
+        add_flags(UNIT_TEST_FLAGS -Wno-global-constructors -Wno-exit-time-destructors)
   endif()
   
-  add_flags( LIBRARY_FLAGS 
-        -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long
-  )
+  add_flags( WARNING_FLAGS 
+        -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long)
+
   if (CONFIG_ELIB_COVERITY_SCAN)
-    add_flags( LIBRARY_FLAGS -Wno-unknown-pragmas )
+    add_flags( WARNING_FLAGS -Wno-unknown-pragmas )
   endif()
   
 endif()
-################################################################################
+
+set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
+#set(UNIT_TEST_FLAGS "${UNIT_TEST_FLAGS} ${WARNING_FLAGS}")
 
 ################################################################################
-##                          Library Parts                                     ##
+##                             Library Parts
 ################################################################################
 include(elib/build.cmake)
-include_library_if(CONFIG_LIB_EXCEPT except/build.cmake)
-include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake)
-include_library_if(CONFIG_LIB_FILESYSTEM fs/build.cmake)
-include_library_if(CONFIG_LIB_LOG log/build.cmake)
-include_library_if(CONFIG_LIB_MPL mp/build.cmake)
-include_library_if(CONFIG_LIB_AUX aux/build.cmake)
-include_library_if(CONFIG_LIB_CEXPR cexpr/build.cmake)
-include_library_if(CONFIG_LIB_FUNCTIONAL functional/build.cmake)
-include_library_if(CONFIG_LIB_FUSE fuse/build.cmake)
-include_library_if(CONFIG_LIB_TUPLE tuple/build.cmake)
-include_library_if(CONFIG_LIB_WEB web/build.cmake)
-include_library_if(CONFIG_LIB_OPTIONS options/build.cmake)
+include_library_if(CONFIG_LIB_EXCEPT      except/build.cmake      )
+include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake )
+include_library_if(CONFIG_LIB_FILESYSTEM  fs/build.cmake          )
+include_library_if(CONFIG_LIB_LOG         log/build.cmake         )
+include_library_if(CONFIG_LIB_MPL         mp/build.cmake          )
+include_library_if(CONFIG_LIB_AUX         aux/build.cmake         )
+include_library_if(CONFIG_LIB_CEXPR       cexpr/build.cmake       )
+include_library_if(CONFIG_LIB_FUNCTIONAL  functional/build.cmake  )
+include_library_if(CONFIG_LIB_FUSE        fuse/build.cmake        )
+include_library_if(CONFIG_LIB_TUPLE       tuple/build.cmake       )
+include_library_if(CONFIG_LIB_WEB         web/build.cmake         )
+include_library_if(CONFIG_LIB_OPTIONS     options/build.cmake     )
 
 ################################################################################
-##                                  Objects
+##                               Objects
 ################################################################################
 # Compile source files into "Object Libraries"
 add_library(ObjLib OBJECT ${LIBRARY_SRC})
 set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
 
 ################################################################################
-##                               Libraries
+##                             Libraries
 ################################################################################
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
 add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
@@ -94,7 +97,7 @@ install(TARGETS elib_static ARCHIVE DESTINATION lib)
 install(DIRECTORY ${headerDir} DESTINATION include)
   
 ################################################################################
-##                               Unit Tests
+##                            Unit Tests
 ################################################################################
 if(CONFIG_UNIT_TESTS) 
 
@@ -106,7 +109,8 @@ find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
-add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)	
+add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
+set_target_properties(TestObj PROPERTIES COMPILE_FLAGS "${UNIT_TEST_FLAGS}")	
 add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>)
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj> )
 target_link_libraries(elib_test_static elib_static ${ELIB_TEST_LINK_FLAGS})
@@ -114,6 +118,3 @@ target_link_libraries(elib_test_shared elib ${ELIB_TEST_LINK_FLAGS})
          
 endif()
 ################################################################################
-
-
-

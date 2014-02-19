@@ -48,15 +48,6 @@ namespace elib { namespace options
     template <class T>
     class typed_value;
     
-    template <class T>
-    typed_value<T> value();
-    
-    template <class T>
-    typed_value<T> value(T & v);
-    
-    typed_value<bool>* bool_switch();
-    typed_value<bool>* bool_switch(bool * v);
-    
     ////////////////////////////////////////////////////////////////////////////
     //                              Parsers
     ////////////////////////////////////////////////////////////////////////////
@@ -75,32 +66,12 @@ namespace elib { namespace options
         
     static constexpr collect_unrecognized_mode exclude_positional =
         collect_unrecognized_mode::exclude_positional;
-    
-    parsed_options 
-    parse_command_line(
-        int argc, const char* const argv[]
-      , options_description const &
-    );
-    
-    parsed_options
-    parse_command_line(
-        std::vector<std::string> const &
-      , options_description const &
-    );
-    
-    std::vector< std::string >
-    collect_unrecognized(
-        std::vector< option > & options
-      , collect_unrecognized_mode mode
-    );
+
     
     ////////////////////////////////////////////////////////////////////////////
     //                           Storage
     ////////////////////////////////////////////////////////////////////////////
     class variable_map;
-    
-    void store(parsed_options const &, variable_map &);
-    void notify(variable_map &);
     
 }}                                                      // namespace elib::options
 #endif /* ELIB_OPTIONS_FWD_HPP */

@@ -1,20 +1,25 @@
 cmake_minimum_required (VERSION 2.7)
 
-################################################################################
-#                   Toolchain config
-################################################################################
+if ( WIN32 )
+    message( FATAL_ERROR "Windows not supported!" )
+endif()
 
-# C++ Version Config 
-option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
+################################################################################
+#                            Toolchain config
+################################################################################
 
 # Compiler Config
 # DEPRECATED It is kept around to be able to ship versions of the
 # build pre-configured for clang and libc++
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 if(CONFIG_USE_CLANG)
-    set(CMAKE_C_COMPILER /usr/bin/clang)
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+    set(CMAKE_C_COMPILER   /usr/bin/clang   )
+    set(CMAKE_CXX_COMPILER /usr/bin/clang++ )
 endif()
+
+# C++ Version Config
+# NOTE: Default is C++11
+option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Standard Library config
 # TODO: Move the std library confige to enviroment variables.
@@ -25,8 +30,8 @@ option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 # can be configured for newer versions of clang and GCC
 # They must be used in a mutually exclusive maner if at all.
 option(CONFIG_ASAN "address sanitizer" OFF)
-option(CONFIG_TSAN "thread sanitizer" OFF)
-option(CONFIG_MSAN "memory sanitizer" OFF)
+option(CONFIG_TSAN "thread sanitizer"  OFF)
+option(CONFIG_MSAN "memory sanitizer"  OFF)
 
 # Adds a ton of warnings to the build. 
 # NOTE: ALL CODE SHOULD COMPILE CLEANLY WITH THIS ON!
@@ -61,7 +66,6 @@ option(CONFIG_HEADER_ONLY_SOURCE
 ################################################################################
 # NOTE There are top level files that are not a member of any library part
 # config, any, fmt, lexical_cast, scope_guard are some examples.
-
 
 # TODO aux is header only and turning this option off doesn't do anything
 # except turn the unit tests off
@@ -101,11 +105,9 @@ option(CONFIG_LIB_FUSE "Build Fusion Library" OFF)
 # Stub. cexpr is currently empty
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 
-
 ################################################################################
-#                         PROJECT ELIB
+#                            PROJECT ELIB
 ################################################################################
-
 # need C to get the pthreads library 
 project(EricsLibrary CXX C)
 
@@ -114,20 +116,24 @@ project(EricsLibrary CXX C)
 ################################################################################
 
 set( CMAKE_BUILD_TYPE DEBUG )
+set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
+set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
+set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
+set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 
-if (CONFIG_ELIB_ASSERT_CONFIG)
-    add_definitions( -DELIB_ASSERT_CONFIG=1 )
+if (NOT CONFIG_CXX1Y)
+    set(CXX_VERSION_FLAGS " -std=c++11 ")
+else()
+    message( STATUS "Using c++1y standard")
+    set(CXX_VERSION_FLAGS " -std=c++1y ")
 endif()
 
-if (CONFIG_ELIB_COVERITY_SCAN)
-    add_definitions( -DELIB_CONFIG_COVERITY_SCAN=1 )
-    add_definitions( -include config/gcc_4_8_2_coverity_scan_missing_builtins.hpp)
-endif()
+set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
 
-if ( WIN32 )
-    message( FATAL_ERROR "Windows not supported!" )
-endif()
-
+################################################################################
+##                         Compiler Detection
+################################################################################
 if ( ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" )
     message(STATUS "Configuring for GCC")
     set( CXX_COMPILER_GCC TRUE )
@@ -139,17 +145,67 @@ elseif( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" )
 else()
     message( FATAL_ERROR "Compiler not supported! (${CMAKE_CXX_COMPILER_ID})" )
 endif()
-# Flag Config
-if (NOT CONFIG_CXX1Y)
-    set(CXX_VERSION_FLAGS " -std=c++11 ")
-else()
-    message( STATUS "Using c++1y standard")
-    set(CXX_VERSION_FLAGS " -std=c++1y ")
+
+################################################################################
+##                        Compiler Configuration
+################################################################################
+if ( CXX_COMPILER_GCC )
+   
+    # check min version
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
+        message(FATAL_ERROR "Insufficient GCC Version")
+    elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
+    endif()
+
+    # Check C++1y config
+    if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9.0")
+        message(FATAL_ERROR "Insufficient GCC Version for C++1y")
+    endif()
+
+    set(CXX_GCC_FLAGS " -fmax-errors=3 " )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
+
+elseif( CXX_COMPILER_CLANG ) ###################################################
+
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.3")
+        message(FATAL_ERROR "Insufficient Clang Version")
+    endif()
+
+    if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.4")
+        message(FATAL_ERROR "Insufficient Clang Version for C++1y")
+    endif()
+
+    set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
+
+endif()
+################################################################################
+##                    Standard Library Configuration
+################################################################################
+if (CONFIG_USE_LIBCXX)
+    if (NOT CXX_COMPILER_CLANG)
+        message( FATAL_ERROR "Cannot use libc++ without clang" )
+    endif()
+    message( STATUS "Using libc++ with clang" )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
 endif()
 
-set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
+# Currently only GCC's libstdc++ works with -std=c++1y
+# TODO This is personal configuration. I need to get it out of here
+if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
+    message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
+    add_definitions( -nostdinc++ )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} 
+                        -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ 
+                        -I/opt/gcc4.9/include/c++/4.9.0/")
 
+    set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
+endif()
+
+################################################################################
+##                        Sanitizer Configuration
+################################################################################
 if ( CONFIG_ASAN OR CONFIG_TSAN OR CONFIG_MSAN )
     if (NOT CMAKE_BUILD_TYPE MATCHES "DEBUG")
         message( WARNING "Build configuration forced to DEBUG when using sanitizers")
@@ -157,55 +213,11 @@ if ( CONFIG_ASAN OR CONFIG_TSAN OR CONFIG_MSAN )
     set(CMAKE_BUILD_TYPE DEBUG CACHE STRING "Build configuration" FORCE)
 endif()
 
-
-if ( CXX_COMPILER_GCC )
-    # check min version
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
-        message(FATAL_ERROR "Insufficient GCC Version")
-    elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
-    endif()
-    # Check C++1y config
-    if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9.0")
-        message(FATAL_ERROR "Insufficient GCC Version for C++1y")
-    endif()
-    set(CXX_GCC_FLAGS " -fmax-errors=3 " )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
-elseif( CXX_COMPILER_CLANG )
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.3")
-        message(FATAL_ERROR "Insufficient Clang Version")
-    endif()
-    if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.4")
-        message(FATAL_ERROR "Insufficient Clang Version for C++1y")
-    endif()
-    set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
-endif()
-
-
-if (CONFIG_USE_LIBCXX)
-    if (NOT CXX_COMPILER_CLANG)
-        message( FATAL_ERROR "Cannot use libc++ with GNU" )
-    endif()
-    message( STATUS "Using libc++ with Clang" )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
-endif()
-
-# Currently only GCC's libstdc++ works with -std=c++1y
-if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
-    message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
-    add_definitions( -nostdinc++ )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ -I/opt/gcc4.9/include/c++/4.9.0/")
-    set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
-endif()
-
-
 if (CONFIG_ASAN)
   message( STATUS "Compiling with address sanitizer")
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS} -fsanitize=address ")
 endif()
-
 
 if (CONFIG_TSAN)
   message( STATUS "Compiling with thread sanitizer")
@@ -213,17 +225,21 @@ if (CONFIG_TSAN)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=thread ")
 endif() 
 
-
 if (CONFIG_MSAN)
   message( STATUS "Compiling with memory sanitizer")
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=memory ")
 endif() 
+#################################################################################
 
-set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
-set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
+if (CONFIG_ELIB_ASSERT_CONFIG)
+    add_definitions( -DELIB_ASSERT_CONFIG )
+endif()
+
+if (CONFIG_ELIB_COVERITY_SCAN)
+    add_definitions( -DELIB_CONFIG_COVERITY_SCAN )
+    add_definitions( -include config/gcc_4_8_2_coverity_scan_missing_builtins.hpp)
+endif()
 
 ################################################################################
 #                          Build & Installation Config
@@ -297,12 +313,7 @@ macro(include_library_if Pred CFile)
         add_definitions( -DELIB_${Pred} )
     endif()
 endmacro(include_library_if)
-
-################################################################################
-#
 ################################################################################
 
 add_subdirectory(src)
 #add_subdirectory(test_main)
-
-

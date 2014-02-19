@@ -123,9 +123,9 @@ namespace elib { namespace options
             return this;
         }
         
-        typed_value* value_name(std::string const & name)
+        typed_value* value_name(std::string const & xname)
         {
-            m_value_name = name;
+            m_value_name = xname;
             return this;
         }
         
@@ -168,7 +168,10 @@ namespace elib { namespace options
             return m_value_name;
         }
         
-        bool is_composing() const noexcept { return m_composing; }
+        bool is_composing() const noexcept 
+        { 
+            return m_composing; 
+        }
         
         unsigned min_tokens() const
         {

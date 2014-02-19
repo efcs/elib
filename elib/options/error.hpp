@@ -5,8 +5,6 @@
 
 namespace elib { namespace options
 {
-    ////////////////////////////////////////////////////////////////////////////
-    //
     class error;
     class duplicate_option_error;
     class option_name_error;

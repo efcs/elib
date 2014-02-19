@@ -20,37 +20,80 @@ option(CONFIG_TSAN "thread sanitizer" OFF)
 option(CONFIG_MSAN "memory sanitizer" OFF)
 
 # Misc
+# Adds a ton of warnings to the build. 
+# NOTE: ALL CODE SHOULD COMPILE CLEANLY WITH THIS ON!
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
+
+# Unsupported configurations should work for most
+# libraries. Certain libraries require some configuration macros
+# not defined by default.
 option(CONFIG_ELIB_ASSERT_CONFIG 
       "Ensure that a elib/config finds a valid configuration" OFF)
+
+# elib is a open source project that uses coverity scan for defect detection.
+# Certain parts of elib are unsupported on otherwise buggy for EDG.
+# This configures the enviroment to only shouw EDG what it can handle.
 option(CONFIG_ELIB_COVERITY_SCAN
       "Setup build for when doing a build with coverity scan" OFF)
 
-# Options to select what parts to build
+# Unit tests require the boost test library.
+# And a version that also uses the configured standard library
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
+
+# Source files in header only source directories are uneeded.
+# When this option is on those files are removed from the build.
+# The disadvantage of this is it does not perform any include tests
+# on the build but the build is MUCH faster.
 option(CONFIG_HEADER_ONLY_SOURCE
         " Build source files for header-only libraries. 
          The source files are usually just include tests. " OFF)
 
+################################################################################
+##                         Library Parts                                      ##
+################################################################################
 
-option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
-option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
-option(CONFIG_LIB_MPL "Build MPL" ON)
-option(CONFIG_LIB_LOG "Build Log" ON)
+# TODO aux is header only and turning this option off doesn't do anything
+# except turn the unit tests off
 option(CONFIG_LIB_AUX "Build Aux" ON)
+
+# header only. I don't think any other library has mp as dependency.
+option(CONFIG_LIB_MPL "Build MPL" ON)
+
+# header only. log uses enumeration when available
+# disabling this library disables the log::log_level enum <-> string casting
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
+
+# header only. function objects for operators and more
 option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
+
+# header only. pair and tuple
 option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
+
+# requires linkage. 
+option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
+
+# requires linkage. Log is fairly stable
+option(CONFIG_LIB_LOG "Build Log" ON)
+
+# Work in progress. Set to ON because it shouldn't break the build
 option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
+
+# Work in progress. Set to ON because it shouldn't break the build
+option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
+
 # off until GCC supports regex
 option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
-# incomplete
+
+# Stub. Fuse is currently empty
 option(CONFIG_LIB_FUSE "Build Fusion Library" OFF)
-# incomplete && GCC support lacking
+
+# Stub. cexpr is currently empty
 option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 
 
 # Toolchain Configuration
+# DEPRECATED Environment variables ore the preferred method of setting
+# the compiler. 
 if(CONFIG_USE_CLANG)
     set(CMAKE_C_COMPILER /usr/bin/clang)
     set(CMAKE_CXX_COMPILER /usr/bin/clang++)
@@ -145,7 +188,7 @@ if (CONFIG_USE_LIBCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
 endif()
 
-
+# Currently only GCC's libstdc++ works with -std=c++1y
 if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
     message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
     add_definitions( -nostdinc++ )

@@ -67,3 +67,9 @@ boost_test:
 	@ echo
 	@ echo === Running tests ===
 	@ ./bin/elib_boost_test_main --log_level=message --report_level=short
+
+.PHONY: scan
+scan:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake -DCONFIG_ELIB_COVERITY_SCAN=ON .. ; cd ..
+	@ cov-build --dir cov-int $(MAKE) -C build all

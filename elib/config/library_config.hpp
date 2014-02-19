@@ -2,7 +2,7 @@
 #define ELIB_CONFIG_LIBRARY_CONFIG_HPP
 # 
 # /* include a file to get library version macros */
-# include <utility>
+# include <cstddef>
 # 
 # if defined(__GLIBCXX__)
 #   include <elib/config/library/libstdcxx.hpp>

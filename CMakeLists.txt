@@ -11,7 +11,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
 
 # Standard Library config
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
 # Sanitizers
@@ -29,13 +29,15 @@ option(CONFIG_ELIB_COVERITY_SCAN
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
 
+option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
 option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
 option(CONFIG_LIB_MPL "Build MPL" ON)
 option(CONFIG_LIB_LOG "Build Log" ON)
-option(CONFIG_LIB_AUX "Build aux" ON)
+option(CONFIG_LIB_AUX "Build Aux" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
 option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
+option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
 # off until GCC supports regex
 option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
 # incomplete

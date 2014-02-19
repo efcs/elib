@@ -14,8 +14,10 @@ namespace elib
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
   /* bad_cast error for lexical casts */
-  class bad_lexical_cast : public std::runtime_error {
+  class bad_lexical_cast : public std::runtime_error 
+  {
   public:
+/* EDG doesn't like binding rvalues to const lvalues */
 # if defined(ELIB_CONFIG_COVERITY_SCAN)
       bad_lexical_cast(std::string && s)
         : std::runtime_error(s)
@@ -106,7 +108,6 @@ namespace elib
         ss >> b;
         if (ss) return b;
             
-        
         throw bad_lexical_cast(
                 std::string{"Bad lexical cast from string to bool: \""}
                     + f + '"'

@@ -51,6 +51,8 @@ endif()
 set(LIBRARY_SRC "")
 set(UNIT_TEST_SRC "")
 
+include(elib/build.cmake)
+include_library_if(CONFIG_LIB_EXCEPT except/build.cmake)
 include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake)
 include_library_if(CONFIG_LIB_FILESYSTEM fs/build.cmake)
 include_library_if(CONFIG_LIB_LOG log/build.cmake)
@@ -61,6 +63,7 @@ include_library_if(CONFIG_LIB_FUNCTIONAL functional/build.cmake)
 include_library_if(CONFIG_LIB_FUSE fuse/build.cmake)
 include_library_if(CONFIG_LIB_TUPLE tuple/build.cmake)
 include_library_if(CONFIG_LIB_WEB web/build.cmake)
+include_library_if(CONFIG_LIB_OPTIONS options/build.cmake)
 
 # compile into objects
 

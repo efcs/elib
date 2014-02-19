@@ -2,6 +2,7 @@
 #define ELIB_OPTIONS_OPTION_HPP
 
 # include <elib/options/fwd.hpp>
+# include <elib/options/value.hpp>
 # include <elib/aux.hpp>
 
 # include <string>
@@ -23,11 +24,11 @@ namespace elib { namespace options
           , std::vector< std::string > const & val
         ); 
         
-        std::string string_key{};
+        std::string string_key;
         int position_key{-1};
         
-        std::vector< std::string > value{};
-        std::vector< std::string > original_tokens{};
+        std::vector< std::string > value;
+        std::vector< std::string > original_tokens;
         
         bool unregistered{true};
     };
@@ -70,36 +71,7 @@ namespace elib { namespace options
         std::shared_ptr<const value_semantic> m_semantics;
     };  
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    class option_description_init
-    {
-    private:
-        friend class options_description;
-        
-        option_description_init(options_description & owner);
-        
-    public:
-        option_description_init &
-        operator()(std::string name, std::string desc)
-        {
-            m_owner.add(option_description(
-                name, untyped_value{}, desc
-            );
-            return *this;
-        }
-        
-        option_description_init &
-        operator()(std::string name, value_semantic && s)
-        
-        option_description_init &
-        operator()(std::string name, value_semantic && s, std::string desc);
-
-    private:        
-        options_description & m_owner;
-    };
-    
-    ////////////////////////////////////////////////////////////////////////////
+     ////////////////////////////////////////////////////////////////////////////
     //
     class options_description
     {
@@ -125,6 +97,37 @@ namespace elib { namespace options
         std::map<std::string, int> m_map_to_index;
         std::vector< std::shared_ptr<option_description> > m_options;
     };
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    class option_description_init
+    {
+    private:
+        friend class options_description;
+        
+        option_description_init(options_description & owner);
+        
+    public:
+        option_description_init &
+        operator()(std::string name, std::string desc)
+        {
+            m_owner.add(std::make_shared<option_description>(
+                name, untyped_value{}, desc
+            ));
+            return *this;
+        }
+        
+        option_description_init &
+        operator()(std::string name, value_semantic && s);
+        
+        option_description_init &
+        operator()(std::string name, value_semantic && s, std::string desc);
+
+    private:        
+        options_description & m_owner;
+    };
+    
+   
     
     ////////////////////////////////////////////////////////////////////////////
     //

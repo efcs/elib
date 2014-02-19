@@ -28,6 +28,10 @@ option(CONFIG_ELIB_COVERITY_SCAN
 
 # Options to select what parts to build
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
+option(CONFIG_HEADER_ONLY_SOURCE
+        " Build source files for header-only libraries. "
+        " The source files are usually just include tests. " OFF)
+
 
 option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
 option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
@@ -216,6 +220,13 @@ macro(add_src)
     add_library_src()
     add_unit_test_src()
 endmacro(add_src)
+
+macro(add_header_only_src)
+    if (CONFIG_HEADER_ONLY_SOURCE)
+        add_library_src()
+    endif()
+    add_unit_test_src()
+endmacro(add_header_only_src)
 
 macro(stringify_list m_list dest)
     string(REPLACE ";" " " ${dest} "${m_list}")

@@ -15,7 +15,8 @@
 # endif
 # 
 # if defined(unix) || defined(__unix) || defined(__unix__) \
-    || defined(_XOPEN_SOURCE) || defined(_POSIX_SOURCE)
+    || defined(_XOPEN_SOURCE) || defined(_POSIX_SOURCE) \
+    || defined(ELIB_CONFIG_APPLE)
 #   include <elib/config/posix_config.hpp>
 # endif
 # 

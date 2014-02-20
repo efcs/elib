@@ -256,6 +256,7 @@ BOOST_AUTO_TEST_CASE(fs_type_query_test)
   }
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 //                            ITERATORS
 ////////////////////////////////////////////////////////////////////////////////
@@ -265,8 +266,6 @@ BOOST_AUTO_TEST_CASE(test_top_iterator)
   //TODO
   BOOST_CHECK(true);
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //                           MODIFIERS                                              
@@ -311,7 +310,6 @@ BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
     BOOST_CHECK(!ec);
     BOOST_CHECK(fs::exists(p) == false);
         
-    
 }
 
 BOOST_AUTO_TEST_CASE(fs_standalone_clean)

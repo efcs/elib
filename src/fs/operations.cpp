@@ -1,3 +1,4 @@
+#include "elib/config.hpp"
 #include "elib/fs/operations.hpp"
 #include "elib/fs/directory_iterator.hpp"
 #include "elib/fs/filesystem_error.hpp"
@@ -371,7 +372,7 @@ namespace elib
         return false;
       }
       
-      
+#if 0
       inline bool posix_fchmodat(int fd, const string_type& s, mode_t mode,
               std::error_code *ec)
       {
@@ -380,6 +381,21 @@ namespace elib
         if (::fchmodat(fd, s.c_str(), mode, 0) == -1)
         {
           detail::handle_and_throw_errno("elib::fs::posix_fchmodat", path{s}, ec);
+          return false;
+        }
+        return true;
+      }
+#endif
+      
+      
+      inline bool posix_chmod(const string_type& s, mode_t mode,
+              std::error_code *ec)
+      {
+        detail::clear_error(ec);
+        errno = 0;
+        if (::chmod(s.c_str(), mode) == -1)
+        {
+          detail::handle_and_throw_errno("elib::fs::posix_chmod", path{s}, ec);
           return false;
         }
         return true;
@@ -882,7 +898,7 @@ namespace elib
       
       void permissions(const path& p,  perms prms,  std::error_code *ec)
       {
-        detail::posix_fchmodat(AT_FDCWD, p.string(),
+        detail::posix_chmod(p.string(),
                 detail::posix_convert_perms(prms), ec);
       }
       

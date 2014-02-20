@@ -100,17 +100,21 @@
 # //////////////////////////////////////////////////////////////////////////////
 # 
 # if defined(ELIB_CONFIG_CLANG)
-#   if __clang_major__ <= 3 && __clang_minor__ <= 4
+#   if __clang_major__ <= 5 && __clang_minor__ <= 0
 #     /* Clang compares all enumerations as if they were unsigned */
 #     define ELIB_WORKAROUND_GUARD_CLANG_ENUMERATION_COMPARE_BUG 1
+#   else
+#     define ELIB_WORKAROUND_GUARD_CLANG_ENUMERATION_COMPARE_BUG 0
 #   endif
 #   
-#   if __clang_major__ <= 3 && __clang_minor__ <= 4
+#   if __clang_major__ <= 5 && __clang_minor__ <= 0
 #     /* absolutely bizzare bug from clang where using 
 #      * __is_final in some contexts will cause clang to spit out:
 #      *     error: cannot yet mangle expression type UnaryTypeTraitExpr
 #      */
 #     define ELIB_WORKAROUND_GUARD_CLANG_IS_FINAL_BUG 1
+#   else
+#     define ELIB_WORKAROUND_GUARD_CLANG_IS_FINAL_BUG 0
 #   endif
 # endif                                                      // clang bugs
 # 

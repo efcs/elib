@@ -14,16 +14,8 @@ namespace elib { namespace options
 {
     ////////////////////////////////////////////////////////////////////////////
     //
-    class option
+    struct option
     {
-    public:
-        option() {}
-        
-        option(
-            std::string const & skey
-          , std::vector< std::string > const & val
-        ); 
-        
         std::string string_key;
         int position_key{-1};
         
@@ -38,9 +30,16 @@ namespace elib { namespace options
     class option_description
     {
     public:
-        option_description();
-        option_description(std::string name, value_semantic && s);
-        option_description(std::string name, value_semantic && s, std::string desc);
+        option_description() {}
+        
+        option_description(
+            std::string const & name, value_semantic && s
+        );
+        
+        option_description(
+            std::string const & name, value_semantic && s
+          , std::string desc
+        );
         
         virtual ~option_description();
         
@@ -127,7 +126,6 @@ namespace elib { namespace options
         options_description & m_owner;
     };
     
-   
     
     ////////////////////////////////////////////////////////////////////////////
     //

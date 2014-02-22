@@ -30,7 +30,7 @@ namespace elib { namespace options
         none, full, aprox
     };
     
-    class option;
+    struct option;
     
     class option_description;
     class option_description_init;

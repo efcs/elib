@@ -17,7 +17,6 @@ namespace elib
         scoped_exit() = delete;
         scoped_exit(const scoped_exit&) = delete;
         scoped_exit(scoped_exit&&) = delete;
-        
         scoped_exit& operator=(const scoped_exit&) = delete;
         scoped_exit& operator=(scoped_exit&&) = delete;
 

@@ -4,6 +4,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/system/error_code.hpp>
 
+#include "elib/config.hpp"
 #include "elib/filesystem.hpp"
 
 #include <string>
@@ -56,7 +57,11 @@ inline bool operator==(const bfs::directory_entry& b_de,
 
 const std::vector<std::string> example_path_list = 
   {
+# if !defined(ELIB_CONFIG_APPLE)
 #   include "test_files/long_paths_list"
+# else 
+#   include "test_files/short_paths_list"
+# endif
   };
 
 

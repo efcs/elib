@@ -2,11 +2,10 @@
 #define ELIB_EXCEPT_FWD_HPP
 
 # include <string>
+# include <system_error>
 # include <memory>
 # include <typeinfo>
 # include <cstdio>
-
-# include <elib/tuple.hpp>
 
 namespace elib { namespace except
 {
@@ -32,6 +31,12 @@ namespace elib { namespace except
     [[noreturn]] void 
     throw_exception_from(
         E & e
+      , const char* file, const char* func, unsigned line
+    );
+    
+    template <class E>
+    E & set_exception_throw_site(
+        E &
       , const char* file, const char* func, unsigned line
     );
     
@@ -104,7 +109,7 @@ namespace elib { namespace except
         struct file_name {};
         struct file_open_mode {};
         struct type_info_name {};
-        struct original_exception_type {};
+        struct error_code {};
         
         struct throw_func {};
         struct throw_file {};
@@ -126,6 +131,38 @@ namespace elib { namespace except
     using errinfo_file_name = error_info<tags::file_name, std::string>;
     using errinfo_file_open_mode = error_info<tags::file_open_mode, std::string>;
     using errinfo_type_info_name = error_info<tags::type_info_name, std::string>;
+    using errinfo_error_code = error_info<tags::error_code, std::error_code>;
     
 }}                                                          // namespace elib
+
+namespace elib
+{
+    using except::exception;
+    using except::error_info;
+    
+    using except::throw_exception;
+    using except::throw_exception_from;
+    using except::set_exception_throw_site;
+    
+    using except::current_exception_cast;
+    using except::has_error_info;
+    using except::insert_error_info;
+    using except::emplace_error_info;
+    using except::set_error_info;
+    using except::get_error_info;
+    using except::operator<<;
+    
+    using except::throw_func;
+    using except::throw_file;
+    using except::throw_line;
+    
+    using except::errinfo_api_function;
+    using except::errinfo_at_line;
+    using except::errinfo_errno;
+    using except::errinfo_file_handle;
+    using except::errinfo_file_name;
+    using except::errinfo_file_open_mode;
+    using except::errinfo_type_info_name;
+    using except::errinfo_error_code;
+}
 #endif /* ELIB_EXCEPT_FWD_HPP */

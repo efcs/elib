@@ -21,7 +21,7 @@ namespace elib
     private:
         /* only a single instance of static_log is allowed */
         static_log();
-        static log m_impl;
+        static static_log & get_instance();
     public:
         
         static const std::string & 
@@ -102,12 +102,13 @@ namespace elib
 # if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wexit-time-destructors"
-#   pragma clang diagnostic ignored "-Wglobal-constructors"
 # endif
-
-    template <typename Tag>
-    log static_log<Tag>::m_impl;
-    
+    template <class Tag>
+    static_log<Tag> & static_log<Tag>::get_instance()
+    {
+        static static_log<Tag> m_instance;
+        return m_instance;
+    }
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
@@ -118,35 +119,35 @@ namespace elib
         va_start(__args, msg); \
         std::string __str = fmt(msg, __args); \
         va_end(__args); \
-        m_impl._log(level, __str)
+        get_instance()._log(level, __str)
     
 
     template <typename Tag>
     inline const std::string &
     static_log<Tag>::prompt(level_e level)
     {
-        return m_impl.prompt(level);
+        return get_instance().prompt(level);
     }
 
     template <typename Tag>
     inline void 
     static_log<Tag>::prompt(level_e level, const std::string &prompt)
     {
-        m_impl.prompt(level, prompt);
+        get_instance().prompt(level, prompt);
     }
 
     template <typename Tag>
     inline void 
     static_log<Tag>::level(level_e level)
     {
-        m_impl.level(level);
+        get_instance().level(level);
     }
 
     template <typename Tag>
     inline level_e 
     static_log<Tag>::level()
     {
-        return m_impl.level();
+        return get_instance().level();
     }
 
     template <typename Tag>
@@ -160,7 +161,7 @@ namespace elib
     inline void 
     static_log<Tag>::print(level_e level, const std::string &msg)
     {
-        m_impl._log(level, msg.c_str());
+        get_instance()._log(level, msg.c_str());
     }
 
     template <typename Tag>
@@ -174,7 +175,7 @@ namespace elib
     inline void 
     static_log<Tag>::debug(const std::string & s)
     {
-        m_impl._log(level_e::debug, s.c_str());
+        get_instance()._log(level_e::debug, s.c_str());
     }
 
     template <typename Tag>
@@ -188,7 +189,7 @@ namespace elib
     inline void 
     static_log<Tag>::info(const std::string & s)
     {
-        m_impl._log(level_e::info, s.c_str());
+        get_instance()._log(level_e::info, s.c_str());
     }
 
     template <typename Tag>
@@ -202,7 +203,7 @@ namespace elib
     inline void 
     static_log<Tag>::step(const std::string & s)
     {
-        m_impl._log(level_e::step, s.c_str());
+        get_instance()._log(level_e::step, s.c_str());
     }
 
     template <typename Tag>
@@ -216,7 +217,7 @@ namespace elib
     inline void 
     static_log<Tag>::warn(const std::string & s)
     {
-        m_impl._log(level_e::warn, s.c_str());
+        get_instance()._log(level_e::warn, s.c_str());
     }
 
     template <typename Tag>
@@ -230,7 +231,7 @@ namespace elib
     inline void 
     static_log<Tag>::err(const std::string & s)
     {
-        m_impl._log(level_e::err, s.c_str());
+        get_instance()._log(level_e::err, s.c_str());
     }
 
     template <typename Tag>
@@ -244,7 +245,7 @@ namespace elib
     inline void 
     static_log<Tag>::fatal(const std::string & s)
     {
-        m_impl._log(level_e::fatal, s.c_str());
+        get_instance()._log(level_e::fatal, s.c_str());
     }
 
     template <typename Tag>
@@ -258,7 +259,7 @@ namespace elib
     inline void 
     static_log<Tag>::raw_out(const std::string &msg)
     {
-        m_impl._log(level_e::raw_out, msg.c_str());
+        get_instance()._log(level_e::raw_out, msg.c_str());
     }
 
     template <typename Tag>
@@ -272,21 +273,21 @@ namespace elib
     inline void
     static_log<Tag>::raw_err(const std::string & msg)
     {
-        m_impl._log(level_e::raw_err, msg.c_str());
+        get_instance()._log(level_e::raw_err, msg.c_str());
     }
 
     template <typename Tag>
     inline void
     static_log<Tag>::on(bool p) 
     {
-        m_impl.on(p);
+        get_instance().on(p);
     }
 
     template <typename Tag>
     inline bool
     static_log<Tag>::on()
     {
-        return m_impl.on();
+        return get_instance().on();
     }
        
 # undef ELIB_LOG_FUNC_HANDLER

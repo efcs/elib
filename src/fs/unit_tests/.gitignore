@@ -1,3 +1,4 @@
 test_env/
 test_files/*
 !test_files/long_paths_list
+!test_files/short_paths_list

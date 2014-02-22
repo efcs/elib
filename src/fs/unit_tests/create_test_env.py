@@ -3,6 +3,7 @@ import os
 import subprocess
 import shutil
 
+
 dot_path, file_name = os.path.split(os.path.realpath(__file__))
 file_path = os.path.join(dot_path, file_name)
 
@@ -51,6 +52,7 @@ block_files = ["/dev/sda"]
 regular_files = ["rfile1", "rfile2", "dir1/rfile1", "dir2/dir1/rfile1"]
 fifo_files = ["fifo1", "dir1/fifo1", "dir2/fifo1", "dir2/dir1/fifo1"]
 
+
 symlink_from = ["dir1", character_files[0], block_files[0], "dir1/rfile1"]
 symlink_to = ["sym_dir1", "sym_cfile1", "sym_bfile1", "dir1/sym_rfile1"]
 
@@ -95,9 +97,10 @@ def init_query_files():
       f.write(fn + "\n")
   write_list_abs(regular_files, "test_files/regular_files")
   
+  
   for fn in fifo_files:
     abs_path = os.path.join(env_path, fn)
-    call_shell("mknod " + abs_path + " p")
+    call_shell("mkfifo " + abs_path)
   write_list_abs(fifo_files, "test_files/fifo_files")
   
   for i in range(0, len(symlink_from)):

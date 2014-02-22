@@ -110,6 +110,7 @@ option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 ################################################################################
 # need C to get the pthreads library 
 project(EricsLibrary CXX C)
+set(CONFIG_ELIB_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 
 ################################################################################
 #                       Toolchain config (Post-project)

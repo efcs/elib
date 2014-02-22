@@ -68,6 +68,7 @@ const std::vector<std::string> example_path_list =
 
 BOOST_AUTO_TEST_SUITE(fs_operations_test_suite)
 
+
 BOOST_AUTO_TEST_CASE(fs_current_path_test)
 {
   bfs::error_code bec{};

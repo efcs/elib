@@ -2,37 +2,45 @@
 #define ELIB_EXCEPT_ERROR_INFO_HPP
 
 # include <elib/except/fwd.hpp>
-# include <elib/tuple.hpp>
+# include <elib/aux.hpp>
+
+# define ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(Type)                      \
+    static_assert(                                                     \
+      ::elib::except::is_error_info<::elib::aux::uncvref<Type>>::value \
+      , #Type " is not an instance of error_info"                      \
+    )
 
 namespace elib { namespace except
 {
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class Tag, class T> 
-    class error_info;
+    class error_info
+    {
+    public:
+        using tag_type = Tag;
+        using value_type = T;
+        
+        error_info(T const & t)
+          : m_value(t)
+        {}
+        
+        error_info(T && t)
+          : m_value(elib::move(t))
+        {}
+        
+        T const & value() const noexcept { return m_value; }
+        T & value() noexcept { return m_value; }
+
+    private:
+        T m_value;
+    };
     
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <class E, class Tag, class T>
-    void set_error_info(E const &, error_info<Tag, T> const &);
+    template <class T>
+    struct is_error_info : aux::false_ {};
     
-    template <class E, class ...Tags, class ...Types>
-    void set_error_info(E const &, elib::tuple<error_info<Tags, Types>...> const &);
+    template <class Tag, class T>
+    struct is_error_info< error_info<Tag, T> > : aux::true_ {};
     
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <class ErrorInfo, class E>
-    typename ErrorInfo::error_info::value_type const * get_error_info(E const &);
-    
-    template <class ErrorInfo, class E>
-    typename ErrorInfo::error_info::value_type * get_error_info(E &);
-    
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <class E, class Tag, class T>
-    E const & operator<<(E const &, error_info<Tag, T> const &);
-    
-    template <class E, class ...Tags, class ...Types>
-    E const & operator<<(E const &, elib::tuple<error_info<Tags, Types>...> const &);
 }}                                                          // namespace elib
 #endif /* ELIB_EXCEPT_ERROR_INFO_HPP */

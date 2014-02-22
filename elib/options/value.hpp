@@ -1,6 +1,7 @@
 #ifndef ELIB_OPTIONS_VALUE_HPP
 #define ELIB_OPTIONS_VALUE_HPP
 
+# include <elib/options/config.hpp>
 # include <elib/options/fwd.hpp>
 # include <elib/aux.hpp>
 # include <elib/any.hpp>
@@ -8,6 +9,7 @@
 # include <functional>
 # include <string>
 # include <vector>
+# include <memory>
 # include <typeinfo>
 
 namespace elib { namespace options
@@ -54,22 +56,27 @@ namespace elib { namespace options
           : m_zero_tokens(zero_tokens)
         {}
         
-        std::string name() const;
+        untyped_value(untyped_value const &) = delete;
+        untyped_value(untyped_value &&) = delete;
+        untyped_value & operator=(untyped_value const &) = delete;
+        untyped_value & operator=(untyped_value &&) = delete;
         
-        unsigned min_tokens() const;
-        unsigned max_tokens() const;
+        std::string name() const { return "untyped option"; }
         
-        bool is_composing() const;
-        bool is_required() const;
+        unsigned min_tokens() const { return !m_zero_tokens; }
+        unsigned max_tokens() const { return !m_zero_tokens;}
+        
+        bool is_composing() const { return false; }
+        bool is_required() const { return false; }
         
         void parse(
             elib::any & store
           , std::vector<std::string> const & new_tokens
         ) const;
         
-        bool apply_default(elib::any & store) const;
+        bool apply_default(elib::any &) const { return false; }
         
-        void notify(elib::any const &) const;
+        void notify(elib::any const &) const {}
 
     private:
         bool m_zero_tokens;
@@ -95,70 +102,77 @@ namespace elib { namespace options
         typed_value();
         typed_value(T & store_to);
         
+        typed_value(typed_value const &) = delete;
+        typed_value(typed_value &&) = delete;
+        typed_value & operator=(typed_value const &) = delete;
+        typed_value & operator=(typed_value &&) = delete;
+        
         typed_value & default_value(T const & v)
         {
             m_default_value = v;
             m_default_value_str = "";
-            return this;
+            return *this;
         }
         
         typed_value & default_value(T const & v, std::string const & textual)
         {
             m_default_value = v;
             m_default_value_str = textual;
-            return this;
+            return *this;
         }
         
         typed_value & implicit_value(T const & v)
         {
             m_implicit_value = v;
             m_implicit_value_str = "";
-            return this;
+            return *this;
         }
         
         typed_value & implicit_value(T const & v, std::string const & textual)
         {
             m_implicit_value = v;
             m_implicit_value_str = textual;
-            return this;
+            return *this;
         }
         
         typed_value & value_name(std::string const & xname)
         {
             m_value_name = xname;
-            return this;
+            return *this;
         }
         
         typed_value & notifier(std::function<void(T const &)> f)
         {
             m_notifier = f;
-            return this;
+            return *this;
         }
         
         typed_value & composing() 
         {
             m_composing = true;
-            return this;
+            return *this;
         }
         
         //TODO validate input
         typed_value & multitoken()
         {
             m_multitoken = true;
-            return this;
+            return *this;
         }
         
         typed_value & zero_tokens()
         {
             m_zero_tokens = true;
-            return this;
+            return *this;
         }
         
         typed_value & required()
         {
             m_required = true;
-            return this;
+            return *this;
         }
+        
+       
 
     public:
         
@@ -182,7 +196,7 @@ namespace elib { namespace options
         unsigned max_tokens() const
         {
             if (m_zero_tokens) return 0;
-            if (m_multitoken) return 10;
+            if (m_multitoken) return value_semantics_max_tokens;
             return 1;
         }
         
@@ -213,7 +227,11 @@ namespace elib { namespace options
             return typeid(T);
         }
         
+         bool validate() const;
+        
     private:
+        T* m_value;
+        
         std::string m_value_name;
         
         elib::any m_default_value;
@@ -230,12 +248,12 @@ namespace elib { namespace options
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class T>
-    typed_value<T> & value();
+    std::shared_ptr<typed_value<T>> value();
     
     template <class T>
-    typed_value<T> &value(T* v);
+    std::shared_ptr<typed_value<T>> value(T & v);
     
-    typed_value<bool> & bool_switch();
-    typed_value<bool> & bool_switch(bool * v);
+    std::shared_ptr<typed_value<bool>>  bool_switch();
+    std::shared_ptr<typed_value<bool>>  bool_switch(bool & v);
 }}                                                          // namespace elib
 #endif /* ELIB_OPTIONS_VALUE_HPP */

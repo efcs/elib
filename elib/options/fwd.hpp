@@ -15,7 +15,7 @@ namespace elib { namespace options
     class duplicate_option_error;
     class option_name_error;
     class multiple_values_error;
-    class mutiple_occurrences_error;
+    class multiple_occurrences_error;
     class required_option_error;
     class unknown_option_error;
     class ambiguous_option_error;

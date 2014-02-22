@@ -218,7 +218,7 @@ namespace elib
         return any_cast<type const &>(const_cast<any &>(v));
         
         static_assert(
-            !aux::is_reference<type>::value_type
+            !aux::is_reference<type>::value
           , "type is still reference after remove_reference_t"
         );
     }

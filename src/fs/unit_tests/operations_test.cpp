@@ -60,8 +60,8 @@ const std::vector<std::string> example_path_list =
 #   include "test_files/long_paths_list"
   };
 
-
-
+////////////////////////////////////////////////////////////////////////////////
+//
 BOOST_AUTO_TEST_SUITE(fs_operations_test_suite)
 
 

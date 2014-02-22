@@ -66,7 +66,7 @@ const std::string dir_prefix = ELIB_FS_UNIT_TEST_PATH;
 
 
 
-std::vector<std::string> relative_paths, absolute_paths, canonical_paths,            \
+std::vector<std::string> relative_paths, absolute_paths, canonical_paths,
                          dne_paths, directories, character_files, block_files, 
                          regular_files, fifo_files, symlink_to, symlink_from,  
                          empty_files, non_empty_files;

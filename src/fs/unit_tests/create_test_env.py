@@ -3,6 +3,8 @@ import os
 import subprocess
 import shutil
 
+# Ensure that this is being run on a specific platform
+assert sys.platform.startswith('linux') or sys.platform.startswith('darwin')
 
 dot_path, file_name = os.path.split(os.path.realpath(__file__))
 file_path = os.path.join(dot_path, file_name)
@@ -51,9 +53,9 @@ character_files = ["/dev/null", "/dev/zero"]
 regular_files = ["rfile1", "rfile2", "dir1/rfile1", "dir2/dir1/rfile1"]
 fifo_files = ["fifo1", "dir1/fifo1", "dir2/fifo1", "dir2/dir1/fifo1"]
 
-if sys.platform == "linux" or sys.platform == "linux2":
+if sys.platform.startswith('linux'):
   block_files = ["/dev/sda"]
-else:
+elif sys.platform.startswith('darwin'):
   block_files = ["/dev/disk0"]
   
 

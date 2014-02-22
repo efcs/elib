@@ -3,7 +3,7 @@
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
 
 WARNING: This file is update very infrequently
-LAST UPDATE: 9/12/2014
+LAST UPDATE: 21/02/2014
 
 ## Platform Support
 Elib currently only supports Linux and OS X. Although most libraries would
@@ -17,6 +17,10 @@ Enumeration:
   It is a way to provide checked casting, string casting, iteration
   and non-default operators
   (Header Only)
+
+Except:
+: A header only exception library similar to boost::exception. It allows
+  for exceptions to store arbitrary data
 
 Log
 : Exactly what it sounds like. A basic message logging library.

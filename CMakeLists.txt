@@ -90,11 +90,11 @@ option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
 # requires linkage. Log is fairly stable
 option(CONFIG_LIB_LOG "Build Log" ON)
 
-# Work in progress. Set to ON because it shouldn't break the build
-option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
+# header only. 
+option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
 
 # Work in progress. Set to ON because it shouldn't break the build
-option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
+option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
 
 # off until GCC supports regex
 option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)

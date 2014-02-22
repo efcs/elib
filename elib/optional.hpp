@@ -2,7 +2,7 @@
 #define ELIB_OPTIONAL_HPP
 
 # include <elib/aux.hpp>
-
+# include <stdexcept>
 # include <initializer_list>
 # include <utility> /* for swap */
 
@@ -11,8 +11,13 @@ namespace elib
     constexpr class nullopt_t {}  nullopt  {};
     constexpr class in_place_t {} in_place {};
     
-    class bad_optional_access;
-    
+    //TODO
+    class bad_optional_access : public std::logic_error
+    {
+    public:
+        bad_optional_access() : std::logic_error("TODO") {}
+    };
+
     namespace optional_detail
     {
         constexpr struct dummy_ctor_arg_t
@@ -172,34 +177,44 @@ namespace elib
             return is_init(); 
         }
         
-        constexpr T const * operator->() const;
-        T * operator->()
+        constexpr T const * operator->() const
         {
-            if (!is_init()) throw bad_optional_access();
-            return static_cast<T const *>(raw_ptr());
+            return is_init() ? static_cast<T const *>(raw_ptr())
+                             : throw bad_optional_access();
         }
         
-        constexpr T const & operator*() const;
+        T * operator->()
+        {
+            return is_init() ? static_cast<T *>(raw_ptr())
+                             : throw bad_optional_access();
+        }
+        
+        constexpr T const & operator*() const
+        {
+            return is_init() ? static_cast<T const &>(raw_val()) 
+                             : throw bad_optional_access();
+        }
+        
         T & operator*()
         {
-            if (!is_init()) throw bad_optional_access();
-            return static_cast<T *>(raw_ptr());
+            return is_init() ? static_cast<T &>(m_impl.store.value)
+                             : throw bad_optional_access(); 
         }
         
         constexpr T const & value() const &
         {
             return is_init() ? raw_val() : throw bad_optional_access(); 
         }
+        
         T & value() &
         {
-            if (!is_init()) throw bad_optional_access();
-            return raw_val();
+             return is_init() ? raw_val() : throw bad_optional_access(); 
         }
         
         T && value() &&
         {
-            if (!is_init()) throw bad_optional_access();
-            return elib::move(*this).raw_val();
+            return is_init() ? elib::move(*this).raw_val() 
+                             : throw bad_optional_access();
         }
         
         template <class U> 
@@ -325,14 +340,12 @@ namespace elib
         
         constexpr T* operator->() const 
         {
-            if (!m_ref) throw bad_optional_access();
-            return m_ref;
+            return m_ref ? m_ref : throw bad_optional_access();
         }
         
         constexpr T & operator*() const
         {
-            if (!m_ref) throw bad_optional_access();
-            return *m_ref;;
+            return m_ref ? *m_ref : throw bad_optional_access();
         }
         
         constexpr T & value() const
@@ -389,7 +402,7 @@ namespace elib
     }
     
     template <class T>
-    constexpr bool operator<(optional<T> const & lhs, nullopt_t) noexcept
+    constexpr bool operator<(optional<T> const &, nullopt_t) noexcept
     {
         return false;
     }
@@ -407,7 +420,7 @@ namespace elib
     }
     
     template <class T> 
-    constexpr bool operator<=(nullopt_t, optional<T> const & rhs) noexcept
+    constexpr bool operator<=(nullopt_t, optional<T> const &) noexcept
     {
         return true;
     }
@@ -419,13 +432,13 @@ namespace elib
     }
     
     template <class T> 
-    constexpr bool operator>(nullopt_t, optional<T> const & rhs) noexcept
+    constexpr bool operator>(nullopt_t, optional<T> const &) noexcept
     {
         return false;
     }
     
     template <class T>
-    constexpr bool operator>=(optional<T> const & lhs, nullopt_t) noexcept
+    constexpr bool operator>=(optional<T> const &, nullopt_t) noexcept
     {
         return true;
     }
@@ -513,7 +526,6 @@ namespace elib
     {
         return lhs.swap(rhs);
     }
-        
     
     template <class T> 
     constexpr optional<aux::decay_t<T>> 

@@ -48,10 +48,14 @@ dne_paths = ["dne", "dir1/dne", "cfile1/dne"]
 
 directories = ["dir1", "dir1/dir2", "dir2", "dir2/dir1", "dir2/dir1/dir1"]
 character_files = ["/dev/null", "/dev/zero"]
-block_files = ["/dev/sda"]
 regular_files = ["rfile1", "rfile2", "dir1/rfile1", "dir2/dir1/rfile1"]
 fifo_files = ["fifo1", "dir1/fifo1", "dir2/fifo1", "dir2/dir1/fifo1"]
 
+if sys.platform == "linux" or sys.platform == "linux2":
+  block_files = ["/dev/sda"]
+else:
+  block_files = ["/dev/disk0"]
+  
 
 symlink_from = ["dir1", character_files[0], block_files[0], "dir1/rfile1"]
 symlink_to = ["sym_dir1", "sym_cfile1", "sym_bfile1", "dir1/sym_rfile1"]

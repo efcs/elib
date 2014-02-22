@@ -3,9 +3,6 @@
 
 # include <string>
 # include <system_error>
-# include <memory>
-# include <typeinfo>
-# include <cstdio>
 
 namespace elib { namespace except
 {
@@ -63,7 +60,6 @@ namespace elib { namespace except
     template <class ErrorInfo, class E, class ...Args>
     bool emplace_error_info(E &, Args &&...);
     
-    
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class E, class Tag, class T>
@@ -98,7 +94,7 @@ namespace elib { namespace except
     template <class E, class Tag, class T>
     E & operator<<(E &, error_info<Tag, T> &&);
     
-     ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     //
     namespace tags
     {
@@ -164,5 +160,5 @@ namespace elib
     using except::errinfo_file_open_mode;
     using except::errinfo_type_info_name;
     using except::errinfo_error_code;
-}
+}                                                           // namespace elib
 #endif /* ELIB_EXCEPT_FWD_HPP */

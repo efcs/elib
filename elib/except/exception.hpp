@@ -186,6 +186,7 @@ namespace elib { namespace except
     template <class ErrorInfo, class E>
     ErrorInfo const & get_error_info(E const & e)
     {
+        // all logic in non-const version is const so const_cast is safe.
         return get_error_info<ErrorInfo>(const_cast<E &>(e));
     }
     

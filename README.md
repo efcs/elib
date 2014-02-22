@@ -12,6 +12,20 @@ no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
 
 ## Library Summary
 
+Any
+: a typesafe generic container. very similar to boost::any
+
+Aux
+: misc functionality that is frequently needed.
+  it includes:
+
+  * forward, move, declval
+  * integral_constant, true_, false_, int_, size_type
+  * not_, and_, or_, if_, enable_if
+  * a type_traits implementation (C++11 Or C++14)
+  * ELIB_ASSERT
+  (Header Only)
+
 Enumeration:
 : A header-only library for dealing with C++11 scoped enumerations.
   It is a way to provide checked casting, string casting, iteration
@@ -20,7 +34,11 @@ Enumeration:
 
 Except:
 : A header only exception library similar to boost::exception. It allows
-  for exceptions to store arbitrary data
+  exceptions to store arbitrary data
+
+Filesystem
+: A posix only implementation of the C++14 filesystem library.
+  (No Windows Support)
 
 Log
 : Exactly what it sounds like. A basic message logging library.
@@ -30,23 +48,10 @@ MP
   has the same structure, files and iterface as boost::mpl
   (Header Only)
 
-Filesystem
-: A posix only implementation of the C++14 filesystem library.
-  This library will not compile on windows. (No Windows Support)
-
 Web
 : C++ Socket, HTTP parsing and other Web/Network utilities.
-  stripped from a class project (No Windows Support)
-
-Aux
-: misc functionality that is frequently needed.
-  it includes:
-
-  * fmt: used to format varargs strings 
-  * lexical_cast: For casting between strings and integral types
-  * scoped_exit: uses lambdas to provide scoped exit functionality
-  * size_type: A helper for using a "size_type" and its npos value
-  (Header Only)
+  stripped from a class project
+  (No Windows Support)
 
 
 ## Building
@@ -63,12 +68,12 @@ Requirements (Library specific):
     Native library used by <mutex> (pthread on linux)
 
   Filesystem:
-    Posix filesystem headers
+    POSIX filesystem headers
     Boost System (Unit Test Only)
     Boost Filesystem (Unit Test Only)
 
   Web:
-    Posix thread headers
+    POSIX thread headers
     Support for <regex> (I'm looking at you GCC)
 
 
@@ -90,24 +95,28 @@ Requirements (Library specific):
   
 ### Select what parts to build
   
+  * CONFIG_LIB_AUX
+: build the utility library
+  Default: ON
+
   * CONFIG_LIB_ENUMERATION
 : build enumeration library
   Default: ON
+
+  * CONFIG_LIB_EXCEPT
+: build exception library
+  Default: ON
+
+  * CONFIG_LIB_FILESYSTEM
+: build the filesystem library
+  Default: ON 
 
   * CONFIG_LIB_LOG
 : build logging library
   Default: ON
 
   * CONFIG_LIB_MP
-: build the MPL (header-only, only builds unit_tests and dummy file)
-  Default: ON
-
-  * CONFIG_LIB_FILESYSTEM
-: build the filesystem library
-  Default: ON (Except on windows)
-
-  * CONFIG_LIB_AUX
-: build the utility library
+: build the MPL
   Default: ON
 
   * CONFIG_LIB_WEB

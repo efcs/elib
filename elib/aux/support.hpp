@@ -167,10 +167,10 @@ namespace elib
         }
             
         ////////////////////////////////////////////////////////////////////////
-        // declval
+        // declval. NOTE: use of add_rvalue_reference ensures handling of void.
         template <class T>
         typename aux::add_rvalue_reference<T>::type 
-        declval();
+        declval() noexcept;
         
         ////////////////////////////////////////////////////////////////////////
         // aux::addressof

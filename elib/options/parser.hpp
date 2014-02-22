@@ -9,6 +9,19 @@
 
 namespace elib { namespace options
 {  
+    enum class collect_unrecognized_mode
+    {
+        include_positional
+      , exclude_positional
+    };
+    
+    // avoid having to qualify names without losing type safety
+    static constexpr collect_unrecognized_mode include_positional = 
+        collect_unrecognized_mode::include_positional;
+        
+    static constexpr collect_unrecognized_mode exclude_positional =
+        collect_unrecognized_mode::exclude_positional;
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     class parsed_options

@@ -93,7 +93,7 @@ namespace elib { namespace options
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    template <class T>
+    template <class T, class Converter>
     class typed_value
       : public value_semantic
       , public typed_value_base
@@ -230,7 +230,8 @@ namespace elib { namespace options
          bool validate() const;
         
     private:
-        T* m_value;
+        T* m_dest;
+        std::shared_ptr<T> m_store;
         
         std::string m_value_name;
         

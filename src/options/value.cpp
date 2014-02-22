@@ -3,6 +3,9 @@
 
 namespace elib { namespace options
 {
+    ////////////////////////////////////////////////////////////////////////////
+    //                            untyped_value
+    ////////////////////////////////////////////////////////////////////////////
     void untyped_value::parse(
         elib::any & store
       , std::vector<std::string> const & new_tokens
@@ -12,4 +15,5 @@ namespace elib { namespace options
         if (new_tokens.size() > 1) throw multiple_values_error("multiple values");
         store = new_tokens.empty() ? std::string("") : new_tokens.front();
     }
+    
 }}                                                          // namespace elib

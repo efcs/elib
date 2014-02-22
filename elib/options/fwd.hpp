@@ -39,13 +39,27 @@ namespace elib { namespace options
     class positional_options_description;
     
     ////////////////////////////////////////////////////////////////////////////
+    //                              Converters
+    ////////////////////////////////////////////////////////////////////////////
+    
+    /** uses elib::lexical_cast */
+    template <class T> struct lexical_converter;
+    
+    /** uses elib::enumeration::enum_cast */
+    template <class T> struct enum_converter;
+    
+    /** Chooses the best converter for type T */
+    template <class T> struct default_converter;
+    
+    ////////////////////////////////////////////////////////////////////////////
     //                              Values
     ////////////////////////////////////////////////////////////////////////////
     class value_semantic;
     class untyped_value;
+    
     class typed_value_base;
     
-    template <class T>
+    template <class T, class Converter = default_converter<T>>
     class typed_value;
     
     ////////////////////////////////////////////////////////////////////////////
@@ -53,20 +67,6 @@ namespace elib { namespace options
     ////////////////////////////////////////////////////////////////////////////
     class command_line_parser;
     class parsed_options;
-    
-    enum class collect_unrecognized_mode
-    {
-        include_positional
-      , exclude_positional
-    };
-    
-    // avoid having to qualify names without losing type safety
-    static constexpr collect_unrecognized_mode include_positional = 
-        collect_unrecognized_mode::include_positional;
-        
-    static constexpr collect_unrecognized_mode exclude_positional =
-        collect_unrecognized_mode::exclude_positional;
-
     
     ////////////////////////////////////////////////////////////////////////////
     //                           Storage

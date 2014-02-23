@@ -89,14 +89,14 @@ namespace elib
         optional(optional const & rhs) : m_impl() 
         {
             m_impl.init = rhs.is_init();
-            if (is_init()) ::new (raw_ptr()) T(*rhs);
+            if (is_init()) ::new (static_cast<void*>(raw_ptr())) T(*rhs);
         }
         
         optional(optional && rhs) noexcept 
           : m_impl()
         {
             m_impl.init = rhs.is_init();
-            if (is_init()) ::new (raw_ptr()) T(elib::move(*rhs));
+            if (is_init()) ::new (static_cast<void*>(raw_ptr())) T(elib::move(*rhs));
         }
         
         constexpr optional(T const & t)
@@ -179,42 +179,48 @@ namespace elib
         
         constexpr T const * operator->() const
         {
-            return is_init() ? static_cast<T const *>(raw_ptr())
-                             : throw bad_optional_access();
+            return is_init() ? raw_ptr() : throw bad_optional_access();
         }
         
         T * operator->()
         {
-            return is_init() ? static_cast<T *>(raw_ptr())
-                             : throw bad_optional_access();
+            return is_init() ? raw_ptr() : throw bad_optional_access();
         }
         
+        // TODO is this god-awful workaround even close to correct? 
         constexpr T const & operator*() const
         {
-            return is_init() ? static_cast<T const &>(raw_val()) 
-                             : throw bad_optional_access();
+            return static_cast<T const &>(
+                *(is_init() ? raw_ptr() : throw bad_optional_access())
+            );
         }
         
         T & operator*()
         {
-            return is_init() ? static_cast<T &>(m_impl.store.value)
-                             : throw bad_optional_access(); 
+            return static_cast<T &>(
+                *(is_init() ? raw_ptr() : throw bad_optional_access())
+            );
         }
         
         constexpr T const & value() const &
         {
-            return is_init() ? raw_val() : throw bad_optional_access(); 
+            return static_cast<T const &>(
+                *(is_init() ? raw_ptr() : throw bad_optional_access())
+            );
         }
         
         T & value() &
         {
-             return is_init() ? raw_val() : throw bad_optional_access(); 
+            return static_cast<T &>(
+                *(is_init() ? raw_ptr() : throw bad_optional_access())
+            );
         }
         
         T && value() &&
         {
-            return is_init() ? elib::move(*this).raw_val() 
-                             : throw bad_optional_access();
+            return static_cast<T &&>(
+                *(is_init() ? raw_ptr() : throw bad_optional_access())
+            );
         }
         
         template <class U> 
@@ -226,7 +232,8 @@ namespace elib
         template <class U>
         T value_or(U && u) &&
         {
-            return *this ? elib::move(*this).raw_val() : static_cast<T>(elib::forward<U>(u));
+            return *this ? elib::move(*this).raw_val() 
+                         : static_cast<T>(elib::forward<U>(u));
         }
 
     private:
@@ -236,18 +243,14 @@ namespace elib
             return m_impl.init; 
         }
         
-        constexpr void const * raw_ptr() const
+        constexpr T const * raw_ptr() const
         {
-            return static_cast<void const *>(
-                elib::addressof(m_impl.store.value)
-            );
+            return elib::addressof(m_impl.store.value);
         }
         
-        void* raw_ptr() 
+        T * raw_ptr() 
         {
-            return static_cast<void *>(
-                elib::addressof(m_impl.store.value)
-            );
+            return elib::addressof(m_impl.store.value);
         }
         
         constexpr T const & raw_val() const &
@@ -269,7 +272,7 @@ namespace elib
         void init(Args &&... args) noexcept(noexcept(T(elib::forward<Args>(args)...)))
         {
             ELIB_ASSERT(!is_init());
-            ::new (raw_ptr()) T(elib::forward<Args>(args)...);
+            ::new (static_cast<void*>(raw_ptr())) T(elib::forward<Args>(args)...);
             m_impl.init = true;
         }
         
@@ -278,7 +281,7 @@ namespace elib
             noexcept(noexcept(T(il, elib::forward<Args>(args)...)))
         {
             ELIB_ASSERT(!is_init());
-            ::new (raw_ptr()) T(il, elib::forward<Args>(args)...);
+            ::new (static_cast<void*>(raw_ptr())) T(il, elib::forward<Args>(args)...);
             m_impl.init = true;
         }
         

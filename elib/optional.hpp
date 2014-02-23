@@ -8,22 +8,37 @@
 
 namespace elib 
 {
+    ////////////////////////////////////////////////////////////////////////////
+    //
     constexpr class nullopt_t {}  nullopt  {};
     constexpr class in_place_t {} in_place {};
     
-    //TODO
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
+    ////////////////////////////////////////////////////////////////////////////
+    //
     class bad_optional_access : public std::logic_error
     {
     public:
-        bad_optional_access() : std::logic_error("TODO") {}
+        bad_optional_access() : std::logic_error("bad optional access") {}
+        
+        ELIB_DEFAULT_COPY_MOVE(bad_optional_access);
+        
+        virtual ~bad_optional_access() = default;
     };
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
 
     namespace optional_detail
     {
         constexpr struct dummy_ctor_arg_t
         {} dummy_ctor_arg {};
         
-        
+        ////////////////////////////////////////////////////////////////////////
+        //
         template <class T>
         union storage
         {
@@ -40,6 +55,8 @@ namespace elib
             ~storage() = default;
         };
         
+        ////////////////////////////////////////////////////////////////////////
+        //
         template <class T>
         struct optional_impl
         {
@@ -74,9 +91,10 @@ namespace elib
                 if (init) store.value.T::~T();
             }
         };
-        
     }                                              // namespace optional_detail
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T>
     class optional
     {
@@ -295,6 +313,8 @@ namespace elib
         optional_detail::optional_impl<T> m_impl;
     };                                                      // class optional
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T>
     class optional<T &>
     {
@@ -371,6 +391,8 @@ namespace elib
         T * m_ref;
     };
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T>
     class optional<T &&>
     {
@@ -380,6 +402,8 @@ namespace elib
         );
     };
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T> 
     constexpr bool operator==(optional<T> const & lhs, nullopt_t) noexcept
     {
@@ -452,6 +476,8 @@ namespace elib
         return (!rhs);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T> 
     constexpr bool operator==(optional<T> const & lhs, T const & rhs)
     {
@@ -524,12 +550,16 @@ namespace elib
         return rhs ? lhs >= *rhs : true;
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T> 
     void swap(optional<T> & lhs, optional<T> & rhs)
     {
         return lhs.swap(rhs);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T> 
     constexpr optional<aux::decay_t<T>> 
     make_optional(T && t)
@@ -537,6 +567,8 @@ namespace elib
         return optional<aux::decay_t<T>>(elib::forward<T>(t));
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     template <class T> struct hash;
     template <class T> struct hash<optional<T>>;
     

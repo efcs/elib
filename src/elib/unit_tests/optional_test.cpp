@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE(elib_optional_ctor_tests)
     
     // ctor 6 (move value)
     int x = 1;
-    optional<int> o6(elib::move(x));
+    const optional<int> o6(elib::move(x));
     BOOST_CHECK(bool(o6));
     BOOST_CHECK(*o6 == 1);
     

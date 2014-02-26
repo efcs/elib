@@ -8,7 +8,7 @@
 
 using namespace elib;
 
-constexpr class dummy_class_t {} dummy_class;
+constexpr class dummy_class_t {} dummy_class{};
 
 class nested_ref_class
 {

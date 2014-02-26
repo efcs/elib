@@ -2,8 +2,8 @@
 #define ELIB_OPTIONAL_HPP
 
 # include <elib/aux.hpp>
-# include <stdexcept>
 # include <initializer_list>
+# include <stdexcept>
 # include <utility> /* for swap */
 
 namespace elib 

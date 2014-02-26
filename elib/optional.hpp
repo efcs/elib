@@ -338,6 +338,12 @@ namespace elib
         
     private:
         optional_detail::optional_impl<T> m_impl;
+        
+        static_assert(
+            !aux::is_same<T, nullopt_t>::value
+            && !aux::is_same<T, in_place_t>::value
+          , "T may not be nullopt_t or in_place_t"
+        );
     };                                                      // class optional
     
     ////////////////////////////////////////////////////////////////////////////
@@ -416,6 +422,12 @@ namespace elib
         
     private:
         T * m_ref;
+        
+        static_assert(
+            !aux::is_same<T, nullopt_t>::value
+            && !aux::is_same<T, in_place_t>::value
+          , "T may not be nullopt_t or in_place_t"
+        );
     };
     
     ////////////////////////////////////////////////////////////////////////////

@@ -154,15 +154,42 @@ namespace elib
         
         optional & operator=(optional && rhs) noexcept
         {
-            if (is_init() && rhs.is_init()) raw_val() = elib::move(rhs).raw_val();
-            else if (is_init()) clear();
-            else if (rhs.is_init()) init(elib::move(rhs).raw_val());
+            if (is_init() && rhs.is_init()) 
+            {
+                raw_val() = elib::move(rhs).raw_val();
+                rhs.m_impl.init = false;
+            }
+            else if (is_init())
+            {
+                clear();
+            }
+            else if (rhs.is_init())
+            {  
+                init(elib::move(rhs).raw_val());
+                rhs.m_impl.init = false;
+            }
             return *this;
         }
         
         // TODO this definition makes no sense
-        //template <class U> 
-        //optional & operator=(U &&);
+        template <
+            class U
+          , ELIB_ENABLE_IF(
+              aux::is_constructible<T, U>::value 
+              && aux::is_assignable<T, U>::value)
+        > 
+        optional & operator=(U && u)
+        {
+            if (is_init())
+            {
+                m_impl.store.value = elib::forward<U>(u);
+                m_impl.init = true;
+            }
+            else
+            {
+                m_impl.init(elib::forward<U>(u));
+            }
+        }
         
         template <class ...Args>
         void emplace(Args &&... args)
@@ -568,7 +595,7 @@ namespace elib
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //TODO
     template <class T> struct hash;
     template <class T> struct hash<optional<T>>;
     

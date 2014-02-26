@@ -10,8 +10,8 @@ namespace elib
 {
     ////////////////////////////////////////////////////////////////////////////
     //
-    constexpr class nullopt_t {}  nullopt  {};
-    constexpr class in_place_t {} in_place {};
+    constexpr class nullopt_t  {}  nullopt  {};
+    constexpr class in_place_t {}  in_place {};
     
 # if defined(__clang__)
 #   pragma clang diagnostic push
@@ -555,7 +555,7 @@ namespace elib
     template <class T> 
     void swap(optional<T> & lhs, optional<T> & rhs)
     {
-        return lhs.swap(rhs);
+        lhs.swap(rhs);
     }
     
     ////////////////////////////////////////////////////////////////////////////

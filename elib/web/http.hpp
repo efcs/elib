@@ -468,13 +468,13 @@ namespace elib { namespace web
         http_field new_val{key, replacement};
         bool found = false;
         std::replace_if(v.begin(), v.end()
-                            , [&](http_field const & f) 
-                                {
-                                    if (f.key == key)
-                                        found = true;
-                                    return (f.key == key); 
-                                }
-                            , new_val); 
+                     , [&](http_field const & f) 
+                       {
+                            if (f.key == key)
+                                found = true;
+                            return (f.key == key); 
+                       }
+                     , new_val); 
         return found;
     }
     

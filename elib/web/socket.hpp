@@ -96,7 +96,7 @@ namespace elib { namespace web
      *  
      * when a vector is return, it is sized to fit exactly the
      * data that was inserted into it.
-     * HOWEVER: When ssize_t is return, the vector passed in DOES NOT have its 
+     * HOWEVER: When ::ssize_t is return, the vector passed in DOES NOT have its 
      * size modified
      */
     constexpr const std::size_t default_receive_length = 1024;
@@ -113,78 +113,78 @@ namespace elib { namespace web
     std::vector<char>
     receive(socket const &, msg_flags, std::error_code & ec) noexcept;
     
-    ssize_t 
+    ::ssize_t 
     receive(socket const &, std::vector<char> &);
     
-    ssize_t 
+    ::ssize_t 
     receive(socket const &, std::vector<char> &, msg_flags);
     
-    ssize_t
+    ::ssize_t
     receive(socket const &, std::vector<char> &, std::error_code & ec) noexcept;
     
-    ssize_t
+    ::ssize_t
     receive(socket const &, std::vector<char> &, msg_flags, std::error_code & ec) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    ssize_t
+    ::ssize_t
     receive_msg(socket const &, message_t &);
     
-    ssize_t 
+    ::ssize_t 
     receive_msg(socket const &, message_t &, msg_flags);
     
-    ssize_t 
+    ::ssize_t 
     receive_msg(socket const &, message_t &, msg_flags, std::error_code & ec) noexcept;
     
-    ssize_t
+    ::ssize_t
     receive_msg(socket const &, message_t &, std::error_code & ec) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    ssize_t
+    ::ssize_t
     send(socket const &, std::vector<char> const &);
     
-    ssize_t
+    ::ssize_t
     send(socket const &, std::vector<char> const &, msg_flags);
     
-    ssize_t
+    ::ssize_t
     send(socket const &, std::vector<char> const &, msg_flags, std::error_code & ec) noexcept;
     
-    ssize_t
+    ::ssize_t
     send(socket const &, std::vector<char> const &, std::error_code & ec) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    ssize_t
+    ::ssize_t
     send_msg(socket const &, message_t const &);
     
-    ssize_t
+    ::ssize_t
     send_msg(socket const &, message_t const &, msg_flags);
     
-    ssize_t
+    ::ssize_t
     send_msg(socket const &, message_t const &, msg_flags, std::error_code & ec) noexcept;
     
-    ssize_t
+    ::ssize_t
     send_msg(socket const &, message_t const &, std::error_code & ec) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const &, std::vector<char> const &, SockAddr const &);
     
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const &, std::vector<char> const &, msg_flags
           , SockAddr const &);
           
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const &, std::vector<char> const &, msg_flags
           , SockAddr const &, std::error_code & ec) noexcept;
           
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const &, std::vector<char> const &
             , SockAddr const &, std::error_code & ec) noexcept;
     
@@ -197,19 +197,19 @@ namespace elib { namespace web
         socket accept_impl(socket const &, sockaddr *addr, socklen_t *len
                          , std::error_code *ec = nullptr);
                          
-        ssize_t receive_impl(socket const &, std::vector<char> &, msg_flags
+        ::ssize_t receive_impl(socket const &, std::vector<char> &, msg_flags
                            , std::error_code *ec = nullptr);
                             
-        ssize_t receive_msg_impl(socket const &, message_t &, msg_flags
+        ::ssize_t receive_msg_impl(socket const &, message_t &, msg_flags
                                , std::error_code *ec = nullptr);
                                
-        ssize_t send_impl(socket const &, std::vector<char> const &, msg_flags
+        ::ssize_t send_impl(socket const &, std::vector<char> const &, msg_flags
                         , std::error_code *ec = nullptr); 
                            
-        ssize_t send_msg_impl(socket const &, message_t const &, msg_flags 
+        ::ssize_t send_msg_impl(socket const &, message_t const &, msg_flags 
                              , std::error_code *ec = nullptr);
                              
-        ssize_t send_to_impl(socket const &, std::vector<char> const &, msg_flags
+        ::ssize_t send_to_impl(socket const &, std::vector<char> const &, msg_flags
                            , const sockaddr *dest_addr, socklen_t len
                            , std::error_code *ec = nullptr);
     }                                                       // namespace detail
@@ -477,7 +477,7 @@ namespace elib { namespace web
     receive(socket const & s, msg_flags f)
     {
         std::vector<char> v(default_receive_length);
-        ssize_t ret = detail::receive_impl(s, v, f);
+        ::ssize_t ret = detail::receive_impl(s, v, f);
         /* ret >= 0 since receive_impl didn't throw */
         v.resize(static_cast<std::size_t>(ret));
         return v;
@@ -493,7 +493,7 @@ namespace elib { namespace web
     receive(socket const & s, msg_flags f, std::error_code & ec) noexcept
     {
         std::vector<char> v(default_receive_length);
-        ssize_t ret = detail::receive_impl(s, v, f, &ec);
+        ::ssize_t ret = detail::receive_impl(s, v, f, &ec);
         if (!ec) 
             v.resize(static_cast<std::size_t>(ret));
         else 
@@ -501,25 +501,25 @@ namespace elib { namespace web
         return v;
     }
     
-    inline ssize_t 
+    inline ::ssize_t 
     receive(socket const & s, std::vector<char> & v)
     {
         return detail::receive_impl(s, v, msg_flags::none);
     }
     
-    inline ssize_t 
+    inline ::ssize_t 
     receive(socket const & s, std::vector<char> & v, msg_flags f)
     {
         return detail::receive_impl(s, v, f);
     }
     
-    inline ssize_t 
+    inline ::ssize_t 
     receive(socket const & s, std::vector<char> & v, std::error_code & ec) noexcept
     {
         return detail::receive_impl(s, v, msg_flags::none, &ec);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     receive(socket const & s, std::vector<char> & v, msg_flags f
           , std::error_code & ec) noexcept
     {
@@ -528,25 +528,25 @@ namespace elib { namespace web
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    inline ssize_t
+    inline ::ssize_t
     receive_msg(socket const & s, message_t & m)
     {
         return detail::receive_msg_impl(s, m, msg_flags::none);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     receive_msg(socket const & s, message_t & m, msg_flags f)
     {
         return detail::receive_msg_impl(s, m, f);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     receive_msg(socket const & s, message_t & m, std::error_code & ec) noexcept
     {
         return detail::receive_msg_impl(s, m, msg_flags::none, &ec);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     receive_msg(socket const & s, message_t & m, msg_flags f
               , std::error_code & ec) noexcept
     {
@@ -555,25 +555,25 @@ namespace elib { namespace web
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    inline ssize_t
+    inline ::ssize_t
     send(socket const & s, std::vector<char> const & v)
     {
         return detail::send_impl(s, v, msg_flags::none);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     send(socket const & s, std::vector<char> const & v, msg_flags f)
     {
         return detail::send_impl(s, v, f);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     send(socket const & s, std::vector<char> const & v, std::error_code & ec) noexcept
     {
         return detail::send_impl(s, v, msg_flags::none, &ec);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     send(socket const & s, std::vector<char> const & v, msg_flags f
        , std::error_code & ec) noexcept
     {
@@ -582,25 +582,25 @@ namespace elib { namespace web
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    inline ssize_t
+    inline ::ssize_t
     send_msg(socket const & s, message_t const & m)
     {
         return detail::send_msg_impl(s, m, msg_flags::none);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     send_msg(socket const & s, message_t const & m, msg_flags f)
     {
         return detail::send_msg_impl(s, m, f);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     send_msg(socket const & s, message_t const & m, std::error_code & ec) noexcept
     {
         return detail::send_msg_impl(s, m, msg_flags::none, &ec);
     }
     
-    inline ssize_t
+    inline ::ssize_t
     send_msg(socket const & s, message_t const & m, msg_flags f
             , std::error_code & ec) noexcept
     {
@@ -610,7 +610,7 @@ namespace elib { namespace web
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const & s, std::vector<char> const & v, SockAddr const & addr)
     {
         return detail::send_to_impl(
@@ -620,7 +620,7 @@ namespace elib { namespace web
     }
     
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const & s, std::vector<char> const & v, msg_flags f 
           , SockAddr const & addr)
     {
@@ -631,7 +631,7 @@ namespace elib { namespace web
     }
     
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const & s, std::vector<char> const & v, SockAddr const & addr
           , std::error_code & ec) noexcept
     {
@@ -643,7 +643,7 @@ namespace elib { namespace web
     }
     
     template <class SockAddr>
-    ssize_t
+    ::ssize_t
     send_to(socket const & s, std::vector<char> const & v, msg_flags f
           , SockAddr const & addr, std::error_code & ec) noexcept
     {

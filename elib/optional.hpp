@@ -212,9 +212,8 @@ namespace elib
                 using std::swap;
                 swap(raw_val(), rhs.raw_val());
             }
-            else if (is_init()) rhs.init(elib::move(*this).raw_val());
-            else if (rhs.is_init()) init(elib::move(rhs).raw_val());
-            
+            else if (is_init()) rhs.init(elib::move(this->raw_val()));
+            else if (rhs.is_init()) init(elib::move(rhs.raw_val()));
         }
         
         constexpr explicit operator bool() const noexcept

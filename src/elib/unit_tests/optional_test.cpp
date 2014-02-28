@@ -10,6 +10,11 @@ using namespace elib;
 
 constexpr class dummy_class_t {} dummy_class{};
 
+/* NOTE: It is important to test a class with a reference member
+ * The reason optional was pull from the C++14 standard was issues
+ * with optional and classes with nested references. The implementation
+ * that elib::optional is based off of mentions that the method of dealing
+ * with these sorts of classes wanders into undefined behaviour */
 class nested_ref_class
 {
 public:

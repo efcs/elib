@@ -8,7 +8,7 @@
 
 namespace elib { namespace web { namespace http
 {
-     data_type::const_iterator 
+    data_type::const_iterator 
     parse(
         data_type::const_iterator begin
       , data_type::const_iterator const & end

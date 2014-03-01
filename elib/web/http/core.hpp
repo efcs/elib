@@ -12,7 +12,7 @@ namespace elib { namespace web { namespace http
 {
     /* because \n just won't do the trick
      * initialization format is needed to prevent extra null (i think?) */
-    constexpr const char newl[] = {'\r', '\n'};
+    constexpr const char newl[2] = {'\r', '\n'};
     
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -93,8 +93,6 @@ namespace elib { namespace enumeration
         
         static constexpr const bool ELIB_ENUM_IS_CONTIGIOUS = true;
     };
-    
-   
 }}                                               // namespace elib::enumeration
     
 namespace elib { namespace web { namespace http
@@ -217,7 +215,6 @@ namespace elib { namespace web { namespace http
     {
         return (status_is_client_error(s) || status_is_server_error(s));
     }
-    
     
     ////////////////////////////////////////////////////////////////////////////
     //

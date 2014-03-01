@@ -17,7 +17,6 @@ namespace elib { namespace web { namespace http
     {
         template <class Message>
         Message receive(web::socket const & s);
-        
     }
     
     request receive_request(web::socket const & s)
@@ -49,7 +48,6 @@ namespace elib { namespace web { namespace http
             return 0;
         }
     
-        
         template <class Message>
         Message receive(web::socket const & s)
         {
@@ -58,7 +56,6 @@ namespace elib { namespace web { namespace http
                 || elib::aux::is_same<Message, response>::value
               , "The only two choices"
             );
-
             
             ELIB_ASSERT(s);
             
@@ -86,7 +83,8 @@ namespace elib { namespace web { namespace http
                     
                     return ret;
                 };
-                
+               
+            // get header
             while (true)
             {
                 timeout_receive();
@@ -97,7 +95,7 @@ namespace elib { namespace web { namespace http
                 remaining.erase(remaining.begin(), pos);
                 break;
             }
-            // has state
+            // get fields and newline
             while (true)
             {
                 auto field_end = parse(remaining.begin(), remaining.end(), msg.fields);
@@ -118,6 +116,7 @@ namespace elib { namespace web { namespace http
             msg.data.insert(msg.data.end(), remaining.begin(), remaining.end());
             // find out size of remaining content
             std::size_t needed_size = content_size(msg) - remaining.size();
+            ELIB_ASSERT(content_size(msg) >= remaining.size());
             // get remaining data if needed 
             if (needed_size != 0)
             {

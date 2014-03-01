@@ -127,7 +127,7 @@ namespace elib
         bool empty() const noexcept
         { return !m_holder; }
         
-        operator bool() const noexcept
+        explicit operator bool() const noexcept
         { return m_holder; }
         
         std::type_info const & type() const

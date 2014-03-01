@@ -2,7 +2,6 @@
 #define ELIB_TUPLE_TUPLE_ELEMENT_INDEX_HPP
 
 # include <elib/tuple/fwd.hpp>
-# include <elib/tuple/element_index_impl.hpp>
 # include <elib/aux.hpp>
 
 namespace elib { namespace tuples 

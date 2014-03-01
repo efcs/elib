@@ -33,85 +33,342 @@ namespace elib
 #   pragma clang diagnostic pop
 # endif
 
+    
+    namespace lexical_cast_detail
+    {
+        template<
+            class ToType, class FromType
+          , bool ToInt = aux::is_integral<ToType>::value
+          , bool ToFloat = aux::is_floating_point<ToType>::value
+          , bool ToString = aux::is_same<ToType, std::string>::value
+          , bool ToBool = aux::is_same<ToType, bool>::value
+          , bool FromInt = aux::is_integral<FromType>::value
+          , bool FromFloat = aux::is_floating_point<FromType>::value
+          , bool FromString = aux::is_string_type<FromType>::value
+        >
+        struct cast_type
+        {
+            using BadCastType = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////
+        //To Int
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , true /* ToInt */, false, false, false
+          , true /* FromInt */, false, false
+        >
+        {
+            using IntToInt = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , true /* ToInt */, false, false, false
+          , false, true /* FromFloat */, false
+        >
+        {
+            using FloatToInt = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , true /* ToInt */, false, false, false
+          , false, false, true /* FromString */
+        >
+        {
+            using StringToInt = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////
+        // ToFloat
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , false, true /* ToFloat */, false, false
+          , true /* FromInt */, false, false
+        >
+        {
+            using IntToFloat = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , false, true /* ToFloat */, false, false
+          , false, true /* FromFloat */, false
+        >
+        {
+            using FloatToFloat = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , false, true /* ToFloat */, false, false
+          , false, false, true /* FromString */
+        >
+        {
+            using StringToFloat = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////
+        // To String
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , false, false, true /* ToString */, false
+          , true /* FromInt */, false, false
+        >
+        {
+            using IntToString = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , false, false, true /* ToString */, false
+          , false, true /* FromFloat */, false
+        >
+        {
+            using FloatToString = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , false, false, true /* ToString */, false
+          , false, false, true /* FromString */
+        >
+        {
+            using StringToString = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////
+        // ToBool
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , true, false, false, true /* ToBool */
+          , true /* FromInt */, false, false
+        >
+        {
+            using IntToBool = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , true, false, false, true /* ToBool */
+          , false, true /* FromFloat */, false
+        >
+        {
+            using FloatToBool = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+        
+        template <class ToType, class FromType>
+        struct cast_type<
+            ToType, FromType
+          , true, false, false, true /* ToBool */
+          , false, false, true /* FromString */
+        >
+        {
+            using StringToBool = ToType;
+            using To = ToType;
+            using From = FromType;
+        };
+     
+        template <class To, class From>
+        To from_string_cast(From const & from)
+        {
+            To t{};
+            std::stringstream ss;  
+            
+            ss << from;
+            ss >> t;
+            
+            if (!ss) 
+                throw bad_lexical_cast{
+                    std::string{"bad lexical cast from string: \""}
+                    + from + "\""
+                };
+            
+            return t;
+        }
+        
+        template <class From>
+        bool from_string_to_bool_cast(From const & f)
+        {
+            bool b{};
+            std::stringstream ss;
+            
+            // try reading as "true" or "false"
+            ss << std::boolalpha << f;
+            ss >> b;
+            
+            // success on first try
+            // input string was "true" or "false"
+            if (ss) return b;
+        
+            // input string was a digit
+            ss.clear();
+            ss << std::noboolalpha;
+            ss >> b;
+            if (ss) return b;
+                
+            throw bad_lexical_cast(
+                    std::string{"Bad lexical cast from string to bool: \""}
+                        + f + '"'
+                );
+        }
+        
+        template <class From>
+        std::string to_string_cast(From from)
+        {
+            std::stringstream ss;
+            if (aux::is_same<From, bool>::value)
+                ss.setf(std::ios_base::boolalpha);
+            ss << from;
+            return ss.str();
+        }
+        
+        template <class To, class From>
+        struct is_valid_lexical_cast_impl
+        {
+            template <class CastType, class = typename CastType::BadCastType>
+            static constexpr bool test(int) noexcept { return false; }
+            
+            template <class>
+            static constexpr bool test(...) noexcept { return true; }
+            
+            using type = bool_< test<cast_type<To, From>>(0) >;
+        };
+    }                                                       // namespace detail
+
     // TODO: rename this. 
     template <class T>
     using is_lexical = 
         aux::or_<
             aux::is_integral<T>
           , aux::is_floating_point<T>
+          , aux::is_string_type<T>
           >;
+    
+    template <class To, class From>
+    using is_valid_lexical_cast = typename 
+        lexical_cast_detail::is_valid_lexical_cast_impl<To, From>::type;
+        
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    template <class To, class From>
+    constexpr typename lexical_cast_detail::cast_type<To, From>::IntToInt
+    lexical_cast(From from) noexcept
+    {
+        return static_cast<To>(from);
+    }
+    
+    template <class To, class From>
+    constexpr typename lexical_cast_detail::cast_type<To, From>::FloatToInt
+    lexical_cast(From from) noexcept
+    {
+        return static_cast<To>(from + 0.5f);
+    }
+    
+    template <class To, class From>
+    inline typename lexical_cast_detail::cast_type<To, From>::StringToInt
+    lexical_cast(From const & from) 
+    {
+        return lexical_cast_detail::from_string_cast<To>(from);
+    }
+  
+    template <class To, class From>
+    constexpr typename lexical_cast_detail::cast_type<To, From>::IntToFloat
+    lexical_cast(From from) noexcept
+    {
+        return static_cast<To>(from);
+    }
 
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <
-        class To, class From
-      , ELIB_ENABLE_IF(aux::is_same<To, std::string>::value)
-      , ELIB_ENABLE_IF(is_lexical<From>::value)
-    >
-    To lexical_cast(From from)
+    template <class To, class From>
+    constexpr typename lexical_cast_detail::cast_type<To, From>::FloatToFloat
+    lexical_cast(From from) noexcept
     {
-        std::stringstream ss;
-        if (aux::is_same<From, bool>::value)
-            ss.setf(std::ios_base::boolalpha);
-        ss << from;
-        return ss.str();
+        return static_cast<To>(from);
     }
     
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <
-        class To, class From
-      , ELIB_ENABLE_IF(is_lexical<To>::value)
-      , ELIB_ENABLE_IF(!aux::is_same<To, bool>::value)
-      , ELIB_ENABLE_IF(aux::is_string_type<From>::value)
-      >
-    To lexical_cast(From const & f)
+    template <class To, class From>
+    inline typename lexical_cast_detail::cast_type<To, From>::StringToFloat
+    lexical_cast(From const & from)
     {
-        To t{};
-        std::stringstream ss;  
+        return lexical_cast_detail::from_string_cast<To>(from);
+    }
         
-        ss << f;
-        ss >> t;
-        
-        if (!ss) 
-            throw bad_lexical_cast{
-                std::string{"bad lexical cast from string: \""}
-                + f + "\""
-            };
-        
-        return t;
+    template <class To, class From>
+    inline typename lexical_cast_detail::cast_type<To, From>::IntToString
+    lexical_cast(From from)
+    {
+        return lexical_cast_detail::to_string_cast(from);
     }
     
-    ////////////////////////////////////////////////////////////////////////////
-    // Special case for str -> bool conversion 
-    template <
-        class To, class From
-      , ELIB_ENABLE_IF(aux::is_same<To, bool>::value)
-      , ELIB_ENABLE_IF(aux::is_string_type<From>::value)
-    >
-    To lexical_cast(From const & f)
+    template <class To, class From>
+    inline typename lexical_cast_detail::cast_type<To, From>::FloatToString
+    lexical_cast(From from)
     {
-        bool b{};
-        std::stringstream ss;
-        
-        // try reading as "true" or "false"
-        ss << std::boolalpha << f;
-        ss >> b;
-        
-        // success on first try
-        // input string was "true" or "false"
-        if (ss) return b;
+        return lexical_cast_detail::to_string_cast(from);
+    }
     
-        // input string was a digit
-        ss.clear();
-        ss << std::noboolalpha;
-        ss >> b;
-        if (ss) return b;
-            
-        throw bad_lexical_cast(
-                std::string{"Bad lexical cast from string to bool: \""}
-                    + f + '"'
-              );
+    template <class To, class From>
+    inline typename lexical_cast_detail::cast_type<To, From>::StringToString
+    lexical_cast(From const & from)
+    {
+        return std::string(from);
+    }
+    
+    template <class To, class From>
+    constexpr typename lexical_cast_detail::cast_type<To, From>::IntToBool
+    lexical_cast(From from) noexcept
+    {
+        return static_cast<bool>(from);
+    }
+    
+    template <class To, class From>
+    constexpr typename lexical_cast_detail::cast_type<To, From>::FloatToBool
+    lexical_cast(From from) noexcept
+    {
+        return static_cast<bool>(from);
+    }
+    
+    template <class To, class From>
+    inline typename lexical_cast_detail::cast_type<To, From>::StringToBool
+    lexical_cast(From const & from)
+    {
+        return lexical_cast_detail::from_string_to_bool_cast(from);
     }
 }                                                            // namespace elib
 #endif /* ELIB_LEXICAL_CAST_HPP */

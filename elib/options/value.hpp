@@ -3,8 +3,11 @@
 
 # include <elib/options/config.hpp>
 # include <elib/options/fwd.hpp>
+# include <elib/options/detail/opt_lexical_cast.hpp>
 # include <elib/aux.hpp>
 # include <elib/any.hpp>
+# include <elib/lexical_cast.hpp>
+# include <elib/optional.hpp>
 
 # include <functional>
 # include <string>
@@ -23,7 +26,11 @@ namespace elib { namespace options
     class value_semantic
     {
     public:
-        virtual std::string name() const = 0;
+        ELIB_DEFAULT_CLASS(value_semantic);
+        
+        virtual ~value_semantic() noexcept {}
+        
+        virtual std::string const & name() const = 0;
         
         virtual unsigned min_tokens() const = 0;
         virtual unsigned max_tokens() const = 0;
@@ -32,20 +39,25 @@ namespace elib { namespace options
         virtual bool is_required() const = 0;
         
         virtual void parse(
-            elib::any & store, 
-            std::vector<std::string> const & new_tokens
-          ) const = 0;
+            elib::any & dest
+          , std::vector<std::string> const & new_tokens
+        ) const = 0;
         
-        virtual bool apply_default(elib::any & store) const = 0;
+        virtual bool apply_default(elib::any &) const = 0;
+        virtual bool apply_implicit(elib::any &) const = 0;
         
-        virtual void notify(elib::any const & store) const = 0;
+        virtual void notify(elib::any const &) const = 0;
         
-        virtual ~value_semantic() noexcept {}
+        
     };
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
     
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wexit-time-destructors"
+# endif
     ////////////////////////////////////////////////////////////////////////////
     //
     class untyped_value
@@ -56,12 +68,16 @@ namespace elib { namespace options
           : m_zero_tokens(zero_tokens)
         {}
         
-        untyped_value(untyped_value const &) = delete;
-        untyped_value(untyped_value &&) = delete;
-        untyped_value & operator=(untyped_value const &) = delete;
-        untyped_value & operator=(untyped_value &&) = delete;
+        untyped_value(untyped_value const &) = default;
+        untyped_value(untyped_value &&) = default;
+        untyped_value & operator=(untyped_value const &) = default;
+        untyped_value & operator=(untyped_value &&) = default;
         
-        std::string name() const { return "untyped option"; }
+        std::string const & name() const 
+        {
+            static const std::string m_name("untyped value");
+            return m_name;
+        }
         
         unsigned min_tokens() const { return !m_zero_tokens; }
         unsigned max_tokens() const { return !m_zero_tokens;}
@@ -69,18 +85,22 @@ namespace elib { namespace options
         bool is_composing() const { return false; }
         bool is_required() const { return false; }
         
-        void parse(
-            elib::any & store
+        void parse( 
+            elib::any & dest
           , std::vector<std::string> const & new_tokens
         ) const;
         
-        bool apply_default(elib::any &) const { return false; }
+        bool apply_default(elib::any &)  const { return false; }
+        bool apply_implicit(elib::any &) const { return false; }
         
         void notify(elib::any const &) const {}
 
     private:
         bool m_zero_tokens;
     };
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
     
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -99,18 +119,23 @@ namespace elib { namespace options
       , public typed_value_base
     {
     public:
-        typed_value();
-        typed_value(T & store_to);
+        typed_value()
+          : m_dest(nullptr)
+        {}
         
-        typed_value(typed_value const &) = delete;
-        typed_value(typed_value &&) = delete;
-        typed_value & operator=(typed_value const &) = delete;
-        typed_value & operator=(typed_value &&) = delete;
+        typed_value(T & store_to)
+          : m_dest(elib::addressof(store_to))
+        {}
+        
+        typed_value(typed_value const &) = default;
+        typed_value(typed_value &&) = default;
+        typed_value & operator=(typed_value const &) = default;
+        typed_value & operator=(typed_value &&) = default;
         
         typed_value & default_value(T const & v)
         {
             m_default_value = v;
-            m_default_value_str = "";
+            m_default_value_str = detail::opt_lexical_cast(v, "Default Value");
             return *this;
         }
         
@@ -124,7 +149,7 @@ namespace elib { namespace options
         typed_value & implicit_value(T const & v)
         {
             m_implicit_value = v;
-            m_implicit_value_str = "";
+            m_implicit_value_str = detail::opt_lexical_cast(v, "Implicit Value");
             return *this;
         }
         
@@ -171,13 +196,11 @@ namespace elib { namespace options
             m_required = true;
             return *this;
         }
-        
-       
 
     public:
         
         //TODO whats the point of this
-        std::string name() const
+        std::string const & name() const
         {
             return m_value_name;
         }
@@ -205,21 +228,33 @@ namespace elib { namespace options
             return m_required; 
         }
         
-        void parse(
-            elib::any & store
-          , std::vector<std::string> const & new_tokens
-        ) const;
-        
-        virtual bool apply_default(elib::any & store) const
+        void parse( 
+            elib::any & dest
+          , std::vector<std::string> const & new_tokens 
+        ) const
         {
-            ELIB_ASSERT(m_default_value);
-            store = m_default_value;
+            Converter c;
+            dest = c(new_tokens);
         }
         
-        void notify(elib::any const & store) const
+        virtual bool apply_default(elib::any & dest)
         {
-            if (!m_notifier) return;
-            m_notifier(any_cast<T const &>(store));
+            if (!m_default_value) return false;
+            dest = m_default_value;
+            return true;
+        }
+        
+        virtual bool apply_implicit(elib::any & dest) const
+        {
+            if (!m_implicit_value) return false;
+            dest = m_implicit_value;
+            return true;
+        }
+        
+        void notify(elib::any const & val) const
+        {
+            if (m_notifier) m_notifier(any_cast<T const &>(val));
+            if (m_dest) *m_dest = any_cast<T const &>(val);
         }
         
         std::type_info const & value_type() const noexcept
@@ -227,13 +262,15 @@ namespace elib { namespace options
             return typeid(T);
         }
         
-         bool validate() const;
+        bool validate() const;
         
     private:
-        T* m_dest;
-        std::shared_ptr<T> m_store;
+        bool m_multitoken{false}, m_zero_tokens{false}, m_composing{false};
+        bool m_implicit{false}, m_required{false};
         
-        std::string m_value_name;
+        T* m_dest{nullptr};
+        
+        std::string m_value_name{"Typed Value"};
         
         elib::any m_default_value;
         std::string m_default_value_str;
@@ -241,20 +278,18 @@ namespace elib { namespace options
         elib::any m_implicit_value;
         std::string m_implicit_value_str;
         
-        bool m_composing, m_implicit, m_multitoken, m_zero_tokens, m_required;
-        
         std::function<void(T const &)> m_notifier;
     };
     
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class T>
-    std::shared_ptr<typed_value<T>> value();
+    typed_value<T> value();
     
     template <class T>
-    std::shared_ptr<typed_value<T>> value(T & v);
+    typed_value<T> value(T & v);
     
-    std::shared_ptr<typed_value<bool>>  bool_switch();
-    std::shared_ptr<typed_value<bool>>  bool_switch(bool & v);
+    typed_value<bool>  bool_switch();
+    typed_value<bool>  bool_switch(bool & v);
 }}                                                          // namespace elib
 #endif /* ELIB_OPTIONS_VALUE_HPP */

@@ -9,14 +9,15 @@
 #include <iostream>
 
 using namespace elib::web;
+using namespace elib::web::http;
 namespace enums = elib::enumeration;
 
 BOOST_AUTO_TEST_SUITE(prox_http_test_suite)
 
 BOOST_AUTO_TEST_CASE(prox_http_version_test)
 {
-    http_version zero = http_version::ONE_ZERO;
-    http_version one = http_version::ONE_ONE;
+    version zero = version::ONE_ZERO;
+    version one = version::ONE_ONE;
     
     BOOST_CHECK(std::string{"HTTP/1.0"} == version_to_string(zero));
     BOOST_CHECK(std::string{"HTTP/1.1"} == version_to_string(one));
@@ -28,26 +29,26 @@ BOOST_AUTO_TEST_CASE(prox_http_version_test)
 #define TEST_STR_MAP(Name) \
     BOOST_CHECK(enums::enum_cast<std::string>(Name) == #Name)
     
-BOOST_AUTO_TEST_CASE(prox_http_method_test)
+BOOST_AUTO_TEST_CASE(prox_method_test)
 {
-    auto OPTIONS = http_method::OPTIONS;
-    auto GET = http_method::GET;
-    auto HEAD = http_method::HEAD;
-    auto POST = http_method::POST;
-    auto PUT = http_method::PUT;
-    auto DELETE = http_method::DELETE;
-    auto TRACE = http_method::TRACE;
-    auto CONNECT = http_method::CONNECT;
+    auto OPTIONS = method::OPTIONS;
+    auto GET = method::GET;
+    auto HEAD = method::HEAD;
+    auto POST = method::POST;
+    auto PUT = method::PUT;
+    auto DELETE = method::DELETE;
+    auto TRACE = method::TRACE;
+    auto CONNECT = method::CONNECT;
     
-    using traits = enums::enum_traits<http_method>;
-    using btraits = enums::basic_enum_traits<http_method>;
+    using traits = enums::enum_traits<method>;
+    using btraits = enums::basic_enum_traits<method>;
     BOOST_CHECK(traits::has_first_value && traits::first_value == OPTIONS);
     BOOST_CHECK(traits::has_last_value && traits::last_value == CONNECT);
     BOOST_CHECK(traits::has_is_contigious && traits::is_contigious);
-    BOOST_CHECK(enums::has_name_map<http_method>::value
-            && btraits::name_map.size() == enums::size<http_method>());
+    BOOST_CHECK(enums::has_name_map<method>::value
+            && btraits::name_map.size() == enums::size<method>());
     
-    BOOST_CHECK(enums::has_constexpr_range<http_method>::value);
+    BOOST_CHECK(enums::has_constexpr_range<method>::value);
     
     TEST_STR_MAP(OPTIONS);
     TEST_STR_MAP(GET);
@@ -60,25 +61,25 @@ BOOST_AUTO_TEST_CASE(prox_http_method_test)
 }
 #undef TEST_STR_MAP
 
-BOOST_AUTO_TEST_CASE(prox_http_status_test)
+BOOST_AUTO_TEST_CASE(prox_status_test)
 {    
-    BOOST_CHECK(enums::has_name_map<http_status>::value);
-    BOOST_CHECK(enums::has_range<http_status>::value);
-    BOOST_CHECK(!enums::has_constexpr_range<http_status>::value);
+    BOOST_CHECK(enums::has_name_map<status>::value);
+    BOOST_CHECK(enums::has_range<status>::value);
+    BOOST_CHECK(!enums::has_constexpr_range<status>::value);
  
 #define TEST_E(V, N)                                                                             \
-    BOOST_CHECK(N == enums::underlying_cast(http_status::V));                                    \
-    BOOST_CHECK(http_status::V == enums::enum_cast<http_status>(N));                             \
-    BOOST_CHECK(http_status::V == enums::enum_cast<http_status>(#V));                            \
-    BOOST_CHECK(std::string{ #V } == enums::enum_cast<std::string>(http_status::V));             \
-    BOOST_CHECK(#N == elib::lexical_cast<std::string>(enums::underlying_cast(http_status::V)) ); \
+    BOOST_CHECK(N == enums::underlying_cast(status::V));                                    \
+    BOOST_CHECK(status::V == enums::enum_cast<status>(N));                             \
+    BOOST_CHECK(status::V == enums::enum_cast<status>(#V));                            \
+    BOOST_CHECK(std::string{ #V } == enums::enum_cast<std::string>(status::V));             \
+    BOOST_CHECK(#N == elib::lexical_cast<std::string>(enums::underlying_cast(status::V)) ); \
     BOOST_CHECK( FN(V) )
 
-#define FN(V) status_is_information(http_status::V)
+#define FN(V) status_is_information(status::V)
     TEST_E(CONTINUE, 100);
     TEST_E(SWITCH_PROTOCOL, 101);
 #undef FN
-#define FN(V) status_is_success(http_status::V)
+#define FN(V) status_is_success(status::V)
     TEST_E(OK, 200);
     TEST_E(CREATED, 201);
     TEST_E(ACCEPTED, 202);
@@ -87,7 +88,7 @@ BOOST_AUTO_TEST_CASE(prox_http_status_test)
     TEST_E(RESET_CONTENT, 205);
     TEST_E(PARTIAL_CONTENT, 206);
 #undef FN
-#define FN(V) status_is_redirect(http_status::V)
+#define FN(V) status_is_redirect(status::V)
     TEST_E(REDIRECT_CHOICE, 300);
     TEST_E(REDIRECT_MOVED_PERM, 301);
     TEST_E(REDIRECT_FOUND, 302);
@@ -97,7 +98,7 @@ BOOST_AUTO_TEST_CASE(prox_http_status_test)
     //UNUSED 306
     TEST_E(REDIRECT_TEMP, 307);
 #undef FN
-#define FN(V) status_is_client_error(http_status::V) && status_is_error(http_status::V)
+#define FN(V) status_is_client_error(status::V) && status_is_error(status::V)
     TEST_E(BAD_REQUEST, 400);
     TEST_E(UNAUTHORIZED, 401);
     TEST_E(PAYMENT_REQUIRED, 402);
@@ -117,7 +118,7 @@ BOOST_AUTO_TEST_CASE(prox_http_status_test)
     TEST_E(REQUEST_RANGE_NOT_SATISFIABLE, 416);
     TEST_E(EXPECTATION_FAILED, 417);
 #undef FN
-#define FN(V) status_is_server_error(http_status::V) && status_is_error(http_status::V)
+#define FN(V) status_is_server_error(status::V) && status_is_error(status::V)
     TEST_E(INTERNAL_SERVER_ERROR, 500);
     TEST_E(NOT_IMPLEMENTED, 501);
     TEST_E(BAD_GATEWAY, 502);
@@ -128,31 +129,31 @@ BOOST_AUTO_TEST_CASE(prox_http_status_test)
 #undef TEST_E
 }
 
-bool operator==(http_data const & lhs, std::string const & rhs)
+bool operator==(data_type const & lhs, std::string const & rhs)
 {
     std::string lhs_s = std::string(lhs.begin(), lhs.end());
     return lhs_s == rhs;
 }
 
 
-std::ostream & operator <<(std::ostream & out, http_data const & dt)
+std::ostream & operator <<(std::ostream & out, data_type const & dt)
 {
     out << std::string{dt.begin(), dt.end()};
     return out;
 }
 
-BOOST_AUTO_TEST_CASE(generate_http_field_test)
+BOOST_AUTO_TEST_CASE(serialize_test)
 {
-    auto v = generate_http_field(http_field{"Hello", "Value"});
+    auto v = serialize(field_type{"Hello", "Value"});
     BOOST_CHECK( v == "Hello: Value\r\n" );
     
-    v = generate_http_field(http_field{"Hello-World", "this \"is_my\" value"});
+    v = serialize(field_type{"Hello-World", "this \"is_my\" value"});
     BOOST_CHECK( v == std::string{"Hello-World: this \"is_my\" value\r\n"});
 }
 
-BOOST_AUTO_TEST_CASE(generate_http_fields_test)
+BOOST_AUTO_TEST_CASE(serializes_test)
 {
-    std::vector<http_field> v =
+    std::vector<field_type> v =
         {
             {"Hello", "Value"}
           , {"Hello-World", "Tada "}
@@ -164,34 +165,34 @@ BOOST_AUTO_TEST_CASE(generate_http_fields_test)
         "Hello-World: Tada \r\n"
         "third-list: 3.14\r\n";
 
-    BOOST_CHECK(generate_http_fields(v) == s);
+    BOOST_CHECK(serialize(v) == s);
 }
 
-BOOST_AUTO_TEST_CASE(generate_http_request_header_test)
+BOOST_AUTO_TEST_CASE(serialize_request_header_test)
 {
-    http_request_header h =
-        {http_version::ONE_ZERO, http_method::GET, "/index.html"};
+    request_header h =
+        {version::ONE_ZERO, method::GET, "/index.html"};
         
     std::string s =
         "GET /index.html HTTP/1.0\r\n";
         
-    BOOST_CHECK(generate_http_request_header(h) == s);
+    BOOST_CHECK(serialize(h) == s);
 }
 
-BOOST_AUTO_TEST_CASE(generate_http_response_header_test)
+BOOST_AUTO_TEST_CASE(serialize_response_header_test)
 {
-    http_response_header h =
-        { http_version::ONE_ONE, http_status::OK, "OK"};
+    response_header h =
+        { version::ONE_ONE, status::OK, "OK"};
     
     std::string s = "HTTP/1.1 200 OK\r\n";
-    BOOST_CHECK(generate_http_response_header(h) == s);
+    BOOST_CHECK(serialize(h) == s);
 }
 
-BOOST_AUTO_TEST_CASE(generate_http_request_test)
+BOOST_AUTO_TEST_CASE(serialize_request_test)
 {
-    http_request h =
+    request h =
         { 
-            {http_version::ONE_ONE, http_method::GET, "/home/index.html"}
+            {version::ONE_ONE, method::GET, "/home/index.html"}
           , {{"Hello", "World"}, {"Hello-World", "Value Test"}}
           , {'h', 'e', 'l', 'l', 'o'}
         };
@@ -203,14 +204,14 @@ BOOST_AUTO_TEST_CASE(generate_http_request_test)
         "\r\n"
         "hello";
         
-    BOOST_CHECK(generate_http_request(h) == s);
+    BOOST_CHECK(serialize(h) == s);
 }
 
-BOOST_AUTO_TEST_CASE(generate_http_response_test)
+BOOST_AUTO_TEST_CASE(serialize_response_test)
 {
-    http_response h =
+    response h =
         {
-            {http_version::ONE_ZERO, http_status::NOT_FOUND, "Page Not Found"}
+            {version::ONE_ZERO, status::NOT_FOUND, "Page Not Found"}
           , {{"Hello", "\"World\""}, {"My-Test", " 'test' 123"}} 
           , {'t', '\r', '\n', 't', 'e', 's', 't'}
         };
@@ -223,23 +224,23 @@ BOOST_AUTO_TEST_CASE(generate_http_response_test)
         "t\r\n"
         "test";
         
-    BOOST_CHECK(generate_http_response(h) == s);
+    BOOST_CHECK(serialize(h) == s);
 }
     
-BOOST_AUTO_TEST_CASE(parse_http_field_test)
+BOOST_AUTO_TEST_CASE(parse_field_type_test)
 {
     std::string s_ = "Hello-World: Value\r\n";
     std::vector<char> s{s_.begin(), s_.end()};
     auto begin = s.begin();
     auto end = s.end();
-    http_field f;
+    field_type f;
     
-    BOOST_CHECK(parse_http_field(begin, end, f) == end);
-    BOOST_CHECK(f.key == "Hello-World");
-    BOOST_CHECK(f.value == "Value");
+    BOOST_CHECK(parse(begin, end, f) == end);
+    BOOST_CHECK(f.first == "Hello-World");
+    BOOST_CHECK(f.second == "Value");
 }
 
-BOOST_AUTO_TEST_CASE(parse_http_fields_test)
+BOOST_AUTO_TEST_CASE(parse_field_types_test)
 {
     std::string s_ = 
         "Hello-World:  Value\r\n"
@@ -249,48 +250,48 @@ BOOST_AUTO_TEST_CASE(parse_http_fields_test)
     auto begin = s.begin();
     auto end = s.end();
         
-    std::vector<http_field> v =
+    std::vector<field_type> v =
         {
             {"Hello-World", " Value"}
           , {"this", "is 'a' test"}
           , {"This-World-Is", " Going Down!"}
         };
     
-    std::vector<http_field> r;
-    BOOST_CHECK(parse_http_fields(begin, end, r) == end);
+    std::vector<field_type> r;
+    BOOST_CHECK(parse(begin, end, r) == end);
     BOOST_REQUIRE(r.size() == v.size());
     
     auto vb = v.begin();
     for (const auto & f : r)
     {
-        BOOST_CHECK(vb->key == f.key);
-        BOOST_CHECK(vb->value == f.value);
+        BOOST_CHECK(vb->first == f.first);
+        BOOST_CHECK(vb->second == f.second);
         ++vb;
     }
 }
 
-BOOST_AUTO_TEST_CASE(parse_http_request_header_test)
+BOOST_AUTO_TEST_CASE(parse_request_header_test)
 {
     std::string s_ = "GET \"this-value/index.html\" HTTP/1.1\r\n";
     std::vector<char> s{s_.begin(), s_.end()};
-    http_request_header h;
+    request_header h;
     
-    BOOST_CHECK(parse_http_request_header(s.begin(), s.end(), h) == s.end());
-    BOOST_CHECK(h.version == http_version::ONE_ONE);
-    BOOST_CHECK(h.method == http_method::GET);
-    BOOST_CHECK(h.request == "\"this-value/index.html\"");
+    BOOST_CHECK(parse(s.begin(), s.end(), h) == s.end());
+    BOOST_CHECK(h.http_version == version::ONE_ONE);
+    BOOST_CHECK(h.code == method::GET);
+    BOOST_CHECK(h.value == "\"this-value/index.html\"");
 }
 
-BOOST_AUTO_TEST_CASE(parse_http_response_header_test)
+BOOST_AUTO_TEST_CASE(parse_response_header_test)
 {
     std::string s_ = "HTTP/1.0 404 Page Not Found\r\n";
     std::vector<char> s{s_.begin(), s_.end()};
-    http_response_header h;
+    response_header h;
     
-    BOOST_CHECK(parse_http_response_header(s.begin(), s.end(), h) == s.end());
-    BOOST_CHECK(h.version == http_version::ONE_ZERO);
-    BOOST_CHECK(h.status == http_status::NOT_FOUND);
-    BOOST_CHECK(h.description == "Page Not Found");
+    BOOST_CHECK(parse(s.begin(), s.end(), h) == s.end());
+    BOOST_CHECK(h.http_version == version::ONE_ZERO);
+    BOOST_CHECK(h.code == status::NOT_FOUND);
+    BOOST_CHECK(h.value == "Page Not Found");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -128,8 +128,9 @@ namespace elib { namespace options
         option_description_init &
         operator()(std::string name, std::string desc)
         {
+            untyped_value v;
             m_owner.add(std::make_shared<option_description>(
-                name, untyped_value{}, desc
+                name, v, desc
             ));
             return *this;
         }

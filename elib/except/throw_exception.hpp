@@ -6,7 +6,7 @@
 # include <elib/except/error_info.hpp>
 
 # define ELIB_THROW_EXCEPTION(Ex) \
-  ::elib::except::throw_exception_from(ex, __FILE__, __func__, __LINE__)
+  ::elib::except::throw_exception_from(Ex, __FILE__, __func__, __LINE__)
   
 # define ELIB_SET_EXCEPTION_THROW_SITE(Ex)  \
   ::elib::except::set_exception_throw_site(Ex, __FILE__, __func__, __LINE__)

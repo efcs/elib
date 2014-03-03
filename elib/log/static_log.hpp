@@ -119,7 +119,7 @@ namespace elib
         va_start(__args, msg); \
         std::string __str = fmt(msg, __args); \
         va_end(__args); \
-        get_instance()._log(level, __str)
+        get_instance().print(level, __str)
     
 
     template <typename Tag>

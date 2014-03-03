@@ -3,6 +3,7 @@
 
 # include <elib/log/log_level.hpp>
 # include <elib/log/log.hpp>
+# include <elib/aux.hpp>
 # include <elib/fmt.hpp>
 # include <cstdarg>
 # include <string>
@@ -25,77 +26,159 @@ namespace elib
     public:
         
         static const std::string & 
-        prompt(level_e l);
+        prompt(level_e l)
+        {
+            return get_instance().prompt(l);
+        }
         
         static void 
-        prompt(level_e l, const std::string &prompt);
+        prompt(level_e l, const std::string &p)
+        {
+            get_instance().prompt(l, p);
+        }
         
         static void 
-        level(level_e l);
+        level(level_e l)
+        {
+            get_instance().level(l);
+        }
         
         static level_e 
-        level();
+        level()
+        {
+            return get_instance().level();
+        }
+        
+        template <class ...Args>
+        static void 
+        print(level_e l, const char *msg, Args &&... args)
+        {
+            get_instance().print(l, msg, elib::forward<Args>(args)...);
+        }
+        
         
         static void 
-        print(level_e l, const char *msg, ... );
+        print(level_e l, const std::string &msg)
+        {
+            get_instance().print(l, msg);
+        }
+        
+        template <class ...Args>
+        static void 
+        debug(const char *msg, Args &&... args)
+        {
+            get_instance().debug(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        print(level_e l, const std::string &msg);
+        debug(const std::string & s)
+        {
+            get_instance().debug(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        info(const char *msg, Args &&... args)
+        {
+            get_instance().info(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        debug(const char *msg, ... );
+        info(const std::string & s)
+        {
+            get_instance().info(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        step(const char *msg, Args &&... args)
+        {
+            get_instance().step(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        debug(const std::string & s);
+        step(const std::string & s)
+        {
+            get_instance().step(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        warn(const char *msg, Args &&... args)
+        {
+            get_instance().warn(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        info(const char *msg, ... );
+        warn(const std::string & s)
+        {
+            get_instance().warn(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        err(const char *msg, Args &&... args)
+        {
+            get_instance().err(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        info(const std::string & s);
+        err(const std::string & s)
+        {
+            get_instance().err(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        fatal(const char *msg, Args &&... args)
+        {
+            get_instance().fatal(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        step(const char *msg, ... );
+        fatal(const std::string & s)
+        {
+            get_instance().fatal(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        raw_out(const char *msg, Args &&... args)
+        {
+            get_instance().raw_out(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        step(const std::string & s);
+        raw_out(const std::string & s)
+        {
+            get_instance().raw_out(s);
+        }
+        
+        template <class ...Args>
+        static void 
+        raw_err(const char *msg, Args &&... args)
+        {
+            get_instance().raw_err(msg, elib::forward<Args>(args)...);
+        }
         
         static void 
-        warn(const char *msg, ... );
-        
-        static void 
-        warn(const std::string & s);
-        
-        static void 
-        err(const char *msg, ... );
-        
-        static void 
-        err(const std::string & s);
-        
-        static void 
-        fatal(const char *msg, ...);
-        
-        static void 
-        fatal(const std::string & s);
-        
-        static void 
-        raw_out(const char *msg, ...);
-        
-        static void 
-        raw_out(const std::string & s);
-        
-        static void 
-        raw_err(const char *msg, ...);
-        
-        static void 
-        raw_err(const std::string & s);
+        raw_err(const std::string & s)
+        {
+            get_instance().raw_err(s);
+        }
         
         /* Turn ALL OUTPUT from log on/off */
         static void 
-        on(bool p);
+        on(bool p)
+        {
+            get_instance().on(p);
+        }
         
         static bool 
-        on();
+        on()
+        {
+            return get_instance().on();
+        }
     };
 
       
@@ -112,185 +195,6 @@ namespace elib
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
-
-    
-    #define ELIB_LOG_FUNC_HANDLER(level) \
-        va_list __args; \
-        va_start(__args, msg); \
-        std::string __str = fmt(msg, __args); \
-        va_end(__args); \
-        get_instance().print(level, __str)
-    
-
-    template <typename Tag>
-    inline const std::string &
-    static_log<Tag>::prompt(level_e level)
-    {
-        return get_instance().prompt(level);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::prompt(level_e level, const std::string &prompt)
-    {
-        get_instance().prompt(level, prompt);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::level(level_e level)
-    {
-        get_instance().level(level);
-    }
-
-    template <typename Tag>
-    inline level_e 
-    static_log<Tag>::level()
-    {
-        return get_instance().level();
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::print(level_e level, const char *msg, ... ) 
-    {
-        ELIB_LOG_FUNC_HANDLER(level);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::print(level_e level, const std::string &msg)
-    {
-        get_instance().print(level, msg.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::debug(const char *msg, ... )
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::debug);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::debug(const std::string & s)
-    {
-        get_instance().print(level_e::debug, s.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::info(const char *msg, ... )
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::info);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::info(const std::string & s)
-    {
-        get_instance().print(level_e::info, s.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::step(const char *msg, ... )
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::step);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::step(const std::string & s)
-    {
-        get_instance().print(level_e::step, s.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::warn(const char *msg, ... )
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::warn);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::warn(const std::string & s)
-    {
-        get_instance().print(level_e::warn, s.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::err(const char *msg, ... )
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::err);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::err(const std::string & s)
-    {
-        get_instance().print(level_e::err, s.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::fatal(const char *msg, ...)
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::fatal);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::fatal(const std::string & s)
-    {
-        get_instance().print(level_e::fatal, s.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::raw_out(const char *msg, ...)
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::raw_out);
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::raw_out(const std::string &msg)
-    {
-        get_instance().print(level_e::raw_out, msg.c_str());
-    }
-
-    template <typename Tag>
-    inline void 
-    static_log<Tag>::raw_err(const char *msg, ...)
-    {
-        ELIB_LOG_FUNC_HANDLER(level_e::raw_err);
-    }
-
-    template <typename Tag>
-    inline void
-    static_log<Tag>::raw_err(const std::string & msg)
-    {
-        get_instance().print(level_e::raw_err, msg.c_str());
-    }
-
-    template <typename Tag>
-    inline void
-    static_log<Tag>::on(bool p) 
-    {
-        get_instance().on(p);
-    }
-
-    template <typename Tag>
-    inline bool
-    static_log<Tag>::on()
-    {
-        return get_instance().on();
-    }
-       
-# undef ELIB_LOG_FUNC_HANDLER
 
   }                                                         // namespace log
 }                                                           // namespace elib

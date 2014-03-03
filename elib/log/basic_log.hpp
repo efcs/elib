@@ -2,6 +2,8 @@
 #define ELIB_LOG_BASIC_LOG_HPP
 
 #include <elib/log/log_level.hpp>
+# include <elib/aux.hpp>
+# include <elib/fmt.hpp>
 
 #include <map>
 #include <mutex>
@@ -37,33 +39,105 @@ namespace elib
         
         /* print a message to a given log level,
         * valid levels: all */
-        void print(level_e l, const char *msg, ... );
-        void print(level_e l, const std::string &msg);
+        template <class ...Args>
+        void print(level_e l, const char *msg, Args &&... args )
+        {
+            _log(l, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
+        
+        void print(level_e l, const std::string &msg)
+        {
+            _log(l, msg);
+        }
         
         /* a method for each log level */
-        void debug(const char *msg, ... );
-        void debug(const std::string & s);
+        template <class ...Args>
+        void debug(const char *msg, Args &&... args )
+        {
+            _log(level_e::debug, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
         
-        void info(const char *msg, ... );
-        void info(const std::string & s);
+        void debug(const std::string & s)
+        {
+            _log(level_e::debug, s);
+        }
         
-        void step(const char *msg, ... );
-        void step(const std::string & s);
+        template <class ...Args>
+        void info(const char *msg, Args &&... args )
+        {
+            _log(level_e::info, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
         
-        void warn(const char *msg, ... );
-        void warn(const std::string & s);
+        void info(const std::string & s)
+        {
+            _log(level_e::info, s);
+        }
         
-        void err(const char *msg, ... );
-        void err(const std::string & s);
+        template <class ...Args>
+        void step(const char *msg, Args &&... args )
+        {
+            _log(level_e::step, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
         
-        void fatal(const char *msg, ...);
-        void fatal(const std::string & s);
+        void step(const std::string & s)
+        {
+            _log(level_e::step, s);
+        }
         
-        void raw_out(const char *msg, ...);
-        void raw_out(const std::string & s);
+        template <class ...Args>
+        void warn(const char *msg, Args &&... args )
+        {
+            _log(level_e::warn, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
         
-        void raw_err(const char *msg, ...);
-        void raw_err(const std::string & s);
+        void warn(const std::string & s)
+        {
+            _log(level_e::warn, s);
+        }
+        
+        template <class ...Args>
+        void err(const char *msg, Args &&... args )
+        {
+            _log(level_e::err, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
+        
+        void err(const std::string & s)
+        {
+            _log(level_e::err, s);
+        }
+        
+        template <class ...Args>
+        void fatal(const char *msg, Args &&... args)
+        {
+            _log(level_e::fatal, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
+        
+        void fatal(const std::string & s)
+        {
+            _log(level_e::fatal, s);
+        }
+        
+        template <class ...Args>
+        void raw_out(const char *msg, Args &&... args)
+        {
+            _log(level_e::raw_out, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
+        
+        void raw_out(const std::string & s)
+        {
+            _log(level_e::raw_out, s);
+        }
+        
+        template <class ...Args>
+        void raw_err(const char *msg, Args &&... args)
+        {
+            _log(level_e::raw_err, elib::fmt(msg, elib::forward<Args>(args)...));
+        }
+        
+        void raw_err(const std::string & s)
+        {
+            _log(level_e::raw_err, s);
+        }
         
         /* Turn ALL OUTPUT from log on/off */
         void on(bool p);
@@ -102,10 +176,6 @@ namespace elib
               {level_e::raw_out, ""},
               {level_e::raw_err, ""} 
             };
-        
-    private:
-        template <typename T>
-        friend class static_log;
     };
 
 

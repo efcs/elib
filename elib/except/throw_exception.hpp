@@ -27,7 +27,7 @@ namespace elib { namespace except
     )
     {
         throw (
-            e << throw_file(file) << throw_func(func) << throw_line(line);
+            e << throw_file(file) << throw_func(func) << throw_line(line)
         );
     }
     

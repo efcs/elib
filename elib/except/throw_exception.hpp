@@ -32,8 +32,29 @@ namespace elib { namespace except
     }
     
     template <class E>
+    [[noreturn]] void
+    throw_exception_from(
+        E && e
+      , const char *file, const char* func, unsigned line
+    )
+    {
+        throw (
+            e << throw_file(file) << throw_func(func) << throw_line(line)
+        );
+    }
+    
+    template <class E>
     E & set_exception_throw_site(
         E & e
+      , const char* file, const char* func, unsigned line
+    )
+    {
+        return (e << throw_file(file) << throw_func(func) << throw_line(line));
+    }
+    
+    template <class E>
+    E & set_exception_throw_site(
+        E && e
       , const char* file, const char* func, unsigned line
     )
     {

@@ -20,8 +20,8 @@ namespace elib
     class static_log { 
     private:
         /* only a single instance of static_log is allowed */
-        static_log();
-        static static_log & get_instance();
+        static_log() = delete;
+        static log & get_instance();
     public:
         
         static const std::string & 
@@ -104,9 +104,9 @@ namespace elib
 #   pragma clang diagnostic ignored "-Wexit-time-destructors"
 # endif
     template <class Tag>
-    static_log<Tag> & static_log<Tag>::get_instance()
+    log & static_log<Tag>::get_instance()
     {
-        static static_log<Tag> m_instance;
+        static log m_instance;
         return m_instance;
     }
 # if defined(__clang__)

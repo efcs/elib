@@ -3,6 +3,7 @@
 
 # include <elib/except/fwd.hpp>
 # include <elib/except/error_info.hpp>
+# include <elib/aux.hpp>
 # include <elib/any.hpp>
 
 # include <exception>
@@ -36,6 +37,8 @@ namespace elib { namespace except
         exception(const char* what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
         {}
+        
+        ELIB_DEFAULT_COPY_MOVE(exception);
         
         virtual const char* what() const noexcept 
         { return m_impl->m_what_arg.c_str(); }

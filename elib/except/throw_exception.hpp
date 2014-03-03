@@ -4,6 +4,7 @@
 # include <elib/except/fwd.hpp>
 # include <elib/except/exception.hpp>
 # include <elib/except/error_info.hpp>
+# include <elib/aux.hpp>
 
 # define ELIB_THROW_EXCEPTION(Ex) \
   ::elib::except::throw_exception_from(Ex, __FILE__, __func__, __LINE__)
@@ -31,7 +32,10 @@ namespace elib { namespace except
         );
     }
     
-    template <class E>
+    template <
+        class E
+      , ELIB_ENABLE_IF(!aux::is_lvalue_reference<E>::value)
+    >
     [[noreturn]] void
     throw_exception_from(
         E && e

@@ -3,7 +3,7 @@
 
 # include <elib/config.hpp>
 # if !defined(ELIB_CONFIG_POSIX)
-#   error "elib::web::socket requires POSIX "\
+#   error "elib::web::socket requires POSIX " \
           "please use the CMake option CONFIG_LIB_WEB to disable this library"
 # endif
 
@@ -94,10 +94,10 @@ namespace elib { namespace web
     /* receive maps to recv. If no vector is supplied it attempts to 
      * use a vector of size default_receive_length to store the data.
      *  
-     * when a vector is return, it is sized to fit exactly the
-     * data that was inserted into it.
-     * HOWEVER: When ::ssize_t is return, the vector passed in DOES NOT have its 
-     * size modified
+     * when a vector is returned, it is sized to fit exactly the data that was 
+     * inserted into it.
+     * HOWEVER: When ::ssize_t is returned, the vector passed in DOES NOT have 
+     * its size modified
      */
     constexpr const std::size_t default_receive_length = 1024;
     

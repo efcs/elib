@@ -11,7 +11,8 @@
 namespace elib { namespace web { namespace http
 {
     /* because \n just won't do the trick
-     * initialization format is needed to prevent extra null (i think?) */
+     * initialization format is needed to prevent extra null (i think?) 
+     * TODO: Fix this */
     constexpr const char newl[2] = {'\r', '\n'};
     
     ////////////////////////////////////////////////////////////////////////////

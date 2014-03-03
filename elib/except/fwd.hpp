@@ -116,12 +116,12 @@ namespace elib { namespace except
     //
     using throw_func = error_info<tags::throw_func, const char*>;
     using throw_file = error_info<tags::throw_file, const char*>;
-    using throw_line = error_info<tags::throw_line, int>;
+    using throw_line = error_info<tags::throw_line, unsigned>;
     
     ////////////////////////////////////////////////////////////////////////////
     //
     using errinfo_api_function = error_info<tags::api_function, const char*>;
-    using errinfo_at_line = error_info<tags::at_line, int>;
+    using errinfo_at_line = error_info<tags::at_line, unsigned>;
     using errinfo_errno = error_info<tags::errno_info, int>;
     using errinfo_file_handle = error_info<tags::file_handle, int>;
     using errinfo_file_name = error_info<tags::file_name, std::string>;

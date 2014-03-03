@@ -80,7 +80,7 @@ namespace elib
                             );
                     break;
                 case 's':
-                    if (!aux::is_same<const char*, T>::value)
+                    if (!aux::is_string_type<T>::value)
                         throw std::logic_error(
                             "Type mismatch: expected C string"
                             );

@@ -12,6 +12,9 @@
 # include <cstdio>
 # include <cstdarg>
 
+# include <typeinfo>
+# include <iostream>
+
 namespace elib 
 {
     namespace fmt_detail
@@ -81,10 +84,13 @@ namespace elib
                     break;
                 case 's':
                     if (!aux::is_string_type<T>::value)
+                    {
+                        std::cerr << typeid(T).name() << std::endl;
                         throw std::logic_error(
                             "Type mismatch: expected C string"
                             );
-                        break;
+                    }
+                    break;
                 case 'p':
                     if (!aux::is_pointer<T>::value)
                         throw std::logic_error(

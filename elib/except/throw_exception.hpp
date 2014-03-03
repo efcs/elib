@@ -20,7 +20,7 @@ namespace elib { namespace except
     }
     
     template <class E>
-    [[noreturn]] void t
+    [[noreturn]] void
     throw_exception_from(
         E & e
       , const char *file, const char* func, unsigned line

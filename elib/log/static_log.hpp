@@ -161,7 +161,7 @@ namespace elib
     inline void 
     static_log<Tag>::print(level_e level, const std::string &msg)
     {
-        get_instance()._log(level, msg.c_str());
+        get_instance().print(level, msg.c_str());
     }
 
     template <typename Tag>
@@ -175,7 +175,7 @@ namespace elib
     inline void 
     static_log<Tag>::debug(const std::string & s)
     {
-        get_instance()._log(level_e::debug, s.c_str());
+        get_instance().print(level_e::debug, s.c_str());
     }
 
     template <typename Tag>
@@ -189,7 +189,7 @@ namespace elib
     inline void 
     static_log<Tag>::info(const std::string & s)
     {
-        get_instance()._log(level_e::info, s.c_str());
+        get_instance().print(level_e::info, s.c_str());
     }
 
     template <typename Tag>
@@ -203,7 +203,7 @@ namespace elib
     inline void 
     static_log<Tag>::step(const std::string & s)
     {
-        get_instance()._log(level_e::step, s.c_str());
+        get_instance().print(level_e::step, s.c_str());
     }
 
     template <typename Tag>
@@ -217,7 +217,7 @@ namespace elib
     inline void 
     static_log<Tag>::warn(const std::string & s)
     {
-        get_instance()._log(level_e::warn, s.c_str());
+        get_instance().print(level_e::warn, s.c_str());
     }
 
     template <typename Tag>
@@ -231,7 +231,7 @@ namespace elib
     inline void 
     static_log<Tag>::err(const std::string & s)
     {
-        get_instance()._log(level_e::err, s.c_str());
+        get_instance().print(level_e::err, s.c_str());
     }
 
     template <typename Tag>
@@ -245,7 +245,7 @@ namespace elib
     inline void 
     static_log<Tag>::fatal(const std::string & s)
     {
-        get_instance()._log(level_e::fatal, s.c_str());
+        get_instance().print(level_e::fatal, s.c_str());
     }
 
     template <typename Tag>
@@ -259,7 +259,7 @@ namespace elib
     inline void 
     static_log<Tag>::raw_out(const std::string &msg)
     {
-        get_instance()._log(level_e::raw_out, msg.c_str());
+        get_instance().print(level_e::raw_out, msg.c_str());
     }
 
     template <typename Tag>
@@ -273,7 +273,7 @@ namespace elib
     inline void
     static_log<Tag>::raw_err(const std::string & msg)
     {
-        get_instance()._log(level_e::raw_err, msg.c_str());
+        get_instance().print(level_e::raw_err, msg.c_str());
     }
 
     template <typename Tag>

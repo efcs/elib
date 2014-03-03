@@ -1,8 +1,8 @@
 #ifndef ELIB_AUX_LITERALS_HPP
 #define ELIB_AUX_LITERALS_HPP
 
-
 # include <elib/aux/integral_constant.hpp>
+# include <string>
 # include <cstddef>
 
 namespace elib 
@@ -45,6 +45,11 @@ namespace elib
     constexpr aux::detail::generate_literal_apply<bool, Ch...>
     operator "" _bool() noexcept
     { return {}; }
+    
+    inline std::string operator "" _s(const char *s) 
+    {
+        return std::string(s);
+    }
 # endif /* ELIB_CONFIG_COVERITY_SCAN */
 }                                                           // namespace elib
 #endif /* ELIB_AUX_LITERALS_HPP */

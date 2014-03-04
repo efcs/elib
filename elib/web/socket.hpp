@@ -192,10 +192,10 @@ namespace elib { namespace web
     ////////////////////////////////////////////////////////////////////////////
     //
     ::sockaddr_in 
-    get_peer_info(socket const &);
+    get_peer_name(socket const &);
     
     ::sockaddr_in
-    get_peer_info(socket const &, std::error_code & ec) noexcept;
+    get_peer_name(socket const &, std::error_code & ec) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -234,7 +234,7 @@ namespace elib { namespace web
           , std::error_code *ec = nullptr
         );
                            
-        ::sockaddr_in get_peer_info_impl(
+        ::sockaddr_in get_peer_name_impl(
             socket const &
           , std::error_code *ec = nullptr
         );
@@ -681,15 +681,15 @@ namespace elib { namespace web
     ////////////////////////////////////////////////////////////////////////////
     //
     inline ::sockaddr_in 
-    get_peer_info(socket const & s)
+    get_peer_name(socket const & s)
     {
         return detail::get_peer_info_impl(s);
     }
     
     inline ::sockaddr_in
-    get_peer_info(socket const & s, std::error_code & ec) noexcept
+    get_peer_name(socket const & s, std::error_code & ec) noexcept
     {
-        return detail::get_peer_info_impl(s, &ec);
+        return detail::get_peer_name_impl(s, &ec);
     }
 
 }}                                                       // namespace elib::web

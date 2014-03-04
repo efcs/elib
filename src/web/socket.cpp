@@ -236,22 +236,22 @@ namespace elib { namespace web
             return ret;
         }
         
-        ::sockaddr_in get_peer_info_impl(socket const & s, std::error_code *ec)
+        ::sockaddr_in get_peer_name_impl(socket const & s, std::error_code *ec)
         {
             if (ec) ec->clear();
             
             ::sockaddr_in in;
             
             if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to get_peer_info", s, ec))
+                "bad socket passed to get_peer_name", s, ec))
                 return in;
             
             ::socklen_t len = sizeof(::sockaddr_in);
-            int ret = ::getpeerinfo(s.raw_socket(), &in, &len);
+            int ret = ::getpeername(s.raw_socket(), &in, &len);
             
             if (ret == -1) 
             {
-                detail::handle_or_throw_error("get_peer_info failed", ec);
+                detail::handle_or_throw_error("get_peer_name failed", ec);
                 return in;
             }
                 

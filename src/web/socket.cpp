@@ -247,7 +247,7 @@ namespace elib { namespace web
                 return in;
             
             ::socklen_t len = sizeof(::sockaddr_in);
-            int ret = ::getpeername(s.raw_socket(), &in, &len);
+            int ret = ::getpeername(s.raw_socket(), (::sockaddr*)&in, &len);
             
             if (ret == -1) 
             {

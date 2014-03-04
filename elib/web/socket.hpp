@@ -683,7 +683,7 @@ namespace elib { namespace web
     inline ::sockaddr_in 
     get_peer_name(socket const & s)
     {
-        return detail::get_peer_info_impl(s);
+        return detail::get_peer_name_impl(s);
     }
     
     inline ::sockaddr_in

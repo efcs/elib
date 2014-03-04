@@ -19,6 +19,7 @@
 
 # include <sys/socket.h>
 # include <sys/types.h>
+# include <netinet/in.h>
 # include <unistd.h>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -187,6 +188,14 @@ namespace elib { namespace web
     ::ssize_t
     send_to(socket const &, std::vector<char> const &
             , SockAddr const &, std::error_code & ec) noexcept;
+            
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    ::sockaddr_in 
+    get_peer_info(socket const &);
+    
+    ::sockaddr_in
+    get_peer_info(socket const &, std::error_code & ec) noexcept;
     
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -194,24 +203,41 @@ namespace elib { namespace web
      * passes through one of these */
     namespace detail
     {
-        socket accept_impl(socket const &, sockaddr *addr, socklen_t *len
-                         , std::error_code *ec = nullptr);
+        socket accept_impl(
+            socket const &, sockaddr *addr, socklen_t *len
+          , std::error_code *ec = nullptr
+        );
                          
-        ::ssize_t receive_impl(socket const &, std::vector<char> &, msg_flags
-                           , std::error_code *ec = nullptr);
+        ::ssize_t receive_impl(
+            socket const &, std::vector<char> &, msg_flags
+          , std::error_code *ec = nullptr
+        );
                             
-        ::ssize_t receive_msg_impl(socket const &, message_t &, msg_flags
-                               , std::error_code *ec = nullptr);
+        ::ssize_t receive_msg_impl(
+            socket const &, message_t &, msg_flags
+          , std::error_code *ec = nullptr
+        );
                                
-        ::ssize_t send_impl(socket const &, std::vector<char> const &, msg_flags
-                        , std::error_code *ec = nullptr); 
+        ::ssize_t send_impl(
+            socket const &, std::vector<char> const &, msg_flags
+          , std::error_code *ec = nullptr
+        ); 
                            
-        ::ssize_t send_msg_impl(socket const &, message_t const &, msg_flags 
-                             , std::error_code *ec = nullptr);
+        ::ssize_t send_msg_impl(
+            socket const &, message_t const &, msg_flags 
+          , std::error_code *ec = nullptr
+        );
                              
-        ::ssize_t send_to_impl(socket const &, std::vector<char> const &, msg_flags
-                           , const sockaddr *dest_addr, socklen_t len
-                           , std::error_code *ec = nullptr);
+        ::ssize_t send_to_impl(
+            socket const &, std::vector<char> const &, msg_flags
+          , const sockaddr *dest_addr, socklen_t len
+          , std::error_code *ec = nullptr
+        );
+                           
+        ::sockaddr_in get_peer_info_impl(
+            socket const &
+          , std::error_code *ec = nullptr
+        );
     }                                                       // namespace detail
     
     /* To provide some type safety as compared against
@@ -348,15 +374,13 @@ namespace elib { namespace web
         
         ////////////////////////////////////////////////////////////////////////
         //
-        bool is_open() const noexcept
-        { return (m_fd != -1); }
+        bool is_open() const noexcept { return (m_fd != -1); }
         
         void open(sock_domain d, sock_type t, int protocol = 0) noexcept;
         void shutdown(sock_shut = sock_shut::read_write) noexcept;
         void close() noexcept;
         
-        int raw_socket() const noexcept
-        { return m_fd; }
+        int raw_socket() const noexcept { return m_fd; }
         
         ////////////////////////////////////////////////////////////////////////
         //
@@ -652,6 +676,20 @@ namespace elib { namespace web
                   , (const sockaddr*)elib::addressof(addr), sizeof(SockAddr)
                   , &ec
             );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    inline ::sockaddr_in 
+    get_peer_info(socket const & s)
+    {
+        return detail::get_peer_info_impl(s);
+    }
+    
+    inline ::sockaddr_in
+    get_peer_info(socket const & s, std::error_code & ec) noexcept
+    {
+        return detail::get_peer_info_impl(s, &ec);
     }
 
 }}                                                       // namespace elib::web

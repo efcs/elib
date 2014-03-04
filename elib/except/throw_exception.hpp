@@ -15,7 +15,8 @@
 namespace elib { namespace except
 {
     template <class E>
-    [[noreturn]] void throw_exception(E const & e)
+    [[noreturn]] void 
+    throw_exception(E const & e)
     {
         throw e;
     }

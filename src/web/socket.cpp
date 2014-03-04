@@ -235,5 +235,28 @@ namespace elib { namespace web
                 detail::handle_or_throw_error("send_to failed", ec);
             return ret;
         }
+        
+        ::sockaddr_in get_peer_info_impl(socket const & s, std::error_code *ec)
+        {
+            if (ec) ec->clear();
+            
+            ::sockaddr_in in;
+            
+            if (detail::handle_or_throw_bad_sock(
+                "bad socket passed to get_peer_info", s, ec))
+                return in;
+            
+            ::socklen_t len = sizeof(::sockaddr_in);
+            int ret = ::getpeerinfo(s.raw_socket(), &in, &len);
+            
+            if (ret == -1) 
+            {
+                detail::handle_or_throw_error("get_peer_info failed", ec);
+                return in
+            };
+                
+            ELIB_ASSERT(len <= sizeof(::sockaddr_in));
+            return in;
+        }
     }                                                       // namespace detail
 }}                                                       // namespace elib::web

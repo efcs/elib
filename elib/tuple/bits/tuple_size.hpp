@@ -39,6 +39,11 @@ namespace elib { namespace tuples
           : size_type_<sizeof...(Types)>
         {};
         
+        template <class Indexes, class ...Types>
+        struct tuple_size_impl< tuple_impl<Indexes, Types...> >
+          : size_type_<sizeof...(Types)>
+        {};
+        
         template <class ...Types>
         struct tuple_size_impl< tuple<Types...> >
           : size_type_<sizeof...(Types)>

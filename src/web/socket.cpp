@@ -252,8 +252,8 @@ namespace elib { namespace web
             if (ret == -1) 
             {
                 detail::handle_or_throw_error("get_peer_info failed", ec);
-                return in
-            };
+                return in;
+            }
                 
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;

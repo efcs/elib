@@ -1,8 +1,10 @@
 #ifndef ELIB_WEB_HTTP_CORE_HPP
 #define ELIB_WEB_HTTP_CORE_HPP
 
+# include <elib/web/http/fwd.hpp>
 # include <elib/aux.hpp>
 # include <elib/enumeration.hpp>
+# include <elib/lexical_cast.hpp>
 # include <algorithm>
 # include <string>
 # include <vector>
@@ -235,9 +237,6 @@ namespace elib { namespace web { namespace http
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    using data_type = std::vector<char>;
-    using field_type = std::pair<std::string, std::string>;
-    
     template <class EnumType>
     struct message_header
     {
@@ -245,9 +244,6 @@ namespace elib { namespace web { namespace http
         EnumType code;
         std::string value;
     };
-    
-    using request_header = message_header<method>;
-    using response_header = message_header<status>;
     
     template <class HeaderType>
     struct message
@@ -258,9 +254,6 @@ namespace elib { namespace web { namespace http
         std::vector<field_type> fields;
         data_type data;
     };
-    
-    using request = message<request_header>;
-    using response = message<response_header>;
     
     ////////////////////////////////////////////////////////////////////////////
     //
@@ -275,55 +268,59 @@ namespace elib { namespace web { namespace http
     }
 
 
-    inline void insert_field(
+    template <
+        class Header
+      , class T
+      , ELIB_ENABLE_IF(elib::is_lexical<T>::value)
+    >
+    void insert_field(
+        message<Header> & dest
+      , std::string const & key
+      , T && v
+    )
+    {
+        dest.fields.push_back(std::make_pair(
+            key
+          , elib::lexical_cast<std::string>(elib::forward<T>(v))
+        ));
+    }
+    
+    template <
+        class T
+      , ELIB_ENABLE_IF(elib::is_lexical<T>::value)
+    >
+    void insert_field(
         std::vector<field_type> & dest
+      , std::string const & key
+      , T && v
+    )
+    {
+        dest.push_back(std::make_pair(
+            key
+          , elib::lexical_cast<std::string>(elib::forward<T>(v))
+        ));
+    }
+    
+    template <class Header>
+    void insert_field(
+        message<Header> & dest
       , field_type const & f
     )
     {
-        dest.push_back( f );
+        dest.fields.push_back( f );
     }
     
-    inline void insert_field(
+    inline void 
+    insert_field(
         std::vector<field_type> & dest
       , field_type && f
     )
     {
-        dest.push_back( static_cast<field_type &&>(f) );
+        dest.push_back(
+            static_cast<field_type &&>(f)
+        );
     }
     
-    inline void insert_field(
-        std::vector<field_type> & dest
-      , std::string const & key
-      , std::string const & value
-    )
-    {
-        return dest.push_back( {key, value} );
-    }
-    
-    template <class Header>
-    void insert_field(message<Header> & dest
-      , std::string const & key
-      , std::string const & value
-    )
-    {
-        return dest.fields.push_back( {key, value} );
-    }
-    
-    template <class Header>
-    void insert_field(message<Header> & dest
-      , field_type const & f
-    )
-    {
-        return dest.fields.push_back( f );
-    }
-    
-    template <class Header>
-    void insert_field(message<Header> & dest
-      , field_type && f
-    )
-    {
-        return dest.fields.push_back( static_cast<field_type &&>(f) );
-    }
     
     ////////////////////////////////////////////////////////////////////////////
     //

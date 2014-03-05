@@ -215,10 +215,10 @@ namespace elib
             ss >> t;
             
             if (!ss) 
-                throw bad_lexical_cast{
+                throw bad_lexical_cast(
                     std::string{"bad lexical cast from string: \""}
                     + from + "\""
-                };
+                  );
             
             return t;
         }

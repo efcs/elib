@@ -8,6 +8,12 @@
 namespace elib { namespace web { namespace http
 {
 
+     /* because \n just won't do the trick
+     * initialization format is needed to prevent extra null (i think?) 
+     * TODO: Fix this */
+    constexpr const char newl[2] = {'\r', '\n'};
+    
+    
     enum class version;
     enum class method;
     enum class status;
@@ -33,23 +39,7 @@ namespace elib { namespace web { namespace http
     data_type serialize(std::vector<field_type> const &);
     
     template <class HeaderType>
-    data_type serialize(message<HeaderType> const & m)
-    {
-        data_type dt;
-        
-        data_type tmp = serialize(m.header);
-        dt.insert(dt.end(), tmp.begin(), tmp.end());
-        
-        tmp = serialize(m.fields);
-        dt.insert(dt.end(), tmp.begin(), tmp.end());
-        
-        dt.push_back(newl[0]);
-        dt.push_back(newl[1]);
-        
-        dt.insert(dt.end(), m.data.begin(), m.data.end());
-        
-        return dt;
-    }
+    data_type serialize(message<HeaderType> const & m);
     
     data_type::const_iterator 
     parse(
@@ -91,7 +81,7 @@ namespace elib { namespace web { namespace http
         data_type::const_iterator begin
       , data_type::const_iterator const & end
       , message<Header> & dest
-    )
+    );
     
     
 }}}                                                         // namespace elib

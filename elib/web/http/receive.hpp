@@ -19,19 +19,19 @@ namespace elib { namespace web { namespace http
         Message receive(web::socket const & s);
     }
     
-    request receive_request(web::socket const & s)
+    inline request receive_request(web::socket const & s)
     {
         return detail::receive<request>(s);
     }
     
-    response receive_response(web::socket const & s)
+    inline response receive_response(web::socket const & s)
     {
         return detail::receive<response>(s);
     }
     
     namespace detail
     {
-        std::size_t content_size(request const & msg)
+        inline std::size_t content_size(request const & msg)
         {
             // if there is content, and the length to the size of the buffer
             auto field_pos = find_field(msg.fields, "Content-Length");
@@ -40,7 +40,7 @@ namespace elib { namespace web { namespace http
             return 0;
         }
         
-        std::size_t content_size(response const & msg)
+        inline std::size_t content_size(response const & msg)
         {
             auto field_pos = find_field(msg.fields, "Content-Length");
             if (field_pos != msg.fields.end())
@@ -72,7 +72,7 @@ namespace elib { namespace web { namespace http
                     if (std::chrono::system_clock::now() > timeout_at)
                         throw "TODO";
                     
-                    ::size_t ret = web::receive(s, buff);
+                    ::ssize_t ret = web::receive(s, buff);
                     ELIB_ASSERT(ret >= 0);
                     
                     std::copy_n(

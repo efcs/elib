@@ -12,13 +12,6 @@ namespace elib { namespace enumeration
     namespace detail
     {
         template <class Str>
-        using from_string_type_valid =
-            aux::or_<
-                aux::is_same< aux::decay_uncvref<Str>, const char*>
-              , aux::is_same< aux::decay_uncvref<Str>, std::string>
-            >;
-        
-        template <class Str>
         using to_string_type_valid = aux::is_same< Str, std::string >;
     }                                                       // namespace detail
     
@@ -145,7 +138,7 @@ namespace elib { namespace enumeration
     template<
         class To, class From
       , ELIB_ENABLE_IF(aux::is_enum<To>::value
-                    && detail::from_string_type_valid<From>::value
+                    && aux::is_string_type<From>::value
                     && has_name_map<To>::value)
     >
     bool enum_cast(From && v, To & t) noexcept
@@ -164,7 +157,7 @@ namespace elib { namespace enumeration
     template<
         class To, class From
       , ELIB_ENABLE_IF(aux::is_enum<To>::value
-                    && detail::from_string_type_valid<From>::value
+                    && aux::is_string_type<From>::value
                     && has_name_map<To>::value)
     >
     To enum_cast(From && v)

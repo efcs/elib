@@ -322,7 +322,6 @@ namespace elib { namespace web
           : basic_web_error{static_cast<std::string &&>(what_arg)}
           , m_ec{ec}
         {}
-          
         
         ELIB_DEFAULT_COPY_MOVE(socket_error);
         

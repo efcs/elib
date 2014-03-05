@@ -4,8 +4,6 @@ namespace elib
 {
   namespace enumeration
   {
-      
-#ifdef ELIB_CONFIG_LIB_ENUMERATION
 
 # if defined(__clang__)
 #   pragma clang diagnostic push
@@ -26,8 +24,6 @@ namespace elib
           
 # if defined(__clang__)
 #   pragma clang diagnostic pop
-# endif
-      
 # endif
     
   }                                                    // namespace enumeration

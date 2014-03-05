@@ -2,9 +2,7 @@
 #define ELIB_LOG_LOG_LEVEL_HPP
 
 # include <elib/log/config.hpp>
-#   ifdef ELIB_CONFIG_LIB_ENUMERATION
-#     include <elib/enumeration/basic_enum_traits.hpp>
-#   endif
+# include <elib/enumeration/basic_enum_traits.hpp>
 
 namespace elib 
 {
@@ -34,9 +32,6 @@ namespace elib
   }                                                         // namespace log
 }                                                           // namespace elib
 
-
-# ifdef ELIB_CONFIG_LIB_ENUMERATION
-
 namespace elib
 {
   namespace enumeration
@@ -63,6 +58,5 @@ namespace elib
   }                                                    // namespace enumeration
 }                                                      // namespace elib
 
-#   endif                                        // ELIB_CONFIG_LIB_ENUMERATION
 
 #endif /* ELIB_LOG_LOG_LEVEL_HPP */

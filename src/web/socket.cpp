@@ -254,7 +254,7 @@ namespace elib { namespace web
                 detail::handle_or_throw_error("get_peer_name failed", ec);
                 return in;
             }
-                
+            // TODO this is wrong
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }

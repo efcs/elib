@@ -7,7 +7,7 @@
           "please use the CMake option CONFIG_LIB_WEB to disable this library"
 # endif
 
-# include <elib/web/basic_web_error.hpp>
+# include <elib/web/error.hpp>
 # include <elib/aux.hpp>
 
 # include <memory>
@@ -314,12 +314,11 @@ namespace elib { namespace web
 # endif
     /////////////////////////////////////////////////////////////////////////////
     //
-    class socket_error
-      : public basic_web_error
+    class socket_error: public web_error
     {
     public:
         socket_error(std::string what_arg, std::error_code ec)
-          : basic_web_error{static_cast<std::string &&>(what_arg)}
+          : web_error{static_cast<std::string &&>(what_arg)}
           , m_ec{ec}
         {}
         

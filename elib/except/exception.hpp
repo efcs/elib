@@ -32,20 +32,47 @@ namespace elib { namespace except
     public:
         exception(std::string const & what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
-        {}
+        {
+                m_impl->m_what_arg += throw_info_str();
+        }
         
         exception(const char* what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
-        {}
+        {
+            m_impl->m_what_arg += throw_info_str();
+        }
         
         ELIB_DEFAULT_COPY_MOVE(exception);
         
         virtual const char* what() const noexcept 
-        { return m_impl->m_what_arg.c_str(); }
+        { 
+            return m_impl->m_what_arg.c_str();
+        }
         
         virtual ~exception() = default;
 
     public:
+        bool has_throw_info() const
+        {
+            return has_error_info<throw_func>()
+                && has_error_info<throw_file>()
+                && has_error_info<throw_line>();
+        }
+        
+        std::string throw_info_str() const
+        {
+            std::string s;
+            if (!has_throw_info()) return s;
+            
+            s = get_error_info<throw_file>()->value();
+            s += "::" 
+              + std::to_string( get_error_info<throw_line>()->value() );
+            s += " in function ";
+            s += get_error_info<throw_func>()->value();
+            
+            return s;
+        }
+        
         template <class ErrorInfo>
         bool has_error_info() const
         {

@@ -43,9 +43,8 @@ namespace elib { namespace except
       , const char *file, const char* func, unsigned line
     )
     {
-        throw (
-            e << throw_file(file) << throw_func(func) << throw_line(line)
-        );
+        e << throw_file(file) << throw_func(func) << throw_line(line);
+        throw e;
     }
     
     template <class E>

@@ -267,7 +267,11 @@ namespace elib { namespace web { namespace http
     template <
         class Header
       , class T
-      , ELIB_ENABLE_IF(elib::is_lexical<T>::value)
+      , ELIB_ENABLE_IF(
+          elib::is_valid_lexical_cast<
+              std::string, aux::uncvref<T>
+          >::value
+       )
     >
     void insert_field(
         message<Header> & dest
@@ -283,7 +287,11 @@ namespace elib { namespace web { namespace http
     
     template <
         class T
-      , ELIB_ENABLE_IF(elib::is_lexical<T>::value)
+      , ELIB_ENABLE_IF(
+          elib::is_valid_lexical_cast<
+              std::string, aux::uncvref<T>
+          >::value
+        )
     >
     void insert_field(
         std::vector<field_type> & dest

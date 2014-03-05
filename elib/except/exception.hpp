@@ -5,7 +5,6 @@
 # include <elib/except/error_info.hpp>
 # include <elib/aux.hpp>
 # include <elib/any.hpp>
-
 # include <exception>
 # include <stdexcept>
 # include <memory>
@@ -33,30 +32,35 @@ namespace elib { namespace except
         exception(std::string const & what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
         {
-                m_impl->m_what_arg += throw_info_str();
         }
         
         exception(const char* what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
         {
-            m_impl->m_what_arg += throw_info_str();
         }
         
         ELIB_DEFAULT_COPY_MOVE(exception);
         
         virtual const char* what() const noexcept 
         { 
-            return m_impl->m_what_arg.c_str();
-        }
+            if (m_impl->m_fmt == "")
+            {
+                m_impl->m_fmt = m_impl->m_what_arg;
+                if (has_throw_info())
+                    m_impl->m_fmt += ("\n  Thrown from " + throw_info_str());
+            }
+
+            return m_impl->m_fmt.c_str();
+        }   
         
         virtual ~exception() = default;
 
     public:
         bool has_throw_info() const
         {
-            return has_error_info<throw_func>()
-                && has_error_info<throw_file>()
-                && has_error_info<throw_line>();
+            return this->has_error_info<throw_func>()
+                && this->has_error_info<throw_file>()
+                && this->has_error_info<throw_line>();
         }
         
         std::string throw_info_str() const
@@ -141,6 +145,7 @@ namespace elib { namespace except
             {}
             
             std::string m_what_arg;
+            mutable std::string m_fmt;
             std::unordered_map<std::type_index, elib::any> m_info_map;
         };
         

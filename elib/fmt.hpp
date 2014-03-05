@@ -20,11 +20,11 @@ namespace elib
         //
         template <class T, ELIB_ENABLE_IF(aux::is_integral<T>::value)>
         constexpr long normalize_arg(T v) noexcept
-        { return v; }
+        { return static_cast<long>(v); }
         
         template <class T, ELIB_ENABLE_IF(aux::is_floating_point<T>::value)>
         constexpr double normalize_arg(T v) noexcept
-        { return v; }
+        { return static_cast<double>(v); }
         
         template <class T, ELIB_ENABLE_IF(aux::is_pointer<T>::value)>
         constexpr T normalize_arg(T v) noexcept

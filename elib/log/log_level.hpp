@@ -39,20 +39,20 @@ namespace elib
 
     /* level_e can be used with enum_traits */
     template <>
-    struct basic_enum_traits<log::level_e> 
+    struct basic_enum_traits<::elib::log::level_e> 
     {    
-        static constexpr log::level_e ELIB_ENUM_DEFAULT_VALUE = 
-          log::default_log_level;
+        static constexpr ::elib::log::level_e ELIB_ENUM_DEFAULT_VALUE = 
+          ::elib::log::default_log_level;
           
-        static constexpr log::level_e ELIB_ENUM_FIRST_VALUE = 
-          log::level_e::debug;
+        static constexpr ::elib::log::level_e ELIB_ENUM_FIRST_VALUE = 
+          ::elib::log::level_e::debug;
           
-        static constexpr log::level_e ELIB_ENUM_LAST_VALUE = 
-          log::level_e::raw_err;
+        static constexpr ::elib::log::level_e ELIB_ENUM_LAST_VALUE = 
+          ::elib::log::level_e::raw_err;
           
         static constexpr bool ELIB_ENUM_IS_CONTIGIOUS = true;
         
-        static enum_map_t<log::level_e> name_map;
+        static const enum_map_t<::elib::log::level_e> name_map;
     };                                             // struct basic_enum_traits
     
   }                                                    // namespace enumeration

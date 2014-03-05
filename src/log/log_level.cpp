@@ -10,16 +10,16 @@ namespace elib
 #   pragma clang diagnostic ignored "-Wexit-time-destructors"
 #   pragma clang diagnostic ignored "-Wglobal-constructors"
 # endif
-      enum_map_t<log::level_e>
-      basic_enum_traits<log::level_e>::name_map =
-          { {log::level_e::debug, "debug"},
-            {log::level_e::info, "info"},
-            {log::level_e::step, "step"},
-            {log::level_e::warn, "warn"},
-            {log::level_e::err, "err"},
-            {log::level_e::fatal, "fatal"},
-            {log::level_e::raw_out, "raw_out"},
-            {log::level_e::raw_err, "raw_err"}
+      const enum_map_t<::elib::log::level_e>
+      basic_enum_traits<::elib::log::level_e>::name_map =
+          { {::elib::log::level_e::debug, "debug"},
+            {::elib::log::level_e::info, "info"},
+            {::elib::log::level_e::step, "step"},
+            {::elib::log::level_e::warn, "warn"},
+            {::elib::log::level_e::err, "err"},
+            {::elib::log::level_e::fatal, "fatal"},
+            {::elib::log::level_e::raw_out, "raw_out"},
+            {::elib::log::level_e::raw_err, "raw_err"}
           };
           
 # if defined(__clang__)

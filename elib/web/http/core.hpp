@@ -270,8 +270,59 @@ namespace elib { namespace web { namespace http
         response r;
         r.header.http_version = version::ONE_ZERO;
         r.header.code = Status;
-        r.header.value = elib::enumeration::enum_cast<std::string>(Status);
+        r.header.value = to_string(Status);
         return r;
+    }
+
+
+    inline void insert_field(
+        std::vector<field_type> & dest
+      , field_type const & f
+    )
+    {
+        dest.push_back( f );
+    }
+    
+    inline void insert_field(
+        std::vector<field_type> & dest
+      , field_type && f
+    )
+    {
+        dest.push_back( static_cast<field_type &&>(f) );
+    }
+    
+    inline void insert_field(
+        std::vector<field_type> & dest
+      , std::string const & key
+      , std::string const & value
+    )
+    {
+        return dest.push_back( {key, value} );
+    }
+    
+    template <class Header>
+    void insert_field(message<Header> & dest
+      , std::string const & key
+      , std::string const & value
+    )
+    {
+        return dest.fields.push_back( {key, value} );
+    }
+    
+    template <class Header>
+    void insert_field(message<Header> & dest
+      , field_type const & f
+    )
+    {
+        return dest.fields.push_back( f );
+    }
+    
+    template <class Header>
+    void insert_field(message<Header> & dest
+      , field_type && f
+    )
+    {
+        return dest.fields.push_back( static_cast<field_type &&>(f) );
     }
     
     ////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,5 @@
 #ifndef ELIB_WEB_HTTP_CORE_HPP
-# define ELIB_WEB_HTTP_CORE_HPP
+#define ELIB_WEB_HTTP_CORE_HPP
 
 # include <elib/aux.hpp>
 # include <elib/enumeration.hpp>
@@ -33,7 +33,7 @@ namespace elib { namespace web { namespace http
 # endif
     ////////////////////////////////////////////////////////////////////////////
     //
-    inline const char* version_to_string(version v)
+    inline std::string version_to_string(version v)
     {
         switch (v)
         {
@@ -44,6 +44,11 @@ namespace elib { namespace web { namespace http
             default:
                 throw "In default case!";
         }
+    }
+    
+    inline std::string to_string(version v)
+    {
+        return version_to_string(v);
     }
     
 # if defined(__clang__)
@@ -98,6 +103,12 @@ namespace elib { namespace enumeration
     
 namespace elib { namespace web { namespace http
 {
+    
+    inline std::string to_string(method m)
+    {
+        return elib::enumeration::enum_cast<std::string>(m);
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     enum class status
@@ -165,6 +176,11 @@ namespace elib { namespace enumeration
     
 namespace elib { namespace web { namespace http
 {
+    inline std::string to_string(status s)
+    {
+        return elib::enumeration::enum_cast<std::string>(s);
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     constexpr bool status_is_information(status s) noexcept

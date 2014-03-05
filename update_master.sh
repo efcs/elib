@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x # echo commands
 set -e # fail on error
 
 _run()

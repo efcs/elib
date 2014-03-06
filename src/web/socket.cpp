@@ -258,5 +258,27 @@ namespace elib { namespace web
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }
+        
+        
+        ::sockaddr_in get_sock_name_impl(socket const & s, std::error_code *ec)
+        {
+            if (ec) ec->clear();
+              
+            ::sockaddr_in in;
+            
+            if (detail::handle_or_throw_bad_sock(
+                "bad socket passed to get_sock_name", s, ec))
+                return in;
+            
+            ::socklen_t len = sizeof(::sockaddr_in);
+            int ret = ::getsockname(s.raw_socket(), (::sockaddr*)&in, &len);
+            if (ret == -1)
+            {
+                detail::handle_or_throw_error("get_sock_name failed", ec);
+                return in;
+            }
+            ELIB_ASSERT(len <= sizeof(::sockaddr_in));
+            return in;
+        }
     }                                                       // namespace detail
 }}                                                       // namespace elib::web

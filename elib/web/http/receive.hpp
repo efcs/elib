@@ -3,11 +3,14 @@
 
 # include <elib/web/http/core.hpp>
 # include <elib/web/http/parse.hpp>
+# include <elib/web/error.hpp>
 # include <elib/web/socket.hpp>
 # include <elib/aux.hpp>
+# include <elib/eprintf.hpp>
 # include <elib/lexical_cast.hpp>
 # include <algorithm>
 # include <chrono>
+# include <iterator>
 # include <cstddef>
 
 namespace elib { namespace web { namespace http
@@ -57,37 +60,37 @@ namespace elib { namespace web { namespace http
               , "The only two choices"
             );
             
-            ELIB_ASSERT(s);
-            
             Message msg;
             data_type buff(10024);
             data_type remaining;
             
-            const auto timeout_at = std::chrono::seconds(30)
+            const auto timeout_at = std::chrono::seconds(5)
                                   + std::chrono::system_clock::now();
-                                  
+                             
             auto timeout_receive = 
                 [&]()
                 {
+                   
                     if (std::chrono::system_clock::now() > timeout_at)
-                        throw "TODO";
+                        ELIB_THROW_EXCEPTION(web_error("receive timed-out"));
                     
                     ::ssize_t ret = web::receive(s, buff);
                     ELIB_ASSERT(ret >= 0);
-                    
                     std::copy_n(
                         buff.begin()
                       , static_cast<std::size_t>(ret)
-                      , remaining.end()
+                      , std::back_inserter(remaining)
                     );
-                    
+                   
                     return ret;
                 };
                
             // get header
+       
             while (true)
             {
                 timeout_receive();
+        
                 auto pos = parse(remaining.begin(), remaining.end(), msg.header);
                 
                 if (pos == remaining.begin()) continue;
@@ -101,10 +104,13 @@ namespace elib { namespace web { namespace http
                 auto field_end = parse(remaining.begin(), remaining.end(), msg.fields);
                 remaining.erase(remaining.begin(), field_end);
                 
-                auto newl_end = parse_newl(field_end, remaining.end());
+                auto newl_end = parse_newl(remaining.begin(), remaining.end());
+                
+                bool have_newl = newl_end != remaining.begin();
+                
                 remaining.erase(remaining.begin(), newl_end);
                 
-                if (newl_end != field_end) break;
+                if (have_newl) break;
                     
                 // receive must only happen if we fail to parse till the 
                 // newline break. othewise we could be waiting on a message

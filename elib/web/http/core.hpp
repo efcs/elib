@@ -241,6 +241,13 @@ namespace elib { namespace web { namespace http
         std::string value;
     };
     
+    template <class Enum>
+    std::string to_string(message_header<Enum> const & h)
+    {
+        auto dt = serialize(h);
+        return std::string(dt.begin(), dt.end());
+    }
+    
     template <class HeaderType>
     struct message
     {
@@ -250,6 +257,13 @@ namespace elib { namespace web { namespace http
         std::vector<field_type> fields;
         data_type data;
     };
+    
+    template <class Header>
+    std::string to_string(message<Header> const & h)
+    {
+        auto dt = serialize(h);
+        return std::string(dt.begin(), dt.end());
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     //

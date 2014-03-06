@@ -197,6 +197,13 @@ namespace elib { namespace web
     ::sockaddr_in
     get_peer_name(socket const &, std::error_code & ec) noexcept;
     
+    ::sockaddr_in
+    get_sock_name(socket const &);
+    
+    ::sockaddr_in
+    get_sock_name(socket const &, std::error_code & ec) noexcept;
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     /* This is how the free function overloads are handled. Every free function
@@ -235,6 +242,11 @@ namespace elib { namespace web
         );
                            
         ::sockaddr_in get_peer_name_impl(
+            socket const &
+          , std::error_code *ec = nullptr
+        );
+        
+        ::sockaddr_in get_sock_name_impl(
             socket const &
           , std::error_code *ec = nullptr
         );
@@ -693,6 +705,18 @@ namespace elib { namespace web
     get_peer_name(socket const & s, std::error_code & ec) noexcept
     {
         return detail::get_peer_name_impl(s, &ec);
+    }
+    
+    inline ::sockaddr_in
+    get_sock_name(socket const & s)
+    {
+        return detail::get_sock_name_impl(s);
+    }
+    
+    inline ::sockaddr_in
+    get_sock_name(socket const & s, std::error_code & ec) noexcept
+    {
+        return detail::get_sock_name_impl(s, &ec);;
     }
 
 }}                                                       // namespace elib::web

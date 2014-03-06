@@ -7,6 +7,10 @@
 # define ELIB_SCOPE_GUARD(...)          \
     auto _elib_scope_guard_##__LINE__ = \
       ::elib::make_scope_guard(__VA_ARGS__)
+      
+# define ELIB_SCOPE_GUARD_LAMBDA(...)   \
+    auto _elib_scope_guard_##__LINE__ = \
+      ::elib::make_scope_guard([&]() { __VA_ARGS__ } )
 
 namespace elib 
 {

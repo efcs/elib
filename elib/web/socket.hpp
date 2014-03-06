@@ -446,6 +446,11 @@ namespace elib { namespace web
     };
     
     
+    inline void swap(web::socket & lhs, web::socket & rhs)
+    {
+        lhs.swap(rhs);
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     inline socket accept(socket const & s)

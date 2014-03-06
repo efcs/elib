@@ -253,16 +253,23 @@ namespace elib { namespace web { namespace http
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    template <status Status>
-    response generate_status_response()
+    inline request generate_request(method m, std::string value = "")
+    {
+        request r;
+        r.header.http_version = version::ONE_ZERO;
+        r.header.code = m;
+        r.header.value = value;
+        return r;
+    }
+    
+    inline response generate_response(status s)
     {
         response r;
         r.header.http_version = version::ONE_ZERO;
-        r.header.code = Status;
-        r.header.value = to_string(Status);
+        r.header.code = s;
+        r.header.value = to_string(s);
         return r;
     }
-
 
     template <
         class Header
@@ -335,6 +342,13 @@ namespace elib { namespace web { namespace http
                     , [&](field_type const & f) { return f.first == key; });
     }
     
+    template <class Header>
+    inline std::vector<field_type>::const_iterator
+    find_field(message<Header> const & h, std::string const & key)
+    {
+        return find_field(h.fields, key);
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     inline std::vector<field_type>::iterator
@@ -344,6 +358,34 @@ namespace elib { namespace web { namespace http
                           , [&](field_type const & f) { return f.first == key; }); 
     }
     
+    template <class Header>
+    inline std::vector<field_type>::iterator
+    find_field(message<Header> & m, std::string const & key)
+    {
+        return find_field(m.fields, key);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    inline bool has_field(
+        std::vector<field_type> const & v
+      , std::string const & key
+    )
+    {
+        auto pos = find_field(v, key);
+        return pos != v.end();
+    }
+    
+    template <class Header>
+    inline bool has_field(
+        message<Header> const & m
+      , std::string const & key
+    )
+    {
+        auto pos = find_field(m.fields, key);
+        return pos != m.fields.end();
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     //
     inline bool
@@ -352,6 +394,12 @@ namespace elib { namespace web { namespace http
         auto it = std::remove_if(v.begin(), v.end()
                         , [&](field_type const & f) { return f.first == key; });
         return it != v.end();
+    }
+    
+    template <class Header>
+    inline bool remove_field(message<Header> & m, std::string const & key)
+    {
+        return remove_field(m.fields, key);
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -373,5 +421,23 @@ namespace elib { namespace web { namespace http
         return found;
     }
     
+    template <class Header>
+    inline bool
+    replace_field(
+        message<Header> & m
+      , std::string const & key
+      , std::string const & val
+    )
+    {
+        return replace_field(m.fields, key, val);
+    }
+    
+    template <class Header>
+    bool has_connection_close(message<Header> const & msg)
+    {
+        auto pos = find_field(msg.fields, "Connection");
+        if (pos == msg.fields.end()) return false;
+        return (pos->second == "close");
+    }
 }}}                                                         // namespace elib
 #endif /* ELIB_WEB_HTTP_CORE_HPP */

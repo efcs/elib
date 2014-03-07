@@ -11,6 +11,7 @@
 # include <algorithm>
 # include <chrono>
 # include <iterator>
+# include <system_error>
 # include <cstddef>
 
 namespace elib { namespace web { namespace http
@@ -21,7 +22,7 @@ namespace elib { namespace web { namespace http
         template <class Message>
         Message receive(
             web::socket const & s
-          , std::chrono::seconds timeout_in = std::chrono::seconds(3)
+          , std::chrono::seconds timeout_in = std::chrono::seconds(5)
         );
     }
     
@@ -72,25 +73,38 @@ namespace elib { namespace web { namespace http
             
             
             
-            const auto timeout_at = timeout_in
-                                  + std::chrono::system_clock::now();
+            const auto timeout_at = std::chrono::system_clock::now() + timeout_in;
                              
             auto timeout_receive = 
                 [&]()
                 {
+                    std::error_code ec;
+                    while (std::chrono::system_clock::now() < timeout_at)
+                    {
+                        ec.clear();
+                        ::ssize_t ret = web::receive(s, buff, ec);
+                        if (ec.value() == EAGAIN || ec.value() == EWOULDBLOCK)
+                            continue;
+                        if (ec)
+                        {
+                            ELIB_THROW_EXCEPTION(socket_error(
+                                "http::receive failed with error"
+                              , ec
+                            ));
+                        }
+                        ELIB_ASSERT(ret >= 0);
+                        std::copy_n(
+                            buff.begin()
+                          , static_cast<std::size_t>(ret)
+                          , std::back_inserter(remaining)
+                        );
                    
-                    if (std::chrono::system_clock::now() > timeout_at)
-                        ELIB_THROW_EXCEPTION(web_error("receive timed-out"));
+                        return ret;
+                    }
                     
-                    ::ssize_t ret = web::receive(s, buff);
-                    ELIB_ASSERT(ret >= 0);
-                    std::copy_n(
-                        buff.begin()
-                      , static_cast<std::size_t>(ret)
-                      , std::back_inserter(remaining)
-                    );
-                   
-                    return ret;
+                    ELIB_THROW_EXCEPTION(web_error(
+                        "http::receive timed out"
+                    ));
                 };
                
             // get header

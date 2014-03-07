@@ -22,7 +22,7 @@ namespace elib { namespace web { namespace http
         template <class Message>
         Message receive(
             web::socket const & s
-          , std::chrono::seconds timeout_in = std::chrono::seconds(5)
+          , std::chrono::seconds timeout_in = std::chrono::seconds(15)
         );
     }
     

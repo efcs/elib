@@ -167,9 +167,9 @@ namespace elib
         /* prompt maps: level -> prompt */
         std::map<level_e, std::string> m_prompts = 
             {
-              {level_e::debug, "Debug: "}, 
-              {level_e::info, "Info: "},
+              {level_e::debug, "Debug: "},
               {level_e::step, "--> "},
+              {level_e::info, "Info: "},
               {level_e::warn, "Warning: "},
               {level_e::err, "ERROR: "},
               {level_e::fatal, "FATAL: "},

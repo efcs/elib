@@ -16,8 +16,8 @@ namespace elib
     enum class level_e 
     {
         debug,
-        info,
         step,
+        info,
         warn,
         err,
         fatal,
@@ -26,7 +26,7 @@ namespace elib
     };
 
     /* the default logging level */
-    constexpr level_e default_log_level = level_e::step;
+    constexpr level_e default_log_level = level_e::info;
 
 
   }                                                         // namespace log

@@ -19,7 +19,10 @@ namespace elib { namespace web { namespace http
     namespace detail
     {
         template <class Message>
-        Message receive(web::socket const & s);
+        Message receive(
+            web::socket const & s
+          , std::chrono::seconds timeout_in = std::chrono::seconds(3)
+        );
     }
     
     inline request receive_request(web::socket const & s)
@@ -52,7 +55,10 @@ namespace elib { namespace web { namespace http
         }
     
         template <class Message>
-        Message receive(web::socket const & s)
+        Message receive(
+            web::socket const & s
+          , std::chrono::seconds timeout_in
+        )
         {
             static_assert(
                 elib::aux::is_same<Message, request>::value
@@ -64,7 +70,9 @@ namespace elib { namespace web { namespace http
             data_type buff(10024);
             data_type remaining;
             
-            const auto timeout_at = std::chrono::seconds(5)
+            
+            
+            const auto timeout_at = timeout_in
                                   + std::chrono::system_clock::now();
                              
             auto timeout_receive = 
@@ -118,20 +126,17 @@ namespace elib { namespace web { namespace http
                 timeout_receive();
             }
             
-            // insert remaining into data
-            msg.data.insert(msg.data.end(), remaining.begin(), remaining.end());
-            // find out size of remaining content
-            std::size_t needed_size = content_size(msg) - remaining.size();
-            ELIB_ASSERT(content_size(msg) >= remaining.size());
+           
+            std::size_t const con_size = content_size(msg);
+            ELIB_ASSERT(con_size >= remaining.size());
+            
             // get remaining data if needed 
-            if (needed_size != 0)
+            while (remaining.size() != con_size)
             {
-                buff.resize(needed_size);
-                ::ssize_t ret = web::receive(s, buff, msg_flags::wait_all);
-                ELIB_ASSERT(ret >= 0);
-                ELIB_ASSERT(static_cast<std::size_t>(ret) == needed_size);
-                msg.data.insert(msg.data.end(), buff.begin(), buff.end());
+                timeout_receive();                
             }
+            
+            msg.data.insert(msg.data.end(), remaining.begin(), remaining.end());
             
             return msg;
         }

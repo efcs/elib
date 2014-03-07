@@ -88,7 +88,10 @@ namespace elib { namespace web { namespace http
                         if (ec)
                         {
                             ELIB_THROW_EXCEPTION(socket_error(
-                                "http::receive failed with error"
+                                elib::fmt(
+                                    "http::receive failed with error %s"
+                                  , ec.message()
+                                )
                               , ec
                             ));
                         }

@@ -1,6 +1,9 @@
 #include <elib/web/socket.hpp>
 #include <elib/assert.hpp>
 
+#define ELIB_WEB_HANDLE_OR_THROW_ERROR(...) \
+    ELIB_CATCH_AND_RETHROW(detail::handle_or_throw_error(__VA_ARGS__);)
+
 namespace elib { namespace web
 {
     namespace detail
@@ -24,7 +27,11 @@ namespace elib { namespace web
                 return false;
                 
             if (!ec)
-                throw socket_error{elib::move(msg), elib::move(m_ec)};
+            {
+                ELIB_THROW_EXCEPTION(
+                    socket_error{elib::move(msg), elib::move(m_ec)}
+                  );
+            }
             // else
             *ec = elib::move(m_ec);
             return true;
@@ -47,7 +54,11 @@ namespace elib { namespace web
             std::error_code m_ec{errno, std::system_category()};
             
             if (!ec)
-                throw socket_error{elib::move(msg), elib::move(m_ec)};
+            {
+                ELIB_THROW_EXCEPTION(socket_error(
+                    elib::move(msg), elib::move(m_ec)
+                ));
+            }
             // else
             *ec = elib::move(m_ec);
         }
@@ -133,15 +144,19 @@ namespace elib { namespace web
         {
             if (ec) ec->clear();
             socket m_sock{};
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to accept", s, ec))
-                return m_sock;
+            
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to accept", s, ec))
+                    return m_sock;
+            } ELIB_RETHROW_BLOCK_END()
                 
             int fd = ::accept(s.raw_socket(), addr, len);
             if (fd >= 0)
                 m_sock.m_fd = fd;
             else
-                detail::handle_or_throw_error("accept failed", ec);
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("accept failed", ec);
             return m_sock;
         }
                    
@@ -151,15 +166,20 @@ namespace elib { namespace web
                            , msg_flags f, std::error_code *ec)
         {
             if (ec) ec->clear();
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to receive", s, ec))
-                return -1;
+                
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to receive", s, ec))
+                    return -1;
+            } 
+            ELIB_RETHROW_BLOCK_END()
             
             ssize_t ret = ::recv(s.raw_socket(), static_cast<void*>(&v[0])
                                 , v.size(), static_cast<int>(f));
                                 
             if (-1 == ret)
-                detail::handle_or_throw_error("receive failed", ec);
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("receive failed", ec);
             return ret;
         }
                   
@@ -169,14 +189,19 @@ namespace elib { namespace web
                                , std::error_code *ec)
         {
             if (ec) ec->clear();
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to receive_msg", s, ec))
-                return -1;
+            
+            ELIB_RETHROW_BLOCK_BEGIN() 
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to receive_msg", s, ec))
+                    return -1;
+            } 
+            ELIB_RETHROW_BLOCK_END()
                 
             ssize_t ret = ::recvmsg(s.raw_socket(), &m, static_cast<int>(f));
             
             if (-1 == ret)
-                detail::handle_or_throw_error("receive_msg failed", ec);
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("receive_msg failed", ec);
             return ret;
         }
               
@@ -186,14 +211,21 @@ namespace elib { namespace web
                         , msg_flags f, std::error_code *ec)
         {
             if (ec) ec->clear();
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to send", s, ec))
-                return -1;
+            
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to send", s, ec))
+                    return -1;
+            }
+            ELIB_RETHROW_BLOCK_END()
                 
             ssize_t ret = ::send(s.raw_socket(), static_cast<const void*>(&v[0])
                                 , v.size(), static_cast<int>(f));
             if (-1 == ret)
-                detail::handle_or_throw_error("send failed", ec);
+            {
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("send failed", ec);
+            }
             return ret;
         }
         
@@ -204,14 +236,21 @@ namespace elib { namespace web
         {
             ELIB_ASSERT(!errno);
             if (ec) ec->clear();
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to send_msg", s, ec))
-                return -1;
+                
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to send_msg", s, ec))
+                    return -1;
+            }
+            ELIB_RETHROW_BLOCK_END()
                 
             ssize_t ret = ::sendmsg(s.raw_socket(), &m, static_cast<int>(f));
             
             if (-1 == ret)
-                detail::handle_or_throw_error("send_msg failed", ec);
+            {
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("send_msg failed", ec);
+            }
             return ret;
         }
                   
@@ -223,16 +262,23 @@ namespace elib { namespace web
                            , std::error_code *ec)
         {
             if (ec) ec->clear();
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to send_to", s, ec))
-                return -1;
+                
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to send_to", s, ec))
+                    return -1;
+            } 
+            ELIB_RETHROW_BLOCK_END()
             
             ssize_t ret = ::sendto(s.raw_socket(), static_cast<const void*>(&v[0])
                                   , v.size(), static_cast<int>(f)
                                   , dest_addr, len);
                
             if (-1 == ret)
-                detail::handle_or_throw_error("send_to failed", ec);
+            {
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("send_to failed", ec);
+            }
             return ret;
         }
         
@@ -242,16 +288,20 @@ namespace elib { namespace web
             
             ::sockaddr_in in;
             
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to get_peer_name", s, ec))
-                return in;
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to get_peer_name", s, ec))
+                    return in;
+            }
+            ELIB_RETHROW_BLOCK_END()
             
             ::socklen_t len = sizeof(::sockaddr_in);
             int ret = ::getpeername(s.raw_socket(), (::sockaddr*)&in, &len);
             
             if (ret == -1) 
             {
-                detail::handle_or_throw_error("get_peer_name failed", ec);
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("get_peer_name failed", ec);
                 return in;
             }
             // TODO this is wrong
@@ -266,17 +316,23 @@ namespace elib { namespace web
               
             ::sockaddr_in in;
             
-            if (detail::handle_or_throw_bad_sock(
-                "bad socket passed to get_sock_name", s, ec))
-                return in;
+            ELIB_RETHROW_BLOCK_BEGIN()
+            {
+                if (detail::handle_or_throw_bad_sock(
+                    "bad socket passed to get_sock_name", s, ec))
+                    return in;
+            }
+            ELIB_RETHROW_BLOCK_END()
             
             ::socklen_t len = sizeof(::sockaddr_in);
             int ret = ::getsockname(s.raw_socket(), (::sockaddr*)&in, &len);
+            
             if (ret == -1)
             {
-                detail::handle_or_throw_error("get_sock_name failed", ec);
+                ELIB_WEB_HANDLE_OR_THROW_ERROR("get_sock_name failed", ec);
                 return in;
             }
+            
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }

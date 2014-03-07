@@ -6,12 +6,33 @@
 # include <elib/except/error_info.hpp>
 # include <elib/aux.hpp>
 
-# define ELIB_THROW_EXCEPTION(Ex) \
-  ::elib::except::throw_exception_from(Ex, __FILE__, __func__, __LINE__)
+# define ELIB_THROW_EXCEPTION(...) \
+  ::elib::except::throw_exception_from(__VA_ARGS__, __FILE__, __func__, __LINE__)
   
-# define ELIB_SET_EXCEPTION_THROW_SITE(Ex)  \
-  ::elib::except::set_exception_throw_site(Ex, __FILE__, __func__, __LINE__)
+# define ELIB_SET_EXCEPTION_THROW_SITE(...)  \
+  ::elib::except::set_exception_throw_site(__VA_ARGS__, __FILE__, __func__, __LINE__)
+  
+# define ELIB_CATCH_AND_RETHROW(...)                  \
+    do {                                              \
+        try {                                         \
+            __VA_ARGS__                               \
+        } catch (::elib::exception & e) {             \
+            ::elib::except::set_exception_throw_site( \
+                e, __FILE__, __func__, __LINE__       \
+            );                                        \
+            throw;                                    \
+        }                                             \
+    } while (false)
+    
+# define ELIB_RETHROW_BLOCK_BEGIN() try 
+        
+# define ELIB_RETHROW_BLOCK_END()                                        \
+    catch (::elib::exception & e) {                                    \
+        ::elib::except::set_exception_throw_site(e, __FILE__, __func__, __LINE__); \
+        throw;                                                           \
+    }
 
+    
 namespace elib { namespace except
 {
     template <class E>

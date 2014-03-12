@@ -23,7 +23,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Standard Library config
 # TODO: Move the std library confige to enviroment variables.
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
 # Address, Memory and Thread sanitizers
@@ -97,7 +97,7 @@ option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
 option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
 
 # off until GCC supports regex
-option(CONFIG_LIB_WEB "Build Web/Socket Library" ON)
+option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
 
 # Stub. Fuse is currently empty
 option(CONFIG_LIB_FUSE "Build Fusion Library" OFF)

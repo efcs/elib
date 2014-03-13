@@ -1,6 +1,11 @@
 #ifndef ELIB_OPTIONAL_HPP
 #define ELIB_OPTIONAL_HPP
 
+/**
+ * Optional is currently an almost exact copy of the reference implementation
+ * for proposal N793. The repository can be found here.
+ * https://github.com/akrzemi1/Optional/ 
+ */
 # include <elib/aux.hpp>
 # include <initializer_list>
 # include <stdexcept>

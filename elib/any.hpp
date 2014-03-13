@@ -1,6 +1,9 @@
 #ifndef ELIB_ANY_HPP
 #define ELIB_ANY_HPP
 
+/**
+ * Any is a implementation of boost any. Somewhat more modernized.
+ */
 # include <elib/aux.hpp>
 # include <typeinfo>
 # include <utility>

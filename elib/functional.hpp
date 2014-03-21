@@ -2,6 +2,7 @@
 #define ELIB_FUNCTIONAL_HPP
 
 # include <elib/aux.hpp>
+# include <elib/any.hpp>
 # include <type_traits>
 # include <utility>
 # include <cstddef>
@@ -1205,7 +1206,7 @@ namespace elib
             template <class Ret, class Class, class Obj>
             constexpr auto operator()(Ret Class::*, Obj &&) const
             ELIB_AUTO_RETURN_NOEXCEPT(
-                aux::any{}
+                aux::anything{}
             )
             
             //TODO
@@ -1215,7 +1216,7 @@ namespace elib
             >
             constexpr auto operator()(Ret (Class::*)(Args...), Obj&&, T&&...) const
             ELIB_AUTO_RETURN_NOEXCEPT(
-                aux::any{}
+                aux::anything{}
             )
         };
         

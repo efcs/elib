@@ -90,6 +90,8 @@ namespace elib
             ))
         {
             using unref = aux::remove_reference_t<ValueType>;
+            // TODO no idea why this would fire, except for maybe
+            // reference wrappers? 
             static_assert(
                 !aux::is_reference<unref>::value
               , "ValueType is still reference after remove_reference_t"

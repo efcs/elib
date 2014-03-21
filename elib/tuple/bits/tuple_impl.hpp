@@ -230,7 +230,8 @@ namespace elib { namespace tuples
             struct item_at_index
             {
                 using result = decltype(
-                    item_at_index_lookup<size_type_<Index>>(std::declval<tuple_impl>())
+                    item_at_index_lookup<size_type_<Index>>(
+                        std::declval<tuple_impl>())
                 );
                 
                 static_assert(

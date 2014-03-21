@@ -16,6 +16,12 @@ namespace elib
             using type = param_pack;
             static constexpr std::size_t size = sizeof...(Args);
         };
+        
+        template <class ...Args>
+        constexpr std::size_t param_pack<Args...>::size;
+        
+        template <class T, T ...Values>
+        using param_pack_c = param_pack<integral_constant<T, Values>...>;
 
         template <class ...Args>
         constexpr std::size_t param_pack<Args...>::size;

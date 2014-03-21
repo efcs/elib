@@ -234,14 +234,14 @@ namespace elib
         namespace detail
         {
             ////////////////////////////////////////////////////////////////////
-            // detail::any
+            // detail::anything
             template <class Ignored = decltype(nullptr)>
-            struct any
+            struct anything
             {
-                any() = default;
+                anything() = default;
 
                 template <typename T>
-                constexpr any(T const &) noexcept
+                constexpr anything(T const &) noexcept
                 {}
 
                 template <class T>
@@ -251,7 +251,7 @@ namespace elib
 
         ////////////////////////////////////////////////////////////////////////
         // any
-        using any = detail::any<>;
+        using anything = detail::anything<>;
 
         ////////////////////////////////////////////////////////////////////////
         // any_pod

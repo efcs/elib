@@ -12,24 +12,25 @@
 # define ELIB_SET_EXCEPTION_THROW_SITE(...)  \
   ::elib::except::set_exception_throw_site(__VA_ARGS__, __FILE__, __func__, __LINE__)
   
-# define ELIB_CATCH_AND_RETHROW(...)                  \
-    do {                                              \
-        try {                                         \
-            __VA_ARGS__                               \
-        } catch (::elib::exception & e) {             \
-            ::elib::except::set_exception_throw_site( \
-                e, __FILE__, __func__, __LINE__       \
-            );                                        \
-            throw;                                    \
-        }                                             \
+# define ELIB_CATCH_AND_RETHROW(...)                          \
+    do {                                                      \
+        try {                                                 \
+            __VA_ARGS__                                       \
+        } catch (::elib::exception & _elib_exception) {       \
+            ::elib::except::set_exception_throw_site(         \
+                _elib_exception, __FILE__, __func__, __LINE__ \
+            );                                                \
+            throw;                                            \
+        }                                                     \
     } while (false)
     
 # define ELIB_RETHROW_BLOCK_BEGIN() try 
         
-# define ELIB_RETHROW_BLOCK_END()                                        \
-    catch (::elib::exception & e) {                                    \
-        ::elib::except::set_exception_throw_site(e, __FILE__, __func__, __LINE__); \
-        throw;                                                           \
+# define ELIB_RETHROW_BLOCK_END()                           \
+    catch (::elib::exception & _elib_exception) {           \
+        ::elib::except::set_exception_throw_site(           \
+            _elib_exception, __FILE__, __func__, __LINE__); \
+        throw;                                              \
     }
 
     
@@ -77,8 +78,11 @@ namespace elib { namespace except
         return (e << throw_file(file) << throw_func(func) << throw_line(line));
     }
     
-    template <class E>
-    E & set_exception_throw_site(
+    template <
+        class E
+      , ELIB_ENABLE_IF(!aux::is_lvalue_reference<E>::value)
+    >
+    E set_exception_throw_site(
         E && e
       , const char* file, const char* func, unsigned line
     )

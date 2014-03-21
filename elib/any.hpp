@@ -2,7 +2,7 @@
 #define ELIB_ANY_HPP
 
 /**
- * Any is a implementation of boost any. Somewhat more modernized.
+ * Any is a implementation of boost any. Some what modernized.
  */
 # include <elib/aux.hpp>
 # include <typeinfo>

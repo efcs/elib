@@ -19,9 +19,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_ASSERT
 # if ELIB_AUX_ASSERT_ON && !defined(ELIB_ASSERT_NO_EXIT)
-#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO("ELIB_ASSERT::", __VA_ARGS__)
+#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO("ELIB_ASSERT :", __VA_ARGS__)
 # elif ELIB_AUX_ASSERT_ON
-#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_ASSERT::", __VA_ARGS__)
+#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_ASSERT: ", __VA_ARGS__)
 # else
 #   define ELIB_ASSERT(...) ((void)0)
 # endif
@@ -29,7 +29,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_WARN
 # if ELIB_AUX_ASSERT_ON && !defined(ELIB_ASSERT_WARN_OFF)
-#   define ELIB_WARN(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_WARN::", __VA_ARGS__)
+#   define ELIB_WARN(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_WARN: ", __VA_ARGS__)
 # else
 #   define ELIB_WARN(...) ((void)0)
 # endif
@@ -37,7 +37,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_DEBUG
 # if ELIB_AUX_ASSERT_ON && !defined(ELIB_ASSERT_DEBUG_OFF)
-#   define ELIB_DEBUG(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_DEBUG::", __VA_ARGS__)
+#   define ELIB_DEBUG(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_DEBUG: ", __VA_ARGS__)
 # else
 #   define ELIB_DEBUG(...) ((void)0)
 # endif
@@ -89,8 +89,8 @@
         , const char* file, const char* func, int line                 \
         , const char* opt_str = nullptr)                               \
     {                                                                  \
-        Stream <<  prompt << file <<  line <<  std::endl;              \
-        Stream << " In  " << func << ": ( " << pred_str << " ) FAILED" \
+        Stream <<  prompt << file << "::" << line <<  std::endl;              \
+        Stream << " In " << func << ": ( " << pred_str << " ) FAILED" \
                << std::endl;                                           \
                                                                        \
         if (opt_str) Stream << "  " << opt_str << std::endl;           \

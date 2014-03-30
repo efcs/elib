@@ -4,7 +4,7 @@
 # include <elib/aux.hpp>
 # include <iterator>
 
-namespace elib { namespace iter
+namespace elib { namespace range
 {
     ////////////////////////////////////////////////////////////////////////////
     template<class Iterator, class Pred>

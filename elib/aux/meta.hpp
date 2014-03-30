@@ -10,7 +10,8 @@
 # 
 # 
 # define ELIB_ENABLE_IF_VALID_EXPR(...)              \
-  decltype(static_cast<void>(__VA_ARGS__))* const& = ELIB_ENABLER
+  decltype(static_cast<void>(__VA_ARGS__))* const& = \
+    ::elib::aux::static_const<void*>::value
 # 
 # 
 # define ELIB_AUX_LEFT_ASSOC_EXPR(Entry, Impl, Op)                        \

@@ -282,10 +282,8 @@ namespace elib
         template <class T>
         constexpr T static_const<T>::value;
 
-        namespace 
-        {
-            constexpr void *const &enabler = static_const<void*>::value;
-        }
+        static constexpr void *const & enabler = static_const<void*>::value;
+        
 
         namespace detail
         {

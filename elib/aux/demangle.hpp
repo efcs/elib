@@ -28,7 +28,7 @@ namespace elib { namespace aux
         
         realname = abi::__cxa_demangle(name, nullptr, &len, &stat);
         
-        if (realname != NULL)
+        if (realname != nullptr)
         {
             std::string out(realname);
             std::free(realname);

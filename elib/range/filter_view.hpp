@@ -22,7 +22,6 @@ namespace elib { namespace range
         using reverse_iterator = filter_iterator<detected_riter, Pred>;
         using const_reverse_iterator  = filter_iterator<detected_criter, Pred>;
         
-        
     public:
         explicit filter_view(Sequence & s)
           : m_seq(elib::addressof(s))

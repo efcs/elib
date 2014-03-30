@@ -50,9 +50,9 @@ namespace elib { namespace range
         }
         
     private:
+        Pred m_pred;
         Iterator m_pos;
         Iterator m_end;
-        Pred m_pred;
     };
 }}                                                          // namespace elib
 #endif /* ELIB_RANGE_FILTER_ITERATOR_HPP */

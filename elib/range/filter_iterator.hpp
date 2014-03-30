@@ -7,7 +7,7 @@
 namespace elib { namespace iter
 {
     ////////////////////////////////////////////////////////////////////////////
-    template<class Iterator, class ConceptType>
+    template<class Iterator, class Pred>
     class filter_iterator
     {
     private:
@@ -22,7 +22,7 @@ namespace elib { namespace iter
         
     public:
 
-        filter_iterator(ConceptType p, Iterator b, Iterator e = Iterator())
+        filter_iterator(Pred p, Iterator b, Iterator e = Iterator())
           : m_pred(p), m_pos(b), m_end(e)
         {
             satify_pred();

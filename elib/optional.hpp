@@ -391,17 +391,23 @@ namespace elib
             return *this;
         }
         
+        constexpr bool activated() const noexcept
+        {
+            return m_ref;
+        }
+        
+        constexpr explicit operator bool() const noexcept
+        {
+            return m_ref;
+        }
+    
+        
         void emplace(T & v) noexcept
         {
             m_ref = elib::addressof(v);
         }
         
         void emplace(T &&) = delete;
-        
-        void swap(optional & rhs) noexcept
-        {
-            std::swap(m_ref, rhs.m_ref);
-        }
         
         constexpr T* operator->() const 
         {
@@ -418,15 +424,16 @@ namespace elib
             return **this;
         }
         
-        constexpr explicit operator bool() const noexcept
-        {
-            return m_ref;
-        }
-        
         template <class U>
         constexpr aux::decay_t<T> value_or(U && u) const
         {
             return *this ? **this : static_cast<aux::decay_t<T>>(elib::forward<U>(u));
+        }
+        
+        void swap(optional & rhs) noexcept
+        {
+            using std::swap;
+            swap(m_ref, rhs.m_ref);
         }
         
     private:

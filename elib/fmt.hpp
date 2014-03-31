@@ -23,40 +23,48 @@ namespace elib
         struct explicit_conversion_tag {};
         struct stream_insertion_tag    {};
         struct to_string_function_tag  {};
-        struct bad_conversion_tag {};
+        struct bad_conversion_tag      {};
         
         ////////////////////////////////////////////////////////////////////////////
         template <
             class T
-          , ELIB_ENABLE_IF_VALID_EXPR( static_cast<std::string>(elib::declval<T>()) )
           , ELIB_ENABLE_IF( !aux::is_convertible<T, std::string>::value )
+          , ELIB_ENABLE_IF_VALID_EXPR(
+              static_cast<std::string>( elib::declval<T>() )
+            )
           >
-        true_ has_explicit_conversion_impl(int) noexcept;
+        elib::true_ 
+        has_explicit_conversion_impl(int);
         
         template <class>
-        false_ has_explicit_conversion_impl(long) noexcept;
+        elib::false_ 
+        has_explicit_conversion_impl(long);
         
         ////////////////////////////////////////////////////////////////////////////
         template <
             class T
-          , ELIB_ENABLE_IF_VALID_EXPR( to_string(elib::declval<T>()) )
+          , ELIB_ENABLE_IF_VALID_EXPR(to_string( elib::declval<T>() ))
           >
-        true_ has_to_string_function_impl(int) noexcept;
+        elib::true_ 
+        has_to_string_function_impl(int);
         
         template <class>
-        false_ has_to_string_function_impl(long) noexcept;
+        elib::false_ 
+        has_to_string_function_impl(long);
         
         ////////////////////////////////////////////////////////////////////////////
         template <
             class T
           , ELIB_ENABLE_IF_VALID_EXPR(
-            operator<<( elib::declval<std::ostream>(), elib::declval<T>() ) 
+                operator<<( elib::declval<std::ostream>(), elib::declval<T>() ) 
             )
           >
-        true_ has_stream_insertion_impl(int) noexcept;
+        elib::true_ 
+        has_stream_insertion_impl(int);
         
         template <class>
-        false_ has_stream_insertion_impl(long) noexcept;
+        elib::false_ 
+        has_stream_insertion_impl(long);
     
         ///////////////////////////////////////////////////////////////////////////
         template <class T>
@@ -135,12 +143,14 @@ namespace elib
             return ss.str();
         }
         
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         std::string convert_str_impl(T const & t, to_string_function_tag)
         {
             return to_string(t);
         }
         
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         std::string convert_str_impl(T const &, bad_conversion_tag)
         {
@@ -211,7 +221,7 @@ namespace elib
     namespace fmt_detail
     {
         template <class T>
-        using is_raw_fmt_type_impl = 
+        using is_cfmt_type_impl = 
             elib::or_<
                 aux::is_integral<T>
               , aux::is_floating_point<T>
@@ -226,20 +236,21 @@ namespace elib
             >;
     }                                                       // namespace fmt_detail
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using is_raw_fmt_type = fmt_detail::is_raw_fmt_type_impl<aux::uncvref<T>>;
+    using is_cfmt_type = fmt_detail::is_cfmt_type_impl<aux::uncvref<T>>;
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     using is_fmt_type = fmt_detail::is_fmt_type_impl<aux::uncvref<T>>;
     
+    
     namespace fmt_detail
     {
-        
         template <
             class T
-          , ELIB_ENABLE_IF(is_raw_fmt_type<aux::uncvref<T>>::value)
-        >
+          , ELIB_ENABLE_IF(is_cfmt_type<T>::value)
+          >
         T && convert_arg(T && t) noexcept
         {
             return elib::forward<T>(t);
@@ -247,8 +258,8 @@ namespace elib
         
         template <
             class T
-          , ELIB_ENABLE_IF(not is_raw_fmt_type<T>::value)
-          , ELIB_ENABLE_IF(is_fmt_type<T>::value)
+          , ELIB_ENABLE_IF(not is_cfmt_type<T>::value)
+          , ELIB_ENABLE_IF(is_string_convertible<T>::value)
           >
         std::string convert_arg(T && t)
         {
@@ -256,7 +267,6 @@ namespace elib
         }
         
         //////////////////////////////////////////////////////////////////////////
-        //
         template <class T, ELIB_ENABLE_IF(aux::is_integral<T>::value)>
         constexpr long normalize_arg(T v) noexcept
         { return static_cast<long>(v); }
@@ -279,7 +289,6 @@ namespace elib
     }                                                       // namespace fmt_detail
       
     //////////////////////////////////////////////////////////////////////////
-    // 
     inline void check_fmt(const char *f)
     {
         for (; *f; ++f)
@@ -291,7 +300,8 @@ namespace elib
                 );
         }
     }
-        
+     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, class ...Ts>
     inline void check_fmt(const char *f, T const &, Ts const &... ts)
     {
@@ -395,6 +405,7 @@ namespace elib
 #   pragma GCC diagnostic pop
 # endif
 
+    ////////////////////////////////////////////////////////////////////////////
     inline std::string fmt_varargs(const char *msg, ...) 
     {
         va_list args;
@@ -403,7 +414,6 @@ namespace elib
         va_end(args);
         return tmp;
     }
-    
     
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>
@@ -441,8 +451,6 @@ namespace elib
         );
     }
     
-    
-
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>
     void eprintf(const char *msg, Ts &&... ts)

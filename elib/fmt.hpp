@@ -404,30 +404,30 @@ namespace elib
         return tmp;
     }
     
-    namespace fmt_detail
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    std::string cfmt(const char *msg, Ts const &... ts)
     {
-        template <class ...Args>
-        std::string fmt_impl(const char *msg, Args &&... args)
-        {
-#       ifndef NDEBUG
-            check_fmt(msg, args...);
-#       endif
-            return fmt_varargs(msg, normalize_arg(args)...);
-        }
-        
-        template <class ...Args>
-        std::string checked_fmt_impl(const char *msg, Args &&... args)
-        {
-            check_fmt(msg, args...);
-            return fmt_varargs(msg, normalize_arg(args)...);
-        }
-    }                                                       // namespace fmt_detail
+#   ifndef NDEBUG
+        check_fmt(msg, ts...);
+#   endif
+        return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    std::string checked_cfmt(const char *msg, Ts const &... ts)
+    {
+        check_fmt(msg, ts...);
+        return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>
     std::string fmt(const char *msg, Ts &&... ts)
     {
-        return fmt_detail::fmt_impl(
+        return cfmt(
             msg, fmt_detail::convert_arg(elib::forward<Ts>(ts))...
         );
     }
@@ -436,10 +436,12 @@ namespace elib
     template <class ...Ts>
     std::string checked_fmt(const char *msg, Ts &&... ts)
     {
-        return fmt_detail::checked_fmt_impl(
+        return checked_cfmt(
             msg, fmt_detail::convert_arg(elib::forward<Ts>(ts))...
         );
     }
+    
+    
 
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>

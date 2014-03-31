@@ -40,9 +40,9 @@ namespace elib
             class T
           , ELIB_ENABLE_IF(is_raw_fmt_type<T>::value)
         >
-        T && convert_arg(T && t) noexcept
+        T convert_arg(T const & t) noexcept
         {
-            return elib::forward<T>(t);
+            return t;
         }
         
         template <
@@ -50,9 +50,9 @@ namespace elib
           , ELIB_ENABLE_IF(not is_raw_fmt_type<T>::value)
           , ELIB_ENABLE_IF(is_fmt_type<T>::value)
           >
-        std::string convert_arg(T && t)
+        std::string convert_arg(T const& t)
         {
-            return convert_to_string(elib::forward<T>(t));
+            return convert_to_string(t);
         }
         
         //////////////////////////////////////////////////////////////////////////

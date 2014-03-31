@@ -38,12 +38,12 @@ namespace elib
     {
         template<
             class ToType, class FromType
-          , bool ToInt = aux::is_integral<ToType>::value
-          , bool ToFloat = aux::is_floating_point<ToType>::value
-          , bool ToString = aux::is_same<ToType, std::string>::value
-          , bool ToBool = aux::is_same<ToType, bool>::value
-          , bool FromInt = aux::is_integral<FromType>::value
-          , bool FromFloat = aux::is_floating_point<FromType>::value
+          , bool ToInt      = aux::is_integral<ToType>::value
+          , bool ToFloat    = aux::is_floating_point<ToType>::value
+          , bool ToString   = aux::is_same<ToType, std::string>::value
+          , bool ToBool     = aux::is_same<ToType, bool>::value
+          , bool FromInt    = aux::is_integral<FromType>::value
+          , bool FromFloat  = aux::is_floating_point<FromType>::value
           , bool FromString = aux::is_string_type<FromType>::value
         >
         struct cast_type

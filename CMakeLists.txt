@@ -59,7 +59,7 @@ option(CONFIG_UNIT_TESTS "build unit tests" ON)
 # on the build but the build is MUCH faster.
 option(CONFIG_HEADER_ONLY_SOURCE
         " Build source files for header-only libraries. 
-         The source files are usually just include tests. " OFF)
+         The source files are usually just include tests. " ON)
 
 ################################################################################
 ##                         Library Parts                                      ##

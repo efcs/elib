@@ -3,7 +3,6 @@
 
 # include <elib/aux.hpp>
 # include <elib/convert.hpp>
-# include <elib/lexical_cast.hpp>
 # include <elib/CXX14/memory.hpp> /* for std::make_unique */
 
 # include <stdexcept>
@@ -17,32 +16,41 @@ namespace elib
 ////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////
-    template <class T>
-    using is_raw_fmt_type = 
-        elib::or_<
-            aux::is_integral<T>
-          , aux::is_floating_point<T>
-          , aux::is_pointer<T>
-        >;
+    namespace fmt_detail
+    {
+        template <class T>
+        using is_raw_fmt_type_impl = 
+            elib::or_<
+                aux::is_integral<T>
+              , aux::is_floating_point<T>
+              , aux::is_pointer<T>
+            >;
+        
+        template <class T>
+        using is_fmt_type_impl =
+            elib::or_<
+                 is_raw_fmt_type_impl<T>
+               , is_string_convertible<T>
+            >;
+    }                                                       // namespace fmt_detail
+    
     
     template <class T>
-    using is_fmt_type =
-        elib::or_<
-            is_raw_fmt_type<T>
-          , is_string_convertible<T>
-        >;
-        
+    using is_raw_fmt_type = fmt_detail::is_raw_fmt_type_impl<aux::uncvref<T>>;
+    
+    template <class T>
+    using is_fmt_type = fmt_detail::is_fmt_type_impl<aux::uncvref<T>>;
     
     namespace fmt_detail
     {
         
         template <
             class T
-          , ELIB_ENABLE_IF(is_raw_fmt_type<T>::value)
+          , ELIB_ENABLE_IF(is_raw_fmt_type<aux::uncvref<T>>::value)
         >
-        T convert_arg(T const & t) noexcept
+        T && convert_arg(T && t) noexcept
         {
-            return t;
+            return elib::forward<T>(t);
         }
         
         template <
@@ -50,9 +58,9 @@ namespace elib
           , ELIB_ENABLE_IF(not is_raw_fmt_type<T>::value)
           , ELIB_ENABLE_IF(is_fmt_type<T>::value)
           >
-        std::string convert_arg(T const& t)
+        std::string convert_arg(T && t)
         {
-            return convert_to_string(t);
+            return convert_to_string(elib::forward<T>(t));
         }
         
         //////////////////////////////////////////////////////////////////////////
@@ -214,26 +222,26 @@ namespace elib
     }                                                       // namespace fmt_detail
 
     template <class ...Args>
-    std::string fmt_variadic(const char *msg, Args const &... args)
+    std::string fmt_variadic(const char *msg, Args &&... args)
     {
         return fmt_detail::fmt_variadic_impl(
-            msg, fmt_detail::convert_arg(args)...
+            msg, fmt_detail::convert_arg(elib::forward<Args>(args))...
         );
     }
     
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class ...Ts>
-    std::string fmt(const char *msg, Ts const &... ts)
+    std::string fmt(const char *msg, Ts &&... ts)
     {
 #   ifndef NDEBUG
         check_fmt(msg, ts...);
 #   endif
-        return fmt_variadic(msg, ts...);
+        return fmt_variadic(msg, elib::forward<Ts>(ts)...);
     }
     
     template <class ...Ts>
-    std::string checked_fmt(const char *msg, Ts const &... ts)
+    std::string checked_fmt(const char *msg, Ts &&... ts)
     {
         check_fmt(msg, ts...);
         return fmt_variadic(msg, elib::forward<Ts>(ts)...);

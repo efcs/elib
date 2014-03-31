@@ -14,6 +14,9 @@
 
 namespace elib 
 {
+////////////////////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////////////////////
     template <class T>
     using is_raw_fmt_type = 
         elib::or_<
@@ -206,27 +209,27 @@ namespace elib
         template <class ...Args>
         std::string fmt_variadic_impl(const char *msg, Args &&... args)
         {
-            return fmt_varargs(msg, normalize_arg(elib::forward<Args>(args))...);
+            return fmt_varargs(msg, normalize_arg(args)...);
         }
     }                                                       // namespace fmt_detail
 
     template <class ...Args>
-    std::string fmt_variadic(const char *msg, Args &&... args)
+    std::string fmt_variadic(const char *msg, Args const &... args)
     {
         return fmt_detail::fmt_variadic_impl(
-            msg, fmt_detail::convert_arg(elib::forward<Args>(args))...
+            msg, fmt_detail::convert_arg(args)...
         );
     }
     
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class ...Ts>
-    std::string fmt(const char *msg, Ts &&... ts)
+    std::string fmt(const char *msg, Ts const &... ts)
     {
 #   ifndef NDEBUG
         check_fmt(msg, ts...);
 #   endif
-        return fmt_variadic(msg, elib::forward<Ts>(ts)...);
+        return fmt_variadic(msg, ts...);
     }
     
     template <class ...Ts>

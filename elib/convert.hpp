@@ -179,15 +179,15 @@ namespace elib { namespace converts
     }                                                       // namespace detail
     
     template <class T>
-    std::string convert_to_string(T const & t)
+    std::string convert_to_string(T && t)
     {
-        return detail::convert_str_impl(t, conversion_tag<T>{});
+        return detail::convert_str_impl(elib::forward<T>(t), conversion_tag<T>{});
     }
     
     template <class T>
-    std::string to_str(T const & t)
+    std::string to_str(T && t)
     {
-        return detail::convert_str_impl(t, conversion_tag<T>{});
+        return detail::convert_str_impl(elib::forward<T>(t), conversion_tag<T>{});
     }
 }}                                                           // namespace elib
 

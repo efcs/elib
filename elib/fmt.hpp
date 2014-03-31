@@ -112,18 +112,21 @@ namespace elib
             bad_conversion_tag
         >::type;
         
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         std::string convert_str_impl(T const & t, implicit_conversion_tag)
         {
             return t;
         }
         
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         std::string convert_str_impl(T const & t, explicit_conversion_tag)
         {
             return static_cast<std::string>(t);
         }
         
+        ///////////////////////////////////////////////////////////////////////
         template <class T>
         std::string convert_str_impl(T const & t, stream_insertion_tag)
         {
@@ -149,36 +152,37 @@ namespace elib
         }
     }                                                   // namespace fmt_detail
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     using is_string_convertible = 
         elib::not_<aux::is_same<
             fmt_detail::bad_conversion_tag
           , fmt_detail::conversion_tag<T>
         >>;
-        
+
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    std::string convert_to_string(T && t)
+    std::string make_str(T && t)
     {
+        static_assert(
+            is_string_convertible<T>::value
+          , "Cannot use make_str with type T. It is not string convertible"
+        );
+        
         return fmt_detail::convert_str_impl(
             elib::forward<T>(t)
           , fmt_detail::conversion_tag<T>{}
         );
     }
     
-    template <class T>
-    std::string to_str(T && t)
-    {
-        return fmt_detail::convert_str_impl(
-            elib::forward<T>(t)
-          , fmt_detail::conversion_tag<T>{}
-        );
-    }
-        
-    inline std::ostream & build_str(std::ostream & out) noexcept 
+    ////////////////////////////////////////////////////////////////////////////
+    inline std::ostream & 
+    build_str(std::ostream & out) noexcept 
     { 
         return out; 
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class First, class ...Rest>
     inline std::ostream & 
     build_str(std::ostream & out, First && f, Rest &&... rest)
@@ -188,10 +192,11 @@ namespace elib
           , "Type First IS NOT string convertible"
         );
         
-        out << to_str(elib::forward<First>(f));
+        out << make_str(elib::forward<First>(f));
         return build_str(out, elib::forward<Rest>(rest)...);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template<class ...Args>
     inline std::string cat_str(Args &&... args)
     {
@@ -247,7 +252,7 @@ namespace elib
           >
         std::string convert_arg(T && t)
         {
-            return convert_to_string(elib::forward<T>(t));
+            return make_str(elib::forward<T>(t));
         }
         
         //////////////////////////////////////////////////////////////////////////
@@ -314,7 +319,7 @@ namespace elib
                             );
                     break;
                 case 's':
-                    if (!is_string_convertible<T>::value)
+                    if (!aux::is_string_type<T>::value)
                         throw std::logic_error(
                             "Type mismatch: expected C string"
                             );
@@ -402,73 +407,52 @@ namespace elib
     namespace fmt_detail
     {
         template <class ...Args>
-        std::string fmt_variadic_impl(const char *msg, Args &&... args)
+        std::string fmt_impl(const char *msg, Args &&... args)
         {
+#       ifndef NDEBUG
+            check_fmt(msg, args...);
+#       endif
+            return fmt_varargs(msg, normalize_arg(args)...);
+        }
+        
+        template <class ...Args>
+        std::string checked_fmt_impl(const char *msg, Args &&... args)
+        {
+            check_fmt(msg, args...);
             return fmt_varargs(msg, normalize_arg(args)...);
         }
     }                                                       // namespace fmt_detail
-
-    template <class ...Args>
-    std::string fmt_variadic(const char *msg, Args &&... args)
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    std::string fmt(const char *msg, Ts &&... ts)
     {
-        return fmt_detail::fmt_variadic_impl(
-            msg, fmt_detail::convert_arg(elib::forward<Args>(args))...
+        return fmt_detail::fmt_impl(
+            msg, fmt_detail::convert_arg(elib::forward<Ts>(ts))...
         );
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
-    template <class ...Ts>
-    std::string fmt(const char *msg, Ts &&... ts)
-    {
-#   ifndef NDEBUG
-        check_fmt(msg, ts...);
-#   endif
-        return fmt_variadic(msg, elib::forward<Ts>(ts)...);
-    }
-    
     template <class ...Ts>
     std::string checked_fmt(const char *msg, Ts &&... ts)
     {
-        check_fmt(msg, ts...);
-        return fmt_variadic(msg, elib::forward<Ts>(ts)...);
+        return fmt_detail::checked_fmt_impl(
+            msg, fmt_detail::convert_arg(elib::forward<Ts>(ts))...
+        );
     }
-   
-# if defined(__clang__)
-#   pragma clang diagnostic push
-#   pragma clang diagnostic ignored "-Wformat-security"
-# elif defined(__GNUG__)
-#   pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-#   pragma GCC diagnostic ignored "-Wformat-security"
-# endif
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <class ...Ts>
-    int eprintf(const char *msg, Ts const &... ts)
-    {
-#   ifndef NDEBUG
-        check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-#   endif
-        return std::printf(msg, fmt_detail::normalize_arg(ts)...);
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    template <class ...Ts>
-    int eprintf_err(const char *msg, Ts const &... ts)
-    {
-#   ifndef NDEBUG
-        check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-#   endif
-        return std::fprintf(stderr, msg, fmt_detail::normalize_arg(ts)...);
-    }
-# if defined(__clang__)
-#   pragma clang diagnostic pop
-# elif defined(__GNUG__)
-#   pragma GCC diagnostic pop
-# endif
 
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    void eprintf(const char *msg, Ts &&... ts)
+    {
+        std::cout << fmt(msg, elib::forward<Ts>(ts)...);
+    }
     
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    void eprintf_err(const char *msg, Ts &&... ts)
+    {
+        std::cerr << fmt(msg, elib::forward<Ts>(ts)...);
+    }
 }                                                            // namespace elib
 #endif                                                  // ELIB_FMT_HPP

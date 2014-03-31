@@ -212,6 +212,7 @@ namespace elib
         using if_t = typename if_c<static_cast<bool>(Pred::type::value), Then, Else>::type;
         
 # else /* ELIB_AUX_OLD_STYLE_IF */
+
         namespace detail
         {
             template <class T>

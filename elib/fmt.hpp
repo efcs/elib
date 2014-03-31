@@ -1,8 +1,8 @@
 #ifndef ELIB_FMT_HPP
 #define ELIB_FMT_HPP
 
-# include <elib/assert.hpp>
 # include <elib/aux.hpp>
+# include <elib/convert.hpp>
 # include <elib/lexical_cast.hpp>
 # include <elib/CXX14/memory.hpp> /* for std::make_unique */
 
@@ -14,8 +14,44 @@
 
 namespace elib 
 {
+    template <class T>
+    using is_raw_fmt_type = 
+        elib::or_<
+            aux::is_integral<T>
+          , aux::is_floating_point<T>
+          , aux::is_pointer<T>
+        >;
+    
+    template <class T>
+    using is_fmt_type =
+        elib::or_<
+            is_raw_fmt_type<T>
+          , is_string_convertible<T>
+        >;
+        
+    
     namespace fmt_detail
     {
+        
+        template <
+            class T
+          , ELIB_ENABLE_IF(is_raw_fmt_type<T>::value)
+        >
+        T && convert_arg(T && t) noexcept
+        {
+            return elib::forward<T>(t);
+        }
+        
+        template <
+            class T
+          , ELIB_ENABLE_IF(not is_raw_fmt_type<T>::value)
+          , ELIB_ENABLE_IF(is_fmt_type<T>::value)
+          >
+        std::string convert_arg(T && t)
+        {
+            return convert_to_string(elib::forward<T>(t));
+        }
+        
         //////////////////////////////////////////////////////////////////////////
         //
         template <class T, ELIB_ENABLE_IF(aux::is_integral<T>::value)>
@@ -80,7 +116,7 @@ namespace elib
                             );
                     break;
                 case 's':
-                    if (!aux::is_string_type<T>::value)
+                    if (!is_string_convertible<T>::value)
                         throw std::logic_error(
                             "Type mismatch: expected C string"
                             );
@@ -164,23 +200,40 @@ namespace elib
         va_end(args);
         return tmp;
     }
+    
+    namespace fmt_detail
+    {
+        template <class ...Args>
+        std::string fmt_variadic_impl(const char *msg, Args &&... args)
+        {
+            return fmt_varargs(msg, normalize_arg(elib::forward<Args>(args))...);
+        }
+    }                                                       // namespace fmt_detail
 
+    template <class ...Args>
+    std::string fmt_variadic(const char *msg, Args &&... args)
+    {
+        return fmt_detail::fmt_variadic_impl(
+            msg, fmt_detail::convert_arg(elib::forward<Args>(args))...
+        );
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class ...Ts>
-    std::string fmt(const char *msg, Ts const &... ts)
+    std::string fmt(const char *msg, Ts &&... ts)
     {
 #   ifndef NDEBUG
-        check_fmt(msg, fmt_detail::normalize_arg(ts)...);
+        check_fmt(msg, ts...);
 #   endif
-        return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
+        return fmt_variadic(msg, elib::forward<Ts>(ts)...);
     }
     
     template <class ...Ts>
     std::string checked_fmt(const char *msg, Ts const &... ts)
     {
-        check_fmt(msg, fmt_detail::normalize_arg(ts)...);
-        return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
+        check_fmt(msg, ts...);
+        return fmt_variadic(msg, elib::forward<Ts>(ts)...);
     }
    
 # if defined(__clang__)
@@ -217,5 +270,31 @@ namespace elib
 # elif defined(__GNUG__)
 #   pragma GCC diagnostic pop
 # endif
+
+    inline std::ostream & build_str(std::ostream & out) noexcept 
+    { 
+        return out; 
+    }
+    
+    template <class First, class ...Rest>
+    inline std::ostream & 
+    build_str(std::ostream & out, First && f, Rest &&... rest)
+    {
+        static_assert(
+            is_string_convertible<First>::value
+          , "Type First IS NOT string convertible"
+        );
+        
+        out << to_str(elib::forward<First>(f));
+        return build_str(out, elib::forward<Rest>(rest)...);
+    }
+    
+    template<class ...Args>
+    inline std::string cat_str(Args &&... args)
+    {
+        std::ostringstream ss;
+        build_str(ss, elib::forward<Args>(args)...);
+        return ss.str();
+    }
 }                                                            // namespace elib
 #endif                                                  // ELIB_FMT_HPP

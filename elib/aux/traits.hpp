@@ -51,9 +51,6 @@ namespace elib { namespace aux
         
 # if __cplusplus >= 201303L
         using std::is_null_pointer;
-        
-        template <class T>
-        using is_null_ptr = std::is_null_pointer<T>;
 # endif
 
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
@@ -119,9 +116,6 @@ namespace elib { namespace aux
 #   if __cplusplus >= 201303L
         template <class T>
         constexpr bool is_null_pointer_v = is_null_pointer<T>::value;
-        
-        template <class T>
-        constexpr bool is_null_ptr_v = is_null_ptr<T>::value;
 # endif
     
 # endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
@@ -799,31 +793,22 @@ namespace elib { namespace aux
             // to avoid deps, implement own declval
             template <class T>
             add_rvalue_ref_t<T> declval();
-            
-            auto is_char_array_impl(const volatile char[]) -> true_;
-            auto is_char_array_impl(...) -> false_;
-            
-            auto is_raw_string_impl(const volatile char* const) -> true_;
-            auto is_raw_string_impl(...) -> false_;
-            
+
             auto is_string_type_impl(const volatile char* const) -> true_;
             auto is_string_type_impl(std::string) -> true_;
             auto is_string_type_impl(...) -> false_;
+            
+            template <class T>
+            using is_c_string_impl = elib::bool_<
+                   is_same<char*, T>::value
+                or is_same<const char*, T>::value
+                or is_same<volatile char*, T>::value
+                or is_same<const volatile char*, T>::value
+              >;
         }
-       
+               
         template <class T>
-        using is_char_array = decltype(
-            traits_detail::is_char_array_impl(
-                traits_detail::declval<T>()
-              )
-          );
-        
-        template <class T>
-        using is_raw_string = decltype(
-            traits_detail::is_raw_string_impl(
-                traits_detail::declval<T>()
-              )
-          );
+        using is_c_string = traits_detail::is_c_string_impl<decay_t<T>>;
         
         template <class T>
         using is_string_type = decltype(
@@ -833,14 +818,20 @@ namespace elib { namespace aux
           );
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T>
-        constexpr bool is_char_array_v = is_char_array<T>::value;
-        
-        template <class T>
-        constexpr bool is_raw_string_v = is_raw_string<T>::value;
+        constexpr bool is_c_string_v = is_c_string<T>::value;
         
         template <class T>
         constexpr bool is_string_type_v = is_string_type<T>::value;
 # endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
+
+        template <class T>
+        using is_nullptr = is_same<decltype(nullptr), uncvref<T>>;
+        
+# if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
+        template <class T>
+        constexpr bool is_nullptr_v = is_nullptr<T>::value;
+# endif
+
     }                                                       // namespace traits
     
     using namespace ::elib::aux::traits;

@@ -19,11 +19,11 @@ namespace elib
 ////////////////////////////////////////////////////////////////////////////////
     namespace fmt_detail
     {
-        struct implicit_conversion_tag {};
-        struct explicit_conversion_tag {};
-        struct stream_insertion_tag    {};
-        struct to_string_function_tag  {};
-        struct bad_conversion_tag      {};
+        struct implicit_cast_conversion_tag       {};
+        struct explicit_cast_conversion_tag       {};
+        struct stream_insertion_conversion_tag    {};
+        struct to_string_function_conversion_tag  {};
+        struct bad_conversion_tag                 {};
         
         ////////////////////////////////////////////////////////////////////////////
         template <
@@ -34,11 +34,11 @@ namespace elib
             )
           >
         elib::true_ 
-        has_explicit_conversion_impl(int);
+        has_explicit_string_cast_impl(int);
         
         template <class>
         elib::false_ 
-        has_explicit_conversion_impl(long);
+        has_explicit_string_cast_impl(long);
         
         ////////////////////////////////////////////////////////////////////////////
         template <
@@ -56,7 +56,7 @@ namespace elib
         template <
             class T
           , ELIB_ENABLE_IF_VALID_EXPR(
-                operator<<( elib::declval<std::ostream>(), elib::declval<T>() ) 
+                elib::declval<std::ostream &>() << elib::declval<T>() 
             )
           >
         elib::true_ 
@@ -66,55 +66,60 @@ namespace elib
         elib::false_ 
         has_stream_insertion_impl(long);
     
-        ///////////////////////////////////////////////////////////////////////////
-        template <class T>
-        using has_explicit_string_conversion = decltype(
-            fmt_detail::has_explicit_conversion_impl<T>(0)
-        );
+    }                                                       // namespace fmt_detail
+    
+    ///////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using has_explicit_string_cast = decltype(
+        fmt_detail::has_explicit_string_cast_impl<T>(0)
+    );
         
-        ////////////////////////////////////////////////////////////////////////////
-        template <class T>
-        using has_implicit_string_conversion = 
-            typename aux::is_convertible<T, std::string>::type;
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using has_implicit_string_cast = 
+        typename aux::is_convertible<T, std::string>::type;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using has_string_cast = 
+        elib::or_<
+            has_implicit_string_cast<T>
+          , has_explicit_string_cast<T>
+          >;
         
-        ////////////////////////////////////////////////////////////////////////////
-        template <class T>
-        using has_string_conversion = 
-            elib::or_<
-                has_implicit_string_conversion<T>
-              , has_explicit_string_conversion<T>
-            >;
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using has_stream_insertion = decltype(
+        fmt_detail::has_stream_insertion_impl<T>(0)
+      );
         
-        ////////////////////////////////////////////////////////////////////////////
-        template <class T>
-        using has_stream_insertion = decltype(
-            fmt_detail::has_stream_insertion_impl<T>(0)
-        );
-        
-        ////////////////////////////////////////////////////////////////////////////
-        template <class T>
-        using has_to_string = decltype(
-            fmt_detail::has_to_string_function_impl<T>(0)
-        );
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using has_to_string = decltype(
+        fmt_detail::has_to_string_function_impl<T>(0)
+      );
+    
+    namespace fmt_detail
+    {
         
         ////////////////////////////////////////////////////////////////////////////
         template <class T>
         using conversion_tag = typename
         if_<
-            has_implicit_string_conversion<T>
-          , implicit_conversion_tag
+            has_implicit_string_cast<T>
+          , implicit_cast_conversion_tag
         >::template
         else_if<
-            has_explicit_string_conversion<T>
-          , explicit_conversion_tag
+            has_explicit_string_cast<T>
+          , explicit_cast_conversion_tag
         >::template
         else_if<
             has_stream_insertion<T>
-          , stream_insertion_tag
+          , stream_insertion_conversion_tag
         >::template
         else_if<
             has_to_string<T>
-          , to_string_function_tag
+          , to_string_function_conversion_tag
         >::template
         else_<
             bad_conversion_tag
@@ -122,30 +127,30 @@ namespace elib
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        std::string convert_str_impl(T const & t, implicit_conversion_tag)
+        std::string convert_str_impl(T const & t, implicit_cast_conversion_tag)
         {
             return t;
         }
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        std::string convert_str_impl(T const & t, explicit_conversion_tag)
+        std::string convert_str_impl(T const & t, explicit_cast_conversion_tag)
         {
             return static_cast<std::string>(t);
         }
         
         ///////////////////////////////////////////////////////////////////////
         template <class T>
-        std::string convert_str_impl(T const & t, stream_insertion_tag)
+        std::string convert_str_impl(T const & t, stream_insertion_conversion_tag)
         {
             std::ostringstream ss;
-            ss << t;
+            ss << std::boolalpha << t;
             return ss.str();
         }
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        std::string convert_str_impl(T const & t, to_string_function_tag)
+        std::string convert_str_impl(T const & t, to_string_function_conversion_tag)
         {
             return to_string(t);
         }
@@ -164,7 +169,7 @@ namespace elib
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using is_string_convertible = 
+    using has_string_conversion = 
         elib::not_<aux::is_same<
             fmt_detail::bad_conversion_tag
           , fmt_detail::conversion_tag<T>
@@ -175,7 +180,7 @@ namespace elib
     std::string make_str(T && t)
     {
         static_assert(
-            is_string_convertible<T>::value
+            has_string_conversion<T>::value
           , "Cannot use make_str with type T. It is not string convertible"
         );
         
@@ -197,11 +202,6 @@ namespace elib
     inline std::ostream & 
     build_str(std::ostream & out, First && f, Rest &&... rest)
     {
-        static_assert(
-            is_string_convertible<First>::value
-          , "Type First IS NOT string convertible"
-        );
-        
         out << make_str(elib::forward<First>(f));
         return build_str(out, elib::forward<Rest>(rest)...);
     }
@@ -227,6 +227,13 @@ namespace elib
               , aux::is_floating_point<T>
               , aux::is_pointer<T>
             >;
+        
+        template <class T>
+        using is_fmt_type_impl =
+            elib::or_<
+                is_cfmt_type_impl<T>
+              , aux::is_same<T, std::string>
+              >;
     }                                                       // namespace fmt_detail
     
     ////////////////////////////////////////////////////////////////////////////
@@ -235,35 +242,31 @@ namespace elib
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using is_ext_fmt_type = 
-        elib::and_<
-            not_<is_cfmt_type<T>>
-          , is_string_convertible<T>
-          >;
+    using is_fmt_type = fmt_detail::is_fmt_type_impl<aux::uncvref<T>>;
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using is_fmt_type = 
+    using is_ext_fmt_type = 
         elib::or_<
-            is_cfmt_type<T>
-          , is_ext_fmt_type<T>
+            is_fmt_type<T>
+          , has_string_conversion<T>
           >;
-    
     
     namespace fmt_detail
     {
+   
+        
         template <
             class T
-          , ELIB_ENABLE_IF(is_cfmt_type<T>::value)
+          , ELIB_ENABLE_IF(is_fmt_type<T>::value)
           >
-        T && convert_arg(T && t) noexcept
-        {
-            return elib::forward<T>(t);
-        }
+        auto convert_arg(T && t) 
+        ELIB_AUTO_RETURN_NOEXCEPT( elib::forward<T>(t) )
         
         template <
             class T
           , ELIB_ENABLE_IF(is_ext_fmt_type<T>::value)
+          , ELIB_ENABLE_IF(!is_fmt_type<T>::value)
           >
         std::string convert_arg(T && t)
         {
@@ -282,6 +285,9 @@ namespace elib
         template <class T, ELIB_ENABLE_IF(aux::is_pointer<T>::value)>
         constexpr T normalize_arg(T v) noexcept
         { return v; }
+        
+        inline void* normalize_arg(std::nullptr_t) noexcept
+        { return static_cast<void*>(nullptr); }
         
         inline const char* normalize_arg(std::string const & s) noexcept
         { return s.c_str(); }
@@ -333,7 +339,7 @@ namespace elib
                             );
                     break;
                 case 's':
-                    if (!aux::is_string_type<T>::value)
+                    if (!aux::is_c_string<T>::value)
                         throw std::logic_error(
                             "Type mismatch: expected C string"
                             );
@@ -426,31 +432,49 @@ namespace elib
 #   ifndef NDEBUG
         check_fmt(msg, ts...);
 #   endif
-        return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
+        return fmt_varargs(msg, ts...);
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>
     std::string checked_cfmt(const char *msg, Ts const &... ts)
     {
         check_fmt(msg, ts...);
-        return fmt_varargs(msg, fmt_detail::normalize_arg(ts)...);
+        return fmt_varargs(msg, ts...);
     }
     
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>
-    std::string fmt(const char *msg, Ts &&... ts)
+    std::string fmt(const char *msg, Ts const &... ts)
     {
         return cfmt(
+            msg, fmt_detail::normalize_arg(ts)...
+        );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    std::string checked_fmt(const char *msg, Ts const &... ts)
+    {
+        return checked_cfmt(
+            msg, fmt_detail::normalize_arg(ts)...
+        );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class ...Ts>
+    std::string ext_fmt(const char *msg, Ts &&... ts)
+    {
+        return fmt(
             msg, fmt_detail::convert_arg(elib::forward<Ts>(ts))...
         );
     }
     
     ////////////////////////////////////////////////////////////////////////////
     template <class ...Ts>
-    std::string checked_fmt(const char *msg, Ts &&... ts)
+    std::string checked_ext_fmt(const char *msg, Ts &&... ts)
     {
-        return checked_cfmt(
+        return checked_fmt(
             msg, fmt_detail::convert_arg(elib::forward<Ts>(ts))...
         );
     }

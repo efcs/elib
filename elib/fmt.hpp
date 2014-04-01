@@ -231,7 +231,7 @@ namespace elib
         template <class T>
         using is_fmt_type_impl =
             elib::or_<
-                 is_raw_fmt_type_impl<T>
+                 is_cfmt_type_impl<T>
                , is_string_convertible<T>
             >;
     }                                                       // namespace fmt_detail

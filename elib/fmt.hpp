@@ -227,13 +227,6 @@ namespace elib
               , aux::is_floating_point<T>
               , aux::is_pointer<T>
             >;
-        
-        template <class T>
-        using is_fmt_type_impl =
-            elib::or_<
-                 is_cfmt_type_impl<T>
-               , is_string_convertible<T>
-            >;
     }                                                       // namespace fmt_detail
     
     ////////////////////////////////////////////////////////////////////////////
@@ -242,7 +235,19 @@ namespace elib
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using is_fmt_type = fmt_detail::is_fmt_type_impl<aux::uncvref<T>>;
+    using is_ext_fmt_type = 
+        elib::and_<
+            not_<is_cfmt_type<T>>
+          , is_string_convertible<T>
+          >;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using is_fmt_type = 
+        elib::or_<
+            is_cfmt_type<T>
+          , is_ext_fmt_type<T>
+          >;
     
     
     namespace fmt_detail
@@ -258,8 +263,7 @@ namespace elib
         
         template <
             class T
-          , ELIB_ENABLE_IF(not is_cfmt_type<T>::value)
-          , ELIB_ENABLE_IF(is_string_convertible<T>::value)
+          , ELIB_ENABLE_IF(is_ext_fmt_type<T>::value)
           >
         std::string convert_arg(T && t)
         {

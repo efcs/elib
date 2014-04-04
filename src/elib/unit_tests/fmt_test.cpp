@@ -838,7 +838,6 @@ BOOST_AUTO_TEST_CASE( check_cfmt_throw_test )
     BOOST_CHECK_NO_THROW(str = FMT_FN("%s", std::string("Hello")));
     std::snprintf(buff, sizeof(buff), "%s", "Hello");
     BOOST_CHECK(str == buff);
-
   }
 #undef FMT_FN
 }

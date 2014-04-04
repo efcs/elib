@@ -184,7 +184,7 @@ namespace elib
                 static constexpr bool test(int) { return true; }
                 
                 template <class U>
-                static constexpr bool test(...) { return false; }
+                static constexpr bool test(long) { return false; }
                 
                 using type = integral_constant<bool, test<T>(0)>;
             };

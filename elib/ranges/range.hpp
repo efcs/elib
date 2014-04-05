@@ -17,7 +17,8 @@ namespace elib { namespace ranges
     class range
     {
     public:                                            // types
-        using value_type = typename std::iterator_traits<Iterator>::value_type;
+        using value_type = typename 
+        std::iterator_traits<Iterator>::value_type;
         using reference = typename std::iterator_traits<Iterator>::reference;
         using difference_type = typename std::iterator_traits<Iterator>::difference_type;
         using iterator = Iterator;
@@ -34,8 +35,8 @@ namespace elib { namespace ranges
         template< class Range >
         range(Range && r)
           : m_iters(
-              ranges::begin(elib::forward<Range>(r))
-            , ranges::end(elib::forward<Range>(r))
+              ranges::begin( elib::forward<Range>(r) )
+            , ranges::end  ( elib::forward<Range>(r) )
             )
         {}
 
@@ -43,8 +44,8 @@ namespace elib { namespace ranges
         range& operator=( Range && r )
         {
             m_iters = {
-                ranges::begin(elib::forward<Range>(r))
-              , ranges::end(elib::forward<Range>(r))
+                ranges::begin( elib::forward<Range>(r) )
+              , ranges::end  ( elib::forward<Range>(r) )
             };
         }
 
@@ -98,12 +99,12 @@ namespace elib { namespace ranges
 
     ////////////////////////////////////////////////////////////////////////////
     template< class Range >
-    class sub_range : public range< typename range_iterator<Range>::type >
+    class sub_range : public range< range_iterator_t<Range> >
     {
     public: 
-        using base_type = range< typename range_iterator<Range>::type >;
-        using iterator = typename range_iterator<Range>::type;
-        using const_iterator = typename range_iterator<const Range>::type;
+        using base_type = range< range_iterator_t<Range> >;
+        using iterator = range_iterator_t<Range>;
+        using const_iterator = range_iterator_t<const Range>;
         using const_reference = typename std::iterator_traits<const_iterator>::reference;
         using value_type = typename base_type::value_type;
         using reference = typename base_type::reference;

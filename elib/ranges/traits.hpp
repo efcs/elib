@@ -10,7 +10,7 @@ namespace elib { namespace ranges
     template<class Range>
     struct range_iterator
     {
-        using type = decltype( ranges::begin(* ((Range*)nullptr) ) );
+        using type = decltype(ranges::begin( *((Range*)nullptr) ));
     };
     
     
@@ -26,7 +26,8 @@ namespace elib { namespace ranges
     
     
     template <class BidirectionalRange>
-    using range_reverse_iterator_t = typename range_reverse_iterator<BidirectionalRange>::type;
+    using range_reverse_iterator_t = typename 
+        range_reverse_iterator< BidirectionalRange >::type;
 
     ////////////////////////////////////////////////////////////////////////////
     template< class Range >
@@ -43,7 +44,8 @@ namespace elib { namespace ranges
     template< class Range >
     struct range_reference
     {
-        using type = typename std::iterator_traits<range_iterator_t<Range>>::reference;
+        using type = typename 
+            std::iterator_traits< range_iterator_t<Range> >::reference;
     };
     
     
@@ -54,7 +56,8 @@ namespace elib { namespace ranges
     template< class Range >
     struct range_pointer
     {
-        using type = typename std::iterator_traits<range_iterator_t<Range>>::pointer;
+        using type = typename 
+            std::iterator_traits< range_iterator_t<Range> >::pointer;
     };
     
     
@@ -65,7 +68,8 @@ namespace elib { namespace ranges
     template< class Range >
     struct range_difference
     {
-        using type = typename std::iterator_traits<range_iterator_t<Range>>::difference_type;
+        using type = typename 
+            std::iterator_traits< range_iterator_t<Range> >::difference_type;
     };
 
     
@@ -76,7 +80,8 @@ namespace elib { namespace ranges
     template< class Range >
     struct range_category
     {
-        using type = typename std::iterator_traits<range_iterator_t<Range>>::iterator_category;
+        using type = typename 
+            std::iterator_traits< range_iterator_t<Range> >::iterator_category;
     };
     
     template <class Range>

@@ -315,7 +315,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         void swap(optional & other)
             noexcept( aux::is_nothrow_move_constructible<T>::value
-                && aux::is_noexcept_swappable<T>::value
+                   && aux::is_noexcept_swappable<T>::value
               )
         {
             if (m_init() && not other.m_init()) {
@@ -536,6 +536,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         void swap(optional & rhs) noexcept
         {
+            // m_data is a pointer, so we just want std::swap. 
             std::swap(m_data, rhs.m_data);
         }
         

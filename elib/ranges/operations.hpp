@@ -1,54 +1,20 @@
 #ifndef ELIB_RANGES_OPERATIONS_HPP
 #define ELIB_RANGES_OPERATIONS_HPP
 
+# include <elib/ranges/begin_end.hpp>
 # include <elib/ranges/traits.hpp>
 # include <elib/aux/convert.hpp>
+# include <iterator>
 # include <utility>
 # include <cstddef>
 
 namespace elib { namespace ranges
 {
-    template <class Range>
-    auto range_begin(Range && r) -> decltype( r.begin() )
-    {
-        return r.begin();
-    }
-    
-    template <class Iterator>
-    Iterator range_begin(std::pair<Iterator, Iterator> const & p)
-    {
-        return p.first;
-    }
-    
-    template <class T, std::size_t N>
-    T* range_begin(T (&array)[N] )
-    {
-        return array;
-    }
-    
-    template <class Range>
-    auto range_end(Range && r) -> decltype( r.end() )
-    {
-        return r.end();
-    }
-    
-    template <class Iterator>
-    Iterator range_end(std::pair<Iterator, Iterator> const & p)
-    {
-        return p.second;
-    }
-    
-    template <class T, std::size_t N>
-    T* range_end(T (&array)[N] )
-    {
-        return array + N;
-    }
-    
     template< class RandomAccessRange >
-    typename range_difference<RandomAccessRange>::type 
+    range_difference_t<RandomAccessRange> 
     size(RandomAccessRange const & r)
     {
-        return std::end(r) - std::begin(r);
+        return ranges::end(r) - ranges::begin(r);
     }
     
     template< class Range >
@@ -58,40 +24,72 @@ namespace elib { namespace ranges
     }
 
     template< class BidirectionalRange >
-    typename range_reverse_iterator<BidirectionalRange>::type 
-    rbegin(BidirectionalRange && r )
+    range_reverse_iterator_t<BidirectionalRange>
+    rbegin(BidirectionalRange && r)
     {
-        return elib::convert(std::end(r));
+        return elib::convert(ranges::end(r));
     }
 
     template< class BidirectionalRange >
-    typename range_reverse_iterator<BidirectionalRange>::type
+    range_reverse_iterator_t<BidirectionalRange>
     rend(BidirectionalRange && r)
     {
-        return elib::convert(std::begin(r));
+        return elib::convert(ranges::begin(r));
     }
 
     template< class Range >
-    typename range_iterator<const Range>::type 
+    range_iterator_t<const Range> 
     const_begin(Range const & r)
     {
-        return std::begin(r);
+        return ranges::begin(r);
     }
 
     template< class Range >
-    typename range_iterator<const Range>::type 
+    range_iterator_t<const Range>
     const_end(Range const & r)
     {
-        return std::end(r);
+        return ranges::end(r);
     }
 
     template< class BidirectionalRange >
-    typename range_reverse_iterator<const BidirectionalRange>::type 
-    const_rbegin( const BidirectionalRange& r );
+    range_reverse_iterator_t<const BidirectionalRange> 
+    const_rbegin(BidirectionalRange const & r)
+    {
+        return ranges::rbegin(r);
+    }
 
     template< class BidirectionalRange >
-    typename range_reverse_iterator<const BidirectionalRange>::type 
-    const_rend( const BidirectionalRange& r );
+    range_reverse_iterator_t<const BidirectionalRange>
+    const_rend(BidirectionalRange const & r)
+    {
+        return ranges::rend(r);
+    }
+    
+    template< class CopyableRange, class Range >      
+    CopyableRange copy_range(Range const & r)
+    {
+        return CopyableRange(ranges::begin(r), ranges::end(r));
+    }
+
+    template< class ForwardRange >
+    typename range_difference<ForwardRange>::type
+    distance(ForwardRange const & r)
+    {
+        return std::distance(ranges::begin(r), ranges::end(r));
+    }
     
 }}                                                          // namespace elib
+namespace elib
+{
+    using ranges::size;
+    using ranges::empty;
+    using ranges::rbegin;
+    using ranges::rend;
+    using ranges::const_begin;
+    using ranges::const_end;
+    using ranges::const_rbegin;
+    using ranges::const_rend;
+    using ranges::copy_range;
+    using ranges::distance;
+}                                                           // namespace elib
 #endif /* ELIB_RANGES_OPERATIONS_HPP */

@@ -1,6 +1,7 @@
 #ifndef ELIB_RANGES_RANGE_HPP
 #define ELIB_RANGES_RANGE_HPP
 
+# include <elib/ranges/begin_end.hpp>
 # include <elib/ranges/operations.hpp>
 # include <elib/ranges/traits.hpp>
 # include <elib/aux.hpp>
@@ -31,15 +32,15 @@ namespace elib { namespace ranges
 
         template< class Range >
         range(Range && r)
-          : m_iters(std::begin(elib::forward<Range>(r)), std::end(elib::forward<Range>(r)))
+          : m_iters(ranges::begin(elib::forward<Range>(r)), ranges::end(elib::forward<Range>(r)))
         {}
 
         template< class Range >
         range& operator=( Range && r )
         {
             m_iters = {
-                std::begin(elib::forward<Range>(r))
-              , std::end(elib::forward<Range>(r))
+                ranges::begin(elib::forward<Range>(r))
+              , ranges::end(elib::forward<Range>(r))
             };
         }
 
@@ -173,7 +174,7 @@ namespace elib { namespace ranges
             base_type::advance_end(n);
             return *this;
         }
-    };
+    };                                                      // class sub_range
 
     // stream output
     template< class Iterator, class T, class Traits >
@@ -196,19 +197,19 @@ namespace elib { namespace ranges
     template< class Iterator, class Iterator2 >
     bool operator==(range<Iterator> const & lhs, range<Iterator2> const & rhs)
     {
-        return std::equal(std::begin(lhs), std::end(lhs), std::begin(rhs));
+        return std::equal(ranges::begin(lhs), ranges::end(lhs), ranges::begin(rhs));
     }
 
     template< class Iterator, class Range >
     bool operator==(range<Iterator> const & lhs, Range const & rhs)
     {
-        return std::equal(std::begin(lhs), std::end(lhs), std::begin(rhs));
+        return std::equal(ranges::begin(lhs), ranges::end(lhs), ranges::begin(rhs));
     }
 
     template< class Iterator, class Range >
     bool operator==(Range const & lhs, range<Iterator> const & rhs)
     {
-        return std::equal(std::begin(lhs), std::end(lhs), std::begin(rhs));
+        return std::equal(ranges::begin(lhs), ranges::end(lhs), ranges::begin(rhs));
     }
 
     template< class Iterator, class Iterator2 >
@@ -233,8 +234,8 @@ namespace elib { namespace ranges
     bool operator<(range<Iterator> const & lhs, range<Iterator2> const & rhs)
     {
         return std::lexicographical_compare(
-            std::begin(lhs), std::end(lhs)
-          , std::begin(rhs), std::end(rhs)
+            ranges::begin(lhs), ranges::end(lhs)
+          , ranges::begin(rhs), ranges::end(rhs)
           );
     }
 
@@ -242,8 +243,8 @@ namespace elib { namespace ranges
     bool operator<(range<Iterator> const & lhs, Range const & rhs)
     {
         return std::lexicographical_compare(
-            std::begin(lhs), std::end(lhs)
-          , std::begin(rhs), std::end(rhs)
+            ranges::begin(lhs), ranges::end(lhs)
+          , ranges::begin(rhs), ranges::end(rhs)
           );
     }
 
@@ -251,8 +252,8 @@ namespace elib { namespace ranges
     bool operator<(Range const & lhs, range<Iterator> const & rhs)
     {
         return std::lexicographical_compare(
-            std::begin(lhs), std::end(lhs)
-          , std::begin(rhs), std::end(rhs)
+            ranges::begin(lhs), ranges::end(lhs)
+          , ranges::begin(rhs), ranges::end(rhs)
           );
     }
 
@@ -308,18 +309,11 @@ namespace elib { namespace ranges
         tmp.advance_end(advance_end);
         return tmp;
     }
-            
-    template< class CopyableRange, class Range >      
-    CopyableRange copy_range(Range const & r)
-    {
-        return CopyableRange(std::begin(r), std::end(r));
-    }
-
-    template< class ForwardRange >
-    typename range_difference<ForwardRange>::type
-    distance(ForwardRange const & r)
-    {
-        return std::distance(std::begin(r), std::end(r));
-    }
 }}                                                          // namespace elib
+namespace elib
+{
+    using ranges::range;
+    using ranges::sub_range;
+    using ranges::make_range;
+}                                                           // namespace elib
 #endif /* ELIB_RANGES_RANGE_HPP */

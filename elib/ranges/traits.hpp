@@ -1,6 +1,7 @@
 #ifndef ELIB_RANGES_TRAITS_HPP
 #define ELIB_RANGES_TRAITS_HPP
 
+# include <elib/ranges/begin_end.hpp>
 # include <iterator>
 
 namespace elib { namespace ranges
@@ -9,7 +10,7 @@ namespace elib { namespace ranges
     template<class Range>
     struct range_iterator
     {
-        using type = decltype( std::begin(* ((Range*)nullptr) ) );
+        using type = decltype( ranges::begin(* ((Range*)nullptr) ) );
     };
     
     
@@ -77,7 +78,6 @@ namespace elib { namespace ranges
     {
         using type = typename std::iterator_traits<range_iterator_t<Range>>::iterator_category;
     };
-    
     
     template <class Range>
     using range_category_t = typename range_category<Range>::type;

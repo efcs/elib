@@ -1,12 +1,12 @@
-#ifndef ELIB_RANGE_ITERATOR_FACADE_HPP
-#define ELIB_RANGE_ITERATOR_FACADE_HPP
+#ifndef ELIB_ITER_ITERATOR_FACADE_HPP
+#define ELIB_ITER_ITERATOR_FACADE_HPP
 
-# include <elib/range/iterator_traits.hpp>
+# include <elib/iter/iterator_traits.hpp>
 # include <elib/aux.hpp>
 # include <iterator>
 # include <cstddef>
 
-namespace elib { namespace range
+namespace elib { namespace iter
 {
     template<
         class Derived
@@ -17,7 +17,7 @@ namespace elib { namespace range
     >
     class iterator_facade;
     
-# define ELIB_RANGE_ITERATOR_ACCESS_OP(Prefix, Return, Op) \
+# define ELIB_ITER_ITERATOR_ACCESS_OP(Prefix, Return, Op) \
     template <                                             \
         class D1, class V1, class C1, class R1, class Di1  \
       , class D2, class V2, class C2, class R2, class Di2  \
@@ -33,12 +33,12 @@ namespace elib { namespace range
         template <class, class, class, class, class>
         friend class iterator_facade;
         
-        ELIB_RANGE_ITERATOR_ACCESS_OP(friend, bool, == );
-        ELIB_RANGE_ITERATOR_ACCESS_OP(friend, bool, != );
-        ELIB_RANGE_ITERATOR_ACCESS_OP(friend, bool, <  );
-        ELIB_RANGE_ITERATOR_ACCESS_OP(friend, bool, <= );
-        ELIB_RANGE_ITERATOR_ACCESS_OP(friend, bool, >  );
-        ELIB_RANGE_ITERATOR_ACCESS_OP(friend, bool, >= );
+        ELIB_ITER_ITERATOR_ACCESS_OP(friend, bool, == );
+        ELIB_ITER_ITERATOR_ACCESS_OP(friend, bool, != );
+        ELIB_ITER_ITERATOR_ACCESS_OP(friend, bool, <  );
+        ELIB_ITER_ITERATOR_ACCESS_OP(friend, bool, <= );
+        ELIB_ITER_ITERATOR_ACCESS_OP(friend, bool, >  );
+        ELIB_ITER_ITERATOR_ACCESS_OP(friend, bool, >= );
         
     private:
         template <class Facade>
@@ -90,7 +90,7 @@ namespace elib { namespace range
     private:
         iterator_access() = delete;
     };
-# undef ELIB_RANGE_ITERATOR_ACCESS_OP
+# undef ELIB_ITER_ITERATOR_ACCESS_OP
 
 
     template<
@@ -284,4 +284,4 @@ namespace elib { namespace range
         ) >= 0;
     }
 }}                                                          // namespace elib
-#endif /* ELIB_RANGE_ITERATOR_FACADE_HPP */
+#endif /* ELIB_ITER_ITERATOR_FACADE_HPP */

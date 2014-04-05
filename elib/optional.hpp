@@ -1,17 +1,13 @@
 #ifndef ELIB_OPTIONAL_HPP
 #define ELIB_OPTIONAL_HPP
 
-
-
 /**
- * Optional is currently an almost exact copy of the reference implementation
- * for proposal N793. The repository can be found here.
- * https://github.com/akrzemi1/Optional/ 
+ * Optional is implementation for proposal N793. 
  */
 # include <elib/aux.hpp>
 # include <initializer_list>
-# include <string>
 # include <stdexcept>
+# include <string>
 # include <utility> /* for swap */
 
 namespace elib 
@@ -137,6 +133,7 @@ namespace elib
             }
         };
         
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         struct constexpr_optional_base
         {
@@ -199,9 +196,13 @@ namespace elib
         
         using base_type = optional_detail::optional_base_t<T>;
         
+        //
     public:
+        //
+        
         using value_type = T;
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr optional() noexcept
           : base_type()
         {}
@@ -242,8 +243,10 @@ namespace elib
           : base_type(in_place, il, elib::forward<Args>(args)...)
         {}
         
+        ////////////////////////////////////////////////////////////////////////
         ~optional() = default;
         
+        ////////////////////////////////////////////////////////////////////////
         optional & operator=(nullopt_t) noexcept
         {
             m_destroy();
@@ -294,6 +297,7 @@ namespace elib
             return *this;
         }
         
+        ////////////////////////////////////////////////////////////////////////
         template <class ...Args>
         void emplace(Args &&... args)
         {
@@ -308,6 +312,7 @@ namespace elib
             m_create(il, elib::forward<Args>(args)...);
         }
         
+        ////////////////////////////////////////////////////////////////////////
         void swap(optional & other)
             noexcept( aux::is_nothrow_move_constructible<T>::value
                 && aux::is_noexcept_swappable<T>::value
@@ -327,6 +332,7 @@ namespace elib
             }
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr T const* operator ->() const
         {
 #       ifndef NDEBUG
@@ -342,6 +348,7 @@ namespace elib
             return m_ptr();
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr T const & operator *() const
         {
 #       ifndef NDEBUG
@@ -357,6 +364,7 @@ namespace elib
             return m_ref();
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr explicit operator bool() const noexcept
         {
             return m_init();
@@ -367,6 +375,7 @@ namespace elib
             return m_init();
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr T const & value() const
         {
             return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
@@ -377,6 +386,7 @@ namespace elib
             return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
         }
         
+        ////////////////////////////////////////////////////////////////////////
         template <
             class U
           , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
@@ -395,40 +405,12 @@ namespace elib
             return bool(*this) ? elib::move(**this) 
                                : static_cast<T>(elib::forward<U>(v));
         }
-        
+       
+       //
     private:
-        
-        constexpr bool m_init() const noexcept
-        {
-            return base_type::init;
-        }
-        
-        constexpr value_type const* m_ptr() const noexcept
-        {
-            return elib::addressof(base_type::store.value);
-        }
-        
-        value_type* m_ptr() noexcept
-        {
-            return elib::addressof(base_type::store.value);
-        }
-        
-        constexpr value_type const & m_ref() const noexcept
-        {
-            return base_type::store.value;
-        }
-        
-        value_type & m_ref() noexcept
-        {
-            return base_type::store.value;
-        }
-        
-        void m_destroy() noexcept
-        {
-            if (m_init()) m_ptr()->T::~T();
-            base_type::init = false;
-        }
-        
+       //
+       
+        ////////////////////////////////////////////////////////////////////////
         template <class ...Args>
         void m_create(Args &&... args)
             noexcept(noexcept(T(elib::forward<Args>(args)...)))
@@ -446,8 +428,42 @@ namespace elib
             ::new ((void*)m_ptr()) T(il, elib::forward<Args>(args)...);
             base_type::init = true;
         }
-
-    };
+        
+        ////////////////////////////////////////////////////////////////////////
+        void m_destroy() noexcept
+        {
+            if (m_init()) m_ptr()->T::~T();
+            base_type::init = false;
+        }
+        
+        ////////////////////////////////////////////////////////////////////////
+        constexpr bool m_init() const noexcept
+        {
+            return base_type::init;
+        }
+        
+        ////////////////////////////////////////////////////////////////////////
+        constexpr value_type const* m_ptr() const noexcept
+        {
+            return elib::addressof(base_type::store.value);
+        }
+        
+        value_type* m_ptr() noexcept
+        {
+            return elib::addressof(base_type::store.value);
+        }
+        
+        ////////////////////////////////////////////////////////////////////////
+        constexpr value_type const & m_ref() const noexcept
+        {
+            return base_type::store.value;
+        }
+        
+        value_type & m_ref() noexcept
+        {
+            return base_type::store.value;
+        }
+    };                                                      // class optional
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
@@ -464,7 +480,10 @@ namespace elib
           , "Cannot create elib::optional with type \"nullopt_t\""
         );
         
+        //
     public:
+        //
+        
         using value_type = T &;
         
         constexpr optional() noexcept
@@ -491,8 +510,10 @@ namespace elib
         
         explicit optional(in_place_t, T &&)  = delete;
         
+        ////////////////////////////////////////////////////////////////////////
         ~optional() = default;
         
+        ////////////////////////////////////////////////////////////////////////
         optional & operator=(nullopt_t) noexcept
         {
             m_data = nullptr;
@@ -512,11 +533,13 @@ namespace elib
         
         void emplace(T &&) = delete;
         
+        ////////////////////////////////////////////////////////////////////////
         void swap(optional & rhs) noexcept
         {
             std::swap(m_data, rhs.m_data);
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr T* operator->() const 
         {
 #       ifndef NDEBUG
@@ -526,6 +549,7 @@ namespace elib
 #       endif
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr T & operator*() const
         {
 #       ifndef NDEBUG
@@ -535,11 +559,13 @@ namespace elib
 #       endif
         }
         
+        ////////////////////////////////////////////////////////////////////////
         constexpr T & value() const 
         {
             return *(bool(m_data) ?  m_data : throw bad_optional_access("bad optional access"));
         }
         
+        ////////////////////////////////////////////////////////////////////////
         explicit constexpr operator bool() const noexcept
         {
             return bool(m_data);
@@ -550,7 +576,10 @@ namespace elib
             return bool(m_data);
         }
         
+        //
     private:
+       //
+        
       T *m_data;  
     };
 
@@ -618,6 +647,7 @@ namespace elib
         return !rhs;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T> 
     constexpr bool operator!=(optional<T> const & lhs, nullopt_t) noexcept
     {
@@ -630,6 +660,7 @@ namespace elib
         return bool(rhs);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T> 
     constexpr bool operator<(optional<T> const &, nullopt_t) noexcept
     {
@@ -642,6 +673,7 @@ namespace elib
         return bool(rhs);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T> 
     constexpr bool operator<=(optional<T> const & lhs, nullopt_t) noexcept
     {
@@ -654,6 +686,7 @@ namespace elib
         return true;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     constexpr bool operator>(optional<T> const & lhs, nullopt_t) noexcept
     {
@@ -666,6 +699,7 @@ namespace elib
         return false;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     constexpr bool operator>=(optional<T> const &, nullopt_t) noexcept
     {
@@ -691,6 +725,7 @@ namespace elib
         return bool(rhs) ? lhs == *rhs : false;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     constexpr bool operator!=(optional<T> const & lhs, T const & rhs)
     {
@@ -703,6 +738,7 @@ namespace elib
         return bool(rhs) ? lhs != *rhs : true;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     constexpr bool operator<(optional<T> const & lhs, T const & rhs)
     {
@@ -715,6 +751,7 @@ namespace elib
         return bool(rhs) ? lhs < *rhs : false;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T> 
     constexpr bool operator>(optional<T> const & lhs, T const & rhs)
     {
@@ -727,6 +764,7 @@ namespace elib
         return bool(rhs) ? *rhs < lhs : true;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T> 
     constexpr bool operator<=(optional<T> const & lhs, T const & rhs)
     {
@@ -739,6 +777,7 @@ namespace elib
         return !(lhs > rhs);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T> 
     constexpr bool operator>=(optional<T> const & lhs, T const & rhs)
     {
@@ -768,6 +807,7 @@ namespace elib
 }                                                             // namespace elib
 namespace std
 {
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     struct hash<::elib::optional<T>>
     {
@@ -780,6 +820,7 @@ namespace std
         }
     };
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     struct hash<::elib::optional<T &>>
     {

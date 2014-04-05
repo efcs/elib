@@ -12,7 +12,7 @@ namespace elib { namespace aux
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T>
-        constexpr bool is_standard_layout_v = is_standard_layoutt<T>::value;
+        constexpr bool is_standard_layout_v = is_standard_layout<T>::value;
 # endif
     }                                                       //namespace traits
     

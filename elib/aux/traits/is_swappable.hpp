@@ -56,10 +56,10 @@ namespace elib { namespace aux
             
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T, class U = T>
-        using is_swappable_v = is_swappable<T, U>::value;
+        constexpr bool is_swappable_v = is_swappable<T, U>::value;
         
         template <class T, class U = T>
-        using is_noexcept_swappable_v = is_noexcept_swappable<T, U>::value;
+        constexpr bool is_noexcept_swappable_v = is_noexcept_swappable<T, U>::value;
 # endif
     }                                                       //namespace traits
     

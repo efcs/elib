@@ -1,11 +1,11 @@
-#ifndef ELIB_RANGE_FILTER_VIEW_HPP
-#define ELIB_RANGE_FILTER_VIEW_HPP
+#ifndef ELIB_ITER_FILTER_VIEW_HPP
+#define ELIB_ITER_FILTER_VIEW_HPP
 
-# include <elib/range/filter_iterator.hpp>
+# include <elib/iter/filter_iterator.hpp>
 # include <elib/aux.hpp>
 # include <iterator>
 
-namespace elib { namespace range
+namespace elib { namespace iter
 {
     ////////////////////////////////////////////////////////////////////////////
     template <class Sequence, class Pred>
@@ -326,4 +326,4 @@ namespace elib { namespace range
     ELIB_AUTO_RETURN( v.end() )
     
 }}                                                          // namespace elib
-#endif /* ELIB_RANGE_FILTER_VIEW_HPP */
+#endif /* ELIB_ITER_FILTER_VIEW_HPP */

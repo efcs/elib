@@ -8,6 +8,7 @@
 # include <elib/config.hpp>
 # include <elib/aux/convert.hpp>
 # include <elib/aux/demangle.hpp>
+# include <elib/aux/get_swap.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/integer_sequence.hpp>
 # include <elib/aux/literals.hpp>

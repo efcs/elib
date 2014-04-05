@@ -1,10 +1,10 @@
-#ifndef ELIB_RANGE_FILTER_ITERATOR_HPP
-#define ELIB_RANGE_FILTER_ITERATOR_HPP
+#ifndef ELIB_ITER_FILTER_ITERATOR_HPP
+#define ELIB_ITER_FILTER_ITERATOR_HPP
 
 # include <elib/aux.hpp>
 # include <iterator>
 
-namespace elib { namespace range
+namespace elib { namespace iter
 {
     ////////////////////////////////////////////////////////////////////////////
     template<class Iterator, class Pred>
@@ -55,4 +55,4 @@ namespace elib { namespace range
         Iterator m_end;
     };
 }}                                                          // namespace elib
-#endif /* ELIB_RANGE_FILTER_ITERATOR_HPP */
+#endif /* ELIB_ITER_FILTER_ITERATOR_HPP */

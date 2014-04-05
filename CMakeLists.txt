@@ -23,7 +23,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Standard Library config
 # TODO: Move the std library confige to enviroment variables.
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 
 # Address, Memory and Thread sanitizers
@@ -79,6 +79,7 @@ option(CONFIG_LIB_MPL "Build MPL" ON)
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 
 option(CONFIG_LIB_RANGE "Build Range" ON)
+option(CONFIG_LIB_ITER "Build Iterator" ON)
 
 # header only. function objects for operators and more
 option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
@@ -124,13 +125,13 @@ set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 
-message( STATUS "Configuring for ${CMAKE_BUILD_TYPE}")
+message( STATUS "Configuring for Build Type: ${CMAKE_BUILD_TYPE}")
 
 if (NOT CONFIG_CXX1Y)
-    message( STATUS "Configuring for C++11" )
+    message( STATUS "Configuring for Standard: C++11" )
     set(CXX_VERSION_FLAGS " -std=c++11 ")
 else()
-    message( STATUS "Configuring for C++1y" )
+    message( STATUS "Configuring for Standard: C++1y" )
     set(CXX_VERSION_FLAGS " -std=c++1y ")
 endif()
 
@@ -141,11 +142,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS
 ##                         Compiler Detection
 ################################################################################
 if ( ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" )
-    message(STATUS "Configuring for GCC")
+    message(STATUS "Configuring for Compiler: GCC")
     set( CXX_COMPILER_GCC TRUE )
     set( CXX_COMPILER_CLANG FALSE )
 elseif( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" )
-    message(STATUS "Configuring for Clang")
+    message(STATUS "Configuring for Compiler: Clang")
     set( CXX_COMPILER_GCC FALSE )
     set( CXX_COMPILER_CLANG TRUE )
 else()
@@ -193,14 +194,14 @@ if (CONFIG_USE_LIBCXX)
     if (NOT CXX_COMPILER_CLANG)
         message( FATAL_ERROR "Cannot use libc++ without clang" )
     endif()
-    message( STATUS "Using libc++ with clang" )
+    message( STATUS "Configuring for Library: libc++" )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
 endif()
 
 # Currently only GCC's libstdc++ works with -std=c++1y
 # TODO This is personal configuration. I need to get it out of here
 if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
-    message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
+    message( STATUS "Configuring for Library: libstdc++ in /opt/gcc4.9/lib64" )
     add_definitions( -nostdinc++ )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ -I/opt/gcc4.9/include/c++/4.9.0/")
 

@@ -1,11 +1,11 @@
-#ifndef ELIB_RANGE_ITERATOR_TRAITS_HPP
-#define ELIB_RANGE_ITERATOR_TRAITS_HPP
+#ifndef ELIB_ITER_ITERATOR_TRAITS_HPP
+#define ELIB_ITER_ITERATOR_TRAITS_HPP
 
 # include <elib/aux.hpp>
 # include <iterator>
 # include <cstddef>
 
-namespace elib { namespace range
+namespace elib { namespace iter
 {
     template <class A, class B>
     using is_interoperable = aux::or_<
@@ -31,4 +31,4 @@ namespace elib { namespace range
         choose_iterator_traits<I1, I2>::difference_type;
     
 }}                                                          // namespace elib
-#endif /* ELIB_RANGE_ITERATOR_TRAITS_HPP */
+#endif /* ELIB_ITER_ITERATOR_TRAITS_HPP */

@@ -7,6 +7,7 @@
 # include <string> /* for is_string_type */
 # include <type_traits>
 # include <functional> /* for *strip_t */
+# include <utility>
 # include <cstddef>
 
 namespace elib { namespace aux
@@ -831,6 +832,18 @@ namespace elib { namespace aux
         template <class T>
         constexpr bool is_nullptr_v = is_nullptr<T>::value;
 # endif
+
+        namespace traits_adl_barrier
+        {
+            using std::swap;
+            
+            template <class T>
+            using has_noexcept_swap = elib::bool_<
+                noexcept( swap(std::declval<T &>(), std::declval<T &>()) )
+            >;
+        }
+        
+        using traits_adl_barrier::has_noexcept_swap;
 
     }                                                       // namespace traits
     

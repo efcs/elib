@@ -10,203 +10,786 @@
  */
 # include <elib/aux.hpp>
 # include <initializer_list>
+# include <string>
 # include <stdexcept>
 # include <utility> /* for swap */
 
 namespace elib 
 {
-    ////////////////////////////////////////////////////////////////////////////
-    constexpr class nullopt_t  {}  nullopt  {};
-    constexpr class in_place_t {}  in_place {};
-    
+////////////////////////////////////////////////////////////////////////////////
 # if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
-    ////////////////////////////////////////////////////////////////////////////
-    class bad_optional_access : public std::logic_error
+    class bad_optional_access 
+      : public std::logic_error 
     {
     public:
-        bad_optional_access() : std::logic_error("bad optional access") {}
+        explicit bad_optional_access(std::string const & what_arg)
+          : std::logic_error(what_arg)
+        {}
         
-        ELIB_DEFAULT_COPY_MOVE(bad_optional_access);
-        
-        virtual ~bad_optional_access() = default;
+        explicit bad_optional_access(const char *what_arg)
+          : std::logic_error(what_arg)
+        {}
     };
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
-
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr struct nullopt_t
+    {
+        struct init {};
+        constexpr nullopt_t(init) {}
+    } nullopt( nullopt_t::init{} );
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr struct in_place_t 
+    {
+        struct init {};
+        constexpr in_place_t(init) {}
+    } in_place( in_place_t::init{} );
+    
+        
     namespace optional_detail
     {
-        constexpr struct dummy_ctor_arg_t {} dummy_ctor_arg {};
+        ////////////////////////////////////////////////////////////////////////
+        constexpr struct dummy_ctor_arg_t 
+        {
+            struct init {};
+            constexpr dummy_ctor_arg_t(init) {}
+        } dummy_ctor_arg( dummy_ctor_arg_t::init{} );
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        union storage
+        union default_storage
         {
             unsigned char dummy;
             T value;
             
-            constexpr storage(dummy_ctor_arg_t) noexcept
+            constexpr default_storage(dummy_ctor_arg_t) noexcept
               : dummy(0)
             {}
             
             template <class ...Args>
-            constexpr storage(Args &&... args)
+            constexpr default_storage(Args &&... args)
               : value(elib::forward<Args>(args)...)
             {}
             
-            ~storage() {}
+            ~default_storage() {}
         };
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        struct optional_base
+        union constexpr_storage
+        {
+            unsigned char dummy;
+            T value;
+            
+            constexpr constexpr_storage(dummy_ctor_arg_t) noexcept
+              : dummy(0)
+            {}
+            
+            template <class ...Args>
+            constexpr constexpr_storage(Args &&... args)
+              : value(elib::forward<Args>(args)...)
+            {}
+            
+            ~constexpr_storage() = default;
+        };
+        
+        ////////////////////////////////////////////////////////////////////////
+        template <class T>
+        struct default_optional_base
         {
             bool init;
-            storage<T> store;
+            default_storage<T> store;
             
-            optional_base() noexcept
+            constexpr default_optional_base() noexcept
               : init(false), store(dummy_ctor_arg)
             {}
             
-            optional_base(T const & v)
+            constexpr default_optional_base(T const & v)
               : init(true), store(v)
             {}
             
-            optional_base(T && v) 
+            constexpr default_optional_base(T && v) 
               : init(true), store(elib::move(v))
             {}
             
             template <class ...Args>
-            optional_base(in_place_t, Args &&... args)
+            constexpr default_optional_base(in_place_t, Args &&... args)
               : init(true), store(elib::forward<Args>(args)...)
             {}
             
             template <class U, class ...Args>
-            optional_base(in_place_t, std::initializer_list<U> il, Args &&... args)
+            default_optional_base(in_place_t
+              , std::initializer_list<U> il
+              , Args &&... args
+            )
               : init(true), store(il, elib::forward<Args>(args)...)
             {}
             
-            ~optional_base()
+            ~default_optional_base()
             {
                 if (init) store.value.T::~T();
             }
         };
         
+        template <class T>
+        struct constexpr_optional_base
+        {
+            bool init;
+            constexpr_storage<T> store;
+            
+            constexpr constexpr_optional_base() noexcept
+              : init(false), store(dummy_ctor_arg)
+            {}
+            
+            constexpr constexpr_optional_base(T const & v)
+              : init(true), store(v)
+            {}
+            
+            constexpr constexpr_optional_base(T && v) 
+              : init(true), store(elib::move(v))
+            {}
+            
+            template <class ...Args>
+            constexpr constexpr_optional_base(in_place_t, Args &&... args)
+              : init(true), store(elib::forward<Args>(args)...)
+            {}
+            
+            template <class U, class ...Args>
+            constexpr_optional_base(in_place_t
+              , std::initializer_list<U> il
+              , Args &&... args
+            )
+              : init(true), store(il, elib::forward<Args>(args)...)
+            {}
+            
+            ~constexpr_optional_base() = default;
+        };
+        
+        
+        template <class T>
+        using optional_base_t = 
+          elib::if_t<
+            aux::is_trivially_destructible<T>
+          , constexpr_optional_base<T>
+          , default_optional_base<T>
+          >;
     }                                              // namespace optional_detail
     
     
     template <class T>
     class optional 
-      : private optional_detail::optional_base<T>
+      : private optional_detail::optional_base_t<T>
     {
+    private:
+        static_assert(
+            not aux::is_same<T, in_place_t>::value
+          , "Cannot create elib::optional with type \"in_place_t\""
+        );
+        
+        static_assert(
+            not aux::is_same<T, nullopt_t>::value
+          , "Cannot create elib::optional with type \"nullopt_t\""
+        );
+        
+        using base_type = optional_detail::optional_base_t<T>;
+        
     public:
         using value_type = T;
         
-        constexpr optional() noexcept;
+        constexpr optional() noexcept
+          : base_type()
+        {}
         
-        constexpr optional(nullopt_t) noexcept;
+        constexpr optional(nullopt_t) noexcept
+          : base_type()
+        {}
         
-        optional(optional const &);
+        optional(optional const & other)
+          : base_type()
+        {
+            if (other) m_create(other.m_ref());
+        }
         
-        optional(optional &&);
+        optional(optional && other)
+          : base_type()
+        {
+            if (other) m_create(elib::move(other.m_ref()));
+        }
         
-        constexpr optional(T const &);
+        constexpr optional(T const & v)
+          : base_type(v)
+        {}
         
-        constexpr optional(T &&);
+        constexpr optional(T && v)
+          : base_type(static_cast<T &&>(v))
+        {}
         
         template <class ...Args>
         constexpr explicit 
-        optional(in_place_t, Args &&... args);
+        optional(in_place_t, Args &&... args)
+          : base_type(in_place, elib::forward<Args &&>(args)...)
+        {}
         
         template <class U, class ...Args>
         constexpr explicit 
-        optional(in_place_t, std::initializer_list<U>, Args &&... args);
+        optional(in_place_t, std::initializer_list<U> il, Args &&... args)
+          : base_type(in_place, il, elib::forward<Args>(args)...)
+        {}
         
-        ~optional();
+        ~optional() = default;
         
-        optional & operator=(nullopt_t) noexcept;
-        optional & operator=(optional const &);
-        optional & operator=(optional &&);
+        optional & operator=(nullopt_t) noexcept
+        {
+            m_destroy();
+            return *this;
+        }
         
-        template <class U>
-        optional & operator=(U &&);
+        optional & operator=(optional const & other)
+        {
+            if (m_init() && not other.m_init()) {
+                m_destroy();
+            }
+            else if (not m_init() && other.m_init()) {
+                m_create(other.m_ref());
+            }
+            else if (m_init() && other.m_init()) {
+                m_ref() = other.m_ref();
+            }
+            return *this;
+        }
+        
+        optional & operator=(optional && other)
+        {
+            if (m_init() && not other.m_init()) {
+                m_destroy();
+            }
+            else if (not m_init() && other.m_init()) {
+                m_create(elib::move(*other));
+            }
+            else if (m_init() && other.m_init()) {
+                m_ref() = elib::move(*other);
+            }
+            return *this;
+        }
+        
+        template <
+            class U
+          , ELIB_ENABLE_IF(aux::is_constructible<T, U>::value)
+          , ELIB_ENABLE_IF(aux::is_assignable<T&, U>::value)
+        >
+        optional & operator=(U && v)
+        {
+            if (m_init()) {
+                m_ref() = elib::forward<U>(v);
+            } 
+            else {
+                m_create(elib::forward<U>(v));
+            }
+            return *this;
+        }
         
         template <class ...Args>
-        void emplace(Args &&... args);
+        void emplace(Args &&... args)
+        {
+            m_destroy();
+            m_create(elib::forward<Args>(args)...);
+        }
         
         template <class U, class ...Args>
-        void emplace(std::initializer_list<U>, Args &&... args);
+        void emplace(std::initializer_list<U> il, Args &&... args)
+        {
+            m_destroy();
+            m_create(il, elib::forward<Args>(args)...);
+        }
         
-        void swap(optional &);
+        void swap(optional & other)
+            noexcept( aux::is_nothrow_move_constructible<T>::value
+                && aux::has_noexcept_swap<T>::value
+              )
+        {
+            if (m_init() && not other.m_init()) {
+                other.m_create(elib::move(m_ref()));
+                m_destroy();
+            }
+            else if (not m_init() && other.m_init()) {
+                m_create(elib::move(*other));
+                other.m_destroy();
+            } 
+            else if (m_init() && other.m_init()) {
+                using std::swap;
+                swap(m_ref(), other.m_ref());
+            }
+        }
         
-        constexpr T const* operator ->() const;
+        constexpr T const* operator ->() const
+        {
+#       ifndef NDEBUG
+            return m_init() ? m_ptr() : throw bad_optional_access("bad optional access");
+#       else
+            return m_ptr();
+#       endif
+        }
         
-        T* operator ->();
+        T* operator ->()
+        {
+            ELIB_ASSERT(m_init());
+            return m_ptr();
+        }
         
-        constexpr T const& operator *() const;
+        constexpr T const & operator *() const
+        {
+#       ifndef NDEBUG
+            return *(m_init() ? m_ptr() : throw bad_optional_access("bad optional access"));
+#       else
+            return m_ref();
+#       endif
+        }
         
-        T& operator *();
+        T & operator *()
+        {
+            ELIB_ASSERT(m_init());
+            return m_ref();
+        }
         
-        constexpr explicit operator bool() const noexcept;
+        constexpr explicit operator bool() const noexcept
+        {
+            return m_init();
+        }
         
-        constexpr T const& value() const;
+        constexpr bool good() const noexcept
+        {
+            return m_init();
+        }
         
-        T& value();
+        constexpr T const & value() const
+        {
+            return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
+        }
         
-        template <class U> constexpr T value_or(U&&) const&;
+        T & value()
+        {
+            return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
+        }
         
-        template <class U> T value_or(U&&) &&;
+        template <
+            class U
+          , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
+          > 
+        constexpr T value_or(U && v) const &
+        {
+            return bool(*this) ? **this : static_cast<T>(elib::forward<U>(v));
+        }
+        
+        template <
+            class U
+          , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
+          > 
+        T value_or(U && v) &&
+        {
+            return bool(*this) ? elib::move(**this) 
+                               : static_cast<T>(elib::forward<U>(v));
+        }
         
     private:
         
+        constexpr bool m_init() const noexcept
+        {
+            return base_type::init;
+        }
+        
+        constexpr value_type const* m_ptr() const noexcept
+        {
+            return elib::addressof(base_type::store.value);
+        }
+        
+        value_type* m_ptr() noexcept
+        {
+            return elib::addressof(base_type::store.value);
+        }
+        
+        constexpr value_type const & m_ref() const noexcept
+        {
+            return base_type::store.value;
+        }
+        
+        value_type & m_ref() noexcept
+        {
+            return base_type::store.value;
+        }
+        
+        void m_destroy() noexcept
+        {
+            if (m_init()) m_ptr()->T::~T();
+            base_type::init = false;
+        }
+        
+        template <class ...Args>
+        void m_create(Args &&... args)
+            noexcept(noexcept(T(elib::forward<Args>(args)...)))
+        {
+            ELIB_ASSERT( not m_init() );
+            ::new ((void*)m_ptr()) T(elib::forward<Args>(args)...);
+            base_type::init = true;
+        }
+        
+        template <class U, class ...Args>
+        void m_create(std::initializer_list<U> il, Args &&...args)
+            noexcept(noexcept(T(il, elib::forward<Args>(args)...)))
+        {
+            ELIB_ASSERT( not m_init() );
+            ::new ((void*)m_ptr()) T(il, elib::forward<Args>(args)...);
+            base_type::init = true;
+        }
 
     };
-
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    constexpr bool operator==(const optional<T>&, const optional<T>&);
-    template <class T>
-    constexpr bool operator!=(const optional<T>&, const optional<T>&);
-    template <class T>
-    constexpr bool operator<(const optional<T>&, const optional<T>&);
-    template <class T>
-    constexpr bool operator>(const optional<T>&, const optional<T>&);
-    template <class T>
-    constexpr bool operator<=(const optional<T>&, const optional<T>&);
-    template <class T>
-    constexpr bool operator>=(const optional<T>&, const optional<T>&);
+    class optional<T &>
+    {
+    private:
+        static_assert(
+            not aux::is_same<T, in_place_t>::value
+          , "Cannot create elib::optional with type \"in_place_t\""
+        );
         
-    template <class T> constexpr bool operator==(const optional<T>&, nullopt_t) noexcept;
-    template <class T> constexpr bool operator==(nullopt_t, const optional<T>&) noexcept;
-    template <class T> constexpr bool operator!=(const optional<T>&, nullopt_t) noexcept;
-    template <class T> constexpr bool operator!=(nullopt_t, const optional<T>&) noexcept;
-    template <class T> constexpr bool operator<(const optional<T>&, nullopt_t) noexcept;
-    template <class T> constexpr bool operator<(nullopt_t, const optional<T>&) noexcept;
-    template <class T> constexpr bool operator<=(const optional<T>&, nullopt_t) noexcept;
-    template <class T> constexpr bool operator<=(nullopt_t, const optional<T>&) noexcept;
-    template <class T> constexpr bool operator>(const optional<T>&, nullopt_t) noexcept;
-    template <class T> constexpr bool operator>(nullopt_t, const optional<T>&) noexcept;
-    template <class T> constexpr bool operator>=(const optional<T>&, nullopt_t) noexcept;
-    template <class T> constexpr bool operator>=(nullopt_t, const optional<T>&) noexcept;
-    
-    template <class T> constexpr bool operator==(const optional<T>&, const T&);
-    template <class T> constexpr bool operator==(const T&, const optional<T>&);
-    template <class T> constexpr bool operator!=(const optional<T>&, const T&);
-    template <class T> constexpr bool operator!=(const T&, const optional<T>&);
-    template <class T> constexpr bool operator<(const optional<T>&, const T&);
-    template <class T> constexpr bool operator<(const T&, const optional<T>&);
-    template <class T> constexpr bool operator<=(const optional<T>&, const T&);
-    template <class T> constexpr bool operator<=(const T&, const optional<T>&);
-    template <class T> constexpr bool operator>(const optional<T>&, const T&);
-    template <class T> constexpr bool operator>(const T&, const optional<T>&);
-    template <class T> constexpr bool operator>=(const optional<T>&, const T&);
-    template <class T> constexpr bool operator>=(const T&, const optional<T>&);
-    
-    template <class T> void swap(optional<T>&, optional<T>&);
-    //template <class T> constexpr optional<see below> make_optional(T&&);
+        static_assert(
+            not aux::is_same<T, nullopt_t>::value
+          , "Cannot create elib::optional with type \"nullopt_t\""
+        );
+        
+    public:
+        using value_type = T &;
+        
+        constexpr optional() noexcept
+          : m_data(nullptr)
+        {}
+        
+        constexpr optional(nullopt_t) noexcept
+          : m_data(nullptr)
+        {}
+        
+        constexpr optional(T & v) noexcept
+          : m_data(elib::addressof(v))
+        {}
+        
+        optional(T &&) = delete;
+        
+        constexpr optional(optional const & other) noexcept
+          : m_data(other.m_data)
+        {}
+        
+        explicit constexpr optional(in_place_t, T & v) noexcept
+          : m_data(elib::addressof(v))
+        {}
+        
+        explicit optional(in_place_t, T &&)  = delete;
+        
+        ~optional() = default;
+        
+        optional & operator=(nullopt_t) noexcept
+        {
+            m_data = nullptr;
+            return *this;
+        }
+        
+        optional & operator=(optional const & other) noexcept
+        {
+            m_data = other.m_data;
+            return *this;
+        }
+       
+        void emplace(T & v) noexcept
+        {
+            m_data = elib::addressof(v);
+        }
+        
+        void emplace(T &&) = delete;
+        
+        void swap(optional & rhs) noexcept
+        {
+            std::swap(m_data, rhs.m_data);
+        }
+        
+        constexpr T* operator->() const 
+        {
+#       ifndef NDEBUG
+            return bool(m_data) ? m_data : throw bad_optional_access("bad optional access");
+#       else
+            return m_data;
+#       endif
+        }
+        
+        constexpr T & operator*() const
+        {
+#       ifndef NDEBUG
+            return *(bool(m_data) ? m_data : throw bad_optional_access("bad optional access"));
+#       else
+            return *m_data;
+#       endif
+        }
+        
+        constexpr T & value() const 
+        {
+            return *(bool(m_data) ?  m_data : throw bad_optional_access("bad optional access"));
+        }
+        
+        explicit constexpr operator bool() const noexcept
+        {
+            return bool(m_data);
+        }
+        
+        constexpr bool good() const noexcept
+        {
+            return bool(m_data);
+        }
+        
+    private:
+      T *m_data;  
+    };
 
     
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    class optional<T &&>
+    {
+        static_assert(
+            aux::never<T>::value
+          , "Rvalue references are not allowed in elib::optional"
+        );
+    };
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    constexpr bool operator==(optional<T> const & lhs, optional<T> const & rhs) 
+    {
+        return bool(lhs) != bool(rhs) 
+               ? false
+               : (!lhs ? true : (*lhs == *rhs));
+    }
+    
+    template <class T>
+    constexpr bool operator!=(optional<T> const & lhs, optional<T> const & rhs)
+    {
+        return !(lhs == rhs);
+    }
+    
+    template <class T>
+    constexpr bool operator<(optional<T> const & lhs, optional<T> const & rhs)
+    {
+        return !rhs ? false 
+                    : (!lhs ? true : *lhs < *rhs);
+    }
+
+    template <class T>
+    constexpr bool operator>(optional<T> const & lhs, optional<T> const & rhs)
+    {
+        return (rhs < lhs);
+    }
+    
+    template <class T>
+    constexpr bool operator<=(optional<T> const & lhs, optional<T> const & rhs)
+    {
+        return !(rhs < lhs);
+    }
+    
+    template <class T>
+    constexpr bool operator>=(optional<T> const & lhs, optional<T> const & rhs)
+    {
+        return !(lhs < rhs);
+    }
+        
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T> 
+    constexpr bool operator==(optional<T> const & lhs, nullopt_t) noexcept
+    {
+        return !lhs;
+    }
+    
+    template <class T> 
+    constexpr bool operator==(nullopt_t, optional<T> const & rhs) noexcept
+    {
+        return !rhs;
+    }
+    
+    template <class T> 
+    constexpr bool operator!=(optional<T> const & lhs, nullopt_t) noexcept
+    {
+        return bool(lhs);
+    }
+    
+    template <class T> 
+    constexpr bool operator!=(nullopt_t, optional<T> const & rhs) noexcept
+    {
+        return bool(rhs);
+    }
+    
+    template <class T> 
+    constexpr bool operator<(optional<T> const &, nullopt_t) noexcept
+    {
+        return false;
+    }
+    
+    template <class T> 
+    constexpr bool operator<(nullopt_t, optional<T> const & rhs) noexcept
+    {
+        return bool(rhs);
+    }
+    
+    template <class T> 
+    constexpr bool operator<=(optional<T> const & lhs, nullopt_t) noexcept
+    {
+        return !lhs;
+    }
+    
+    template <class T> 
+    constexpr bool operator<=(nullopt_t, optional<T> const &) noexcept
+    {
+        return true;
+    }
+    
+    template <class T>
+    constexpr bool operator>(optional<T> const & lhs, nullopt_t) noexcept
+    {
+        return bool(lhs);
+    }
+    
+    template <class T> 
+    constexpr bool operator>(nullopt_t, optional<T> const &) noexcept
+    {
+        return false;
+    }
+    
+    template <class T>
+    constexpr bool operator>=(optional<T> const &, nullopt_t) noexcept
+    {
+        return true;
+    }
+    
+    template <class T> 
+    constexpr bool operator>=(nullopt_t, optional<T> const & rhs) noexcept
+    {
+        return !rhs;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T> 
+    constexpr bool operator==(optional<T> const & lhs, T const & rhs)
+    {
+        return bool(lhs) ? *lhs == rhs : false;
+    }
+    
+    template <class T>
+    constexpr bool operator==(T const & lhs, optional<T> const & rhs)
+    {
+        return bool(rhs) ? lhs == *rhs : false;
+    }
+    
+    template <class T>
+    constexpr bool operator!=(optional<T> const & lhs, T const & rhs)
+    {
+        return bool(lhs) ? *lhs != rhs : true;
+    }
+    
+    template <class T> 
+    constexpr bool operator!=(T const & lhs, optional<T> const & rhs)
+    {
+        return bool(rhs) ? lhs != *rhs : true;
+    }
+    
+    template <class T>
+    constexpr bool operator<(optional<T> const & lhs, T const & rhs)
+    {
+        return bool(lhs) ? *lhs < rhs : true;
+    }
+    
+    template <class T> 
+    constexpr bool operator<(T const & lhs, optional<T> const & rhs)
+    {
+        return bool(rhs) ? lhs < *rhs : false;
+    }
+    
+    template <class T> 
+    constexpr bool operator>(optional<T> const & lhs, T const & rhs)
+    {
+        return bool(lhs) ? rhs < *lhs : false;
+    }
+    
+    template <class T> 
+    constexpr bool operator>(T const & lhs, optional<T> const & rhs)
+    {
+        return bool(rhs) ? *rhs < lhs : true;
+    }
+    
+    template <class T> 
+    constexpr bool operator<=(optional<T> const & lhs, T const & rhs)
+    {
+        return !(lhs > rhs);
+    }
+    
+    template <class T> 
+    constexpr bool operator<=(T const & lhs, optional<T> const & rhs)
+    {
+        return !(lhs > rhs);
+    }
+    
+    template <class T> 
+    constexpr bool operator>=(optional<T> const & lhs, T const & rhs)
+    {
+        return !(lhs < rhs);
+    }
+    
+    template <class T>
+    constexpr bool operator>=(T const & lhs, optional<T> const & rhs)
+    {
+        return !(lhs < rhs);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T> 
+    void swap(optional<T> & lhs, optional<T> & rhs)
+        noexcept(noexcept( lhs.swap(rhs) ))
+    {
+        lhs.swap(rhs);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T> 
+    constexpr optional<aux::decay_t<T>> make_optional(T && v)
+    {
+        return optional<aux::decay_t<T>>(elib::forward<T>(v));
+    }
 }                                                             // namespace elib
+namespace std
+{
+    template <class T>
+    struct hash<::elib::optional<T>>
+    {
+        using result_type = typename hash<T>::result_type;
+        using argument_type = ::elib::optional<T>;
+        
+        constexpr result_type operator()(::elib::optional<T> const & v) const
+        {
+            return bool(v) ? std::hash<T>{}(*v) : result_type{};
+        }
+    };
+    
+    template <class T>
+    struct hash<::elib::optional<T &>>
+    {
+        using result_type = typename std::hash<T>::result_type;
+        using argument_type = ::elib::optional<T &>;
+        
+        constexpr result_type operator()(::elib::optional<T &> const & v) const
+        {
+            return bool(v) ? std::hash<T>{}(*v) : result_type{};
+        }
+    };
+}
 #endif /* ELIB_OPTIONAL_HPP */

@@ -310,7 +310,7 @@ namespace elib
         
         void swap(optional & other)
             noexcept( aux::is_nothrow_move_constructible<T>::value
-                && aux::has_noexcept_swap<T>::value
+                && aux::is_noexcept_swappable<T>::value
               )
         {
             if (m_init() && not other.m_init()) {

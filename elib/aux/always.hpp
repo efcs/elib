@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_META_ALWAYS_HPP
-#define ELIB_AUX_META_ALWAYS_HPP
+#ifndef ELIB_AUX_ALWAYS_HPP
+#define ELIB_AUX_ALWAYS_HPP
 
 # include <elib/aux/integral_constant.hpp>
 
@@ -23,4 +23,4 @@ namespace elib { namespace aux
     template <class ...T>
     using always_void = typename aux::detail::_always<void, T...>::type;
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_META_ALWAYS_HPP */
+#endif /* ELIB_AUX_ALWAYS_HPP */

@@ -1,8 +1,8 @@
-#ifndef ELIB_AUX_META_ARITHMETIC_HPP
-#define ELIB_AUX_META_ARITHMETIC_HPP
+#ifndef ELIB_AUX_ARITHMETIC_HPP
+#define ELIB_AUX_ARITHMETIC_HPP
 
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/meta/left_associative_expression.hpp>
+# include <elib/aux/left_associative_expression.hpp>
 
 namespace elib { namespace aux
 {
@@ -74,4 +74,4 @@ namespace elib { namespace aux
     template <class T>
     using decrement_t = decrement<T>;
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_META_ARITHMETIC_HPP */
+#endif /* ELIB_AUX_ARITHMETIC_HPP */

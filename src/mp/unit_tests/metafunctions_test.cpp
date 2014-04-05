@@ -44,11 +44,11 @@ BOOST_AUTO_TEST_SUITE(mp_metafunctions_test_suite)
 
   BOOST_AUTO_TEST_CASE(mp_if_test)
   {
-    CHECK( if_t<aux::same_type<_1, _1>, true_, false_>() );
-    CHECK( if_t<aux::same_type<_1, _2>, false_, true_>() );
+    CHECK( if_t<aux::is_same<_1, _1>, true_, false_>() );
+    CHECK( if_t<aux::is_same<_1, _2>, false_, true_>() );
     CHECK( if_c_t<true, true_, false_>() );
     CHECK( if_c_t<false, false_, true_>() );
-    CHECK( eval_if_t<aux::same_type<_1, _1>, identity<true_>, identity<false_>>() );
+    CHECK( eval_if_t<aux::is_same<_1, _1>, identity<true_>, identity<false_>>() );
     CHECK( eval_if_t<false_, identity<false_>, identity<true_>>() );
     CHECK( eval_if_c_t<true, identity<true_>, void>() );
     CHECK( eval_if_c_t<false, void, identity<true_>>() );

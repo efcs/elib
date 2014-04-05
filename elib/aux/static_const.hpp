@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_STATIC_CONST_HPP
-#define ELIB_AUX_SUPPORT_STATIC_CONST_HPP
+#ifndef ELIB_AUX_STATIC_CONST_HPP
+#define ELIB_AUX_STATIC_CONST_HPP
 
 // for use with ELIB_ENABLE_IF and ELIB_ENABLE_IF_VALID_EXPR 
 # define ELIB_ENABLER_TYPE void* const&
@@ -18,4 +18,4 @@ namespace elib { namespace aux
 
     static constexpr void *const & enabler = static_const<void*>::value;
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_SUPPORT_STATIC_CONST_HPP */
+#endif /* ELIB_AUX_STATIC_CONST_HPP */

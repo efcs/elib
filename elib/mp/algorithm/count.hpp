@@ -38,11 +38,11 @@ namespace elib
             
 
     template <class Seq, class T>
-    struct count : count_if<Seq, aux::same_type<T, _1>>
+    struct count : count_if<Seq, aux::is_same<T, _1>>
     {};
 
     template <class Seq, class T>
-    using count_t = typename count_if<Seq, aux::same_type<T, _1>>::type;
+    using count_t = typename count_if<Seq, aux::is_same<T, _1>>::type;
 
   }                                                         // namespace mp
 }                                                           // namespace elib

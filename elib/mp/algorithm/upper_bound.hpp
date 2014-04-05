@@ -26,7 +26,7 @@ namespace elib
         
       template <class Seq>
       using upper_bound_pred_op =
-        aux::same_type< end_t<Seq>, _1 >;
+        aux::is_same< end_t<Seq>, _1 >;
       
     }                                                       // namespace detail
     

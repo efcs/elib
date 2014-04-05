@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_DECLVAL_HPP
-#define ELIB_AUX_SUPPORT_DECLVAL_HPP
+#ifndef ELIB_AUX_DECLVAL_HPP
+#define ELIB_AUX_DECLVAL_HPP
 
 # include <elib/aux/traits/add_rvalue_reference.hpp>
 
@@ -13,4 +13,4 @@ namespace elib
 {
     using aux::declval;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_SUPPORT_DECLVAL_HPP */
+#endif /* ELIB_AUX_DECLVAL_HPP */

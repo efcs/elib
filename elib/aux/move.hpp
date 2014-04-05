@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_MOVE_HPP
-#define ELIB_AUX_SUPPORT_MOVE_HPP
+#ifndef ELIB_AUX_MOVE_HPP
+#define ELIB_AUX_MOVE_HPP
 
 # include <elib/aux/traits/conditional.hpp>
 # include <elib/aux/traits/is_copy_constructible.hpp>
@@ -37,4 +37,4 @@ namespace elib
     using aux::move;
     using aux::move_if_noexcept;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_SUPPORT_MOVE_HPP */
+#endif /* ELIB_AUX_MOVE_HPP */

@@ -1,8 +1,8 @@
-#ifndef ELIB_AUX_SUPPORT_COMMON_HPP
-#define ELIB_AUX_SUPPORT_COMMON_HPP
+#ifndef ELIB_AUX_COMMON_HPP
+#define ELIB_AUX_COMMON_HPP
 # 
 # include <elib/config.hpp>
-# include <elib/aux/support/declval.hpp>
+# include <elib/aux/declval.hpp>
 # 
 # 
 # define ELIB_DEFAULT_CLASS(Class)          \
@@ -105,4 +105,4 @@
 #   define ELIB_CXX14_CONSTEXPR constexpr
 # endif
 # 
-#endif /* ELIB_AUX_SUPPORT_COMMON_HPP */
+#endif /* ELIB_AUX_COMMON_HPP */

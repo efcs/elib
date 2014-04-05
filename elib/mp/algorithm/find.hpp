@@ -24,7 +24,7 @@ namespace elib
             , _2 
             , _1
           >
-        , aux::same_type<end_t<Seq>, _1>
+        , aux::is_same<end_t<Seq>, _1>
       >;
     
     
@@ -34,7 +34,7 @@ namespace elib
     
     
     template <class Seq, class T>
-    struct find : find_if<Seq, aux::same_type<T, _1>>
+    struct find : find_if<Seq, aux::is_same<T, _1>>
     {};
     
     template <class Seq, class T>

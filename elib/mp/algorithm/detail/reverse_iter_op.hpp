@@ -23,8 +23,8 @@ namespace elib
         using apply = 
           if_t<
               or_<
-                  aux::same_type<Begin, Iter>
-                , aux::same_type<End, Iter>
+                  aux::is_same<Begin, Iter>
+                , aux::is_same<End, Iter>
               >
             , identity< End >
             , prior< Iter >

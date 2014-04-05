@@ -19,7 +19,7 @@ namespace elib
         template <class State, class Iter>
         using apply = 
           and_<
-              not_<aux::same_type<Iter, End>>
+              not_<aux::is_same<Iter, End>>
             , apply_wrap<Pred, State, Iter> 
           >;
       };

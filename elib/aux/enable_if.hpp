@@ -1,8 +1,8 @@
-#ifndef ELIB_AUX_META_ENABLE_IF_HPP
-#define ELIB_AUX_META_ENABLE_IF_HPP
+#ifndef ELIB_AUX_ENABLE_IF_HPP
+#define ELIB_AUX_ENABLE_IF_HPP
 
-# include <elib/aux/support/static_const.hpp>
-# include <elib/aux/meta/no_decay.hpp>
+# include <elib/aux/static_const.hpp>
+# include <elib/aux/no_decay.hpp>
 
 # define ELIB_ENABLE_IF(...)                                                \
   typename ::elib::aux::enable_if_c<static_cast<bool>(__VA_ARGS__)>::type* const& = \
@@ -103,4 +103,4 @@ namespace elib
     using aux::lazy_disable_if_c;
     using aux::lazy_disable_if_c_t;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_META_ENABLE_IF_HPP */
+#endif /* ELIB_AUX_ENABLE_IF_HPP */

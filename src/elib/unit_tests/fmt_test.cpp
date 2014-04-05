@@ -267,14 +267,14 @@ BOOST_AUTO_TEST_CASE(conversion_tag_test)
 
 
 #define CHECK_MAKE_ALL_TYPES(Expect, Type, Value)                          \
-    BOOST_CHECK(( Expect == make_str(static_cast<Type>(Value)) ));         \
-    BOOST_CHECK(( Expect == make_str(static_cast<Type const>(Value)) ));   \
-    BOOST_CHECK(( Expect == make_str(static_cast<Type &>(Value)) ));       \
-    BOOST_CHECK(( Expect == make_str(static_cast<Type &&>(Value)) ));      \
-    BOOST_CHECK(( Expect == make_str(static_cast<Type const &>(Value)) )); \
-    BOOST_CHECK(( Expect == make_str(static_cast<Type const &&>(Value)) ))
+    BOOST_CHECK(( Expect == mkstr(static_cast<Type>(Value)) ));         \
+    BOOST_CHECK(( Expect == mkstr(static_cast<Type const>(Value)) ));   \
+    BOOST_CHECK(( Expect == mkstr(static_cast<Type &>(Value)) ));       \
+    BOOST_CHECK(( Expect == mkstr(static_cast<Type &&>(Value)) ));      \
+    BOOST_CHECK(( Expect == mkstr(static_cast<Type const &>(Value)) )); \
+    BOOST_CHECK(( Expect == mkstr(static_cast<Type const &&>(Value)) ))
 
-BOOST_AUTO_TEST_CASE( make_str_test )
+BOOST_AUTO_TEST_CASE( mkstr_test )
 {
     // std::string test
     {

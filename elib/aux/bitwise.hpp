@@ -1,8 +1,8 @@
-#ifndef ELIB_AUX_META_BITWISE_HPP
-#define ELIB_AUX_META_BITWISE_HPP
+#ifndef ELIB_AUX_BITWISE_HPP
+#define ELIB_AUX_BITWISE_HPP
 
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/meta/left_associative_expression.hpp>
+# include <elib/aux/left_associative_expression.hpp>
 
 namespace elib { namespace aux
 {
@@ -61,4 +61,4 @@ namespace elib { namespace aux
     template <class T, class U>
     using shift_right_t = ELIB_AUTO_INTC(( T::type::value >> U::type::value ));
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_META_BITWISE_HPP */
+#endif /* ELIB_AUX_BITWISE_HPP */

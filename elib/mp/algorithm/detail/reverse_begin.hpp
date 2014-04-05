@@ -22,7 +22,7 @@ namespace elib
         
         using type = 
           eval_if_t<
-              aux::same_type<begin_, end_>
+              aux::is_same<begin_, end_>
             , identity< end_ >
             , prior< end_ >
           >;

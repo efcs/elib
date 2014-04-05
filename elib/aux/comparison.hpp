@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_META_COMPARISON_HPP
-#define ELIB_AUX_META_COMPARISON_HPP
+#ifndef ELIB_AUX_COMPARISON_HPP
+#define ELIB_AUX_COMPARISON_HPP
 
 # include <elib/aux/integral_constant.hpp>
 
@@ -23,4 +23,4 @@ namespace elib { namespace aux
     template <class LHS, class RHS>
     struct greater_equal : bool_<(LHS::type::value >= RHS::type::value)> {};
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_META_COMPARISON_HPP */
+#endif /* ELIB_AUX_COMPARISON_HPP */

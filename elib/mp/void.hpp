@@ -11,10 +11,10 @@ namespace elib
     struct void_ { using type = void_; };
     
     template <class T>
-    using is_void = aux::same_type<T, void_>;
+    using is_void = aux::is_same<T, void_>;
     
     template <class T>
-    using is_void_t = typename aux::same_type<T, void_>::type;
+    using is_void_t = typename aux::is_same<T, void_>::type;
     
   }                                                         // namespace mp
 }                                                           // namespace elib

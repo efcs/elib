@@ -1,9 +1,9 @@
-#ifndef ELIB_AUX_META_IF_HPP
-#define ELIB_AUX_META_IF_HPP
+#ifndef ELIB_AUX_IF_HPP
+#define ELIB_AUX_IF_HPP
 
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/meta/no_decay.hpp>
-# include <elib/aux/meta/none.hpp>
+# include <elib/aux/no_decay.hpp>
+# include <elib/aux/none.hpp>
 # include <elib/aux/traits/conditional.hpp>
 
 namespace elib { namespace aux
@@ -203,4 +203,4 @@ namespace elib
     using aux::eval_if_c;
     using aux::eval_if_c_t;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_META_IF_HPP */
+#endif /* ELIB_AUX_IF_HPP */

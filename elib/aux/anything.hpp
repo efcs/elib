@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_ANYTHING_HPP
-#define ELIB_AUX_SUPPORT_ANYTHING_HPP
+#ifndef ELIB_AUX_ANYTHING_HPP
+#define ELIB_AUX_ANYTHING_HPP
 
 namespace elib { namespace aux
 {
@@ -24,4 +24,4 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////
     using anything = detail::anything<>;
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_SUPPORT_ANYTHING_HPP */
+#endif /* ELIB_AUX_ANYTHING_HPP */

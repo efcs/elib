@@ -64,11 +64,11 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     // general
     {
       using P1 = pack< float, int, int, float, float, int, float>;
-      using P = filter_view<P1, aux::same_type<float, _1>>;
+      using P = filter_view<P1, aux::is_same<float, _1>>;
       using V1 = vector< float, int, int, float, float, int, float>;
-      using V = filter_view<V1, aux::same_type<float, _1>>;
+      using V = filter_view<V1, aux::is_same<float, _1>>;
       using L1 = list< float, int, int, float, float, int, float>;
-      using L = filter_view<L1, aux::same_type<float, _1>>;
+      using L = filter_view<L1, aux::is_same<float, _1>>;
       
       using E = pack<float, float, float, float>;
       
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     // model_of
     {
       using T1 = pack<float, int, float, int, int, float>;
-      using T = filter_view< T1, aux::same_type<float, _1>>;
+      using T = filter_view< T1, aux::is_same<float, _1>>;
       SAME_TYPE( typename T::class_type, filter_view_tag );
       SAME_TYPE( typename T::model_type, filter_view_model );
       CHECK( is_sequence_t<T>() );

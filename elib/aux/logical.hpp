@@ -1,8 +1,8 @@
-#ifndef ELIB_AUX_META_LOGICAL_HPP
-#define ELIB_AUX_META_LOGICAL_HPP
+#ifndef ELIB_AUX_LOGICAL_HPP
+#define ELIB_AUX_LOGICAL_HPP
 
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/meta/if.hpp>
+# include <elib/aux/if.hpp>
 
 namespace elib { namespace aux
 {
@@ -186,4 +186,4 @@ namespace elib
     using aux::or_;
     using aux::or_c;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_META_LOGICAL_HPP */
+#endif /* ELIB_AUX_LOGICAL_HPP */

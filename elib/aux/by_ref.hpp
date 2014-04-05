@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_BY_REF_HPP
-#define ELIB_AUX_SUPPORT_BY_REF_HPP
+#ifndef ELIB_AUX_BY_REF_HPP
+#define ELIB_AUX_BY_REF_HPP
 
 namespace elib { namespace aux
 {
@@ -13,4 +13,4 @@ namespace elib { namespace aux
 
     constexpr by_ref_ by_ref{};
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_SUPPORT_BY_REF_HPP */
+#endif /* ELIB_AUX_BY_REF_HPP */

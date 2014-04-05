@@ -1,16 +1,17 @@
 #ifndef ELIB_AUX_SUPPORT_HPP
 #define ELIB_AUX_SUPPORT_HPP
 #
-# include <elib/aux/support/addressof.hpp>
-# include <elib/aux/support/any_pod.hpp>
-# include <elib/aux/support/anything.hpp>
-# include <elib/aux/support/by_ref.hpp>
-# include <elib/aux/support/by_val.hpp>
-# include <elib/aux/support/common.hpp>
-# include <elib/aux/support/declval.hpp>
-# include <elib/aux/support/forward.hpp>
-# include <elib/aux/support/move.hpp>
-# include <elib/aux/support/static_const.hpp>
-# include <elib/aux/support/swallow.hpp>
+# include <elib/aux/addressof.hpp>
+# include <elib/aux/any_pod.hpp>
+# include <elib/aux/anything.hpp>
+# include <elib/aux/by_ref.hpp>
+# include <elib/aux/by_val.hpp>
+# include <elib/aux/common.hpp>
+# include <elib/aux/declval.hpp>
+# include <elib/aux/exchange.hpp>
+# include <elib/aux/forward.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/static_const.hpp>
+# include <elib/aux/swallow.hpp>
 # 
 #endif /* ELIB_AUX_SUPPORT_HPP */

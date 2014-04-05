@@ -28,21 +28,6 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////////
         template <
             class T
-          , ELIB_ENABLE_IF( !aux::is_convertible<T, std::string>::value )
-          , ELIB_ENABLE_IF_VALID_EXPR(
-              static_cast<std::string>( elib::declval<T>() )
-            )
-          >
-        elib::true_ 
-        has_explicit_string_cast_impl(int);
-        
-        template <class>
-        elib::false_ 
-        has_explicit_string_cast_impl(long);
-        
-        ////////////////////////////////////////////////////////////////////////////
-        template <
-            class T
           , ELIB_ENABLE_IF_VALID_EXPR(to_string( elib::declval<T>() ))
           >
         elib::true_ 
@@ -51,28 +36,12 @@ namespace elib
         template <class>
         elib::false_ 
         has_to_string_function_impl(long);
-        
-        ////////////////////////////////////////////////////////////////////////////
-        template <
-            class T
-          , ELIB_ENABLE_IF_VALID_EXPR(
-                elib::declval<std::ostream &>() << elib::declval<T>() 
-            )
-          >
-        elib::true_ 
-        has_stream_insertion_impl(int);
-        
-        template <class>
-        elib::false_ 
-        has_stream_insertion_impl(long);
-    
     }                                                       // namespace fmt_detail
     
     ///////////////////////////////////////////////////////////////////////////
     template <class T>
-    using has_explicit_string_cast = decltype(
-        fmt_detail::has_explicit_string_cast_impl<T>(0)
-    );
+    using has_explicit_string_cast = 
+        aux::is_explicitly_convertible<T, std::string>;
         
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
@@ -89,9 +58,7 @@ namespace elib
         
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using has_stream_insertion = decltype(
-        fmt_detail::has_stream_insertion_impl<T>(0)
-      );
+    using has_stream_insertion = aux::is_output_streamable<T>;
         
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
@@ -177,11 +144,11 @@ namespace elib
 
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    std::string make_str(T && t)
+    std::string mkstr(T && t)
     {
         static_assert(
             has_string_conversion<T>::value
-          , "Cannot use make_str with type T. It is not string convertible"
+          , "Cannot use mkstr with type T. It is not string convertible"
         );
         
         return fmt_detail::convert_str_impl(
@@ -202,7 +169,7 @@ namespace elib
     inline std::ostream & 
     build_str(std::ostream & out, First && f, Rest &&... rest)
     {
-        out << make_str(elib::forward<First>(f));
+        out << mkstr(elib::forward<First>(f));
         return build_str(out, elib::forward<Rest>(rest)...);
     }
     
@@ -270,7 +237,7 @@ namespace elib
           >
         std::string convert_arg(T && t)
         {
-            return make_str(elib::forward<T>(t));
+            return mkstr(elib::forward<T>(t));
         }
         
         //////////////////////////////////////////////////////////////////////////

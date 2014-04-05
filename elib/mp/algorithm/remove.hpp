@@ -66,7 +66,7 @@ namespace elib
       , class In = back_inserter<clear_t<Seq>>
       >
     struct remove
-      : remove_if<Seq, aux::same_type<_1, T>, In>
+      : remove_if<Seq, aux::is_same<_1, T>, In>
     {};
     
     
@@ -84,7 +84,7 @@ namespace elib
       , class In = front_inserter<clear_t<Seq>>
       >
     struct reverse_remove
-      : reverse_remove_if<Seq, aux::same_type<_1, T>, In>
+      : reverse_remove_if<Seq, aux::is_same<_1, T>, In>
     {};
     
    

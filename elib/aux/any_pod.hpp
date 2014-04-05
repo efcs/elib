@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_ANY_POD_HPP
-#define ELIB_AUX_SUPPORT_ANY_POD_HPP
+#ifndef ELIB_AUX_ANY_POD_HPP
+#define ELIB_AUX_ANY_POD_HPP
 
 namespace elib { namespace aux
 {
@@ -9,4 +9,4 @@ namespace elib { namespace aux
         any_pod(...);
     };
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_SUPPORT_ANY_POD_HPP */
+#endif /* ELIB_AUX_ANY_POD_HPP */

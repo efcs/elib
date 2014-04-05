@@ -23,7 +23,7 @@ namespace elib
         constexpr operator value_type() const noexcept
         { return Val; }
             
-            constexpr T operator()() const noexcept
+        constexpr T operator()() const noexcept
         { return Val; }
     };
     

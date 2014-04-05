@@ -1,8 +1,8 @@
-#ifndef ELIB_AUX_SUPPORT_ADDRESSOF_HPP
-#define ELIB_AUX_SUPPORT_ADDRESSOF_HPP
+#ifndef ELIB_AUX_ADDRESSOF_HPP
+#define ELIB_AUX_ADDRESSOF_HPP
 
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/support/declval.hpp>
+# include <elib/aux/declval.hpp>
 # include <cstddef>
 
 namespace elib { namespace aux
@@ -61,4 +61,4 @@ namespace elib
 {
     using aux::addressof;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_SUPPORT_ADDRESSOF_HPP */
+#endif /* ELIB_AUX_ADDRESSOF_HPP */

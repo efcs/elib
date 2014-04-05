@@ -87,11 +87,18 @@
 # include <elib/aux/traits/is_same.hpp>
 # include <elib/aux/traits/is_base_of.hpp>
 # include <elib/aux/traits/is_convertible.hpp>
+# 
+# include <elib/aux/traits/is_explicitly_convertible.hpp>
+# include <elib/aux/traits/is_explicitly_castable.hpp>
+# include <elib/aux/traits/is_implicitly_castable.hpp>
+# include <elib/aux/traits/is_castable.hpp>
+# include <elib/aux/traits/is_swappable.hpp>
+# include <elib/aux/traits/is_input_streamable.hpp>
+# include <elib/aux/traits/is_output_streamable.hpp>
+# include <elib/aux/traits/is_string_type.hpp>
 # include <elib/aux/traits/uncvref.hpp>
 # include <elib/aux/traits/strip_ref_wrapper.hpp>
-# include <elib/aux/traits/is_string_type.hpp>
-# include <elib/aux/traits/has_swap.hpp>
-# include <elib/aux/traits/same_type.hpp>
+# 
 # include <elib/aux/traits/conditional.hpp>
 # 
 #endif /* ELIB_AUX_TRAITS_HPP */

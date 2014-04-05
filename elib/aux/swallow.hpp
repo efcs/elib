@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_SWALLOW_HPP
-#define ELIB_AUX_SUPPORT_SWALLOW_HPP
+#ifndef ELIB_AUX_SWALLOW_HPP
+#define ELIB_AUX_SWALLOW_HPP
 
 namespace elib { namespace aux
 {
@@ -11,4 +11,4 @@ namespace elib { namespace aux
     constexpr void swallow(T &&...) noexcept {}
 # endif
 }}                                                          // namespace elib
-#endif /* ELIB_AUX_SUPPORT_SWALLOW_HPP */
+#endif /* ELIB_AUX_SWALLOW_HPP */

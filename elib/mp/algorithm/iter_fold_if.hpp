@@ -90,7 +90,7 @@ namespace elib
             , State
             , identity_state_op
             , lambda< next<_1> >
-            , lambda< not_< aux::same_type<end_t<Seq>, _2> > >
+            , lambda< not_< aux::is_same<end_t<Seq>, _2> > >
             , lambda< StateOp >
             , lambda< Pred >
           >;

@@ -23,7 +23,7 @@ struct IterCountOpImpl
   template <class State, class Iter>
   using apply = 
     eval_if< 
-        aux::same_type<T, deref_t<Iter>>
+        aux::is_same<T, deref_t<Iter>>
       , next<State>
       , identity< State >
       >;
@@ -60,7 +60,7 @@ struct CountOpImpl
   template <class State, class Item>
   using apply = 
     eval_if< 
-        aux::same_type<T, Item>
+        aux::is_same<T, Item>
       , next<State>
       , identity< State >
       >;
@@ -488,11 +488,11 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
         using Void = advance_c_t<B, 3>;
         using E = end_t<T>;
         
-        using Pred1 = not_< aux::same_type<int, _1> >;
+        using Pred1 = not_< aux::is_same<int, _1> >;
         using FVoid = find_if_t<T, Pred1>;
         SAME_TYPE(Void, FVoid);
         
-        using Pred2 = lambda< aux::same_type<char, _1> >;
+        using Pred2 = lambda< aux::is_same<char, _1> >;
         using FDNE = find_if_t<T, Pred2>;
         SAME_TYPE(FDNE, E);
         
@@ -541,10 +541,10 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
     {
       using T = vector<int, int, int, char, char, bool, int, int>;
       
-      CHECK( 5 == count_if_t<T, aux::same_type<int, _1> >() );
-      CHECK( 7 == count_if_t<T, not_<aux::same_type<bool, _1>> >() );
-      CHECK( 3 == count_if_t<T, or_<aux::same_type<bool, _1>, aux::same_type<char, _1>> >() );
-      CHECK( 0 == count_if_t<T, aux::same_type<_1, void>>() );
+      CHECK( 5 == count_if_t<T, aux::is_same<int, _1> >() );
+      CHECK( 7 == count_if_t<T, not_<aux::is_same<bool, _1>> >() );
+      CHECK( 3 == count_if_t<T, or_<aux::is_same<bool, _1>, aux::is_same<char, _1>> >() );
+      CHECK( 0 == count_if_t<T, aux::is_same<_1, void>>() );
       
       using TE = vector<>;
       CHECK( 0 == count_if_t<TE, always<true_>>() );
@@ -842,14 +842,14 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
     using L = list< int, long, long, long, void, void, char, void >;
     
     using E = pack< int, long, void, char, void >;
-    CHECK( sequence_equal_t<unique_t<P, not_<aux::same_type<_1, _2>>>, E>() );
-    CHECK( sequence_equal_t<unique_t<V, not_<aux::same_type<_1, _2>>>, E>() );
-    CHECK( sequence_equal_t<unique_t<L, not_<aux::same_type<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<unique_t<P, not_<aux::is_same<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<unique_t<V, not_<aux::is_same<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<unique_t<L, not_<aux::is_same<_1, _2>>>, E>() );
     
     
-    CHECK( sequence_equal_t<reverse_unique_t<P, not_<aux::same_type<_1, _2>>>, E>() );
-    CHECK( sequence_equal_t<reverse_unique_t<V, not_<aux::same_type<_1, _2>>>, E>() );
-    CHECK( sequence_equal_t<reverse_unique_t<L, not_<aux::same_type<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<reverse_unique_t<P, not_<aux::is_same<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<reverse_unique_t<V, not_<aux::is_same<_1, _2>>>, E>() );
+    CHECK( sequence_equal_t<reverse_unique_t<L, not_<aux::is_same<_1, _2>>>, E>() );
   }                                                // mp_algorithm_unique_test
   
   BOOST_AUTO_TEST_CASE(mp_algorithm_transform_test)
@@ -864,7 +864,7 @@ BOOST_AUTO_TEST_SUITE(mp_algorithm_test_suite)
       
       using Tr = 
         if_<
-            aux::same_type<int, _1>
+            aux::is_same<int, _1>
           , void
           , int
         >;

@@ -1,5 +1,5 @@
-#ifndef ELIB_AUX_SUPPORT_FORWARD_HPP
-#define ELIB_AUX_SUPPORT_FORWARD_HPP
+#ifndef ELIB_AUX_FORWARD_HPP
+#define ELIB_AUX_FORWARD_HPP
 
 # include <elib/aux/traits/is_lvalue_reference.hpp>
 # include <elib/aux/traits/remove_reference.hpp>
@@ -30,4 +30,4 @@ namespace elib
 {
     using aux::forward;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_SUPPORT_FORWARD_HPP */
+#endif /* ELIB_AUX_FORWARD_HPP */

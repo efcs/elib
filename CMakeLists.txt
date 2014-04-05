@@ -124,10 +124,13 @@ set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 
+message( STATUS "Configuring for ${CMAKE_BUILD_TYPE}")
+
 if (NOT CONFIG_CXX1Y)
+    message( STATUS "Configuring for C++11" )
     set(CXX_VERSION_FLAGS " -std=c++11 ")
 else()
-    message( STATUS "Using c++1y standard")
+    message( STATUS "Configuring for C++1y" )
     set(CXX_VERSION_FLAGS " -std=c++1y ")
 endif()
 
@@ -199,9 +202,7 @@ endif()
 if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
     message( STATUS "Using libstdc++ in /opt/gcc4.9/lib64" )
     add_definitions( -nostdinc++ )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} 
-                        -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ 
-                        -I/opt/gcc4.9/include/c++/4.9.0/")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ -I/opt/gcc4.9/include/c++/4.9.0/")
 
     set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
 endif()

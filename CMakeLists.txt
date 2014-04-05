@@ -78,7 +78,7 @@ option(CONFIG_LIB_MPL "Build MPL" ON)
 # disabling this library disables the log::log_level enum <-> string casting
 option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
 
-option(CONFIG_LIB_RANGE "Build Range" ON)
+option(CONFIG_LIB_RANGES "Build Range" ON)
 option(CONFIG_LIB_ITER "Build Iterator" ON)
 
 # header only. function objects for operators and more

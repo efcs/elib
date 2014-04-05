@@ -7,6 +7,10 @@
 #include <iostream>
 #include <typeinfo>
 
+#if defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Wformat-zero-length"
+#endif
+
 using namespace elib;
 
 using fmt_detail::implicit_cast_conversion_tag;

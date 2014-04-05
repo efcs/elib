@@ -3,9 +3,11 @@
 
 # include <elib/ranges/operations.hpp>
 # include <elib/ranges/traits.hpp>
-
+# include <elib/aux.hpp>
+# include <algorithm>
 # include <iostream>
 # include <iterator>
+# include <utility>
 
 namespace elib { namespace ranges
 {
@@ -20,31 +22,80 @@ namespace elib { namespace ranges
         using const_iterator = Iterator;
 
     public:                                             // construction, assignment
-        range();
+        range() = default;
 
         template< class Iterator2 >
-        range( const Iterator2& begin, const Iterator2& end );
+        range(Iterator2 const & begin, Iterator2 const & end)
+          : m_iters(begin, end)
+        {}
 
         template< class Range >
-        range( Range&& r );
+        range(Range && r)
+          : m_iters(std::begin(elib::forward<Range>(r)), std::end(elib::forward<Range>(r)))
+        {}
 
         template< class Range >
-        range& operator=( Range&& r );
+        range& operator=( Range && r )
+        {
+            m_iters = {
+                std::begin(elib::forward<Range>(r))
+              , std::end(elib::forward<Range>(r))
+            };
+        }
 
     public:                                             // forward range functions
-        iterator        begin() const;
-        iterator        end() const;
-        difference_type size() const;
-        bool            empty() const;
+        Iterator begin() const
+        { return m_iters.first; }
+        
+        Iterator end() const
+        { return m_iters.second; }
+        
+        
+        difference_type size() const
+        { return m_iters.second - m_iters.first; }
+        
+        bool empty() const
+        { return size() == 0; }
 
     public:                                             // convenience
-        operator    unspecified_bool_type() const;
-        bool        equal( const range& ) const;
-        reference   front() const;
-        reference   back() const;
-        reference   operator[]( difference_type at ) const;
-        range&      advance_begin( difference_type n );
-        range&      advance_end( difference_type n );
+        explicit operator bool() const
+        { return empty(); }
+        
+        bool equal(range const & other) const
+        {
+            return begin() == other.begin() && end() == other.end();
+        }
+        
+        reference front() const
+        {
+            return *begin();
+        }
+        
+        reference back() const
+        {
+            return *--end();
+        }
+        
+        reference operator[]( difference_type at ) const
+        {
+            ELIB_ASSERT( 0 <= at && at <= size() );
+            return *(begin() + at);
+        }
+        
+        range & advance_begin( difference_type n )
+        {
+            m_iters.first = std::advance(m_iters.first, n);
+            return *this;
+        }
+        
+        range & advance_end( difference_type n )
+        {
+            m_iters.second = std::advance(m_iters.second, n);
+            return *this;
+        }
+
+    private:
+        std::pair<iterator, iterator> m_iters;
     };
 
     template< class Range >
@@ -54,102 +105,221 @@ namespace elib { namespace ranges
         using base_type = range< typename range_iterator<Range>::type >;
         using iterator = typename range_iterator<Range>::type;
         using const_iterator = typename range_iterator<const Range>::type;
-        using const_reference = std::iterator_traits<const_iterator>::reference;
-        using base_type::value_type;
-        using base_type::reference;
-        using base_type::difference_type;
+        using const_reference = typename std::iterator_traits<const_iterator>::reference;
+        using value_type = typename base_type::value_type;
+        using reference = typename base_type::reference;
+        using difference_type = typename base_type::difference_type;
 
     public:                                             // construction, assignment
-        sub_range();
+        sub_range() = default;
 
         template< class Iterator >
-        sub_range( const Iterator& begin, const Iterator& end );
+        sub_range(Iterator const & begin, Iterator const & end)
+          : base_type(begin, end)
+        {}
 
         template< class Range2 >
-        sub_range( Range2&& r );
+        sub_range(Range2 && r)
+          : base_type( elib::forward<Range2>(r) )
+        {}
 
-    template< class Range2 >
-        sub_range& operator=( Range2&& r );
+        template< class Range2 >
+        sub_range & operator=(Range2 && r)
+        {
+            base_type::operator=(elib::forward<Range2>(r));
+            return *this;;
+        }
 
     public:                                             // forward range functions 
-        iterator        begin();
-        const_iterator  begin() const;
-        iterator        end();
-        const_iterator  end() const;    
+        iterator begin()
+        { return base_type::begin();}
+        
+        const_iterator begin() const
+        { return base_type::begin(); }
+        
+        iterator end()
+        { return base_type::end(); }
+        
+        const_iterator  end() const
+        { return base_type::end(); }
 
     public:                                             // convenience 
-        reference        front();
-        const_reference  front() const;
-        reference        back();
-        const_reference  back() const;
-        reference        operator[]( difference_type at );
-        const_reference  operator[]( difference_type at ) const;   
-        sub_range&       advance_begin( difference_type n );
-        sub_range&       advance_end( difference_type n );
+        reference front()
+        { return base_type::front(); }
+        
+        const_reference  front() const
+        { return base_type::front(); }
+        
+        reference back()
+        { return base_type::back(); }
+        
+        const_reference back() const
+        { return base_type::back(); }
+        
+        reference operator[](difference_type at)
+        { return base_type::operator[](at); }
+        
+        const_reference operator[](difference_type at) const
+        { return base_type::operator[](at); }
+        
+        sub_range & advance_begin( difference_type n )
+        { 
+            base_type::advance_begin(n);
+            return *this;
+        }
+        
+        sub_range & advance_end( difference_type n )
+        {
+            base_type::advance_end(n);
+            return *this;
+        }
     };
 
     // stream output
     template< class Iterator, class T, class Traits >
     std::basic_ostream<T,Traits>& 
-    operator<<( std::basic_ostream<T,Traits>& Os,
-                const range<Iterator>& r );
+    operator<<(
+        std::basic_ostream<T,Traits> & out
+      , range<Iterator> const & r
+      )
+    {
+         std::copy(
+             r.begin(), r.end()
+           , std::ostream_iterator< 
+               typename std::iterator_traits<Iterator>::value_type, T, Traits
+              >(out)
+          ); 
+        return out;
+    }
 
     // comparison
     template< class Iterator, class Iterator2 >
-    bool operator==( const range<Iterator>& l, const range<Iterator2>& r );
+    bool operator==(range<Iterator> const & lhs, range<Iterator2> const & rhs)
+    {
+        return std::equal(std::begin(lhs), std::end(lhs), std::begin(rhs));
+    }
 
     template< class Iterator, class Range >
-    bool operator==( const range<Iterator>& l, const Range& r );
+    bool operator==(range<Iterator> const & lhs, Range const & rhs)
+    {
+        return std::equal(std::begin(lhs), std::end(lhs), std::begin(rhs));
+    }
 
     template< class Iterator, class Range >
-    bool operator==( const Range& l, const range<Iterator>& r );
+    bool operator==(Range const & lhs, range<Iterator> const & rhs)
+    {
+        return std::equal(std::begin(lhs), std::end(lhs), std::begin(rhs));
+    }
 
     template< class Iterator, class Iterator2 >
-    bool operator!=( const range<Iterator>& l, const range<Iterator2>& r );
+    bool operator!=(range<Iterator> const & lhs, range<Iterator2> const & rhs)
+    {
+        return !(lhs == rhs);
+    }
 
     template< class Iterator, class Range >
-    bool operator!=( const range<Iterator>& l, const Range& r );
+    bool operator!=(range<Iterator> const & lhs, Range const & rhs)
+    {
+        return !(lhs == rhs);
+    }
 
     template< class Iterator, class Range >
-    bool operator!=( const Range& l, const range<Iterator>& r );
+    bool operator!=(Range const & lhs, range<Iterator> const & rhs)
+    {
+        return !(lhs == rhs);
+    }
 
     template< class Iterator, class Iterator2 >
-    bool operator<( const range<Iterator>& l, const range<Iterator2>& r );
+    bool operator<(range<Iterator> const & lhs, range<Iterator2> const & rhs)
+    {
+        return std::lexicographical_compare(
+            std::begin(lhs), std::end(lhs)
+          , std::begin(rhs), std::end(rhs)
+          );
+    }
 
     template< class Iterator, class Range >
-    bool operator<( const range<Iterator>& l, const Range& r );
+    bool operator<(range<Iterator> const & lhs, Range const & rhs)
+    {
+        return std::lexicographical_compare(
+            std::begin(lhs), std::end(lhs)
+          , std::begin(rhs), std::end(rhs)
+          );
+    }
 
     template< class Iterator, class Range >
-    bool operator<( const Range& l, const range<Iterator>& r );
+    bool operator<(Range const & lhs, range<Iterator> const & rhs)
+    {
+        return std::lexicographical_compare(
+            std::begin(lhs), std::end(lhs)
+          , std::begin(rhs), std::end(rhs)
+          );
+    }
 
     template< class Range, class Range2 >
-    bool operator==( const sub_range<Range>& l, const sub_range<Range2>& r );
+    bool operator==(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
+    {
+        using lhs_base = typename sub_range<Range>::base_type const &;
+        using rhs_base = typename sub_range<Range2>::base_type const &;
+        return static_cast<lhs_base>(lhs) == static_cast<rhs_base>(rhs);
+    }
 
     template< class Range, class Range2 >
-    bool operator!=( const sub_range<Range>& l, const sub_range<Range2>& r )
+    bool operator!=(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
+    {
+        using lhs_base = typename sub_range<Range>::base_type const &;
+        using rhs_base = typename sub_range<Range2>::base_type const &;
+        return static_cast<lhs_base>(lhs) != static_cast<rhs_base>(rhs);
+    }
 
     template< class Range, class Range2 >
-    bool operator<( const sub_range<Range>& l, const sub_range<Range2>& r );
+    bool operator<(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
+    {
+        using lhs_base = typename sub_range<Range>::base_type const &;
+        using rhs_base = typename sub_range<Range2>::base_type const &;
+        return static_cast<lhs_base>(lhs) < static_cast<rhs_base>(rhs);
+    }
 
     // external construction
     template< class Iterator >
     range<Iterator>
-    make_range( const Iterator& begin, const Iterator& end );
+    make_range(Iterator const & begin, Iterator const & end)
+    {
+        return range<Iterator>(begin, end);
+    }
     
     template< class Range >
-    range<typename range_iterator<Range>::type> 
-    make_range( Range&& r );
+    range<range_iterator_t<Range>> 
+    make_range(Range && r)
+    {
+        return range<range_iterator_t<Range>>(elib::forward<Range>(r));
+    }
 
     template< class Range >
-    range<typename range_iterator<Range>::type> 
-    make_range( Range&& r, typename range_difference<Range>::type advance_begin,
-                           typename range_difference<Range>::type advance_end );
+    range<range_iterator_t<Range>> 
+    make_range(
+        Range && r
+      , range_difference_t<Range> advance_begin
+      , range_difference_t<Range> advance_end 
+      )
+    {
+        range<range_iterator_t<Range>> tmp(elib::forward<Range>(r));
+        tmp.advance_begin(advance_begin);
+        tmp.advance_end(advance_end);
+        return tmp;
+    }
             
     template< class CopyableRange, class Range >      
-    CopyableRange copy_range( const Range& r );
+    CopyableRange copy_range(Range const & r)
+    {
+        return CopyableRange(std::begin(r), std::end(r));
+    }
 
     template< class ForwardRange >
     typename range_difference<ForwardRange>::type
-    distance( const ForwardRange& r );
+    distance(ForwardRange const & r)
+    {
+        return std::distance(std::begin(r), std::end(r));
+    }
 }}                                                          // namespace elib
 #endif /* ELIB_RANGES_RANGE_HPP */

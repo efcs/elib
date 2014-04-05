@@ -9,8 +9,7 @@ namespace elib { namespace ranges
     template<class Range>
     struct range_iterator
     {
-        using std::begin;
-        using type = decltype( begin(* ((Range*)nullptr) ) );
+        using type = decltype( std::begin(* ((Range*)nullptr) ) );
     };
     
     
@@ -52,7 +51,7 @@ namespace elib { namespace ranges
 
     ////////////////////////////////////////////////////////////////////////////
     template< class Range >
-    struct range_pointer;
+    struct range_pointer
     {
         using type = typename std::iterator_traits<range_iterator_t<Range>>::pointer;
     };

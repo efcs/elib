@@ -2,6 +2,7 @@
 #define ELIB_RANGES_OPERATIONS_HPP
 
 # include <elib/ranges/traits.hpp>
+# include <elib/aux/convert.hpp>
 # include <utility>
 # include <cstddef>
 

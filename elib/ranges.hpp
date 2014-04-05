@@ -1,8 +1,8 @@
 #ifndef ELIB_RANGES_HPP
 #define ELIB_RANGES_HPP
 #
-# include <ranges/operations.hpp>
-# include <ranges/range.hpp>
-# include <ranges/traits.hpp>
+# include <elib/ranges/operations.hpp>
+# include <elib/ranges/range.hpp>
+# include <elib/ranges/traits.hpp>
 # 
 #endif /* ELIB_RANGES_HPP */

@@ -234,7 +234,7 @@ namespace elib
         template <class ...Args>
         constexpr explicit 
         optional(in_place_t, Args &&... args)
-          : base_type(in_place, elib::forward<Args &&>(args)...)
+          : base_type(in_place, elib::forward<Args>(args)...)
         {}
         
         template <class U, class ...Args>

@@ -26,7 +26,8 @@ namespace elib { namespace tuples
           : first(), second()
         {
             static_assert(
-                !aux::is_ref<First>::value && !aux::is_ref<Second>::value
+                !aux::is_reference<First>::value 
+                && !aux::is_reference<Second>::value
               , "Attempting to default construct a reference type in pair"
             );
         }

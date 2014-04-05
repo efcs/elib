@@ -64,7 +64,7 @@ namespace elib { namespace tuples
               : m_value()
             {
                 static_assert(
-                    !aux::is_ref<Type>::value
+                    !aux::is_reference<Type>::value
                   , "Attempting to default construct a reference element in a"
                     " tuple"
                 );
@@ -75,7 +75,7 @@ namespace elib { namespace tuples
                 : m_value(t.get())
             {
                 static_assert(
-                    !aux::is_rvalue_ref<Type>::value_type
+                    !aux::is_rvalue_reference<Type>::value_type
                   , "Cannot copy a tuple with a rvalue reference member"
                 );
             }
@@ -89,20 +89,20 @@ namespace elib { namespace tuples
             {
                 static_assert(
                     or_<
-                        not_<aux::is_rvalue_ref<Type>>
+                        not_<aux::is_rvalue_reference<Type>>
                       , and_<
-                            aux::is_lvalue_ref<Type>
+                            aux::is_lvalue_reference<Type>
                           , or_<
-                                aux::is_lvalue_ref<T>
+                                aux::is_lvalue_reference<T>
                               , aux::is_same<
-                                    aux::remove_ref_t<T>
+                                    aux::remove_reference_t<T>
                                   , std::reference_wrapper< aux::remove_ref_t<Type> >
                                 >
                             >
                         >
                       , and_<
-                            aux::is_rvalue_ref<Type>
-                        , not_<aux::is_lvalue_ref<T>>
+                            aux::is_rvalue_reference<Type>
+                        , not_<aux::is_lvalue_reference<T>>
                         >
                     >::value
                     , " Attempted to construct a reference element in a tuple"
@@ -163,7 +163,7 @@ namespace elib { namespace tuples
               : Type(t.get())
             {
                 static_assert(
-                    !aux::is_rvalue_ref<Type>::value
+                    !aux::is_rvalue_reference<Type>::value
                   , "Cannot copy a tuple with rvalue refernce member"
                 );
             }

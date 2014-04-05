@@ -33,7 +33,7 @@ namespace elib { namespace tuples
             using TupleType = aux::remove_ref_t<Tuple>;
             using ElementType =
                 if_t<
-                    aux::is_lvalue_ref<Tuple>
+                    aux::is_lvalue_reference<Tuple>
                   , tuple_element_impl_t<Start, TupleType>&
                   , tuple_element_impl_t<Start, TupleType>
                   >;

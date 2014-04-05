@@ -10,19 +10,7 @@
 
 namespace elib { namespace ranges
 {
-    template< class RandomAccessRange >
-    range_difference_t<RandomAccessRange> 
-    size(RandomAccessRange const & r)
-    {
-        return ranges::end(r) - ranges::begin(r);
-    }
-    
-    template< class Range >
-    bool empty(Range const & r)
-    {
-        return (ranges::size(r) == 0);;
-    }
-
+    ////////////////////////////////////////////////////////////////////////////
     template< class BidirectionalRange >
     range_reverse_iterator_t<BidirectionalRange>
     rbegin(BidirectionalRange && r)
@@ -30,6 +18,7 @@ namespace elib { namespace ranges
         return elib::convert(ranges::end(r));
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class BidirectionalRange >
     range_reverse_iterator_t<BidirectionalRange>
     rend(BidirectionalRange && r)
@@ -37,6 +26,7 @@ namespace elib { namespace ranges
         return elib::convert(ranges::begin(r));
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Range >
     range_iterator_t<const Range> 
     const_begin(Range const & r)
@@ -44,6 +34,7 @@ namespace elib { namespace ranges
         return ranges::begin(r);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Range >
     range_iterator_t<const Range>
     const_end(Range const & r)
@@ -51,6 +42,7 @@ namespace elib { namespace ranges
         return ranges::end(r);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class BidirectionalRange >
     range_reverse_iterator_t<const BidirectionalRange> 
     const_rbegin(BidirectionalRange const & r)
@@ -58,6 +50,7 @@ namespace elib { namespace ranges
         return ranges::rbegin(r);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class BidirectionalRange >
     range_reverse_iterator_t<const BidirectionalRange>
     const_rend(BidirectionalRange const & r)
@@ -65,12 +58,22 @@ namespace elib { namespace ranges
         return ranges::rend(r);
     }
     
-    template< class CopyableRange, class Range >      
-    CopyableRange copy_range(Range const & r)
+    ////////////////////////////////////////////////////////////////////////////
+    template< class RandomAccessRange >
+    range_difference_t<RandomAccessRange> 
+    size(RandomAccessRange const & r)
     {
-        return CopyableRange(ranges::begin(r), ranges::end(r));
+        return ranges::end(r) - ranges::begin(r);
     }
-
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template< class Range >
+    bool empty(Range const & r)
+    {
+        return (ranges::size(r) == 0);;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template< class ForwardRange >
     typename range_difference<ForwardRange>::type
     distance(ForwardRange const & r)
@@ -78,18 +81,24 @@ namespace elib { namespace ranges
         return std::distance(ranges::begin(r), ranges::end(r));
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    template< class CopyableRange, class Range >      
+    CopyableRange copy_range(Range const & r)
+    {
+        return CopyableRange(ranges::begin(r), ranges::end(r));
+    }
 }}                                                          // namespace elib
 namespace elib
 {
-    using ranges::size;
-    using ranges::empty;
     using ranges::rbegin;
     using ranges::rend;
     using ranges::const_begin;
     using ranges::const_end;
     using ranges::const_rbegin;
     using ranges::const_rend;
-    using ranges::copy_range;
+    using ranges::size;
+    using ranges::empty;
     using ranges::distance;
+    using ranges::copy_range;
 }                                                           // namespace elib
 #endif /* ELIB_RANGES_OPERATIONS_HPP */

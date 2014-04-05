@@ -12,7 +12,8 @@
 
 namespace elib { namespace ranges
 {
-    template< class Iterator >
+    ////////////////////////////////////////////////////////////////////////////
+    template<class Iterator>
     class range
     {
     public:                                            // types
@@ -26,13 +27,16 @@ namespace elib { namespace ranges
         range() = default;
 
         template< class Iterator2 >
-        range(Iterator2 const & begin, Iterator2 const & end)
-          : m_iters(begin, end)
+        range(Iterator2 const & xbegin, Iterator2 const & xend)
+          : m_iters(xbegin, xend)
         {}
 
         template< class Range >
         range(Range && r)
-          : m_iters(ranges::begin(elib::forward<Range>(r)), ranges::end(elib::forward<Range>(r)))
+          : m_iters(
+              ranges::begin(elib::forward<Range>(r))
+            , ranges::end(elib::forward<Range>(r))
+            )
         {}
 
         template< class Range >
@@ -51,7 +55,6 @@ namespace elib { namespace ranges
         Iterator end() const
         { return m_iters.second; }
         
-        
         difference_type size() const
         { return m_iters.second - m_iters.first; }
         
@@ -63,19 +66,13 @@ namespace elib { namespace ranges
         { return empty(); }
         
         bool equal(range const & other) const
-        {
-            return begin() == other.begin() && end() == other.end();
-        }
+        { return begin() == other.begin() && end() == other.end(); }
         
         reference front() const
-        {
-            return *begin();
-        }
+        { return *begin(); }
         
         reference back() const
-        {
-            return *--end();
-        }
+        { return *--end(); }
         
         reference operator[]( difference_type at ) const
         {
@@ -99,6 +96,7 @@ namespace elib { namespace ranges
         std::pair<iterator, iterator> m_iters;
     };
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Range >
     class sub_range : public range< typename range_iterator<Range>::type >
     {
@@ -111,12 +109,12 @@ namespace elib { namespace ranges
         using reference = typename base_type::reference;
         using difference_type = typename base_type::difference_type;
 
-    public:                                             // construction, assignment
+    public:                                         // construction, assignment
         sub_range() = default;
 
         template< class Iterator >
-        sub_range(Iterator const & begin, Iterator const & end)
-          : base_type(begin, end)
+        sub_range(Iterator const & xbegin, Iterator const & xend)
+          : base_type(xbegin, xend)
         {}
 
         template< class Range2 >
@@ -131,7 +129,7 @@ namespace elib { namespace ranges
             return *this;;
         }
 
-    public:                                             // forward range functions 
+    public:                                          // forward range functions 
         iterator begin()
         { return base_type::begin();}
         
@@ -176,6 +174,7 @@ namespace elib { namespace ranges
         }
     };                                                      // class sub_range
 
+    ////////////////////////////////////////////////////////////////////////////
     // stream output
     template< class Iterator, class T, class Traits >
     std::basic_ostream<T,Traits>& 
@@ -184,34 +183,48 @@ namespace elib { namespace ranges
       , range<Iterator> const & r
       )
     {
-         std::copy(
-             r.begin(), r.end()
-           , std::ostream_iterator< 
-               typename std::iterator_traits<Iterator>::value_type, T, Traits
-              >(out)
-          ); 
+        using out_iter = std::ostream_iterator<
+            typename std::iterator_traits<Iterator>::value_type, T, Traits
+          >;
+        
+        std::copy(
+            r.begin(), r.end()
+          , out_iter(out)
+        ); 
+        
         return out;
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     // comparison
     template< class Iterator, class Iterator2 >
     bool operator==(range<Iterator> const & lhs, range<Iterator2> const & rhs)
     {
-        return std::equal(ranges::begin(lhs), ranges::end(lhs), ranges::begin(rhs));
+        return std::equal(
+            ranges::begin(lhs), ranges::end(lhs)
+          , ranges::begin(rhs)
+        );
     }
 
     template< class Iterator, class Range >
     bool operator==(range<Iterator> const & lhs, Range const & rhs)
     {
-        return std::equal(ranges::begin(lhs), ranges::end(lhs), ranges::begin(rhs));
+        return std::equal(
+            ranges::begin(lhs), ranges::end(lhs)
+          , ranges::begin(rhs)
+        );
     }
 
     template< class Iterator, class Range >
     bool operator==(Range const & lhs, range<Iterator> const & rhs)
     {
-        return std::equal(ranges::begin(lhs), ranges::end(lhs), ranges::begin(rhs));
+        return std::equal(
+            ranges::begin(lhs), ranges::end(lhs)
+          , ranges::begin(rhs)
+        );
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Iterator, class Iterator2 >
     bool operator!=(range<Iterator> const & lhs, range<Iterator2> const & rhs)
     {
@@ -230,6 +243,7 @@ namespace elib { namespace ranges
         return !(lhs == rhs);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Iterator, class Iterator2 >
     bool operator<(range<Iterator> const & lhs, range<Iterator2> const & rhs)
     {
@@ -257,6 +271,7 @@ namespace elib { namespace ranges
           );
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Range, class Range2 >
     bool operator==(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
     {
@@ -265,6 +280,7 @@ namespace elib { namespace ranges
         return static_cast<lhs_base>(lhs) == static_cast<rhs_base>(rhs);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Range, class Range2 >
     bool operator!=(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
     {
@@ -273,6 +289,7 @@ namespace elib { namespace ranges
         return static_cast<lhs_base>(lhs) != static_cast<rhs_base>(rhs);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     template< class Range, class Range2 >
     bool operator<(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
     {
@@ -281,6 +298,7 @@ namespace elib { namespace ranges
         return static_cast<lhs_base>(lhs) < static_cast<rhs_base>(rhs);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
     // external construction
     template< class Iterator >
     range<Iterator>

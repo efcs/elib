@@ -26,6 +26,7 @@ namespace elib { namespace ranges
         return array;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class Range>
     auto begin(Range && r) -> 
         decltype( range_begin(elib::forward<Range>(r)) )
@@ -51,6 +52,7 @@ namespace elib { namespace ranges
         return array + N;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class Range>
     auto end(Range && r) -> 
         decltype( range_end(elib::forward<Range>(r)) )

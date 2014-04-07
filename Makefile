@@ -46,6 +46,22 @@ check:
 	@ echo 
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short
+
+.PHONY: check_shared
+check_shared:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo 
+	@ echo === Running shared tests ===
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
+
+.PHONY: check_static
+check_static:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo
+	@ echo === Running static tests ===
+	@ ./bin/elib_test_static --log_level=message --report_level=short
 	
 .PHONY: test
 test:
@@ -72,6 +88,6 @@ scan:
 .PHONY: config
 config:
 	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(CONFIG) .. ; cd ..
-	@ $(MAKE) --no-print-directory -C build all
-	@ $(MAKE) --no-print-directory check
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) $(STDLIB) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_ONLY_SOURCE=ON .. ; cd ..
+	@ $(MAKE) --no-print-directory -C build -j2 all 1> /dev/null
+	@ $(MAKE) --no-print-directory check_shared

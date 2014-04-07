@@ -119,7 +119,11 @@ set(CONFIG_ELIB_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 #                       Toolchain config (Post-project)
 ################################################################################
 
-set( CMAKE_BUILD_TYPE DEBUG )
+if( NOT CMAKE_BUILD_TYPE )
+  set( CMAKE_BUILD_TYPE DEBUG CACHE STRING
+       "Choose the type of build"
+       FORCE )
+endif()
 set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )

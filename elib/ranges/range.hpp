@@ -19,7 +19,7 @@ namespace elib { namespace ranges
     {
     public:
         // types
-        using iterator_category = typename 
+        using range_category = typename 
         std::iterator_traits<Iterator>::iterator_category;
         
         using value_type = typename 
@@ -74,7 +74,7 @@ namespace elib { namespace ranges
         {
             return *std::prev(end());
             static_assert(
-                iter::is_bidirectional_tag<iterator_category>::value
+                iter::is_bidirectional_tag<range_category>::value
               , "Must be convertible to bidirectional_iterator_tag"
             );
         }
@@ -84,7 +84,7 @@ namespace elib { namespace ranges
         {
             return (index >= 0 ? begin() : end())[index];
             static_assert(
-                iter::is_random_access_tag<iterator_category>::value
+                iter::is_random_access_tag<range_category>::value
               , "Must be convertible to random_access_iterator_tag"
             );
         }
@@ -95,7 +95,7 @@ namespace elib { namespace ranges
         
         ////////////////////////////////////////////////////////////////////////
         constexpr difference_type size() const
-        { return iter::size(begin(), end(), iterator_category()); }
+        { return iter::size(begin(), end(), range_category()); }
 
         ////////////////////////////////////////////////////////////////////////
         void pop_front()
@@ -116,7 +116,7 @@ namespace elib { namespace ranges
                 m_begin
               , std::max((difference_type)0, n)
               , m_end
-              , iterator_category()
+              , range_category()
             );
         }
 
@@ -125,7 +125,7 @@ namespace elib { namespace ranges
         {
             --m_end;
             static_assert(
-               iter::is_bidirectional_tag<iterator_category>::value
+               iter::is_bidirectional_tag<range_category>::value
               , "Must be bidirectional_iterator_tag"
             );
         }
@@ -135,7 +135,7 @@ namespace elib { namespace ranges
         {
             std::advance(m_end, -n);
             static_assert(
-                iter::is_bidirectional_tag<iterator_category>::value
+                iter::is_bidirectional_tag<range_category>::value
               , "Must be bidirectional iterator"
             );
         }
@@ -146,10 +146,10 @@ namespace elib { namespace ranges
                 m_end
               , -std::max((difference_type)0, n)
               , m_begin
-              , iterator_category()
+              , range_category()
             );
             static_assert(
-                iter::is_bidirectional_tag<iterator_category>::value
+                iter::is_bidirectional_tag<range_category>::value
               , "Must be bidirectional iterator"
             );
         }
@@ -166,11 +166,11 @@ namespace elib { namespace ranges
                 );
             }
             else {
-                return m_dispatch_split_neg(index, iterator_category{});
+                return m_dispatch_split_neg(index, range_category{});
             }
             
             static_assert(
-                iter::is_forward_tag<iterator_category>::value
+                iter::is_forward_tag<range_category>::value
               , " must be forward iterator"
             );
         }
@@ -178,9 +178,9 @@ namespace elib { namespace ranges
         ////////////////////////////////////////////////////////////////////////
         range slice(difference_type start, difference_type stop) const
         {
-            return m_dispatch_slice(start, stop, iterator_category{});
+            return m_dispatch_slice(start, stop, range_category{});
             static_assert(
-                iter::is_forward_tag<iterator_category>::type
+                iter::is_forward_tag<range_category>::type
               , "Must be forward iterator"
             );
         }
@@ -189,7 +189,7 @@ namespace elib { namespace ranges
         {
             return split(start).second;
             static_assert(
-                iter::is_forward_tag<iterator_category>::type
+                iter::is_forward_tag<range_category>::type
               , "Must be forward iterator"
             );
         }

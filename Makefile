@@ -1,13 +1,10 @@
 SHELL := /bin/bash
 
-
-
 .PHONY: all
 all: 
 	@ mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
 	@ $(MAKE) --no-print-directory -C build
 
-	
 .PHONY: e
 e:
 	@ $(MAKE) --no-print-directory distclean
@@ -19,7 +16,6 @@ ej:
 	@ $(MAKE) --no-print-directory distclean
 	@ $(MAKE) --no-print-directory redep
 	@ $(MAKE) --no-print-directory -j2 -C build
-	
 	
 .PHONY: clean
 clean:
@@ -39,7 +35,6 @@ distclean:
 .PHONY: install
 install:
 	@ $(MAKE) --no-print-directory -C build install
-	
 	
 .PHONY: check
 check:
@@ -73,3 +68,10 @@ scan:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake -DCONFIG_ELIB_COVERITY_SCAN=ON .. ; cd ..
 	@ cov-build --dir cov-int $(MAKE) -C build all
+
+.PHONY: config
+config:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(CONFIG) .. ; cd ..
+	@ $(MAKE) --no-print-directory -C build all
+	@ $(MAKE) --no-print-directory check

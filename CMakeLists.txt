@@ -25,6 +25,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 # TODO: Move the std library confige to enviroment variables.
 option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
+option(CONFIG_USE_OPT_LIBCXX "use /opt/clang3.4/lib/" OFF)
 
 # Address, Memory and Thread sanitizers
 # can be configured for newer versions of clang and GCC
@@ -124,8 +125,8 @@ if( NOT CMAKE_BUILD_TYPE )
        "Choose the type of build"
        FORCE )
 endif()
-set( CMAKE_CXX_FLAGS_RELEASE "-O3  -DNDEBUG " )
-set( CMAKE_C_FLAGS_RELEASE "-O3  -DNDEBUG " )
+set( CMAKE_CXX_FLAGS_RELEASE "-O2" )
+set( CMAKE_C_FLAGS_RELEASE "-O2" )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 
@@ -204,12 +205,20 @@ endif()
 
 # Currently only GCC's libstdc++ works with -std=c++1y
 # TODO This is personal configuration. I need to get it out of here
-if (CONFIG_USE_OPT_LIBSTDCXX OR CONFIG_CXX1Y)
+if (CONFIG_USE_OPT_LIBSTDCXX)
     message( STATUS "Configuring for Library: libstdc++ in /opt/gcc4.9/lib64" )
     add_definitions( -nostdinc++ )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ -I/opt/gcc4.9/include/c++/4.9.0/")
 
     set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
+endif()
+
+if (CONFIG_USE_OPT_LIBCXX)
+    message( STATUS "Configuring for Library: libc++ in /opt/clang3.4/lib" )
+    add_definitions( -nostdinc++ )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/v1/x86_64-unknown-linux-gnu/ -I/opt/clang3.4/include/c++/v1")
+
+    set(STDLIB_LINK "-stdlib=libc++ -L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64 -L/opt/clang3.4/lib -Wl,-rpath -Wl,/opt/clang3.4/lib")
 endif()
 
 ################################################################################

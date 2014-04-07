@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_DEMANGLE_HPP
 #define ELIB_AUX_DEMANGLE_HPP
 
+# include <elib/config.hpp>
 /** 
  * Adapted (Read: almost stolen) from:
  * boost/units/detail/utility.hpp
@@ -8,7 +9,7 @@
 # include <string>
 # include <cstdlib>
 
-# if defined(__GNUC__) && __GNUC__ >= 3
+# if defined(ELIB_CONFIG_LIBSTDCXX) && defined(__GNUC__) && __GNUC__ >= 3
 #   define ELIB_AUX_HAS_DEMANGLE
 # endif
 

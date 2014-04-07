@@ -85,9 +85,13 @@ scan:
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake -DCONFIG_ELIB_COVERITY_SCAN=ON .. ; cd ..
 	@ cov-build --dir cov-int $(MAKE) -C build all
 
+.PHONY: config_silent
+config_silent:
+	@ $(MAKE) -j2 --no-print-directory -C build all 1> /dev/null
+
 .PHONY: config
 config:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) $(STDLIB) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_ONLY_SOURCE=ON .. ; cd ..
-	@ $(MAKE) --no-print-directory -C build -j2 all 1> /dev/null
-	@ $(MAKE) --no-print-directory check_shared
+	@ time $(MAKE) --no-print-directory config_silent
+	@ $(MAKE) --no-print-directory check

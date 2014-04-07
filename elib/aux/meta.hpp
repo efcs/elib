@@ -12,7 +12,9 @@
 # include <elib/aux/logical.hpp>
 # include <elib/aux/no_decay.hpp>
 # include <elib/aux/none.hpp>
-# include <elib/aux/not_defined.hpp>
+# include <elib/aux/undefined.hpp>
 # include <elib/aux/type.hpp>
+# include <elib/aux/type_pair.hpp>
+# include <elib/aux/type_vector.hpp>
 # 
 #endif /* ELIB_AUX_META_HPP */

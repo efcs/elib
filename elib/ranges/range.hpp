@@ -1,10 +1,10 @@
 #ifndef ELIB_RANGES_RANGE_HPP
 #define ELIB_RANGES_RANGE_HPP
 
-# include <elib/ranges/begin_end.hpp>
-# include <elib/ranges/operations.hpp>
 # include <elib/ranges/traits.hpp>
 # include <elib/aux.hpp>
+# include <elib/iter/algorithm.hpp>
+# include <elib/iter/traits.hpp>
 # include <algorithm>
 # include <iostream>
 # include <iterator>
@@ -12,327 +12,272 @@
 
 namespace elib { namespace ranges
 {
+    
     ////////////////////////////////////////////////////////////////////////////
     template<class Iterator>
-    class range
+    class range 
     {
-    public:                                            // types
+    public:
+        // types
+        using iterator_category = typename 
+        std::iterator_traits<Iterator>::iterator_category;
+        
         using value_type = typename 
         std::iterator_traits<Iterator>::value_type;
-        using reference = typename std::iterator_traits<Iterator>::reference;
-        using difference_type = typename std::iterator_traits<Iterator>::difference_type;
-        using iterator = Iterator;
-        using const_iterator = Iterator;
-
-    public:                                             // construction, assignment
+        
+        using reference = typename
+        std::iterator_traits<Iterator>::reference;
+        
+        using pointer = typename
+        std::iterator_traits<Iterator>::pointer;
+        
+        using difference_type = typename
+        std::iterator_traits<Iterator>::difference_type;
+        
+    public:
+        // constructors
         range() = default;
-
-        template< class Iterator2 >
-        range(Iterator2 const & xbegin, Iterator2 const & xend)
-          : m_iters(xbegin, xend)
+        
+        constexpr range(Iterator xbegin, Iterator xend)
+          : m_begin(xbegin), m_end(xend)
         {}
-
-        template< class Range >
-        range(Range && r)
-          : m_iters(
-              ranges::begin( elib::forward<Range>(r) )
-            , ranges::end  ( elib::forward<Range>(r) )
-            )
+        
+        template<
+            class R
+          , ELIB_ENABLE_IF(not aux::is_pointer<R>::value)
+          , ELIB_ENABLE_IF(is_range<R>::value)
+          , ELIB_ENABLE_IF(aux::is_convertible<aux::begin_result_t<R>, Iterator>::value)
+          >
+        constexpr range(R && r)
+          : m_begin( adl_begin(elib::forward<R>(r)) )
+          , m_end  ( adl_end  (elib::forward<R>(r)) )
         {}
+        
+        //template<typename R>
+        //constexpr range(R && r);
 
-        template< class Range >
-        range& operator=( Range && r )
+        ////////////////////////////////////////////////////////////////////////
+        constexpr Iterator begin() const
+        { return m_begin; }
+        
+        constexpr Iterator end() const
+        { return m_end; }
+
+        ////////////////////////////////////////////////////////////////////////
+        constexpr reference front() const
         {
-            m_iters = {
-                ranges::begin( elib::forward<Range>(r) )
-              , ranges::end  ( elib::forward<Range>(r) )
-            };
-        }
-
-    public:                                             // forward range functions
-        Iterator begin() const
-        { return m_iters.first; }
-        
-        Iterator end() const
-        { return m_iters.second; }
-        
-        difference_type size() const
-        { return m_iters.second - m_iters.first; }
-        
-        bool empty() const
-        { return size() == 0; }
-
-    public:                                             // convenience
-        explicit operator bool() const
-        { return empty(); }
-        
-        bool equal(range const & other) const
-        { return begin() == other.begin() && end() == other.end(); }
-        
-        reference front() const
-        { return *begin(); }
-        
-        reference back() const
-        { return *--end(); }
-        
-        reference operator[]( difference_type at ) const
-        {
-            ELIB_ASSERT( 0 <= at && at <= size() );
-            return *(begin() + at);
+            return *begin();
         }
         
-        range & advance_begin( difference_type n )
+        ////////////////////////////////////////////////////////////////////////
+        constexpr reference back() const
         {
-            m_iters.first = std::advance(m_iters.first, n);
-            return *this;
+            return *std::prev(end());
+            static_assert(
+                iter::is_bidirectional_tag<iterator_category>::value
+              , "Must be convertible to bidirectional_iterator_tag"
+            );
         }
         
-        range & advance_end( difference_type n )
+        ////////////////////////////////////////////////////////////////////////
+        constexpr reference operator[](difference_type index) const
         {
-            m_iters.second = std::advance(m_iters.second, n);
-            return *this;
+            return (index >= 0 ? begin() : end())[index];
+            static_assert(
+                iter::is_random_access_tag<iterator_category>::value
+              , "Must be convertible to random_access_iterator_tag"
+            );
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        constexpr bool empty() const
+        { return begin() == end(); }
+        
+        ////////////////////////////////////////////////////////////////////////
+        constexpr difference_type size() const
+        { return iter::size(begin(), end(), iterator_category()); }
+
+        ////////////////////////////////////////////////////////////////////////
+        void pop_front()
+        {
+            ELIB_ASSERT(!empty());
+            ++m_begin;
+        }
+        
+        void pop_front(difference_type n)
+        {
+            ELIB_ASSERT(size() <= n);
+            std::advance(m_begin, n);
+        }
+        
+        void pop_front_upto(difference_type n)
+        {
+            iter::advance_upto(
+                m_begin
+              , std::max((difference_type)0, n)
+              , m_end
+              , iterator_category()
+            );
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        void pop_back()
+        {
+            --m_end;
+            static_assert(
+               iter::is_bidirectional_tag<iterator_category>::value
+              , "Must be bidirectional_iterator_tag"
+            );
+        }
+        
+        
+        void pop_back(difference_type n)
+        {
+            std::advance(m_end, -n);
+            static_assert(
+                iter::is_bidirectional_tag<iterator_category>::value
+              , "Must be bidirectional iterator"
+            );
+        }
+        
+        void pop_back_upto(difference_type n)
+        {
+            iter::advance_upto(
+                m_end
+              , -std::max((difference_type)0, n)
+              , m_begin
+              , iterator_category()
+            );
+            static_assert(
+                iter::is_bidirectional_tag<iterator_category>::value
+              , "Must be bidirectional iterator"
+            );
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        std::pair<range, range> split(difference_type index) const
+        {
+            if (index >= 0) {
+                range second = *this;
+                second.pop_front_upto(index);
+                return std::make_pair(
+                    range(begin(), second.begin())
+                  , second
+                );
+            }
+            else {
+                return m_dispatch_split_neg(index, iterator_category{});
+            }
+            
+            static_assert(
+                iter::is_forward_tag<iterator_category>::value
+              , " must be forward iterator"
+            );
+        }
+        
+        ////////////////////////////////////////////////////////////////////////
+        range slice(difference_type start, difference_type stop) const
+        {
+            return m_dispatch_slice(start, stop, iterator_category{});
+            static_assert(
+                iter::is_forward_tag<iterator_category>::type
+              , "Must be forward iterator"
+            );
+        }
+        
+        range slice(difference_type start) const
+        {
+            return split(start).second;
+            static_assert(
+                iter::is_forward_tag<iterator_category>::type
+              , "Must be forward iterator"
+            );
         }
 
     private:
-        std::pair<iterator, iterator> m_iters;
+        
+        ////////////////////////////////////////////////////////////////////////
+        std::pair<range, range> m_dispatch_split_neg(
+            difference_type n
+          , std::forward_iterator_tag
+          ) const
+        {
+            ELIB_ASSERT(n <= 0);
+            return split(std::max<difference_type>(0, size() + n));
+        }
+        
+        std::pair<range, range> m_dispatch_split_neg(
+            difference_type n
+          , std::bidirectional_iterator_tag
+          ) const
+        {
+            ELIB_ASSERT(n <= 0);
+            range first = *this;
+            first.pop_back_upto(-n);
+            return std::make_pair(first, range(first.end(), end()));
+        }
+        
+        ////////////////////////////////////////////////////////////////////////
+        range m_dispatch_slice(
+            difference_type start, difference_type stop
+          , std::forward_iterator_tag
+          ) const;
+        
+        range m_dispatch_slice(
+            difference_type start, difference_type stop
+          , std::bidirectional_iterator_tag
+          ) const;
+          
+        range m_dispatch_slice(
+            difference_type start, difference_type stop
+          , std::random_access_iterator_tag
+          ) const;
+        
+    private:
+        Iterator m_begin, m_end;
     };
 
     ////////////////////////////////////////////////////////////////////////////
-    template< class Range >
-    class sub_range : public range< range_iterator_t<Range> >
+    template<class Iterator>
+    constexpr range<Iterator> make_range(Iterator begin, Iterator end)
     {
-    public: 
-        using base_type = range< range_iterator_t<Range> >;
-        using iterator = range_iterator_t<Range>;
-        using const_iterator = range_iterator_t<const Range>;
-        using const_reference = typename std::iterator_traits<const_iterator>::reference;
-        using value_type = typename base_type::value_type;
-        using reference = typename base_type::reference;
-        using difference_type = typename base_type::difference_type;
-
-    public:                                         // construction, assignment
-        sub_range() = default;
-
-        template< class Iterator >
-        sub_range(Iterator const & xbegin, Iterator const & xend)
-          : base_type(xbegin, xend)
-        {}
-
-        template< class Range2 >
-        sub_range(Range2 && r)
-          : base_type( elib::forward<Range2>(r) )
-        {}
-
-        template< class Range2 >
-        sub_range & operator=(Range2 && r)
-        {
-            base_type::operator=(elib::forward<Range2>(r));
-            return *this;;
-        }
-
-    public:                                          // forward range functions 
-        iterator begin()
-        { return base_type::begin();}
-        
-        const_iterator begin() const
-        { return base_type::begin(); }
-        
-        iterator end()
-        { return base_type::end(); }
-        
-        const_iterator  end() const
-        { return base_type::end(); }
-
-    public:                                             // convenience 
-        reference front()
-        { return base_type::front(); }
-        
-        const_reference  front() const
-        { return base_type::front(); }
-        
-        reference back()
-        { return base_type::back(); }
-        
-        const_reference back() const
-        { return base_type::back(); }
-        
-        reference operator[](difference_type at)
-        { return base_type::operator[](at); }
-        
-        const_reference operator[](difference_type at) const
-        { return base_type::operator[](at); }
-        
-        sub_range & advance_begin( difference_type n )
-        { 
-            base_type::advance_begin(n);
-            return *this;
-        }
-        
-        sub_range & advance_end( difference_type n )
-        {
-            base_type::advance_end(n);
-            return *this;
-        }
-    };                                                      // class sub_range
-
-    ////////////////////////////////////////////////////////////////////////////
-    // stream output
-    template< class Iterator, class T, class Traits >
-    std::basic_ostream<T,Traits>& 
-    operator<<(
-        std::basic_ostream<T,Traits> & out
-      , range<Iterator> const & r
-      )
-    {
-        using out_iter = std::ostream_iterator<
-            typename std::iterator_traits<Iterator>::value_type, T, Traits
-          >;
-        
-        std::copy(
-            r.begin(), r.end()
-          , out_iter(out)
-        ); 
-        
-        return out;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // comparison
-    template< class Iterator, class Iterator2 >
-    bool operator==(range<Iterator> const & lhs, range<Iterator2> const & rhs)
-    {
-        return std::equal(
-            ranges::begin(lhs), ranges::end(lhs)
-          , ranges::begin(rhs)
-        );
-    }
-
-    template< class Iterator, class Range >
-    bool operator==(range<Iterator> const & lhs, Range const & rhs)
-    {
-        return std::equal(
-            ranges::begin(lhs), ranges::end(lhs)
-          , ranges::begin(rhs)
-        );
-    }
-
-    template< class Iterator, class Range >
-    bool operator==(Range const & lhs, range<Iterator> const & rhs)
-    {
-        return std::equal(
-            ranges::begin(lhs), ranges::end(lhs)
-          , ranges::begin(rhs)
-        );
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Iterator, class Iterator2 >
-    bool operator!=(range<Iterator> const & lhs, range<Iterator2> const & rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-    template< class Iterator, class Range >
-    bool operator!=(range<Iterator> const & lhs, Range const & rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-    template< class Iterator, class Range >
-    bool operator!=(Range const & lhs, range<Iterator> const & rhs)
-    {
-        return !(lhs == rhs);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Iterator, class Iterator2 >
-    bool operator<(range<Iterator> const & lhs, range<Iterator2> const & rhs)
-    {
-        return std::lexicographical_compare(
-            ranges::begin(lhs), ranges::end(lhs)
-          , ranges::begin(rhs), ranges::end(rhs)
-          );
-    }
-
-    template< class Iterator, class Range >
-    bool operator<(range<Iterator> const & lhs, Range const & rhs)
-    {
-        return std::lexicographical_compare(
-            ranges::begin(lhs), ranges::end(lhs)
-          , ranges::begin(rhs), ranges::end(rhs)
-          );
-    }
-
-    template< class Iterator, class Range >
-    bool operator<(Range const & lhs, range<Iterator> const & rhs)
-    {
-        return std::lexicographical_compare(
-            ranges::begin(lhs), ranges::end(lhs)
-          , ranges::begin(rhs), ranges::end(rhs)
-          );
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Range, class Range2 >
-    bool operator==(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
-    {
-        using lhs_base = typename sub_range<Range>::base_type const &;
-        using rhs_base = typename sub_range<Range2>::base_type const &;
-        return static_cast<lhs_base>(lhs) == static_cast<rhs_base>(rhs);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Range, class Range2 >
-    bool operator!=(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
-    {
-        using lhs_base = typename sub_range<Range>::base_type const &;
-        using rhs_base = typename sub_range<Range2>::base_type const &;
-        return static_cast<lhs_base>(lhs) != static_cast<rhs_base>(rhs);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Range, class Range2 >
-    bool operator<(sub_range<Range> const & lhs, sub_range<Range2> const & rhs)
-    {
-        using lhs_base = typename sub_range<Range>::base_type const &;
-        using rhs_base = typename sub_range<Range2>::base_type const &;
-        return static_cast<lhs_base>(lhs) < static_cast<rhs_base>(rhs);
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    // external construction
-    template< class Iterator >
-    range<Iterator>
-    make_range(Iterator const & begin, Iterator const & end)
-    {
-        return range<Iterator>(begin, end);
+        return range<Iterator>(elib::move(begin), elib::move(end));
     }
     
-    template< class Range >
-    range<range_iterator_t<Range>> 
-    make_range(Range && r)
+    ////////////////////////////////////////////////////////////////////////////
+    template<
+        class Range
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    constexpr auto make_range(Range && r)
+        -> range<decltype( elib::adl_begin(declval<Range>()) )>
     {
-        return range<range_iterator_t<Range>>(elib::forward<Range>(r));
+        using iter_type = decltype( elib::adl_begin(declval<Range>()) );
+        return range<iter_type>( elib::forward<Range>(r) );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template<
+        class Range
+      , ELIB_ENABLE_IF(is_contigious_range<Range>::value)
+      , ELIB_ENABLE_IF(aux::is_pointer<
+          decltype(&*adl_begin(declval<Range>()))
+          >::value
+        )
+      >
+    constexpr auto make_ptr_range(Range && r) 
+      -> range< decltype(&*elib::adl_begin(declval<Range>())) >
+    {
+        return range<decltype(&*elib::adl_begin(declval<Range>()))>(
+            elib::forward<Range>(r)
+          );
     }
 
-    template< class Range >
-    range<range_iterator_t<Range>> 
-    make_range(
-        Range && r
-      , range_difference_t<Range> advance_begin
-      , range_difference_t<Range> advance_end 
-      )
-    {
-        range<range_iterator_t<Range>> tmp(elib::forward<Range>(r));
-        tmp.advance_begin(advance_begin);
-        tmp.advance_end(advance_end);
-        return tmp;
-    }
 }}                                                          // namespace elib
 namespace elib
 {
     using ranges::range;
-    using ranges::sub_range;
     using ranges::make_range;
+    using ranges::make_ptr_range;
 }                                                           // namespace elib
 #endif /* ELIB_RANGES_RANGE_HPP */

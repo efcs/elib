@@ -1,7 +1,8 @@
-#ifndef ELIB_AUX_GET_SWAP_HPP
-#define ELIB_AUX_GET_SWAP_HPP
+#ifndef ELIB_AUX_SWAP_HPP
+#define ELIB_AUX_SWAP_HPP
 
 # include <elib/aux/traits/is_swappable.hpp>
+# include <elib/aux/enable_if.hpp>
 # include <utility>
 
 namespace elib { namespace aux
@@ -95,6 +96,13 @@ namespace elib { namespace aux
         return get_swap_detail::get_noexcept_swap_impl<T, U>(0);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T, class U>
+    void adl_swap(T & lhs, U & rhs) noexcept(is_noexcept_swappable<T, U>::value)
+    {
+        get_swap<T, U>()(lhs, rhs);
+    }
+    
 }}                                                          // namespace elib
 namespace elib
 {
@@ -103,5 +111,6 @@ namespace elib
     using aux::get_noexcept_swap;
     using aux::get_swap_ptr;
     using aux::get_noexcept_swap_ptr;
+    using aux::adl_swap;
 }                                                           // namespace elib
-#endif /* ELIB_AUX_GET_SWAP_HPP */
+#endif /* ELIB_AUX_SWAP_HPP */

@@ -1,107 +1,89 @@
 #ifndef ELIB_RANGES_TRAITS_HPP
 #define ELIB_RANGES_TRAITS_HPP
 
-# include <elib/ranges/begin_end.hpp>
-# include <iterator>
+# include <elib/aux.hpp>
+# include <elib/iter/traits.hpp>
+
+# include <array>
+# include <string>
+# include <vector>
+# include <cstddef>
 
 namespace elib { namespace ranges
 {
     ////////////////////////////////////////////////////////////////////////////
-    template<class Range>
-    struct range_iterator
+    namespace detail
     {
-        using type = decltype(ranges::begin( *((Range*)nullptr) ));
-    };
-    
-    
-    template <class Range>
-    using range_iterator_t = typename range_iterator<Range>::type;
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class BidirectionalRange >
-    struct range_reverse_iterator
-    {
-        using type = std::reverse_iterator< range_iterator_t<BidirectionalRange> >;
-    };
-    
-    
-    template <class BidirectionalRange>
-    using range_reverse_iterator_t = typename 
-        range_reverse_iterator< BidirectionalRange >::type;
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Range >
-    struct range_value
-    {
-        using type = typename std::iterator_traits<range_iterator_t<Range>>::value_type;
-    };
-    
-    
-    template <class Range>
-    using range_value_t = typename range_value<Range>::type;
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Range >
-    struct range_reference
-    {
-        using type = typename 
-            std::iterator_traits< range_iterator_t<Range> >::reference;
-    };
-    
-    
-    template <class Range>
-    using range_reference_t = typename range_reference<Range>::type;
-
-    ////////////////////////////////////////////////////////////////////////////
-    template< class Range >
-    struct range_pointer
-    {
-        using type = typename 
-            std::iterator_traits< range_iterator_t<Range> >::pointer;
-    };
-    
-    
-    template <class Range>
-    using range_pointer_t = typename range_pointer<Range>::type;
+        template <
+            class T
+          , bool = elib::and_<aux::has_begin<T>, aux::has_end<T>>::value
+          >
+        struct is_range_impl
+        {
+            using is_same_result_ = 
+                aux::is_same<
+                    aux::begin_result_t<T>
+                  , aux::end_result_t<T>
+                  >;
+                
+            using type = typename
+              elib::and_<
+                  is_same_result_
+                , not_<aux::is_pointer<T>>
+              >::type;
+        };
+            
+        template <class T>
+        struct is_range_impl<T, false>
+        {
+            using type = elib::false_;
+        };
+    }                                                       // namespace detail
+        
+    ////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using is_range = typename detail::is_range_impl<T>::type;
     
     ////////////////////////////////////////////////////////////////////////////
-    template< class Range >
-    struct range_difference
+    namespace detail
     {
-        using type = typename 
-            std::iterator_traits< range_iterator_t<Range> >::difference_type;
-    };
-
-    
-    template <class Range>
-    using range_difference_t = typename range_difference<Range>::type;
-    
+        template <class T>
+        struct is_contigious_range_impl : elib::false_ {};
+        
+        template <class T>
+        struct is_contigious_range_impl<T &> : is_contigious_range_impl<T> {};
+        
+        template <class T>
+        struct is_contigious_range_impl<T &&> : is_contigious_range_impl<T> {};
+        
+        template <class T>
+        struct is_contigious_range_impl<T const> : is_contigious_range_impl<T> {};
+        
+        template <class T, std::size_t N>
+        struct is_contigious_range_impl<T[N]> : elib::true_ {};
+        
+        template <class T, std::size_t N>
+        struct is_contigious_range_impl<const T[N]> : elib::true_ {};
+        
+        template <class T, std::size_t N>
+        struct is_contigious_range_impl<std::array<T, N>> : elib::true_ {};
+        
+        template <>
+        struct is_contigious_range_impl<std::string> : elib::true_ {};
+        
+        template <class T, class Alloc>
+        struct is_contigious_range_impl<std::vector<T, Alloc>> : elib::true_ {}; 
+    }                                                       // namespace detail
+        
     ////////////////////////////////////////////////////////////////////////////
-    template< class Range >
-    struct range_category
-    {
-        using type = typename 
-            std::iterator_traits< range_iterator_t<Range> >::iterator_category;
-    };
-    
-    template <class Range>
-    using range_category_t = typename range_category<Range>::type;
+    template <class T>
+    struct is_contigious_range : detail::is_contigious_range_impl<T>::type
+    {};
+        
 }}                                                          // namespace elib
 namespace elib
 {
-    using ranges::range_iterator;
-    using ranges::range_iterator_t;
-    using ranges::range_reverse_iterator;
-    using ranges::range_reverse_iterator_t;
-    using ranges::range_value;
-    using ranges::range_value_t;
-    using ranges::range_reference;
-    using ranges::range_reference_t;
-    using ranges::range_pointer;
-    using ranges::range_pointer_t;
-    using ranges::range_difference;
-    using ranges::range_difference_t;
-    using ranges::range_category;
-    using ranges::range_category_t;
+    using ranges::is_range;
+    using ranges::is_contigious_range;
 }                                                           // namespace elib
 #endif /* ELIB_RANGES_TRAITS_HPP */

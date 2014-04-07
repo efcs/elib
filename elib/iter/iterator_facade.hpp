@@ -1,7 +1,7 @@
 #ifndef ELIB_ITER_ITERATOR_FACADE_HPP
 #define ELIB_ITER_ITERATOR_FACADE_HPP
 
-# include <elib/iter/iterator_traits.hpp>
+# include <elib/iter/traits.hpp>
 # include <elib/aux.hpp>
 # include <iterator>
 # include <cstddef>

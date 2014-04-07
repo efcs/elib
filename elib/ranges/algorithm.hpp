@@ -9,6 +9,12 @@
 
 namespace elib { namespace ranges { namespace algorithm_adl_barrier
 {
+    template <class T>
+    using not_range_or_iterator = 
+        elib::not_<elib::or_<
+            is_range<T>, iter::is_iterator<T>
+          >>;
+    
 ////////////////////////////////////////////////////////////////////////////////
 //                        all_of, any_of, none_of
 ////////////////////////////////////////////////////////////////////////////////
@@ -295,6 +301,65 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , p
     ))
     
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class InputIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      >
+    auto find_end(Range && r, InputIt first, InputIt last)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_end(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class InputIt
+      , class BinaryPred
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      >
+    auto find_end(Range && r, InputIt first, InputIt last, BinaryPred p)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_end(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , p
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class InputIt, class Range
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto find_end(InputIt first, InputIt last, Range && r)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_end(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+    ))
+    
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class InputIt, class Range
+      , class BinaryPred
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto find_end(InputIt first, InputIt last, Range && r, BinaryPred p)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_end(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , p
+    ))
+    
+    
+    
 ////////////////////////////////////////////////////////////////////////////////
 //                           find_first_of
 ////////////////////////////////////////////////////////////////////////////////
@@ -326,6 +391,63 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , elib::adl_end  ( elib::forward<Range1>(r1) )
       , elib::adl_begin( elib::forward<Range2>(r2) )
       , elib::adl_end  ( elib::forward<Range2>(r2) )
+      , p
+    ))
+    
+    ///////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class InputIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      >
+    auto find_first_of(Range && r, InputIt first, InputIt last)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_first_of(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class InputIt
+      , class BinaryPred
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      >
+    auto find_first_of(Range && r, InputIt first, InputIt last, BinaryPred p)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_first_of(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , p
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class InputIt, class Range
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto find_first_of(InputIt first, InputIt last, Range && r)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_first_of(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+    ))
+    
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class InputIt, class Range
+      , class BinaryPred
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto find_first_of(InputIt first, InputIt last, Range && r, BinaryPred p)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::find_first_of(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
       , p
     ))
     
@@ -387,6 +509,62 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , elib::adl_end  ( elib::forward<Range1>(r1) )
       , elib::adl_begin( elib::forward<Range2>(r2) )
       , elib::adl_end  ( elib::forward<Range2>(r2) )
+      , p
+    ))
+    
+    ///////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class InputIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      >
+    auto search(Range && r, InputIt first, InputIt last)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::search(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class InputIt
+      , class BinaryPred
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      >
+    auto search(Range && r, InputIt first, InputIt last, BinaryPred p)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::search(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , p
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class InputIt, class Range
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto search(InputIt first, InputIt last, Range && r)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::search(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class InputIt, class Range
+      , class BinaryPred
+      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto search(InputIt first, InputIt last, Range && r, BinaryPred p)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::search(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
       , p
     ))
     
@@ -683,6 +861,18 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
         elib::adl_begin( elib::forward<Range1>(r1) )
       , elib::adl_end  ( elib::forward<Range1>(r1) )
       , elib::adl_begin( elib::forward<Range2>(r2) )
+    ))
+    
+    template <
+        class Range1, class Iter1
+      , ELIB_ENABLE_IF(is_range<Range1>::value)
+      , ELIB_ENABLE_IF(iter::is_forward_iterator<Iter1>::value)
+      >
+    auto swap_ranges(Range1 && r1, Iter1 first1)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::swap_ranges(
+        elib::adl_begin( elib::forward<Range1>(r1) )
+      , elib::adl_end  ( elib::forward<Range1>(r1) )
+      , first1
     ))
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -1255,6 +1445,66 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
     
     ////////////////////////////////////////////////////////////////////////////
     template <
+        class Range, class Iter, class OutIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto merge(Range && r, Iter first, Iter last, OutIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::merge(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto merge(Range && r, Iter first, Iter last, OutIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::merge(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto merge(Iter first, Iter last, Range && r, OutputIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::merge(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto merge(Iter first, Iter last, Range && r, OutputIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::merge(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
         class Range, class RangeIt
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
@@ -1309,6 +1559,60 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
     
     ////////////////////////////////////////////////////////////////////////////
     template <
+        class Range, class Iter
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      >
+    auto includes(Range && r, Iter first, Iter last)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::includes(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      >
+    auto includes(Range && r, Iter first, Iter last, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::includes(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto includes(Iter first, Iter last, Range && r)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::includes(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto includes(Iter first, Iter last, Range && r, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::includes(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
         class Range1, class Range2, class OutIt
       , ELIB_ENABLE_IF(is_range<Range1>::value)
       , ELIB_ENABLE_IF(is_range<Range2>::value)
@@ -1334,6 +1638,66 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , elib::adl_end  ( elib::forward<Range1>(r1) )
       , elib::adl_begin( elib::forward<Range2>(r2) )
       , elib::adl_end  ( elib::forward<Range2>(r2) )
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_difference(Range && r, Iter first, Iter last, OutIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_difference(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_difference(Range && r, Iter first, Iter last, OutIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_difference(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_difference(Iter first, Iter last, Range && r, OutputIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_difference(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_difference(Iter first, Iter last, Range && r, OutputIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_difference(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
       , out, cmp
     ))
     
@@ -1369,6 +1733,66 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
     
     ////////////////////////////////////////////////////////////////////////////
     template <
+        class Range, class Iter, class OutIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_symmetric_difference(Range && r, Iter first, Iter last, OutIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_symmetric_difference(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_symmetric_difference(Range && r, Iter first, Iter last, OutIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_symmetric_difference(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_symmetric_difference(Iter first, Iter last, Range && r, OutputIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_symmetric_difference(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_symmetric_difference(Iter first, Iter last, Range && r, OutputIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_symmetric_difference(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
         class Range1, class Range2, class OutIt
       , ELIB_ENABLE_IF(is_range<Range1>::value)
       , ELIB_ENABLE_IF(is_range<Range2>::value)
@@ -1399,6 +1823,66 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
     
     ////////////////////////////////////////////////////////////////////////////
     template <
+        class Range, class Iter, class OutIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_intersection(Range && r, Iter first, Iter last, OutIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_intersection(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_intersection(Range && r, Iter first, Iter last, OutIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_intersection(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_intersection(Iter first, Iter last, Range && r, OutputIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_intersection(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_intersection(Iter first, Iter last, Range && r, OutputIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_intersection(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
         class Range1, class Range2, class OutIt
       , ELIB_ENABLE_IF(is_range<Range1>::value)
       , ELIB_ENABLE_IF(is_range<Range2>::value)
@@ -1424,6 +1908,66 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , elib::adl_end  ( elib::forward<Range1>(r1) )
       , elib::adl_begin( elib::forward<Range2>(r2) )
       , elib::adl_end  ( elib::forward<Range2>(r2) )
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_union(Range && r, Iter first, Iter last, OutIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_union(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class OutIt, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutIt>::value)
+      >
+    auto set_union(Range && r, Iter first, Iter last, OutIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_union(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , out, cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_union(Iter first, Iter last, Range && r, OutputIt out)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_union(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , out
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class OutputIt, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_output_iterator<OutputIt>::value)
+      >
+    auto set_union(Iter first, Iter last, Range && r, OutputIt out, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::set_union(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
       , out, cmp
     ))
     
@@ -1673,6 +2217,60 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , elib::adl_end  ( elib::forward<Range1>(r1) )
       , elib::adl_begin( elib::forward<Range2>(r2) )
       , elib::adl_end  ( elib::forward<Range2>(r2) )
+      , cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      >
+    auto lexicographical_compare(Range && r, Iter first, Iter last)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::lexicographical_compare(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Range, class Iter, class Compare
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      >
+    auto lexicographical_compare(Range && r, Iter first, Iter last, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::lexicographical_compare(
+        elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+      , first, last
+      , cmp
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto lexicographical_compare(Iter first, Iter last, Range && r)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::lexicographical_compare(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
+    ))
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <
+        class Iter, class Range, class Compare
+      , ELIB_ENABLE_IF(iter::is_input_iterator<Iter>::value)
+      , ELIB_ENABLE_IF(is_range<Range>::value)
+      >
+    auto lexicographical_compare(Iter first, Iter last, Range && r, Compare cmp)
+    ELIB_AUTO_RETURN_NOEXCEPT(std::lexicographical_compare(
+        first, last
+      , elib::adl_begin( elib::forward<Range>(r) )
+      , elib::adl_end  ( elib::forward<Range>(r) )
       , cmp
     ))
     

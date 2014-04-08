@@ -94,4 +94,8 @@ config:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) $(STDLIB) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_ONLY_SOURCE=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
-	@ $(MAKE) --no-print-directory check
+	@ echo === Running static tests ===
+	@ ./bin/elib_test_static --log_level=message --report_level=short
+	@ echo === Running shared tests ===
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	@ echo

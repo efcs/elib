@@ -23,7 +23,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Standard Library config
 # TODO: Move the std library confige to enviroment variables.
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 option(CONFIG_USE_OPT_LIBCXX "use /opt/clang3.4/lib/" OFF)
 
@@ -71,6 +71,9 @@ option(CONFIG_HEADER_ONLY_SOURCE
 # TODO aux is header only and turning this option off doesn't do anything
 # except turn the unit tests off
 option(CONFIG_LIB_AUX "Build Aux" ON)
+
+# Containers and adapters
+option(CONFIG_LIB_CONTAINER "Build containers" ON)
 
 # header only. I don't think any other library has mp as dependency.
 option(CONFIG_LIB_MPL "Build MPL" ON)
@@ -255,6 +258,7 @@ if (CONFIG_ELIB_ASSERT_CONFIG)
 endif()
 
 if (CONFIG_ELIB_COVERITY_SCAN)
+    message( STATUS "Configuring for Coverity Scan")
     add_definitions( -DELIB_CONFIG_COVERITY_SCAN )
     add_definitions( -include config/gcc_4_8_2_coverity_scan_missing_builtins.hpp)
 endif()
@@ -266,7 +270,7 @@ endif()
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "/usr" 
         CACHE PATH "library install prefix" FORCE)
-    MESSAGE(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
+    MESSAGE(STATUS "Configuring for Install Prefix: ${CMAKE_INSTALL_PREFIX}")
 endif()
 
 set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)

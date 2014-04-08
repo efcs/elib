@@ -63,6 +63,7 @@ set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
 ##                             Library Parts
 ################################################################################
 include(elib/build.cmake)
+include_library_if(CONFIG_LIB_CONTAINER   container/build.cmake   )
 include_library_if(CONFIG_LIB_EXCEPT      except/build.cmake      )
 include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake )
 include_library_if(CONFIG_LIB_RANGES      ranges/build.cmake      )

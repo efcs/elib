@@ -4,7 +4,7 @@ set -e # fail on error
 
 _run()
 {
-    git checkout master
+    git checkout staging
     git merge development
     git push
     git checkout development

@@ -128,6 +128,10 @@
 # if defined(ELIB_CONFIG_LIBSTDCXX)
 #   /* libstdc++ lacks support for some parts of <type_traits> */
 #   define ELIB_WORKAROUND_GUARD_LIBSTDCXX_LIMITED_TYPE_TRAITS 1
+#   
+#   if __GLIBCXX__ < 20140108L
+#     define ELIB_WORKAROUND_GUARD_LIBSTDCXX_CONST_ITERATOR_BUG 1
+#   endif
 # endif
 # 
 #endif /* ELIB_CONFIG_WORKAROUND_HPP */

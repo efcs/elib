@@ -514,12 +514,23 @@ namespace elib { namespace container
         ////////////////////////////////////////////////////////////////////////
         iterator erase(const_iterator pos)
         {
+#   if defined(ELIB_CONFIG_LIBSTDCXX) && ELIB_LIBRARY_VERSION < 20140108L
+            auto non_const_pos = begin() + (pos - cbegin());
+            return m_store.erase(non_const_pos);
+#   else
             return m_store.erase(pos);
+#   endif
         }
         
         iterator erase(const_iterator first, const_iterator last)
         {
+#   if defined(ELIB_CONFIG_LIBSTDCXX) && ELIB_LIBRARY_VERSION < 20140108L
+            auto non_const_first = begin() + (first - cbegin());
+            auto non_const_last = begin() + (last - cbegin());
+            return m_store.erase(non_const_first, non_const_last);
+#    else
             return m_store.erase(first, last);
+#    endif
         }
         
         
@@ -584,7 +595,6 @@ namespace elib { namespace container
             if (pos == end() || pos->first == k) return pos;
             return end();
         }
-        
         
         ////////////////////////////////////////////////////////////////////////
         std::pair<iterator, iterator>

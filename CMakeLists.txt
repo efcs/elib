@@ -23,7 +23,7 @@ option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
 # Standard Library config
 # TODO: Move the std library confige to enviroment variables.
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" ON)
+option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
 option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
 option(CONFIG_USE_OPT_LIBCXX "use /opt/clang3.4/lib/" OFF)
 

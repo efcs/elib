@@ -188,7 +188,13 @@ namespace elib { namespace container
         flat_map_base(InputIt first, InputIt last)
           : m_cmp(), m_store(first, last)
         {
-            std::sort(begin(), end(), m_cmp);
+            std::stable_sort(begin(), end(), m_cmp);
+            auto end_pos = std::unique(
+                begin(), end()
+              , [](value_type const & lhs, value_type const & rhs)
+                { return lhs.first == rhs.first; }
+              );
+            m_store.erase(end_pos, end());
         }
         
         ////////////////////////////////////////////////////////////////////////

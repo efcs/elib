@@ -12,19 +12,19 @@
 #define STR(x) XSTR(x)
 #define XSTR(x) #x
 
-using value_type = std::pair<std::size_t, std::size_t>;
-using flat_map = elib::flat_map<std::size_t, std::size_t>;
-using linear_flat_map = elib::linear_flat_map<std::size_t, std::size_t>;
-using standard_map = std::map<std::size_t, std::size_t>;
+using value_type = std::pair<int, int>;
+using flat_map = elib::flat_map<int, int>;
+using linear_flat_map = elib::linear_flat_map<int, int>;
+using standard_map = std::map<int, int>;
 
 
-std::vector<value_type> make_values(std::size_t to_add)
+std::vector<value_type> make_values(int to_add)
 {
     std::vector<value_type> dest;
     dest.reserve(to_add);
     
-    for (std::size_t i=0; i < to_add; ++i) {
-        dest.push_back(value_type(i, i));
+    for (int i=0; i < to_add; ++i) {
+        dest.emplace_back(value_type(i, i));
     }
     
     std::random_shuffle(dest.begin(), dest.end());
@@ -41,7 +41,7 @@ MapType construct_test(std::vector<value_type> const & v)
 template <class MapType>
 void find_test(std::vector<value_type> const & v, MapType const & m)
 {
-    for (int i=0; i < 1000; ++i) {
+    for (int i=0; i < 10; ++i) {
         for (auto & kv : v) {
             m.find(kv.first);
         }
@@ -49,15 +49,16 @@ void find_test(std::vector<value_type> const & v, MapType const & m)
 }
 
 template <class MapType>
-void iter_test(MapType const & m)
+int iter_test(MapType const & m)
 {
-    std::size_t accum = 0;
+    int accum = 0;
     for (int i=0; i < 100; ++i) {
         for (auto & kv : m) {
             accum += kv.first;
             accum %= 2;
         }
     }
+    return accum;
 }
 
 template <class Fn>
@@ -84,9 +85,11 @@ int main()
 {
     std::cout << "Testing " STR(MAP_TYPE) << std::endl;
     using Map = MAP_TYPE;
-    auto kv = make_values(1000000);
+    auto kv = make_values(100000000);
     Map m;
+    int x = 0;
     time("Construct", [&]() { m = construct_test<Map>(kv); });
     //time("Find", [&]() { find_test(kv, m); });
-    time("Iterate", [&]() { iter_test(m); });
+    time("Iterate", [&]() { x = iter_test(m); });
+    std::cout << x;
 }

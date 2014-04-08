@@ -17,8 +17,8 @@ clean:
 
 .PHONY: check
 check: $(OBJS)
-	./standard_map.out
-	@ echo
 	./flat_map.out
 	@ echo
 	./linear_flat_map.out
+	@ echo
+	./standard_map.out

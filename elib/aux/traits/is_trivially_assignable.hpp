@@ -12,8 +12,8 @@ namespace elib { namespace aux
         using std::is_trivially_assignable;
         
 #   if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_trivially_assignable_v = is_trivially_assignable<T>::value;
+        template <class T, class U>
+        constexpr bool is_trivially_assignable_v = is_trivially_assignable<T, U>::value;
 #   endif
 # endif /* LIBSTDCXX_LIMITED_TYPE_TRAITS */
     }                                                       //namespace traits

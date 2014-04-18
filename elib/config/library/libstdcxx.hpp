@@ -11,12 +11,12 @@
 #   error "unsupported version of libstdc++"
 # endif
 # 
-# if ELIB_COMPILER_VERSION < 40800L
+# if defined(ELIB_CONFIG_GCC) && ELIB_COMPILER_VERSION < 40800L
 #   define ELIB_CONFIG_LIBSTDCXX_HAS_TRIVIAL_DESTRUCTOR_WORKAROUND
 #   define ELIB_CONFIG_NO_IS_NOTHROW_DESTRUCTIBLE
 # endif
 # 
-# if __GLIBCXX__ >= 40900L
+# if defined(ELIB_CONFIG_GCC) && ELIB_COMPILER_VERSION >= 40900L
 #   define ELIB_CONFIG_HAS_REGEX 1
 # endif
 # 

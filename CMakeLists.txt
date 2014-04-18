@@ -131,13 +131,19 @@ endif()
 
 set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
-if ($ENV{CXXFLAGS})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} $ENV{CXXFLAGS}")
+
+if (DEFINED ENV{CXXFLAGS})
+    message(STATUS "Configuring with extra Flags: $ENV{CXXFLAGS}")
+    string(STRIP "$ENV{CXXFLAGS}" TMP_CXXFLAGS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TMP_CXXFLAGS}")
 endif()
-if ($ENV{LDFLAGS})
-    set(STDLIB_LINK "$ENV{LDFLAGS}")
-    string(STRIP "$ENV{LDFLAGS}" "${STDLIB_LINK}")
+
+if (DEFINED ENV{LDFLAGS})
+    string(STRIP "$ENV{LDFLAGS}" TMP_LDFLAGS)
+    set(STDLIB_LINK "${TMP_LDFLAGS}")
+    message(STATUS "Configuring Link Flags: ${STDLIB_LINK}")
 endif()
+
 
 ################################################################################
 ##                         Compiler Detection

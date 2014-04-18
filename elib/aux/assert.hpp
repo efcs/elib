@@ -49,6 +49,7 @@
 #define ELIB_AUX_ASSERT_HPP
 
 # include <elib/pp/overload.hpp>
+# include <elib/aux/attributes.hpp>
 # include <iostream>
 # include <cstdlib>
 
@@ -102,7 +103,7 @@ namespace elib { namespace aux
 {
     namespace detail
     {
-        [[noreturn]] ELIB_AUX_ASSERT_FUNCTION(assert_failed, std::cerr, std::abort())
+        ELIB_NORETURN ELIB_AUX_ASSERT_FUNCTION(assert_failed, std::cerr, std::abort())
     
         ELIB_AUX_ASSERT_FUNCTION(assert_failed_noexit, std::cerr, ((void)0))
     }                                                       // namespace detail

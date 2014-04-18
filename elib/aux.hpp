@@ -6,6 +6,7 @@
 #define ELIB_AUX_HPP
 #
 # include <elib/config.hpp>
+# include <elib/aux/attributes.hpp>
 # include <elib/aux/begin_end.hpp>
 # include <elib/aux/convert.hpp>
 # include <elib/aux/demangle.hpp>

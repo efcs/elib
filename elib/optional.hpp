@@ -4,6 +4,7 @@
 /**
  * Optional is implementation for proposal N793. 
  */
+# include <elib/config.hpp>
 # include <elib/aux.hpp>
 # include <initializer_list>
 # include <stdexcept>
@@ -387,6 +388,7 @@ namespace elib
         }
         
         ////////////////////////////////////////////////////////////////////////
+# if ! defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
         template <
             class U
           , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
@@ -405,6 +407,16 @@ namespace elib
             return bool(*this) ? elib::move(**this) 
                                : static_cast<T>(elib::forward<U>(v));
         }
+# else
+        template <
+            class U
+          , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
+          > 
+        constexpr T value_or(U && v) const
+        {
+            return bool(*this) ? **this : static_cast<T>(elib::forward<U>(v));
+        }
+# endif
        
        //
     private:

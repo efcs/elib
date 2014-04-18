@@ -4,4 +4,13 @@
 # define ELIB_COMPILER GCC
 # define ELIB_CONFIG_GCC 1
 
+# if __GNUC_MINOR__ < 8 || (__GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ < 1)
+#   define ELIB_CONFIG_NO_ATTRIBUTES 1
+#   define ELIB_CONFIG_NO_REF_QUALIFIERS 1
+# endif
+
+# if __GNUC_MINOR__ < 8
+#   define ELIB_CONFIG_NO_DECLTYPE
+# endif
+
 #endif /* ELIB_CONFIG_COMPILER_GCC_HPP */

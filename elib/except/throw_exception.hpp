@@ -37,14 +37,14 @@
 namespace elib { namespace except
 {
     template <class E>
-    [[noreturn]] void 
+    ELIB_NORETURN void 
     throw_exception(E const & e)
     {
         throw e;
     }
     
     template <class E>
-    [[noreturn]] void
+    ELIB_NORETURN void
     throw_exception_from(
         E & e
       , const char *file, const char* func, unsigned line
@@ -59,7 +59,7 @@ namespace elib { namespace except
         class E
       , ELIB_ENABLE_IF(!aux::is_lvalue_reference<E>::value)
     >
-    [[noreturn]] void
+    ELIB_NORETURN void
     throw_exception_from(
         E && e
       , const char *file, const char* func, unsigned line

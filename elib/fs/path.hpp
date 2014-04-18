@@ -60,9 +60,9 @@ namespace elib { namespace fs
         ~path() =  default;
         
       //assignments
-        path& operator=(const path& p) = default;
+        path & operator=(const path &) = default;
         
-        path& operator=(path&& p) noexcept
+        path & operator=(path&& p) noexcept
         {
           m_pathname.swap(p.m_pathname);
           return *this;

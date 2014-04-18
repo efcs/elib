@@ -3,6 +3,7 @@
 
 # include <elib/container/detail/flat_map_base.hpp>
 # include <elib/aux.hpp>
+# include <elib/config.hpp>
 # include <functional> /* std::less */
 # include <initializer_list>
 # include <utility> /* std::pair */
@@ -43,8 +44,22 @@ namespace elib { namespace container
         linear_flat_map() = default;
         linear_flat_map(linear_flat_map const &) = default;
         linear_flat_map(linear_flat_map &&) = default;
-        
+# if !defined(ELIB_CONFIG_NO_INHERITING_CONSTRUCTORS)
         using base_type::base_type;
+# else
+        explicit linear_flat_map(Compare const & cmp)
+          : base_type(cmp)
+        {}
+        
+        template <class InputIt>
+        linear_flat_map(InputIt first, InputIt last)
+          : base_type(first, last)
+        {}
+        
+        linear_flat_map(std::initializer_list<value_type> il)
+          : base_type(il)
+        {}
+# endif
         
         ~linear_flat_map() = default;
         

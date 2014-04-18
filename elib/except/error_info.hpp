@@ -6,7 +6,7 @@
 
 # define ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(Type)                      \
     static_assert(                                                     \
-      ::elib::except::is_error_info<::elib::aux::uncvref<Type>>::value \
+      ::elib::except::is_error_info< ::elib::aux::uncvref< Type>>::value \
       , #Type " is not an instance of error_info"                      \
     )
 

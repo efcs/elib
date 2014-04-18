@@ -4,6 +4,7 @@
 # include <elib/mp/algorithm/fold.hpp>
 # include <elib/mp/arg.hpp>
 # include <elib/mp/apply_wrap.hpp>
+# include <elib/mp/if.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/lambda.hpp>
 # include <elib/aux.hpp>

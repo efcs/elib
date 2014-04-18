@@ -10,8 +10,8 @@ namespace elib
 #   pragma clang diagnostic ignored "-Wexit-time-destructors"
 #   pragma clang diagnostic ignored "-Wglobal-constructors"
 # endif
-      const enum_map_t<::elib::log::level_e>
-      basic_enum_traits<::elib::log::level_e>::name_map =
+      const std::map< ::elib::log::level_e, std::string>
+      basic_enum_traits< ::elib::log::level_e>::name_map =
           { {::elib::log::level_e::debug, "debug"},
             {::elib::log::level_e::step, "step"},
             {::elib::log::level_e::info, "info"},

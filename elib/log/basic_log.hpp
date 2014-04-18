@@ -24,7 +24,7 @@ namespace elib
         basic_log() = default;
         basic_log(level_e l);
         
-        virtual ~basic_log() noexcept;
+        virtual ~basic_log() {}
         
         /* set & get the prompt for each log level,
         * the prompt is printed before the message for that level 

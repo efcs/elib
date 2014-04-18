@@ -822,7 +822,7 @@ namespace std
 {
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    struct hash<::elib::optional<T>>
+    struct hash< ::elib::optional<T>>
     {
         using result_type = typename hash<T>::result_type;
         using argument_type = ::elib::optional<T>;
@@ -835,7 +835,7 @@ namespace std
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    struct hash<::elib::optional<T &>>
+    struct hash< ::elib::optional<T &>>
     {
         using result_type = typename std::hash<T>::result_type;
         using argument_type = ::elib::optional<T &>;

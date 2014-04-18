@@ -15,7 +15,14 @@ namespace elib { namespace options
     class error : public std::logic_error
     {
     public:
-        using std::logic_error::logic_error;
+        explicit error(const char *what_arg)
+          : std::logic_error(what_arg)
+        {}
+        
+        explicit error(std::string const & what_arg)
+          : std::logic_error(what_arg)
+        {}
+        
         ELIB_DEFAULT_COPY_MOVE(error);
         virtual ~error() noexcept {}
     };
@@ -24,7 +31,14 @@ namespace elib { namespace options
     class option_name_error : public error
     {
     public:
-        using error::error;
+        explicit option_name_error(const char *what_arg)
+          : error(what_arg)
+        {}
+        
+        explicit option_name_error(std::string const & what_arg)
+          : error(what_arg)
+        {}
+        
         ELIB_DEFAULT_COPY_MOVE(option_name_error);
         virtual ~option_name_error() noexcept {}
     };
@@ -33,7 +47,13 @@ namespace elib { namespace options
     class duplicate_option_error : public error
     {
     public:
-        using error::error;
+        explicit duplicate_option_error(const char *what_arg)
+          : error(what_arg)
+        {}
+        
+        explicit duplicate_option_error(std::string const & what_arg)
+          : error(what_arg)
+        {}
         ELIB_DEFAULT_COPY_MOVE(duplicate_option_error);
         virtual ~duplicate_option_error() noexcept {}
     };
@@ -42,7 +62,13 @@ namespace elib { namespace options
     class multiple_values_error : public error
     {
     public:
-        using error::error;
+        explicit multiple_values_error(const char *what_arg)
+          : error(what_arg)
+        {}
+        
+        explicit multiple_values_error(std::string const & what_arg)
+          : error(what_arg)
+        {}
         ELIB_DEFAULT_COPY_MOVE(multiple_values_error);
         virtual ~multiple_values_error() noexcept {}
     };
@@ -51,7 +77,13 @@ namespace elib { namespace options
     class multiple_occurrences_error : public error
     {
     public:
-        using error::error;
+        explicit multiple_occurrences_error(const char *what_arg)
+          : error(what_arg)
+        {}
+        
+        explicit multiple_occurrences_error(std::string const & what_arg)
+          : error(what_arg)
+        {}
         ELIB_DEFAULT_COPY_MOVE(multiple_occurrences_error);
         virtual ~multiple_occurrences_error() noexcept {}
     };
@@ -60,7 +92,13 @@ namespace elib { namespace options
     class required_option_error : public error
     {
     public:
-        using error::error;
+        explicit required_option_error(const char *what_arg)
+          : error(what_arg)
+        {}
+        
+        explicit required_option_error(std::string const & what_arg)
+          : error(what_arg)
+        {}
         ELIB_DEFAULT_COPY_MOVE(required_option_error);
         virtual ~required_option_error() noexcept {}
     };
@@ -69,7 +107,13 @@ namespace elib { namespace options
     class unknown_option_error : public error
     {
     public:
-        using error::error;
+        explicit unknown_option_error(const char *what_arg)
+          : error(what_arg)
+        {}
+        
+        explicit unknown_option_error(std::string const & what_arg)
+          : error(what_arg)
+        {}
         ELIB_DEFAULT_COPY_MOVE(unknown_option_error);
         virtual ~unknown_option_error() noexcept {}
     };

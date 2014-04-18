@@ -24,7 +24,14 @@ namespace elib { namespace enumeration
     class bad_enum_cast 
       : public std::runtime_error
     {
-        using std::runtime_error::runtime_error;
+    public:
+        explicit bad_enum_cast(const char *what_arg)
+          : std::runtime_error(what_arg)
+        {}
+        
+        explicit bad_enum_cast(std::string const & what_arg)
+          : std::runtime_error(what_arg)
+        {}
     };
 # if defined(__clang__)
 #   pragma clang diagnostic pop

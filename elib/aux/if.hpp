@@ -8,41 +8,6 @@
 
 namespace elib { namespace aux
 {
-# if defined(ELIB_AUX_OLD_STYLE_IF)
-    ////////////////////////////////////////////////////////////////////////////
-    // aux::if_c
-    template <bool Pred, class Then, class Else>
-    struct if_c;
-
-    template <class Then, class Else>
-    struct if_c<true, Then, Else>
-    {
-        using type = Then;
-    };
-
-    template <class Then, class Else>
-    struct if_c<false, Then, Else>
-    {
-        using type = Else;
-    };
-
-    ////////////////////////////////////////////////////////////////////////////
-    // aux::if_c_t
-    template <bool Pred, class Then, class Else>
-    using if_c_t = typename if_c<Pred, Then, Else>::type;
-
-    ////////////////////////////////////////////////////////////////////////////
-    // aux::if_
-    template <class Pred, class Then, class Else>
-    struct if_ : if_c<static_cast<bool>(Pred::type::value), Then, Else> {};
-
-    ////////////////////////////////////////////////////////////////////////////
-    // aux::if_t
-    template <class Pred, class Then, class Else>
-    using if_t = typename if_c<static_cast<bool>(Pred::type::value), Then, Else>::type;
-
-# else /* ELIB_AUX_OLD_STYLE_IF */
-
     namespace detail
     {
         template <class T>
@@ -117,6 +82,26 @@ namespace elib { namespace aux
       , class Else = aux::none
       >
     struct if_;
+    
+    template <class Cond, class Then, class Else>
+    struct if_
+      : detail::conditional_accumulate<>::template 
+          else_if<Cond, Then, Else>
+    {};
+
+    template <class Cond>
+    struct if_<Cond>
+      : if_<
+            Cond
+          , aux::no_decay<void>
+          , aux::none
+          >
+    {};
+
+    template <class Cond, class Then>
+    struct if_<Cond, Then>
+      : detail::conditional_accumulate<>::template else_if<Cond, Then>
+    {};
 
     template <
         class Cond
@@ -139,30 +124,8 @@ namespace elib { namespace aux
       , class Then = aux::none
       , class Else = aux::none
       >
-    using if_c_t = typename if_<bool_<Cond>, Then, Else>::type;
+    using if_c_t = typename if_<integral_constant<Cond>, Then, Else>::type;
 
-
-    template <class Cond, class Then, class Else>
-    struct if_
-      : detail::conditional_accumulate<>::template 
-          else_if<Cond, Then, Else>
-    {};
-
-    template <class Cond>
-    struct if_<Cond>
-      : if_<
-            Cond
-          , aux::no_decay<void>
-          , aux::none
-          >
-    {};
-
-    template <class Cond, class Then>
-    struct if_<Cond, Then>
-      : detail::conditional_accumulate<>::template else_if<Cond, Then>
-    {};
-    
-# endif /* ELIB_AUX_OLD_STYLE_IF */
 
     ////////////////////////////////////////////////////////////////////////////
     // aux::eval_if

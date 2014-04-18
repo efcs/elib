@@ -2,6 +2,7 @@
 #define ELIB_FMT_HPP
 
 # include <elib/aux.hpp>
+# include <elib/config.hpp>
 # include <elib/CXX14/memory.hpp> /* for std::make_unique */
 
 # include <stdexcept>
@@ -101,9 +102,9 @@ namespace elib
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        std::string convert_str_impl(T const & t, explicit_cast_conversion_tag)
+        std::string convert_str_impl(T && t, explicit_cast_conversion_tag)
         {
-            return static_cast<std::string>(t);
+            return static_cast<std::string>(elib::forward<T>);
         }
         
         ///////////////////////////////////////////////////////////////////////
@@ -340,7 +341,11 @@ namespace elib
 #   pragma clang diagnostic ignored "-Wformat-nonliteral"
 # elif defined(__GNUG__)
 #   pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+#   if ELIB_COMPILER_VERSION >= 40800
+#     pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+#   else
+#     pragma GCC diagnostic ignored "-Wmissing-format-attribute"
+#   endif
 # endif
     inline std::string fmt_varargs(const char *msg, va_list args)
     {

@@ -8,7 +8,9 @@ namespace elib { namespace aux
 {
     namespace traits
     {
+# if ! defined(ELIB_CONFIG_NO_IS_NOTHROW_DESTRUCTIBLE)
         using std::is_nothrow_destructible;
+# endif
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T>

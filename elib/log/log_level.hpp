@@ -41,7 +41,7 @@ namespace elib
 
     /* level_e can be used with enum_traits */
     template <>
-    struct basic_enum_traits<::elib::log::level_e> 
+    struct basic_enum_traits< ::elib::log::level_e> 
     {    
         static constexpr ::elib::log::level_e ELIB_ENUM_DEFAULT_VALUE = 
           ::elib::log::default_log_level;
@@ -54,7 +54,7 @@ namespace elib
           
         static constexpr bool ELIB_ENUM_IS_CONTIGIOUS = true;
         
-        static const enum_map_t<::elib::log::level_e> name_map;
+        static const std::map< ::elib::log::level_e, std::string> name_map;
     };                                             // struct basic_enum_traits
     
   }                                                    // namespace enumeration

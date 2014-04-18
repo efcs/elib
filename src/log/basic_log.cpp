@@ -13,8 +13,6 @@ basic_log::basic_log(level_e l)
     : m_level(l)
 { }
 
-basic_log::~basic_log() noexcept
-{ }
 
 const std::string &
 basic_log::prompt(level_e l) const

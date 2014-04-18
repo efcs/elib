@@ -9,14 +9,12 @@
 namespace elib { namespace enumeration
 {
     
-    template <typename T>
-    using enum_map_t = const std::map<T, std::string>;
   
 # if 0    
     template <typename T>
     struct basic_enum_traits
     {
-        static enum_map_t<T> name_map;
+        static const std::map<T, std::string> name_map;
         
         static constexpr T ELIB_ENUM_DEFAULT_VALUE = T::value; 
         static constexpr T ELIB_ENUM_ERROR_VALUE = T::value;

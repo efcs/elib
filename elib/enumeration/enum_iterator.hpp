@@ -72,7 +72,7 @@ namespace elib { namespace enumeration
             : m_val{val}
             {}
             
-            virtual ~iter_impl() = default;
+            virtual ~iter_impl() noexcept {}
             
         protected:
             
@@ -127,7 +127,7 @@ namespace elib { namespace enumeration
             : m_iter{btraits::name_map.find(pos)}
             {}
             
-            virtual ~iter_impl() = default;
+            virtual ~iter_impl() noexcept {}
             
         protected:
             
@@ -156,11 +156,16 @@ namespace elib { namespace enumeration
     class enum_iterator 
       : public detail::iter_impl<T>
     {
+        using base_type = detail::iter_impl<T>;
     public:
-      
-        using detail::iter_impl<T>::iter_impl;
         
-        virtual ~enum_iterator() = default;
+        enum_iterator() = default;
+        explicit enum_iterator(T v)
+          : base_type(v)
+        {}
+        
+        
+        virtual ~enum_iterator() noexcept {}
         
         const T& operator*() const
         {

@@ -166,7 +166,7 @@ endif()
 if ( CXX_COMPILER_GCC )
    
     # check min version
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7.0")
         message(FATAL_ERROR "Insufficient GCC Version")
     elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
@@ -177,7 +177,7 @@ if ( CXX_COMPILER_GCC )
         message(FATAL_ERROR "Insufficient GCC Version for C++1y")
     endif()
 
-    set(CXX_GCC_FLAGS " -fmax-errors=3 " )
+    set(CXX_GCC_FLAGS " -fmax-errors=5 " )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
 
 elseif( CXX_COMPILER_CLANG ) ###################################################

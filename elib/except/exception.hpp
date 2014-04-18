@@ -16,7 +16,7 @@
 
 # define ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(Ex)                      \
     static_assert(                                                  \
-      ::elib::except::is_exception<::elib::aux::uncvref<Ex>>::value \
+      ::elib::except::is_exception< ::elib::aux::uncvref< Ex>>::value \
       , #Ex " is not an exception type"                             \
     )
 
@@ -53,7 +53,7 @@ namespace elib { namespace except
             return m_impl->m_fmt.c_str();
         }   
         
-        virtual ~exception() = default;
+        virtual ~exception() noexcept {}
 
     public:
         bool has_throw_info() const

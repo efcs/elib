@@ -20,7 +20,8 @@ namespace elib
         file_log() = default;
         /* open file for output */
         file_log(const std::string & filename);
-        ~file_log() = default;
+        
+        virtual ~file_log() { }
         
         /* return the path to the current file */
         const std::string & filename() const;

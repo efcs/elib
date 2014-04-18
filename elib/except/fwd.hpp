@@ -1,6 +1,7 @@
 #ifndef ELIB_EXCEPT_FWD_HPP
 #define ELIB_EXCEPT_FWD_HPP
 
+# include <elib/aux/attributes.hpp>
 # include <string>
 # include <system_error>
 
@@ -22,10 +23,10 @@ namespace elib { namespace except
     ////////////////////////////////////////////////////////////////////////////
     //
     template <class E>
-    [[noreturn]] void throw_exception(E const & e);
+    ELIB_NORETURN void throw_exception(E const & e);
     
     template <class E>
-    [[noreturn]] void 
+    ELIB_NORETURN void 
     throw_exception_from(
         E & e
       , const char* file, const char* func, unsigned line

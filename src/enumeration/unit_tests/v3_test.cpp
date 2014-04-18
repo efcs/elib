@@ -46,7 +46,7 @@ namespace elib
     template <>
     struct basic_enum_traits<C>
     {
-      static enum_map_t<C> name_map;
+      static const std::map<C, std::string> name_map;
       
       static constexpr C ELIB_ENUM_DEFAULT_VALUE = C::none;
       static constexpr C ELIB_ENUM_ERROR_VALUE = C::none; 
@@ -61,7 +61,7 @@ namespace elib
       static constexpr bool ELIB_ENUM_IS_MIXED_COMPARIBLE = true;
     };
     
-    enum_map_t<C> basic_enum_traits<C>::name_map = 
+    const std::map<C, std::string> basic_enum_traits<C>::name_map = 
     { 
       {C::none, "none"}, 
       {C::one, "one"}, 

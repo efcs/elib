@@ -130,8 +130,14 @@ else()
 endif()
 
 set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
-set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} ${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
-set(STDLIB_LINK "$ENV{LDFLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
+if ($ENV{CXXFLAGS})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} $ENV{CXXFLAGS}")
+endif()
+if ($ENV{LDFLAGS})
+    set(STDLIB_LINK "$ENV{LDFLAGS}")
+    string(STRIP "$ENV{LDFLAGS}" "${STDLIB_LINK}")
+endif()
 
 ################################################################################
 ##                         Compiler Detection

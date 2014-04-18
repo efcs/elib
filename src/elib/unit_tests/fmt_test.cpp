@@ -13,8 +13,6 @@
 # pragma GCC diagnostic ignored "-Wformat"
 #endif
 
-#if ! defined(ELIB_CONFIG_GCC) || ELIB_COMPILER_VERSION >= 40800L
-
 
 using namespace elib;
 
@@ -872,5 +870,3 @@ BOOST_AUTO_TEST_CASE(ext_fmt_test)
     BOOST_CHECK(buff == dest);
 }
 BOOST_AUTO_TEST_SUITE_END()
-
-# endif

@@ -124,7 +124,7 @@ namespace elib { namespace aux
       , class Then = aux::none
       , class Else = aux::none
       >
-    using if_c_t = typename if_<integral_constant<Cond>, Then, Else>::type;
+    using if_c_t = typename if_<bool_<Cond>, Then, Else>::type;
 
 
     ////////////////////////////////////////////////////////////////////////////

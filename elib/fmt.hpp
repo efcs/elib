@@ -104,7 +104,7 @@ namespace elib
         template <class T>
         std::string convert_str_impl(T && t, explicit_cast_conversion_tag)
         {
-            return static_cast<std::string>(elib::forward<T>);
+            return static_cast<std::string>(elib::forward<T>(t));
         }
         
         ///////////////////////////////////////////////////////////////////////

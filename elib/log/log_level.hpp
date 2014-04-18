@@ -3,6 +3,8 @@
 
 # include <elib/log/config.hpp>
 # include <elib/enumeration/basic_enum_traits.hpp>
+# include <elib/enumeration/enum_cast.hpp>
+# include <string>
 
 namespace elib 
 {
@@ -57,6 +59,11 @@ namespace elib
     
   }                                                    // namespace enumeration
 }                                                      // namespace elib
-
-
+namespace elib { namespace log
+{
+    inline std::string to_string(level_e lv)
+    {
+        return enumeration::enum_cast<std::string>(lv);
+    }
+}}                                                          // namespace elib
 #endif /* ELIB_LOG_LOG_LEVEL_HPP */

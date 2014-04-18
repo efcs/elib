@@ -54,7 +54,7 @@ template <class MapType>
 int_type iter_test(MapType const & m)
 {
     int_type accum = 0;
-    for (int_type i=0; i < 100; ++i) {
+    for (int_type i=0; i < 50; ++i) {
         for (auto & kv : m) {
             accum += kv.first;
             accum %= 2;
@@ -67,9 +67,11 @@ template <class Fn>
 void time(const char *name, Fn f)
 {
     using clock = std::chrono::high_resolution_clock;
+
     auto start = clock::now();
     f();
     auto end = clock::now();
+
     clock::duration tp = end - start;
     auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(tp);
     auto mm = std::chrono::duration_cast<std::chrono::microseconds>(tp);
@@ -86,12 +88,17 @@ void time(const char *name, Fn f)
 int main()
 {
     std::cout << "Testing " STR(MAP_TYPE) << std::endl;
+    std::cout << "Value type size: " << sizeof(value_type) << std::endl;
     using Map = MAP_TYPE;
-    auto kv = make_values(10000000);
-    Map m;
-    int_type x = 0;
-    time("Construct", [&]() { m = construct_test<Map>(kv); });
+		Map m;
+		{
+    	auto kv = make_values(50000000);
+    	time("Construct", [&]() { m = construct_test<Map>(kv); });
+		}
+		
     //time("Find", [&]() { find_test(kv, m); });
+
+		int_type x = 0;
     time("Iterate", [&]() { x = iter_test(m); });
     std::cout << x;
 }

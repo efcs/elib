@@ -21,4 +21,4 @@ check: $(OBJS)
 	@ echo
 	./linear_flat_map.out
 	@ echo
-	#./standard_map.out
+	./standard_map.out

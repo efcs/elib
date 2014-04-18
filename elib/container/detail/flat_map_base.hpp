@@ -10,20 +10,6 @@
 
 namespace elib { namespace container 
 {
-    constexpr struct linear_op_t
-    {
-        struct init {};
-        constexpr linear_op_t(init) {}
-    }
-    linear_op( linear_op_t::init{} );
-    
-    constexpr struct log_op_t
-    {
-        struct init {};
-        constexpr log_op_t(init) {}
-    }
-    log_op( log_op_t::init{} );
-    
     ////////////////////////////////////////////////////////////////////////////
     namespace detail
     {

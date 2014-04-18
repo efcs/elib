@@ -8,7 +8,8 @@ namespace elib { namespace aux
 {
     namespace traits
     {
-# if ! defined(ELIB_CONFIG_LIBSTDCXX_HAS_TRIVIAL_DESTRUCTOR_WORKAROUND)
+# if defined(ELIB_CONFIG_LIBCXX) ||\
+    !defined(ELIB_CONFIG_LIBSTDCXX_HAS_TRIVIAL_DESTRUCTOR_WORKAROUND)
         using std::is_trivially_destructible;
 # else
         template <class T>

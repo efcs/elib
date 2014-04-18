@@ -8,24 +8,9 @@ endif()
 #                            Toolchain config
 ################################################################################
 
-# Compiler Config
-# DEPRECATED It is kept around to be able to ship versions of the
-# build pre-configured for clang and libc++
-option(CONFIG_USE_CLANG "use clang instead of gcc" OFF)
-if(CONFIG_USE_CLANG)
-    set(CMAKE_C_COMPILER   /usr/bin/clang   )
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++ )
-endif()
-
 # C++ Version Config
 # NOTE: Default is C++11
 option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
-
-# Standard Library config
-# TODO: Move the std library confige to enviroment variables.
-option(CONFIG_USE_LIBCXX "if clang is selected,  it will use libc++" OFF)
-option(CONFIG_USE_OPT_LIBSTDCXX "use /opt/gcc4.9/lib64" OFF)
-option(CONFIG_USE_OPT_LIBCXX "use /opt/clang3.4/lib/" OFF)
 
 # Address, Memory and Thread sanitizers
 # can be configured for newer versions of clang and GCC
@@ -33,6 +18,7 @@ option(CONFIG_USE_OPT_LIBCXX "use /opt/clang3.4/lib/" OFF)
 option(CONFIG_ASAN "address sanitizer" OFF)
 option(CONFIG_TSAN "thread sanitizer"  OFF)
 option(CONFIG_MSAN "memory sanitizer"  OFF)
+option(CONFIG_USAN "undefined behaviour sanitizer" OFF)
 
 # Adds a ton of warnings to the build. 
 # NOTE: ALL CODE SHOULD COMPILE CLEANLY WITH THIS ON!
@@ -144,7 +130,8 @@ else()
 endif()
 
 set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} ${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
+set(STDLIB_LINK "$ENV{LDFLAGS}")
 
 ################################################################################
 ##                         Compiler Detection
@@ -195,34 +182,7 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 
 endif()
-################################################################################
-##                    Standard Library Configuration
-################################################################################
-if (CONFIG_USE_LIBCXX)
-    if (NOT CXX_COMPILER_CLANG)
-        message( FATAL_ERROR "Cannot use libc++ without clang" )
-    endif()
-    message( STATUS "Configuring for Library: libc++" )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -stdlib=libc++ ")
-endif()
 
-# Currently only GCC's libstdc++ works with -std=c++1y
-# TODO This is personal configuration. I need to get it out of here
-if (CONFIG_USE_OPT_LIBSTDCXX)
-    message( STATUS "Configuring for Library: libstdc++ in /opt/gcc4.9/lib64" )
-    add_definitions( -nostdinc++ )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/4.9.0/x86_64-unknown-linux-gnu/ -I/opt/gcc4.9/include/c++/4.9.0/")
-
-    set(STDLIB_LINK "-L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64")
-endif()
-
-if (CONFIG_USE_OPT_LIBCXX)
-    message( STATUS "Configuring for Library: libc++ in /opt/clang3.4/lib" )
-    add_definitions( -nostdinc++ )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/opt/gcc4.9/include/c++/v1/x86_64-unknown-linux-gnu/ -I/opt/clang3.4/include/c++/v1")
-
-    set(STDLIB_LINK "-stdlib=libc++ -L/opt/gcc4.9/lib64 -Wl,-rpath -Wl,/opt/gcc4.9/lib64 -L/opt/clang3.4/lib -Wl,-rpath -Wl,/opt/clang3.4/lib")
-endif()
 
 ################################################################################
 ##                        Sanitizer Configuration
@@ -251,6 +211,12 @@ if (CONFIG_MSAN)
   set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
   set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=memory ")
 endif() 
+
+if (CONFIG_USAN)
+    message( STATUS "Compiling with undefined behaviour sanitizer")
+    set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
+    set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+endif()
 #################################################################################
 
 if (CONFIG_ELIB_ASSERT_CONFIG)

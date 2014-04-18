@@ -28,9 +28,8 @@ namespace elib { namespace fs
         path() : m_pathname{}
         {}
         
-        path(const path& p) = default;
-          
-        path(path&& p) noexcept = default;
+        path(path const &) = default;
+        path(path &&) = default;
         
         template <typename Source>
         path(const Source& src)

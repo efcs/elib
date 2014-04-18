@@ -16,7 +16,10 @@ namespace elib
   namespace log 
   {
     
-
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
     /* this class defines the basic logging interface used with the
     * classes log, file_log, and elog (static) */
     class basic_log {
@@ -177,7 +180,9 @@ namespace elib
               {level_e::raw_err, ""} 
             };
     };
-
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
 
   } /* namespace log */
 } /* namespace elib */

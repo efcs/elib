@@ -12,10 +12,6 @@ namespace elib
   namespace log
   {
 
-# if defined(__clang__)
-#   pragma clang diagnostic push
-#   pragma clang diagnostic ignored "-Wweak-vtables"
-# endif    
     /* file_log implements the basic_log interface,
     * for basic_log method documentation see log.h */
     class file_log final : public basic_log {
@@ -24,7 +20,7 @@ namespace elib
         /* open file for output */
         file_log(const std::string & filename);
         
-        virtual ~file_log() { }
+        ~file_log() { }
         
         /* return the path to the current file */
         const std::string & filename() const;
@@ -49,9 +45,6 @@ namespace elib
         
     };
     
-# if defined(__clang__)
-#   pragma clang diagnostic pop
-# endif
 
   } /* namespace log */
 } /* namespace elib */

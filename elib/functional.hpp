@@ -3,6 +3,7 @@
 
 # include <elib/aux.hpp>
 # include <elib/any.hpp>
+# include <elib/config.hpp>
 # include <type_traits>
 # include <utility>
 # include <cstddef>
@@ -1373,18 +1374,18 @@ namespace elib
         {
             using result_type = T;
             
-            [[noreturn]] void operator()(const T& t) const noexcept(false)
+            ELIB_NORETURN void operator()(const T& t) const noexcept(false)
             {
                 throw t;
             }
             
-            [[noreturn]] void operator()(T& t) const noexcept(false)
+            ELIB_NORETURN void operator()(T& t) const noexcept(false)
             {
                 throw t;
             }
             
             template <class U>
-            [[noreturn]] void operator()(U && u) const noexcept(false)
+            ELIB_NORETURN void operator()(U && u) const noexcept(false)
             {
                 throw static_cast<T>(u);
             }
@@ -1396,7 +1397,7 @@ namespace elib
             using is_transparent = aux::true_;
             
             template <class T>
-            [[noreturn]] void operator()(T && t) const noexcept(false)
+            ELIB_NORETURN void operator()(T && t) const noexcept(false)
             {
                 throw static_cast<T &&>(t);
             }

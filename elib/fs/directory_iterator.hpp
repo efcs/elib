@@ -17,7 +17,6 @@ namespace elib { namespace fs
 {
 
     ////////////////////////////////////////////////////////////////////////////
-    //
     enum class directory_options
     {
         none,
@@ -26,15 +25,17 @@ namespace elib { namespace fs
     };
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     class directory_entry
     {
     public:
         //ctor & dtor
-        explicit directory_entry(const fs::path& p, file_status st=file_status(),
-                                file_status symlink_st=file_status())
+        explicit directory_entry(
+            const fs::path & p
+          , file_status st=file_status()
+          , file_status symlink_st=file_status()
+          )
             : m_path{p}, m_status{st}, m_symlink_status{symlink_st}
-        { }
+        {}
         
         directory_entry() = default;
         directory_entry(const directory_entry&) = default;
@@ -44,9 +45,11 @@ namespace elib { namespace fs
         ~directory_entry() = default; 
         
         ////////////////////////////////////////////////////////////////////////
-        //
-        void assign(const fs::path& p, file_status st=file_status(),
-                    file_status symlink_st=file_status())
+        void assign(
+            const fs::path & p
+          , file_status st=file_status()
+          , file_status symlink_st=file_status()
+          )
         {
             m_path = p;
             m_status = st;
@@ -54,9 +57,11 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        //
-        void replace_filename(const fs::path& p, file_status st=file_status(),
-                                file_status symlink_st=file_status())
+        void replace_filename(
+            const fs::path& p
+          , file_status st = file_status()
+          , file_status symlink_st = file_status()
+          )
         {
             m_path.replace_filename(p);
             m_status = st;
@@ -64,48 +69,27 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        // 
-        const fs::path& path() const noexcept
+        fs::path const & path() const noexcept
         { return m_path; }
          
         ////////////////////////////////////////////////////////////////////////
-        //
         file_status status() const
         { return m_get_status();}
         
-        file_status status(std::error_code& ec) const noexcept
+        file_status status(std::error_code & ec) const noexcept
         { return m_get_status(&ec); }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         file_status symlink_status() const
         { return m_get_symlink_status(); }
         
         file_status symlink_status(std::error_code& ec) const noexcept
         { return m_get_symlink_status(&ec); }
         
-        ////////////////////////////////////////////////////////////////////////
-        //
-        bool operator==(const directory_entry& rhs) const noexcept
-            { return m_path == rhs.m_path; }
-            
-        bool operator!=(const directory_entry& rhs) const noexcept
-            { return m_path != rhs.m_path; }
-            
-        ////////////////////////////////////////////////////////////////////////
-        //
-        bool operator< (const directory_entry& rhs) const noexcept
-            { return m_path < rhs.m_path; }
-            
-        bool operator<=(const directory_entry& rhs) const noexcept
-            { return m_path <= rhs.m_path; }
-            
-        bool operator> (const directory_entry& rhs) const noexcept
-            { return m_path > rhs.m_path; }
-            
-        bool operator>=(const directory_entry& rhs) const noexcept
-            { return m_path >= rhs.m_path; }
-      
+    private:
+        friend bool operator==(directory_entry const &, directory_entry const &);
+        friend bool operator< (directory_entry const &, directory_entry const &);
+        
     private:
         ////////////////////////////////////////////////////////////////////////
         // These don't need to be inline,  but they are for now.
@@ -143,6 +127,42 @@ namespace elib { namespace fs
   
     }; // class directory_entry
       
+      
+    ////////////////////////////////////////////////////////////////////////////
+    inline bool operator==(directory_entry const & lhs, directory_entry const & rhs)
+    {
+        return lhs.m_path == rhs.m_path;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline bool operator!=(directory_entry const & lhs, directory_entry const & rhs)
+    {
+        return !(lhs == rhs);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline bool operator<(directory_entry const & lhs, directory_entry const & rhs)
+    {
+        return (lhs.m_path < rhs.m_path);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline bool operator>(directory_entry const & lhs, directory_entry const & rhs)
+    {
+        return (rhs < lhs);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline bool operator<=(directory_entry const & lhs, directory_entry const & rhs)
+    {
+        return !(rhs < lhs);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline bool operator>=(directory_entry const & lhs, directory_entry const & rhs)
+    {
+        return !(lhs < rhs);
+    }
       
     namespace detail
     {
@@ -390,7 +410,6 @@ namespace elib { namespace fs
     };                                     // class recursive_directory_iterator
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     inline recursive_directory_iterator const & 
     begin(recursive_directory_iterator const & iter) noexcept
     { 
@@ -398,7 +417,6 @@ namespace elib { namespace fs
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     inline recursive_directory_iterator 
     end(recursive_directory_iterator const &) noexcept
     { 

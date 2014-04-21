@@ -154,7 +154,7 @@ endif()
 if ( CXX_COMPILER_GCC )
    
     # check min version
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.7.0")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
         message(FATAL_ERROR "Insufficient GCC Version")
     elseif(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")

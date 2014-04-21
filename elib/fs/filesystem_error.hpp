@@ -69,42 +69,45 @@ namespace elib { namespace fs
 #   pragma clang diagnostic pop
 # endif
 
-    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     //                      MISC ERROR HELPERS                                                      
-    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     namespace detail 
     {
+        ////////////////////////////////////////////////////////////////////////
         constexpr int errc_cast(std::errc e) noexcept
         {
             return static_cast<int>(e);
         }
         
-        inline std::error_code
-        handle_errno()
+        ////////////////////////////////////////////////////////////////////////
+        inline std::error_code handle_errno()
         {
             std::error_code ec{errno, std::system_category()};
             errno = 0;
             return ec;
         }
 
-        inline void
-        handle_errno(std::error_code& ec)
+        ////////////////////////////////////////////////////////////////////////
+        inline void handle_errno(std::error_code& ec)
         {
             ec = handle_errno();
         }
 
+        ////////////////////////////////////////////////////////////////////////
         inline std::error_code handle_error(int xerrno)
         {
             return std::error_code{xerrno, std::system_category()};
         }
 
+        ////////////////////////////////////////////////////////////////////////
         inline std::error_code handle_error(std::errc err_code)
         {
             return std::make_error_code(err_code);
         }
 
-        inline void
-        handle_error(int xerrno, std::error_code& ec)
+        ////////////////////////////////////////////////////////////////////////
+        inline void handle_error(int xerrno, std::error_code& ec)
         {
             ec = handle_error(xerrno);
         }

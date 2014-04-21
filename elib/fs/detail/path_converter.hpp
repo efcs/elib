@@ -19,39 +19,25 @@ namespace elib
     namespace detail 
     {
       template <typename T>
-      struct is_convertible : public std::false_type { };
+      struct is_pathable : public std::false_type { };
 
       template <>
-      struct is_convertible<char*> : public std::true_type { };
+      struct is_pathable<char*> : public std::true_type { };
 
       template <>
-      struct is_convertible<const char*> : public std::true_type { };
+      struct is_pathable<const char*> : public std::true_type { };
 
       template <>
-      struct is_convertible<std::string> : public std::true_type { };
+      struct is_pathable<std::string> : public std::true_type { };
 
       template <>
-      struct is_convertible<std::vector<char>> : public std::true_type { };
+      struct is_pathable<std::vector<char>> : public std::true_type { };
 
       template <>
-      struct is_convertible<std::list<char>> : public std::true_type { };
+      struct is_pathable<std::list<char>> : public std::true_type { };
 
       template <>
-      struct is_convertible<directory_entry> : public std::true_type { };
-
-
-      template <typename T, typename Ret=void>
-      struct enable_if_convertible 
-          : public std::enable_if<
-              is_convertible<typename std::decay<T>::type>::value
-              , Ret
-            >
-     {};
-     
-
-      template <typename T, typename Ret=void>
-      using enable_if_convertible_t = 
-        typename enable_if_convertible<T, Ret>::type;
+      struct is_pathable<directory_entry> : public std::true_type { };
 
       template <typename Ret>
       Ret

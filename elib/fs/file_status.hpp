@@ -6,7 +6,6 @@
 namespace elib { namespace fs
 {
     ////////////////////////////////////////////////////////////////////////////
-    //
     enum class file_type
     {
         none = 0,
@@ -22,7 +21,6 @@ namespace elib { namespace fs
     };
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     enum class perms
     {
         none = 0,

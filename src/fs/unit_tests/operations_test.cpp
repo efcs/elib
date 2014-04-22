@@ -163,7 +163,14 @@ BOOST_AUTO_TEST_CASE(fs_test_main)
           BOOST_CHECK(e_ec == b_ec);
           
           reset_state(s, s1, s2);
-          BOOST_CHECK(efs::hard_link_count(e, e_ec) == bfs::hard_link_count(b, b_ec));
+          auto const ecount = efs::hard_link_count(e, e_ec);
+          auto const bcount = bfs::hard_link_count(b, b_ec);
+          if (e_ec) {
+            BOOST_CHECK(ecount == static_cast<decltype(ecount)>(-1));
+            BOOST_CHECK(bcount == 0);
+          } else {
+              BOOST_CHECK(ecount == bcount);
+          }
           BOOST_CHECK(e_ec == b_ec);
           
           //reset_state(s, s1, s2);

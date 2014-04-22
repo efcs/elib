@@ -81,17 +81,15 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline std::error_code handle_errno()
+        inline std::error_code capture_errno()
         {
-            std::error_code ec{errno, std::system_category()};
-            errno = 0;
-            return ec;
+            return std::error_code{errno, std::system_category()};
         }
 
         ////////////////////////////////////////////////////////////////////////
-        inline void handle_errno(std::error_code& ec)
+        inline void capture_errno(std::error_code & ec)
         {
-            ec = handle_errno();
+            ec = capture_errno();
         }
 
         ////////////////////////////////////////////////////////////////////////

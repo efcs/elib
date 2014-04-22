@@ -8,22 +8,11 @@
 # include <elib/assert.hpp>
 
 # include <system_error>
-# include <chrono>
 # include <cstdint>
 
 
 namespace elib { namespace fs
 {
-    namespace detail
-    {
-        typedef std::chrono::system_clock clock_type;
-        typedef typename clock_type::time_point time_point;
-        typedef typename clock_type::duration duration;
-    }                                                       // namespace detail
-
-    ////////////////////////////////////////////////////////////////////////////
-    using file_time_type = detail::time_point;
-    
     ////////////////////////////////////////////////////////////////////////////
     struct space_info  // returned by space function
     {
@@ -123,10 +112,10 @@ namespace elib { namespace fs
         bool is_empty(const path& p, std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
-        file_time_type last_write_time(const path& p, std::error_code *ec=nullptr);
+        std::time_t last_write_time(const path& p, std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
-        void last_write_time(const path& p, file_time_type new_time,
+        void last_write_time(const path& p, std::time_t new_time,
                 std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
@@ -410,17 +399,17 @@ namespace elib { namespace fs
     { return is_other(detail::status(p, &ec)); }
     
     ////////////////////////////////////////////////////////////////////////////
-    inline file_time_type last_write_time(const path& p)
+    inline std::time_t last_write_time(const path& p)
     { return detail::last_write_time(p); }
       
-    inline file_time_type last_write_time(const path& p, std::error_code& ec) noexcept
+    inline std::time_t last_write_time(const path& p, std::error_code& ec) noexcept
     { return detail::last_write_time(p, &ec); }
     
     ////////////////////////////////////////////////////////////////////////////
-    inline void last_write_time(const path& p, file_time_type new_time)
+    inline void last_write_time(const path& p, std::time_t new_time)
     { detail::last_write_time(p, new_time); }
       
-    inline void last_write_time(const path& p, file_time_type new_time,
+    inline void last_write_time(const path& p, std::time_t new_time,
             std::error_code& ec) noexcept
     { detail::last_write_time(p, new_time, &ec); }
     

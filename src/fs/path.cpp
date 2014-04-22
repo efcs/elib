@@ -309,7 +309,12 @@ namespace elib { namespace fs
         m_set_position(0);
       }
       else if (m_pos == parser::npos) {
-        m_set_position(parser::start_of(m_path_str(), m_path_str().size()-1));
+        auto const path_str = m_path_str();
+        auto const path_str_size = path_str.size();
+        m_set_position(parser::start_of(
+            path_str
+          , path_str_size != 0 ? path_str_size - 1 : path_str_size
+          ));
       }
       else{
         while (!m_set_position(parser::start_of(m_path_str(), m_pos-1)))

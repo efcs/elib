@@ -5,6 +5,9 @@ namespace elib { namespace options
 {
     /////////////////////////////////////////////////////////////////////////////
     // option_description
+    
+    option_description::~option_description() {}
+    
     void option_description::m_set_name(std::string const & name)
     {
         std::string::size_type pos = name.find(',');

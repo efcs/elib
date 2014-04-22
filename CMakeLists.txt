@@ -168,7 +168,9 @@ if ( CXX_COMPILER_GCC )
 
 elseif( CXX_COMPILER_CLANG ) ###################################################
 
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.3")
+    if (CMAKE_CXX_COMPILER_VERSION STREQUAL "")
+        message(WARNING "Failed to detect clang version")
+    elseif (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "3.3")
         message(FATAL_ERROR "Insufficient Clang Version: ${CMAKE_CXX_COMPILER_VERSION} (Requires >= 3.3)")
     endif()
 

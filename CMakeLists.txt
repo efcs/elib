@@ -124,7 +124,12 @@ endif()
 set(CXX_WARNING_FLAGS " -Wall -Wextra -pedantic ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_VERSION_FLAGS} ${CXX_WARNING_FLAGS}")
 
-
+if (DEFINED ENV{CXXFLAGS})
+    message(STATUS "Configuring with extra CXX flags: $ENV{CXXFLAGS}")
+endif()
+if (DEFINED ENV{LDFLAGS})
+    message(STATUS "Configuring with extra LD flags: $ENV{LDFLAGS}")
+endif()
 ################################################################################
 ##                         Compiler Detection
 ################################################################################
@@ -206,7 +211,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
-message(STATUS "Configuring with CXX flags: ${CMAKE_CXX_FLAGS}")
 
 ################################################################################
 #                           Macros & Functions

@@ -29,15 +29,14 @@ namespace elib { namespace fs
     {
         using value_type = path::value_type;
         using string_type = path::string_type;
-        using stat_t = struct ::stat;
-        using statvfs_t = struct ::statvfs;
+        
         
         // NOTE: The below functions are marked as inline so that they
         // do not set off the "-Wmissing-prototypes" warning
         
         ////////////////////////////////////////////////////////////////////////
         // set the permissions as described in stat
-        inline perms posix_get_perms(const stat_t & st) noexcept
+        inline perms posix_get_perms(const struct ::stat & st) noexcept
         {
             perms pmask = perms::none;
             auto const mode = st.st_mode;
@@ -78,7 +77,7 @@ namespace elib { namespace fs
         ////////////////////////////////////////////////////////////////////////
         inline file_status posix_stat(
             path const & p
-          , stat_t & path_stat
+          , struct ::stat & path_stat
           , std::error_code* ec
           )
         {
@@ -119,7 +118,7 @@ namespace elib { namespace fs
         ////////////////////////////////////////////////////////////////////////
         inline file_status posix_lstat(
             path const & p
-          , stat_t & path_stat
+          , struct ::stat & path_stat
           , std::error_code* ec
           )
         {
@@ -160,7 +159,7 @@ namespace elib { namespace fs
         ////////////////////////////////////////////////////////////////////////
         inline bool posix_statvfs(
             path const & p
-          , statvfs_t & sv
+          , struct ::statvfs & sv
           , std::error_code *ec
           )
         {
@@ -514,21 +513,21 @@ namespace elib { namespace fs { namespace detail
 
     ////////////////////////////////////////////////////////////////////////////
     // TODO
-    void copy(const path& from, const path& to, copy_options options,
-        std::error_code *ec);
+   // void copy(const path& from, const path& to, copy_options options,
+     //   std::error_code *ec);
     
 
     ////////////////////////////////////////////////////////////////////////////
     // TODO
-    bool copy_file(
-        const path& from, const path& to
-      , copy_options option, std::error_code *ec
-      );
+    //bool copy_file(
+      //  const path& from, const path& to
+      //, copy_options option, std::error_code *ec
+      //);
         
 
-
-    void copy_symlink(const path& existing_symlink, const path& new_symlink,
-        std::error_code *ec);
+    //TODO
+    //void copy_symlink(const path& existing_symlink, const path& new_symlink,
+      //  std::error_code *ec);
 
     //TODO
     //bool create_directories(const path& p, std::error_code *ec);
@@ -554,9 +553,9 @@ namespace elib { namespace fs { namespace detail
         }
     }
 
-
-    void create_directory(const path& p, const path& attributes, 
-        std::error_code *ec);
+    //TODO
+    //void create_directory(const path& p, const path& attributes, 
+      //  std::error_code *ec);
 
     ////////////////////////////////////////////////////////////////////////////
     void create_directory_symlink(
@@ -604,7 +603,7 @@ namespace elib { namespace fs { namespace detail
         std::error_code *ec)
     {
         std::error_code ec1, ec2;
-        stat_t st1, st2;
+        struct ::stat st1, st2;
         detail::posix_stat(p1.native(), st1, &ec1);
         detail::posix_stat(p2.native(), st2, &ec2);
         
@@ -634,7 +633,7 @@ namespace elib { namespace fs { namespace detail
     std::uintmax_t file_size(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
-        stat_t st;
+        struct ::stat st;
         file_status fst = detail::posix_stat(p, st, &m_ec);
         if (fs::exists(fst) && fs::is_regular_file(fst)) {
             ELIB_ASSERT(not m_ec);
@@ -667,7 +666,7 @@ namespace elib { namespace fs { namespace detail
     std::uintmax_t hard_link_count(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
-        stat_t st;
+        struct ::stat st;
         detail::posix_stat(p, st, &m_ec);
         if (ec) *ec = m_ec;
         if (m_ec && not ec) {
@@ -693,7 +692,7 @@ namespace elib { namespace fs { namespace detail
     std::time_t last_write_time(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
-        stat_t st;
+        struct ::stat st;
         detail::posix_stat(p, st, &m_ec);
         if (ec) *ec = m_ec;
             
@@ -716,7 +715,7 @@ namespace elib { namespace fs { namespace detail
       )
     {
         std::error_code m_ec;
-        stat_t st;
+        struct ::stat st;
         detail::posix_stat(p, st, &m_ec);
         if (ec) *ec = m_ec;
             

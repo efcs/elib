@@ -29,7 +29,10 @@ namespace elib { namespace fs
         path(path const &) = default;
         path(path &&) = default;
         
-        template <typename Source>
+        template <
+            class Source
+          , ELIB_ENABLE_IF(detail::is_pathable<Source>::value)
+          >
         path(const Source& src)
         {
           m_pathname = detail::dispatch<string_type>(src);

@@ -12,14 +12,6 @@ endif()
 # NOTE: Default is C++11
 option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
-# Address, Memory and Thread sanitizers
-# can be configured for newer versions of clang and GCC
-# They must be used in a mutually exclusive maner if at all.
-option(CONFIG_ASAN "address sanitizer" OFF)
-option(CONFIG_TSAN "thread sanitizer"  OFF)
-option(CONFIG_MSAN "memory sanitizer"  OFF)
-option(CONFIG_USAN "undefined behaviour sanitizer" OFF)
-
 # Adds a ton of warnings to the build. 
 # NOTE: ALL CODE SHOULD COMPILE CLEANLY WITH THIS ON!
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
@@ -184,39 +176,6 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
 endif()
 
 
-################################################################################
-##                        Sanitizer Configuration
-################################################################################
-if ( CONFIG_ASAN OR CONFIG_TSAN OR CONFIG_MSAN )
-    if (NOT CMAKE_BUILD_TYPE MATCHES "DEBUG")
-        message( WARNING "Build configuration forced to DEBUG when using sanitizers")
-    endif()
-    set(CMAKE_BUILD_TYPE DEBUG CACHE STRING "Build configuration" FORCE)
-endif()
-
-if (CONFIG_ASAN)
-  message( STATUS "Compiling with address sanitizer")
-  set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
-  set(CMAKE_CXX_FLAGS  " ${CMAKE_CXX_FLAGS} -fsanitize=address ")
-endif()
-
-if (CONFIG_TSAN)
-  message( STATUS "Compiling with thread sanitizer")
-  set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fsanitize=thread ")
-endif() 
-
-if (CONFIG_MSAN)
-  message( STATUS "Compiling with memory sanitizer")
-  set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
-  set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=memory ")
-endif() 
-
-if (CONFIG_USAN)
-    message( STATUS "Compiling with undefined behaviour sanitizer")
-    set(CONFIG_NO_LIBRARIES ON CACHE BOOL "" FORCE)
-    set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -fsanitize=undefined")
-endif()
 #################################################################################
 
 if (CONFIG_ELIB_ASSERT_CONFIG)
@@ -245,6 +204,8 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
+
+message(STATUS "Configuring with CXX flags: ${CMAKE_CXX_FLAGS}")
 
 ################################################################################
 #                           Macros & Functions
@@ -302,6 +263,7 @@ macro(include_library_if Pred CFile)
     endif()
 endmacro(include_library_if)
 ################################################################################
+
 
 add_subdirectory(src)
 #add_subdirectory(test_main)

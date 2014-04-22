@@ -1,6 +1,7 @@
 #ifndef ELIB_FS_CONVERSION_HPP
 #define ELIB_FS_CONVERSION_HPP
 
+# include <elib/aux.hpp>
 #include <locale>
 #include <string>
 #include <cwchar>
@@ -19,39 +20,28 @@ namespace elib
     namespace detail 
     {
       template <typename T>
-      struct is_convertible : public std::false_type { };
+      struct is_pathable_impl : public std::false_type { };
 
       template <>
-      struct is_convertible<char*> : public std::true_type { };
+      struct is_pathable_impl<char*> : public std::true_type { };
 
       template <>
-      struct is_convertible<const char*> : public std::true_type { };
+      struct is_pathable_impl<const char*> : public std::true_type { };
 
       template <>
-      struct is_convertible<std::string> : public std::true_type { };
+      struct is_pathable_impl<std::string> : public std::true_type { };
 
       template <>
-      struct is_convertible<std::vector<char>> : public std::true_type { };
+      struct is_pathable_impl<std::vector<char>> : public std::true_type { };
 
       template <>
-      struct is_convertible<std::list<char>> : public std::true_type { };
+      struct is_pathable_impl<std::list<char>> : public std::true_type { };
 
       template <>
-      struct is_convertible<directory_entry> : public std::true_type { };
-
-
-      template <typename T, typename Ret=void>
-      struct enable_if_convertible 
-          : public std::enable_if<
-              is_convertible<typename std::decay<T>::type>::value
-              , Ret
-            >
-     {};
-     
-
-      template <typename T, typename Ret=void>
-      using enable_if_convertible_t = 
-        typename enable_if_convertible<T, Ret>::type;
+      struct is_pathable_impl<directory_entry> : public std::true_type { };
+      
+      template <class T>
+      using is_pathable = is_pathable_impl<aux::decay_t<T>>;
 
       template <typename Ret>
       Ret

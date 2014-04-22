@@ -101,6 +101,8 @@ set(CONFIG_ELIB_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 #                       Toolchain config (Post-project)
 ################################################################################
 
+message(STATUS "Configuring for linker: ${CMAKE_LINKER}")
+
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE DEBUG CACHE STRING
        "Choose the type of build"

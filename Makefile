@@ -109,7 +109,7 @@ config:
 .PHONY: san_config
 san_config:
 	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_ONLY_SOURCE=ON .. ; cd ..
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(CMAKE_CONFIG) $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_ONLY_SOURCE=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short

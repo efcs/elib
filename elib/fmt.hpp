@@ -357,7 +357,7 @@ namespace elib
         // guess what the size might be
         std::size_t size = 256;
         auto buff_ptr = elib::make_unique<char[]>(size);
-        auto ret = vsnprintf(buff_ptr.get(), size, msg, args_cp);
+        auto ret = std::vsnprintf(buff_ptr.get(), size, msg, args_cp);
         
         va_end(args_cp);
         
@@ -375,7 +375,7 @@ namespace elib
             // cast to prevent overflow
             size = static_cast<std::size_t>(ret) + 1;
             buff_ptr = elib::make_unique<char[]>(size);
-            ret = vsnprintf(buff_ptr.get(), size, msg, args);
+            ret = std::vsnprintf(buff_ptr.get(), size, msg, args);
             ELIB_ASSERT(ret > 0 && static_cast<std::size_t>(ret) < size);
         }
         

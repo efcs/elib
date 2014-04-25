@@ -4,8 +4,8 @@
 #include <elib/fs/directory_iterator.hpp>
 #include <elib/fs/filesystem_error.hpp>
 
-#include <elib/CXX14/memory.hpp>
 #include <elib/aux.hpp>
+#include <elib/make_unique.hpp>
 
 #include <cstdlib>
 #include <climits>
@@ -207,7 +207,7 @@ namespace elib { namespace fs
             auto size = pathconf(".", _PC_PATH_MAX);
             ELIB_ASSERT(size >= 0);
             
-            auto buff = std::make_unique<char[]>( 
+            auto buff = elib::make_unique<char[]>( 
                 static_cast<std::size_t>(size) 
               );
             

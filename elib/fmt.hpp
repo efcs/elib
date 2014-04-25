@@ -3,7 +3,7 @@
 
 # include <elib/aux.hpp>
 # include <elib/config.hpp>
-# include <elib/CXX14/memory.hpp> /* for std::make_unique */
+# include <elib/make_unique.hpp> /* for std::make_unique */
 
 # include <stdexcept>
 # include <sstream>
@@ -356,7 +356,7 @@ namespace elib
         //TODO, use std::array for first attempt to avoid one memory allocation
         // guess what the size might be
         std::size_t size = 256;
-        auto buff_ptr = std::make_unique<char[]>(size);
+        auto buff_ptr = elib::make_unique<char[]>(size);
         auto ret = vsnprintf(buff_ptr.get(), size, msg, args_cp);
         
         va_end(args_cp);
@@ -374,7 +374,7 @@ namespace elib
             // account for null-byte in size
             // cast to prevent overflow
             size = static_cast<std::size_t>(ret) + 1;
-            buff_ptr = std::make_unique<char[]>(size);
+            buff_ptr = elib::make_unique<char[]>(size);
             ret = vsnprintf(buff_ptr.get(), size, msg, args);
             ELIB_ASSERT(ret > 0 && static_cast<std::size_t>(ret) < size);
         }

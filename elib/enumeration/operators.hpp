@@ -5,7 +5,7 @@
 # include <elib/enumeration/enum_traits.hpp>
 
 # include <elib/aux.hpp>
-# include <elib/CXX14/type_traits.hpp>
+
 
 # define ELIB_ENUM_UNARY_OP(Op, Ret, Type0)                               \
     operator Op (Type0 lhs) noexcept                                      \
@@ -46,7 +46,7 @@ namespace elib { namespace enumeration
         ////////////////////////////////////////////////////////////////////////
         //
         template <class T, bool=aux::is_enum<T>::value>
-        struct is_bitmask : std::false_type {};
+        struct is_bitmask : elib::false_ {};
         
         template <class T>
         struct is_bitmask<T, true> : bool_<enum_traits<T>::is_bitmask> {};
@@ -54,17 +54,17 @@ namespace elib { namespace enumeration
         ////////////////////////////////////////////////////////////////////////
         //
         template <class T, bool=aux::is_enum<T>::value>
-        struct is_arithmetic : std::false_type {};
+        struct is_arithmetic : elib::false_ {};
         
         template <class T>
         struct is_arithmetic<T, true>
-            : std::integral_constant<bool, enum_traits<T>::is_arithmetic>
+            : bool_<enum_traits<T>::is_arithmetic>
         {};
         
         ////////////////////////////////////////////////////////////////////////
         //
         template <class T, bool=aux::is_enum<T>::value>
-        struct is_logical : std::false_type {};
+        struct is_logical : elib::false_ {};
         
         template <class T>
         struct is_logical<T, true> : bool_<enum_traits<T>::is_logical> {};
@@ -72,7 +72,7 @@ namespace elib { namespace enumeration
         ////////////////////////////////////////////////////////////////////////
         //
         template <class T, bool=aux::is_enum<T>::value>
-        struct is_mixed_comparible : std::false_type {};
+        struct is_mixed_comparible : elib::false_ {};
         
         template <class T>
         struct is_mixed_comparible<T, true>

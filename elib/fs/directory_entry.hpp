@@ -99,7 +99,7 @@ namespace elib { namespace fs
         // These don't need to be inline,  but they are for now.
         file_status m_get_status(std::error_code *ec=nullptr) const
         {
-            if (!status_known(m_status))
+            if (!status_known(m_status)) 
             {
                 if (status_known(m_symlink_status) && !is_symlink(m_symlink_status))
                     m_status = m_symlink_status; 

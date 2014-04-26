@@ -15,11 +15,13 @@ namespace elib
 {
     namespace compressed_pair_detail
     {
+        ////////////////////////////////////////////////////////////////////////
         enum class compress
         {
             none, first, second, both
         };
         
+        ////////////////////////////////////////////////////////////////////////
         template <bool IsSame, bool FirstEmpty, bool SecondEmpty>
         struct choose_compress_impl;
         
@@ -48,6 +50,7 @@ namespace elib
           : elib::integral_constant<compress, compress::first>
         {};
         
+        ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
         using choose_compress = choose_compress_impl<
             aux::is_same<aux::remove_cv_t<First>, aux::remove_cv_t<Second>>::value
@@ -55,13 +58,14 @@ namespace elib
           , aux::is_empty<Second>::value
           >;
         
+        ////////////////////////////////////////////////////////////////////////
         template <
             class First, class Second
           , compress = choose_compress<First, Second>::value
           >
         class compressed_pair_impl;
         
-        
+        ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
         class compressed_pair_impl<First, Second, compress::none>
         {
@@ -75,26 +79,32 @@ namespace elib
             using first_const_reference = aux::remove_reference_t<First> const &;
             using second_const_reference = aux::remove_reference_t<Second> const &;
             
-            compressed_pair_impl() {}
-            
-            explicit compressed_pair_impl(First f)
-              : m_first(elib::forward<First>(f))
+            constexpr compressed_pair_impl()
+              : m_first(), m_second()
             {}
             
-            explicit compressed_pair_impl(Second s)
-              : m_second(elib::forward<Second>(s))
+            constexpr explicit compressed_pair_impl(First f)
+              : m_first(elib::forward<First>(f)), m_second()
             {}
             
-            compressed_pair_impl(First f, Second s)
+            constexpr explicit compressed_pair_impl(Second s)
+              : m_first(), m_second(elib::forward<Second>(s))
+            {}
+            
+            constexpr compressed_pair_impl(First f, Second s)
               : m_first(elib::forward<First>(f))
               , m_second(elib::forward<Second>(s))
             {}
             
             first_reference first() noexcept { return m_first; }
-            first_const_reference first() const noexcept { return m_first; }
+            
+            constexpr first_const_reference 
+            first() const noexcept { return m_first; }
             
             second_reference second() noexcept { return m_second; }
-            second_const_reference second() const noexcept { return m_second; }
+            
+            constexpr second_const_reference 
+            second() const noexcept { return m_second; }
             
             void swap(compressed_pair_impl & other)
                 noexcept(aux::is_nothrow_swappable<First>::value 
@@ -105,13 +115,13 @@ namespace elib
                 swap(m_second, other.m_second);
             }
             
-            
         private:
             First m_first;
             Second m_second;
         };
         
         
+        ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
         class compressed_pair_impl<First, Second, compress::first>
           : private First
@@ -126,26 +136,32 @@ namespace elib
             using first_const_reference = First const &;
             using second_const_reference = aux::remove_reference_t<Second> const &;
             
-            compressed_pair_impl() {}
-            
-            explicit compressed_pair_impl(First f)
-              : First(elib::forward<First>(f))
+            constexpr compressed_pair_impl() 
+              : First(), m_second()
             {}
             
-            explicit compressed_pair_impl(Second s)
-              : m_second(elib::forward<Second>(s))
+            constexpr explicit compressed_pair_impl(First f)
+              : First(elib::forward<First>(f)), m_second()
             {}
             
-            compressed_pair_impl(First f, Second s)
+            constexpr explicit compressed_pair_impl(Second s)
+              : First(), m_second(elib::forward<Second>(s))
+            {}
+            
+            constexpr compressed_pair_impl(First f, Second s)
               : First(elib::forward<First>(f))
               , m_second(elib::forward<Second>(s))
             {}
             
             first_reference first() noexcept { return *this; }
-            first_const_reference first() const noexcept { return *this; }
+            
+            constexpr first_const_reference 
+            first() const noexcept { return *this; }
             
             second_reference second() noexcept { return m_second; }
-            second_const_reference second() const noexcept { return m_second; }
+            
+            constexpr second_const_reference 
+            second() const noexcept { return m_second; }
             
             void swap(compressed_pair_impl & other)
                 noexcept(aux::is_nothrow_swappable<First>::value 
@@ -158,6 +174,7 @@ namespace elib
         private:
             Second m_second;
         };
+        
         
         ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
@@ -174,26 +191,32 @@ namespace elib
             using first_const_reference = aux::remove_reference_t<First> const &;
             using second_const_reference = Second const &;
             
-            compressed_pair_impl() {}
-            
-            explicit compressed_pair_impl(First f)
-              : m_first(elib::forward<First>(f))
+            constexpr compressed_pair_impl()
+              : Second(), m_first()
             {}
             
-            explicit compressed_pair_impl(Second s)
+            constexpr explicit compressed_pair_impl(First f)
+              : Second(), m_first(elib::forward<First>(f))
+            {}
+            
+            constexpr explicit compressed_pair_impl(Second s)
+              : Second(elib::forward<Second>(s)), m_first()
+            {}
+            
+            constexpr compressed_pair_impl(First f, Second s)
               : Second(elib::forward<Second>(s))
-            {}
-            
-            compressed_pair_impl(First f, Second s)
-              : m_first(elib::forward<First>(f))
-              , Second(elib::forward<Second>(s))
+              , m_first(elib::forward<First>(f))
             {}
             
             first_reference first() noexcept { return m_first; }
-            first_const_reference first() const noexcept { return m_first; }
+            
+            constexpr first_const_reference 
+            first() const noexcept { return m_first; }
             
             second_reference second() noexcept { return *this; }
-            second_const_reference second() const noexcept { return *this; }
+            
+            constexpr second_const_reference 
+            second() const noexcept { return *this; }
             
             void swap(compressed_pair_impl & other)
                 noexcept(aux::is_nothrow_swappable<First>::value 
@@ -223,33 +246,38 @@ namespace elib
             using first_const_reference = First const &;
             using second_const_reference = Second const &;
             
-            compressed_pair_impl() {}
-            
-            explicit compressed_pair_impl(First f)
-              : First(elib::forward<First>(f))
+            constexpr compressed_pair_impl()
+              : First(), Second() 
             {}
             
-            explicit compressed_pair_impl(Second s)
-              : Second(elib::forward<Second>(s))
+            constexpr explicit compressed_pair_impl(First f)
+              : First(elib::forward<First>(f)), Second()
             {}
             
-            compressed_pair_impl(First f, Second s)
+            constexpr explicit compressed_pair_impl(Second s)
+              : First(), Second(elib::forward<Second>(s))
+            {}
+            
+            constexpr compressed_pair_impl(First f, Second s)
               : First(elib::forward<First>(f))
               , Second(elib::forward<Second>(s))
             {}
             
             first_reference first() noexcept { return *this; }
-            first_const_reference first() const noexcept { return *this; }
+            
+            constexpr first_const_reference
+            first() const noexcept { return *this; }
             
             second_reference second() noexcept { return *this; }
-            second_const_reference second() const noexcept { return *this; }
+            
+            constexpr second_const_reference 
+            second() const noexcept { return *this; }
             
             void swap(compressed_pair_impl &)
                 noexcept(aux::is_nothrow_swappable<First>::value 
                         && aux::is_nothrow_swappable<Second>::value)
             {
             }
-            
         };
     }                                       // namespace compressed_pair_detail
     
@@ -268,16 +296,19 @@ namespace elib
         using first_const_reference = typename base::first_const_reference;
         using second_const_reference = typename base::second_const_reference;
         
-        compressed_pair() {}
-        explicit compressed_pair(first_type f)
+        constexpr compressed_pair()
+          : base()
+        {}
+        
+        constexpr explicit compressed_pair(first_type f)
           : base(elib::forward<first_type>(f))
         {}
         
-        explicit compressed_pair(second_type f)
+        constexpr explicit compressed_pair(second_type f)
           : base(elib::forward<second_type>(f))
         {}
         
-        compressed_pair(first_type f, second_type s)
+        constexpr compressed_pair(first_type f, second_type s)
           : base(elib::forward<first_type>(f), elib::forward<second_type>(s))
         {}
         

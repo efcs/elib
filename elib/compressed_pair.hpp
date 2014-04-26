@@ -1,7 +1,15 @@
 #ifndef ELIB_COMPRESSED_PAIR_HPP
 #define ELIB_COMPRESSED_PAIR_HPP
 
-# include <elib/aux.hpp>
+# include <elib/aux/forward.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/integral_constant.hpp>
+# include <elib/aux/traits/decay.hpp>
+# include <elib/aux/traits/is_empty.hpp>
+# include <elib/aux/traits/is_same.hpp>
+# include <elib/aux/traits/is_swappable.hpp>
+# include <elib/aux/traits/remove_const.hpp>
+# include <elib/aux/traits/remove_cv.hpp>
 
 namespace elib 
 {

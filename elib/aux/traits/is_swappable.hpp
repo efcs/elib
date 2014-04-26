@@ -31,13 +31,13 @@ namespace elib { namespace aux
                 class T, class U
               , bool = decltype(is_swappable_impl<T, U>(0))::value
             >
-            struct is_noexcept_swappable_impl
+            struct is_nothrow_swappable_impl
             {
                 using type = false_;
             };
             
             template <class T, class U>
-            struct is_noexcept_swappable_impl<T, U, true>
+            struct is_nothrow_swappable_impl<T, U, true>
             {
                 using type = elib::bool_<
                     noexcept( swap(declval< T&>(), declval<U &>()) )
@@ -51,15 +51,15 @@ namespace elib { namespace aux
           );
         
         template <class T, class U = T>
-        using is_noexcept_swappable = typename 
-            traits_adl_barrier::is_noexcept_swappable_impl<T, U>::type;
+        using is_nothrow_swappable = typename 
+            traits_adl_barrier::is_nothrow_swappable_impl<T, U>::type;
             
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T, class U = T>
         constexpr bool is_swappable_v = is_swappable<T, U>::value;
         
         template <class T, class U = T>
-        constexpr bool is_noexcept_swappable_v = is_noexcept_swappable<T, U>::value;
+        constexpr bool is_nothrow_swappable_v = is_nothrow_swappable<T, U>::value;
 # endif
     }                                                       //namespace traits
     

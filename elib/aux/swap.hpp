@@ -38,7 +38,7 @@ namespace elib { namespace aux
         ////////////////////////////////////////////////////////////////////////
         template <
             class T, class U
-          , ELIB_ENABLE_IF( is_noexcept_swappable<T, U>::value )
+          , ELIB_ENABLE_IF(is_nothrow_swappable<T, U>::value )
           >
         get_swap_t<T, U>
         get_noexcept_swap_impl(int) noexcept
@@ -72,7 +72,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     template <
         class T, class U = T
-      , ELIB_ENABLE_IF(is_noexcept_swappable<T, U>::value)
+      , ELIB_ENABLE_IF(is_nothrow_swappable<T, U>::value)
       >
     get_swap_t<T, U> 
     get_noexcept_swap() noexcept
@@ -98,7 +98,7 @@ namespace elib { namespace aux
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T, class U>
-    void adl_swap(T & lhs, U & rhs) noexcept(is_noexcept_swappable<T, U>::value)
+    void adl_swap(T & lhs, U & rhs) noexcept(is_nothrow_swappable<T, U>::value)
     {
         get_swap<T, U>()(lhs, rhs);
     }

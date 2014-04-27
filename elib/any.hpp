@@ -195,7 +195,10 @@ namespace elib
         }
         
         ////////////////////////////////////////////////////////////////////////
-        template <class ValueType>
+        template <
+            class ValueType
+          , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<ValueType>, any>::value)
+          >
         any(ValueType && value)
           : m_base_ptr(nullptr)
         {
@@ -223,7 +226,10 @@ namespace elib
         // any(std::allocator_arg_t, Allocator const & alloc);
         
         ////////////////////////////////////////////////////////////////////////
-        template <class Allocator, class ValueType>
+        template <
+            class Allocator, class ValueType
+          , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<ValueType>, any>::value)
+          >
         any(std::allocator_arg_t, Allocator const & alloc, ValueType && value)
         {
             using StoredValue = aux::decay_t<ValueType>;
@@ -274,7 +280,10 @@ namespace elib
         }
         
         ////////////////////////////////////////////////////////////////////////
-        template <class ValueType>
+        template <
+            class ValueType
+          , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<ValueType>, any>::value)
+          >
         any & operator=(ValueType && value)
         {
             any(elib::forward<ValueType>(value)).swap(*this);

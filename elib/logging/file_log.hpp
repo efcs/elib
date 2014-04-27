@@ -63,6 +63,5 @@ namespace elib { namespace logging
     };
     
 
-  } /* namespace log */
-} /* namespace elib */
-#endif /* ELIB_LOG_FILE_LOG_HPP */
+}}                                                          // namespace elib
+#endif /* ELIB_LOGGING_FILE_LOG_HPP */

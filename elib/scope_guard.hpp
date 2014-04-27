@@ -1,7 +1,9 @@
 #ifndef ELIB_SCOPE_GUARD_HPP
 #define ELIB_SCOPE_GUARD_HPP
 
-# include <elib/aux.hpp>
+# include <elib/aux/forward.hpp>
+# include <elib/aux/move.hpp>
+# include <elib/aux/traits/decay.hpp>
 # include <cstddef>
 
 # define ELIB_SCOPE_GUARD(...)          \

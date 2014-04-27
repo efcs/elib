@@ -1,8 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/except/exception.hpp>
-#include <elib/except/error_info.hpp>
+#include <elib/except.hpp>
 #include <elib/aux.hpp>
 
 #include <string>

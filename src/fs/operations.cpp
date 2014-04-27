@@ -5,7 +5,7 @@
 #include <elib/fs/filesystem_error.hpp>
 
 #include <elib/aux.hpp>
-#include <elib/make_unique.hpp>
+#include <elib/memory/make_unique.hpp>
 
 #include <cstdlib>
 #include <climits>

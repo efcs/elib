@@ -7,7 +7,8 @@ BOOST_AUTO_TEST_SUITE(elib_compressed_pair_test_suite)
 
 BOOST_AUTO_TEST_CASE(elib_compressed_pair_init)
 {
-
+    //TODO
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

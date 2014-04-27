@@ -1,6 +1,7 @@
 #ifndef ELIB_COMPRESSED_PAIR_HPP
 #define ELIB_COMPRESSED_PAIR_HPP
 
+# include <elib/config.hpp>
 # include <elib/aux/forward.hpp>
 # include <elib/aux/move.hpp>
 # include <elib/aux/integral_constant.hpp>
@@ -50,13 +51,25 @@ namespace elib
           : elib::integral_constant<compress, compress::first>
         {};
         
+# if defined(ELIB_CONFIG_CLANG)
+#   if __has_feature(is_final)
+#     define ELIB_COMPRESSED_PAIR_HAS_FINAL
+#   endif
+# endif
         ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
         using choose_compress = choose_compress_impl<
-            aux::is_same<aux::remove_cv_t<First>, aux::remove_cv_t<Second>>::value
+            aux::is_same<aux::remove_cv_t<First>, aux::remove_cv_t<Second>>::value 
+# if !defined(ELIB_COMPRESSED_PAIR_HAS_FINAL)
           , aux::is_empty<First>::value
           , aux::is_empty<Second>::value
+# else
+          , aux::is_empty<First>::value && !__is_final(First)
+          , aux::is_empty<Second>::value && !__is_final(Second)
+# endif
           >;
+        
+# undef ELIB_COMPRESSED_PAIR_HAS_FINAL
         
         ////////////////////////////////////////////////////////////////////////
         template <

@@ -3,7 +3,7 @@
 
 # include <elib/aux.hpp>
 # include <elib/config.hpp>
-# include <elib/make_unique.hpp> /* for std::make_unique */
+# include <elib/memory/make_unique.hpp> /* for std::make_unique */
 
 # include <stdexcept>
 # include <sstream>

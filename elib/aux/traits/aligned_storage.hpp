@@ -29,7 +29,7 @@ namespace elib { namespace aux
             std::size_t Len
           , std::size_t Align = traits_detail::deduced_align<Len>::value
           >
-        using aligned_storage_t = typename aligned_storage<Len, Align>::value;
+        using aligned_storage_t = typename aligned_storage<Len, Align>::type;
     }                                                       //namespace traits
     
     using namespace traits;

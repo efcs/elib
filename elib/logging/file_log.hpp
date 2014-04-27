@@ -30,7 +30,7 @@ namespace elib { namespace logging
         /* open a new output file */
         bool open(
             const std::string & xfilename
-          , std::ios_base::openmode = std::ios_base::app
+          , std::ios_base::openmode mode = std::ios_base::app
           )
         {
             m_filename = xfilename;
@@ -58,7 +58,7 @@ namespace elib { namespace logging
         }
 
     private:
-        std::string m_filename;;
+        std::string m_filename;
         std::ofstream m_out;
     };
     

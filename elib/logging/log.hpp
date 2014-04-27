@@ -19,7 +19,7 @@ namespace elib { namespace logging
     protected:
         std::ostream & m_get_stream(level_e lv)
         {
-            return ((lv <= level_e::step || l == level_e::raw_out) 
+            return ((lv <= level_e::step || lv == level_e::raw_out) 
               ? std::cout 
               : std::cerr);
         }

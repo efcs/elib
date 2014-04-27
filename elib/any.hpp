@@ -10,6 +10,11 @@
 
 namespace elib
 {
+
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
     ////////////////////////////////////////////////////////////////////////////
     class bad_any_cast : std::bad_cast
     {
@@ -19,6 +24,9 @@ namespace elib
             return "bad any cast";
         }
     };
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
     
     namespace any_detail
     {

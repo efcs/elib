@@ -89,7 +89,9 @@ namespace elib
                 NewAlloc a(m_pair.second());
                 using Dtor = allocator_destructor<NewAlloc>;
                 std::unique_ptr<storage_type, Dtor> tmp(a.allocate(1), Dtor(a, 1));
-                ::new ((void*)tmp.get()) storage_type(m_pair.first(), Alloc(a));
+                ::new ((void*)tmp.get()) storage_type(
+                    m_pair.first(), Alloc(a)
+                  );
                 return tmp.release();
             }
             

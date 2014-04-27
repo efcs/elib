@@ -150,16 +150,13 @@ namespace elib
         using buffer_t = aux::aligned_storage_t<sizeof(void*)*3>;
         
         ////////////////////////////////////////////////////////////////////////
-        template <
-            class ValueType
-          , class Alloc = std::allocator<ValueType>
-          >
+        template <class StorageType>
         using store_locally = 
         elib::and_c<
-            sizeof(storage_type<ValueType, Alloc>) <= sizeof(buffer_t)
+            sizeof(StorageType) <= sizeof(buffer_t)
           , aux::alignment_of<buffer_t>::value 
-                % std::alignment_of<storage_type<ValueType, Alloc>>::value == 0
-          , aux::is_nothrow_move_constructible<ValueType>::value
+                % std::alignment_of<StorageType>::value == 0
+          , aux::is_nothrow_move_constructible<typename StorageType::value_type>::value
         >;
     }                                                       // namespace detail
     
@@ -204,7 +201,8 @@ namespace elib
         {
             using StoredValue = aux::decay_t<ValueType>;
             using Storage = storage_type<StoredValue>;
-            if (store_locally<StoredValue>::value) {
+            
+            if (store_locally<Storage>::value) {
                 ::new ((void*)&m_buff) Storage(elib::forward<ValueType>(value));
                 m_base_ptr = m_buff_ptr();
             } else {
@@ -256,7 +254,6 @@ namespace elib
             clear();
         }
         
-        // TODO offer strong exception safety guarentee
         any & operator=(any const & other)
         {
             any(other).swap(*this);
@@ -265,7 +262,14 @@ namespace elib
         
         any & operator=(any && other) noexcept
         {
-            this->swap(other);
+            clear();
+            if (other.m_stored_locally()) {
+                m_base_ptr = other.m_base_ptr->move(m_buff_ptr());
+            } 
+            else if (other.m_stored_remotely()) {
+                m_base_ptr = other.m_base_ptr;
+                other.m_base_ptr = nullptr;
+            }
             return *this;
         }
         
@@ -280,10 +284,10 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         void clear() noexcept
         {
-            if (m_base_ptr == m_buff_ptr()) {
+            if (m_stored_locally()) {
                 m_base_ptr->destroy();
             }
-            else if (m_base_ptr) {
+            else if (m_stored_remotely()) {
                 m_base_ptr->destroy_deallocate();
             } 
             m_base_ptr = nullptr;
@@ -343,8 +347,8 @@ namespace elib
         template <class ValueType, class Alloc = std::allocator<ValueType>>
         using storage_type = any_detail::storage_type<ValueType, Alloc>;
         
-        template <class ValueType, class Alloc = std::allocator<ValueType>>
-        using store_locally = any_detail::store_locally<ValueType, Alloc>;
+        template <class StorageType>
+        using store_locally = any_detail::store_locally<StorageType>;
         
     private:
         storage_base * m_buff_ptr() noexcept

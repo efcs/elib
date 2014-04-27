@@ -21,7 +21,6 @@ BOOST_AUTO_TEST_CASE(string_to_int_test)
     BOOST_CHECK(x == dest);
     
     x = 0;
-    dest = 1;
     s = "0";
     dest = lexical_cast<int>(s);
     BOOST_CHECK(x == dest);

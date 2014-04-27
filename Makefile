@@ -85,6 +85,9 @@ scan:
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake -DCONFIG_ELIB_COVERITY_SCAN=ON .. ; cd ..
 	@ cov-build --dir cov-int $(MAKE) -C build all
 
+.PHONY: scan_build
+scan_build:
+	@ rm -rf build/ ; mkdir -p build ; cd build/ ; scan-build cmake .. ; scan-build make ; cd ..
 
 .PHONY: config_silent
 config_silent:

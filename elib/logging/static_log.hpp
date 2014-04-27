@@ -1,18 +1,16 @@
-#ifndef ELIB_LOG_STATIC_LOG_HPP
-#define ELIB_LOG_STATIC_LOG_HPP
+#ifndef ELIB_LOGGING_STATIC_LOG_HPP
+#define ELIB_LOGGING_STATIC_LOG_HPP
 
-# include <elib/log/log_level.hpp>
-# include <elib/log/log.hpp>
+# include <elib/logging/log_level.hpp>
+# include <elib/logging/log.hpp>
 # include <elib/aux.hpp>
 # include <elib/fmt.hpp>
 # include <cstdarg>
 # include <string>
 
 
-namespace elib 
+namespace elib { namespace logging
 {
-  namespace log 
-  {
           
     /* global logging class, it logs to std::cout and std::cerr,
     * while it does not inherit from basic_log it implements
@@ -196,6 +194,5 @@ namespace elib
 #   pragma clang diagnostic pop
 # endif
 
-  }                                                         // namespace log
-}                                                           // namespace elib
-#endif /* ELIB_LOG_STATIC_LOG_HPP */
+}}                                                          // namespace elib
+#endif /* ELIB_LOGGING_STATIC_LOG_HPP */

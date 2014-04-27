@@ -22,8 +22,7 @@ namespace elib { namespace container
         public:
             using key_type = Key;
             using mapped_type = T;
-            using value_type = std::pair<const Key, T>;
-            using stored_type = std::pair<aux::remove_const_t<Key>, T>;
+            using value_type = std::pair<Key, T>;
             using key_compare = Compare;
             
         public:
@@ -52,27 +51,7 @@ namespace elib { namespace container
                 return m_cmp(lhs.first, rhs.first);
             }
             
-            bool operator()(value_type const & lhs, stored_type const & rhs) const
-            {
-                return m_cmp(lhs.first, rhs.first);
-            }
-            
             bool operator()(value_type const & lhs, Key const & rhs) const
-            {
-                return m_cmp(lhs.first, rhs);
-            }
-            
-            bool operator()(stored_type const & lhs, stored_type const & rhs) const
-            {
-                return m_cmp(lhs.first, rhs.first);
-            }
-            
-            bool operator()(stored_type const & lhs, value_type const & rhs) const
-            {
-                return m_cmp(lhs.first, rhs.first);
-            }
-            
-            bool operator()(stored_type const & lhs, Key const & rhs) const
             {
                 return m_cmp(lhs.first, rhs);
             }
@@ -87,14 +66,10 @@ namespace elib { namespace container
                 return m_cmp(lhs, rhs.first);
             }
             
-            bool operator()(Key const & lhs, stored_type const & rhs) const
-            {
-                return m_cmp(lhs, rhs.first);
-            }
-            
         private:
             Compare m_cmp;
         };
+    
     }                                                       // namespace detail
     
     template <

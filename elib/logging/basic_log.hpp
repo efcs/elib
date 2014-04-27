@@ -1,20 +1,18 @@
-#ifndef ELIB_LOG_BASIC_LOG_HPP
-#define ELIB_LOG_BASIC_LOG_HPP
+#ifndef ELIB_LOGGING_BASIC_LOG_HPP
+#define ELIB_LOGGING_BASIC_LOG_HPP
 
-#include <elib/log/log_level.hpp>
-# include <elib/aux.hpp>
+# include <elib/logging/log_level.hpp>
+# include <elib/aux/forward.hpp>
 # include <elib/fmt.hpp>
 
-#include <map>
-#include <mutex>
-#include <string>
-#include <iosfwd>
+# include <map>
+# include <mutex>
+# include <string>
+# include <iosfwd>
 
 
-namespace elib 
+namespace elib { namespace logging 
 {
-  namespace log 
-  {
     
 # if defined(__clang__)
 #   pragma clang diagnostic push
@@ -22,10 +20,14 @@ namespace elib
 # endif
     /* this class defines the basic logging interface used with the
     * classes log, file_log, and elog (static) */
-    class basic_log {
+    class basic_log 
+    {
     public:
         basic_log() = default;
-        basic_log(level_e l);
+        
+        basic_log(level_e l)
+          : m_level(l)
+        {}
         
         virtual ~basic_log() {}
         
@@ -38,113 +40,120 @@ namespace elib
         /* set & get the current logging level
         * valid levels: debug-fatal */
         void level(level_e l);
-        level_e level();
+        level_e level() const { return m_level; }
         
         /* print a message to a given log level,
         * valid levels: all */
         template <class ...Args>
         void print(level_e l, const char *msg, Args &&... args )
         {
-            _log(l, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(l, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void print(level_e l, const std::string &msg)
         {
-            _log(l, msg);
+            m_log_to(l, msg);
         }
         
         /* a method for each log level */
         template <class ...Args>
         void debug(const char *msg, Args &&... args )
         {
-            _log(level_e::debug, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::debug, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void debug(const std::string & s)
         {
-            _log(level_e::debug, s);
+            m_log_to(level_e::debug, s);
         }
         
         template <class ...Args>
         void info(const char *msg, Args &&... args )
         {
-            _log(level_e::info, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::info, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void info(const std::string & s)
         {
-            _log(level_e::info, s);
+            m_log_to(level_e::info, s);
         }
         
         template <class ...Args>
         void step(const char *msg, Args &&... args )
         {
-            _log(level_e::step, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::step, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void step(const std::string & s)
         {
-            _log(level_e::step, s);
+            m_log_to(level_e::step, s);
         }
         
         template <class ...Args>
         void warn(const char *msg, Args &&... args )
         {
-            _log(level_e::warn, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::warn, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void warn(const std::string & s)
         {
-            _log(level_e::warn, s);
+            m_log_to(level_e::warn, s);
         }
         
         template <class ...Args>
         void err(const char *msg, Args &&... args )
         {
-            _log(level_e::err, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::err, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void err(const std::string & s)
         {
-            _log(level_e::err, s);
+            m_log_to(level_e::err, s);
         }
         
         template <class ...Args>
         void fatal(const char *msg, Args &&... args)
         {
-            _log(level_e::fatal, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::fatal, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void fatal(const std::string & s)
         {
-            _log(level_e::fatal, s);
+            m_log_to(level_e::fatal, s);
         }
         
         template <class ...Args>
         void raw_out(const char *msg, Args &&... args)
         {
-            _log(level_e::raw_out, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::raw_out, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void raw_out(const std::string & s)
         {
-            _log(level_e::raw_out, s);
+            m_log_to(level_e::raw_out, s);
         }
         
         template <class ...Args>
         void raw_err(const char *msg, Args &&... args)
         {
-            _log(level_e::raw_err, elib::fmt(msg, elib::forward<Args>(args)...));
+            m_log_to(level_e::raw_err, elib::fmt(msg, elib::forward<Args>(args)...));
         }
         
         void raw_err(const std::string & s)
         {
-            _log(level_e::raw_err, s);
+            m_log_to(level_e::raw_err, s);
         }
         
         /* Turn ALL OUTPUT from log on/off */
-        void on(bool p);
-        bool on() const;
+        void on(bool p) noexcept
+        { 
+            m_on = p; 
+        }
+        
+        bool on() const noexcept
+        {
+            return m_on;
+        }
         
     public:
         /* check properties about a member of level_e 
@@ -155,13 +164,13 @@ namespace elib
     protected:
         typedef std::lock_guard<std::mutex> lock_guard;
         
-        bool _should_print(level_e l) const;
+        bool m_should_print(level_e l) const;
         
-        void _log(level_e l, const std::string & s);
+        void m_log_to(level_e l, const std::string & s);
         
-        std::mutex & _lock() const;
+        std::mutex & m_get_lock() const;
         
-        virtual std::ostream & _get_stream(level_e l) = 0;
+        virtual std::ostream & m_get_stream(level_e l) = 0;
 
     private:
         level_e m_level{default_log_level};
@@ -184,6 +193,5 @@ namespace elib
 #   pragma clang diagnostic pop
 # endif
 
-  } /* namespace log */
-} /* namespace elib */
-#endif /* ELIB_LOG_BASIC_LOG_HPP */
+}}                                                          // namespace elib
+#endif /* ELIB_LOGGING_BASIC_LOG_HPP */

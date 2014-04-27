@@ -396,8 +396,7 @@ namespace elib
     private:
         buffer_t m_buff;
         storage_base *m_base_ptr;
-    
-    };
+    };                                                      // class any
     
     ////////////////////////////////////////////////////////////////////////////
     inline void swap(any & lhs, any & rhs) noexcept
@@ -464,7 +463,7 @@ namespace elib
     template <class ValueType>
     ValueType any_cast(any && v)
     {
-        return any_cast<ValueType>(static_cast<any const &>(v));
+        return any_cast<ValueType>(static_cast<any &>(v));
     }
 
 }                                                           // namespace elib

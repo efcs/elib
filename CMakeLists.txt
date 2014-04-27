@@ -73,7 +73,7 @@ option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
 option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
 
 # requires linkage. Log is fairly stable
-option(CONFIG_LIB_LOG "Build Log" ON)
+option(CONFIG_LIB_LOGGING "Build Logging library" ON)
 
 # header only. 
 option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)

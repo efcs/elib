@@ -63,21 +63,20 @@ set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
 ##                             Library Parts
 ################################################################################
 include(elib/build.cmake)
+include_library_if(CONFIG_LIB_AUX         aux/build.cmake         )
 include_library_if(CONFIG_LIB_CONTAINER   container/build.cmake   )
-include_library_if(CONFIG_LIB_EXCEPT      except/build.cmake      )
 include_library_if(CONFIG_LIB_ENUMERATION enumeration/build.cmake )
-include_library_if(CONFIG_LIB_RANGES      ranges/build.cmake      )
-include_library_if(CONFIG_LIB_ITER        iter/build.cmake        )
+include_library_if(CONFIG_LIB_EXCEPT      except/build.cmake      )
 include_library_if(CONFIG_LIB_FILESYSTEM  fs/build.cmake          )
+include_library_if(CONFIG_LIB_FUNCTIONAL  functional/build.cmake  )
+include_library_if(CONFIG_LIB_ITER        iter/build.cmake        )
 include_library_if(CONFIG_LIB_LOGGING     logging/build.cmake     )
 include_library_if(CONFIG_LIB_MPL         mp/build.cmake          )
-include_library_if(CONFIG_LIB_AUX         aux/build.cmake         )
-include_library_if(CONFIG_LIB_CEXPR       cexpr/build.cmake       )
-include_library_if(CONFIG_LIB_FUNCTIONAL  functional/build.cmake  )
-include_library_if(CONFIG_LIB_FUSE        fuse/build.cmake        )
+include_library_if(CONFIG_LIB_OPTIONS     options/build.cmake     )
+include_library_if(CONFIG_LIB_RANGES      ranges/build.cmake      )
 include_library_if(CONFIG_LIB_TUPLE       tuple/build.cmake       )
 include_library_if(CONFIG_LIB_WEB         web/build.cmake         )
-include_library_if(CONFIG_LIB_OPTIONS     options/build.cmake     )
+
 
 ################################################################################
 ##                               Objects

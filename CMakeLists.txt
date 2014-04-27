@@ -84,11 +84,6 @@ option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
 # off until GCC supports regex
 option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
 
-# Stub. Fuse is currently empty
-option(CONFIG_LIB_FUSE "Build Fusion Library" OFF)
-
-# Stub. cexpr is currently empty
-option(CONFIG_LIB_CEXPR "Build Create Expression Library" OFF)
 
 ################################################################################
 #                            PROJECT ELIB

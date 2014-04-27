@@ -8,19 +8,19 @@ namespace elib { namespace aux
     namespace detail
     {
         template <class Always, class ...Ignored>
-        struct _always
+        struct always_impl
         {
                 using type = Always;
         };
     }                                                   // namespace detail
 
     template <class ...T>
-    using always = typename aux::detail::_always<true_, T...>::type;
+    using always = typename aux::detail::always_impl<elib::true_, T...>::type;
 
     template <class ...T>
-    using never = typename aux::detail::_always<false_, T...>::type;
+    using never = typename aux::detail::always_impl<elib::false_, T...>::type;
 
     template <class ...T>
-    using always_void = typename aux::detail::_always<void, T...>::type;
+    using always_void = typename aux::detail::always_impl<void, T...>::type;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_ALWAYS_HPP */

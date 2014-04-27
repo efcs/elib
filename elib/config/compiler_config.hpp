@@ -7,8 +7,6 @@
 #   include <elib/config/compiler/gcc.hpp>
 # elif defined(_MSC_VER)
 #   include <elib/config/compiler/msvc.hpp>
-# elif defined(__EDG__)
-#   include <elib/config/compiler/edg.hpp>
 # elif defined(ELIB_ASSERT_CONFIG)
 #   error "Unknown compiler"
 # endif

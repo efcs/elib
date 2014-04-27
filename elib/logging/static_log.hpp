@@ -8,7 +8,6 @@
 # include <cstdarg>
 # include <string>
 
-
 namespace elib { namespace logging
 {
           

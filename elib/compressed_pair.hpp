@@ -14,41 +14,42 @@
 
 namespace elib 
 {
+    
+    ////////////////////////////////////////////////////////////////////////////
+    enum class compressed_pair_type
+    {
+        none, first, second, both
+    };
+        
     namespace compressed_pair_detail
     {
-        ////////////////////////////////////////////////////////////////////////
-        enum class compress
-        {
-            none, first, second, both
-        };
-        
         ////////////////////////////////////////////////////////////////////////
         template <bool IsSame, bool FirstEmpty, bool SecondEmpty>
         struct choose_compress_impl;
         
         template <bool IsSame>
         struct choose_compress_impl<IsSame, false, false>
-          : elib::integral_constant<compress, compress::none>
+          : elib::integral_constant<compressed_pair_type, compressed_pair_type::none>
         {};
         
         template <bool IsSame>
         struct choose_compress_impl<IsSame, true, false>
-          : elib::integral_constant<compress, compress::first>
+          : elib::integral_constant<compressed_pair_type, compressed_pair_type::first>
         {};
         
         template <bool IsSame>
         struct choose_compress_impl<IsSame, false, true>
-          : elib::integral_constant<compress, compress::second>
+          : elib::integral_constant<compressed_pair_type, compressed_pair_type::second>
         {};
         
         template <>
         struct choose_compress_impl<false, true, true>
-          : elib::integral_constant<compress, compress::both>
+          : elib::integral_constant<compressed_pair_type, compressed_pair_type::both>
         {};
         
         template <>
         struct choose_compress_impl<true, true, true>
-          : elib::integral_constant<compress, compress::first>
+          : elib::integral_constant<compressed_pair_type, compressed_pair_type::first>
         {};
         
 # if defined(ELIB_CONFIG_CLANG)
@@ -74,13 +75,13 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         template <
             class First, class Second
-          , compress = choose_compress<First, Second>::value
+          , compressed_pair_type = choose_compress<First, Second>::value
           >
         class compressed_pair_impl;
         
         ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
-        class compressed_pair_impl<First, Second, compress::none>
+        class compressed_pair_impl<First, Second, compressed_pair_type::none>
         {
         public:
             using first_type = First;
@@ -136,7 +137,7 @@ namespace elib
         
         ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
-        class compressed_pair_impl<First, Second, compress::first>
+        class compressed_pair_impl<First, Second, compressed_pair_type::first>
           : private First
         {
         public:
@@ -191,7 +192,7 @@ namespace elib
         
         ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
-        class compressed_pair_impl<First, Second, compress::second>
+        class compressed_pair_impl<First, Second, compressed_pair_type::second>
           : private Second
         {
         public:
@@ -246,7 +247,7 @@ namespace elib
         
         ////////////////////////////////////////////////////////////////////////
         template <class First, class Second>
-        class compressed_pair_impl<First, Second, compress::both>
+        class compressed_pair_impl<First, Second, compressed_pair_type::both>
           : private First, Second
         {
         public:
@@ -258,6 +259,8 @@ namespace elib
             
             using first_const_reference = First const &;
             using second_const_reference = Second const &;
+            
+        public:
             
             constexpr compressed_pair_impl()
               : First(), Second() 
@@ -309,6 +312,10 @@ namespace elib
         using first_const_reference = typename base::first_const_reference;
         using second_const_reference = typename base::second_const_reference;
         
+        static constexpr compressed_pair_type compressed = 
+            compressed_pair_detail::choose_compress<First, Second>::value;
+
+    public:
         constexpr compressed_pair()
           : base()
         {}
@@ -342,6 +349,11 @@ namespace elib
             base::swap(other);
         }
     };
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class First, class Second>
+    constexpr compressed_pair_type 
+    compressed_pair<First, Second>::compressed;
     
     ////////////////////////////////////////////////////////////////////////////
     template <class First, class Second>

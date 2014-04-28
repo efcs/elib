@@ -237,3 +237,6 @@ Requirements (Library specific):
   * check
 : Run the unit tests
 
+  * scan_build
+: Run clangs scan-build over the build
+

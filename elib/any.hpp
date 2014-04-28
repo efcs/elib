@@ -232,8 +232,10 @@ namespace elib
         }
         
         ////////////////////////////////////////////////////////////////////////
-        // template <class Allocator>
-        // any(std::allocator_arg_t, Allocator const & alloc);
+        template <class Allocator>
+        any(std::allocator_arg_t, Allocator const &) noexcept
+          : any()
+        {}
         
         ////////////////////////////////////////////////////////////////////////
         template <

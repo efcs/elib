@@ -12,6 +12,7 @@
 # include <elib/aux/demangle.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/integer_sequence.hpp>
+# include <elib/aux/invoke.hpp>
 # include <elib/aux/literals.hpp>
 # include <elib/aux/meta.hpp>
 # include <elib/aux/support.hpp>

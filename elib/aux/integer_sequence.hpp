@@ -81,7 +81,7 @@ namespace elib { namespace aux
     template<int N>
     using make_int_sequence = make_integer_sequence<int, N>;
 
-    template<size_t N>
+    template<std::size_t N>
     using make_index_sequence = make_integer_sequence<std::size_t, N>;
 
     ////////////////////////////////////////////////////////////////////////

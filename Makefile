@@ -102,7 +102,7 @@ config_loud:
 config:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_INCLUDE_TESTS=ON .. ; cd ..
-	@ time $(MAKE) --no-print-directory config_loud
+	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running static tests ===
 	@ ./bin/elib_test_static --log_level=message --report_level=short
 	@ echo === Running shared tests ===
@@ -113,7 +113,7 @@ config:
 san_config:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(CMAKE_CONFIG) $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_INCLUDE_TESTS=ON .. ; cd ..
-	@ time $(MAKE) --no-print-directory config_loud
+	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short
 	@ echo

@@ -284,9 +284,8 @@ namespace elib
         
         template <
             class U
-          , ELIB_ENABLE_IF(aux::is_constructible<T, U>::value)
-          , ELIB_ENABLE_IF(aux::is_assignable<T&, U>::value)
-        >
+          , ELIB_ENABLE_IF(aux::is_same<aux::decay_t<U>, T>::value)
+          >
         optional & operator=(U && v)
         {
             if (m_init()) {
@@ -532,11 +531,21 @@ namespace elib
             return *this;
         }
         
-        optional & operator=(optional const & other) noexcept
+        template <
+            class U
+          , ELIB_ENABLE_IF(aux::is_same<aux::decay_t<U>, optional<T &>>::value)
+          >
+        optional & operator=(U && u) noexcept
         {
-            m_data = other.m_data;
+            m_data = u.m_data;
             return *this;
         }
+        
+        template <
+            class U
+          , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<U>, optional<T &>>::value)
+          >
+        optional & operator=(U && u) noexcept = delete;
        
         void emplace(T & v) noexcept
         {

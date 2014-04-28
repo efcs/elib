@@ -9,8 +9,10 @@
 # include <string>
 # include <cstdlib>
 
-# if defined(ELIB_CONFIG_LIBSTDCXX) && defined(__GNUC__) && __GNUC__ >= 3
-#   define ELIB_AUX_HAS_DEMANGLE
+# if defined(ELIB_CONFIG_LIBSTDCXX) && defined(__GNUC__)
+#   if __GNUC__ >= 3
+#       define ELIB_AUX_HAS_DEMANGLE
+#   endif
 # endif
 
 # if defined(ELIB_AUX_HAS_DEMANGLE)

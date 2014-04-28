@@ -159,7 +159,7 @@ namespace elib { namespace tuples
             
             constexpr tuple_item() noexcept {}
             
-            constexpr tuple_item(tuple_item const& t) ELIB_NOEXCEPT(Type(t.get()))
+            constexpr tuple_item(tuple_item const& t)
               : Type(t.get())
             {
                 static_assert(

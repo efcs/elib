@@ -1,7 +1,7 @@
 #ifndef ELIB_AUX_INVOKE_HPP
 #define ELIB_AUX_INVOKE_HPP
 
-# include <elib/aux/common.hpp>
+# include <elib/aux/auto_return.hpp>
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/forward.hpp>
 # include <elib/aux/integer_sequence.hpp>

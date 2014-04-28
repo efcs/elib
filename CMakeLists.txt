@@ -48,41 +48,41 @@ option(CONFIG_HEADER_ONLY_SOURCE
 
 # TODO aux is header only and turning this option off doesn't do anything
 # except turn the unit tests off
-option(CONFIG_LIB_AUX "Build Aux" ON)
+option(ELIB_AUX_SOURCE "Build Aux" ON)
 
 # Containers and adapters
-option(CONFIG_LIB_CONTAINER "Build containers" ON)
+option(ELIB_CONTAINER_SOURCE "Build containers" ON)
 
 # header only. I don't think any other library has mp as dependency.
-option(CONFIG_LIB_MPL "Build MPL" ON)
+option(ELIB_MP_SOURCE "Build MPL" ON)
 
 # header only. log uses enumeration when available
 # disabling this library disables the log::log_level enum <-> string casting
-option(CONFIG_LIB_ENUMERATION "Build Enumeration" ON)
+option(ELIB_ENUMERATION_SOURCE "Build Enumeration" ON)
 
-option(CONFIG_LIB_RANGES "Build Range" ON)
-option(CONFIG_LIB_ITER "Build Iterator" ON)
+option(ELIB_RANGES_SOURCE "Build Range" ON)
+option(ELIB_ITER_SOURCE "Build Iterator" ON)
 
 # header only. function objects for operators and more
-option(CONFIG_LIB_FUNCTIONAL "Build Functional Library" ON)
+option(ELIB_FUNCTIONAL_SOURCE "Build Functional Library" ON)
 
 # header only. pair and tuple
-option(CONFIG_LIB_TUPLE "Build Tuple Library" ON)
+option(ELIB_TUPLE_SOURCE "Build Tuple Library" ON)
 
 # requires linkage. 
-option(CONFIG_LIB_FILESYSTEM "Build filesystem" ON)
+option(ELIB_FS_SOURCE "Build filesystem" ON)
 
 # requires linkage. Log is fairly stable
-option(CONFIG_LIB_LOGGING "Build Logging library" ON)
+option(ELIB_LOGGING_SOURCE "Build Logging library" ON)
 
 # header only. 
-option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
+option(ELIB_EXCEPT_SOURCE "Build Exception Library" ON)
 
 # Work in progress. Set to ON because it shouldn't break the build
-option(CONFIG_LIB_CMD_OPTIONS "Build Command line Options Library" ON)
+option(ELIB_CMD_OPTIONS_SOURCE "Build Command line Options Library" ON)
 
 # off until GCC supports regex
-option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)
+option(CONFIG_WEB_SOURCE "Build Web/Socket Library" OFF)
 
 
 ################################################################################
@@ -261,7 +261,7 @@ endmacro(add_flags)
 macro(include_library_if Pred CFile)
     if (${Pred})
         include(${CFile})
-        add_definitions( -DELIB_${Pred} )
+        add_definitions( -D${Pred} )
     endif()
 endmacro(include_library_if)
 ################################################################################

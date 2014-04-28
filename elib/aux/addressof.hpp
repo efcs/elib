@@ -1,29 +1,33 @@
 #ifndef ELIB_AUX_ADDRESSOF_HPP
 #define ELIB_AUX_ADDRESSOF_HPP
 
-# include <elib/aux/integral_constant.hpp>
 # include <elib/aux/declval.hpp>
-# include <cstddef>
+# include <elib/aux/enable_if.hpp>
+# include <elib/aux/integral_constant.hpp>
 
+/// std::addressof isn't marked as constexpr because it uses reinterpret_cast.
+/// elib::addressof is constexpr whenever T doesn't overload operator&
 namespace elib { namespace aux
 {
     namespace detail
     {
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         struct has_overload_addressof
         {
             template <
                 class U
-              , std::size_t = sizeof(::elib::aux::declval<U &>().operator&())
+              , ELIB_ENABLE_IF_VALID_EXPR(::elib::aux::declval<U &>().operator&())
               >
-            static constexpr bool test(int) { return true; }
+            static elib::true_ test(int);
                 
-            template <class U>
-            static constexpr bool test(long) { return false; }
+            template <class>
+            static elib::false_ test(long);
                 
-            using type = integral_constant<bool, test<T>(0)>;
+            using type = decltype(test<T>(0));
         };
-            
+          
+        ////////////////////////////////////////////////////////////////////////
         template <bool HasOverload>
         struct addressof_impl
         {
@@ -34,6 +38,7 @@ namespace elib { namespace aux
             }
         };
             
+        ////////////////////////////////////////////////////////////////////////
         template <>
         struct addressof_impl<true>
         {

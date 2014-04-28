@@ -3,6 +3,12 @@
 
 # include <elib/aux/integral_constant.hpp>
 
+/// A set of meta-programming helpers that always evaluate to a given type.
+/// They are usualy used as a dummy context to perform SFINAE or to make
+/// a static_assert dependant on a template parameter (so it only fires when 
+/// the template is instantiated).
+/// NOTE: always_void is the same as the void_t type commonly seen in standard
+/// proposals
 namespace elib { namespace aux
 {
     namespace detail

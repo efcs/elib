@@ -18,7 +18,6 @@
 # include <elib/aux/by_ref.hpp>
 # include <elib/aux/by_val.hpp>
 # include <elib/aux/check_complete.hpp>
-# include <elib/aux/common.hpp>
 # include <elib/aux/comparison.hpp>
 # include <elib/aux/convert.hpp>
 # include <elib/aux/declval.hpp>

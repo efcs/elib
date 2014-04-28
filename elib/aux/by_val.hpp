@@ -1,7 +1,7 @@
 #ifndef ELIB_AUX_BY_VAL_HPP
 #define ELIB_AUX_BY_VAL_HPP
 
-# include <elib/aux/common.hpp>
+# include <elib/aux/auto_return.hpp>
 
 namespace elib { namespace aux
 {
@@ -37,6 +37,6 @@ namespace elib { namespace aux
         )
     };
 
-    constexpr const by_val_ by_val{};
+    constexpr by_val_ by_val{};
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_BY_VAL_HPP */

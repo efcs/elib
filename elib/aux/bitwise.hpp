@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_BITWISE_HPP
 #define ELIB_AUX_BITWISE_HPP
 
+/// A set of meta-functions that provide bitwise operations on integral_constants.
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/left_associative_expression.hpp>
 

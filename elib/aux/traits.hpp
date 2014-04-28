@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_TRAITS_HPP
 #define ELIB_AUX_TRAITS_HPP
 # 
+# /// Standard library traits
 # include <elib/aux/traits/remove_const.hpp>
 # include <elib/aux/traits/remove_volatile.hpp>
 # include <elib/aux/traits/remove_cv.hpp>
@@ -87,7 +88,11 @@
 # include <elib/aux/traits/is_same.hpp>
 # include <elib/aux/traits/is_base_of.hpp>
 # include <elib/aux/traits/is_convertible.hpp>
+# include <elib/aux/traits/conditional.hpp>
 #
+# /// Extended elib traits
+# include <elib/aux/traits/begin_end_result.hpp>
+# include <elib/aux/traits/has_begin_end.hpp>
 # include <elib/aux/traits/is_explicitly_convertible.hpp>
 # include <elib/aux/traits/is_explicitly_castable.hpp>
 # include <elib/aux/traits/is_implicitly_castable.hpp>
@@ -105,9 +110,6 @@
 # include <elib/aux/traits/uncvref.hpp>
 # include <elib/aux/traits/uncvrefptr.hpp>
 # 
-# include <elib/aux/traits/has_begin_end.hpp>
-# include <elib/aux/traits/begin_end_result.hpp>
 # 
-# include <elib/aux/traits/conditional.hpp>
 # 
 #endif /* ELIB_AUX_TRAITS_HPP */

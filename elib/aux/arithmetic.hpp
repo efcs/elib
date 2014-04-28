@@ -4,6 +4,7 @@
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/left_associative_expression.hpp>
 
+/// Arithmetic meta-functions for use with integral_constants.
 namespace elib { namespace aux
 {
     namespace detail

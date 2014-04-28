@@ -1,6 +1,8 @@
 #ifndef ELIB_AUX_CHECK_COMPLETE_HPP
 #define ELIB_AUX_CHECK_COMPLETE_HPP
 
+/// A traits that checks that a list of types are complete.
+/// It causes a compile error if a given type is not complete
 # include <elib/config.hpp>
 
 namespace elib { namespace aux

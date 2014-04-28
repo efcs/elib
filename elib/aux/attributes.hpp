@@ -1,12 +1,10 @@
 #ifndef ELIB_AUX_ATTRIBUTES_HPP
-# define ELIB_AUX_ATTRIBUTES_HPP
-
+#define ELIB_AUX_ATTRIBUTES_HPP
+#
+# /// Atttributes are not always supported. 
+# /// However, they don't effect the correctness so defining them is not required
 # include <elib/config.hpp>
+# 
 
-# if ! defined(ELIB_CONFIG_NO_ATTRIBUTES)
-#   define ELIB_NORETURN [[noreturn]]
-# else
-#   define ELIB_NORETURN
-# endif
 
 #endif /* ELIB_AUX_ATTRIBUTES_HPP */

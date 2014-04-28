@@ -25,7 +25,7 @@ clean:
 	
 .PHONY: redep
 redep: 
-	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_ARGS) ..  ; cd ..
 	
 .PHONY: distclean
 distclean: 

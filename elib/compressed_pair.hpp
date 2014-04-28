@@ -312,7 +312,7 @@ namespace elib
         using first_const_reference = typename base::first_const_reference;
         using second_const_reference = typename base::second_const_reference;
         
-        static constexpr compressed_pair_type compressed = 
+        static constexpr compressed_pair_type compression = 
             compressed_pair_detail::choose_compress<First, Second>::value;
 
     public:
@@ -353,7 +353,7 @@ namespace elib
     ////////////////////////////////////////////////////////////////////////////
     template <class First, class Second>
     constexpr compressed_pair_type 
-    compressed_pair<First, Second>::compressed;
+    compressed_pair<First, Second>::compression;
     
     ////////////////////////////////////////////////////////////////////////////
     template <class First, class Second>

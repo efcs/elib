@@ -46,44 +46,19 @@ option(CONFIG_INCLUDE_TESTS
 # NOTE There are top level files that are not a member of any library part
 # config, any, fmt, lexical_cast, scope_guard are some examples.
 
-# TODO aux is header only and turning this option off doesn't do anything
-# except turn the unit tests off
-option(ELIB_AUX_SOURCE "Build Aux" ON)
-
-# Containers and adapters
+option(ELIB_AUX_SOURCE "Build aux" ON)
+option(ELIB_CMD_OPTIONS_SOURCE "Build command options" ON)
 option(ELIB_CONTAINER_SOURCE "Build containers" ON)
-
-
-
-# header only. log uses enumeration when available
-# disabling this library disables the log::log_level enum <-> string casting
-option(ELIB_ENUMERATION_SOURCE "Build Enumeration" ON)
-
-option(ELIB_RANGES_SOURCE "Build Range" ON)
-option(ELIB_ITER_SOURCE "Build Iterator" ON)
-
-# header only. function objects for operators and more
-option(ELIB_FUNCTIONAL_SOURCE "Build Functional Library" ON)
-
-# requires linkage. 
+option(ELIB_ENUMERATION_SOURCE "Build enumeration" ON)
+option(ELIB_EXCEPT_SOURCE "Build except" ON)
 option(ELIB_FS_SOURCE "Build filesystem" ON)
-
-# requires linkage. Log is fairly stable
-option(ELIB_LOGGING_SOURCE "Build Logging library" ON)
-
-# header only. 
-option(ELIB_EXCEPT_SOURCE "Build Exception Library" ON)
-
-# header only. I don't think any other library has mp as dependency.
-option(ELIB_MP_SOURCE "Build MPL" ON)
-
-option(ELIB_MEMORY_SOURCE "Build memory" ON)
-
-# Work in progress. Set to ON because it shouldn't break the build
-option(ELIB_CMD_OPTIONS_SOURCE "Build Command line Options Library" ON)
-
-# off until GCC supports regex
-option(CONFIG_WEB_SOURCE "Build Web/Socket Library" OFF)
+option(ELIB_FUNCTIONAL_SOURCE "Build functional" ON)
+option(ELIB_ITER_SOURCE "Build iterators" ON)
+option(ELIB_LOGGING_SOURCE "Build logging library" ON)
+option(ELIB_MEMORY_SOURCE "Build memory library" ON)
+option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
+option(ELIB_RANGES_SOURCE "Build ranges library" ON)
+option(ELIB_WEB_SOURCE "Build web library" OFF)
 
 
 ################################################################################
@@ -102,8 +77,8 @@ if( NOT CMAKE_BUILD_TYPE )
        "Choose the type of build"
        FORCE )
 endif()
-set( CMAKE_CXX_FLAGS_RELEASE "-O2" )
-set( CMAKE_C_FLAGS_RELEASE "-O2" )
+set( CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG" )
+set( CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer  -DDELIB_WARN_ON " )
 

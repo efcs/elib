@@ -71,10 +71,9 @@ include_library_if(ELIB_FS_SOURCE          fs/build.cmake          )
 include_library_if(ELIB_FUNCTIONAL_SOURCE  functional/build.cmake  )
 include_library_if(ELIB_ITER_SOURCE        iter/build.cmake        )
 include_library_if(ELIB_LOGGING_SOURCE     logging/build.cmake     )
-include_library_if(ELIB_MPL_SOURCE         mp/build.cmake          )
+include_library_if(ELIB_MP_SOURCE          mp/build.cmake          )
 include_library_if(ELIB_CMD_OPTIONS_SOURCE cmd_options/build.cmake )
 include_library_if(ELIB_RANGES_SOURCE      ranges/build.cmake      )
-include_library_if(ELIB_TUPLE_SOURCE       tuple/build.cmake       )
 include_library_if(ELIB_WEB_SOURCE         web/build.cmake         )
 
 

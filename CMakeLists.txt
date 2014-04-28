@@ -66,9 +66,6 @@ option(ELIB_ITER_SOURCE "Build Iterator" ON)
 # header only. function objects for operators and more
 option(ELIB_FUNCTIONAL_SOURCE "Build Functional Library" ON)
 
-# header only. pair and tuple
-option(ELIB_TUPLE_SOURCE "Build Tuple Library" ON)
-
 # requires linkage. 
 option(ELIB_FS_SOURCE "Build filesystem" ON)
 

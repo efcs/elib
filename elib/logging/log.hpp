@@ -7,6 +7,10 @@
 
 namespace elib { namespace logging
 {
+# if defined(__clang__)
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wweak-vtables"
+# endif
     ////////////////////////////////////////////////////////////////////////////
     class log : public basic_log {
     public:
@@ -24,6 +28,9 @@ namespace elib { namespace logging
               : std::cerr);
         }
     };
+# if defined(__clang__)
+#   pragma clang diagnostic pop
+# endif
  
 }}                                                          // namespace elib
 #endif /* ELIB_LOGGING_LOG_HPP */

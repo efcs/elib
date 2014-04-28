@@ -6,9 +6,11 @@
 # must be commented out.
 
 set(LIBRARY_FLAGS "")
-set(UNIT_TEST_FLAGS "")
 set(WARNING_FLAGS "")
+set(UNIT_TEST_FLAGS "")
+
 set(LIBRARY_SRC "")
+set(INCLUDE_TEST_SRC "")
 set(UNIT_TEST_SRC "")
 
 find_package( Threads REQUIRED )
@@ -71,6 +73,7 @@ include_library_if(ELIB_FS_SOURCE          fs/build.cmake          )
 include_library_if(ELIB_FUNCTIONAL_SOURCE  functional/build.cmake  )
 include_library_if(ELIB_ITER_SOURCE        iter/build.cmake        )
 include_library_if(ELIB_LOGGING_SOURCE     logging/build.cmake     )
+include_library_if(ELIB_MEMORY_SOURCE      memory/build.cmake      )
 include_library_if(ELIB_MP_SOURCE          mp/build.cmake          )
 include_library_if(ELIB_CMD_OPTIONS_SOURCE cmd_options/build.cmake )
 include_library_if(ELIB_RANGES_SOURCE      ranges/build.cmake      )
@@ -83,6 +86,7 @@ include_library_if(ELIB_WEB_SOURCE         web/build.cmake         )
 # Compile source files into "Object Libraries"
 add_library(ObjLib OBJECT ${LIBRARY_SRC})
 set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+
 
 ################################################################################
 ##                             Libraries
@@ -97,6 +101,15 @@ install(TARGETS elib LIBRARY DESTINATION lib)
 install(TARGETS elib_static ARCHIVE DESTINATION lib)
 install(DIRECTORY ${headerDir} DESTINATION include)
   
+################################################################################
+#
+################################################################################
+if (CONFIG_INCLUDE_TESTS)
+    add_library(IncludeTestLib OBJECT ${INCLUDE_TEST_SRC})
+    set_target_properties(IncludeTestLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+endif()
+
+
 ################################################################################
 ##                            Unit Tests
 ################################################################################

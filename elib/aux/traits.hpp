@@ -109,7 +109,6 @@
 # include <elib/aux/traits/uncvptr.hpp>
 # include <elib/aux/traits/uncvref.hpp>
 # include <elib/aux/traits/uncvrefptr.hpp>
-# 
-# 
+#
 # 
 #endif /* ELIB_AUX_TRAITS_HPP */

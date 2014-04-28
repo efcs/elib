@@ -3,6 +3,7 @@
 
 # include <elib/config.hpp>
 # include <elib/aux/any_pod.hpp>
+# include <elib/aux/declval.hpp>
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/forward.hpp>
 # include <elib/aux/integral_constant.hpp>

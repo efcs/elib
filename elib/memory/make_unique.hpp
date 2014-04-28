@@ -3,6 +3,7 @@
 
 # include <elib/aux/always.hpp>
 # include <elib/aux/forward.hpp>
+# include <elib/aux/traits/remove_extent.hpp>
 # include <memory>
 # include <cstddef>
 

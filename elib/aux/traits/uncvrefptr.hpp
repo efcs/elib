@@ -1,5 +1,7 @@
 #ifndef ELIB_AUX_TRAITS_UNCVREFPTR_HPP
-# define ELIB_AUX_TRAITS_UNCVREFPTR_HPP
+#define ELIB_AUX_TRAITS_UNCVREFPTR_HPP
+
+# include <elib/aux/traits/remove_cv.hpp>
 
 namespace elib { namespace aux
 {

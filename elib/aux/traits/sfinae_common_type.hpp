@@ -1,8 +1,10 @@
 #ifndef ELIB_AUX_TRAITS_SFINAE_COMMON_TYPE_HPP
-# define ELIB_AUX_TRAITS_SFINAE_COMMON_TYPE_HPP
+#define ELIB_AUX_TRAITS_SFINAE_COMMON_TYPE_HPP
 
 # include <elib/aux/always.hpp>
+# include <elib/aux/declval.hpp>
 # include <elib/aux/traits/conditional.hpp>
+# include <elib/aux/traits/decay.hpp>
 
 namespace elib { namespace aux
 {

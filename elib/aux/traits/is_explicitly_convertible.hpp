@@ -5,6 +5,7 @@
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/declval.hpp>
+# include <elib/aux/traits/is_convertible.hpp>
 
 
 namespace elib { namespace aux

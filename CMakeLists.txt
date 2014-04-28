@@ -36,9 +36,9 @@ option(CONFIG_UNIT_TESTS "build unit tests" ON)
 # When this option is on those files are removed from the build.
 # The disadvantage of this is it does not perform any include tests
 # on the build but the build is MUCH faster.
-option(CONFIG_HEADER_ONLY_SOURCE
-        " Build source files for header-only libraries. 
-         The source files are usually just include tests. " OFF)
+option(CONFIG_INCLUDE_TESTS
+        " Build source files that simple include the matching header.
+          This is used in  header only librarys to check for errors" OFF)
 
 ################################################################################
 ##                         Library Parts                                      ##
@@ -53,8 +53,7 @@ option(ELIB_AUX_SOURCE "Build Aux" ON)
 # Containers and adapters
 option(ELIB_CONTAINER_SOURCE "Build containers" ON)
 
-# header only. I don't think any other library has mp as dependency.
-option(ELIB_MP_SOURCE "Build MPL" ON)
+
 
 # header only. log uses enumeration when available
 # disabling this library disables the log::log_level enum <-> string casting
@@ -74,6 +73,11 @@ option(ELIB_LOGGING_SOURCE "Build Logging library" ON)
 
 # header only. 
 option(ELIB_EXCEPT_SOURCE "Build Exception Library" ON)
+
+# header only. I don't think any other library has mp as dependency.
+option(ELIB_MP_SOURCE "Build MPL" ON)
+
+option(ELIB_MEMORY_SOURCE "Build memory" ON)
 
 # Work in progress. Set to ON because it shouldn't break the build
 option(ELIB_CMD_OPTIONS_SOURCE "Build Command line Options Library" ON)
@@ -217,32 +221,31 @@ endmacro(set_dot_dir)
 # adds all c++ file in the CWD
 macro(add_library_src)
     set_dot_dir()
-    aux_source_directory(${dotDir} _src)
-    list(APPEND LIBRARY_SRC ${_src})
+    aux_source_directory(${dotDir} _library_src)
+    list(APPEND LIBRARY_SRC ${_library_src})
 endmacro(add_library_src)
+
+# expect /unit_tests in CWD
+macro(add_include_test_src)
+    set_dot_dir()
+    aux_source_directory(${dotDir}/include_tests _include_test)
+    list(APPEND INCLUDE_TEST_SRC ${_include_test})
+endmacro(add_include_test_src)
 
 # expect /unit_tests in CWD
 macro(add_unit_test_src)
     set_dot_dir()
-    aux_source_directory(${dotDir}/unit_tests _test)
-    list(APPEND UNIT_TEST_SRC ${_test})
+    aux_source_directory(${dotDir}/unit_tests _unit_test)
+    list(APPEND UNIT_TEST_SRC ${_unit_test})
 endmacro(add_unit_test_src)
 
 # Always add source and unit tests
 macro(add_src)
     add_library_src()
+    add_include_test_src()
     add_unit_test_src()
 endmacro(add_src)
 
-# add source files to build only when
-# the build is configured for header only source
-# always add unit tests
-macro(add_header_only_src)
-    if (CONFIG_HEADER_ONLY_SOURCE)
-        add_library_src()
-    endif()
-    add_unit_test_src()
-endmacro(add_header_only_src)
 
 macro(stringify_list m_list dest)
     string(REPLACE ";" " " ${dest} "${m_list}")

@@ -62,22 +62,6 @@ check_static:
 	@ echo
 	@ echo === Running static tests ===
 	@ ./bin/elib_test_static --log_level=message --report_level=short
-	
-.PHONY: test
-test:
-	@ echo === Building test ===
-	@ $(MAKE) --no-print-directory -C build
-	@ echo
-	@ echo === Running tests ===
-	@ ./bin/elib_test_main
-	
-.PHONY: boost_test
-boost_test:
-	@ echo === Building test ===
-	@ $(MAKE) --no-print-directory -C build
-	@ echo
-	@ echo === Running tests ===
-	@ ./bin/elib_boost_test_main --log_level=message --report_level=short
 
 .PHONY: scan
 scan:

@@ -79,7 +79,7 @@ option(CONFIG_LIB_LOGGING "Build Logging library" ON)
 option(CONFIG_LIB_EXCEPT "Build Exception Library" ON)
 
 # Work in progress. Set to ON because it shouldn't break the build
-option(CONFIG_LIB_OPTIONS "Build Program Options Library" ON)
+option(CONFIG_LIB_CMD_OPTIONS "Build Command line Options Library" ON)
 
 # off until GCC supports regex
 option(CONFIG_LIB_WEB "Build Web/Socket Library" OFF)

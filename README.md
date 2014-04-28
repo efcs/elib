@@ -128,7 +128,8 @@ Requirements (Library specific):
 
 
 ## Build Options (CMake)
-  These options are found in CMakeLists.txt. 
+  These options are found in CMakeLists.txt. If the enviroment variable
+  ELIB_CMAKE_OPTIONS is set, those options are passed to cmake when configuring.
   Not all options are documented here. 
 
   * CONFIG_ALL_WARNINGS 

@@ -60,7 +60,6 @@ option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
 option(ELIB_RANGES_SOURCE "Build ranges library" ON)
 option(ELIB_WEB_SOURCE "Build web library" OFF)
 
-
 ################################################################################
 #                            PROJECT ELIB
 ################################################################################
@@ -71,6 +70,10 @@ set(CONFIG_ELIB_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 ################################################################################
 #                       Toolchain config (Post-project)
 ################################################################################
+
+if (DEFINED ENV{ELIB_CMAKE_OPTIONS})
+    message(STATUS "Configuring with ELIB_CMAKE_OPTIONS: $ENV{ELIB_CMAKE_OPTIONS}")
+endif()
 
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE DEBUG CACHE STRING
@@ -156,7 +159,6 @@ endif()
 
 
 #################################################################################
-
 if (CONFIG_ELIB_ASSERT_CONFIG)
     add_definitions( -DELIB_ASSERT_CONFIG )
 endif()
@@ -192,6 +194,15 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 macro(set_dot_dir)
     set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 endmacro(set_dot_dir)
+
+# Use the library configuration option to selectivly 
+# build build a library. 
+macro(include_library_if Pred CFile)
+    if (${Pred})
+        include(${CFile})
+        add_definitions( -D${Pred} )
+    endif()
+endmacro(include_library_if)
 
 # adds all c++ file in the CWD
 macro(add_library_src)
@@ -231,16 +242,6 @@ macro(add_flags to)
     set(${to} "${${to}} ${_TMP}")
 endmacro(add_flags)
 
-# Use the library configuration option to selectivly 
-# build build a library. 
-macro(include_library_if Pred CFile)
-    if (${Pred})
-        include(${CFile})
-        add_definitions( -D${Pred} )
-    endif()
-endmacro(include_library_if)
+
 ################################################################################
-
-
 add_subdirectory(src)
-#add_subdirectory(test_main)

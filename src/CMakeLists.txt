@@ -64,7 +64,8 @@ set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
 ################################################################################
 ##                             Library Parts
 ################################################################################
-include(elib/build.cmake) add_definitions(-DELIB_SOURCE)
+include(elib/build.cmake) 
+add_definitions(-DELIB_SOURCE)
 include_library_if(ELIB_AUX_SOURCE         aux/build.cmake         )
 include_library_if(ELIB_CMD_OPTIONS_SOURCE cmd_options/build.cmake )
 include_library_if(ELIB_CONTAINER_SOURCE   container/build.cmake   )

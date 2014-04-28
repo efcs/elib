@@ -157,7 +157,7 @@ namespace elib
         };
         
         ////////////////////////////////////////////////////////////////////////
-        using buffer_t = aux::aligned_storage_t<sizeof(void*)*3>;
+        using buffer_t = aux::aligned_storage_t<3*sizeof(void*)>;
         
         ////////////////////////////////////////////////////////////////////////
         template <class StorageType>
@@ -183,7 +183,7 @@ namespace elib
         any(any const & other)
           : m_base_ptr(nullptr)
         {
-            if (other.m_base_ptr == (const storage_base*)&other.m_buff ) {
+            if (other.m_base_ptr == other.m_buff_ptr()) {
                 m_base_ptr = other.m_base_ptr->copy(m_buff_ptr());
             }
             else if (other.m_base_ptr) {
@@ -234,7 +234,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         template <class Allocator>
         any(std::allocator_arg_t, Allocator const &) noexcept
-          : any()
+          : m_base_ptr(nullptr)
         {}
         
         ////////////////////////////////////////////////////////////////////////
@@ -249,11 +249,10 @@ namespace elib
             
             using Storage = storage_type<StoredValue, StoredAlloc>;
             if (store_locally<Storage>::value) {
-                ::new ((void*)m_buff_ptr()) Storage(
+                m_base_ptr = ::new ((void*)m_buff_ptr()) Storage(
                     elib::forward<ValueType>(value)
                   , StoredAlloc(alloc)
                   );
-                m_base_ptr = m_buff_ptr();
             } else {
                 using OtherAlloc = typename Allocator::template rebind<Storage>::other;
                 using Dtor = allocator_destructor<OtherAlloc>;
@@ -263,7 +262,7 @@ namespace elib
                     elib::forward<ValueType>(value)
                   , StoredAlloc(a)
                   );
-                m_base_ptr = (storage_base*)tmp.release();
+                m_base_ptr = tmp.release();
             }
         }
         
@@ -319,7 +318,9 @@ namespace elib
         {
             if (m_stored_locally() && other.m_stored_locally()) {
                 buffer_t tmp_buff;
-                storage_base *tmp_ptr = m_base_ptr->move((storage_base*)&tmp_buff);
+                storage_base *tmp_ptr = m_base_ptr->move(
+                    static_cast<storage_base*>((void*)&tmp_buff)
+                  );
                 m_base_ptr->destroy();
                 m_base_ptr = other.m_base_ptr->move(m_buff_ptr());
                 other.m_base_ptr->destroy();
@@ -330,7 +331,7 @@ namespace elib
                 m_base_ptr->move(other.m_buff_ptr());
                 m_base_ptr->destroy();
                 m_base_ptr = other.m_base_ptr;
-                other.m_base_ptr = (storage_base*)&other.m_buff;
+                other.m_base_ptr = other.m_buff_ptr();
             }
             else if (other.m_stored_locally()) {
                 other.m_base_ptr->move(m_buff_ptr());

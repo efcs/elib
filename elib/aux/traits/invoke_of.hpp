@@ -16,6 +16,12 @@ namespace elib { namespace aux
 {
     namespace traits { namespace traits_detail
     {
+        template <class Func, class Obj>
+        using is_invoke_base_of = is_base_of<
+            typename member_pointer_traits<remove_ref_t<Func>>::class_type
+          , remove_ref_t<Obj>
+          >;
+        
         ////////////////////////////////////////////////////////////////////////
         template <class ...Args>
         auto try_invoke(any_pod<>, Args&&...) -> none;
@@ -24,12 +30,7 @@ namespace elib { namespace aux
         template <
             class Func, class First, class ...Rest
           , ELIB_ENABLE_IF(is_member_function_pointer<remove_ref_t<Func>>::value)
-          , ELIB_ENABLE_IF(
-              is_base_of<
-                  typename member_pointer_traits<remove_ref_t<Func>>::class_type
-                , remove_ref_t<First>
-              >::value
-              )
+          , ELIB_ENABLE_IF(is_invoke_base_of<Func, First>::value)
           >
         auto try_invoke(Func && fn, First && first, Rest &&... rest)
             -> decltype((elib::forward<First>(first).*fn)(elib::forward<Rest>(rest)...));
@@ -38,12 +39,7 @@ namespace elib { namespace aux
         template <
             class Func, class First, class ...Rest
           , ELIB_ENABLE_IF(is_member_function_pointer<remove_ref_t<Func>>::value)
-          , ELIB_ENABLE_IF(
-              not is_base_of<
-                  typename member_pointer_traits<remove_ref_t<Func>>::class_type
-                , remove_ref_t<First>
-              >::value
-            )
+          , ELIB_ENABLE_IF(not is_invoke_base_of<Func, First>::value)
           >
         auto try_invoke(Func && fn, First && first, Rest &&... rest)
             -> decltype(((*elib::forward<First>(first)).*fn)(elib::forward<Rest>(rest)...));
@@ -52,12 +48,7 @@ namespace elib { namespace aux
         template <
             class Func, class First
           , ELIB_ENABLE_IF(is_member_object_pointer<remove_ref_t<Func>>::value)
-          , ELIB_ENABLE_IF(
-              is_base_of<
-                  typename member_pointer_traits<remove_ref_t<Func>>::class_type
-                , remove_ref_t<First>
-              >::value
-              )
+          , ELIB_ENABLE_IF(is_invoke_base_of<Func, First>::value)
           >
         auto try_invoke(Func && fn, First && first)
             -> decltype(elib::forward<First>(first).*fn);
@@ -66,12 +57,7 @@ namespace elib { namespace aux
         template <
             class Func, class First
           , ELIB_ENABLE_IF(is_member_function_pointer<remove_ref_t<Func>>::value)
-          , ELIB_ENABLE_IF(
-              not is_base_of<
-                  typename member_pointer_traits<remove_ref_t<Func>>::class_type
-                , remove_ref_t<First>
-              >::value
-            )
+          , ELIB_ENABLE_IF(is_invoke_base_of<Func, First>::value)
           >
         auto try_invoke(Func && fn, First && first)
             -> decltype((*elib::forward<First>(first)).*fn);

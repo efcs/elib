@@ -11,6 +11,8 @@ namespace elib { namespace aux
     {
         using std::aligned_storage;
         
+        /// The Align param has an implementation specified default value.
+        /// To provide aligned_storage_t the default argument must be deduced.
         namespace traits_detail
         {
             template <class T>

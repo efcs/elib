@@ -128,8 +128,10 @@ add_library(TestObj OBJECT ${UNIT_TEST_SRC})
 set_target_properties(TestObj PROPERTIES COMPILE_FLAGS "${UNIT_TEST_FLAGS}")
 add_executable(elib_test_static $<TARGET_OBJECTS:TestObj>  unit_test_main.cpp)
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj>  unit_test_main.cpp)
+add_executable(unit_test_main $<TARGET_OBJECTS:TestObj>  unit_test_main.cpp)
 target_link_libraries(elib_test_static elib_static ${ELIB_TEST_LINK_FLAGS})
 target_link_libraries(elib_test_shared elib ${ELIB_TEST_LINK_FLAGS})
+target_link_libraries(unit_test_main elib ${ELIB_TEST_LINK_FLAGS})
          
 endif()
 ################################################################################

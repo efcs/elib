@@ -1,7 +1,6 @@
 #start by ignoring all files in EricsLib
 
 build/
-bin/
 
 #all kate & gedit temp files
 *.kate-swp
@@ -11,3 +10,4 @@ bin/
 /cov-int
 /tmp
 /local
+/test_coverage

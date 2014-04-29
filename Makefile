@@ -30,7 +30,7 @@ redep:
 .PHONY: distclean
 distclean: 
 	@ $(MAKE) --no-print-directory clean
-	@ rm -rf ./build ./bin
+	@ rm -rf ./build
 	
 .PHONY: install
 install:
@@ -42,10 +42,10 @@ check:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo
 	@ echo === Running static tests ===
-	@ ./bin/elib_test_static --log_level=message --report_level=short
+	@ ./build/src/elib_test_static --log_level=message --report_level=short
 	@ echo 
 	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	@ ./build/src/elib_test_shared --log_level=message --report_level=short
 
 .PHONY: check_shared
 check_shared:
@@ -53,7 +53,7 @@ check_shared:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo 
 	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	@ ./build/src/elib_test_shared --log_level=message --report_level=short
 
 .PHONY: check_static
 check_static:
@@ -61,7 +61,7 @@ check_static:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo
 	@ echo === Running static tests ===
-	@ ./bin/elib_test_static --log_level=message --report_level=short
+	@ ./build/src/elib_test_static --log_level=message --report_level=short
 
 .PHONY: scan
 scan:
@@ -72,6 +72,19 @@ scan:
 .PHONY: scan_build
 scan_build:
 	@ rm -rf build/ ; mkdir -p build ; cd build/ ; scan-build cmake .. ; scan-build make ; cd ..
+
+.PHONY: coverage
+coverage:
+	@ export CXXFLAGS="$CXXFLAGS --fprofile-arcs -ftest-coverage"
+	@ $(MAKE) --no-print-directory all
+	@ rm -rf test_coverage ; mkdir -p test_coverage
+	cd build/src ; \
+	pwd ;\
+	lcov --zerocounters --directory . ; \
+	lcov --capture --initial --directory . --output-file test_coverage ; \
+	./elib_test_shared --log_level=message --report_level=short ;\
+	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
+	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
 
 .PHONY: config_silent
 config_silent:
@@ -88,9 +101,9 @@ config:
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_INCLUDE_TESTS=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running static tests ===
-	@ ./bin/elib_test_static --log_level=message --report_level=short
+	@ ./build/src/elib_test_static --log_level=message --report_level=short
 	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	@ ./build/src/elib_test_shared --log_level=message --report_level=short
 	@ echo
 
 .PHONY: san_config
@@ -99,6 +112,6 @@ san_config:
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(CMAKE_CONFIG) $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_INCLUDE_TESTS=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	@ ./build/src/elib_test_shared --log_level=message --report_level=short
 	@ echo
 

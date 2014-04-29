@@ -73,6 +73,14 @@ scan:
 scan_build:
 	@ rm -rf build/ ; mkdir -p build ; cd build/ ; scan-build cmake .. ; scan-build make ; cd ..
 
+.PHONY: valgrind_check
+valgrind_check:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo 
+	@ echo === Running shared tests ===
+	@ valgrind -v --show-reachable=yes --leak-check=full ./build/src/elib_test_shared --log_level=message --report_level=short
+
 .PHONY: coverage
 coverage:
 	@ $(MAKE) --no-print-directory distclean

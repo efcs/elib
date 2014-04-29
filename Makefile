@@ -75,7 +75,11 @@ scan_build:
 
 .PHONY: coverage
 coverage:
-	@ $(MAKE) --no-print-directory ej
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; \
+		cmake -DCMAKE_BUILD_TYPE=TEST $(ELIB_CMAKE_OPTIONS) ..  ; \
+		cd ..
+	@ $(MAKE) --no-print-directory -C build all
 	@ rm -rf test_coverage ; mkdir -p test_coverage
 	cd build/src ; \
 	lcov --zerocounters --directory . ; \

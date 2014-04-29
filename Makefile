@@ -75,11 +75,9 @@ scan_build:
 
 .PHONY: coverage
 coverage:
-	@ export CXXFLAGS="$CXXFLAGS --fprofile-arcs -ftest-coverage"
-	@ $(MAKE) --no-print-directory all
+	@ $(MAKE) --no-print-directory ej
 	@ rm -rf test_coverage ; mkdir -p test_coverage
 	cd build/src ; \
-	pwd ;\
 	lcov --zerocounters --directory . ; \
 	lcov --capture --initial --directory . --output-file test_coverage ; \
 	./elib_test_shared --log_level=message --report_level=short ;\

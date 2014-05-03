@@ -36,7 +36,7 @@ option(CONFIG_UNIT_TESTS "build unit tests" ON)
 # When this option is on those files are removed from the build.
 # The disadvantage of this is it does not perform any include tests
 # on the build but the build is MUCH faster.
-option(CONFIG_INCLUDE_TESTS
+option(CONFIG_HEADER_TESTS
         " Build source files that simple include the matching header.
           This is used in  header only librarys to check for errors" OFF)
 
@@ -207,6 +207,18 @@ macro(include_library_if Pred CFile)
     endif()
 endmacro(include_library_if)
 
+
+macro(include_unit_tests)
+    set_dot_dir()
+    include(${dotDir}/unit_tests/build.cmake)
+endmacro(include_unit_tests)
+
+macro(include_header_tests)
+    set_dot_dir()
+    include(${dotDir}/header_tests/build.cmake)
+endmacro(include_header_tests)
+
+
 # adds all c++ file in the CWD
 macro(add_library_src)
     set_dot_dir()
@@ -214,27 +226,24 @@ macro(add_library_src)
     list(APPEND LIBRARY_SRC ${_library_src})
 endmacro(add_library_src)
 
-# expect /unit_tests in CWD
-macro(add_include_test_src)
+macro(add_header_test_src)
     set_dot_dir()
-    aux_source_directory(${dotDir}/include_tests _include_test)
-    list(APPEND INCLUDE_TEST_SRC ${_include_test})
-endmacro(add_include_test_src)
+    aux_source_directory(${dotDir} _header_src)
+    list(APPEND HEADER_TEST_SRC ${_header_src})
+endmacro(add_header_test_src)
 
-# expect /unit_tests in CWD
 macro(add_unit_test_src)
     set_dot_dir()
-    aux_source_directory(${dotDir}/unit_tests _unit_test)
-    list(APPEND UNIT_TEST_SRC ${_unit_test})
+    aux_source_directory(${dotDir} _unit_test_src)
+    list(APPEND UNIT_TEST_SRC ${_unit_test_src})
 endmacro(add_unit_test_src)
 
 # Always add source and unit tests
 macro(add_src)
     add_library_src()
-    add_include_test_src()
-    add_unit_test_src()
+    include_header_tests()
+    include_unit_tests()
 endmacro(add_src)
-
 
 macro(stringify_list m_list dest)
     string(REPLACE ";" " " ${dest} "${m_list}")

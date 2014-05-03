@@ -10,7 +10,7 @@ set(WARNING_FLAGS "")
 set(UNIT_TEST_FLAGS "")
 
 set(LIBRARY_SRC "")
-set(INCLUDE_TEST_SRC "")
+set(HEADER_TEST_SRC "")
 set(UNIT_TEST_SRC "")
 
 find_package( Threads REQUIRED )
@@ -106,9 +106,9 @@ install(DIRECTORY ${headerDir} DESTINATION include)
 ################################################################################
 #
 ################################################################################
-if (CONFIG_INCLUDE_TESTS)
-    add_library(IncludeTestLib OBJECT ${INCLUDE_TEST_SRC})
-    set_target_properties(IncludeTestLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+if (CONFIG_HEADER_TESTS)
+    add_library(HeaderTestLib OBJECT ${HEADER_TEST_SRC})
+    set_target_properties(HeaderTestLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
 endif()
 
 

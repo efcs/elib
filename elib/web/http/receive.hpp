@@ -6,7 +6,7 @@
 # include <elib/web/error.hpp>
 # include <elib/web/socket.hpp>
 # include <elib/aux.hpp>
-# include <elib/eprintf.hpp>
+# include <elib/fmt.hpp>
 # include <elib/lexical_cast.hpp>
 # include <algorithm>
 # include <chrono>

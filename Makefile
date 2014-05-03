@@ -30,7 +30,7 @@ redep:
 .PHONY: distclean
 distclean: 
 	@ $(MAKE) --no-print-directory clean
-	@ rm -rf ./build
+	@ rm -rf ./build ./bin
 
 .PHONY: include_tests
 include_tests:
@@ -48,10 +48,10 @@ check:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo
 	@ echo === Running static tests ===
-	@ ./build/src/elib_test_static --log_level=message --report_level=short
+	@ ./bin/elib_test_static --log_level=message --report_level=short
 	@ echo 
 	@ echo === Running shared tests ===
-	@ ./build/src/elib_test_shared --log_level=message --report_level=short
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
 
 .PHONY: check_shared
 check_shared:
@@ -59,7 +59,7 @@ check_shared:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo 
 	@ echo === Running shared tests ===
-	@ ./build/src/elib_test_shared --log_level=message --report_level=short
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
 
 .PHONY: check_static
 check_static:
@@ -67,7 +67,7 @@ check_static:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo
 	@ echo === Running static tests ===
-	@ ./build/src/elib_test_static --log_level=message --report_level=short
+	@ ./bin/elib_test_static --log_level=message --report_level=short
 
 .PHONY: scan
 scan:
@@ -85,7 +85,7 @@ valgrind_check:
 	@ $(MAKE) --no-print-directory -C build
 	@ echo 
 	@ echo === Running shared tests ===
-	@ valgrind -v --show-reachable=yes --leak-check=full ./build/src/elib_test_shared --log_level=message --report_level=short
+	@ valgrind -v --show-reachable=yes --leak-check=full ./bin/elib_test_shared --log_level=message --report_level=short
 
 .PHONY: coverage
 coverage:
@@ -117,9 +117,9 @@ config:
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_INCLUDE_TESTS=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running static tests ===
-	@ ./build/src/elib_test_static --log_level=message --report_level=short
+	@ ./bin/elib_test_static --log_level=message --report_level=short
 	@ echo === Running shared tests ===
-	@ ./build/src/elib_test_shared --log_level=message --report_level=short
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
 	@ echo
 
 .PHONY: san_config
@@ -128,6 +128,6 @@ san_config:
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(CMAKE_CONFIG) $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_INCLUDE_TESTS=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running shared tests ===
-	@ ./build/src/elib_test_shared --log_level=message --report_level=short
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
 	@ echo
 

@@ -186,8 +186,6 @@ set(headerDir ${CMAKE_CURRENT_LIST_DIR}/elib)
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 
 
-
-
 ################################################################################
 #                           Macros & Functions
 ################################################################################

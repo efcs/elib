@@ -44,6 +44,9 @@ BOOST_AUTO_TEST_CASE(aux_move_test)
         aux::is_rvalue_reference<decltype(elib::move(dummy_t{}))>::value
       , "Must be rvalue"
       );
+    
+    // DUMMY
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_CASE(aux_move_move_type)
@@ -54,6 +57,9 @@ BOOST_AUTO_TEST_CASE(aux_move_move_type)
         aux::is_rvalue_reference<decltype(elib::move_if_noexcept(t))>::value
       , "Must return rvalue"
       );
+    
+    // DUMMY
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_CASE(aux_move_copy_type)
@@ -64,6 +70,9 @@ BOOST_AUTO_TEST_CASE(aux_move_copy_type)
         aux::is_lvalue_reference<decltype(elib::move_if_noexcept(t))>::value
       , "Must return lvalue"
       );
+    
+    // DUMMY
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_CASE(aux_move_except_move)
@@ -74,6 +83,9 @@ BOOST_AUTO_TEST_CASE(aux_move_except_move)
         aux::is_lvalue_reference<decltype(elib::move_if_noexcept(t))>::value
       , "Must return lvalue"
       );
+    
+    // DUMMY
+    BOOST_CHECK(true);
 }
 
 

@@ -31,6 +31,12 @@ redep:
 distclean: 
 	@ $(MAKE) --no-print-directory clean
 	@ rm -rf ./build
+
+.PHONY: include_tests
+include_tests:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) -DCONFIG_INCLUDE_TESTS=ON ..  ; cd ..
+	@ $(MAKE) --no-print-directory -C build IncludeTestLib
 	
 .PHONY: install
 install:

@@ -3,15 +3,15 @@
 
 /// A set of meta-functions that provide bitwise operations on integral_constants.
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/left_associative_expression.hpp>
+# include <elib/aux/detail/left_associative_expression.hpp>
 
 namespace elib { namespace aux
 {
     namespace detail
     {
-        ELIB_AUX_LEFT_ASSOC_EXPR(bitand_apply, bitand_impl, &);
-        ELIB_AUX_LEFT_ASSOC_EXPR(bitor_apply, bitor_impl, |);
-        ELIB_AUX_LEFT_ASSOC_EXPR(bitxor_apply, bitxor_impl, ^);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(bitand_apply, bitand_impl, &);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(bitor_apply, bitor_impl, |);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(bitxor_apply, bitxor_impl, ^);
     }                                                   // namespace detail
 
     ////////////////////////////////////////////////////////////////////////////

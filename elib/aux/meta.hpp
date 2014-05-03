@@ -8,7 +8,6 @@
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/if.hpp>
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/left_associative_expression.hpp>
 # include <elib/aux/logical.hpp>
 # include <elib/aux/no_decay.hpp>
 # include <elib/aux/none.hpp>

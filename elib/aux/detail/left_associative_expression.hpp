@@ -1,9 +1,9 @@
-#ifndef ELIB_AUX_LEFT_ASSOCIATIVE_EXPRESSION_HPP
-# define ELIB_AUX_LEFT_ASSOCIATIVE_EXPRESSION_HPP
+#ifndef ELIB_AUX_DETAIL_LEFT_ASSOCIATIVE_EXPRESSION_HPP
+#define ELIB_AUX_DETAIL_LEFT_ASSOCIATIVE_EXPRESSION_HPP
 # 
 # include <elib/aux/integral_constant.hpp>
 # 
-# define ELIB_AUX_LEFT_ASSOC_EXPR(Entry, Impl, Op)                        \
+# define ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(Entry, Impl, Op)                 \
     template <bool Done, class ValType, ValType Val>                      \
     struct Impl                                                           \
     {                                                                     \
@@ -106,4 +106,4 @@
         >::template apply<Rest...>::type
 # 
 # 
-#endif /* ELIB_AUX_LEFT_ASSOCIATIVE_EXPRESSION_HPP */
+#endif /* ELIB_AUX_DETAIL_LEFT_ASSOCIATIVE_EXPRESSION_HPP */

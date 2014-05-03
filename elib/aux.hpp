@@ -1,6 +1,5 @@
 
 #include <elib/aux/assert.hpp>
-#include <elib/aux/todo.hpp>
 
 #ifndef ELIB_AUX_HPP
 #define ELIB_AUX_HPP
@@ -27,7 +26,6 @@
 # include <elib/aux/integer_sequence.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/invoke.hpp>
-# include <elib/aux/left_associative_expression.hpp>
 # include <elib/aux/literals.hpp>
 # include <elib/aux/logical.hpp>
 # include <elib/aux/move.hpp>

@@ -1,7 +1,6 @@
 #ifndef ELIB_AUX_DEFAULT_CLASS_HPP
 #define ELIB_AUX_DEFAULT_CLASS_HPP
 # 
-# /// Macros to provide defaulted constructors and assignments
 # 
 # define ELIB_DEFAULT_CLASS(Class)          \
   Class() = default;                        \

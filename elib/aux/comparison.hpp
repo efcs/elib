@@ -1,7 +1,6 @@
 #ifndef ELIB_AUX_COMPARISON_HPP
 #define ELIB_AUX_COMPARISON_HPP
 
-/// meta-functions for performing comparisons between integral_constants
 # include <elib/aux/integral_constant.hpp>
 
 namespace elib { namespace aux

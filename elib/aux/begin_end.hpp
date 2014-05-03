@@ -1,19 +1,6 @@
 #ifndef ELIB_AUX_BEGIN_END_HPP
 #define ELIB_AUX_BEGIN_END_HPP
 
-/// This header provides helpers for working with begin and end. There are three
-/// primary helpers: get_begin, try_get_begin, and adl_begin
-/// (and their 'end' counter parts)
-/// get_begin<T>: 
-///    Return: a functor that can be used to invoke begin on type T
-///    Note: get_begin fails to compile if there is no call to begin for T
-/// try_get_begin<T>: 
-///    Return: a functor pointer that invokes begin on a type or nullptr
-///            if begin(T) is ill-formed. This can be used to determine if T
-///            has a begin method at runtime
-/// adl_begin(T):
-///    Return: the result of calling begin(T) on a overload set that includes
-///            std::begin and begin looked up by ADL.
 # include <elib/aux/declval.hpp>
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/forward.hpp>

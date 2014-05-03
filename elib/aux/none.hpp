@@ -10,10 +10,5 @@ namespace elib { namespace aux
 
     template <class T>
     using is_none = is_same<T, none>;
-    
-    template <class T>
-    using is_not_none = elib::bool_<
-        not is_none<T>::value
-      >;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_NONE_HPP */

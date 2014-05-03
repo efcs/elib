@@ -2,17 +2,17 @@
 #define ELIB_AUX_ARITHMETIC_HPP
 
 # include <elib/aux/integral_constant.hpp>
-# include <elib/aux/left_associative_expression.hpp>
+# include <elib/aux/detail/left_associative_expression.hpp>
 
 /// Arithmetic meta-functions for use with integral_constants.
 namespace elib { namespace aux
 {
     namespace detail
     {
-        ELIB_AUX_LEFT_ASSOC_EXPR(add_apply, add_impl, +);
-        ELIB_AUX_LEFT_ASSOC_EXPR(subtract_apply, subtract_impl, -);
-        ELIB_AUX_LEFT_ASSOC_EXPR(multiply_apply, multiply_impl, *);
-        ELIB_AUX_LEFT_ASSOC_EXPR(divide_apply, divide_impl, /);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(add_apply, add_impl, +);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(subtract_apply, subtract_impl, -);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(multiply_apply, multiply_impl, *);
+        ELIB_AUX_DETAIL_LEFT_ASSOC_EXPR(divide_apply, divide_impl, /);
     }                                                   // namespace detail
 
     ////////////////////////////////////////////////////////////////////////////

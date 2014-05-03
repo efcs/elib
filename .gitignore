@@ -6,6 +6,9 @@ build/
 *.kate-swp
 *~
 
+# all pyc files
+*.pyc
+
 /test_files
 /cov-int
 /tmp

@@ -38,7 +38,7 @@ option(CONFIG_UNIT_TESTS "build unit tests" ON)
 # on the build but the build is MUCH faster.
 option(CONFIG_INCLUDE_TESTS
         " Build source files that simple include the matching header.
-          This is used in  header only librarys to check for errors" ON)
+          This is used in  header only librarys to check for errors" OFF)
 
 ################################################################################
 ##                         Library Parts                                      ##
@@ -57,6 +57,7 @@ option(ELIB_ITER_SOURCE "Build iterators" ON)
 option(ELIB_LOGGING_SOURCE "Build logging library" ON)
 option(ELIB_MEMORY_SOURCE "Build memory library" ON)
 option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
+option(ELIB_PP_SOURCE "Build preprocessor library" ON)
 option(ELIB_RANGES_SOURCE "Build ranges library" ON)
 option(ELIB_WEB_SOURCE "Build web library" OFF)
 

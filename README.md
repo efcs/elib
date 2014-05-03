@@ -3,7 +3,7 @@
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
 
 WARNING: This file is update very infrequently
-LAST UPDATE: 21/02/2014
+LAST UPDATE: 02/05/2014
 
 ## Platform Support
 Elib currently only supports Linux and OS X. Although most libraries would
@@ -145,8 +145,8 @@ Requirements (Library specific):
 : Build the unit tests
   Default: ON
 
-  * CONFIG_INCLUDE_TESTS
-: Build the include tests
+  * CONFIG_HEADER_TESTS
+: Build the header tests
   Default: OFF
 
   * CONFIG_CXX1Y
@@ -198,6 +198,10 @@ Requirements (Library specific):
 
   * ELIB_MP_SOURCE
 : build the MPL
+  Default: ON
+
+  * ELIB_PP_SOURCE
+: build preprocessor library
   Default: ON
 
   * ELIB_RANGES_SOURCE

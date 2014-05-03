@@ -38,7 +38,7 @@ option(CONFIG_UNIT_TESTS "build unit tests" ON)
 # on the build but the build is MUCH faster.
 option(CONFIG_INCLUDE_TESTS
         " Build source files that simple include the matching header.
-          This is used in  header only librarys to check for errors" OFF)
+          This is used in  header only librarys to check for errors" ON)
 
 ################################################################################
 ##                         Library Parts                                      ##

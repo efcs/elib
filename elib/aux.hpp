@@ -11,12 +11,9 @@
 # include <elib/aux/any_pod.hpp>
 # include <elib/aux/anything.hpp>
 # include <elib/aux/arithmetic.hpp>
-# include <elib/aux/attributes.hpp>
 # include <elib/aux/auto_return.hpp>
 # include <elib/aux/begin_end.hpp>
 # include <elib/aux/bitwise.hpp>
-# include <elib/aux/by_ref.hpp>
-# include <elib/aux/by_val.hpp>
 # include <elib/aux/check_complete.hpp>
 # include <elib/aux/comparison.hpp>
 # include <elib/aux/convert.hpp>

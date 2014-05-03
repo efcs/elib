@@ -1,27 +1,24 @@
 #ifndef ELIB_EXCEPT_FWD_HPP
 #define ELIB_EXCEPT_FWD_HPP
 
-# include <elib/aux/attributes.hpp>
+# include <elib/config.hpp>
 # include <string>
 # include <system_error>
 
 namespace elib { namespace except
 {
     ////////////////////////////////////////////////////////////////////////////
-    //
     class exception;
     
     template <class T> struct is_exception;
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class Tag, class T> 
     class error_info;
     
     template <class T> struct is_error_info;
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class E>
     ELIB_NORETURN void throw_exception(E const & e);
     

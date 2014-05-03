@@ -95,6 +95,7 @@ coverage:
 		cd ..
 	@ $(MAKE) --no-print-directory -C build all
 	@ rm -rf test_coverage ; mkdir -p test_coverage
+	@ cp bin/elib_test_shared build/src/
 	cd build/src ; \
 	lcov --zerocounters --directory . ; \
 	lcov --capture --initial --directory . --output-file test_coverage ; \

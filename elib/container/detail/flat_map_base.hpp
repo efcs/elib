@@ -481,7 +481,7 @@ namespace elib { namespace container
         ////////////////////////////////////////////////////////////////////////
         iterator erase(const_iterator pos)
         {
-#   if defined(ELIB_CONFIG_LIBSTDCXX) && ELIB_LIBRARY_VERSION < 20140108L
+#   if defined(ELIB_CONFIG_LIBSTDCXX) && ELIB_COMPILER_VERSION < 40900L
             auto non_const_pos = begin() + (pos - cbegin());
             return m_store.erase(non_const_pos);
 #   else
@@ -491,7 +491,7 @@ namespace elib { namespace container
         
         iterator erase(const_iterator first, const_iterator last)
         {
-#   if defined(ELIB_CONFIG_LIBSTDCXX) && ELIB_LIBRARY_VERSION < 20140108L
+#   if defined(ELIB_CONFIG_LIBSTDCXX) && ELIB_COMPILER_VERSION < 40900L
             auto non_const_first = begin() + (first - cbegin());
             auto non_const_last = begin() + (last - cbegin());
             return m_store.erase(non_const_first, non_const_last);

@@ -136,6 +136,7 @@ if ( CXX_COMPILER_GCC )
     if(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9.0"
         OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
+    else()
         set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
     endif()
 

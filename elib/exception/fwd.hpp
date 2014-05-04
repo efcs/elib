@@ -1,5 +1,5 @@
-#ifndef ELIB_EXCEPT_FWD_HPP
-#define ELIB_EXCEPT_FWD_HPP
+#ifndef ELIB_EXCEPTION_FWD_HPP
+#define ELIB_EXCEPTION_FWD_HPP
 
 # include <elib/config.hpp>
 # include <string>
@@ -159,4 +159,4 @@ namespace elib
     using except::errinfo_type_info_name;
     using except::errinfo_error_code;
 }                                                           // namespace elib
-#endif /* ELIB_EXCEPT_FWD_HPP */
+#endif /* ELIB_EXCEPTION_FWD_HPP */

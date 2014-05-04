@@ -1,9 +1,9 @@
-#ifndef ELIB_EXCEPT_THROW_EXCEPTION_HPP
-#define ELIB_EXCEPT_THROW_EXCEPTION_HPP
+#ifndef ELIB_EXCEPTION_THROW_EXCEPTION_HPP
+#define ELIB_EXCEPTION_THROW_EXCEPTION_HPP
 
-# include <elib/except/fwd.hpp>
-# include <elib/except/exception.hpp>
-# include <elib/except/error_info.hpp>
+# include <elib/exception/fwd.hpp>
+# include <elib/exception/exception.hpp>
+# include <elib/exception/error_info.hpp>
 # include <elib/aux.hpp>
 
 # define ELIB_THROW_EXCEPTION(...) \
@@ -90,4 +90,4 @@ namespace elib { namespace except
         return (e << throw_file(file) << throw_func(func) << throw_line(line));
     }
 }}                                                          // namespace elib
-#endif /* ELIB_EXCEPT_THROW_EXCEPTION_HPP */
+#endif /* ELIB_EXCEPTION_THROW_EXCEPTION_HPP */

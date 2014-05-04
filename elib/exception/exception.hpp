@@ -1,8 +1,8 @@
-#ifndef ELIB_EXCEPT_EXCEPTION_HPP
-#define ELIB_EXCEPT_EXCEPTION_HPP
+#ifndef ELIB_EXCEPTION_EXCEPTION_HPP
+#define ELIB_EXCEPTION_EXCEPTION_HPP
 
-# include <elib/except/fwd.hpp>
-# include <elib/except/error_info.hpp>
+# include <elib/exception/fwd.hpp>
+# include <elib/exception/error_info.hpp>
 # include <elib/aux.hpp>
 # include <elib/any.hpp>
 # include <exception>
@@ -14,7 +14,7 @@
 # include <unordered_map>
 # include <utility>
 
-# define ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(Ex)                      \
+# define ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(Ex)                      \
     static_assert(                                                  \
       ::elib::except::is_exception< ::elib::aux::uncvref< Ex>>::value \
       , #Ex " is not an exception type"                             \
@@ -80,7 +80,7 @@ namespace elib { namespace except
         template <class ErrorInfo>
         bool has_error_info() const
         {
-            ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+            ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
             
             auto pos = m_impl->m_info_map.find(std::type_index(typeid(ErrorInfo)));
             return (pos != m_impl->m_info_map.end());
@@ -89,7 +89,7 @@ namespace elib { namespace except
         template <class ErrorInfo, class ...Args>
         bool emplace_error_info(Args &&... args)
         {
-            ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+            ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
             
             return m_impl->m_info_map.emplace(
                 std::make_pair(
@@ -101,7 +101,7 @@ namespace elib { namespace except
         template <class ErrorInfo>
         bool insert_error_info(ErrorInfo && e)
         {
-            ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+            ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
             
             return m_impl->m_info_map.insert(
                 std::make_pair(
@@ -113,7 +113,7 @@ namespace elib { namespace except
         template <class ErrorInfo>
         void set_error_info(ErrorInfo && e)
         {
-            ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+            ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
             
             m_impl->m_info_map[std::type_index(typeid(ErrorInfo))] = 
                 elib::forward<ErrorInfo>(e);
@@ -128,7 +128,7 @@ namespace elib { namespace except
         template <class ErrorInfo>
         ErrorInfo* get_error_info()
         {
-            ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+            ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
             
             auto pos = m_impl->m_info_map.find(std::type_index(typeid(ErrorInfo)));
             if (pos == m_impl->m_info_map.end()) return nullptr;
@@ -166,8 +166,8 @@ namespace elib { namespace except
     template <class ErrorInfo, class E>
     bool has_error_info(E const & e)
     {
-        ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         
         return e.template has_error_info<ErrorInfo>();
     }
@@ -177,14 +177,14 @@ namespace elib { namespace except
     template <class E, class Tag, class T>
     bool insert_error_info(E & e, error_info<Tag, T> const & i)
     {
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         return e.insert_error_info(i);
     }
     
     template <class E, class Tag, class T>
     bool insert_error_info(E & e, error_info<Tag, T> && i)
     {
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         return e.insert_error_info(elib::move(i));
     }
     
@@ -193,8 +193,8 @@ namespace elib { namespace except
     template <class ErrorInfo, class E, class ...Args>
     bool emplace_error_info(E & e, Args &&... args)
     {
-        ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         
         return 
         e.template emplace_error_info<ErrorInfo>(elib::forward<Args>(args)...);
@@ -205,14 +205,14 @@ namespace elib { namespace except
     template <class E, class Tag, class T>
     void set_error_info(E & e, error_info<Tag, T> const & i)
     {
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         e.set_error_info(i);
     }
     
     template <class E, class Tag, class T>
     void set_error_info(E & e, error_info<Tag, T> && i)
     {
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         e.set_error_info(elib::move(i));
     }
     
@@ -228,8 +228,8 @@ namespace elib { namespace except
     template <class ErrorInfo, class E>
     ErrorInfo & get_error_info(E & e)
     {
-        ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(ErrorInfo);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         
         auto ptr = e.template get_error_info<ErrorInfo>();
         if (!ptr) throw std::logic_error("No such error info");
@@ -257,7 +257,7 @@ namespace elib { namespace except
     template <class E, class Tag, class T>
     E & operator<<(E & e, error_info<Tag, T> const & i)
     {
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         
         e.set_error_info(i);
         return e;
@@ -266,7 +266,7 @@ namespace elib { namespace except
     template <class E, class Tag, class T>
     E & operator<<(E & e, error_info<Tag, T> && i)
     {
-        ELIB_EXCEPT_ASSERT_EXCEPTION_TYPE(E);
+        ELIB_EXCEPTION_ASSERT_EXCEPTION_TYPE(E);
         
         e.set_error_info(elib::move(i));
         return e;
@@ -275,4 +275,4 @@ namespace elib { namespace except
     //template <class E, class ...Tags, class ...Types>
     //E & operator<<(E const &, elib::tuple<error_info<Tags, Types>...> const &);
 }}                                                          // namespace elib
-#endif /* ELIB_EXCEPT_EXCEPTION_HPP */
+#endif /* ELIB_EXCEPTION_EXCEPTION_HPP */

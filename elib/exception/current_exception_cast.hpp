@@ -1,7 +1,7 @@
-#ifndef ELIB_EXCEPT_CURRENT_EXCEPTION_CAST_HPP
-#define ELIB_EXCEPT_CURRENT_EXCEPTION_CAST_HPP
+#ifndef ELIB_EXCEPTION_CURRENT_EXCEPTION_CAST_HPP
+#define ELIB_EXCEPTION_CURRENT_EXCEPTION_CAST_HPP
 
-# include <elib/except/fwd.hpp>
+# include <elib/exception/fwd.hpp>
 # include <elib/aux.hpp>
 
 namespace elib { namespace except
@@ -18,4 +18,4 @@ namespace elib { namespace except
         }
     }
 }}                                                          // namespace elib
-#endif /* ELIB_EXCEPT_CURRENT_EXCEPTION_CAST_HPP */
+#endif /* ELIB_EXCEPTION_CURRENT_EXCEPTION_CAST_HPP */

@@ -1,10 +1,10 @@
-#ifndef ELIB_EXCEPT_ERROR_INFO_HPP
-#define ELIB_EXCEPT_ERROR_INFO_HPP
+#ifndef ELIB_EXCEPTION_ERROR_INFO_HPP
+#define ELIB_EXCEPTION_ERROR_INFO_HPP
 
-# include <elib/except/fwd.hpp>
+# include <elib/exception/fwd.hpp>
 # include <elib/aux.hpp>
 
-# define ELIB_EXCEPT_ASSERT_ERROR_INFO_TYPE(Type)                      \
+# define ELIB_EXCEPTION_ASSERT_ERROR_INFO_TYPE(Type)                      \
     static_assert(                                                     \
       ::elib::except::is_error_info< ::elib::aux::uncvref< Type>>::value \
       , #Type " is not an instance of error_info"                      \
@@ -43,4 +43,4 @@ namespace elib { namespace except
     struct is_error_info< error_info<Tag, T> > : aux::true_ {};
     
 }}                                                          // namespace elib
-#endif /* ELIB_EXCEPT_ERROR_INFO_HPP */
+#endif /* ELIB_EXCEPTION_ERROR_INFO_HPP */

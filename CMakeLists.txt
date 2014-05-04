@@ -131,10 +131,12 @@ if ( CXX_COMPILER_GCC )
     # check min version
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
         message(FATAL_ERROR "Insufficient GCC Version")
-        set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
-    elseif(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9.0"
+    endif()
+    
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9.0"
         OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
+        set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
     endif()
 
     # Check C++1y config

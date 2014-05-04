@@ -4,6 +4,7 @@
 # include <elib/exception/fwd.hpp>
 # include <elib/exception/exception.hpp>
 # include <elib/exception/error_info.hpp>
+# include <elib/config.hpp>
 # include <elib/aux.hpp>
 
 # define ELIB_THROW_EXCEPTION(...) \

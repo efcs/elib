@@ -1,7 +1,7 @@
 #ifndef ELIB_WEB_ERROR_HPP
 #define ELIB_WEB_ERROR_HPP
 
-# include <elib/except.hpp>
+# include <elib/exception.hpp>
 
 namespace elib { namespace web
 {

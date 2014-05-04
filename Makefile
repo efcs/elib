@@ -1,6 +1,8 @@
 SHELL := /bin/bash
 BUILD ?= DEBUG
 THREADS ?= 2
+SILENT ?= 0
+
 
 .PHONY: all
 all: 
@@ -105,12 +107,12 @@ coverage:
 	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
 	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
 
-.PHONY: config_silent
-config_silent:
+.PHONY: config_build1
+config_build1:
 	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all 1> /dev/null
 
-.PHONY: config_loud
-config_loud:
+.PHONY: config_build0
+config_build0:
 	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all 
 
 
@@ -118,7 +120,7 @@ config_loud:
 config:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) -DCMAKE_BUILD_TYPE=$(BUILD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_TESTS=ON .. ; cd ..
-	@ time $(MAKE) --no-print-directory config_silent
+	@ time $(MAKE) --no-print-directory config_build$(SILENT)
 	@ echo === Running static tests ===
 	@ ./bin/elib_test_static --log_level=message --report_level=short
 	@ echo === Running shared tests ===
@@ -129,7 +131,7 @@ config:
 san_config:
 	@ $(MAKE) --no-print-directory distclean
 	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) $(CMAKE_CONFIG) -DCMAKE_BUILD_TYPE=$(BUILD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_TESTS=ON .. ; cd ..
-	@ time $(MAKE) --no-print-directory config_silent
+	@ time $(MAKE) --no-print-directory config_build$(SILENT)
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short
 	@ echo

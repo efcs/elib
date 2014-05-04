@@ -2,7 +2,7 @@
 #define ELIB_RANGES_TRAITS_HPP
 
 # include <elib/aux.hpp>
-# include <elib/iter/traits.hpp>
+# include <elib/iterator/traits.hpp>
 
 # include <array>
 # include <string>

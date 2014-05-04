@@ -1,5 +1,5 @@
-#ifndef ELIB_ITER_FILTER_ITERATOR_HPP
-#define ELIB_ITER_FILTER_ITERATOR_HPP
+#ifndef ELIB_ITERATOR_FILTER_ITERATOR_HPP
+#define ELIB_ITERATOR_FILTER_ITERATOR_HPP
 
 # include <elib/aux.hpp>
 # include <iterator>
@@ -55,4 +55,4 @@ namespace elib { namespace iter
         Iterator m_end;
     };
 }}                                                          // namespace elib
-#endif /* ELIB_ITER_FILTER_ITERATOR_HPP */
+#endif /* ELIB_ITERATOR_FILTER_ITERATOR_HPP */

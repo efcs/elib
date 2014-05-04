@@ -1,5 +1,5 @@
 add_library_src()
-include_unit_tests()
+add_unit_test_src(unit_tests)
 
 add_definitions( 
     -DELIB_FS_UNIT_TEST_PATH="${CMAKE_CURRENT_LIST_DIR}/unit_tests"

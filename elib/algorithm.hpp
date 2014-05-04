@@ -2,7 +2,7 @@
 #define ELIB_ALGORITHM_HPP
 
 # include <elib/aux.hpp>
-# include <elib/iter/traits.hpp>
+# include <elib/iterator/traits.hpp>
 # include <elib/ranges/algorithm.hpp>
 # include <elib/ranges/traits.hpp>
 # include <algorithm>

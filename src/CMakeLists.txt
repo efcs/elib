@@ -64,8 +64,8 @@ set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
 ################################################################################
 ##                             Library Parts
 ################################################################################
-include(elib/build.cmake) 
 add_definitions(-DELIB_SOURCE)
+include_build_dir(elib) 
 include_library_if(ELIB_AUX_SOURCE         aux/build.cmake          )
 include_library_if(ELIB_CMD_OPTIONS_SOURCE cmd_options/build.cmake  )
 include_library_if(ELIB_CONTAINER_SOURCE   container/build.cmake    )
@@ -73,7 +73,7 @@ include_library_if(ELIB_ENUMERATION_SOURCE enumeration/build.cmake  )
 include_library_if(ELIB_EXCEPT_SOURCE      except/build.cmake       )
 include_library_if(ELIB_FS_SOURCE          fs/build.cmake           )
 include_library_if(ELIB_FUNCTIONAL_SOURCE  functional/build.cmake   )
-include_library_if(ELIB_ITER_SOURCE        iter/build.cmake         )
+include_library_if(ELIB_ITERATOR_SOURCE    iterator/build.cmake     )
 include_library_if(ELIB_LOGGING_SOURCE     logging/build.cmake      )
 include_library_if(ELIB_MEMORY_SOURCE      memory/build.cmake       )
 include_library_if(ELIB_MP_SOURCE          mp/build.cmake           )

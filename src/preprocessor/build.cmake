@@ -1,1 +1,1 @@
-include_header_tests()
+add_header_test_src(header_tests)

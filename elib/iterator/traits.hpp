@@ -1,5 +1,5 @@
-#ifndef ELIB_ITER_TRAITS_HPP
-#define ELIB_ITER_TRAITS_HPP
+#ifndef ELIB_ITERATOR_TRAITS_HPP
+#define ELIB_ITERATOR_TRAITS_HPP
 
 # include <elib/aux/meta.hpp>
 # include <elib/aux/traits/is_convertible.hpp>
@@ -93,4 +93,4 @@ namespace elib { namespace iter
         choose_iterator_traits<I1, I2>::difference_type;
 
 }}                                                          // namespace elib
-#endif /* ELIB_ITER_TRAITS_HPP */
+#endif /* ELIB_ITERATOR_TRAITS_HPP */

@@ -1,7 +1,7 @@
-#ifndef ELIB_ITER_ALGORITHM_HPP
-#define ELIB_ITER_ALGORITHM_HPP
+#ifndef ELIB_ITERATOR_ALGORITHM_HPP
+#define ELIB_ITERATOR_ALGORITHM_HPP
 
-# include <elib/iter/traits.hpp>
+# include <elib/iterator/traits.hpp>
 # include <elib/aux.hpp>
 # include <algorithm>
 # include <iterator>
@@ -143,4 +143,4 @@ namespace elib { namespace iter
     using adl_barrier::distance;
     
 }}                                                          // namespace elib
-#endif /* ELIB_ITER_ALGORITHM_HPP */
+#endif /* ELIB_ITERATOR_ALGORITHM_HPP */

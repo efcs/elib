@@ -3,8 +3,8 @@
 
 # include <elib/ranges/traits.hpp>
 # include <elib/aux.hpp>
-# include <elib/iter/algorithm.hpp>
-# include <elib/iter/traits.hpp>
+# include <elib/iterator/algorithm.hpp>
+# include <elib/iterator/traits.hpp>
 # include <algorithm>
 # include <iostream>
 # include <iterator>

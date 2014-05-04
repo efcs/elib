@@ -1,7 +1,7 @@
-#ifndef ELIB_ITER_FILTER_VIEW_HPP
-#define ELIB_ITER_FILTER_VIEW_HPP
+#ifndef ELIB_ITERATOR_FILTER_VIEW_HPP
+#define ELIB_ITERATOR_FILTER_VIEW_HPP
 
-# include <elib/iter/filter_iterator.hpp>
+# include <elib/iterator/filter_iterator.hpp>
 # include <elib/aux.hpp>
 # include <iterator>
 
@@ -326,4 +326,4 @@ namespace elib { namespace iter
     ELIB_AUTO_RETURN( v.end() )
     
 }}                                                          // namespace elib
-#endif /* ELIB_ITER_FILTER_VIEW_HPP */
+#endif /* ELIB_ITERATOR_FILTER_VIEW_HPP */

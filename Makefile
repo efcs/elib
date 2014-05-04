@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 BUILD ?= DEBUG
 THREADS ?= 2
-SILENT ?= 0
+SILENT ?= 1
 
 
 .PHONY: all

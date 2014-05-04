@@ -59,7 +59,7 @@ option(ELIB_MEMORY_SOURCE "Build memory library" ON)
 option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
 option(ELIB_PP_SOURCE "Build preprocessor library" ON)
 option(ELIB_RANGES_SOURCE "Build ranges library" ON)
-option(ELIB_WEB_SOURCE "Build web library" OFF)
+option(ELIB_WEB_SOURCE "Build web library" ON)
 
 ################################################################################
 #                            PROJECT ELIB
@@ -131,6 +131,7 @@ if ( CXX_COMPILER_GCC )
     # check min version
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
         message(FATAL_ERROR "Insufficient GCC Version")
+        set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
     elseif(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9.0"
         OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
@@ -158,6 +159,12 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
 
     set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
+
+    string(REPLACE " " ";" CXX_FLAGS_LIST ${CMAKE_CXX_FLAGS})
+    list(FIND CXX_FLAGS_LIST "-stdlib=libc++" LIBCXX_FLAG_POS)
+    if (LIBCXX_FLAG_POS EQUAL -1)
+        set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
+    endif()
 
 endif()
 

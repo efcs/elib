@@ -2,6 +2,7 @@
 #define ELIB_CONFIG_LIBRARY_LIBSTDCXX_HPP
 # 
 # include <elib/config/compiler_config.hpp>
+# include <cstddef>
 # 
 # define ELIB_LIBRARY libstdcxx
 # define ELIB_LIBRARY_VERSION __GLIBCXX__

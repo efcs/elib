@@ -1,4 +1,6 @@
 SHELL := /bin/bash
+BUILD ?= DEBUG
+THREADS ?= 2
 
 .PHONY: all
 all: 
@@ -15,7 +17,7 @@ e:
 ej:
 	@ $(MAKE) --no-print-directory distclean
 	@ $(MAKE) --no-print-directory redep
-	@ $(MAKE) --no-print-directory -j2 -C build
+	@ $(MAKE) --no-print-directory -j$(THREADS) -C build
 	
 .PHONY: clean
 clean:
@@ -105,17 +107,17 @@ coverage:
 
 .PHONY: config_silent
 config_silent:
-	@ $(MAKE) -j2 --no-print-directory -C build all 1> /dev/null
+	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all 1> /dev/null
 
 .PHONY: config_loud
 config_loud:
-	@ $(MAKE) -j2 --no-print-directory -C build all 
+	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all 
 
 
 .PHONY: config
 config:
 	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_TESTS=ON .. ; cd ..
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) -DCMAKE_BUILD_TYPE=$(BUILD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_TESTS=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running static tests ===
 	@ ./bin/elib_test_static --log_level=message --report_level=short
@@ -126,7 +128,7 @@ config:
 .PHONY: san_config
 san_config:
 	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) $(CMAKE_CONFIG) $(BUILD_TYPE) $(STD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_TESTS=ON .. ; cd ..
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) $(CMAKE_CONFIG) -DCMAKE_BUILD_TYPE=$(BUILD) -DCONFIG_ELIB_ASSERT_CONFIG=ON -DCONFIG_HEADER_TESTS=ON .. ; cd ..
 	@ time $(MAKE) --no-print-directory config_silent
 	@ echo === Running shared tests ===
 	@ ./bin/elib_test_shared --log_level=message --report_level=short

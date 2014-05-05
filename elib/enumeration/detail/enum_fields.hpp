@@ -41,6 +41,7 @@ namespace elib { namespace enumeration
         template <class T, template <class> class FieldType, class Default>
         using field_extractor = typename field_extractor_impl<T, FieldType, Default>::type;
         
+# if !defined(ELIB_CONFIG_COVERITY_SCAN)
         // TODO: For some reason EDG's frontend used by coverity scan
         // blows up on the decltype's
         template <class T>
@@ -74,7 +75,67 @@ namespace elib { namespace enumeration
         template <class T>
         using is_mixed_comparible_field_t = 
             bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>;
-       
+
+# else /* ELIB_CONFIG_COVERITY_SCAN */
+        template <class T, class Enum = decltype(T::ELIB_ENUM_DEFAULT_VALUE)>
+        struct default_value_field : integral_constant<Enum, T::ELIB_ENUM_DEFAULT_VALUE> {};
+        
+        template <class T, class Enum = decltype(T::ELIB_ENUM_ERROR_VALUE)>
+        struct error_value_field : integral_constant<Enum, T::ELIB_ENUM_ERROR_VALUE> {};
+            
+        template <class T, class Enum = decltype(T::ELIB_ENUM_FIRST_VALUE)>
+        struct first_value_field : integral_constant<Enum, T::ELIB_ENUM_FIRST_VALUE> {};
+        
+        template <class T, class Enum = decltype(T::ELIB_ENUM_LAST_VALUE)>
+        struct last_value_field : integral_constant<Enum, T::ELIB_ENUM_LAST_VALUE> {};
+        
+        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>>
+        struct is_contigious_field : 
+            bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>{};
+                
+        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>>
+        struct is_bitmask_field : 
+            bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>{};
+            
+        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>>
+        struct is_arithmetic_field :
+            bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>{};
+            
+        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>>
+        struct is_logical_field : 
+            bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>{};
+            
+        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>>
+        struct is_mixed_comparible_field : 
+            bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>{};
+            
+        template <class T>
+        using default_value_field_t = default_value_field<T>;
+        
+        template <class T>
+        using error_value_field_t = error_value_field<T>;
+            
+        template <class T>
+        using first_value_field_t = first_value_field<T>;
+        
+        template <class T>
+        using last_value_field_t = last_value_field<T>;
+        
+        template <class T>
+        using is_contigious_field_t = is_contigious_field<T>;
+                
+        template <class T>
+        using is_bitmask_field_t = is_bitmask_field<T>;
+            
+        template <class T>
+        using is_arithmetic_field_t = is_arithmetic_field<T>;
+            
+        template <class T>
+        using is_logical_field_t = is_logical_field<T>;
+            
+        template <class T>
+        using is_mixed_comparible_field_t = is_mixed_comparible_field<T>;
+# endif
     }                                                       // namespace detail
 }}                                               // namespace elib::enumeration
 #endif /* ELIB_ENUMERATION_DETAIL_ENUM_FIELDS_HPP */

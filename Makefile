@@ -80,9 +80,16 @@ scan:
 	@ rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
 	@ cov-build --dir cov-int $(MAKE) --no-print-directory -C build all
 
+.PHONY: scan_test
+scan_test:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
+	@ $(MAKE) --no-print-directory -C build all
+
 .PHONY: scan_build
 scan_build:
 	@ rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make --no-print-directory all; cd ..
+
 
 .PHONY: valgrind_check
 valgrind_check:

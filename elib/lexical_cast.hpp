@@ -18,11 +18,6 @@ namespace elib
   {
   public:
 /* EDG doesn't like binding rvalues to const lvalues */
-# if defined(ELIB_CONFIG_COVERITY_SCAN)
-     explicit bad_lexical_cast(std::string && s)
-        : std::runtime_error(s)
-        {}
-# endif
       explicit bad_lexical_cast(const char *what_arg)
         : std::runtime_error(what_arg)
         {}

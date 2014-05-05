@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_CONFIG_HPP
-#define ELIB_FS_CONFIG_HPP
+#ifndef ELIB_FILESYSTEM_CONFIG_HPP
+#define ELIB_FILESYSTEM_CONFIG_HPP
 # 
 # include <elib/config.hpp>
 # 
@@ -8,4 +8,4 @@
           "please use the CMake option CONFIG_LIB_FILESYSTEM to disable this library"
 # endif
 # 
-#endif /* ELIB_FS_CONFIG_HPP */
+#endif /* ELIB_FILESYSTEM_CONFIG_HPP */

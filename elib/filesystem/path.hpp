@@ -1,8 +1,8 @@
-#ifndef ELIB_FS_PATH_HPP
-#define ELIB_FS_PATH_HPP
+#ifndef ELIB_FILESYSTEM_PATH_HPP
+#define ELIB_FILESYSTEM_PATH_HPP
 
-# include <elib/fs/config.hpp>
-# include <elib/fs/detail/path_converter.hpp>
+# include <elib/filesystem/config.hpp>
+# include <elib/filesystem/detail/path_converter.hpp>
 # include <elib/aux/enable_if.hpp>
 
 # include <string>
@@ -584,4 +584,4 @@ namespace elib { namespace fs
     }
     
 }}                                                        // namespace elib::fs
-#endif /* ELIB_FS_PATH_HPP */
+#endif /* ELIB_FILESYSTEM_PATH_HPP */

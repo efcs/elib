@@ -1,9 +1,9 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/fs/directory_entry.hpp"
-#include "elib/fs/file_status.hpp"
-#include "elib/fs/path.hpp"
+#include <elib/filesystem/directory_entry.hpp>
+#include <elib/filesystem/file_status.hpp>
+#include <elib/filesystem/path.hpp>
 
 using namespace elib::fs;
 

@@ -1,8 +1,8 @@
 #include <elib/config.hpp>
-#include <elib/fs/operations.hpp>
-#include <elib/fs/directory_entry.hpp>
-#include <elib/fs/directory_iterator.hpp>
-#include <elib/fs/filesystem_error.hpp>
+#include <elib/filesystem/operations.hpp>
+#include <elib/filesystem/directory_entry.hpp>
+#include <elib/filesystem/directory_iterator.hpp>
+#include <elib/filesystem/filesystem_error.hpp>
 
 #include <elib/aux.hpp>
 #include <elib/memory/make_unique.hpp>

@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_COPY_OPTIONS_OPERATORS_HPP
-#define ELIB_FS_COPY_OPTIONS_OPERATORS_HPP
+#ifndef ELIB_FILESYSTEM_COPY_OPTIONS_OPERATORS_HPP
+#define ELIB_FILESYSTEM_COPY_OPTIONS_OPERATORS_HPP
 
 # include <elib/aux.hpp>
 
@@ -10,7 +10,7 @@ namespace elib { namespace fs
 //         BITWISE OPERATORS
 ////////////////////////////////////////////////////////////////////////////////
     
-# define ELIB_FS_COPY_OPTIONS_BITWISE_OP(Op)                                                      \
+# define ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP(Op)                                                      \
     constexpr copy_options operator Op (copy_options lhs, copy_options rhs) noexcept                            \
     {                                                                                      \
         using UnderT = aux::underlying_type_t<copy_options>;                                      \
@@ -53,11 +53,11 @@ namespace elib { namespace fs
           ); 
     }
     
-    ELIB_FS_COPY_OPTIONS_BITWISE_OP(&)
-    ELIB_FS_COPY_OPTIONS_BITWISE_OP(|)
-    ELIB_FS_COPY_OPTIONS_BITWISE_OP(^)
+    ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP(&)
+    ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP(|)
+    ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP(^)
     
-# undef ELIB_FS_COPY_OPTIONS_BITWISE_OP
+# undef ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP
     
 ////////////////////////////////////////////////////////////////////////////////
 //        LOGICAL OPERATORS                   
@@ -94,4 +94,4 @@ namespace elib { namespace fs
     }
     
 }}                                                          // namespace elib
-#endif /* ELIB_FS_COPY_OPTIONS_OPERATORS_HPP */
+#endif /* ELIB_FILESYSTEM_COPY_OPTIONS_OPERATORS_HPP */

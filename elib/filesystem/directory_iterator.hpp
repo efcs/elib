@@ -1,11 +1,11 @@
-#ifndef ELIB_FS_DIRECTORY_ITERATOR_HPP
-#define ELIB_FS_DIRECTORY_ITERATOR_HPP
+#ifndef ELIB_FILESYSTEM_DIRECTORY_ITERATOR_HPP
+#define ELIB_FILESYSTEM_DIRECTORY_ITERATOR_HPP
 
-# include <elib/fs/config.hpp>
-# include <elib/fs/directory_entry.hpp>
-# include <elib/fs/path.hpp>
-# include <elib/fs/file_status.hpp>
-# include <elib/fs/operations.hpp>
+# include <elib/filesystem/config.hpp>
+# include <elib/filesystem/directory_entry.hpp>
+# include <elib/filesystem/path.hpp>
+# include <elib/filesystem/file_status.hpp>
+# include <elib/filesystem/operations.hpp>
 
 # include <memory>
 # include <iterator>
@@ -286,4 +286,4 @@ namespace elib { namespace fs
     }
 
 }}                                                        // namespace elib::fs
-# endif                                       // ELIB_FS_DIRECTORY_ITERATOR_HPP
+# endif                                       // ELIB_FILESYSTEM_DIRECTORY_ITERATOR_HPP

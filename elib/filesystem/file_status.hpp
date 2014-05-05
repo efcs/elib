@@ -1,7 +1,7 @@
-#ifndef ELIB_FS_FILE_STATUS_HPP
-#define ELIB_FS_FILE_STATUS_HPP
+#ifndef ELIB_FILESYSTEM_FILE_STATUS_HPP
+#define ELIB_FILESYSTEM_FILE_STATUS_HPP
 
-# include <elib/fs/config.hpp>
+# include <elib/filesystem/config.hpp>
 
 namespace elib { namespace fs
 {
@@ -54,7 +54,7 @@ namespace elib { namespace fs
 
 ////////////////////////////////////////////////////////////////////////////////
 // add bitwise operators inline
-# include <elib/fs/detail/perms_operators.hpp>
+# include <elib/filesystem/detail/perms_operators.hpp>
 
 namespace elib { namespace fs
 {
@@ -89,4 +89,4 @@ namespace elib { namespace fs
         perms m_perms;
     };
 }}                                                        // namespace elib::fs
-#endif /* ELIB_FS_FILE_STATUS_HPP */
+#endif /* ELIB_FILESYSTEM_FILE_STATUS_HPP */

@@ -1,8 +1,8 @@
-#ifndef ELIB_FS_FILESYSTEM_ERROR_HPP
-#define ELIB_FS_FILESYSTEM_ERROR_HPP
+#ifndef ELIB_FILESYSTEM_FILESYSTEM_ERROR_HPP
+#define ELIB_FILESYSTEM_FILESYSTEM_ERROR_HPP
 
-# include <elib/fs/config.hpp>
-# include <elib/fs/path.hpp>
+# include <elib/filesystem/config.hpp>
+# include <elib/filesystem/path.hpp>
 
 # include <system_error>
 # include <memory>
@@ -196,4 +196,4 @@ namespace elib { namespace fs
         }
     }                                                       // namespace detail
 }}                                                        // namespace elib::fs
-#endif /* ELIB_FS_FILESYSTEM_ERROR_HPP */
+#endif /* ELIB_FILESYSTEM_FILESYSTEM_ERROR_HPP */

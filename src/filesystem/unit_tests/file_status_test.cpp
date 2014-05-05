@@ -1,8 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "elib/fs/config.hpp"
-#include "elib/fs/file_status.hpp"
+#include <elib/filesystem/config.hpp>
+#include <elib/filesystem/file_status.hpp>
 
 using namespace elib::fs;
 

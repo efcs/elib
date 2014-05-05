@@ -1,9 +1,9 @@
 #ifndef ELIB_OPERATIONS_HPP
 #define ELIB_OPERATIONS_HPP
 
-# include <elib/fs/config.hpp>
-# include <elib/fs/path.hpp>
-# include <elib/fs/file_status.hpp>
+# include <elib/filesystem/config.hpp>
+# include <elib/filesystem/path.hpp>
+# include <elib/filesystem/file_status.hpp>
 
 # include <elib/assert.hpp>
 
@@ -43,7 +43,7 @@ namespace elib { namespace fs
 }}                                                        // namespace elib::fs
 
 // insert bitwise operators
-# include <elib/fs/detail/copy_options_operators.hpp>
+# include <elib/filesystem/detail/copy_options_operators.hpp>
 
 namespace elib { namespace fs
 {

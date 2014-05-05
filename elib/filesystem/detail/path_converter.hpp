@@ -1,5 +1,5 @@
-#ifndef ELIB_FS_CONVERSION_HPP
-#define ELIB_FS_CONVERSION_HPP
+#ifndef ELIB_FILESYSTEM_CONVERSION_HPP
+#define ELIB_FILESYSTEM_CONVERSION_HPP
 
 # include <elib/aux.hpp>
 #include <locale>
@@ -93,4 +93,4 @@ namespace elib
     } /* namespace detail */
   } /* namespace fs */
 } /* namespace elib */
-#endif /* ELIB_FS_CONVERSION_HPP */
+#endif /* ELIB_FILESYSTEM_CONVERSION_HPP */

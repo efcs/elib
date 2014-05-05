@@ -43,7 +43,6 @@ namespace elib { namespace enumeration
       
     }                                                       // namespace detail
     
-    /* should be in enum_cast but it is put here to avoid circular dependancies */
     template <typename T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
     constexpr aux::underlying_type_t<T>
     underlying_cast(T v) noexcept

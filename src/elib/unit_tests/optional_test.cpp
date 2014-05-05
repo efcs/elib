@@ -34,7 +34,7 @@ namespace cexpr_test
     constexpr opt o5(in_place, x);
     constexpr opt o6(in_place, 0);
 }
-# !defined(ELIB_CONFIG_COVERITY_SCAN)
+# endif
 
     
 BOOST_AUTO_TEST_SUITE(optional_test_suite)

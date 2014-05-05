@@ -178,10 +178,9 @@ if (CONFIG_ELIB_ASSERT_CONFIG)
     add_definitions( -DELIB_ASSERT_CONFIG )
 endif()
 
-if (CONFIG_ELIB_COVERITY_SCAN)
+if (CONFIG_COVERITY_SCAN)
     message( STATUS "Configuring for Coverity Scan")
     add_definitions( -DELIB_CONFIG_COVERITY_SCAN )
-   #add_definitions( -include config/gcc_4_8_2_coverity_scan_missing_builtins.hpp)
 endif()
 
 ################################################################################

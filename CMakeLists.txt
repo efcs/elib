@@ -46,6 +46,7 @@ option(CONFIG_HEADER_TESTS
 # NOTE There are top level files that are not a member of any library part
 # config, any, fmt, lexical_cast, scope_guard are some examples.
 
+option(ELIB_ALGORITHM_SOURCE "Build Algorithm" ON)
 option(ELIB_AUX_SOURCE "Build aux" ON)
 option(ELIB_CMD_OPTIONS_SOURCE "Build command options" ON)
 option(ELIB_CONTAINER_SOURCE "Build containers" ON)

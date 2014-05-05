@@ -20,21 +20,25 @@ namespace elib
 using namespace elib;
 
 
-#if !defined(ELIB_CONFIG_COVERITY_SCAN)
+#if defined(ELIB_CONFIG_COVERITY_SCAN)
+# define ELIB_OPTIONAL_CONSTEXPR
+#else
+# define ELIB_OPTIONAL_CONSTEXPR constexpr
+#endif
 /// Try and create constexpr optional instances
 namespace cexpr_test
 {
     using opt = optional<int>;
-    constexpr int x = 0;
+    ELIB_OPTIONAL_CONSTEXPR int x = 0;
     
-    constexpr opt o1;
-    constexpr opt o2(nullopt);
-    constexpr opt o3(x);
-    constexpr opt o4(0);
-    constexpr opt o5(in_place, x);
-    constexpr opt o6(in_place, 0);
+    ELIB_OPTIONAL_CONSTEXPR opt o1;
+    ELIB_OPTIONAL_CONSTEXPR opt o2(nullopt);
+    ELIB_OPTIONAL_CONSTEXPR opt o3(x);
+    ELIB_OPTIONAL_CONSTEXPR opt o4(0);
+    ELIB_OPTIONAL_CONSTEXPR opt o5(in_place, x);
+    ELIB_OPTIONAL_CONSTEXPR opt o6(in_place, 0);
 }
-# endif
+#undef ELIB_OPTIONAL_CONSTEXPR
 
     
 BOOST_AUTO_TEST_SUITE(optional_test_suite)

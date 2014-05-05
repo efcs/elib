@@ -159,12 +159,24 @@ namespace elib { namespace logging
         /* check properties about a member of level_e 
         * raw_levels: raw_out, raw_err
         * basic_levels: debug-fatal */
-        static bool is_raw_level(level_e e);
-        static bool is_basic_level(level_e e);  
+        static bool is_raw_level(level_e l) noexcept
+        {
+            return (l == level_e::raw_out || l == level_e::raw_err);
+        }
+        
+        static bool is_basic_level(level_e l) noexcept
+        {
+            return (l >= level_e::debug && l <= level_e::fatal);
+        }
     protected:
         typedef std::lock_guard<std::mutex> lock_guard;
         
-        bool m_should_print(level_e l) const;
+        bool m_should_print(level_e l) const
+        {
+            return (m_on && 
+                (is_raw_level(l) || 
+                (is_basic_level(l) && m_level <= l)));
+        }
         
         void m_log_to(level_e l, const std::string & s);
         

@@ -58,24 +58,6 @@ namespace elib { namespace logging
         out << m_prompts[l] << msg << std::endl;
     }
 
-    bool basic_log::m_should_print(level_e l) const 
-    {
-        return (m_on && 
-                (is_raw_level(l) || 
-                (is_basic_level(l) && m_level <= l)));
-    }
-
-    bool basic_log::is_raw_level(level_e l)
-    {
-        return (l == level_e::raw_out || l == level_e::raw_err);
-    }
-
-    bool basic_log::is_basic_level(level_e l)
-    {
-        return (l >= level_e::debug && l <= level_e::fatal);
-    }
-
-
     std::mutex & basic_log::m_get_lock() const
     {
     #if defined(ELIB_LOG_LOCK_FREE)

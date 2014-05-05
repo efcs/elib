@@ -1,7 +1,7 @@
 # Elib
 
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
-
+It can be found at github.com/EricWF/elib
 WARNING: This file is update very infrequently
 LAST UPDATE: 02/05/2014
 

@@ -89,25 +89,20 @@ namespace elib { namespace enumeration
         template <class T, class Enum = decltype(T::ELIB_ENUM_LAST_VALUE)>
         struct last_value_field : integral_constant<Enum, T::ELIB_ENUM_LAST_VALUE> {};
         
-        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>>
-        struct is_contigious_field : 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>{};
+        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>>
+        struct is_contigious_field : Base {};
                 
-        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>>
-        struct is_bitmask_field : 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>{};
+        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>>
+        struct is_bitmask_field : Base {};
             
-        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>>
-        struct is_arithmetic_field :
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>{};
+        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>>
+        struct is_arithmetic_field : Base {};
             
-        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>>
-        struct is_logical_field : 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>{};
-            
-        template <class T, class = bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>>
-        struct is_mixed_comparible_field : 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>{};
+        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>>
+        struct is_logical_field : Base {};
+           
+        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>>
+        struct is_mixed_comparible_field : Base {};
             
         template <class T>
         using default_value_field_t = default_value_field<T>;

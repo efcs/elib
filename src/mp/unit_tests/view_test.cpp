@@ -293,7 +293,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
   }                                              // mp_view_transform_view_test
 
   
-# if !defined(ELIB_CONFIG_COVERITY_SCAN)
+# if !defined(ELIB_CONFIG_COVERITY_SCAN) 
   BOOST_AUTO_TEST_CASE(mp_view_zip_view_test)
   {
     // general

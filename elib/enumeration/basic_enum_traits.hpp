@@ -49,7 +49,7 @@ namespace elib { namespace enumeration
             class T
           , template <class Test> class ApplyTest
         >
-        struct traits_detector_impl
+        struct basic_traits_detector_impl
         {
         private:
             template <class U>
@@ -67,16 +67,16 @@ namespace elib { namespace enumeration
             class T
           , template <class Test> class ApplyTest 
         >
-        struct traits_detector : traits_detector_impl<T, ApplyTest>::type {};
+        struct basic_traits_detector : basic_traits_detector_impl<T, ApplyTest>::type {};
      
      
       template <class T>
-      using traits_is_default_detector = 
-        decltype(&basic_enum_traits<T>::ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS);
+      using basic_traits_is_default_detector = 
+        decltype(basic_enum_traits<T>::ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS);
         
       template <class T>
-      using traits_name_map_detector = 
-        decltype(&basic_enum_traits<T>::name_map);
+      using basic_traits_name_map_detector = 
+        decltype(basic_enum_traits<T>::name_map);
       
       
     }                                                       // namespace detail
@@ -84,8 +84,8 @@ namespace elib { namespace enumeration
     template <class T>
     struct has_basic_enum_traits 
       : bool_< 
-          !detail::traits_detector<
-            T, detail::traits_is_default_detector
+          !detail::basic_traits_detector<
+            T, detail::basic_traits_is_default_detector
           >::value
         >
     {};
@@ -96,8 +96,8 @@ namespace elib { namespace enumeration
     template <class T>
     struct has_name_map<T, true>
       : aux::bool_<
-          detail::traits_detector<
-            T, detail::traits_name_map_detector
+          detail::basic_traits_detector<
+            T, detail::basic_traits_name_map_detector
           >::value
         >
     {};

@@ -3,7 +3,7 @@
 
 # include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/basic_enum_traits.hpp>
-# include <elib/enumeration/detail/meta_traits.hpp>
+# include <elib/enumeration/detail/traits_detector.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
 
@@ -11,15 +11,15 @@
 namespace elib { namespace enumeration
 {
     
-# define ELIB_ENUM_MERGE_HAS(name) meta_t::has_##name || int_t::has_##name
-# define ELIB_ENUM_MERGE(name) meta_t::has_##name ? meta_t::name : int_t::name
+# define ELIB_ENUM_MERGE_HAS(name) basic_t::has_##name || intrusive_t::has_##name
+# define ELIB_ENUM_MERGE(name) basic_t::has_##name ? basic_t::name : intrusive_t::name
     
     template <class T, class=enable_if_enum_t<T>>
     struct enum_traits
     {
     private:
-        using meta_t = detail::meta_basic_enum_traits<T>;
-        using int_t = detail::meta_intrusive_traits<T>;
+        using basic_t = detail::basic_enum_traits_detector<T>;
+        using intrusive_t = detail::intrusive_traits_detector<T>;
         
     public:
         
@@ -65,7 +65,7 @@ namespace elib { namespace enumeration
 # undef ELIB_ENUM_MERGE_HAS
 
 
-    template <class T, bool=std::is_enum<T>::value>
+    template <class T, bool=aux::is_enum<T>::value>
     struct has_range : aux::false_
     {};
     
@@ -185,7 +185,6 @@ namespace elib { namespace enumeration
           ));
     }
     
-    
     template <class T>
     constexpr aux::enable_if_c_t<
       enum_traits<T>::has_constexpr_range
@@ -211,10 +210,6 @@ namespace elib { namespace enumeration
         return (first_value<T>() <= v && v <= last_value<T>());
       return basic_enum_traits<T>::name_map.count(v) > 0;
     }
-    
-      
-    
-    
     
   }                                                    // namespace enumeration
 }                                                           // namespace elib

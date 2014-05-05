@@ -91,11 +91,11 @@ BOOST_AUTO_TEST_CASE(enum_v3_basic_enum_traits_detectors)
 }
 
 
-BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
+BOOST_AUTO_TEST_CASE(basic_enum_traits_detector_test)
 {
-  typedef detail::meta_basic_enum_traits<A> meta_A;
-  typedef detail::meta_basic_enum_traits<B> meta_B;
-  typedef detail::meta_basic_enum_traits<C> meta_C;
+  typedef detail::basic_enum_traits_detector<A> meta_A;
+  typedef detail::basic_enum_traits_detector<B> meta_B;
+  typedef detail::basic_enum_traits_detector<C> meta_C;
   
   BOOST_CHECK(meta_A::has_default_value == false);
   BOOST_CHECK(meta_B::has_default_value == false);
@@ -171,11 +171,11 @@ BOOST_AUTO_TEST_CASE(meta_basic_enum_traits_test)
 }
 
 
-BOOST_AUTO_TEST_CASE(intrusive_enum_traits_test)
+BOOST_AUTO_TEST_CASE(intrusive_traits_detector_test)
 {
-  typedef detail::meta_intrusive_traits<A> int_A;
-  typedef detail::meta_intrusive_traits<B> int_B;
-  typedef detail::meta_intrusive_traits<C> int_C;
+  typedef detail::intrusive_traits_detector<A> int_A;
+  typedef detail::intrusive_traits_detector<B> int_B;
+  typedef detail::intrusive_traits_detector<C> int_C;
   
   BOOST_CHECK(int_A::has_default_value == false);
   BOOST_CHECK(int_B::has_default_value == true);

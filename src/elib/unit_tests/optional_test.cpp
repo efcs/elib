@@ -20,6 +20,7 @@ namespace elib
 using namespace elib;
 
 
+#if !defined(ELIB_CONFIG_COVERITY_SCAN)
 /// Try and create constexpr optional instances
 namespace cexpr_test
 {
@@ -33,6 +34,7 @@ namespace cexpr_test
     constexpr opt o5(in_place, x);
     constexpr opt o6(in_place, 0);
 }
+# !defined(ELIB_CONFIG_COVERITY_SCAN)
 
     
 BOOST_AUTO_TEST_SUITE(optional_test_suite)

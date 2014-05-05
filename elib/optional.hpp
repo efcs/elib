@@ -424,7 +424,9 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         template <class ...Args>
         void m_create(Args &&... args)
+# if !defined(ELIB_CONFIG_COVERITY_SCAN)
             noexcept(noexcept(T(elib::forward<Args>(args)...)))
+# endif
         {
             ELIB_ASSERT( not m_init() );
             ::new ((void*)m_ptr()) T(elib::forward<Args>(args)...);
@@ -433,7 +435,9 @@ namespace elib
         
         template <class U, class ...Args>
         void m_create(std::initializer_list<U> il, Args &&...args)
+# if !defined(ELIB_CONFIG_COVERITY_SCAN)
             noexcept(noexcept(T(il, elib::forward<Args>(args)...)))
+# endif
         {
             ELIB_ASSERT( not m_init() );
             ::new ((void*)m_ptr()) T(il, elib::forward<Args>(args)...);

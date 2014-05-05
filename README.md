@@ -14,6 +14,9 @@ no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
 
 ### Core Library
 
+Algorithm
+: Wrappers for <algorithm> that helps with use with ranges
+
 Any
 : a variant container. It implementations the std::any proposal
 
@@ -156,6 +159,11 @@ Requirements (Library specific):
   
 ### Select what parts to build
   
+
+  * ELIB_ALGORITHM_SOURCE
+: build algorithm library
+  Default: ON
+
   * ELIB_AUX_SOURCE
 : build the utility library
   Default: ON
@@ -176,7 +184,7 @@ Requirements (Library specific):
 : build exception library
   Default: ON
 
-  * ELIB_FS_SOURCE
+  * ELIB_FILESYSTEM_SOURCE
 : build the filesystem library
   Default: ON 
 
@@ -184,7 +192,7 @@ Requirements (Library specific):
 : build functional source
   Default: ON
 
-  * ELIB_ITER_SOURCE
+  * ELIB_ITERATOR_SOURCE
 : build iterator source
   Default: ON
 
@@ -210,7 +218,7 @@ Requirements (Library specific):
 
   * ELIB_WEB_SOURCE
 : build web library
-  Default: OFF (until more support for <regex>)
+  Default: ON when compiling with GCC >= 4.9.0 or clang and libc++. Off otherwise. 
     
 ## Makefile Commands
 

@@ -81,7 +81,7 @@ scan:
 
 .PHONY: scan_build
 scan_build:
-	@ rm -rf build/ ; mkdir -p build ; cd build/ ; scan-build cmake .. ; scan-build make ; cd ..
+	@ rm -rf build/ ; mkdir -p build ; cd build/ ; scan-build cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make ; cd ..
 
 .PHONY: valgrind_check
 valgrind_check:

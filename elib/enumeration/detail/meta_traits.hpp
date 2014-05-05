@@ -3,9 +3,7 @@
 
 # include <elib/enumeration/detail/enum_fields.hpp>
 # include <elib/enumeration/basic_enum_traits.hpp>
-# include <elib/aux.hpp>
-
-
+# include <elib/aux/integral_constant.hpp>
 
 namespace elib { namespace enumeration
 {

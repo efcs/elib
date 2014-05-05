@@ -11,7 +11,6 @@
 namespace elib { namespace enumeration
 {
     
-    
 # define ELIB_ENUM_MERGE_HAS(name) meta_t::has_##name || int_t::has_##name
 # define ELIB_ENUM_MERGE(name) meta_t::has_##name ? meta_t::name : int_t::name
     
@@ -62,9 +61,9 @@ namespace elib { namespace enumeration
             has_constexpr_bounds && is_contigious;
     };                                                    // struct enum_traits
     
-    
 # undef ELIB_ENUM_MERGE
 # undef ELIB_ENUM_MERGE_HAS
+
 
     template <class T, bool=std::is_enum<T>::value>
     struct has_range : aux::false_

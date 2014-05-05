@@ -21,7 +21,7 @@ namespace elib { namespace enumeration
         constexpr const bool extracted_field<Found, FieldT>::found;
         
         template <bool Found, class FieldT>
-        constexpr  typename FieldT::value_type const 
+        constexpr typename FieldT::value_type const 
             extracted_field<Found, FieldT>::value;
         
     

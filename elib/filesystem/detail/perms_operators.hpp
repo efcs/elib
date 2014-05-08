@@ -59,39 +59,7 @@ namespace elib { namespace fs
     
 # undef ELIB_FILESYSTEM_PERMS_BITWISE_OP
     
-////////////////////////////////////////////////////////////////////////////////
-//        LOGICAL OPERATORS                   
-////////////////////////////////////////////////////////////////////////////////
 
-    constexpr bool operator!(perms lhs) noexcept
-    { 
-        using UnderT = aux::underlying_type_t<perms>;
-        return ! static_cast<UnderT>(lhs);
-    }
-    
-    constexpr bool operator&&(perms lhs, perms rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<perms>;
-        return ( static_cast<UnderT>(lhs) && static_cast<UnderT>(rhs) );
-    }
-    
-    constexpr bool operator&&(perms lhs, bool rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<perms>;
-        return ( static_cast<UnderT>(lhs) && rhs );
-    }
-    
-    constexpr bool operator||(perms lhs, perms rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<perms>;
-        return ( static_cast<UnderT>(lhs) || static_cast<UnderT>(rhs) );
-    }
-    
-    constexpr bool operator||(perms lhs, bool rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<perms>;
-        return ( static_cast<UnderT>(lhs) || rhs );
-    }
     
 }}                                                          // namespace elib
 #endif /* ELIB_FILESYSTEM_PERMS_OPERATORS_HPP */

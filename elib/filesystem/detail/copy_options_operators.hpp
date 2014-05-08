@@ -58,40 +58,7 @@ namespace elib { namespace fs
     ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP(^)
     
 # undef ELIB_FILESYSTEM_COPY_OPTIONS_BITWISE_OP
-    
-////////////////////////////////////////////////////////////////////////////////
-//        LOGICAL OPERATORS                   
-////////////////////////////////////////////////////////////////////////////////
 
-    constexpr bool operator!(copy_options lhs) noexcept
-    { 
-        using UnderT = aux::underlying_type_t<copy_options>;
-        return ! static_cast<UnderT>(lhs);
-    }
-    
-    constexpr bool operator&&(copy_options lhs, copy_options rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<copy_options>;
-        return ( static_cast<UnderT>(lhs) && static_cast<UnderT>(rhs) );
-    }
-    
-    constexpr bool operator&&(copy_options lhs, bool rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<copy_options>;
-        return ( static_cast<UnderT>(lhs) && rhs );
-    }
-    
-    constexpr bool operator||(copy_options lhs, copy_options rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<copy_options>;
-        return ( static_cast<UnderT>(lhs) || static_cast<UnderT>(rhs) );
-    }
-    
-    constexpr bool operator||(copy_options lhs, bool rhs) noexcept
-    {
-        using UnderT = aux::underlying_type_t<copy_options>;
-        return ( static_cast<UnderT>(lhs) || rhs );
-    }
     
 }}                                                          // namespace elib
 #endif /* ELIB_FILESYSTEM_COPY_OPTIONS_OPERATORS_HPP */

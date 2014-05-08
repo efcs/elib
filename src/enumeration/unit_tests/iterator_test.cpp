@@ -207,11 +207,12 @@ BOOST_AUTO_TEST_CASE(postfix_increment_test)
 BOOST_AUTO_TEST_CASE(prefix_decrement_test)
 {
     {
-        const AIter first(A::none);
+        AIter first(A::none);
+        AIter last;
         AIter it;
-        BOOST_CHECK(it == AIter());
+        BOOST_CHECK(it == last);
         --it;
-        BOOST_REQUIRE(it != AIter());
+        BOOST_REQUIRE(it != last);
         BOOST_CHECK(it != first);
         BOOST_CHECK(*it == A::two);
         --it;
@@ -222,11 +223,12 @@ BOOST_AUTO_TEST_CASE(prefix_decrement_test)
         BOOST_CHECK(*it == A::none);
     }
     {
-        const BIter first(B::none);
+        BIter first(B::none);
+        BIter last;
         BIter it;
-        BOOST_CHECK(it == BIter());
+        BOOST_CHECK(it == last);
         --it;
-        BOOST_REQUIRE(it != BIter());
+        BOOST_REQUIRE(it != last);
         BOOST_CHECK(it != first);
         BOOST_CHECK(*it == B::two);
         --it;

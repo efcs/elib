@@ -85,11 +85,11 @@ namespace elib { namespace enumeration
             
         public:
             iter_impl()
-            : m_iter{btraits::name_map.end()}
+              : m_iter{btraits::name_map.end()}
             {}
             
             explicit iter_impl(T pos)
-            : m_iter{btraits::name_map.find(pos)}
+              : m_iter{btraits::name_map.find(pos)}
             {}
             
         protected:
@@ -106,7 +106,7 @@ namespace elib { namespace enumeration
             { --m_iter; }
             
         private:
-            map_iterator m_iter {};
+            map_iterator m_iter;
         };
     }                                                       // namespace detail
     

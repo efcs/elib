@@ -41,7 +41,10 @@ namespace elib { namespace container
     
     public:
         
-        linear_flat_map() = default;
+        linear_flat_map()
+          : base_type()
+        {}
+        
         linear_flat_map(linear_flat_map const &) = default;
         linear_flat_map(linear_flat_map &&) = default;
 # if !defined(ELIB_CONFIG_NO_INHERITING_CONSTRUCTORS)

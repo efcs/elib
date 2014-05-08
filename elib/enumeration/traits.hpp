@@ -13,10 +13,11 @@ namespace elib { namespace enumeration
 # define ELIB_ENUM_MERGE_HAS(name) basic_t::has_##name || intrusive_t::has_##name
 # define ELIB_ENUM_MERGE(name) basic_t::has_##name ? basic_t::name : intrusive_t::name
     
-    template <class T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
+    template <class T, bool IsEnum = aux::is_enum<T>::value>
     struct enum_traits
     {
     private:
+        static_assert(IsEnum, "enum_traits requires T be an enum");
         using basic_t = detail::basic_enum_traits_detector<T>;
         using intrusive_t = detail::intrusive_traits_detector<T>;
         
@@ -63,6 +64,11 @@ namespace elib { namespace enumeration
     
 # undef ELIB_ENUM_MERGE
 # undef ELIB_ENUM_MERGE_HAS
+
+    template <class T>
+    struct enum_traits<T, false>
+    {
+    };
 
     ////////////////////////////////////////////////////////////////////////////
     template <class T, bool=aux::is_enum<T>::value>

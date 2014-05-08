@@ -309,7 +309,6 @@ BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
     BOOST_CHECK(fs::remove(p, ec));
     BOOST_CHECK(!ec);
     BOOST_CHECK(fs::exists(p) == false);
-        
 }
 
 BOOST_AUTO_TEST_CASE(fs_standalone_clean)

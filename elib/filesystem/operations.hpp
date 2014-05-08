@@ -43,13 +43,57 @@ namespace elib { namespace fs
         // implementation detail
         detail_in_recursive_copy = 512
     }; 
-}}                                                        // namespace elib::fs
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr copy_options operator~(copy_options lhs) noexcept
+    {
+        return static_cast<copy_options>(
+            ~ static_cast<int>(lhs) 
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr copy_options operator&(copy_options lhs, copy_options rhs) noexcept
+    {
+        return static_cast<copy_options>(
+            static_cast<int>(lhs) & static_cast<int>(rhs)
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline copy_options & operator&=(copy_options & lhs, copy_options rhs) noexcept
+    {
+        return lhs = lhs & rhs;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr copy_options operator|(copy_options lhs, copy_options rhs) noexcept
+    {
+        return static_cast<copy_options>(
+            static_cast<int>(lhs) | static_cast<int>(rhs)
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline copy_options & operator|=(copy_options & lhs, copy_options rhs) noexcept
+    {
+        return lhs = lhs | rhs;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr copy_options operator^(copy_options lhs, copy_options rhs) noexcept
+    {
+        return static_cast<copy_options>(
+            static_cast<int>(lhs) ^ static_cast<int>(rhs)
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline copy_options & operator^=(copy_options & lhs, copy_options rhs) noexcept
+    {
+        return lhs = lhs ^ rhs;
+    }
 
-// insert bitwise operators
-# include <elib/filesystem/detail/copy_options_operators.hpp>
-
-namespace elib { namespace fs
-{
     // operations handling is similar to the boost version
     // both except && no-except function signatures call a wrapper
     namespace detail

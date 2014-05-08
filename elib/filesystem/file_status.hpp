@@ -50,14 +50,57 @@ namespace elib { namespace fs
         unknown = 0xFFFF,
         symlink_perms = 0x4000
     };
-}}                                                        // namespace elib::fs
-
-////////////////////////////////////////////////////////////////////////////////
-// add bitwise operators inline
-# include <elib/filesystem/detail/perms_operators.hpp>
-
-namespace elib { namespace fs
-{
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr perms operator~(perms lhs) noexcept
+    {
+        return static_cast<perms>(
+            ~ static_cast<int>(lhs) 
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr perms operator&(perms lhs, perms rhs) noexcept
+    {
+        return static_cast<perms>(
+            static_cast<int>(lhs) & static_cast<int>(rhs)
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline perms & operator&=(perms & lhs, perms rhs) noexcept
+    {
+        return lhs = lhs & rhs;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr perms operator|(perms lhs, perms rhs) noexcept
+    {
+        return static_cast<perms>(
+            static_cast<int>(lhs) | static_cast<int>(rhs)
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline perms & operator|=(perms & lhs, perms rhs) noexcept
+    {
+        return lhs = lhs | rhs;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    constexpr perms operator^(perms lhs, perms rhs) noexcept
+    {
+        return static_cast<perms>(
+            static_cast<int>(lhs) ^ static_cast<int>(rhs)
+          );
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    inline perms & operator^=(perms & lhs, perms rhs) noexcept
+    {
+        return lhs = lhs ^ rhs;
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     class file_status

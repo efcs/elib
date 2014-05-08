@@ -69,9 +69,7 @@ namespace elib { namespace enumeration
         static const std::map< ::Empty, std::string> name_map;
     };
     
-    const std::map< ::Empty, std::string> basic_enum_traits< ::Empty>::name_map = 
-        {
-        };
+    const std::map< ::Empty, std::string> basic_enum_traits< ::Empty>::name_map;
 }}                                                          // namespace elib
 
 using namespace elib::enumeration;

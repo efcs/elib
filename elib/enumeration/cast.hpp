@@ -8,11 +8,7 @@
 
 namespace elib { namespace enumeration
 {
-    namespace detail
-    {
-        template <class Str>
-        using to_string_type_valid = aux::is_same< Str, std::string >;
-    }                                                       // namespace detail
+
     
 # if defined(__clang__)
 #   pragma clang diagnostic push
@@ -112,7 +108,7 @@ namespace elib { namespace enumeration
     template <
         class To, class From
       , ELIB_ENABLE_IF(aux::is_enum<From>::value 
-                    && detail::to_string_type_valid<To>::value
+                    && aux::is_same<To, std::string>::value
                     && has_name_map<From>::value)
     >
     bool enum_cast(From v, To & t) noexcept
@@ -131,7 +127,7 @@ namespace elib { namespace enumeration
     template <
         class To, class From
       , ELIB_ENABLE_IF(aux::is_enum<From>::value 
-                    && detail::to_string_type_valid<To>::value
+                    && aux::is_same<To, std::string>::value
                     && has_name_map<From>::value)
     >
     To enum_cast(From v)

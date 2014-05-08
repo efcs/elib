@@ -43,8 +43,10 @@ namespace elib { namespace enumeration
         using enable_if_iterable_t =
             aux::enable_if_t<is_iterable<T>>;
         
+        
         template <class T, class=void>
         class iter_impl;
+        
         
         template <class T>
         class iter_impl<T, enable_if_constexpr_iterable_t<T>>
@@ -148,7 +150,7 @@ namespace elib { namespace enumeration
     
     template <typename T, class=detail::enable_if_iterable_t<T>>
     class enum_iterator 
-      : public detail::iter_impl<T>
+      : private detail::iter_impl<T>
     {
         using base_type = detail::iter_impl<T>;
     public:
@@ -160,9 +162,6 @@ namespace elib { namespace enumeration
         explicit enum_iterator(T v)
           : base_type(v)
         {}
-        
-        
-        virtual ~enum_iterator() noexcept {}
         
         const T& operator*() const
         {
@@ -200,8 +199,6 @@ namespace elib { namespace enumeration
             this->decrement();
             return cp;
         }
-        
-        
     };                                                   // class enum_iterator
     
 }}                                                          // namespace elib

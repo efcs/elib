@@ -39,16 +39,6 @@ namespace
 }                                                           // namespace
 namespace elib { namespace enumeration
 {
-    template <>
-    struct basic_enum_traits< ::B>
-    {
-        static constexpr ::B ELIB_ENUM_DEFAULT_VALUE = ::B::none; 
-        static constexpr ::B ELIB_ENUM_ERROR_VALUE = ::B::one;
-        
-        static constexpr ::B ELIB_ENUM_FIRST_VALUE = ::B::none;
-        static constexpr ::B ELIB_ENUM_LAST_VALUE = ::B::two;
-        static constexpr bool ELIB_ENUM_IS_CONTIGIOUS = true;
-    };
     
     template <>
     struct basic_enum_traits< ::C>

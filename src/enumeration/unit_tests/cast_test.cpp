@@ -144,6 +144,13 @@ BOOST_AUTO_TEST_CASE(enumeration_enum_cast_string_to_enum)
     BOOST_CHECK_THROW(enum_cast<C>(""), bad_enum_cast);
     BOOST_CHECK_THROW(enum_cast<C>("three"), bad_enum_cast);
     
+    C dest = C::none;
+    BOOST_CHECK(enum_cast("one", dest));
+    BOOST_CHECK(dest == C::one);
+    dest = C::none;
+    BOOST_CHECK(not enum_cast("", dest));
+    BOOST_CHECK(not enum_cast("three", dest));
+    
     
 }
 

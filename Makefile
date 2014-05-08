@@ -113,6 +113,8 @@ coverage:
 	lcov --capture --initial --directory . --output-file test_coverage ; \
 	./elib_test_shared --log_level=message --report_level=short ;\
 	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
+	lcov --remove test_coverage.info /usr/include/\* --output-file test_coverage.info ;\
+	lcov --remove test_coverage.info /opt/\* --output-file test_coverage.info ;\
 	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
 
 .PHONY: config_build1

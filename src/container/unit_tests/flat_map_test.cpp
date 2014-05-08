@@ -168,6 +168,7 @@ BOOST_AUTO_TEST_CASE(insert_test)
         
         p.second = 1;
         ret = m.insert(m.cbegin(), static_cast<map_type::value_type const &>(p));
+        ret = m.insert(m.cbegin(), p);
         BOOST_CHECK(ret->first == 0);
         BOOST_CHECK(ret->second == 0);
         BOOST_CHECK(m.size() == 1);

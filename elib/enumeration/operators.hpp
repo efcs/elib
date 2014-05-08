@@ -6,18 +6,18 @@
 # include <elib/preprocessor/cat.hpp>
 
 # define ELIB_ENUMERATION_PREFIX_OP(Type, Op)                       \
-    constexpr Type & operator ELIB_PP_CAT(Op, Op) (Type & t)        \
+    inline Type & operator ELIB_PP_CAT(Op, Op) (Type & t)           \
     ELIB_RETURN_NOEXCEPT(t = static_cast<Type>(                     \
         static_cast< ::elib::enumeration::opt_cast_t<Type>>(t) Op 1 \
     ))
 # 
 
-# define ELIB_ENUMERATION_SUFFIX_OP(Type, Op)         \
-    Type operator ELIB_PP_CAT(Op, Op) (Type & t, int) \
-    {                                                 \
-        auto cp = t;                                  \
-        ELIB_PP_CAT(Op, Op) t;                        \
-        return cp;                                    \
+# define ELIB_ENUMERATION_SUFFIX_OP(Type, Op)                \
+    inline Type operator ELIB_PP_CAT(Op, Op) (Type & t, int) \
+    {                                                        \
+        auto cp = t;                                         \
+        ELIB_PP_CAT(Op, Op) t;                               \
+        return cp;                                           \
     } 
 # 
         

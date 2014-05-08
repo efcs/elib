@@ -228,8 +228,8 @@ BOOST_AUTO_TEST_CASE(enumeration_default_value_test)
     static_assert(
         default_value<B>() == B::none, "default == none"
     );
-    BOOST_CHECK(default_value<A>() == A::one);
-    BOOST_CHECK(default_value<B>() == B::one);
+    BOOST_CHECK(default_value<A>() == A::none);
+    BOOST_CHECK(default_value<B>() == B::none);
 }
 
 BOOST_AUTO_TEST_CASE(enumeration_error_value_test)

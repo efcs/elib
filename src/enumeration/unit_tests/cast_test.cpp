@@ -138,8 +138,6 @@ BOOST_AUTO_TEST_CASE(enumeration_enum_cast_string_to_enum)
     dest = C::none;
     BOOST_CHECK(not enum_cast("", dest));
     BOOST_CHECK(not enum_cast("three", dest));
-    
-    
 }
 
 BOOST_AUTO_TEST_SUITE_END()

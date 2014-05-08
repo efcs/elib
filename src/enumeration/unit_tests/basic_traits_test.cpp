@@ -25,7 +25,6 @@ namespace elib { namespace enumeration
     template <>
     struct basic_enum_traits< ::A>
     {
-        
     };
     
     template <>

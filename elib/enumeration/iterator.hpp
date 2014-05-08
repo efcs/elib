@@ -23,7 +23,7 @@ namespace elib { namespace enumeration
         ////////////////////////////////////////////////////////////////////////
         template <class T, bool HasNameMap>
         class iter_impl<T, true, HasNameMap>
-            : public std::iterator<std::bidirectional_iterator_tag, T>
+            : public std::iterator<std::bidirectional_iterator_tag, T const>
         {
         private:
             using underlying_type = aux::underlying_type_t<T>;
@@ -36,16 +36,16 @@ namespace elib { namespace enumeration
         public:
             
             constexpr iter_impl()
-              : m_val{m_end_value}
+              : m_val(m_end_value)
             {}
             
             constexpr explicit iter_impl(T val)
-              : m_val{val}
+              : m_val(val)
             {}
             
         protected:
             
-            const T & dereference() const
+            const T & dereference() const noexcept
             { 
                 return m_val; 
             }
@@ -70,13 +70,13 @@ namespace elib { namespace enumeration
             }
 
         private:
-            T m_val {};
+            T m_val;
         };
         
         ////////////////////////////////////////////////////////////////////////
         template <class T>
         class iter_impl<T, false, true>
-            : public std::iterator<std::bidirectional_iterator_tag, T>
+            : public std::iterator<std::bidirectional_iterator_tag, T const>
         {
         private:
             static_assert(has_name_map<T>::value, "must have name map");

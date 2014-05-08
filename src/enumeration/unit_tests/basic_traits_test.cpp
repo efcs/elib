@@ -2,6 +2,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <elib/enumeration/basic_traits.hpp>
+#include <map>
+#include <string>
 
 enum class A
 {

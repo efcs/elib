@@ -32,7 +32,6 @@ namespace elib { namespace enumeration
 #   pragma clang diagnostic pop
 # endif
 
-
     
     ////////////////////////////////////////////////////////////////////////////
     // enum_cast: Enum -> Integral (safe)

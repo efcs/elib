@@ -13,7 +13,15 @@ namespace elib { namespace container
     template class flat_map_base<std::string, std::string, std::less<std::string>>;
 }}  
 
-BOOST_AUTO_TEST_SUITE(flat_map_base_test_suite)
+using map_type = elib::container::flat_map_base<int, int, std::less<int>>;
+using value_type = map_type::value_type;
+using compare = map_type::key_compare;
+using iterator = map_type::iterator;
+using const_iterator = map_type::const_iterator;
+using reverse_iterator = map_type::reverse_iterator;
+using const_reverse_iterator = map_type::const_reverse_iterator;
+
+BOOST_AUTO_TEST_SUITE(container_flat_map_base_test_suite)
 
 BOOST_AUTO_TEST_CASE(flat_map_base_init)
 {

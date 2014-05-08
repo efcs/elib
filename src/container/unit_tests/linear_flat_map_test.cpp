@@ -3,7 +3,7 @@
 
 #include <elib/container/linear_flat_map.hpp>
 #include <string>
-#include <map>
+#include <utility>
 
 // instantiation test
 namespace elib { namespace container 
@@ -17,7 +17,7 @@ using compare = map_type::key_compare;
 using iterator = map_type::iterator;
 using const_iterator = map_type::const_iterator;
 
-BOOST_AUTO_TEST_SUITE(linear_flat_map_test_suite)
+BOOST_AUTO_TEST_SUITE(container_linear_flat_map_test_suite)
 
 BOOST_AUTO_TEST_CASE(constructor_test)
 {
@@ -78,12 +78,14 @@ BOOST_AUTO_TEST_CASE(access_test)
         BOOST_CHECK(m1.at(0) == 0);
         BOOST_CHECK(m1.at(1) == 1);
         BOOST_CHECK(m1.at(2) == 2);
+        BOOST_CHECK_THROW(m1.at(3), std::out_of_range);
     }
     {
         map_type m1{{0, 0}, {1, 1}, {2, 2}};
         BOOST_CHECK(m1.at(0) == 0);
         BOOST_CHECK(m1.at(1) == 1);
         BOOST_CHECK(m1.at(2) == 2);
+        BOOST_CHECK_THROW(m1.at(3), std::out_of_range);
     }
     {
         map_type m1{{0, 0}, {1, 1}, {2, 2}};
@@ -294,6 +296,14 @@ BOOST_AUTO_TEST_CASE(erase_range_test)
     
 }
 
+BOOST_AUTO_TEST_CASE(clear_test)
+{
+    map_type m1{{0, 0}, {1, 1}};
+    BOOST_CHECK(not m1.empty());
+    m1.clear();
+    BOOST_CHECK(m1.empty());
+}
+
 BOOST_AUTO_TEST_CASE(swap_test)
 {
     const map_type m1{{0, 0}, {1, 1}};
@@ -307,6 +317,10 @@ BOOST_AUTO_TEST_CASE(swap_test)
     m1_cp.swap(m2_cp);
     BOOST_CHECK(m1_cp == m2);
     BOOST_CHECK(m2_cp == m1);
+    
+    swap(m1_cp, m2_cp);
+    BOOST_CHECK(m1_cp == m1);
+    BOOST_CHECK(m2_cp == m2);
 }
 
 BOOST_AUTO_TEST_CASE(count_test)
@@ -471,4 +485,5 @@ BOOST_AUTO_TEST_CASE(upper_bound_test)
         BOOST_CHECK(ret == m.end());
     }
 } 
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,7 +1,6 @@
 #ifndef ELIB_ENUMERATION_ENUM_TRAITS_HPP
 #define ELIB_ENUMERATION_ENUM_TRAITS_HPP
 
-# include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/basic_enum_traits.hpp>
 # include <elib/enumeration/detail/traits_detector.hpp>
 # include <elib/aux.hpp>
@@ -14,7 +13,7 @@ namespace elib { namespace enumeration
 # define ELIB_ENUM_MERGE_HAS(name) basic_t::has_##name || intrusive_t::has_##name
 # define ELIB_ENUM_MERGE(name) basic_t::has_##name ? basic_t::name : intrusive_t::name
     
-    template <class T, class=enable_if_enum_t<T>>
+    template <class T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
     struct enum_traits
     {
     private:
@@ -110,105 +109,99 @@ namespace elib { namespace enumeration
       return enum_traits<T>::last_value;
     }
     
-    template <class T>
-    aux::enable_if_c_t<
-      has_name_map<T>::value
-        && !enum_traits<T>::has_first_value
-      , T
-    >
-    first_value()
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(has_name_map<Enum>::value)
+      , ELIB_ENABLE_IF(not enum_traits<Enum>::has_first_value)
+      >
+    Enum first_value()
     {
-      return basic_enum_traits<T>::name_map.begin()->first;
+      return basic_enum_traits<Enum>::name_map.begin()->first;
     }
     
     
-    template <class T>
-    aux::enable_if_c_t<
-      has_name_map<T>::value
-        && !enum_traits<T>::has_last_value
-      , T
-    >
-    last_value()
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(has_name_map<Enum>::value)
+      , ELIB_ENABLE_IF(not enum_traits<Enum>::has_last_value)
+      >
+    Enum last_value()
     {
-      return (basic_enum_traits<T>::name_map.end()--)->first;
+      return (--basic_enum_traits<Enum>::name_map.end())->first;
     }
     
     
-    template <class T>
-    constexpr aux::enable_if_c_t<
-      enum_traits<T>::has_constexpr_range
-      , std::size_t
-    >
-    size() noexcept
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(enum_traits<Enum>::has_constexpr_range)
+      >
+    constexpr std::size_t size() noexcept
     {
-      return underlying_cast(last_value<T>()) 
-             - underlying_cast(first_value<T>()) + 1;
+        static_assert(aux::is_enum<Enum>::value, "Must be enum");
+        using Underlying = aux::underlying_type_t<Enum>;
+        return static_cast<Underlying>(last_value<Enum>()) 
+             - static_cast<Underlying>(first_value<Enum>()) + 1;
     }
     
     
-    template <class T>
-    aux::enable_if_c_t<
-      has_name_map<T>::value
-        && !enum_traits<T>::has_constexpr_range
-      , std::size_t
-    >
-    size()
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(has_name_map<Enum>::value)
+      , ELIB_ENABLE_IF(not enum_traits<Enum>::has_constexpr_range)
+      >
+    std::size_t size()
     {
-      return basic_enum_traits<T>::name_map.size();
+      return basic_enum_traits<Enum>::name_map.size();
     }
     
     
-    template <class T>
-    constexpr aux::enable_if_c_t<
-      enum_traits<T>::has_is_contigious
-      , bool
-    >
-    is_contigious() noexcept
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(enum_traits<Enum>::has_is_contigious)
+      >
+    constexpr bool is_contigious() noexcept
     {
-      return enum_traits<T>::is_contigious;
+      return enum_traits<Enum>::is_contigious;
     }
     
     
-    template <class T>
-    aux::enable_if_c_t<
-      has_name_map<T>::value
-        && !enum_traits<T>::has_is_contigious
-      , bool
-    >
-    is_contigious()
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(has_name_map<Enum>::value)
+      , ELIB_ENABLE_IF(not enum_traits<Enum>::has_is_contigious)
+      >
+    bool is_contigious()
     {
-      return (size<T>() == 0 
-        || (static_cast<std::size_t>(
-                underlying_cast(last_value<T>()) - underlying_cast(first_value<T>())
-          )
-             == size<T>()
-          ));
+        using Underlying = aux::underlying_type_t<Enum>;
+        return size<Enum>() == 0 
+            || size<Enum>() == static_cast<std::size_t>(
+                                    static_cast<Underlying>(last_value<Enum>()) 
+                                  - static_cast<Underlying>(first_value<Enum>())
+                                );
     }
     
-    template <class T>
-    constexpr aux::enable_if_c_t<
-      enum_traits<T>::has_constexpr_range
-      , bool 
-    >
-    in_range(T v) noexcept
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(enum_traits<Enum>::has_constexpr_range)
+      >
+    constexpr bool in_range(Enum v) noexcept
     {
-      return (first_value<T>() <= v && v <= last_value<T>());
+        return (first_value<Enum>() <= v && v <= last_value<Enum>());
     }
     
     
-    template <class T>
-    aux::enable_if_c_t<
-      has_name_map<T>::value
-        && !enum_traits<T>::has_constexpr_range
-      , bool
-    >
-    in_range(T v)
+    template <
+        class Enum
+      , ELIB_ENABLE_IF(has_name_map<Enum>::value)
+      , ELIB_ENABLE_IF(not enum_traits<Enum>::has_constexpr_range)
+      >
+    bool in_range(Enum v)
     {
-      if (size<T>() == 0)
+      if (size<Enum>() == 0)
         return false;
-      if (is_contigious<T>())
-        return (first_value<T>() <= v && v <= last_value<T>());
-      return basic_enum_traits<T>::name_map.count(v) > 0;
+      if (is_contigious<Enum>())
+        return (first_value<Enum>() <= v && v <= last_value<Enum>());
+      return basic_enum_traits<Enum>::name_map.count(v) > 0;
     }
     
   }                                                    // namespace enumeration

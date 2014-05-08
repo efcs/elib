@@ -1,7 +1,6 @@
 #ifndef ELIB_ENUMERATION_ENUM_CAST_HPP
 #define ELIB_ENUMERATION_ENUM_CAST_HPP
 
-# include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/enum_traits.hpp>
 # include <elib/aux.hpp>
 # include <string>
@@ -36,6 +35,8 @@ namespace elib { namespace enumeration
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
+
+
     
     ////////////////////////////////////////////////////////////////////////////
     // enum_cast: Enum -> Integral (safe)
@@ -176,5 +177,21 @@ namespace elib { namespace enumeration
         throw bad_enum_cast{"bad_enum_cast"};
     }
 
+    template <typename T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
+    constexpr aux::underlying_type_t<T>
+    underlying_cast(T v) noexcept
+    {
+      return static_cast<aux::underlying_type_t<T>>(v);
+    }
+    
+    template <class T>
+    using opt_cast_t = aux::sfinae_underlying_type_t<T>;
+    
+    template <class T, ELIB_ENABLE_IF(aux::is_integral_enum<T>::value)>
+    constexpr opt_cast_t<T> opt_cast(T t) noexcept
+    {
+        return static_cast<opt_cast_t<T>>(t);
+    }
+    
 }}                                                           // namespace elib
 #endif /* ELIB_ENUMERATION_ENUM_CAST_HPP */

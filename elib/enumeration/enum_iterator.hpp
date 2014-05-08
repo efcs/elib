@@ -1,7 +1,6 @@
 #ifndef ELIB_ENUMERATION_ENUM_ITERATOR_HPP
 #define ELIB_ENUMERATION_ENUM_ITERATOR_HPP
 
-# include <elib/enumeration/enum_helper.hpp>
 # include <elib/enumeration/basic_enum_traits.hpp>
 # include <elib/enumeration/enum_traits.hpp>
 # include <elib/aux.hpp>

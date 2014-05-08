@@ -1,7 +1,6 @@
 #ifndef ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
 #define ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
 
-# include <elib/enumeration/enum_helper.hpp>
 # include <elib/aux.hpp>
 # include <string>
 # include <map>

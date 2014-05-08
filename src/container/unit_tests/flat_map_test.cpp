@@ -472,6 +472,6 @@ BOOST_AUTO_TEST_CASE(upper_bound_test)
         ret = m.upper_bound(2);
         BOOST_CHECK(ret == m.end());
     }
-}
+} 
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -8,7 +8,8 @@
 namespace elib { namespace enumeration
 {
     
-# if 0    
+# if defined(ELIB_ENUMERATION_EXPOSITION)
+#   error ELIB_ENUMERATION_EXPOSITION should never be defined
     template <typename T>
     struct basic_enum_traits
     {
@@ -37,8 +38,6 @@ namespace elib { namespace enumeration
     {
         static constexpr bool ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS = true;
     };
-      
-    
       
     namespace detail
     {

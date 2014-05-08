@@ -153,7 +153,10 @@ namespace elib { namespace enumeration
         using base_type = detail::iter_impl<T>;
     public:
         
-        enum_iterator() = default;
+        enum_iterator()
+          : base_type()
+        {}
+        
         explicit enum_iterator(T v)
           : base_type(v)
         {}
@@ -198,15 +201,6 @@ namespace elib { namespace enumeration
             return cp;
         }
         
-        friend enum_iterator begin(const enum_iterator&)
-        {
-            return enum_iterator{first_value<T>()};
-        }
-        
-        friend enum_iterator end(const enum_iterator&)
-        {
-            return enum_iterator{};
-        }
         
     };                                                   // class enum_iterator
     

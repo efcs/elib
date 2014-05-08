@@ -12,6 +12,7 @@ enum class A
   none
 };
 
+
 enum class B
 {
   none, 
@@ -633,7 +634,7 @@ BOOST_AUTO_TEST_CASE(test_iter)
   
   /* test for constexpr iterator (e.g. B's) */
   using b_iter = enum_iterator<B>;
-  b_iter bit = begin(b_iter{});
+  b_iter bit(B::none);
   const b_iter bend = b_iter{};
   
   BOOST_CHECK(bit == b_iter{first_value<B>()});
@@ -658,8 +659,8 @@ BOOST_AUTO_TEST_CASE(test_iter)
   
   /* test for name iterator */
   using c_iter = enum_iterator<C>;
-  c_iter cit = begin(c_iter{});
-  const c_iter cend = end(c_iter{});
+  c_iter cit(C::none);
+  const c_iter cend;
   
   BOOST_CHECK(cend == c_iter{});
   

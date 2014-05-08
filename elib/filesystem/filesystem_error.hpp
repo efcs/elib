@@ -74,23 +74,13 @@ namespace elib { namespace fs
     ////////////////////////////////////////////////////////////////////////////
     namespace detail 
     {
-        ////////////////////////////////////////////////////////////////////////
-        constexpr int errc_cast(std::errc e) noexcept
-        {
-            return static_cast<int>(e);
-        }
-        
+    
         ////////////////////////////////////////////////////////////////////////
         inline std::error_code capture_errno()
         {
             return std::error_code{errno, std::system_category()};
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        inline void capture_errno(std::error_code & ec)
-        {
-            ec = capture_errno();
-        }
 
         ////////////////////////////////////////////////////////////////////////
         inline std::error_code handle_error(int xerrno)
@@ -99,23 +89,6 @@ namespace elib { namespace fs
         }
 
         ////////////////////////////////////////////////////////////////////////
-        inline std::error_code handle_error(std::errc err_code)
-        {
-            return std::make_error_code(err_code);
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        inline void handle_error(int xerrno, std::error_code& ec)
-        {
-            ec = handle_error(xerrno);
-        }
-        
-        inline void
-        handle_error(std::errc err_code, std::error_code& ec)
-        {
-            ec = handle_error(err_code);
-        }
-
         inline void clear_error(std::error_code *ec)
         {
             if (ec) ec->clear();
@@ -167,24 +140,6 @@ namespace elib { namespace fs
                         std::error_code *ec)
         { 
             return handle_and_throw_error(clear_errno(), msg, p1, ec);
-        }
-
-        inline bool handle_and_throw_errno(const std::string& msg, const path& p1,
-                                            const path& p2, std::error_code *ec)
-        {
-            return handle_and_throw_error(clear_errno(), msg, p1, p2, ec);
-        }
-
-        inline bool handle_and_throw_error(std::errc err_code, 
-                        const std::string& msg, std::error_code *ec)
-        {
-            return handle_and_throw_error(static_cast<int>(err_code), msg, ec);
-        }
-
-        inline bool handle_and_throw_error(std::errc err_code, 
-                        const std::string& msg, const path& p1, std::error_code *ec)
-        {
-            return handle_and_throw_error(static_cast<int>(err_code), msg, p1, ec);
         }
 
         inline bool handle_and_throw_error(std::errc err_code, 

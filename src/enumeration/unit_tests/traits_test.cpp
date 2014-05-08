@@ -31,6 +31,10 @@ enum class D
     none, one, two
 };
 
+enum class Empty
+{
+};
+
 namespace elib { namespace enumeration
 {
     template <>
@@ -55,6 +59,16 @@ namespace elib { namespace enumeration
             {::C::none, "none"}
           , {::C::one, "one"}
           , {::C::two, "two"}
+        };
+        
+    template <>
+    struct basic_enum_traits< ::Empty>
+    {
+        static const std::map< ::Empty, std::string> name_map;
+    };
+    
+    const std::map< ::Empty, std::string> basic_enum_traits< ::Empty>::name_map = 
+        {
         };
 }}                                                          // namespace elib
 
@@ -312,6 +326,7 @@ BOOST_AUTO_TEST_CASE(enumeration_in_range_test)
     BOOST_CHECK(in_range(C::none));
     BOOST_CHECK(in_range(C::two));
     BOOST_CHECK(not in_range(static_cast<C>(3)));
+    BOOST_CHECK(not in_range(static_cast<Empty>(0)));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

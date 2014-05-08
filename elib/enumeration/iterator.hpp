@@ -2,9 +2,9 @@
 #define ELIB_ENUMERATION_ITERATOR_HPP
 
 # include <elib/enumeration/basic_traits.hpp>
+# include <elib/enumeration/cast.hpp>
 # include <elib/enumeration/traits.hpp>
-# include <elib/aux.hpp>
-
+# include <elib/aux/traits/underlying_type.hpp>
 # include <iterator>
 
 namespace elib { namespace enumeration

@@ -1,5 +1,5 @@
-#ifndef ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
-#define ELIB_ENUM_BASIC_ENUM_TRAITS_HPP
+#ifndef ELIB_ENUMERATION_BASIC_TRAITS_HPP
+#define ELIB_ENUMERATION_BASIC_TRAITS_HPP
 
 # include <elib/aux.hpp>
 # include <string>
@@ -8,7 +8,6 @@
 namespace elib { namespace enumeration
 {
     
-  
 # if 0    
     template <typename T>
     struct basic_enum_traits
@@ -102,6 +101,5 @@ namespace elib { namespace enumeration
     {};
     
       
-  }                                                    // namespace enumeration
-}                                                           // namespace elib
-#endif /* ELIB_ENUM_BASIC_ENUM_TRAITS_HPP */
+}}                                                          // namespace elib
+#endif /* ELIB_ENUMERATION_BASIC_TRAITS_HPP */

@@ -1,7 +1,7 @@
 #ifndef ELIB_ENUMERATION_DETAIL_TRAITS_DETECTOR_HPP
 #define ELIB_ENUMERATION_DETAIL_TRAITS_DETECTOR_HPP
 
-# include <elib/enumeration/basic_enum_traits.hpp>
+# include <elib/enumeration/basic_traits.hpp>
 # include <elib/aux/integral_constant.hpp>
 
 namespace elib { namespace enumeration

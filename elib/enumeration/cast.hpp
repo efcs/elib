@@ -1,7 +1,7 @@
-#ifndef ELIB_ENUMERATION_ENUM_CAST_HPP
-#define ELIB_ENUMERATION_ENUM_CAST_HPP
+#ifndef ELIB_ENUMERATION_CAST_HPP
+#define ELIB_ENUMERATION_CAST_HPP
 
-# include <elib/enumeration/enum_traits.hpp>
+# include <elib/enumeration/traits.hpp>
 # include <elib/aux.hpp>
 # include <string>
 # include <stdexcept>
@@ -194,4 +194,4 @@ namespace elib { namespace enumeration
     }
     
 }}                                                           // namespace elib
-#endif /* ELIB_ENUMERATION_ENUM_CAST_HPP */
+#endif /* ELIB_ENUMERATION_CAST_HPP */

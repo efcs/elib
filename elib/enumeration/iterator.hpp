@@ -1,8 +1,8 @@
-#ifndef ELIB_ENUMERATION_ENUM_ITERATOR_HPP
-#define ELIB_ENUMERATION_ENUM_ITERATOR_HPP
+#ifndef ELIB_ENUMERATION_ITERATOR_HPP
+#define ELIB_ENUMERATION_ITERATOR_HPP
 
-# include <elib/enumeration/basic_enum_traits.hpp>
-# include <elib/enumeration/enum_traits.hpp>
+# include <elib/enumeration/basic_traits.hpp>
+# include <elib/enumeration/traits.hpp>
 # include <elib/aux.hpp>
 
 # include <iterator>
@@ -12,7 +12,6 @@ namespace elib { namespace enumeration
     
     namespace detail
     {
-      
         template <class T>
         struct is_iterable : has_range<T> {};
         
@@ -44,10 +43,8 @@ namespace elib { namespace enumeration
         using enable_if_iterable_t =
             aux::enable_if_t<is_iterable<T>>;
         
-        
         template <class T, class=void>
         class iter_impl;
-        
         
         template <class T>
         class iter_impl<T, enable_if_constexpr_iterable_t<T>>
@@ -214,4 +211,4 @@ namespace elib { namespace enumeration
     };                                                   // class enum_iterator
     
 }}                                                          // namespace elib
-#endif /* ELIB_ENUMERATION_ENUM_ITERATOR_HPP */
+#endif /* ELIB_ENUMERATION_ITERATOR_HPP */

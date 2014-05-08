@@ -1,8 +1,8 @@
 #ifndef ELIB_LOGGING_LOG_LEVEL_HPP
 #define ELIB_LOGGING_LOG_LEVEL_HPP
 
-# include <elib/enumeration/basic_enum_traits.hpp>
-# include <elib/enumeration/enum_cast.hpp>
+# include <elib/enumeration/basic_traits.hpp>
+# include <elib/enumeration/cast.hpp>
 # include <string>
 
 namespace elib { namespace logging

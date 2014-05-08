@@ -1,7 +1,7 @@
-#ifndef ELIB_ENUMERATION_ENUM_TRAITS_HPP
-#define ELIB_ENUMERATION_ENUM_TRAITS_HPP
+#ifndef ELIB_ENUMERATION_TRAITS_HPP
+#define ELIB_ENUMERATION_TRAITS_HPP
 
-# include <elib/enumeration/basic_enum_traits.hpp>
+# include <elib/enumeration/basic_traits.hpp>
 # include <elib/enumeration/detail/traits_detector.hpp>
 # include <elib/aux.hpp>
 # include <cstddef>
@@ -22,7 +22,8 @@ namespace elib { namespace enumeration
         
     public:
         
-        typedef T enum_type;
+        using value_type = T;
+        using enum_type = T;
         
         static constexpr bool has_default_value = ELIB_ENUM_MERGE_HAS(default_value);
         static constexpr T default_value = ELIB_ENUM_MERGE(default_value);
@@ -63,7 +64,7 @@ namespace elib { namespace enumeration
 # undef ELIB_ENUM_MERGE
 # undef ELIB_ENUM_MERGE_HAS
 
-
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, bool=aux::is_enum<T>::value>
     struct has_range : aux::false_
     {};
@@ -76,6 +77,7 @@ namespace elib { namespace enumeration
         >
     {};
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T,  bool=aux::is_enum<T>::value>
     struct has_constexpr_range : aux::false_ {};
     
@@ -84,31 +86,35 @@ namespace elib { namespace enumeration
       : bool_< enum_traits<T>::has_constexpr_range >
     {};
 
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, ELIB_ENABLE_IF(enum_traits<T>::has_default_value)>
     constexpr T default_value() noexcept
     {
       return enum_traits<T>::default_value;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, ELIB_ENABLE_IF(enum_traits<T>::has_error_value)>
     constexpr T error_value() noexcept
     {
       return enum_traits<T>::error_value;
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, ELIB_ENABLE_IF(enum_traits<T>::has_first_value)>
     constexpr T first_value() noexcept
     {
       return enum_traits<T>::first_value;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, ELIB_ENABLE_IF(enum_traits<T>::has_last_value)>
     constexpr T last_value() noexcept
     {
       return enum_traits<T>::last_value;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(has_name_map<Enum>::value)
@@ -119,7 +125,7 @@ namespace elib { namespace enumeration
       return basic_enum_traits<Enum>::name_map.begin()->first;
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(has_name_map<Enum>::value)
@@ -130,7 +136,7 @@ namespace elib { namespace enumeration
       return (--basic_enum_traits<Enum>::name_map.end())->first;
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(enum_traits<Enum>::has_constexpr_range)
@@ -143,7 +149,7 @@ namespace elib { namespace enumeration
              - static_cast<Underlying>(first_value<Enum>()) + 1;
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(has_name_map<Enum>::value)
@@ -154,7 +160,7 @@ namespace elib { namespace enumeration
       return basic_enum_traits<Enum>::name_map.size();
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(enum_traits<Enum>::has_is_contigious)
@@ -164,7 +170,7 @@ namespace elib { namespace enumeration
       return enum_traits<Enum>::is_contigious;
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(has_name_map<Enum>::value)
@@ -180,6 +186,7 @@ namespace elib { namespace enumeration
                                 );
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(enum_traits<Enum>::has_constexpr_range)
@@ -189,7 +196,7 @@ namespace elib { namespace enumeration
         return (first_value<Enum>() <= v && v <= last_value<Enum>());
     }
     
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class Enum
       , ELIB_ENABLE_IF(has_name_map<Enum>::value)
@@ -204,6 +211,5 @@ namespace elib { namespace enumeration
       return basic_enum_traits<Enum>::name_map.count(v) > 0;
     }
     
-  }                                                    // namespace enumeration
-}                                                           // namespace elib
-#endif /* ELIB_ENUMERATION_ENUM_TRAITS_HPP */
+}}                                                          // namespace elib
+#endif /* ELIB_ENUMERATION_TRAITS_HPP */

@@ -88,7 +88,7 @@ set( CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DDELIB_WARN_ON " )
 set( CMAKE_C_FLAGS_TEST "-g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors -fprofile-arcs -ftest-coverage")
-set( CMAKE_CXX_FLAGS_TEST "-g -O0 -fno-omit-frame-pointer-DDELIB_WARN_ON -fno-elide-constructors -fprofile-arcs -ftest-coverage")
+set( CMAKE_CXX_FLAGS_TEST "-g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors -fprofile-arcs -ftest-coverage")
 
 
 message( STATUS "Configuring for Build Type: ${CMAKE_BUILD_TYPE}")

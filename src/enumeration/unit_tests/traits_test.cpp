@@ -214,6 +214,8 @@ BOOST_AUTO_TEST_CASE(enumeration_default_value_test)
     static_assert(
         default_value<B>() == B::none, "default == none"
     );
+    BOOST_CHECK(default_value<A>() == A::one);
+    BOOST_CHECK(default_value<B>() == B::one);
 }
 
 BOOST_AUTO_TEST_CASE(enumeration_error_value_test)
@@ -224,6 +226,8 @@ BOOST_AUTO_TEST_CASE(enumeration_error_value_test)
     static_assert(
         error_value<B>() == B::one, "error == one"
     );
+    BOOST_CHECK(error_value<A>() == A::one);
+    BOOST_CHECK(error_value<B>() == B::one);
 }
 
 BOOST_AUTO_TEST_CASE(enumeration_traits_first_value_test)
@@ -234,6 +238,8 @@ BOOST_AUTO_TEST_CASE(enumeration_traits_first_value_test)
     static_assert(
         first_value<B>() == B::none, "first == none"
     );
+    BOOST_CHECK(first_value<A>() == A::none);
+    BOOST_CHECK(first_value<B>() == B::none);
     BOOST_CHECK(first_value<C>() == C::none);
 }
 
@@ -246,6 +252,8 @@ BOOST_AUTO_TEST_CASE(enumeration_traits_last_value_test)
     static_assert(
         last_value<B>() == B::two, "last == two"
     );
+    BOOST_CHECK(last_value<A>() == A::two);
+    BOOST_CHECK(last_value<B>() == B::two);
     BOOST_CHECK(last_value<C>() == C::two);
 }
 
@@ -257,6 +265,8 @@ BOOST_AUTO_TEST_CASE(enumeration_traits_size_test)
     static_assert(
         size<B>() == 3, "size == 3"
     );
+    BOOST_CHECK(size<A>() == 3);
+    BOOST_CHECK(size<B>() == 3);
     BOOST_CHECK(size<C>() == 3);
 }
 
@@ -268,7 +278,9 @@ BOOST_AUTO_TEST_CASE(enumeration_is_contigious_test)
     static_assert(
         is_contigious<B>() == true, "is_contigious == true"
     );
-    BOOST_CHECK(is_contigious<C>() == true);
+    BOOST_CHECK(is_contigious<A>());
+    BOOST_CHECK(is_contigious<B>());
+    BOOST_CHECK(is_contigious<C>());
 }
 
 BOOST_AUTO_TEST_CASE(enumeration_in_range_test)
@@ -291,6 +303,12 @@ BOOST_AUTO_TEST_CASE(enumeration_in_range_test)
     static_assert(
         not in_range(static_cast<A>(3)), "in range"
     );
+    BOOST_CHECK(in_range(A::none));
+    BOOST_CHECK(in_range(A::two));
+    BOOST_CHECK(not in_range(static_cast<A>(3)));
+    BOOST_CHECK(in_range(B::none));
+    BOOST_CHECK(in_range(B::two));
+    BOOST_CHECK(not in_range(static_cast<B>(3)));
     BOOST_CHECK(in_range(C::none));
     BOOST_CHECK(in_range(C::two));
     BOOST_CHECK(not in_range(static_cast<C>(3)));

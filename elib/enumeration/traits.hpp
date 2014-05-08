@@ -176,6 +176,7 @@ namespace elib { namespace enumeration
             || size<Enum>() == static_cast<std::size_t>(
                                     static_cast<Underlying>(last_value<Enum>()) 
                                   - static_cast<Underlying>(first_value<Enum>())
+                                  + 1
                                 );
     }
     

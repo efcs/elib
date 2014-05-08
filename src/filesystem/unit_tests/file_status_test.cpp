@@ -6,9 +6,45 @@
 
 using namespace elib::fs;
 
-BOOST_AUTO_TEST_SUITE(fs_file_status_test_suite)
+BOOST_AUTO_TEST_SUITE(filesystem_file_status_test_suite)
 
-BOOST_AUTO_TEST_CASE(fs_file_status_ctor_test)
+BOOST_AUTO_TEST_CASE(perms_test)
+{
+    // negate test
+    {
+        BOOST_CHECK(~perms::none == static_cast<perms>(~0));
+        BOOST_CHECK(~perms::all == static_cast<perms>(~ static_cast<int>(perms::all)));
+    }
+    // and test
+    {
+        perms p = perms::owner_read & perms::owner_write;
+        int ip = static_cast<int>(perms::owner_read) & static_cast<int>(perms::owner_write);
+        BOOST_CHECK(p == static_cast<perms>(ip));
+        p = perms::owner_read;
+        p &= perms::owner_write;
+        BOOST_CHECK(p == static_cast<perms>(ip));
+    }
+    // or test
+    {
+        perms p = perms::owner_read | perms::owner_write;
+        int ip = static_cast<int>(perms::owner_read) | static_cast<int>(perms::owner_write);
+        BOOST_CHECK(p == static_cast<perms>(ip));
+        p = perms::owner_read;
+        p |= perms::owner_write;
+        BOOST_CHECK(p == static_cast<perms>(ip));
+    }
+    // xor test
+    {
+        perms p = perms::owner_read ^ perms::owner_write;
+        int ip = static_cast<int>(perms::owner_read) ^ static_cast<int>(perms::owner_write);
+        BOOST_CHECK(p == static_cast<perms>(ip));
+        p = perms::owner_read;
+        p ^= perms::owner_write;
+        BOOST_CHECK(p == static_cast<perms>(ip));
+    }
+}
+
+BOOST_AUTO_TEST_CASE(ctor_test)
 {
     // default ctor test
     {
@@ -30,7 +66,16 @@ BOOST_AUTO_TEST_CASE(fs_file_status_ctor_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(fs_file_status_modifiers)
+BOOST_AUTO_TEST_CASE(assignment_coverage_test)
+{
+    const file_status st;
+    file_status st2;
+    st2 = st;
+    st2 = file_status();
+    BOOST_CHECK(true);
+}
+
+BOOST_AUTO_TEST_CASE(modifiers_test)
 {
     file_status st;
     

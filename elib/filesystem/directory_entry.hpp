@@ -18,7 +18,7 @@ namespace elib { namespace fs
           , file_status st = file_status()
           , file_status symlink_st = file_status()
           )
-            : m_path{p}, m_status{st}, m_symlink_status{symlink_st}
+            : m_path(p), m_status(st), m_symlink_status(symlink_st)
         {}
         
         directory_entry() = default;
@@ -26,7 +26,6 @@ namespace elib { namespace fs
         directory_entry(directory_entry&&) noexcept = default;
         directory_entry& operator=(const directory_entry&) = default;
         directory_entry& operator=(directory_entry&&) noexcept = default;
-        ~directory_entry() = default; 
         
         ////////////////////////////////////////////////////////////////////////
         void assign(
@@ -99,10 +98,11 @@ namespace elib { namespace fs
         {
             if (!status_known(m_status)) 
             {
-                if (status_known(m_symlink_status) && !is_symlink(m_symlink_status))
+                if (status_known(m_symlink_status) && !is_symlink(m_symlink_status)) {
                     m_status = m_symlink_status; 
-                else
+                } else {
                     m_status = ec ? fs::status(m_path, *ec) : fs::status(m_path);
+                }
             }
             return m_status;
         }
@@ -111,21 +111,22 @@ namespace elib { namespace fs
         //
         file_status m_get_symlink_status(std::error_code *ec=nullptr) const
         {
-            if (!status_known(m_symlink_status))
-            m_symlink_status = ec ? fs::symlink_status(m_path, *ec)
-                                    : fs::symlink_status(m_path);
+            if (!status_known(m_symlink_status)) {
+                m_symlink_status = ec ? fs::symlink_status(m_path, *ec)
+                                      : fs::symlink_status(m_path);
+            }
             return m_symlink_status;
         }
         
         ////////////////////////////////////////////////////////////////////////
         //
-        fs::path m_path {};
+        fs::path m_path;
         
         // Although these are not atomic to adjust, mutability allows
         // for file status caching as suggested in the standard
         // documentation
-        mutable file_status m_status {};
-        mutable file_status m_symlink_status {}; 
+        mutable file_status m_status;
+        mutable file_status m_symlink_status; 
   
     }; // class directory_entry
       

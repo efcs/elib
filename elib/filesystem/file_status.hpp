@@ -115,7 +115,6 @@ namespace elib { namespace fs
         
         file_status(const file_status&) noexcept = default;
         file_status(file_status&&) noexcept = default;
-        ~file_status() = default;
         
         file_status& operator=(const file_status&) noexcept = default;
         file_status& operator=(file_status&&) noexcept = default;

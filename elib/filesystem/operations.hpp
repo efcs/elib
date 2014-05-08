@@ -38,7 +38,10 @@ namespace elib { namespace fs
         // form of copy 
         directories_only = 64,
         create_symlinks = 128,
-        create_hard_links = 256
+        create_hard_links = 256, 
+        
+        // implementation detail
+        detail_in_recursive_copy = 512
     }; 
 }}                                                        // namespace elib::fs
 
@@ -60,10 +63,6 @@ namespace elib { namespace fs
                     std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
-        bool copy_file(const path& from, const path& to, 
-                        std::error_code *ec=nullptr);
-        
-        ////////////////////////////////////////////////////////////////////////
         bool copy_file(const path& from, const path& to, copy_options option,
                         std::error_code *ec=nullptr);
         
@@ -78,7 +77,7 @@ namespace elib { namespace fs
         bool create_directory(const path& p, std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
-        void create_directory(const path& p, const path& attributes, 
+        void create_directory(const path& p, const path & attributes, 
                 std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
@@ -194,11 +193,11 @@ namespace elib { namespace fs
     
     ////////////////////////////////////////////////////////////////////////////
     inline bool copy_file(const path& from, const path& to)
-    { return detail::copy_file(from, to); }
+    { return detail::copy_file(from, to, copy_options::none); }
       
     inline bool copy_file(const path& from, const path& to, 
             std::error_code& ec) noexcept
-    { return detail::copy_file(from, to, &ec); }
+    { return detail::copy_file(from, to, copy_options::none, &ec); }
               
     inline bool copy_file(const path& from, const path& to, copy_options option)
     { return detail::copy_file(from, to, option); }

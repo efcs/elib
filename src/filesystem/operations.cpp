@@ -468,12 +468,14 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
+        // TODO
         inline bool copy_file_impl(
             const path& from, const path& to
           , std::error_code *ec
           )
         {
-            detail::clear_error(ec);
+            if (ec) { ec->clear(); }
+                
             std::ifstream in(from.c_str(), std::ios::binary);
             std::ofstream out(to.c_str(),  std::ios::binary);
             
@@ -513,24 +515,210 @@ namespace elib { namespace fs { namespace detail
 
     ////////////////////////////////////////////////////////////////////////////
     // TODO
-   // void copy(const path& from, const path& to, copy_options options,
-     //   std::error_code *ec);
+    void copy(
+        const path& from, const path& to
+      , copy_options options
+      , std::error_code *ec
+      )
+    {
+        const bool sym_status = bool(options & 
+            (copy_options::create_symlinks | copy_options::skip_symlinks));
+        
+        struct ::stat f_st;
+        const file_status f = sym_status ? detail::posix_lstat(from, f_st, ec)
+                                         : detail::posix_stat(from, f_st, ec);
+        if (ec && *ec) { return; }
+            
+        if (not exists(f)) {
+            const std::error_code mec(
+                static_cast<int>(std::errc::no_such_file_or_directory)
+              , std::system_category()
+              );
+            if (ec) {
+                *ec = mec;
+                return;
+            } else {
+                throw filesystem_error("fs::copy", from, mec);
+            }
+        }
+        
+        struct ::stat t_st;
+        const file_status t = sym_status ? detail::posix_lstat(to, t_st, ec)
+                                         : detail::posix_stat(to, t_st, ec);
+        if (ec && *ec) { return; }
+            
+        if ((f_st.st_dev == t_st.st_dev && f_st.st_ino == t_st.st_ino)
+          || is_other(f) || is_other(t) 
+          || (is_directory(f) && is_regular_file(t)))
+        {
+            const std::error_code mec(
+                static_cast<int>(std::errc::function_not_supported)
+              , std::system_category()
+              );
+            if (ec) {
+                *ec = mec;
+                return;
+            } else {
+                throw filesystem_error("fs::copy", from, to, mec);
+            }
+        }
+        
+        if (ec) { ec->clear(); }
+            
+        if (is_symlink(f)) {
+            if (bool(copy_options::skip_symlinks & options)) {
+                // do nothing
+            }
+            else if (not exists(t)) {
+                detail::copy_symlink(from, to, ec);
+            } else {
+                const std::error_code mec(
+                    static_cast<int>(std::errc::file_exists)
+                  , std::system_category()
+                  );
+                if (ec) {
+                    *ec = mec;
+                    return;
+                }
+                // else
+                throw filesystem_error("fs::copy", from, to, mec);
+            }
+            return;
+        }
+        else if (is_regular_file(f)) {
+            if (bool(copy_options::directories_only & options)) {
+                // do nothing
+            }
+            else if (bool(copy_options::create_symlinks & options)) {
+                detail::create_symlink(from, to, ec);
+            }
+            else if (bool(copy_options::create_hard_links & options)) {
+                detail::create_hard_link(from, to, ec);
+            }
+            else if (is_directory(t)) {
+                detail::copy_file(from, to/from.filename(), options, ec);
+           
+            } else {
+                detail::copy_file(from, to, options, ec);
+            }
+            return;
+        }
+        else if (is_directory(f)) {
+            if (not bool(copy_options::recursive & options) &&
+                bool(copy_options::detail_in_recursive_copy & options))
+            {
+                return;
+            }
+            
+            if (!exists(t)) {
+                // create directory to with attributes from 'from'.
+                detail::create_directory(to, from, ec);
+                if (ec && *ec) { return; }
+            }
+            directory_iterator it = ec ? directory_iterator(from, *ec) 
+                                       : directory_iterator(from);
+            if (ec && *ec) { return; }
+            for (; it != directory_iterator(); ++it) {
+                detail::copy(it->path(), to / it->path().filename()
+                  , options | copy_options::detail_in_recursive_copy
+                  , ec
+                  );
+                if (ec && *ec) { return; }
+            }
+            return;
+        } else {
+            // TODO shouldn't be here
+            ELIB_ASSERT(false);
+        }
+
+    }
     
 
     ////////////////////////////////////////////////////////////////////////////
     // TODO
-    //bool copy_file(
-      //  const path& from, const path& to
-      //, copy_options option, std::error_code *ec
-      //);
+    bool copy_file(
+        const path& from, const path& to
+      , copy_options options, std::error_code *ec
+      )
+    {
+        const bool to_exists = ec ? fs::exists(to, *ec) : fs::exists(to);
+        if (ec && *ec) {
+            return false;
+        }
+        
+        if (to_exists && not bool(options & 
+            (copy_options::skip_existing 
+            | copy_options::update_existing 
+            | copy_options::overwrite_existing))) 
+        {
+            const std::error_code mec(
+                static_cast<int>(std::errc::file_exists)
+              , std::system_category()
+              );
+            if (ec) {
+                *ec = mec;
+                return false;
+            } else {
+                throw filesystem_error("fs::copy_file", from, to, mec);
+            }
+        }
+        else if (to_exists && bool(copy_options::skip_existing & options)) {
+            return false;
+        }
+        else if (to_exists && bool(copy_options::update_existing & options)) {
+            auto from_time = detail::last_write_time(from, ec);
+            if (ec && *ec) { return false; }
+            auto to_time = detail::last_write_time(to, ec);
+            if (ec && *ec) { return false; }
+            if (from_time <= to_time) {
+                return false;
+            }
+        }
+        return detail::copy_file_impl(from, to, ec);
+    }
         
 
-    //TODO
-    //void copy_symlink(const path& existing_symlink, const path& new_symlink,
-      //  std::error_code *ec);
+    void copy_symlink(
+        const path& existing_symlink, const path& new_symlink
+      , std::error_code *ec)
+    {
+        const path real_path(detail::read_symlink(existing_symlink, ec));
+        if (ec && *ec) { return; }
+        
+        // TODO proposal says you should detect if you should call
+        // create_symlink or create_directory_symlink. I don't think this
+        // is needed with POSIX
+        detail::create_symlink(real_path, new_symlink, ec);
+    }
 
-    //TODO
-    //bool create_directories(const path& p, std::error_code *ec);
+
+    bool create_directories(const path& p, std::error_code *ec)
+    {
+        std::error_code mec;
+        auto const st = fs::status(p, mec);
+        
+        if (is_directory(st)) {
+            if (ec) ec->clear();
+            return false;
+        }
+        
+        const path parent = p.parent_path();
+        if (!parent.empty()) {
+            const file_status parent_st = fs::status(parent, mec);
+            if (not exists(parent_st)) {
+                fs::create_directories(parent, mec);
+                if (mec && ec) {
+                    *ec = mec;
+                    return false;
+                } 
+                else if (mec) {
+                    throw filesystem_error("fs::create_directories", parent, mec);
+                }
+            }
+        }
+        
+        return detail::create_directory(p, ec);
+    }
 
 
     bool create_directory(const path& p, std::error_code *ec)
@@ -553,9 +741,35 @@ namespace elib { namespace fs { namespace detail
         }
     }
 
-    //TODO
-    //void create_directory(const path& p, const path& attributes, 
-      //  std::error_code *ec);
+    
+    void create_directory(
+        path const & p, path const & attributes
+      , std::error_code *ec
+      )
+    {
+        struct ::stat attr_stat;
+        std::error_code mec;
+        detail::posix_stat(attributes, attr_stat, &mec);
+        if (mec && ec) {
+            *ec = mec;
+            return;
+        }
+        else if (mec) {
+            throw filesystem_error("fs::create_directory", p, attributes, mec);
+        }
+    
+        if (::mkdir(p.c_str(), attr_stat.st_mode) == -1) {
+            mec = std::error_code(errno, std::system_category());
+            if (ec) {
+                *ec = mec;
+                return;
+            } else {
+                throw filesystem_error("fs::create_directory", p, attributes, mec);
+            }
+        } else {
+            if (ec) ec->clear();
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     void create_directory_symlink(
@@ -597,7 +811,6 @@ namespace elib { namespace fs { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     bool equivalent(
         const path& p1, const path& p2, 
         std::error_code *ec)
@@ -662,7 +875,6 @@ namespace elib { namespace fs { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     std::uintmax_t hard_link_count(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
@@ -756,9 +968,56 @@ namespace elib { namespace fs { namespace detail
         return detail::posix_remove(p.native(), ec);
     }
 
-
-    //TODO
-    //std::uintmax_t remove_all(const path& p, std::error_code *ec);
+    ////////////////////////////////////////////////////////////////////////////
+    inline std::uintmax_t remove_all_impl(
+        path const & p, file_status const & st
+      , std::error_code *ec)
+    {
+        static constexpr std::uintmax_t npos = static_cast<std::uintmax_t>(-1);
+        std::uintmax_t count = 1;
+        if (is_directory(st)) {
+            for (directory_iterator it(p); it != directory_iterator(); ++it) {
+                const file_status fst = detail::symlink_status(it->path(), ec);
+                if (ec && *ec) {
+                    return npos;
+                }
+                const std::uintmax_t other_count = 
+                    detail::remove_all_impl(it->path(), fst, ec);
+                if ((ec && *ec) || other_count == npos) {
+                    return npos;
+                }
+                count += other_count;
+            }
+        }
+        const bool ret = detail::remove(p, ec);
+        ELIB_ASSERT(ret); ((void)ret);
+        if (ec && *ec) {
+            return npos;
+        } else {
+            return count;
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    std::uintmax_t remove_all(const path& p, std::error_code *ec)
+    {
+        std::error_code mec;
+        const file_status st = detail::symlink_status(p, &mec);
+        if (not status_known(st)) {
+            if (ec) {
+                ELIB_ASSERT(mec);
+                *ec = mec;
+                return static_cast<std::uintmax_t>(-1);
+            } 
+            throw filesystem_error("fs::remove_all", p, mec);
+        }
+        
+        if (exists(st)) {
+            return detail::remove_all_impl(p, st, ec);
+        } else {
+            return 0;
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     void rename(const path& from, const path& to, std::error_code *ec)

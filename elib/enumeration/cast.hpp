@@ -177,21 +177,30 @@ namespace elib { namespace enumeration
         throw bad_enum_cast{"bad_enum_cast"};
     }
 
-    template <typename T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
+    ////////////////////////////////////////////////////////////////////////////
+    template <typename T>
     constexpr aux::underlying_type_t<T>
     underlying_cast(T v) noexcept
     {
       return static_cast<aux::underlying_type_t<T>>(v);
     }
     
-    template <class T>
-    using opt_cast_t = aux::sfinae_underlying_type_t<T>;
-    
-    template <class T, ELIB_ENABLE_IF(aux::is_integral_enum<T>::value)>
-    constexpr opt_cast_t<T> opt_cast(T t) noexcept
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
+    constexpr aux::underlying_type_t<T> opt_cast(T t) noexcept
     {
-        return static_cast<opt_cast_t<T>>(t);
+        return static_cast<aux::underlying_type_t<T>>(t);
     }
+    
+    template <class T, ELIB_ENABLE_IF(aux::is_integral<T>::value)>
+    constexpr T opt_cast(T v) noexcept
+    {
+        return v;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using opt_cast_t = decltype(opt_cast(elib::declval<T>()));
     
 }}                                                           // namespace elib
 #endif /* ELIB_ENUMERATION_CAST_HPP */

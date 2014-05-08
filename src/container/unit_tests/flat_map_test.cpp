@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(emplace_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(erase_test)
+BOOST_AUTO_TEST_CASE(erase_key_test)
 {
     map_type m;
     BOOST_CHECK(m.erase(0) == 0);
@@ -224,6 +224,53 @@ BOOST_AUTO_TEST_CASE(erase_test)
     BOOST_CHECK(m.size() == 1);
     m.erase(0);
     BOOST_CHECK(m.size() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(erase_position_test)
+{
+    map_type m{{1, 1}, {2, 2}};
+    BOOST_CHECK(m.size() == 2);
+    
+    iterator pos = m.erase(m.cbegin());
+    BOOST_CHECK(pos == m.begin());
+    BOOST_CHECK(pos->first == 2);
+    BOOST_CHECK(m.size() == 1);
+    
+    pos = m.erase(m.cbegin());
+    BOOST_CHECK(pos == m.end());
+    BOOST_CHECK(m.size() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(erase_range_test)
+{
+    map_type m{{0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}};
+    BOOST_CHECK(m.size() == 5);
+    
+    iterator pos = m.erase(m.cend(), m.cend());
+    BOOST_CHECK(pos == m.cend());
+    BOOST_CHECK(m.size() == 5);
+    
+    pos = m.erase(m.cbegin(), m.cbegin());
+    BOOST_CHECK(pos == m.begin());
+    BOOST_CHECK(m.size() == 5);
+
+    // erase first element
+    pos = m.erase(m.cbegin(), ++m.cbegin());
+    BOOST_CHECK(pos == m.begin());
+    BOOST_CHECK(m.size() == 4);
+    BOOST_CHECK(pos->first == 1);
+    // range is not {1, 1}, {2, 2}, {3, 3}, {4, 4}
+    
+    // erase last two elements
+    pos = m.erase(m.cbegin() + 2, m.cend());
+    BOOST_CHECK(pos == m.end());
+    BOOST_CHECK(m.size() == 2);
+    // range is now {1, 1}, {2, 2}
+    
+    pos = m.erase(m.cbegin(), m.cend());
+    BOOST_CHECK(pos == m.end());
+    BOOST_CHECK(m.empty());
+    
 }
 
 BOOST_AUTO_TEST_CASE(swap_test)

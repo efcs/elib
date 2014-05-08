@@ -6,8 +6,6 @@
 # include <elib/filesystem/file_status.hpp>
 # include <elib/filesystem/operations.hpp>
 
-
-
 namespace elib { namespace fs
 {
     ////////////////////////////////////////////////////////////////////////////

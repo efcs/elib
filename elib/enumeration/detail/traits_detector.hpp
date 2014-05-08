@@ -8,24 +8,24 @@ namespace elib { namespace enumeration
 {
     namespace detail
     {
+        ////////////////////////////////////////////////////////////////////////
         template <bool Found, class FieldT>
         struct extracted_field 
         {
             using type = extracted_field;
             using value_type = typename FieldT::value_type;
             
-            static constexpr const bool found = Found;
-            static constexpr const value_type value = FieldT::value;
+            static constexpr bool found = Found;
+            static constexpr value_type value = FieldT::value;
         };
         
         template <bool Found, class FieldT>
-        constexpr const bool extracted_field<Found, FieldT>::found;
+        constexpr bool extracted_field<Found, FieldT>::found;
         
         template <bool Found, class FieldT>
-        constexpr typename FieldT::value_type const 
-            extracted_field<Found, FieldT>::value;
+        constexpr typename FieldT::value_type extracted_field<Found, FieldT>::value;
         
-    
+        ////////////////////////////////////////////////////////////////////////
         template <class Type, template <class> class FieldType, class Default>
         struct field_extractor_impl
         {
@@ -134,6 +134,7 @@ namespace elib { namespace enumeration
 # endif
 
 
+        ////////////////////////////////////////////////////////////////////////
         template <class Enum, class From>
         struct traits_detector
         {

@@ -66,6 +66,12 @@ BOOST_AUTO_TEST_CASE(assignment_test)
         m1 = map_type();
         BOOST_CHECK(m1.empty());
     }
+    {
+        map_type m1;
+        BOOST_CHECK(m1.empty());
+        m1 = {{0, 0}, {1, 1}};
+        BOOST_CHECK(m1.size() == 2);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(access_test)
@@ -116,7 +122,7 @@ BOOST_AUTO_TEST_CASE(insert_test)
 {
     // insert pair
     {
-        std::pair<int, int> p(0, 0);
+        map_type::value_type p(0, 0);
         map_type m;
         auto ret = m.insert(p);
         BOOST_CHECK(ret.second);
@@ -136,14 +142,14 @@ BOOST_AUTO_TEST_CASE(insert_test)
     // insert pair rvalue
     {
         map_type m;
-        auto ret = m.insert(std::make_pair(0, 0));
+        auto ret = m.insert(map_type::value_type(0, 0));
         BOOST_CHECK(ret.second);
         BOOST_CHECK(ret.first->first == 0);
         BOOST_CHECK(ret.first->second == 0);
         BOOST_CHECK(m.size() == 1);
         BOOST_CHECK(m.at(0) == 0);
         
-        ret = m.insert(std::make_pair(0, 1));
+        ret = m.insert(map_type::value_type(0, 1));
         BOOST_CHECK(not ret.second);
         BOOST_CHECK(ret.first->first == 0);
         BOOST_CHECK(ret.first->second == 0);
@@ -151,6 +157,23 @@ BOOST_AUTO_TEST_CASE(insert_test)
         BOOST_CHECK(m.at(0) == 0);
     }
     // insert pair position
+    {
+        map_type m;
+        map_type::value_type p(0, 0);
+        auto ret = m.insert(m.cbegin(), p);
+        BOOST_CHECK(ret->first == 0);
+        BOOST_CHECK(ret->second == 0);
+        BOOST_CHECK(m.size() == 1);
+        BOOST_CHECK(m.at(0) == 0);
+        
+        p.second = 1;
+        ret = m.insert(m.cbegin(), p);
+        BOOST_CHECK(ret->first == 0);
+        BOOST_CHECK(ret->second == 0);
+        BOOST_CHECK(m.size() == 1);
+        BOOST_CHECK(m.at(0) == 0);
+    }
+    // insert rvalue pair position
     {
         map_type m;
         auto ret = m.insert(m.cbegin(), std::make_pair(0, 0));

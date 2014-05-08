@@ -1,7 +1,7 @@
 #ifndef ELIB_ENUMERATION_BASIC_TRAITS_HPP
 #define ELIB_ENUMERATION_BASIC_TRAITS_HPP
 
-# include <elib/aux.hpp>
+# include <elib/aux/integral_constant.hpp>
 # include <string>
 # include <map>
 

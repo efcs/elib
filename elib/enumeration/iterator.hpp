@@ -12,47 +12,22 @@ namespace elib { namespace enumeration
     
     namespace detail
     {
-        template <class T>
-        struct is_iterable : has_range<T> {};
-        
-        template <class T, bool=aux::is_enum<T>::value>
-        struct is_constexpr_range_iterable : aux::false_
-        {};
-        
-        template <class T>
-        struct is_constexpr_range_iterable<T, true>
-            : bool_<enum_traits<T>::has_constexpr_range>
-        {};
-        
-        template <class T>
-        struct is_name_map_iterable : has_name_map<T>
-        {};
-        
-        template <class T>
-        using enable_if_constexpr_iterable_t =
-            aux::enable_if_t<is_constexpr_range_iterable<T>>;
-            
-        template <class T>
-        using enable_if_name_map_iterable_t =
-            aux::enable_if_c_t<
-            is_name_map_iterable<T>::value
-                && !is_constexpr_range_iterable<T>::value
-            >;
-            
-        template <class T>
-        using enable_if_iterable_t =
-            aux::enable_if_t<is_iterable<T>>;
-        
-        
-        template <class T, class=void>
+        ////////////////////////////////////////////////////////////////////////
+        template <
+            class T
+          , bool HasConstexprRange = has_constexpr_range<T>::value
+          , bool HasNameMap = has_name_map<T>::value
+          >
         class iter_impl;
         
-        
-        template <class T>
-        class iter_impl<T, enable_if_constexpr_iterable_t<T>>
+        ////////////////////////////////////////////////////////////////////////
+        template <class T, bool HasNameMap>
+        class iter_impl<T, true, HasNameMap>
             : public std::iterator<std::bidirectional_iterator_tag, T>
         {
         private:
+            using underlying_type = aux::underlying_type_t<T>;
+            
             static constexpr T m_end_value = 
             static_cast<T>(
                 underlying_cast(enum_traits<T>::last_value) + 1
@@ -60,61 +35,55 @@ namespace elib { namespace enumeration
             
         public:
             
-            iter_impl()
-            : m_val{m_end_value}
+            constexpr iter_impl()
+              : m_val{m_end_value}
             {}
             
-            explicit iter_impl(T val)
-            : m_val{val}
+            constexpr explicit iter_impl(T val)
+              : m_val{val}
             {}
-            
-            virtual ~iter_impl() noexcept {}
             
         protected:
             
-            const T& dereference() const
-            { return m_val; }
+            const T & dereference() const
+            { 
+                return m_val; 
+            }
             
             bool equals(const iter_impl& other) const
             {
-            return (m_val == other.m_val);
+                return (m_val == other.m_val);
             }
             
             void increment()
             {
-            if (m_val != m_end_value)
-                m_val = static_cast<T>(underlying_cast(m_val) + 1);
+                m_val = (m_val != m_end_value) 
+                    ? static_cast<T>(underlying_cast(m_val) + 1)
+                    : m_val;
             }
             
             void decrement()
             {
-            if (m_val != first_value<T>())
-                m_val = static_cast<T>(underlying_cast(m_val) - 1);
+                m_val = static_cast<T>(
+                    enumeration::underlying_cast(m_val) - 1
+                  );
             }
 
         private:
-            
             T m_val {};
-            
         };
         
-        
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
-        class iter_impl<T, enable_if_name_map_iterable_t<T>>
+        class iter_impl<T, false, true>
             : public std::iterator<std::bidirectional_iterator_tag, T>
         {
         private:
-            
             static_assert(has_name_map<T>::value, "must have name map");
-            
             using btraits = basic_enum_traits<T>;
+            using map_iterator = typename decltype(btraits::name_map)::const_iterator;    
             
-            using result = decltype(btraits::name_map);
-            using map_iterator = typename result::const_iterator;
-            
-        
         public:
-            
             iter_impl()
             : m_iter{btraits::name_map.end()}
             {}
@@ -123,14 +92,11 @@ namespace elib { namespace enumeration
             : m_iter{btraits::name_map.find(pos)}
             {}
             
-            virtual ~iter_impl() noexcept {}
-            
         protected:
-            
-            const T& dereference() const
+            constexpr const T& dereference() const
             { return m_iter->first; }
             
-            bool equals(const iter_impl& other) const
+            constexpr bool equals(const iter_impl& other) const
             { return m_iter == other.m_iter; }
             
             void increment()
@@ -140,26 +106,24 @@ namespace elib { namespace enumeration
             { --m_iter; }
             
         private:
-            
             map_iterator m_iter {};
-            
-        };                                           // class iter_impl(name_map)
-        
+        };
     }                                                       // namespace detail
     
-    
-    template <typename T, class=detail::enable_if_iterable_t<T>>
+    ////////////////////////////////////////////////////////////////////////////
+    template <typename T>
     class enum_iterator 
-      : private detail::iter_impl<T>
+      : public detail::iter_impl<T>
     {
+        static_assert(has_range<T>::value, "T must satisfy has_range<T>");
         using base_type = detail::iter_impl<T>;
     public:
         
-        enum_iterator()
+        constexpr enum_iterator()
           : base_type()
         {}
         
-        explicit enum_iterator(T v)
+        constexpr explicit enum_iterator(T v)
           : base_type(v)
         {}
         
@@ -172,7 +136,7 @@ namespace elib { namespace enumeration
         { return this->equals(other); }
         
         bool operator!=(const enum_iterator& other) const
-        { return ! this->equals(other); }
+        { return not this->equals(other); }
         
         enum_iterator& operator++()
         {

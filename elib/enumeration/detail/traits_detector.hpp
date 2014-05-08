@@ -60,22 +60,6 @@ namespace elib { namespace enumeration
         template <class T>
         using is_contigious_field_t = 
             bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>;
-                
-        template <class T>
-        using is_bitmask_field_t = 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>;
-            
-        template <class T>
-        using is_arithmetic_field_t =
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>;
-            
-        template <class T>
-        using is_logical_field_t = 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>;
-            
-        template <class T>
-        using is_mixed_comparible_field_t = 
-            bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>;
 
 # else /* ELIB_CONFIG_COVERITY_SCAN */
         template <class T, class Enum = decltype(T::ELIB_ENUM_DEFAULT_VALUE)>
@@ -92,18 +76,6 @@ namespace elib { namespace enumeration
         
         template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_CONTIGIOUS)>>
         struct is_contigious_field : Base {};
-                
-        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_BITMASK)>>
-        struct is_bitmask_field : Base {};
-            
-        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_ARITHMETIC)>>
-        struct is_arithmetic_field : Base {};
-            
-        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_LOGICAL)>>
-        struct is_logical_field : Base {};
-           
-        template <class T, class Base = bool_<static_cast<bool>(T::ELIB_ENUM_IS_MIXED_COMPARIBLE)>>
-        struct is_mixed_comparible_field : Base {};
             
         template <class T>
         using default_value_field_t = default_value_field<T>;
@@ -119,18 +91,6 @@ namespace elib { namespace enumeration
         
         template <class T>
         using is_contigious_field_t = is_contigious_field<T>;
-                
-        template <class T>
-        using is_bitmask_field_t = is_bitmask_field<T>;
-            
-        template <class T>
-        using is_arithmetic_field_t = is_arithmetic_field<T>;
-            
-        template <class T>
-        using is_logical_field_t = is_logical_field<T>;
-            
-        template <class T>
-        using is_mixed_comparible_field_t = is_mixed_comparible_field<T>;
 # endif
 
 
@@ -155,18 +115,6 @@ namespace elib { namespace enumeration
                                         
             using m_is_contigious = field_extractor<From,
                                         is_contigious_field_t, aux::false_>;
-                                        
-            using m_is_bitmask = field_extractor<From,
-                                        is_bitmask_field_t, aux::false_>;
-                                        
-            using m_is_arithmetic = field_extractor<From,
-                                        is_arithmetic_field_t, aux::false_>;
-                                    
-            using m_is_logical = field_extractor<From,
-                                        is_logical_field_t, aux::false_>;
-                                        
-            using m_is_mixed_comparible = field_extractor<From, 
-                                    is_mixed_comparible_field_t, aux::false_>;
             
         public:
             
@@ -184,20 +132,6 @@ namespace elib { namespace enumeration
             
             static constexpr bool has_is_contigious = m_is_contigious::found;
             static constexpr bool is_contigious = m_is_contigious::value;
-            
-            static constexpr bool has_is_bitmask = m_is_bitmask::found;
-            static constexpr bool is_bitmask = m_is_bitmask::value;
-            
-            static constexpr bool has_is_arithmetic = m_is_arithmetic::found;
-            static constexpr bool is_arithmetic = m_is_arithmetic::value;
-            
-            static constexpr bool has_is_logical = m_is_logical::found;
-            static constexpr bool is_logical = m_is_logical::value;
-            
-            static constexpr bool has_is_mixed_comparible = 
-                m_is_mixed_comparible::found;
-            static constexpr bool is_mixed_comparible = 
-                m_is_mixed_comparible::value;
             
         };                                                  // struct traits_detector
         
@@ -230,30 +164,6 @@ namespace elib { namespace enumeration
         
         template <class Enum, class From>
         constexpr const bool traits_detector<Enum, From>::is_contigious;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::has_is_bitmask;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::is_bitmask;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::has_is_arithmetic;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::is_arithmetic;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::has_is_logical;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::is_logical;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::has_is_mixed_comparible;
-        
-        template <class Enum, class From>
-        constexpr const bool traits_detector<Enum, From>::is_mixed_comparible;
         
         template <class Enum>
         using basic_enum_traits_detector = traits_detector<Enum, basic_enum_traits<Enum>>;

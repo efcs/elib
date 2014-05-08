@@ -22,10 +22,6 @@ namespace elib { namespace enumeration
         static constexpr T ELIB_ENUM_LAST_VALUE = T::value;
         
         static constexpr bool ELIB_ENUM_IS_CONTIGIOUS = false;
-        static constexpr bool ELIB_ENUM_IS_BITMASK = false;
-        static constexpr bool ELIB_ENUM_IS_ARITHMETIC = false;
-        static constexpr bool ELIB_ENUM_IS_LOGICAL = false;
-        static constexpr bool ELIB_ENUM_IS_MIXED_COMPARIBLE = false;
     };
 #endif
 
@@ -42,6 +38,7 @@ namespace elib { namespace enumeration
     namespace detail
     {
      
+        ////////////////////////////////////////////////////////////////////////
         template <
             class T
           , template <class Test> class ApplyTest
@@ -54,30 +51,31 @@ namespace elib { namespace enumeration
             
             template <class>
             static aux::false_ test(...);
-            
         public:
             using type = decltype(test<T>(0));
         };
       
-      
+        ////////////////////////////////////////////////////////////////////////
         template <
             class T
           , template <class Test> class ApplyTest 
         >
-        struct basic_traits_detector : basic_traits_detector_impl<T, ApplyTest>::type {};
+        struct basic_traits_detector 
+          : basic_traits_detector_impl<T, ApplyTest>::type
+        {};
      
-     
-      template <class T>
-      using basic_traits_is_default_detector = 
-        decltype(basic_enum_traits<T>::ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS);
+        ////////////////////////////////////////////////////////////////////////
+        template <class T>
+        using basic_traits_is_default_detector = 
+            decltype(basic_enum_traits<T>::ELIB_ENUM_IS_DEFAULT_ENUM_TRAITS);
         
-      template <class T>
-      using basic_traits_name_map_detector = 
-        decltype(basic_enum_traits<T>::name_map);
-      
-      
+        ////////////////////////////////////////////////////////////////////////
+        template <class T>
+        using basic_traits_name_map_detector = 
+            decltype(basic_enum_traits<T>::name_map);
     }                                                       // namespace detail
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T>
     struct has_basic_enum_traits 
       : bool_< 
@@ -87,6 +85,7 @@ namespace elib { namespace enumeration
         >
     {};
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, bool=has_basic_enum_traits<T>::value>
     struct has_name_map : aux::false_ {};
     
@@ -98,7 +97,5 @@ namespace elib { namespace enumeration
           >::value
         >
     {};
-    
-      
 }}                                                          // namespace elib
 #endif /* ELIB_ENUMERATION_BASIC_TRAITS_HPP */

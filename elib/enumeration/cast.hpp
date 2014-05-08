@@ -181,22 +181,18 @@ namespace elib { namespace enumeration
       return static_cast<aux::underlying_type_t<T>>(v);
     }
     
-    ////////////////////////////////////////////////////////////////////////////
-    template <class T, ELIB_ENABLE_IF(aux::is_enum<T>::value)>
-    constexpr aux::underlying_type_t<T> opt_cast(T t) noexcept
+    namespace detail
     {
-        return static_cast<aux::underlying_type_t<T>>(t);
-    }
-    
-    template <class T, ELIB_ENABLE_IF(aux::is_integral<T>::value)>
-    constexpr T opt_cast(T v) noexcept
-    {
-        return v;
-    }
+        template <class Enum>
+        auto opt_cast_impl(int) -> aux::underlying_type_t<Enum>;
+        
+        template <class Other>
+        auto opt_cast_impl(long) -> Other;
+    }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
-    using opt_cast_t = decltype(opt_cast(elib::declval<T>()));
+    using opt_cast_t = decltype(detail::opt_cast_impl<T>(0));
     
 }}                                                           // namespace elib
 #endif /* ELIB_ENUMERATION_CAST_HPP */

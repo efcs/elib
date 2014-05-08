@@ -10,8 +10,8 @@
 namespace elib { namespace enumeration
 {
     
-# define ELIB_ENUM_MERGE_HAS(name) basic_t::has_##name || intrusive_t::has_##name
-# define ELIB_ENUM_MERGE(name) basic_t::has_##name ? basic_t::name : intrusive_t::name
+# define ELIB_ENUM_MERGE_HAS(name) (basic_t::has_##name || intrusive_t::has_##name)
+# define ELIB_ENUM_MERGE(name) (basic_t::has_##name ? basic_t::name : intrusive_t::name)
     
     template <class T, bool IsEnum = aux::is_enum<T>::value>
     struct enum_traits
@@ -24,7 +24,8 @@ namespace elib { namespace enumeration
     public:
         
         using value_type = T;
-        using enum_type = T;
+        
+        static constexpr bool has_name_map = enumeration::has_name_map<T>::value;
         
         static constexpr bool has_default_value = ELIB_ENUM_MERGE_HAS(default_value);
         static constexpr T default_value = ELIB_ENUM_MERGE(default_value);
@@ -40,20 +41,6 @@ namespace elib { namespace enumeration
         
         static constexpr bool has_is_contigious = ELIB_ENUM_MERGE_HAS(is_contigious);
         static constexpr bool is_contigious = ELIB_ENUM_MERGE(is_contigious);
-        
-        static constexpr bool has_is_bitmask = ELIB_ENUM_MERGE_HAS(is_bitmask);
-        static constexpr bool is_bitmask = ELIB_ENUM_MERGE(is_bitmask);
-        
-        static constexpr bool has_is_arithmetic = ELIB_ENUM_MERGE_HAS(is_arithmetic);
-        static constexpr bool is_arithmetic = ELIB_ENUM_MERGE(is_arithmetic);
-        
-        static constexpr bool has_is_logical = ELIB_ENUM_MERGE_HAS(is_logical);
-        static constexpr bool is_logical = ELIB_ENUM_MERGE(is_logical);
-        
-        static constexpr bool has_is_mixed_comparible = 
-            ELIB_ENUM_MERGE_HAS(is_mixed_comparible);
-        static constexpr bool is_mixed_comparible = 
-            ELIB_ENUM_MERGE(is_mixed_comparible);
         
         static constexpr bool has_constexpr_bounds =
             has_first_value && has_last_value;

@@ -40,7 +40,10 @@ namespace elib { namespace container
         using const_reverse_iterator = typename base_type::const_reverse_iterator;
     
     public:
-        flat_map() = default;
+        flat_map()
+          : base_type()
+        {}
+        
         flat_map(flat_map const &) = default;
         flat_map(flat_map &&) = default;
         
@@ -61,7 +64,6 @@ namespace elib { namespace container
         {}
 # endif
         
-        ~flat_map() = default;
         
     public:
         flat_map & operator=(flat_map const &) = default;

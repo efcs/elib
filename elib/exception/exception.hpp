@@ -43,13 +43,10 @@ namespace elib { namespace except
         
         virtual const char* what() const noexcept 
         { 
-            if (m_impl->m_fmt == "")
-            {
-                m_impl->m_fmt = m_impl->m_what_arg;
-                if (has_throw_info())
+            m_impl->m_fmt = m_impl->m_what_arg;
+            if (has_throw_info()) {
                     m_impl->m_fmt += ("\n  Thrown from " + throw_info_str());
             }
-
             return m_impl->m_fmt.c_str();
         }   
         

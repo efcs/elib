@@ -25,13 +25,13 @@ namespace elib { namespace except
     template <class E>
     ELIB_NORETURN void 
     throw_exception_from(
-        E & e
+        E && e
       , const char* file, const char* func, unsigned line
     );
     
     template <class E>
-    E & set_exception_throw_site(
-        E &
+    E set_exception_throw_site(
+        E &&
       , const char* file, const char* func, unsigned line
     );
     

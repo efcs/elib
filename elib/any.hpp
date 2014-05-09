@@ -43,9 +43,9 @@ namespace elib
             
             virtual ~storage_base() { }
             
-            virtual void* copy() const = 0;
-            virtual void* copy(void*) const = 0;
-            virtual void* move(void*) = 0;
+            virtual storage_base* copy() const = 0;
+            virtual storage_base* copy(void*) const = 0;
+            virtual storage_base* move(void*) = 0;
             
             virtual void destroy() noexcept = 0;
             virtual void destroy_deallocate() noexcept = 0;
@@ -91,7 +91,7 @@ namespace elib
             {}
             
         public:
-            void* copy() const
+            storage_base* copy() const
             {
                 using NewAlloc = typename Alloc::template rebind<storage_type>::other;
                 NewAlloc a(m_pair.second());
@@ -103,7 +103,7 @@ namespace elib
                 return tmp.release();
             }
             
-            void* copy(void* dest) const
+            storage_base* copy(void* dest) const
             {
                 return 
                   ::new (dest) storage_type(
@@ -112,7 +112,7 @@ namespace elib
                   );
             }
             
-            void* move(void* dest)
+            storage_base* move(void* dest)
             {
                 return 
                   ::new (dest) storage_type(
@@ -318,9 +318,7 @@ namespace elib
         {
             if (m_stored_locally() && other.m_stored_locally()) {
                 buffer_t tmp_buff;
-                storage_base* tmp_ptr = static_cast<storage_base*>(
-                    m_base()->move((void*)&tmp_buff)
-                  );
+                storage_base* tmp_ptr = m_base()->move((void*)&tmp_buff);
                 m_base()->destroy();
                 m_base_ptr = other.m_base()->move(m_buff_ptr());
                 other.m_base()->destroy();

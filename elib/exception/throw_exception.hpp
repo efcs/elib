@@ -9,10 +9,12 @@
 
 # define ELIB_THROW_EXCEPTION(...) \
   ::elib::except::throw_exception_from(__VA_ARGS__, __FILE__, __func__, __LINE__)
+# 
   
 # define ELIB_SET_EXCEPTION_THROW_SITE(...)  \
   ::elib::except::set_exception_throw_site(__VA_ARGS__, __FILE__, __func__, __LINE__)
-  
+# 
+
 # define ELIB_CATCH_AND_RETHROW(...)                          \
     do {                                                      \
         try {                                                 \
@@ -24,7 +26,8 @@
             throw;                                            \
         }                                                     \
     } while (false)
-    
+# 
+  
 # define ELIB_RETHROW_BLOCK_BEGIN() try 
         
 # define ELIB_RETHROW_BLOCK_END()                           \
@@ -33,10 +36,11 @@
             _elib_exception, __FILE__, __func__, __LINE__); \
         throw;                                              \
     }
+# 
 
-    
 namespace elib { namespace except
 {
+    ////////////////////////////////////////////////////////////////////////////
     template <class E>
     ELIB_NORETURN void 
     throw_exception(E const & e)
@@ -44,6 +48,7 @@ namespace elib { namespace except
         throw e;
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class E>
     ELIB_NORETURN void
     throw_exception_from(
@@ -56,20 +61,7 @@ namespace elib { namespace except
         );
     }
     
-    template <
-        class E
-      , ELIB_ENABLE_IF(!aux::is_lvalue_reference<E>::value)
-    >
-    ELIB_NORETURN void
-    throw_exception_from(
-        E && e
-      , const char *file, const char* func, unsigned line
-    )
-    {
-        e << throw_file(file) << throw_func(func) << throw_line(line);
-        throw e;
-    }
-    
+    ////////////////////////////////////////////////////////////////////////////
     template <class E>
     E & set_exception_throw_site(
         E & e

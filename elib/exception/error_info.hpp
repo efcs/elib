@@ -13,7 +13,6 @@
 namespace elib { namespace except
 {
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class Tag, class T> 
     class error_info
     {

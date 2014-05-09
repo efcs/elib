@@ -103,7 +103,7 @@ namespace elib { namespace aux
 {
     namespace detail
     {
-        ELIB_NORETURN ELIB_AUX_ASSERT_FUNCTION(assert_failed, std::cerr, std::abort())
+        /* LCOV_EXCL_LINE */ ELIB_NORETURN ELIB_AUX_ASSERT_FUNCTION(assert_failed, std::cerr, std::abort())
     
         ELIB_AUX_ASSERT_FUNCTION(assert_failed_noexit, std::cerr, ((void)0))
     }                                                       // namespace detail

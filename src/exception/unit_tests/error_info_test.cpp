@@ -14,6 +14,17 @@ using Info = error_info<DummyTag, std::string>;
 
 BOOST_AUTO_TEST_SUITE(except_error_info_test_suite)
 
+BOOST_AUTO_TEST_CASE(is_error_info_test)
+{
+    static_assert(
+        not is_error_info<void>::value, "Void is not error info"
+    );
+    static_assert(
+        is_error_info<Info>::value, "Info is error info"
+    );
+    BOOST_CHECK(true);
+}
+
 BOOST_AUTO_TEST_CASE(constructor_test)
 {
     // from lvalue
@@ -66,13 +77,6 @@ BOOST_AUTO_TEST_CASE(throw_types_test)
     BOOST_CHECK((aux::is_same<typename throw_file::tag_type, tags::throw_file>::value));
     BOOST_CHECK((aux::is_same<typename throw_file::value_type, const char*>::value));
     BOOST_CHECK(is_error_info<throw_file>::value);
-}
-
-// NOTE: only test failing cases
-BOOST_AUTO_TEST_CASE(except_is_error_info_test)
-{
-    BOOST_CHECK(!is_error_info<void>::value);
-    BOOST_CHECK(!is_error_info<int>::value);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -78,17 +78,5 @@ namespace elib { namespace except
     {
         return (e << throw_file(file) << throw_func(func) << throw_line(line));
     }
-    
-    template <
-        class E
-      , ELIB_ENABLE_IF(!aux::is_lvalue_reference<E>::value)
-    >
-    E set_exception_throw_site(
-        E && e
-      , const char* file, const char* func, unsigned line
-    )
-    {
-        return (e << throw_file(file) << throw_func(func) << throw_line(line));
-    }
 }}                                                          // namespace elib
 #endif /* ELIB_EXCEPTION_THROW_EXCEPTION_HPP */

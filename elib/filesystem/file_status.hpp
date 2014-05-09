@@ -102,7 +102,6 @@ namespace elib { namespace fs
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     class file_status
     {
     public:

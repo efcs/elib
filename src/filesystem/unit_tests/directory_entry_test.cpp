@@ -7,8 +7,8 @@
 #include <elib/filesystem/path.hpp>
 #include <elib/aux.hpp>
 
-#ifndef ELIB_FS_UNIT_TEST_PATH
-# error ELIB_FS_UNIT_TEST_PATH must be set to the directory of this file
+#ifndef ELIB_FILESYSTEM_UNIT_TEST_PATH
+# error ELIB_FILESYSTEM_UNIT_TEST_PATH must be set to the directory of this file
 # endif
 
 using namespace elib::fs;
@@ -115,14 +115,14 @@ BOOST_AUTO_TEST_CASE(status_test)
     }
     // symlink status known and is symlink w/o errc
     {
-        const directory_entry d(ELIB_FS_UNIT_TEST_PATH, bad_st, symlink_st);
+        const directory_entry d(ELIB_FILESYSTEM_UNIT_TEST_PATH, bad_st, symlink_st);
         file_status ret;
         BOOST_CHECK_NO_THROW(ret = d.status())
         BOOST_CHECK(ret.type() == file_type::directory);
     }
     // symlink status known and is symlink w/ errc
     {
-        const directory_entry d(ELIB_FS_UNIT_TEST_PATH, bad_st, symlink_st);
+        const directory_entry d(ELIB_FILESYSTEM_UNIT_TEST_PATH, bad_st, symlink_st);
         std::error_code ec;
         file_status ret = d.status(ec);
         BOOST_CHECK(not ec);
@@ -130,14 +130,14 @@ BOOST_AUTO_TEST_CASE(status_test)
     }
     // no status known w/o errc
     {
-        const directory_entry d(ELIB_FS_UNIT_TEST_PATH, bad_st, bad_st);
+        const directory_entry d(ELIB_FILESYSTEM_UNIT_TEST_PATH, bad_st, bad_st);
         file_status ret;
         BOOST_CHECK_NO_THROW(ret = d.status());
         BOOST_CHECK(ret.type() == file_type::directory);
     }
     // no status known w/ errc
     {
-        const directory_entry d(ELIB_FS_UNIT_TEST_PATH, bad_st, bad_st);
+        const directory_entry d(ELIB_FILESYSTEM_UNIT_TEST_PATH, bad_st, bad_st);
         std::error_code ec;
         file_status ret = d.status(ec);
         BOOST_CHECK(not ec);
@@ -165,14 +165,14 @@ BOOST_AUTO_TEST_CASE(symlink_status_test)
     }
     // status unknown w/o errc
     {
-        const directory_entry d(ELIB_FS_UNIT_TEST_PATH, bad_st, bad_st);
+        const directory_entry d(ELIB_FILESYSTEM_UNIT_TEST_PATH, bad_st, bad_st);
         file_status ret;
         BOOST_CHECK_NO_THROW(ret = d.symlink_status());
         BOOST_CHECK(ret.type() == file_type::directory);
     }
     // status unknown w/ errc
     {
-        const directory_entry d(ELIB_FS_UNIT_TEST_PATH, bad_st, bad_st);
+        const directory_entry d(ELIB_FILESYSTEM_UNIT_TEST_PATH, bad_st, bad_st);
         std::error_code ec;
         file_status ret = d.symlink_status(ec);
         BOOST_CHECK(not ec);

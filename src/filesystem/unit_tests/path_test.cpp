@@ -230,14 +230,13 @@ void check(
 
   BOOST_CHECK(iter_join == iter);
   BOOST_CHECK( iter_join== iter);
-  BOOST_CHECK(p.native() == str);
+  BOOST_CHECK( p.native() == str);
   BOOST_CHECK( p.root_path().native() == root_path);
   BOOST_CHECK( p.root_name().native() == root_name);
   BOOST_CHECK( p.root_directory().native() == root_dir);
   BOOST_CHECK( p.relative_path().native() == rel_path);
   BOOST_CHECK( p.parent_path().native() == parent_path);
   BOOST_CHECK( p.filename().native() == filename);
-
 }
 
 BOOST_AUTO_TEST_CASE(path_table)

@@ -68,11 +68,12 @@ BOOST_AUTO_TEST_CASE(ctor_test)
 
 BOOST_AUTO_TEST_CASE(assignment_coverage_test)
 {
-    const file_status st;
+    const file_status st(file_type::regular);
     file_status st2;
     st2 = st;
+    BOOST_CHECK(st2.type() == st.type());
     st2 = file_status();
-    BOOST_CHECK(true);
+    BOOST_CHECK(st2.type() == file_status().type());
 }
 
 BOOST_AUTO_TEST_CASE(modifiers_test)

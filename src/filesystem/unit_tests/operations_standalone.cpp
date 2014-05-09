@@ -21,8 +21,8 @@
 
 #include <unistd.h>
 
-#ifndef ELIB_FS_UNIT_TEST_PATH
-# error ELIB_FS_UNIT_TEST_PATH must be set to the directory of this file
+#ifndef ELIB_FILESYSTEM_UNIT_TEST_PATH
+# error ELIB_FILESYSTEM_UNIT_TEST_PATH must be set to the directory of this file
 # endif
 
 
@@ -62,7 +62,7 @@ std::vector<std::string> read_list(const std::string& filename)
 
 
 
-const std::string dir_prefix = ELIB_FS_UNIT_TEST_PATH;
+const std::string dir_prefix = ELIB_FILESYSTEM_UNIT_TEST_PATH;
 
 
 
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_SUITE(fs_standalone_test_suite)
 
 BOOST_AUTO_TEST_CASE(fs_standalone_init)
 {
-  BOOST_REQUIRE( ::chdir( ELIB_FS_UNIT_TEST_PATH ) != -1 );
+  BOOST_REQUIRE( ::chdir( ELIB_FILESYSTEM_UNIT_TEST_PATH ) != -1 );
   
   python_run("init_filesystem()");
   
@@ -274,7 +274,7 @@ BOOST_AUTO_TEST_CASE(test_top_iterator)
 
 BOOST_AUTO_TEST_CASE(test_mkdir_and_rm_dir)
 {
-    const std::string top_level = ELIB_FS_UNIT_TEST_PATH 
+    const std::string top_level = ELIB_FILESYSTEM_UNIT_TEST_PATH 
                                     "/test_env/mkdir";
                                     
     fs::path p {top_level};

@@ -29,12 +29,12 @@ namespace elib { namespace except
     class exception : public std::exception
     {
     public:
-        exception(std::string const & what_arg)
+        explicit exception(std::string const & what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
         {
         }
         
-        exception(const char* what_arg)
+        explicit exception(const char* what_arg)
           : m_impl(std::make_shared<exception_storage>(what_arg))
         {
         }

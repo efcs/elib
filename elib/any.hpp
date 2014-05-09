@@ -43,9 +43,9 @@ namespace elib
             
             virtual ~storage_base() { }
             
-            virtual storage_base* copy() const = 0;
-            virtual storage_base* copy(storage_base *) const = 0;
-            virtual storage_base* move(storage_base *) = 0;
+            virtual void* copy() const = 0;
+            virtual void* copy(void*) const = 0;
+            virtual void* move(void*) = 0;
             
             virtual void destroy() noexcept = 0;
             virtual void destroy_deallocate() noexcept = 0;
@@ -91,7 +91,7 @@ namespace elib
             {}
             
         public:
-            storage_base* copy() const
+            void* copy() const
             {
                 using NewAlloc = typename Alloc::template rebind<storage_type>::other;
                 NewAlloc a(m_pair.second());
@@ -103,22 +103,22 @@ namespace elib
                 return tmp.release();
             }
             
-            storage_base* copy(storage_base* dest) const
+            void* copy(void* dest) const
             {
-                ::new ((void*)dest) storage_type(
+                return 
+                  ::new (dest) storage_type(
                     m_pair.first()
                   , m_pair.second()
                   );
-                return dest;
             }
             
-            storage_base* move(storage_base* dest)
+            void* move(void* dest)
             {
-                ::new ((void*)dest) storage_type(
+                return 
+                  ::new (dest) storage_type(
                     elib::move(m_pair.first())
                   , elib::move(m_pair.second())
                   );
-                return dest;
             }
             
             void destroy() noexcept
@@ -184,10 +184,10 @@ namespace elib
           : m_base_ptr(nullptr)
         {
             if (other.m_base_ptr == other.m_buff_ptr()) {
-                m_base_ptr = other.m_base_ptr->copy(m_buff_ptr());
+                m_base_ptr = other.m_base()->copy(m_buff_ptr());
             }
             else if (other.m_base_ptr) {
-                m_base_ptr = other.m_base_ptr->copy();
+                m_base_ptr = other.m_base()->copy();
             }
         }
         
@@ -196,7 +196,7 @@ namespace elib
           : m_base_ptr(nullptr)
         {
             if (other.m_base_ptr == other.m_buff_ptr()) {
-                m_base_ptr = other.m_base_ptr->move(m_buff_ptr());
+                m_base_ptr = other.m_base()->move(m_buff_ptr());
             } 
             else if (other.m_base_ptr) {
                 m_base_ptr = other.m_base_ptr;
@@ -216,8 +216,7 @@ namespace elib
             using Storage = storage_type<StoredValue>;
             
             if (store_locally<Storage>::value) {
-                ::new ((void*)&m_buff) Storage(elib::forward<ValueType>(value));
-                m_base_ptr = m_buff_ptr();
+                m_base_ptr = ::new ((void*)&m_buff) Storage(elib::forward<ValueType>(value));
             } else {
                 using Alloc = typename Storage::allocator_type::template rebind<Storage>::other;
                 using Dtor = allocator_destructor<Alloc>;
@@ -243,13 +242,14 @@ namespace elib
           , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<ValueType>, any>::value)
           >
         any(std::allocator_arg_t, Allocator const & alloc, ValueType && value)
+          : m_base_ptr(nullptr)
         {
             using StoredValue = aux::decay_t<ValueType>;
             using StoredAlloc = typename Allocator::template rebind<StoredValue>::other;
             
             using Storage = storage_type<StoredValue, StoredAlloc>;
             if (store_locally<Storage>::value) {
-                m_base_ptr = ::new ((void*)m_buff_ptr()) Storage(
+                m_base_ptr = ::new ((void*)&m_buff) Storage(
                     elib::forward<ValueType>(value)
                   , StoredAlloc(alloc)
                   );
@@ -281,7 +281,7 @@ namespace elib
         {
             clear();
             if (other.m_stored_locally()) {
-                m_base_ptr = other.m_base_ptr->move(m_buff_ptr());
+                m_base_ptr = other.m_base()->move((void*)&m_buff);
             } 
             else if (other.m_stored_remotely()) {
                 m_base_ptr = other.m_base_ptr;
@@ -305,10 +305,10 @@ namespace elib
         void clear() noexcept
         {
             if (m_stored_locally()) {
-                m_base_ptr->destroy();
+                m_base()->destroy();
             }
             else if (m_stored_remotely()) {
-                m_base_ptr->destroy_deallocate();
+                m_base()->destroy_deallocate();
             } 
             m_base_ptr = nullptr;
         }
@@ -318,28 +318,28 @@ namespace elib
         {
             if (m_stored_locally() && other.m_stored_locally()) {
                 buffer_t tmp_buff;
-                storage_base *tmp_ptr = m_base_ptr->move(
-                    static_cast<storage_base*>((void*)&tmp_buff)
+                storage_base* tmp_ptr = static_cast<storage_base*>(
+                    m_base()->move((void*)&tmp_buff)
                   );
-                m_base_ptr->destroy();
-                m_base_ptr = other.m_base_ptr->move(m_buff_ptr());
-                other.m_base_ptr->destroy();
+                m_base()->destroy();
+                m_base_ptr = other.m_base()->move(m_buff_ptr());
+                other.m_base()->destroy();
                 other.m_base_ptr = tmp_ptr->move(other.m_buff_ptr());
                 tmp_ptr->destroy();
             } 
             else if (m_stored_locally()) {
-                m_base_ptr->move(other.m_buff_ptr());
-                m_base_ptr->destroy();
+                m_base()->move(other.m_buff_ptr());
+                m_base()->destroy();
                 m_base_ptr = other.m_base_ptr;
                 other.m_base_ptr = other.m_buff_ptr();
             }
             else if (other.m_stored_locally()) {
-                other.m_base_ptr->move(m_buff_ptr());
-                other.m_base_ptr->destroy();
+                other.m_base()->move(m_buff_ptr());
+                other.m_base()->destroy();
                 other.m_base_ptr = m_base_ptr;
                 m_base_ptr = m_buff_ptr();
-            } else {
-                storage_base *tmp_ptr = m_base_ptr;
+            } else { /* both stored remotly */
+                void *tmp_ptr = m_base_ptr;
                 m_base_ptr = other.m_base_ptr;
                 other.m_base_ptr = tmp_ptr;
             }
@@ -359,7 +359,8 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         std::type_info const & type() const noexcept
         {
-            return m_base_ptr ? m_base_ptr->target_type() : typeid(void);
+            return m_base_ptr ? m_base()->target_type() 
+                              : typeid(void);
         }
 
     private:
@@ -373,18 +374,24 @@ namespace elib
         using store_locally = any_detail::store_locally<StorageType>;
         
     private:
-        storage_base * m_buff_ptr() noexcept
+        void * m_buff_ptr() noexcept
         {
-            return static_cast<storage_base*>(
-                static_cast<void*>(&m_buff)
-              );
+            return static_cast<void*>(&m_buff);
         }
         
-        storage_base const * m_buff_ptr() const noexcept
+        void const* m_buff_ptr() const noexcept
         {
-            return static_cast<storage_base const*>(
-                static_cast<void const*>(&m_buff)
-              );
+            return static_cast<void const*>(&m_buff);
+        }
+        
+        storage_base const* m_base() const noexcept
+        {
+            return static_cast<storage_base const *>(m_base_ptr);
+        }
+        
+        storage_base * m_base() noexcept
+        {
+            return static_cast<storage_base *>(m_base_ptr);
         }
         
         bool m_stored_locally() const noexcept
@@ -406,7 +413,7 @@ namespace elib
         
     private:
         buffer_t m_buff;
-        storage_base *m_base_ptr;
+        void* m_base_ptr;
     };                                                      // class any
     
     ////////////////////////////////////////////////////////////////////////////
@@ -420,7 +427,7 @@ namespace elib
     inline ValueType const * any_cast(any const * v) noexcept
     {
         return v && v->m_base_ptr 
-          ? static_cast<ValueType const *>(v->m_base_ptr->target_if(typeid(ValueType)))
+          ? static_cast<ValueType const *>(v->m_base()->target_if(typeid(ValueType)))
           : nullptr;
     }
     
@@ -429,7 +436,7 @@ namespace elib
     inline ValueType * any_cast(any * v) noexcept
     {
         return v && v->m_base_ptr 
-          ? static_cast<ValueType*>(v->m_base_ptr->target_if(typeid(ValueType))) 
+          ? static_cast<ValueType*>(v->m_base()->target_if(typeid(ValueType))) 
           : nullptr;
     }
     

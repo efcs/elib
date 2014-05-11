@@ -30,13 +30,12 @@ clean:
 .PHONY: redep
 redep: 
 	@ rm -rf ./build/ ; mkdir -p build/ 
-	@ rm -rf ./test_files/ ; mkdir -p test_files
 	@ cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) ..  ; cd ..
 	
 .PHONY: distclean
 distclean: 
 	@ $(MAKE) --no-print-directory clean
-	@ rm -rf ./build ./bin ./test_files
+	@ rm -rf ./build ./bin 
 
 .PHONY: header_tests
 header_tests:

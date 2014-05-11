@@ -9,24 +9,19 @@
 # error ELIB_ROOT_PATH must be defined to the elib directory
 #endif
 
-#if !defined(ELIB_TEST_PATH)
-# error ELIB_TEST_PATH must be defined to test file path
-#endif
-
 #include <elib/filesystem/file_status.hpp>
 #include <elib/filesystem/filesystem_error.hpp>
 #include <elib/filesystem/operations.hpp>
 #include <elib/filesystem/path.hpp>
 
+#include <fstream>
 #include <iostream>
-
 
 using namespace elib;
 using namespace elib::fs;
 
 // Some files and directories we can assume to exist
 const path elib_root_path(ELIB_ROOT_PATH);
-const path elib_test_path(ELIB_TEST_PATH);
 const path elib_makefile_path = elib_root_path / path("Makefile");
 const path not_dir_path = elib_makefile_path / path("dne");
 const path dne_path("/this_file_dne");
@@ -47,16 +42,6 @@ BOOST_AUTO_TEST_CASE(status_test)
         BOOST_CHECK(st.type() == file_type::directory);
         
         st = fs::status(elib_root_path, ec);
-        BOOST_CHECK(not ec);
-        BOOST_CHECK(st.type() == file_type::directory);
-    }
-    // Directory test 2
-    {
-        file_status st;
-        BOOST_CHECK_NO_THROW(st = fs::status(elib_test_path));
-        BOOST_CHECK(st.type() == file_type::directory);
-        
-        st = fs::status(elib_test_path, ec);
         BOOST_CHECK(not ec);
         BOOST_CHECK(st.type() == file_type::directory);
     }
@@ -87,6 +72,51 @@ BOOST_AUTO_TEST_CASE(status_test)
         BOOST_CHECK(st.type() == file_type::not_found);
         
         st = fs::status(not_dir_path, ec);
+        BOOST_CHECK(ec && ec.value() == ENOTDIR);
+        BOOST_CHECK(st.type() == file_type::not_found);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(symlink_status_test)
+{
+    std::error_code ec;
+    // Directory test
+    {
+        file_status st;
+        BOOST_CHECK_NO_THROW(st = fs::symlink_status(elib_root_path));
+        BOOST_CHECK(st.type() == file_type::directory);
+        
+        st = fs::symlink_status(elib_root_path, ec);
+        BOOST_CHECK(not ec);
+        BOOST_CHECK(st.type() == file_type::directory);
+    }
+    // file test 
+    {
+        file_status st;
+        BOOST_CHECK_NO_THROW(st = fs::symlink_status(elib_makefile_path));
+        BOOST_CHECK(st.type() == file_type::regular);
+        
+        st = fs::symlink_status(elib_makefile_path, ec);
+        BOOST_CHECK(not ec);
+        BOOST_CHECK(st.type() == file_type::regular);
+    }
+    // dne test
+    {
+        file_status st;
+        BOOST_CHECK_NO_THROW(st = fs::symlink_status(dne_path));
+        BOOST_CHECK(st.type() == file_type::not_found);
+        
+        st = fs::symlink_status(dne_path, ec);
+        BOOST_CHECK(ec && ec.value() == ENOENT);
+        BOOST_CHECK(st.type() == file_type::not_found);
+    }
+    // not dir test
+    {
+        file_status st;
+        BOOST_CHECK_NO_THROW(st = fs::symlink_status(not_dir_path));
+        BOOST_CHECK(st.type() == file_type::not_found);
+        
+        st = fs::symlink_status(not_dir_path, ec);
         BOOST_CHECK(ec && ec.value() == ENOTDIR);
         BOOST_CHECK(st.type() == file_type::not_found);
     }
@@ -225,8 +255,6 @@ BOOST_AUTO_TEST_CASE(canonical_test)
     }
     // TODO symlink test
 }
-
-
 
 
 BOOST_AUTO_TEST_SUITE_END()

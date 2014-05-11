@@ -482,11 +482,18 @@ namespace elib { namespace fs
             if (in.good() && out.good())
             out <<  in.rdbuf();
             
-            if (!out.good() || !in.good())
-            {
-            detail::handle_and_throw_error(std::errc::operation_not_permitted,
-                        "elib::fs::copy_file_impl", from, to, ec);
-            return false;
+            if (!out.good() || !in.good()) {
+                std::error_code m_ec(
+                    static_cast<int>(std::errc::operation_not_permitted)
+                  , std::system_category()
+                  );
+           
+                if (ec) {
+                    *ec = m_ec;
+                    return false;
+                } else {
+                    throw filesystem_error("fs::copy_file_impl", from, to, m_ec);
+                }
             }
             
             return true;
@@ -1086,7 +1093,7 @@ namespace elib { namespace fs { namespace detail
         const char* env_paths[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};
         path p{};
         std::error_code m_ec;
-        detail::clear_error(ec);
+        if (ec) ec->clear();
         for (auto & ep : env_paths) 
         {
             char *ret = std::getenv(ep);

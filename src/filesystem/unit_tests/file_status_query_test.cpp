@@ -160,4 +160,5 @@ BOOST_AUTO_TEST_CASE(file_type_socket_test)
     BOOST_CHECK(is_socket(st));
     BOOST_CHECK(not is_symlink(st));
 }
+
 BOOST_AUTO_TEST_SUITE_END()

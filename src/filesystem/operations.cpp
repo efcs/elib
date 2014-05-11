@@ -180,7 +180,7 @@ namespace elib { namespace fs
         inline path posix_realpath(const path& p, 
                         std::error_code *ec)
         {
-            char buff[PATH_MAX];
+            char buff[PATH_MAX + 1];
             char *ret = ::realpath(p.c_str(), buff);
             
             std::error_code m_ec;

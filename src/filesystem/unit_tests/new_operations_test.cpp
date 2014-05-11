@@ -7,7 +7,11 @@
 #include <elib/filesystem/path.hpp>
 
 #if !defined(ELIB_FILESYSTEM_UNIT_TEST_PATH)
-# error ELIB_FILESYSTEM_UNIT_TEST_PATH must be defined to test path
+# error ELIB_FILESYSTEM_UNIT_TEST_PATH must be defined to filesystem/unit_tests/test_files
+#endif
+
+#if !defined(ELIB_TEST_PATH)
+# error ELIB_TEST_PATH must be defined to test file path
 #endif
 
 using namespace elib;

@@ -70,7 +70,7 @@ option(ELIB_WEB_SOURCE "Build web library" ON)
 project(EricsLibrary CXX C)
 set(ELIB_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
 add_definitions(-DELIB_ROOT_PATH="${ELIB_ROOT_PATH}")
-set(ELIB_TEST_PATH "${CMAKE_CURRENT_LIST_DIR}/test")
+set(ELIB_TEST_PATH "${CMAKE_CURRENT_LIST_DIR}/test_files")
 add_definitions(-DELIB_TEST_PATH="${ELIB_TEST_PATH}")
 
 

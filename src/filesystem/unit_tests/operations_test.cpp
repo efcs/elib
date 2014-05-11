@@ -77,6 +77,18 @@ BOOST_AUTO_TEST_CASE(fs_current_path_test)
   BOOST_CHECK(bec.value() == eec.value());
 }
 
+BOOST_AUTO_TEST_CASE(absolute_test)
+{
+    const efs::path ep("bar/baz");
+    const bfs::path bp("bar/baz");
+    const efs::path ebase("//net/foo");
+    const bfs::path bbase("//net/foo");
+    
+    bfs::path bret = bfs::absolute(bp, bbase);
+    efs::path eret = efs::absolute(ep, ebase);
+    BOOST_CHECK(bret == eret);
+}
+
 
 BOOST_AUTO_TEST_CASE(fs_test_main)
 {

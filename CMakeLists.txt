@@ -69,7 +69,10 @@ option(ELIB_WEB_SOURCE "Build web library" ON)
 # need C to get the pthreads library 
 project(EricsLibrary CXX C)
 set(ELIB_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
+add_definitions(-DELIB_ROOT_PATH="${ELIB_ROOT_PATH}")
 set(ELIB_TEST_PATH "${CMAKE_CURRENT_LIST_DIR}/test")
+add_definitions(-DELIB_TEST_PATH="${ELIB_TEST_PATH}")
+
 
 ################################################################################
 #                       Toolchain config (Post-project)

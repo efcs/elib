@@ -16,7 +16,7 @@ namespace elib { namespace argp
     class command_line_parser;
     
     ////////////////////////////////////////////////////////////////////////////
-    class parsed_option;
+    struct parsed_option;
     
     ////////////////////////////////////////////////////////////////////////////
     enum class option_semantics;
@@ -25,9 +25,6 @@ namespace elib { namespace argp
     
     template <class ValueType>
     struct lexical_converter;
-    
-    
-    
     
     ////////////////////////////////////////////////////////////////////////////
     namespace detail

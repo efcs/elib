@@ -1,63 +1,67 @@
-#ifndef ELIB_CMD_OPTIONS_OPTION_SEMANTICS_HPP
-#define ELIB_CMD_OPTIONS_OPTION_SEMANTICS_HPP
+#ifndef ELIB_ARGP_OPTION_SEMANTICS_HPP
+#define ELIB_ARGP_OPTION_SEMANTICS_HPP
 
-# include <elib/cmd_options/fwd.hpp>
+# include <elib/argp/fwd.hpp>
 
-namespace elib { namespace cmd_options
+namespace elib { namespace argp
 {
-    enum class option_semantics : unsigned 
+    enum class option_semantics 
     {
         none = 0, 
         required = 1 << 0, 
-        multi_token = 1 << 2, 
-        composing = 1 << 3, 
-        value_required = 1 << 4, 
-        has_default_value = 1 << 5
+        composing = 1 << 2, 
+        optional_value = 1 << 3, 
+        required_value = 1 << 4, 
+        multi_value = 1 << 5, 
+        
     };
     
     constexpr option_semantics none = option_semantics::none;
     constexpr option_semantics required = option_semantics::required;
-    constexpr option_semantics multi_value = option_semantics::multi_token;
     constexpr option_semantics composing = option_semantics::composing;
-    constexpr option_semantics value_required = option_semantics::value_required;
-    constexpr option_semantics has_default_value = option_semantics::has_default_value;
+    constexpr option_semantics optional_value = option_semantics::optional_value;
+    constexpr option_semantics required_value = option_semantics::required_value;
+    constexpr option_semantics multi_value = option_semantics::multi_value;
+    
+    
+    bool validate_option_semantics(option_semantics);
     
     constexpr option_semantics operator~(option_semantics s) noexcept
     {
         return static_cast<option_semantics>(
-            ~ static_cast<unsigned>(s)
+            ~ static_cast<int>(s)
           );
     }
     
     constexpr option_semantics operator&(option_semantics lhs, option_semantics rhs) noexcept
     {
         return static_cast<option_semantics>(
-            static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs)
+            static_cast<int>(lhs) & static_cast<int>(rhs)
           );
     }
     
     constexpr option_semantics operator|(option_semantics lhs, option_semantics rhs) noexcept
     {
         return static_cast<option_semantics>(
-            static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs)
+            static_cast<int>(lhs) | static_cast<int>(rhs)
           );
     }
     
     constexpr option_semantics operator^(option_semantics lhs, option_semantics rhs) noexcept
     {
         return static_cast<option_semantics>(
-            static_cast<unsigned>(lhs) ^ static_cast<unsigned>(rhs)
+            static_cast<int>(lhs) ^ static_cast<int>(rhs)
           );
     }
     
     constexpr bool operator !(option_semantics s) noexcept
     {
-        return !(static_cast<unsigned>(s));
+        return !(static_cast<int>(s));
     }
     
     constexpr bool is_set(option_semantics lhs, option_semantics rhs) noexcept
     {
-        return static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs);
+        return static_cast<int>(lhs) & static_cast<int>(rhs);
     }
 }}                                                          // namespace elib
-#endif /* ELIB_CMD_OPTIONS_OPTION_SEMANTICS_HPP */
+#endif /* ELIB_ARGP_OPTION_SEMANTICS_HPP */

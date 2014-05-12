@@ -1,11 +1,11 @@
-#ifndef ELIB_CMD_OPTIONS_PARSED_OPTION_HPP
-#define ELIB_CMD_OPTIONS_PARSED_OPTION_HPP
+#ifndef ELIB_ARGP_PARSED_OPTION_HPP
+#define ELIB_ARGP_PARSED_OPTION_HPP
 
-# include <elib/cmd_options/fwd.hpp>
+# include <elib/argp/fwd.hpp>
 # include <string>
 # include <vector>
 
-namespace elib { namespace cmd_options
+namespace elib { namespace argp
 {
     struct parsed_option
     {
@@ -23,4 +23,4 @@ namespace elib { namespace cmd_options
         bool validated;
     };
 }}                                                          // namespace elib
-#endif /* ELIB_CMD_OPTIONS_PARSED_OPTION_HPP */
+#endif /* ELIB_ARGP_PARSED_OPTION_HPP */

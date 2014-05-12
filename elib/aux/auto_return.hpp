@@ -11,21 +11,21 @@
 # include <elib/aux/declval.hpp>
 # 
 # 
-# define ELIB_AUTO_RETURN_NOEXCEPT(...)       \
-  noexcept(noexcept(                          \
-    ::elib::declval<decltype(__VA_ARGS__)>()  \
-  )) -> decltype(__VA_ARGS__)                 \
-  {                                           \
-    return (__VA_ARGS__);                     \
+# define ELIB_AUTO_RETURN_NOEXCEPT(...)                             \
+  noexcept(noexcept(                                                \
+    decltype(__VA_ARGS__)(::elib::declval<decltype(__VA_ARGS__)>()) \
+  )) -> decltype(__VA_ARGS__)                                       \
+  {                                                                 \
+    return (__VA_ARGS__);                                           \
   }
 #   
 #   
-# define ELIB_RETURN_NOEXCEPT(...)           \
-  noexcept(noexcept(                         \
-    ::elib::declval<decltype(__VA_ARGS__)>() \
-  ))                                         \
-  {                                          \
-    return (__VA_ARGS__);                    \
+# define ELIB_RETURN_NOEXCEPT(...)                                  \
+  noexcept(noexcept(                                                \
+    decltype(__VA_ARGS__)(::elib::declval<decltype(__VA_ARGS__)>()) \
+  ))                                                                \
+  {                                                                 \
+    return (__VA_ARGS__);                                           \
   }
 # 
 # 

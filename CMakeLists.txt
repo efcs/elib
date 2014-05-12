@@ -48,8 +48,8 @@ option(CONFIG_HEADER_TESTS
 
 option(ELIB_SOURCE "Build top level source" ON)
 option(ELIB_ALGORITHM_SOURCE "Build Algorithm" ON)
+option(ELIB_ARGP_SOURCE "Build Argument Parser" ON)
 option(ELIB_AUX_SOURCE "Build aux" ON)
-option(ELIB_CMD_OPTIONS_SOURCE "Build command options" ON)
 option(ELIB_CONTAINER_SOURCE "Build containers" ON)
 option(ELIB_ENUMERATION_SOURCE "Build enumeration" ON)
 option(ELIB_EXCEPTION_SOURCE "Build except" ON)

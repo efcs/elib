@@ -224,6 +224,15 @@ namespace elib
             return t;
         }
         
+        template <class To, class From>
+        bool from_string_cast(From const & from, To & dest) noexcept
+        {
+            std::stringstream ss;
+            ss << from;
+            ss >> dest;
+            return bool(ss);
+        }
+        
         template <class From>
         bool from_string_to_bool_cast(From const & f)
         {
@@ -248,6 +257,21 @@ namespace elib
                     std::string{"Bad lexical cast from string to bool: \""}
                         + f + '"'
                 );
+        }
+        
+        template <class From>
+        bool from_string_to_bool_cast(From const & f, bool & dest) noexcept
+        {
+            std::stringstream ss;
+            ss << std::boolalpha << f;
+            ss >> dest;
+            if (ss) return true;
+                
+            ss.clear();
+            ss <<  std::noboolalpha;
+            ss >> dest;
+            
+            return bool(ss);
         }
         
         template <class From>
@@ -287,7 +311,6 @@ namespace elib
         lexical_cast_detail::is_valid_lexical_cast_impl<To, From>::type;
         
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class To, class From>
     constexpr typename lexical_cast_detail::cast_type<To, From>::IntToInt
     lexical_cast(From from) noexcept
@@ -295,6 +318,19 @@ namespace elib
         return static_cast<To>(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::IntToInt{}
+        )
+      >
+    inline bool lexical_cast(From from, To & dest) noexcept
+    {
+        dest = static_cast<To>(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     constexpr typename lexical_cast_detail::cast_type<To, From>::FloatToInt
     lexical_cast(From from) noexcept
@@ -302,20 +338,58 @@ namespace elib
         return static_cast<To>(from + 0.5f);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::FloatToInt{}
+        )
+      >
+    inline bool lexical_cast(From from, To & dest) noexcept
+    {
+        dest = static_cast<To>(from + 0.5f);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     inline typename lexical_cast_detail::cast_type<To, From>::StringToInt
     lexical_cast(From const & from) 
     {
         return lexical_cast_detail::from_string_cast<To>(from);
     }
+    
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::StringToInt{}
+        )
+      >
+    inline bool lexical_cast(From const & from, To & to) noexcept
+    {
+        return lexical_cast_detail::from_string_cast<To>(from, to);
+    }
   
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     constexpr typename lexical_cast_detail::cast_type<To, From>::IntToFloat
     lexical_cast(From from) noexcept
     {
         return static_cast<To>(from);
     }
+    
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::IntToFloat{}
+        )
+      >
+    inline bool lexical_cast(From from, To & to) noexcept
+    {
+        to = static_cast<To>(from);
+        return true;
+    }
 
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     constexpr typename lexical_cast_detail::cast_type<To, From>::FloatToFloat
     lexical_cast(From from) noexcept
@@ -323,6 +397,19 @@ namespace elib
         return static_cast<To>(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::FloatToFloat{}
+        )
+      >
+    inline bool lexical_cast(From from, To & to) noexcept
+    {
+        to = static_cast<To>(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     inline typename lexical_cast_detail::cast_type<To, From>::StringToFloat
     lexical_cast(From const & from)
@@ -330,6 +417,18 @@ namespace elib
         return lexical_cast_detail::from_string_cast<To>(from);
     }
         
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::StringToFloat{}
+        )
+      >
+    inline bool lexical_cast(From const & from, To & to)
+    {
+        return lexical_cast_detail::from_string_cast(from, to);
+    }
+     
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     inline typename lexical_cast_detail::cast_type<To, From>::IntToString
     lexical_cast(From from)
@@ -337,6 +436,19 @@ namespace elib
         return lexical_cast_detail::to_string_cast(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::IntToString{}
+        )
+      >
+    inline bool lexical_cast(From from, To & to) noexcept
+    {
+        to = lexical_cast_detail::to_string_cast(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     inline typename lexical_cast_detail::cast_type<To, From>::FloatToString
     lexical_cast(From from)
@@ -344,6 +456,19 @@ namespace elib
         return lexical_cast_detail::to_string_cast(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::FloatToString{}
+        )
+      >
+    inline bool lexical_cast(From from, To & to) noexcept
+    {
+        to = lexical_cast_detail::to_string_cast(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     inline typename lexical_cast_detail::cast_type<To, From>::StringToString
     lexical_cast(From const & from)
@@ -351,6 +476,19 @@ namespace elib
         return std::string(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::StringToString{}
+        )
+      >
+    inline bool lexical_cast(From const & from, To & to)
+    {
+        to = std::string(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     constexpr typename lexical_cast_detail::cast_type<To, From>::IntToBool
     lexical_cast(From from) noexcept
@@ -358,6 +496,19 @@ namespace elib
         return static_cast<bool>(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::IntToBool{}
+        )
+      >
+    inline bool lexical_cast(From from, To & to) noexcept
+    {
+        to = static_cast<bool>(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     constexpr typename lexical_cast_detail::cast_type<To, From>::FloatToBool
     lexical_cast(From from) noexcept
@@ -365,11 +516,35 @@ namespace elib
         return static_cast<bool>(from);
     }
     
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::FloatToBool{}
+        )
+      >
+    inline bool lexical_cast(From from, To & to) noexcept
+    {
+        to = static_cast<bool>(from);
+        return true;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     template <class To, class From>
     inline typename lexical_cast_detail::cast_type<To, From>::StringToBool
     lexical_cast(From const & from)
     {
         return lexical_cast_detail::from_string_to_bool_cast(from);
+    }
+    
+    template <
+        class From, class To
+      , ELIB_ENABLE_IF_VALID_EXPR(
+          typename lexical_cast_detail::cast_type<To, From>::StringToBool{}
+        )
+      >
+    inline bool lexical_cast(From const & from, To & to) noexcept
+    {
+        return lexical_cast_detail::from_string_to_bool_cast(from, to);
     }
 }                                                            // namespace elib
 #endif /* ELIB_LEXICAL_CAST_HPP */

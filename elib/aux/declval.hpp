@@ -6,7 +6,7 @@
 namespace elib { namespace aux
 {
     template <class T>
-    typename aux::add_rvalue_reference<T>::type 
+    aux::add_rvalue_reference_t<T>
     declval() noexcept;
 }}                                                          // namespace elib
 namespace elib

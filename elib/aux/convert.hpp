@@ -3,7 +3,9 @@
 
 # include <elib/aux/declval.hpp>
 # include <elib/aux/forward.hpp>
+# include <elib/aux/move.hpp>
 # include <elib/aux/enable_if.hpp>
+# include <elib/aux/traits/remove_reference.hpp>
 
 namespace elib { namespace aux
 {
@@ -11,7 +13,7 @@ namespace elib { namespace aux
     struct converter
     {
         explicit constexpr converter(T v)
-          : m_value(v)
+          : m_value(elib::move(v))
         {}
         
         template <
@@ -30,9 +32,10 @@ namespace elib { namespace aux
     };
     
     template <class T>
-    converter<T> convert(T && v)
+    converter<elib::remove_reference_t<T>>
+    convert(T && v)
     {
-        return converter<T>(elib::forward<T>(v));
+        return converter<elib::remove_reference_t<T>>(elib::forward<T>(v));
     }
 }}                                                          // namespace elib
 namespace elib

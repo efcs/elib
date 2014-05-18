@@ -12,25 +12,53 @@ using namespace elib;
 template <int Dummy = 0>
 struct basic_small_value
 {
-    basic_small_value() noexcept(false) 
+    basic_small_value() noexcept(false)
+      : value(0)
     {}
     
-    basic_small_value(basic_small_value const &) noexcept(false)
+    explicit basic_small_value(int val) noexcept(false)
+      : value(val)
     {}
     
-    basic_small_value(basic_small_value &&) noexcept
+    basic_small_value(basic_small_value const & other) noexcept(false)
+      : value(other.value)
     {}
     
-    basic_small_value & operator=(basic_small_value const &) noexcept(false)
+    basic_small_value(basic_small_value && other) noexcept
+      : value(other.value)
+    {}
+    
+    basic_small_value & operator=(basic_small_value const & other) noexcept(false)
     {
+        value = other.value;
         return *this;
     }
     
-    basic_small_value & operator=(basic_small_value &&) noexcept
+    basic_small_value & operator=(basic_small_value && other) noexcept
     {
+        value = other.value;
         return *this;
     }
+    
+    int value;
 };
+
+
+template <int Dummy>
+inline bool operator==(
+    basic_small_value<Dummy> const & lhs
+  , basic_small_value<Dummy> const & rhs) noexcept
+{
+    return lhs.value == rhs.value;
+}
+
+template <int Dummy>
+inline bool operator !=(
+    basic_small_value<Dummy> const & lhs
+  , basic_small_value<Dummy> const & rhs) noexcept
+{
+    return lhs.value != rhs.value;
+}
 
 using small_value = basic_small_value<>;
 using small_value2 = basic_small_value<2>;
@@ -38,16 +66,55 @@ using small_value2 = basic_small_value<2>;
 template <int Dummy = 0>
 struct basic_large_value
 {
-    basic_large_value() = default;
-    basic_large_value(basic_large_value const &) = default;
-    basic_large_value(basic_large_value &&) = default;
+    basic_large_value() noexcept
+      : value(0)
+    {}
     
-    basic_large_value & operator=(basic_large_value const &) = default;
-    basic_large_value & operator=(basic_large_value &&) = default;
+    explicit basic_large_value(int val) noexcept
+      : value(val)
+    {}
+    
+    basic_large_value(basic_large_value const & other)
+      : value(other.value)
+    {}
+    
+    basic_large_value(basic_large_value && other) noexcept
+      : value(other.value)
+    {}
+    
+    basic_large_value & operator=(basic_large_value const & other)
+    {
+        value = other.value;
+        return *this;
+    }
+    
+    basic_large_value & operator=(basic_large_value && other) noexcept
+    {
+        value = other.value;
+        return *this;
+    }
+
+    int value;
 
 private:
     char m_dummy[1024];
 };
+
+template <int Dummy>
+inline bool operator==(
+    basic_large_value<Dummy> const & lhs
+  , basic_large_value<Dummy> const & rhs) noexcept
+{
+    return lhs.value == rhs.value;
+}
+
+template <int Dummy>
+inline bool operator !=(
+    basic_large_value<Dummy> const & lhs
+  , basic_large_value<Dummy> const & rhs) noexcept
+{
+    return lhs.value != rhs.value;
+}
 
 using large_value = basic_large_value<>;
 using large_value2 = basic_large_value<2>;
@@ -377,6 +444,246 @@ BOOST_AUTO_TEST_CASE(swap_function_coverage_test)
     swap(a1, a2);
     BOOST_CHECK(a1.type() == typeid(large_value));
     BOOST_CHECK(a2.type() == typeid(small_value));
+}
+
+BOOST_AUTO_TEST_CASE(null_nothrow_const_any_cast_test)
+{
+    any const* any_ptr = nullptr;
+    BOOST_CHECK(elib::any_cast<small_value>(any_ptr) == nullptr);
+}
+
+BOOST_AUTO_TEST_CASE(wrong_type_nothrow_const_any_cast_test)
+{
+    // empty
+    {
+        const any a;
+        small_value const* vptr = elib::any_cast<small_value const>(&a);
+        BOOST_CHECK(not vptr);
+    }
+    // non-empty
+    {
+        const any a(small_value{0});
+        large_value const* vptr = elib::any_cast<large_value const>(&a);
+        BOOST_CHECK(not vptr);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nothrow_const_any_cast_value_test)
+{
+    // small
+    {
+        const any a(small_value{1});
+        small_value const *vptr = elib::any_cast<small_value const>(&a);
+        BOOST_REQUIRE(vptr);
+        BOOST_CHECK(vptr->value == 1);
+    }
+    // large
+    {
+        const any a(large_value{1});
+        large_value const *vptr = elib::any_cast<large_value const>(&a);
+        BOOST_REQUIRE(vptr);
+        BOOST_CHECK(vptr->value == 1);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(null_nothrow_any_cast_test)
+{
+    any * any_ptr = nullptr;
+    BOOST_CHECK(elib::any_cast<small_value>(any_ptr) == nullptr);
+}
+
+BOOST_AUTO_TEST_CASE(wrong_type_nothrow_any_cast_test)
+{
+    // empty
+    {
+        any a;
+        small_value* vptr = elib::any_cast<small_value>(&a);
+        BOOST_CHECK(not vptr);
+    }
+    // non-empty
+    {
+        any a(small_value{0});
+        large_value* vptr = elib::any_cast<large_value>(&a);
+        BOOST_CHECK(not vptr);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(nothrow_any_cast_value_test)
+{
+    // small
+    {
+        any a(small_value{1});
+        small_value *vptr = elib::any_cast<small_value>(&a);
+        BOOST_REQUIRE(vptr);
+        BOOST_CHECK(vptr->value == 1);
+        vptr->value = 2;
+        vptr = elib::any_cast<small_value>(&a);
+        BOOST_REQUIRE(vptr);
+        BOOST_CHECK(vptr->value == 2);
+    }
+    // large
+    {
+        any a(large_value{1});
+        large_value *vptr = elib::any_cast<large_value>(&a);
+        BOOST_REQUIRE(vptr);
+        BOOST_CHECK(vptr->value == 1);
+        vptr->value = 2;
+        vptr = elib::any_cast<large_value>(&a);
+        BOOST_REQUIRE(vptr);
+        BOOST_CHECK(vptr->value == 2);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(empty_throwing_any_cast_test)
+{
+    // const to-value test
+    {
+        const any a;
+        BOOST_CHECK_THROW(elib::any_cast<small_value>(a), elib::bad_any_cast);
+    }
+    // const to-ref test
+    {
+        const any a;
+        BOOST_CHECK_THROW(elib::any_cast<small_value const &>(a), elib::bad_any_cast);
+    }
+    // to-value test
+    {
+        any a;
+        BOOST_CHECK_THROW(elib::any_cast<small_value>(a), elib::bad_any_cast);
+    }
+    // to-ref test
+    {
+        any a;
+        BOOST_CHECK_THROW(elib::any_cast<small_value &>(a), elib::bad_any_cast);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(wrong_type_throwing_any_cast_test)
+{
+    // const to-value test
+    {
+        const any a(large_value{});
+        BOOST_CHECK_THROW(elib::any_cast<small_value>(a), elib::bad_any_cast);
+    }
+    // const to-ref test
+    {
+        const any a(large_value{});
+        BOOST_CHECK_THROW(elib::any_cast<small_value const &>(a), elib::bad_any_cast);
+    }
+    // to-value test
+    {
+        any a(large_value{});
+        BOOST_CHECK_THROW(elib::any_cast<small_value>(a), elib::bad_any_cast);
+    }
+    // to-ref test
+    {
+        any a(large_value{});
+        BOOST_CHECK_THROW(elib::any_cast<small_value &>(a), elib::bad_any_cast);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(small_value_throwing_any_cast_test)
+{
+    // const to-value test
+    {
+        const any a(small_value{1});
+        small_value cp = elib::any_cast<small_value>(a);
+        BOOST_CHECK(cp.value == 1);
+        
+        static_assert(
+            not aux::is_reference<decltype(elib::any_cast<small_value>(a))>::value
+          , "Return type should not be reference"
+          );
+    }
+    // const to-ref test
+    {
+        const any a(small_value{1});
+        small_value const & ref = elib::any_cast<small_value const &>(a);
+        BOOST_CHECK(ref.value == 1);
+        
+        static_assert(
+            aux::is_reference<decltype(elib::any_cast<small_value const &>(a))>::value
+          , "Return type should be reference"
+          );
+    }
+    // to-value test
+    {
+        any a(small_value{1});
+        small_value cp = elib::any_cast<small_value>(a);
+        BOOST_CHECK(cp.value == 1);
+        
+        static_assert(
+            not aux::is_reference<decltype(elib::any_cast<small_value>(a))>::value
+          , "Return type should not be reference"
+          );
+    }
+    // to-ref test
+    {
+        any a(small_value{1});
+        small_value & ref = elib::any_cast<small_value &>(a);
+        BOOST_CHECK(ref.value == 1);
+        ref.value = 2;
+        small_value & ref2 = elib::any_cast<small_value &>(a);
+        BOOST_CHECK(ref2.value == 2);
+        ref2.value = 3;
+        BOOST_CHECK(ref.value == 3);
+        static_assert(
+            aux::is_reference<decltype(elib::any_cast<small_value &>(a))>::value
+          , "Return type should be reference"
+          );
+    }
+}
+
+BOOST_AUTO_TEST_CASE(large_value_throwing_any_cast_test)
+{
+    // const to-value test
+    {
+        const any a(large_value{1});
+        large_value cp = elib::any_cast<large_value>(a);
+        BOOST_CHECK(cp.value == 1);
+        
+        static_assert(
+            not aux::is_reference<decltype(elib::any_cast<large_value>(a))>::value
+          , "Return type should not be reference"
+          );
+    }
+    // const to-ref test
+    {
+        const any a(large_value{1});
+        large_value const & ref = elib::any_cast<large_value const &>(a);
+        BOOST_CHECK(ref.value == 1);
+        
+        static_assert(
+            aux::is_reference<decltype(elib::any_cast<large_value const &>(a))>::value
+          , "Return type should be reference"
+          );
+    }
+    // to-value test
+    {
+        any a(large_value{1});
+        large_value cp = elib::any_cast<large_value>(a);
+        BOOST_CHECK(cp.value == 1);
+        
+        static_assert(
+            not aux::is_reference<decltype(elib::any_cast<large_value>(a))>::value
+          , "Return type should not be reference"
+          );
+    }
+    // to-ref test
+    {
+        any a(large_value{1});
+        large_value & ref = elib::any_cast<large_value &>(a);
+        BOOST_CHECK(ref.value == 1);
+        ref.value = 2;
+        large_value & ref2 = elib::any_cast<large_value &>(a);
+        BOOST_CHECK(ref2.value == 2);
+        ref2.value = 3;
+        BOOST_CHECK(ref.value == 3);
+        static_assert(
+            aux::is_reference<decltype(elib::any_cast<large_value &>(a))>::value
+          , "Return type should be reference"
+          );
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

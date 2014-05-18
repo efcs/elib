@@ -7,9 +7,7 @@
 #include <string>
 #include <typeinfo>
 
-#define private public
 #include <elib/any.hpp>
-#undef private
 
 using namespace elib;
 
@@ -135,8 +133,6 @@ BOOST_AUTO_TEST_CASE(default_ctor_test)
     const any a;
     BOOST_CHECK(a.empty());
     BOOST_CHECK(a.type() == typeid(void));
-    BOOST_CHECK(not a.m_stored_locally());
-    BOOST_CHECK(not a.m_stored_remotely());
 }
 
 BOOST_AUTO_TEST_CASE(small_value_ctor_test)
@@ -149,8 +145,6 @@ BOOST_AUTO_TEST_CASE(small_value_ctor_test)
     const any a(small_value{});
     BOOST_CHECK(not a.empty());
     BOOST_CHECK(a.type() == typeid(small_value));
-    BOOST_CHECK(a.m_stored_locally());
-    BOOST_CHECK(not a.m_stored_remotely());
 }
 
 BOOST_AUTO_TEST_CASE(large_value_ctor_test)
@@ -163,8 +157,6 @@ BOOST_AUTO_TEST_CASE(large_value_ctor_test)
     const any a(large_value{});
     BOOST_CHECK(not a.empty());
     BOOST_CHECK(a.type() == typeid(large_value));
-    BOOST_CHECK(not a.m_stored_locally());
-    BOOST_CHECK(a.m_stored_remotely());
 }
 
 BOOST_AUTO_TEST_CASE(empty_copy_ctor_test)
@@ -367,7 +359,7 @@ BOOST_AUTO_TEST_CASE(empty_small_swap_member_test)
     any a1;
     any a2(small_value{});
     a1.swap(a2);
-    BOOST_CHECK(not a1.empty());
+    BOOST_CHECK(a1.empty());
     BOOST_CHECK(a2.empty());
     BOOST_CHECK(a1.type() == typeid(small_value));
     BOOST_CHECK(a2.type() == typeid(void));
@@ -378,7 +370,7 @@ BOOST_AUTO_TEST_CASE(empty_large_swap_member_test)
     any a1;
     any a2(large_value{});
     a1.swap(a2);
-    BOOST_CHECK(not a1.empty());
+    BOOST_CHECK(a1.empty());
     BOOST_CHECK(a2.empty());
     BOOST_CHECK(a1.type() == typeid(large_value));
     BOOST_CHECK(a2.type() == typeid(void));

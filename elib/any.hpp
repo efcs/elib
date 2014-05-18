@@ -28,24 +28,24 @@ namespace elib
 #   pragma clang diagnostic pop
 # endif
     
-    namespace any_detail
+    namespace detail
     {
 # if defined(__clang__)
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
         ////////////////////////////////////////////////////////////////////////
-        struct storage_base
+        struct any_storage_base
         {
-            storage_base() = default;
-            storage_base(storage_base const &) = delete;
-            storage_base(storage_base &&) = delete;
+            any_storage_base() = default;
+            any_storage_base(any_storage_base const &) = delete;
+            any_storage_base(any_storage_base &&) = delete;
             
-            virtual ~storage_base() { }
+            virtual ~any_storage_base() { }
             
-            virtual storage_base* copy() const = 0;
-            virtual storage_base* copy(void*) const = 0;
-            virtual storage_base* move(void*) = 0;
+            virtual any_storage_base* copy() const = 0;
+            virtual any_storage_base* copy(void*) const = 0;
+            virtual any_storage_base* move(void*) = 0;
             
             virtual void destroy() noexcept = 0;
             virtual void destroy_deallocate() noexcept = 0;
@@ -63,59 +63,59 @@ namespace elib
             class ValueType
           , class Alloc = std::allocator<ValueType>
           >
-        struct storage_type : public storage_base
+        struct any_storage_type : public any_storage_base
         {
         public:
             using value_type = ValueType;
             using allocator_type = Alloc;
             
         public:
-            storage_type(ValueType const & v)
+            any_storage_type(ValueType const & v)
               : m_pair(v, Alloc())
             {}
             
-            storage_type(ValueType && v)
+            any_storage_type(ValueType && v)
               : m_pair(elib::move(v), Alloc())
             {}
             
-            storage_type(ValueType const & v, Alloc const & a)
+            any_storage_type(ValueType const & v, Alloc const & a)
               : m_pair(v, a)
             {}
             
-            storage_type(ValueType const & v, Alloc && a)
+            any_storage_type(ValueType const & v, Alloc && a)
               : m_pair(v, elib::move(a))
             {}
             
-            storage_type(ValueType && v, Alloc && a)
+            any_storage_type(ValueType && v, Alloc && a)
               : m_pair(elib::move(v), elib::move(a))
             {}
             
         public:
-            storage_base* copy() const
+            any_storage_base* copy() const
             {
-                using NewAlloc = typename Alloc::template rebind<storage_type>::other;
+                using NewAlloc = typename Alloc::template rebind<any_storage_type>::other;
                 NewAlloc a(m_pair.second());
                 using Dtor = allocator_destructor<NewAlloc>;
-                std::unique_ptr<storage_type, Dtor> tmp(a.allocate(1), Dtor(a, 1));
-                ::new ((void*)tmp.get()) storage_type(
+                std::unique_ptr<any_storage_type, Dtor> tmp(a.allocate(1), Dtor(a, 1));
+                ::new ((void*)tmp.get()) any_storage_type(
                     m_pair.first(), Alloc(a)
                   );
                 return tmp.release();
             }
             
-            storage_base* copy(void* dest) const
+            any_storage_base* copy(void* dest) const
             {
                 return 
-                  ::new (dest) storage_type(
+                  ::new (dest) any_storage_type(
                     m_pair.first()
                   , m_pair.second()
                   );
             }
             
-            storage_base* move(void* dest)
+            any_storage_base* move(void* dest)
             {
                 return 
-                  ::new (dest) storage_type(
+                  ::new (dest) any_storage_type(
                     elib::move(m_pair.first())
                   , elib::move(m_pair.second())
                   );
@@ -129,7 +129,7 @@ namespace elib
             void destroy_deallocate() noexcept
             {
                 using NewAlloc = typename 
-                    Alloc::template rebind<storage_type>::other;
+                    Alloc::template rebind<any_storage_type>::other;
                 NewAlloc a(m_pair.second());
                 m_pair.~compressed_pair<ValueType, Alloc>();
                 a.deallocate(this, 1);
@@ -213,7 +213,7 @@ namespace elib
           : m_base_ptr(nullptr)
         {
             using StoredValue = aux::decay_t<ValueType>;
-            using Storage = storage_type<StoredValue>;
+            using Storage = any_storage_type<StoredValue>;
             
             if (store_locally<Storage>::value) {
                 m_base_ptr = ::new ((void*)&m_buff) Storage(elib::forward<ValueType>(value));
@@ -247,7 +247,7 @@ namespace elib
             using StoredValue = aux::decay_t<ValueType>;
             using StoredAlloc = typename Allocator::template rebind<StoredValue>::other;
             
-            using Storage = storage_type<StoredValue, StoredAlloc>;
+            using Storage = any_storage_type<StoredValue, StoredAlloc>;
             if (store_locally<Storage>::value) {
                 m_base_ptr = ::new ((void*)&m_buff) Storage(
                     elib::forward<ValueType>(value)
@@ -318,7 +318,7 @@ namespace elib
         {
             if (m_stored_locally() && other.m_stored_locally()) {
                 buffer_t tmp_buff;
-                storage_base* tmp_ptr = m_base()->move((void*)&tmp_buff);
+                any_storage_base* tmp_ptr = m_base()->move((void*)&tmp_buff);
                 m_base()->destroy();
                 m_base_ptr = other.m_base()->move(m_buff_ptr());
                 other.m_base()->destroy();
@@ -362,14 +362,14 @@ namespace elib
         }
 
     private:
-        using buffer_t = any_detail::buffer_t;
-        using storage_base = any_detail::storage_base;
+        using buffer_t = detail::buffer_t;
+        using any_storage_base = detail::any_storage_base;
         
         template <class ValueType, class Alloc = std::allocator<ValueType>>
-        using storage_type = any_detail::storage_type<ValueType, Alloc>;
+        using any_storage_type = detail::any_storage_type<ValueType, Alloc>;
         
         template <class StorageType>
-        using store_locally = any_detail::store_locally<StorageType>;
+        using store_locally = detail::store_locally<StorageType>;
         
     private:
         void * m_buff_ptr() noexcept
@@ -382,14 +382,14 @@ namespace elib
             return static_cast<void const*>(&m_buff);
         }
         
-        storage_base const* m_base() const noexcept
+        any_storage_base const* m_base() const noexcept
         {
-            return static_cast<storage_base const *>(m_base_ptr);
+            return static_cast<any_storage_base const *>(m_base_ptr);
         }
         
-        storage_base * m_base() noexcept
+        any_storage_base * m_base() noexcept
         {
-            return static_cast<storage_base *>(m_base_ptr);
+            return static_cast<any_storage_base *>(m_base_ptr);
         }
         
         bool m_stored_locally() const noexcept

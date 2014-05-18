@@ -14,9 +14,9 @@ namespace elib { namespace aux
         ////////////////////////////////////////////////////////////////////////
         template <class T, class U>
         inline T exchange_impl(T & obj, U && new_val, elib::true_) 
-            noexcept(noexcept(T(elib::move_if_noexcept(obj))))
+            noexcept(noexcept(T(elib::move(obj))))
         {
-            T old_val = elib::move_if_noexcept(obj);
+            T old_val = elib::move(obj);
             obj = elib::forward<U>(new_val);
             return old_val;
         }

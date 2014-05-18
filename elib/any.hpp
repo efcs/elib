@@ -19,6 +19,9 @@ namespace elib
     class bad_any_cast : std::bad_cast
     {
     public:
+        bad_any_cast() noexcept 
+        {}
+        
         virtual const char* what() const noexcept
         {
             return "bad any cast";

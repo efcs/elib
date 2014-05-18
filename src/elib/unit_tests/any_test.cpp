@@ -123,6 +123,13 @@ using large_value2 = basic_large_value<2>;
 
 BOOST_AUTO_TEST_SUITE(elib_any_test_suite)
 
+/// Mostly for code coverage
+BOOST_AUTO_TEST_CASE(bad_any_cast_test)
+{
+    const elib::bad_any_cast x;
+    BOOST_CHECK(x.what());
+}
+
 BOOST_AUTO_TEST_CASE(default_ctor_test)
 {
     static_assert(
@@ -359,7 +366,7 @@ BOOST_AUTO_TEST_CASE(empty_small_swap_member_test)
     any a1;
     any a2(small_value{});
     a1.swap(a2);
-    BOOST_CHECK(a1.empty());
+    BOOST_CHECK(not a1.empty());
     BOOST_CHECK(a2.empty());
     BOOST_CHECK(a1.type() == typeid(small_value));
     BOOST_CHECK(a2.type() == typeid(void));
@@ -370,7 +377,7 @@ BOOST_AUTO_TEST_CASE(empty_large_swap_member_test)
     any a1;
     any a2(large_value{});
     a1.swap(a2);
-    BOOST_CHECK(a1.empty());
+    BOOST_CHECK(not a1.empty());
     BOOST_CHECK(a2.empty());
     BOOST_CHECK(a1.type() == typeid(large_value));
     BOOST_CHECK(a2.type() == typeid(void));

@@ -82,12 +82,9 @@ namespace elib
               : m_pair(v, a)
             {}
             
-            any_storage_type(ValueType const & v, Alloc && a)
-              : m_pair(v, elib::move(a))
-            {}
-            
-            any_storage_type(ValueType && v, Alloc && a)
-              : m_pair(elib::move(v), elib::move(a))
+    
+            any_storage_type(ValueType && v, Alloc const & a)
+              : m_pair(elib::move(v), a)
             {}
             
         public:

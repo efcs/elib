@@ -717,4 +717,12 @@ BOOST_AUTO_TEST_CASE(large_value_throwing_any_cast_test)
     }
 }
 
+/// Rvalue version is the same as all the lvalue versions
+/// This test is for coverage only
+BOOST_AUTO_TEST_CASE(throwing_rvalue_any_cast_test)
+{
+    any a(small_value{});
+    BOOST_CHECK_NO_THROW(elib::any_cast<small_value>(elib::move(a)));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

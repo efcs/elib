@@ -129,5 +129,6 @@ namespace elib { namespace fs
         file_type m_type;
         perms m_perms;
     };
+    
 }}                                                        // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_FILE_STATUS_HPP */

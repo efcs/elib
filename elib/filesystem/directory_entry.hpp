@@ -108,7 +108,6 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         file_status m_get_symlink_status(std::error_code *ec=nullptr) const
         {
             if (!status_known(m_symlink_status)) {
@@ -119,7 +118,6 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         fs::path m_path;
         
         // Although these are not atomic to adjust, mutability allows
@@ -131,5 +129,5 @@ namespace elib { namespace fs
     }; // class directory_entry
       
     
-}}                                                          // namespace elib
+}}                                                        // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_DIRECTORY_ENTRY_HPP */

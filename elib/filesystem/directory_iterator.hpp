@@ -25,7 +25,6 @@ namespace elib { namespace fs
         skip_permission_denied
     };
     
-    
     namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
@@ -61,7 +60,6 @@ namespace elib { namespace fs
     }                                                       // namespace detail
 
     ////////////////////////////////////////////////////////////////////////////
-    //
     class directory_iterator
       : public std::iterator<std::input_iterator_tag, directory_entry>
     {
@@ -108,7 +106,6 @@ namespace elib { namespace fs
         { return m_increment(&ec); }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         bool operator==(const directory_iterator& rhs) const noexcept
         { return m_stream.get() == rhs.m_stream.get(); }
         
@@ -134,7 +131,6 @@ namespace elib { namespace fs
     };                                                 // class directory_entry
     
     ////////////////////////////////////////////////////////////////////////////
-    // 
     inline directory_iterator const & 
     begin(directory_iterator const & iter) noexcept
     { 
@@ -148,14 +144,13 @@ namespace elib { namespace fs
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     class recursive_directory_iterator
       : public std::iterator<std::input_iterator_tag,  directory_entry>
     {
     public:
         // constructors and destructor
         recursive_directory_iterator() noexcept
-        { }
+        {}
         
         explicit recursive_directory_iterator(const path& p,
                     directory_options xoptions = directory_options::none)
@@ -191,7 +186,6 @@ namespace elib { namespace fs
         { return &(*(m_stack_ptr->top())); }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         recursive_directory_iterator& operator++()
         { return m_increment(); }
         
@@ -206,12 +200,10 @@ namespace elib { namespace fs
         { return m_increment(&ec); }
 
         ////////////////////////////////////////////////////////////////////////
-        //
         directory_options options() const noexcept
         { return m_options; }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         int depth() const
         {
             // m_stack_ptr && m_stack_ptr->size() == 0 should
@@ -220,12 +212,10 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         bool recursion_pending() const noexcept
         { return m_rec; }
            
         ////////////////////////////////////////////////////////////////////////
-        // 
         void pop()
         {
             if (!m_stack_ptr) return;
@@ -235,17 +225,14 @@ namespace elib { namespace fs
         }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         void disable_recursion_pending() noexcept
         { m_rec = false; }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         bool operator==(const recursive_directory_iterator& other) const noexcept
         { return m_stack_ptr == other.m_stack_ptr; }
         
         ////////////////////////////////////////////////////////////////////////
-        //
         bool operator!=(const recursive_directory_iterator& other) const noexcept
         { return !(*this == other);}
             

@@ -1,0 +1,6 @@
+#ifndef ELIB_VERSION_HPP
+#define ELIB_VERSION_HPP
+
+# define ELIB_VERSION 000100
+
+#endif /* ELIB_VERSION_HPP */

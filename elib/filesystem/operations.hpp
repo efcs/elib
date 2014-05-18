@@ -1,5 +1,5 @@
-#ifndef ELIB_OPERATIONS_HPP
-#define ELIB_OPERATIONS_HPP
+#ifndef ELIB_FILESYSTEM_OPERATIONS_HPP
+#define ELIB_FILESYSTEM_OPERATIONS_HPP
 
 # include <elib/filesystem/config.hpp>
 # include <elib/filesystem/path.hpp>
@@ -545,4 +545,4 @@ namespace elib { namespace fs
     { return detail::unique_path(model, &ec); }
 
 }}                                                        // namespace elib::fs
-#endif /* ELIB_OPERATIONS_HPP */
+#endif /* ELIB_FILESYSTEM_OPERATIONS_HPP */

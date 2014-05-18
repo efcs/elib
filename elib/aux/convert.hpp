@@ -32,10 +32,10 @@ namespace elib { namespace aux
     };
     
     template <class T>
-    converter<elib::remove_reference_t<T>>
+    converter<aux::remove_reference_t<T>>
     convert(T && v)
     {
-        return converter<elib::remove_reference_t<T>>(elib::forward<T>(v));
+        return converter<aux::remove_reference_t<T>>(elib::forward<T>(v));
     }
 }}                                                          // namespace elib
 namespace elib

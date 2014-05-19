@@ -16,3 +16,6 @@
 /tmp
 /local
 /test_coverage
+
+# User build files
+Makefile.user.*

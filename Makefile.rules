@@ -1,0 +1,171 @@
+
+################################################################################
+#				ElibTargets
+################################################################################
+ElibTargets := all everything e clean configure reconfigure distclean install \
+	       check check_static check_shared
+
+.PHONY: $(ElibTargets)
+
+################################################################################
+all: 
+	@ if [ ! -f build/Makefile ]; \
+		then $(error make configure must be run) ;\
+	fi
+	@ $(MAKE) --no-print-directory -C build
+
+################################################################################
+everything:
+	@ $(MAKE) --no-print-directory distclean
+	@ $(MAKE) --no-print-directory configure
+	@ $(MAKE) --no-print-directory -C build
+	@ $(MAKE) --no-print-directory check
+
+################################################################################
+e:
+	@ $(MAKE) --no-print-directory everything
+
+################################################################################	
+clean:
+	@ if [ -f build/Makefile ]; \
+		then $(MAKE) --no-print-directory -C build clean ; \
+	fi
+	
+
+################################################################################
+configure:
+	@ mkdir -p build/
+	@ cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
+
+
+################################################################################
+reconfigure: 
+	@ rm -rf ./build/ ; mkdir -p build/ 
+	@ $(MAKE) --no-print-directory configure
+	
+
+################################################################################
+distclean: 
+	@ $(MAKE) --no-print-directory clean
+	@ rm -rf ./build ./bin 
+
+
+################################################################################	
+install:
+	@ $(MAKE) --no-print-directory -C build install
+
+
+################################################################################	
+check:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo
+	@ echo === Running static tests ===
+	@ ./bin/elib_test_static --log_level=message --report_level=short
+	@ echo 
+	@ echo === Running shared tests ===
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
+
+
+################################################################################
+check_shared:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo 
+	@ echo === Running shared tests ===
+	@ ./bin/elib_test_shared --log_level=message --report_level=short
+
+
+################################################################################
+check_static:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo
+	@ echo === Running static tests ===
+	@ ./bin/elib_test_static --log_level=message --report_level=short
+
+
+################################################################################
+#				ElibToolTargets
+################################################################################
+
+ElibToolTargets := scan scan_test scan_build valgrind_check coverage \
+		   batch_build_command batch_build batch_build_shared batch_build_static
+
+.PHONY: $(ElibTargets)
+
+################################################################################
+scan:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf cov-int
+	@ rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
+	@ cov-build --dir cov-int $(MAKE) --no-print-directory -C build all
+
+
+################################################################################
+scan_test:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
+	@ $(MAKE) --no-print-directory -C build all
+
+
+################################################################################
+scan_build:
+	@ rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make --no-print-directory all; cd ..
+
+
+################################################################################
+valgrind_check:
+	@ echo === Building tests ===
+	@ $(MAKE) --no-print-directory -C build
+	@ echo 
+	@ echo === Running shared tests ===
+	@ valgrind -v --show-reachable=yes --leak-check=full ./bin/elib_test_shared --log_level=message --report_level=short
+
+
+################################################################################
+coverage:
+	@ $(MAKE) --no-print-directory distclean
+	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; \
+		cmake -DCMAKE_BUILD_TYPE=TEST $(ELIB_CMAKE_OPTIONS) ..  ; \
+		cd ..
+	@ $(MAKE) --no-print-directory -j$(THREADS) -C build all
+	@ rm -rf test_coverage ; mkdir -p test_coverage
+	@ cp bin/elib_test_shared build/src/
+	cd build/src ; \
+	lcov --zerocounters --directory . ; \
+	lcov --capture --initial --directory . --output-file test_coverage ; \
+	./elib_test_shared --log_level=message --report_level=short ;\
+	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
+	lcov --remove test_coverage.info '/usr/include/*' '/opt/*' 'src/*/unit_tests/*' --output-file test_coverage.info ;\
+	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
+
+################################################################################
+ifdef BATCH_VERBOSE
+batch_build_command:
+	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all
+else
+batch_build_command:
+	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all  1> /dev/null
+endif
+
+
+################################################################################
+batch_build:
+	@ $(MAKE) --no-print-directory distclean
+	@ $(MAKE) --no-print-directory configure HEADER_TESTS=ON
+	@ $(MAKE) --no-print-directory batch_build_command
+	@ $(MAKE) --no-print-directory check_shared
+	@ $(MAKE) --no-print-directory check_static
+
+batch_build_shared:
+	@ $(MAKE) --no-print-directory distclean
+	@ $(MAKE) --no-print-directory configure HEADER_TESTS=ON
+	@ $(MAKE) --no-print-directory batch_build_command
+	@ $(MAKE) --no-print-directory check_shared
+
+batch_build_static:
+	@ $(MAKE) --no-print-directory distclean
+	@ $(MAKE) --no-print-directory configure HEADER_TESTS=ON
+	@ $(MAKE) --no-print-directory batch_build_command
+	@ $(MAKE) --no-print-directory check_static

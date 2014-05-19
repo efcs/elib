@@ -187,10 +187,10 @@ namespace elib
           : m_store_ptr(nullptr)
         {
             if (other.m_stored_locally()) {
-                m_store_ptr = other.m_base_ptr()->copy((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->copy((void*)&m_buff);
             }
             else if (other.m_stored_remotely()) {
-                m_store_ptr = other.m_base_ptr()->copy();
+                m_store_ptr = other.m_store_ptr->copy();
             }
         }
         
@@ -199,7 +199,7 @@ namespace elib
           : m_store_ptr(nullptr)
         {
             if (other.m_stored_locally()) {
-                m_store_ptr = other.m_base_ptr()->move((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->move((void*)&m_buff);
             } 
             else if (other.m_stored_remotely()) {
                 m_store_ptr = other.m_store_ptr;
@@ -291,7 +291,7 @@ namespace elib
         {
             clear();
             if (other.m_stored_locally()) {
-                m_store_ptr = other.m_base_ptr()->move((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->move((void*)&m_buff);
             } 
             else if (other.m_stored_remotely()) {
                 m_store_ptr = other.m_store_ptr;
@@ -315,10 +315,10 @@ namespace elib
         void clear() noexcept
         {
             if (m_stored_locally()) {
-                m_base_ptr()->destroy();
+                m_store_ptr->destroy();
             }
             else if (m_stored_remotely()) {
-                m_base_ptr()->destroy_deallocate();
+                m_store_ptr->destroy_deallocate();
             } 
             m_store_ptr = nullptr;
         }
@@ -330,11 +330,11 @@ namespace elib
             if (m_stored_locally() && other.m_stored_locally()) {
                 // move our value to tmp_buff, destroy our value
                 any_buffer_t tmp_buff;
-                any_storage_base* tmp_ptr = m_base_ptr()->move((void*)&tmp_buff);
-                m_base_ptr()->destroy();
+                any_storage_base* tmp_ptr = m_store_ptr->move((void*)&tmp_buff);
+                m_store_ptr->destroy();
                 // move other's value in, destroy other
-                m_store_ptr = other.m_base_ptr()->move((void*)&m_buff);
-                other.m_base_ptr()->destroy();
+                m_store_ptr = other.m_store_ptr->move((void*)&m_buff);
+                other.m_store_ptr->destroy();
                 // move tmp_buff into other. destroy tmp_buff
                 other.m_store_ptr = tmp_ptr->move((void*)&other.m_buff);
                 tmp_ptr->destroy();
@@ -343,22 +343,26 @@ namespace elib
             else if (m_stored_locally()) {
                 // move our object into others buffer. 
                 // other.m_store_base remains unchanged.
-                m_base_ptr()->move((void*)&other.m_buff);
-                m_base_ptr()->destroy();
+                m_store_ptr->move((void*)&other.m_buff);
+                m_store_ptr->destroy();
                 // steal other's remote object
                 m_store_ptr = other.m_store_ptr;
                 // point other at local object
-                other.m_store_ptr = (void*)&other.m_buff;
+                other.m_store_ptr = static_cast<any_storage_base*>(
+                    (void*)&other.m_buff
+                  );
             }
             // Our object is remote (or null), other's object is local
             else if (other.m_stored_locally()) {
-                other.m_base_ptr()->move((void*)&m_buff);
-                other.m_base_ptr()->destroy();
+                other.m_store_ptr->move((void*)&m_buff);
+                other.m_store_ptr->destroy();
                 other.m_store_ptr = m_store_ptr;
-                m_store_ptr = (void*)&m_buff;
+                m_store_ptr = static_cast<any_storage_base*>(
+                    (void*)&m_buff
+                  );
             // Both objects are remote.
             } else {               
-                void *tmp_ptr = m_store_ptr;
+                any_storage_base* tmp_ptr = m_store_ptr;
                 m_store_ptr = other.m_store_ptr;
                 other.m_store_ptr = tmp_ptr;
             }
@@ -378,7 +382,7 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         std::type_info const & type() const noexcept
         {
-            return m_store_ptr ? m_base_ptr()->target_type() 
+            return m_store_ptr ? m_store_ptr->target_type() 
                               : typeid(void);
         }
 
@@ -394,19 +398,10 @@ namespace elib
         
     private:
         
-        any_storage_base const* m_base_ptr() const noexcept
-        {
-            return static_cast<any_storage_base const *>(m_store_ptr);
-        }
-        
-        any_storage_base * m_base_ptr() noexcept
-        {
-            return static_cast<any_storage_base *>(m_store_ptr);
-        }
-        
         bool m_stored_locally() const noexcept
         {
-            return m_store_ptr == static_cast<void const*>(&m_buff);
+            return static_cast<void const*>(m_store_ptr) 
+                == static_cast<void const*>(&m_buff);
         }
         
         bool m_stored_remotely() const noexcept
@@ -423,7 +418,7 @@ namespace elib
         
     private:
         any_buffer_t m_buff;
-        void* m_store_ptr;
+        any_storage_base* m_store_ptr;
     };                                                      // class any
     
     ////////////////////////////////////////////////////////////////////////////
@@ -437,7 +432,7 @@ namespace elib
     inline ValueType const * any_cast(any const * v) noexcept
     {
         return v && v->m_store_ptr 
-          ? static_cast<ValueType const *>(v->m_base_ptr()->target_if(typeid(ValueType)))
+          ? static_cast<ValueType const *>(v->m_store_ptr->target_if(typeid(ValueType)))
           : nullptr;
     }
     
@@ -446,7 +441,7 @@ namespace elib
     inline ValueType * any_cast(any * v) noexcept
     {
         return v && v->m_store_ptr 
-          ? static_cast<ValueType*>(v->m_base_ptr()->target_if(typeid(ValueType))) 
+          ? static_cast<ValueType*>(v->m_store_ptr->target_if(typeid(ValueType))) 
           : nullptr;
     }
     

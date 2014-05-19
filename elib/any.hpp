@@ -96,7 +96,10 @@ namespace elib
                 using NewAlloc = typename Alloc::template rebind<any_storage_type>::other;
                 NewAlloc a(m_pair.second());
                 using Dtor = allocator_destructor<NewAlloc>;
-                std::unique_ptr<any_storage_type, Dtor> tmp(a.allocate(1), Dtor(a, 1));
+                
+                std::unique_ptr<any_storage_type, Dtor> tmp(
+                    a.allocate(1), Dtor(a, 1)
+                  );
                 ::new ((void*)tmp.get()) any_storage_type(
                     m_pair.first(), Alloc(a)
                   );
@@ -157,14 +160,14 @@ namespace elib
         };
         
         ////////////////////////////////////////////////////////////////////////
-        using buffer_t = aux::aligned_storage_t<3*sizeof(void*)>;
+        using any_buffer_t = aux::aligned_storage_t<3*sizeof(void*)>;
         
         ////////////////////////////////////////////////////////////////////////
         template <class StorageType>
         using store_locally = 
         elib::and_c<
-            sizeof(StorageType) <= sizeof(buffer_t)
-          , aux::alignment_of<buffer_t>::value 
+            sizeof(StorageType) <= sizeof(any_buffer_t)
+          , aux::alignment_of<any_buffer_t>::value 
                 % std::alignment_of<StorageType>::value == 0
           , aux::is_nothrow_move_constructible<typename StorageType::value_type>::value
         >;
@@ -176,31 +179,31 @@ namespace elib
     public:
         ////////////////////////////////////////////////////////////////////////
         any() noexcept
-          : m_base_ptr(nullptr)
+          : m_store_ptr(nullptr)
         {}
         
         ////////////////////////////////////////////////////////////////////////
         any(any const & other)
-          : m_base_ptr(nullptr)
+          : m_store_ptr(nullptr)
         {
-            if (other.m_base_ptr == other.m_buff_ptr()) {
-                m_base_ptr = other.m_base()->copy(m_buff_ptr());
+            if (other.m_stored_locally()) {
+                m_store_ptr = other.m_base_ptr()->copy((void*)&m_buff);
             }
-            else if (other.m_base_ptr) {
-                m_base_ptr = other.m_base()->copy();
+            else if (other.m_stored_remotely()) {
+                m_store_ptr = other.m_base_ptr()->copy();
             }
         }
         
         ////////////////////////////////////////////////////////////////////////
         any(any && other)
-          : m_base_ptr(nullptr)
+          : m_store_ptr(nullptr)
         {
-            if (other.m_base_ptr == other.m_buff_ptr()) {
-                m_base_ptr = other.m_base()->move(m_buff_ptr());
+            if (other.m_stored_locally()) {
+                m_store_ptr = other.m_base_ptr()->move((void*)&m_buff);
             } 
-            else if (other.m_base_ptr) {
-                m_base_ptr = other.m_base_ptr;
-                other.m_base_ptr = nullptr;
+            else if (other.m_stored_remotely()) {
+                m_store_ptr = other.m_store_ptr;
+                other.m_store_ptr = nullptr;
             }
         }
         
@@ -210,13 +213,15 @@ namespace elib
           , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<ValueType>, any>::value)
           >
         any(ValueType && value)
-          : m_base_ptr(nullptr)
+          : m_store_ptr(nullptr)
         {
             using StoredValue = aux::decay_t<ValueType>;
             using Storage = any_storage_type<StoredValue>;
             
             if (store_locally<Storage>::value) {
-                m_base_ptr = ::new ((void*)&m_buff) Storage(elib::forward<ValueType>(value));
+                m_store_ptr = ::new ((void*)&m_buff) Storage(
+                    elib::forward<ValueType>(value)
+                  );
             } else {
                 using Alloc = typename Storage::allocator_type::template rebind<Storage>::other;
                 using Dtor = allocator_destructor<Alloc>;
@@ -226,14 +231,14 @@ namespace elib
                     elib::forward<ValueType>(value)
                   , typename Storage::allocator_type(a)
                   );
-                m_base_ptr = tmp.release();
+                m_store_ptr = tmp.release();
             }
         }
         
         ////////////////////////////////////////////////////////////////////////
         template <class Allocator>
         any(std::allocator_arg_t, Allocator const &) noexcept
-          : m_base_ptr(nullptr)
+          : m_store_ptr(nullptr)
         {}
         
         ////////////////////////////////////////////////////////////////////////
@@ -242,27 +247,32 @@ namespace elib
           , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<ValueType>, any>::value)
           >
         any(std::allocator_arg_t, Allocator const & alloc, ValueType && value)
-          : m_base_ptr(nullptr)
+          : m_store_ptr(nullptr)
         {
             using StoredValue = aux::decay_t<ValueType>;
-            using StoredAlloc = typename Allocator::template rebind<StoredValue>::other;
-            
+            using StoredAlloc = typename Allocator::template 
+                rebind<StoredValue>::other;
             using Storage = any_storage_type<StoredValue, StoredAlloc>;
+            
             if (store_locally<Storage>::value) {
-                m_base_ptr = ::new ((void*)&m_buff) Storage(
+                m_store_ptr = ::new ((void*)&m_buff) Storage(
                     elib::forward<ValueType>(value)
                   , StoredAlloc(alloc)
                   );
             } else {
-                using OtherAlloc = typename Allocator::template rebind<Storage>::other;
+                using OtherAlloc = typename Allocator::template
+                    rebind<Storage>::other;
                 using Dtor = allocator_destructor<OtherAlloc>;
+                
                 OtherAlloc a(alloc);
-                std::unique_ptr<Storage, Dtor> tmp(a.allocate(1), Dtor(a, 1));
+                std::unique_ptr<Storage, Dtor> tmp(
+                    a.allocate(1), Dtor(a, 1)
+                  );
                 ::new ((void*)tmp.get()) Storage(
                     elib::forward<ValueType>(value)
                   , StoredAlloc(a)
                   );
-                m_base_ptr = tmp.release();
+                m_store_ptr = tmp.release();
             }
         }
         
@@ -281,11 +291,11 @@ namespace elib
         {
             clear();
             if (other.m_stored_locally()) {
-                m_base_ptr = other.m_base()->move((void*)&m_buff);
+                m_store_ptr = other.m_base_ptr()->move((void*)&m_buff);
             } 
             else if (other.m_stored_remotely()) {
-                m_base_ptr = other.m_base_ptr;
-                other.m_base_ptr = nullptr;
+                m_store_ptr = other.m_store_ptr;
+                other.m_store_ptr = nullptr;
             }
             return *this;
         }
@@ -305,48 +315,59 @@ namespace elib
         void clear() noexcept
         {
             if (m_stored_locally()) {
-                m_base()->destroy();
+                m_base_ptr()->destroy();
             }
             else if (m_stored_remotely()) {
-                m_base()->destroy_deallocate();
+                m_base_ptr()->destroy_deallocate();
             } 
-            m_base_ptr = nullptr;
+            m_store_ptr = nullptr;
         }
         
         ////////////////////////////////////////////////////////////////////////
         void swap(any & other) noexcept
         {
+            // both objects are local
             if (m_stored_locally() && other.m_stored_locally()) {
-                buffer_t tmp_buff;
-                any_storage_base* tmp_ptr = m_base()->move((void*)&tmp_buff);
-                m_base()->destroy();
-                m_base_ptr = other.m_base()->move(m_buff_ptr());
-                other.m_base()->destroy();
-                other.m_base_ptr = tmp_ptr->move(other.m_buff_ptr());
+                // move our value to tmp_buff, destroy our value
+                any_buffer_t tmp_buff;
+                any_storage_base* tmp_ptr = m_base_ptr()->move((void*)&tmp_buff);
+                m_base_ptr()->destroy();
+                // move other's value in, destroy other
+                m_store_ptr = other.m_base_ptr()->move((void*)&m_buff);
+                other.m_base_ptr()->destroy();
+                // move tmp_buff into other. destroy tmp_buff
+                other.m_store_ptr = tmp_ptr->move((void*)&other.m_buff);
                 tmp_ptr->destroy();
             } 
+            // Our object is local, other's object is remote (or null)
             else if (m_stored_locally()) {
-                m_base()->move(other.m_buff_ptr());
-                m_base()->destroy();
-                m_base_ptr = other.m_base_ptr;
-                other.m_base_ptr = other.m_buff_ptr();
+                // move our object into others buffer. 
+                // other.m_store_base remains unchanged.
+                m_base_ptr()->move((void*)&other.m_buff);
+                m_base_ptr()->destroy();
+                // steal other's remote object
+                m_store_ptr = other.m_store_ptr;
+                // point other at local object
+                other.m_store_ptr = (void*)&other.m_buff;
             }
+            // Our object is remote (or null), other's object is local
             else if (other.m_stored_locally()) {
-                other.m_base()->move(m_buff_ptr());
-                other.m_base()->destroy();
-                other.m_base_ptr = m_base_ptr;
-                m_base_ptr = m_buff_ptr();
-            } else { /* both stored remotly */
-                void *tmp_ptr = m_base_ptr;
-                m_base_ptr = other.m_base_ptr;
-                other.m_base_ptr = tmp_ptr;
+                other.m_base_ptr()->move((void*)&m_buff);
+                other.m_base_ptr()->destroy();
+                other.m_store_ptr = m_store_ptr;
+                m_store_ptr = (void*)&m_buff;
+            // Both objects are remote.
+            } else {               
+                void *tmp_ptr = m_store_ptr;
+                m_store_ptr = other.m_store_ptr;
+                other.m_store_ptr = tmp_ptr;
             }
         }
         
         ////////////////////////////////////////////////////////////////////////
         bool empty() const noexcept
         {
-            return (m_base_ptr == nullptr);
+            return (m_store_ptr == nullptr);
         }
         
         explicit operator bool() const noexcept
@@ -357,12 +378,12 @@ namespace elib
         ////////////////////////////////////////////////////////////////////////
         std::type_info const & type() const noexcept
         {
-            return m_base_ptr ? m_base()->target_type() 
+            return m_store_ptr ? m_base_ptr()->target_type() 
                               : typeid(void);
         }
 
     private:
-        using buffer_t = detail::buffer_t;
+        using any_buffer_t = detail::any_buffer_t;
         using any_storage_base = detail::any_storage_base;
         
         template <class ValueType, class Alloc = std::allocator<ValueType>>
@@ -372,34 +393,25 @@ namespace elib
         using store_locally = detail::store_locally<StorageType>;
         
     private:
-        void * m_buff_ptr() noexcept
+        
+        any_storage_base const* m_base_ptr() const noexcept
         {
-            return static_cast<void*>(&m_buff);
+            return static_cast<any_storage_base const *>(m_store_ptr);
         }
         
-        void const* m_buff_ptr() const noexcept
+        any_storage_base * m_base_ptr() noexcept
         {
-            return static_cast<void const*>(&m_buff);
-        }
-        
-        any_storage_base const* m_base() const noexcept
-        {
-            return static_cast<any_storage_base const *>(m_base_ptr);
-        }
-        
-        any_storage_base * m_base() noexcept
-        {
-            return static_cast<any_storage_base *>(m_base_ptr);
+            return static_cast<any_storage_base *>(m_store_ptr);
         }
         
         bool m_stored_locally() const noexcept
         {
-            return m_base_ptr == m_buff_ptr();
+            return m_store_ptr == (void*)&m_buff;
         }
         
         bool m_stored_remotely() const noexcept
         {
-            return (m_base_ptr && not m_stored_locally());
+            return (m_store_ptr && not m_stored_locally());
         }
 
     private:
@@ -410,8 +422,8 @@ namespace elib
         template <class T> friend T * any_cast(any *) noexcept;
         
     private:
-        buffer_t m_buff;
-        void* m_base_ptr;
+        any_buffer_t m_buff;
+        void* m_store_ptr;
     };                                                      // class any
     
     ////////////////////////////////////////////////////////////////////////////
@@ -424,8 +436,8 @@ namespace elib
     template <class ValueType>
     inline ValueType const * any_cast(any const * v) noexcept
     {
-        return v && v->m_base_ptr 
-          ? static_cast<ValueType const *>(v->m_base()->target_if(typeid(ValueType)))
+        return v && v->m_store_ptr 
+          ? static_cast<ValueType const *>(v->m_base_ptr()->target_if(typeid(ValueType)))
           : nullptr;
     }
     
@@ -433,13 +445,12 @@ namespace elib
     template <class ValueType>
     inline ValueType * any_cast(any * v) noexcept
     {
-        return v && v->m_base_ptr 
-          ? static_cast<ValueType*>(v->m_base()->target_if(typeid(ValueType))) 
+        return v && v->m_store_ptr 
+          ? static_cast<ValueType*>(v->m_base_ptr()->target_if(typeid(ValueType))) 
           : nullptr;
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    // TODO Don't accept rvalue references
     template <class ValueType>
     ValueType any_cast(any const & v)
     {

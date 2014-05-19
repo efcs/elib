@@ -46,22 +46,6 @@ struct basic_small_value
 };
 
 
-template <int Dummy>
-inline bool operator==(
-    basic_small_value<Dummy> const & lhs
-  , basic_small_value<Dummy> const & rhs) noexcept
-{
-    return lhs.value == rhs.value;
-}
-
-template <int Dummy>
-inline bool operator !=(
-    basic_small_value<Dummy> const & lhs
-  , basic_small_value<Dummy> const & rhs) noexcept
-{
-    return lhs.value != rhs.value;
-}
-
 using small_value = basic_small_value<>;
 using small_value2 = basic_small_value<2>;
 
@@ -97,26 +81,10 @@ struct basic_large_value
     }
 
     int value;
-
 private:
-    char m_dummy[1024];
+    // sizeof(value) + sizeof(any_buffer_t) is bigger than a small object
+    detail::any_buffer_t m_dummy;
 };
-
-template <int Dummy>
-inline bool operator==(
-    basic_large_value<Dummy> const & lhs
-  , basic_large_value<Dummy> const & rhs) noexcept
-{
-    return lhs.value == rhs.value;
-}
-
-template <int Dummy>
-inline bool operator !=(
-    basic_large_value<Dummy> const & lhs
-  , basic_large_value<Dummy> const & rhs) noexcept
-{
-    return lhs.value != rhs.value;
-}
 
 using large_value = basic_large_value<>;
 using large_value2 = basic_large_value<2>;

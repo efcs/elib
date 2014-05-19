@@ -1,5 +1,10 @@
 SHELL := /bin/bash
 BUILD ?= DEBUG
+CXX1Y ?= OFF
+UNIT_TESTS ?= ON
+HEADER_TESTS ?= OFF
+ALL_WARNINGS ?= ON
+ASSERT_CONFIG ?= OFF
 THREADS ?= 2
 SILENT ?= 1
 
@@ -32,12 +37,18 @@ clean:
 .PHONY: configure
 configure:
 	@ mkdir -p build/
-	@ cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; cd ..
+	@ cd build/ ; cmake -DCMAKE_BUILD_TYPE=$(BUILD) \
+			    -DCONFIG_CXX1Y=$(CXX1Y) \
+			    -DCONFIG_UNIT_TESTS=$(UNIT_TESTS) \
+			    -DCONFIG_HEADER_TESTS=$(HEADER_TESTS) \
+			    -DCONFIG_ALL_WARNINGS=$(ALL_WARNINGS) \
+			    -DCONFIG_ELIB_ASSERT_CONFIG=$(ASSERT_CONFIG)\
+			    $(ELIB_CMAKE_OPTIONS) .. ; cd ..
 
 .PHONY: reconfigure
 reconfigure: 
 	@ rm -rf ./build/ ; mkdir -p build/ 
-	@ cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) ..  ; cd ..
+	@ $(MAKE) --no-print-directory configure
 	
 .PHONY: distclean
 distclean: 

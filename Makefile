@@ -6,19 +6,21 @@ SILENT ?= 1
 
 .PHONY: all
 all: 
-	@ mkdir -p build/ ; cd build/ ; cmake .. ; cd ..
+	@ if [ ! -f build/Makefile ]; \
+		then $(MAKE) --no-print-directory configure ; \
+	fi
 	@ $(MAKE) --no-print-directory -C build
 
 .PHONY: e
 e:
 	@ $(MAKE) --no-print-directory distclean
-	@ $(MAKE) --no-print-directory redep
+	@ $(MAKE) --no-print-directory reconfigure
 	@ $(MAKE) --no-print-directory -C build
 	
 .PHONY: ej
 ej:
 	@ $(MAKE) --no-print-directory distclean
-	@ $(MAKE) --no-print-directory redep
+	@ $(MAKE) --no-print-directory reconfigure
 	@ $(MAKE) --no-print-directory -j$(THREADS) -C build
 	
 .PHONY: clean
@@ -27,8 +29,13 @@ clean:
 		then $(MAKE) --no-print-directory -C build clean ; \
 	fi
 	
-.PHONY: redep
-redep: 
+.PHONY: configure
+configure:
+	@ mkdir -p build/
+	@ cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; cd ..
+
+.PHONY: reconfigure
+reconfigure: 
 	@ rm -rf ./build/ ; mkdir -p build/ 
 	@ cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) ..  ; cd ..
 	

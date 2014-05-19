@@ -406,7 +406,7 @@ namespace elib
         
         bool m_stored_locally() const noexcept
         {
-            return m_store_ptr == (void*)&m_buff;
+            return m_store_ptr == static_cast<void const*>(&m_buff);
         }
         
         bool m_stored_remotely() const noexcept

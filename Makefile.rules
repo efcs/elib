@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 
 ################################################################################
 #				ElibTargets
@@ -9,80 +10,80 @@ ElibTargets := all everything e clean configure reconfigure distclean install \
 
 ################################################################################
 all: 
-	@ if [ ! -f build/Makefile ]; \
-		then $(error make configure must be run) ;\
-	fi
-	@ $(MAKE) --no-print-directory -C build
+ifeq ($(wildcard build/Makefile),)
+	$(error make configure must be run)
+else
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+endif
 
 ################################################################################
 everything:
-	@ $(MAKE) --no-print-directory distclean
-	@ $(MAKE) --no-print-directory configure
-	@ $(MAKE) --no-print-directory -C build
-	@ $(MAKE) --no-print-directory check
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) $(MAKE) --no-print-directory configure
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+	$(CMD_VERB) $(MAKE) --no-print-directory check
 
 ################################################################################
 e:
-	@ $(MAKE) --no-print-directory everything
+	$(CMD_VERB) $(MAKE) --no-print-directory everything
 
 ################################################################################	
 clean:
-	@ if [ -f build/Makefile ]; \
+	$(CMD_VERB) if [ -f build/Makefile ]; \
 		then $(MAKE) --no-print-directory -C build clean ; \
 	fi
 	
 
 ################################################################################
 configure:
-	@ mkdir -p build/
-	@ cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
+	$(CMD_VERB) rm -rf ./build/ ; mkdir -p build/
+	$(CMD_VERB) cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
 
 
 ################################################################################
 reconfigure: 
-	@ rm -rf ./build/ ; mkdir -p build/ 
-	@ $(MAKE) --no-print-directory configure
+	$(CMD_VERB) cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
 	
 
 ################################################################################
 distclean: 
-	@ $(MAKE) --no-print-directory clean
-	@ rm -rf ./build ./bin 
+	$(CMD_VERB) $(MAKE) --no-print-directory clean
+	$(CMD_VERB) rm -rf ./build ./bin 
 
 
 ################################################################################	
 install:
-	@ $(MAKE) --no-print-directory -C build install
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build install
 
 
 ################################################################################	
 check:
-	@ echo === Building tests ===
-	@ $(MAKE) --no-print-directory -C build
-	@ echo
-	@ echo === Running static tests ===
-	@ ./bin/elib_test_static --log_level=message --report_level=short
-	@ echo 
-	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	$(CMD_VERB) echo === Building tests ===
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+	$(CMD_VERB) echo
+	$(CMD_VERB) echo === Running static tests ===
+	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short
+	$(CMD_VERB) echo 
+	$(CMD_VERB) echo === Running shared tests ===
+	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short
 
 
 ################################################################################
 check_shared:
-	@ echo === Building tests ===
-	@ $(MAKE) --no-print-directory -C build
-	@ echo 
-	@ echo === Running shared tests ===
-	@ ./bin/elib_test_shared --log_level=message --report_level=short
+	$(CMD_VERB) echo === Building tests ===
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+	$(CMD_VERB) echo 
+	$(CMD_VERB) echo === Running shared tests ===
+	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short
 
 
 ################################################################################
 check_static:
-	@ echo === Building tests ===
-	@ $(MAKE) --no-print-directory -C build
-	@ echo
-	@ echo === Running static tests ===
-	@ ./bin/elib_test_static --log_level=message --report_level=short
+	$(CMD_VERB) echo === Building tests ===
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+	$(CMD_VERB) echo
+	$(CMD_VERB) echo === Running static tests ===
+	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short
 
 
 ################################################################################
@@ -96,42 +97,42 @@ ElibToolTargets := scan scan_test scan_build valgrind_check coverage \
 
 ################################################################################
 scan:
-	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf cov-int
-	@ rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
-	@ cov-build --dir cov-int $(MAKE) --no-print-directory -C build all
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) rm -rf cov-int
+	$(CMD_VERB) rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
+	$(CMD_VERB) cov-build --dir cov-int $(MAKE) --no-print-directory -C build all
 
 
 ################################################################################
 scan_test:
-	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
-	@ $(MAKE) --no-print-directory -C build all
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON .. ; cd ..
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build all
 
 
 ################################################################################
 scan_build:
-	@ rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make --no-print-directory all; cd ..
+	$(CMD_VERB) rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make --no-print-directory all; cd ..
 
 
 ################################################################################
 valgrind_check:
-	@ echo === Building tests ===
-	@ $(MAKE) --no-print-directory -C build
-	@ echo 
-	@ echo === Running shared tests ===
-	@ valgrind -v --show-reachable=yes --leak-check=full ./bin/elib_test_shared --log_level=message --report_level=short
+	$(CMD_VERB) echo === Building tests ===
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+	$(CMD_VERB) echo 
+	$(CMD_VERB) echo === Running shared tests ===
+	$(CMD_VERB) valgrind -v --show-reachable=yes --leak-check=full ./bin/elib_test_shared --log_level=message --report_level=short
 
 
 ################################################################################
 coverage:
-	@ $(MAKE) --no-print-directory distclean
-	@ rm -rf build/ ; mkdir -p build/ ; cd build/ ; \
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) rm -rf build/ ; mkdir -p build/ ; cd build/ ; \
 		cmake -DCMAKE_BUILD_TYPE=TEST $(ELIB_CMAKE_OPTIONS) ..  ; \
 		cd ..
-	@ $(MAKE) --no-print-directory -j$(THREADS) -C build all
-	@ rm -rf test_coverage ; mkdir -p test_coverage
-	@ cp bin/elib_test_shared build/src/
+	$(CMD_VERB) $(MAKE) --no-print-directory -j$(THREADS) -C build all
+	$(CMD_VERB) rm -rf test_coverage ; mkdir -p test_coverage
+	$(CMD_VERB) cp bin/elib_test_shared build/src/
 	cd build/src ; \
 	lcov --zerocounters --directory . ; \
 	lcov --capture --initial --directory . --output-file test_coverage ; \
@@ -141,31 +142,29 @@ coverage:
 	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
 
 ################################################################################
+batch_build_command:
 ifdef BATCH_VERBOSE
-batch_build_command:
-	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all
+	$(CMD_VERB) $(MAKE) -j$(THREADS) --no-print-directory -C build all
 else
-batch_build_command:
-	@ $(MAKE) -j$(THREADS) --no-print-directory -C build all  1> /dev/null
+	$(CMD_VERB) $(MAKE) -j$(THREADS) --no-print-directory -C build all  1> /dev/null
 endif
 
 
 ################################################################################
 batch_build:
-	@ $(MAKE) --no-print-directory distclean
-	@ $(MAKE) --no-print-directory configure HEADER_TESTS=ON
-	@ $(MAKE) --no-print-directory batch_build_command
-	@ $(MAKE) --no-print-directory check_shared
-	@ $(MAKE) --no-print-directory check_static
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) $(MAKE) --no-print-directory configure HEADER_TESTS=ON
+	$(CMD_VERB) time $(MAKE) --no-print-directory batch_build_command
+	$(CMD_VERB) $(MAKE) --no-print-directory check
 
 batch_build_shared:
-	@ $(MAKE) --no-print-directory distclean
-	@ $(MAKE) --no-print-directory configure HEADER_TESTS=ON
-	@ $(MAKE) --no-print-directory batch_build_command
-	@ $(MAKE) --no-print-directory check_shared
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) $(MAKE) --no-print-directory configure HEADER_TESTS=ON
+	$(CMD_VERB) time $(MAKE) --no-print-directory batch_build_command
+	$(CMD_VERB) $(MAKE) --no-print-directory check_shared
 
 batch_build_static:
-	@ $(MAKE) --no-print-directory distclean
-	@ $(MAKE) --no-print-directory configure HEADER_TESTS=ON
-	@ $(MAKE) --no-print-directory batch_build_command
-	@ $(MAKE) --no-print-directory check_static
+	$(CMD_VERB) $(MAKE) --no-print-directory distclean
+	$(CMD_VERB) $(MAKE) --no-print-directory configure HEADER_TESTS=ON
+	$(CMD_VERB) time $(MAKE) --no-print-directory batch_build_command
+	$(CMD_VERB) $(MAKE) --no-print-directory check_static

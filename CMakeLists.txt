@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.7)
 
 if ( WIN32 )
-    message( FATAL_ERROR "Windows not supported!" )
+    message(FATAL_ERROR "Windows not supported")
 endif()
 
 ################################################################################

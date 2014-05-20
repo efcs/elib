@@ -1,6 +1,10 @@
 #ifndef ELIB_VERSION_HPP
 #define ELIB_VERSION_HPP
 # 
+# define ELIB_MAJOR 0
+# define ELIB_MINOR 1
+# define ELIB_PATCHLEVEL 0
+# 
 # define ELIB_VERSION 000100
 # 
 # define ELIB_LIBRARY_VERSION "0_1_0"

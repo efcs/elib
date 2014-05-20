@@ -20,7 +20,7 @@
       , #Ex " is not an exception type"                             \
     )
 
-namespace elib { namespace except
+namespace elib { namespace except { inline namespace v1
 {
 # if defined(__clang__)
 #   pragma clang diagnostic push
@@ -269,7 +269,5 @@ namespace elib { namespace except
         return e;
     }
     
-    //template <class E, class ...Tags, class ...Types>
-    //E & operator<<(E const &, elib::tuple<error_info<Tags, Types>...> const &);
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_EXCEPTION_EXCEPTION_HPP */

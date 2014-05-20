@@ -5,7 +5,7 @@
 # include <string>
 # include <system_error>
 
-namespace elib { namespace except
+namespace elib { namespace except { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     class exception;
@@ -36,7 +36,6 @@ namespace elib { namespace except
     );
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class E>
     E * current_exception_cast();
     
@@ -46,7 +45,6 @@ namespace elib { namespace except
     bool has_error_info(E const &);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class E, class Tag, class T>
     bool insert_error_info(E &, error_info<Tag, T> const &);
     
@@ -59,7 +57,6 @@ namespace elib { namespace except
     bool emplace_error_info(E &, Args &&...);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class E, class Tag, class T>
     void set_error_info(E &, error_info<Tag, T> const &);
     
@@ -67,7 +64,6 @@ namespace elib { namespace except
     void set_error_info(E &, error_info<Tag, T> &&);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class ErrorInfo, class E>
     ErrorInfo const & get_error_info(E const &);
     
@@ -75,7 +71,6 @@ namespace elib { namespace except
     ErrorInfo & get_error_info(E &);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class ErrorInfo, class E>
     typename ErrorInfo::error_info::value_type const & 
     get_error_info_value(E const &);
@@ -85,7 +80,6 @@ namespace elib { namespace except
     get_error_info_value(E &);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class E, class Tag, class T>
     E & operator<<(E &, error_info<Tag, T> const &);
     
@@ -93,7 +87,6 @@ namespace elib { namespace except
     E & operator<<(E &, error_info<Tag, T> &&);
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     namespace tags
     {
         struct api_function {};
@@ -111,13 +104,11 @@ namespace elib { namespace except
     }                                                       // namespace tags
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     using throw_func = error_info<tags::throw_func, const char*>;
     using throw_file = error_info<tags::throw_file, const char*>;
     using throw_line = error_info<tags::throw_line, unsigned>;
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     using errinfo_api_function = error_info<tags::api_function, const char*>;
     using errinfo_at_line = error_info<tags::at_line, unsigned>;
     using errinfo_errno = error_info<tags::errno_info, int>;
@@ -127,8 +118,7 @@ namespace elib { namespace except
     using errinfo_type_info_name = error_info<tags::type_info_name, std::string>;
     using errinfo_error_code = error_info<tags::error_code, std::error_code>;
     
-}}                                                          // namespace elib
-
+}}}                                                         // namespace elib
 namespace elib
 {
     using except::exception;

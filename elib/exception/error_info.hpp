@@ -10,7 +10,7 @@
       , #Type " is not an instance of error_info"                      \
     )
 
-namespace elib { namespace except
+namespace elib { namespace except { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     template <class Tag, class T> 
@@ -41,5 +41,5 @@ namespace elib { namespace except
     template <class Tag, class T>
     struct is_error_info< error_info<Tag, T> > : aux::true_ {};
     
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_EXCEPTION_ERROR_INFO_HPP */

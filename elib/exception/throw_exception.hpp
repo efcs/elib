@@ -38,7 +38,7 @@
     }
 # 
 
-namespace elib { namespace except
+namespace elib { namespace except { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     template <class E>
@@ -71,5 +71,5 @@ namespace elib { namespace except
         return (e << throw_file(file) << throw_func(func) << throw_line(line));
     }
     
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_EXCEPTION_THROW_EXCEPTION_HPP */

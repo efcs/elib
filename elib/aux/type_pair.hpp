@@ -7,14 +7,14 @@ namespace elib { namespace aux
     struct type_pair
     {
         using type = type_pair;
-        using first_type = First;
-        using second_type = Second;
+        using first = First;
+        using second = Second;
     };
     
     template <class T>
-    using first_t = typename T::first_type;
+    using first_t = typename T::first;
     
     template <class T>
-    using second_t = typename T::second_type;
+    using second_t = typename T::second;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_TYPE_PAIR_HPP */

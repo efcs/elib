@@ -1,8 +1,6 @@
 #ifndef ELIB_AUX_ANYTHING_HPP
 #define ELIB_AUX_ANYTHING_HPP
 
-/// A type that will construct from and convert to anything.
-/// It is intended for use with meta-programming. Its methods are never defined
 namespace elib { namespace aux
 {
     namespace detail

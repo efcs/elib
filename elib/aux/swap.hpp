@@ -100,7 +100,8 @@ namespace elib { namespace aux
     template <class T, class U>
     void adl_swap(T & lhs, U & rhs) noexcept(is_nothrow_swappable<T, U>::value)
     {
-        get_swap<T, U>()(lhs, rhs);
+        using std::swap;
+        swap(lhs, rhs);
     }
     
 }}                                                          // namespace elib

@@ -53,13 +53,6 @@
 # include <iostream>
 # include <cstdlib>
 
-////////////////////////////////////////////////////////////////////////////////
-// ELIB_STATIC_ASSERT
-# define ELIB_STATIC_ASSERT(...) \
-    ELIB_PP_OVERLOAD_CALL(ELIB_STATIC_ASSERT_, __VA_ARGS__)
-# 
-# define ELIB_STATIC_ASSERT_1(Pred) static_assert(Pred, "ELIB_STATIC_ASSERT")
-# define ELIB_STATIC_ASSERT_2(Pred, Msg) static_assert(Pred, Msg)
 
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_AUX_ASSERT_MACRO

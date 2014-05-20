@@ -3,7 +3,7 @@ SHELL := /bin/bash
 ################################################################################
 #				ElibTargets
 ################################################################################
-ElibTargets := all everything e clean configure reconfigure distclean install \
+ElibTargets := all everything e elib elib_static clean configure reconfigure distclean install \
 	       check check_static check_shared
 
 .PHONY: $(ElibTargets)
@@ -26,6 +26,13 @@ everything:
 ################################################################################
 e:
 	$(CMD_VERB) $(MAKE) --no-print-directory everything
+
+################################################################################
+elib:
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build elib
+
+elib_static:
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build elib_static
 
 ################################################################################	
 clean:

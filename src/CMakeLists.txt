@@ -99,7 +99,7 @@ target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 # Installation information
 install(TARGETS elib LIBRARY DESTINATION lib)
 install(TARGETS elib_static ARCHIVE DESTINATION lib)
-install(DIRECTORY ${headerDir} DESTINATION include)
+install(DIRECTORY ${ELIB_ROOT_PATH}/elib DESTINATION include)
   
 ################################################################################
 #

@@ -8,7 +8,7 @@
 # include <initializer_list>
 # include <utility> /* std::pair */
 
-namespace elib { namespace container
+namespace elib { namespace container { inline namespace v1
 {
     template <
         class Key, class T
@@ -184,7 +184,7 @@ namespace elib { namespace container
         using base_type::value_comp;
     };
     
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 namespace elib
 {
     using container::flat_map;

@@ -8,7 +8,7 @@
 # include <utility>
 # include <vector>
 
-namespace elib { namespace container 
+namespace elib { namespace container { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     namespace detail
@@ -734,5 +734,5 @@ namespace elib { namespace container
         return !(lhs < rhs);
     }
     
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_CONTAINER_DETAIL_FLAT_MAP_BASE_HPP */

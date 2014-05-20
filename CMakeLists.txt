@@ -160,10 +160,7 @@ if ( CXX_COMPILER_GCC )
         set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
     endif()
 
-    # Check C++1y config
-    if (CONFIG_CXX1Y AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9.0")
-        message(FATAL_ERROR "Insufficient GCC Version for C++1y")
-    endif()
+    
 
     set(CXX_GCC_FLAGS " -fmax-errors=5 " )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")

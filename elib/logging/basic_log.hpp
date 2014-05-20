@@ -46,7 +46,7 @@ namespace elib { namespace logging { inline namespace v1
             return m_prompts.at(l);
         }
         
-        void prompt(level_e l, const std::string &prompt)
+        void prompt(level_e l, const std::string &prompt_str)
         {
             if (! is_basic_level(l))
                 throw std::logic_error("not a valid basic level");

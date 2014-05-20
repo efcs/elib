@@ -48,7 +48,6 @@ option(CONFIG_HEADER_TESTS
 
 option(ELIB_SOURCE "Build top level source" ON)
 option(ELIB_ALGORITHM_SOURCE "Build Algorithm" ON)
-option(ELIB_ARGP_SOURCE "Build Argument Parser" ON)
 option(ELIB_AUX_SOURCE "Build aux" ON)
 option(ELIB_CONTAINER_SOURCE "Build containers" ON)
 option(ELIB_ENUMERATION_SOURCE "Build enumeration" ON)
@@ -126,6 +125,8 @@ elseif( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" )
 else()
     message( FATAL_ERROR "Compiler not supported! (${CMAKE_CXX_COMPILER_ID})" )
 endif()
+
+if (
 
 ################################################################################
 ##                        Compiler Configuration

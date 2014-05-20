@@ -66,7 +66,6 @@ set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
 ################################################################################
 include_library_if(ELIB_SOURCE             elib/build.cmake         )
 include_library_if(ELIB_ALGORITHM_SOURCE   algorithm/build.cmake    )
-include_library_if(ELIB_ARGP_SOURCE        argp/build.cmake         )
 include_library_if(ELIB_AUX_SOURCE         aux/build.cmake          )
 include_library_if(ELIB_CONTAINER_SOURCE   container/build.cmake    )
 include_library_if(ELIB_ENUMERATION_SOURCE enumeration/build.cmake  )

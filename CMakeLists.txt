@@ -126,7 +126,6 @@ else()
     message( FATAL_ERROR "Compiler not supported! (${CMAKE_CXX_COMPILER_ID})" )
 endif()
 
-if (
 
 ################################################################################
 ##                        Compiler Configuration

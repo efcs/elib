@@ -5,6 +5,9 @@
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/declval.hpp>
 # include <elib/aux/enable_if.hpp>
+# include <elib/aux/traits/is_same.hpp>
+# include <elib/aux/traits/is_move_assignable.hpp>
+# include <elib/aux/traits/is_move_constructible.hpp>
 # include <utility>
 
 namespace elib { namespace aux
@@ -13,8 +16,6 @@ namespace elib { namespace aux
     {
         namespace traits_adl_barrier
         {
-            using std::swap;
-            
             template <
                 class T, class U
               , ELIB_ENABLE_IF_VALID_EXPR(
@@ -23,26 +24,40 @@ namespace elib { namespace aux
               >
             elib::true_ is_swappable_impl(int);
             
-            template <class, class>
-            elib::false_ is_swappable_impl(long);
-            
-            
             template <
                 class T, class U
-              , bool = decltype(is_swappable_impl<T, U>(0))::value
-            >
-            struct is_nothrow_swappable_impl
-            {
-                using type = false_;
-            };
+              , ELIB_ENABLE_IF(aux::is_same<T, U>::value)
+              , ELIB_ENABLE_IF(aux::is_move_assignable<T>::value)
+              , ELIB_ENABLE_IF(aux::is_move_constructible<T>::value)
+              >
+            elib::true_ is_swappable_impl(long);
             
-            template <class T, class U>
-            struct is_nothrow_swappable_impl<T, U, true>
+            template <class, class>
+            elib::false_ is_swappable_impl(...);
+            
+            namespace swap_barrier
             {
-                using type = elib::bool_<
-                    noexcept( swap(declval< T&>(), declval<U &>()) )
-                >;
-            };
+                using std::swap;
+                
+                template <
+                    class T, class U
+                , bool = decltype(is_swappable_impl<T, U>(0))::value
+                >
+                struct is_nothrow_swappable_impl
+                {
+                    using type = false_;
+                };
+                
+                template <class T, class U>
+                struct is_nothrow_swappable_impl<T, U, true>
+                {
+                    using type = elib::bool_<
+                        noexcept( swap(declval< T&>(), declval<U &>()) )
+                    >;
+                };
+            }                                         // namespace swap_barrier
+            
+            using swap_barrier::is_nothrow_swappable_impl;
         }                                       // namespace traits_adl_barrier
         
         template <class T, class U = T>

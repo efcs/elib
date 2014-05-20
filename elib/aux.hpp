@@ -31,6 +31,7 @@
 # include <elib/aux/move.hpp>
 # include <elib/aux/no_decay.hpp>
 # include <elib/aux/none.hpp>
+# include <elib/aux/static_assert.hpp>
 # include <elib/aux/static_const.hpp>
 # include <elib/aux/swallow.hpp>
 # include <elib/aux/swap.hpp>

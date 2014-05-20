@@ -99,7 +99,7 @@
     }      
 # 
   
-namespace elib { namespace aux
+namespace elib { namespace aux 
 {
     namespace detail
     {
@@ -108,7 +108,7 @@ namespace elib { namespace aux
         ELIB_AUX_ASSERT_FUNCTION(assert_failed_noexit, std::cerr, ((void)0))
     }                                                       // namespace detail
     
-}}                                                          // namespace elib
+}}                                                           // namespace elib
 
 # undef ELIB_AUX_ASSERT_FUNCTION
 

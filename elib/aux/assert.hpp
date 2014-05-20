@@ -39,7 +39,6 @@
 #ifndef ELIB_AUX_ASSERT_HPP
 #define ELIB_AUX_ASSERT_HPP
 
-# include <elib/config.hpp>
 # include <elib/preprocessor/overload.hpp>
 # include <iostream>
 # include <cstdlib>

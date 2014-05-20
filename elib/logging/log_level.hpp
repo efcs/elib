@@ -5,7 +5,7 @@
 # include <elib/enumeration/cast.hpp>
 # include <string>
 
-namespace elib { namespace logging
+namespace elib { namespace logging { inline namespace v1
 {
         
     /* log_level is used to define what log functions are on/off
@@ -27,7 +27,7 @@ namespace elib { namespace logging
     /* the default logging level */
     constexpr level_e default_log_level = level_e::info;
 
-}}                                                          // namespace elib
+}}}                                                         // namespace elib
 namespace elib { namespace enumeration
 {
     /* level_e can be used with enum_traits */
@@ -48,11 +48,11 @@ namespace elib { namespace enumeration
         static const std::map< ::elib::logging::level_e, std::string> name_map;
     };
 }}                                                          // namespace elib
-namespace elib { namespace logging
+namespace elib { namespace logging { inline namespace v1
 {
     inline std::string to_string(level_e lv)
     {
         return enumeration::enum_cast<std::string>(lv);
     }
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_LOG_LOG_LEVEL_HPP */

@@ -9,9 +9,11 @@
 # include <mutex>
 # include <string>
 # include <iosfwd>
+# include <ostream>
+# include <stdexcept>
 
 
-namespace elib { namespace logging 
+namespace elib { namespace logging { inline namespace v1
 {
     
 # if defined(__clang__)
@@ -34,12 +36,35 @@ namespace elib { namespace logging
         /* set & get the prompt for each log level,
         * the prompt is printed before the message for that level 
         * valid levels: debug-fatal */
-        const std::string & prompt(level_e l) const;
-        void prompt(level_e l, const std::string &prompt);
+        const std::string & prompt(level_e l) const
+        {
+            /* throw if getting non-basic level */
+            if (! is_basic_level(l))
+                throw std::logic_error("not a valid basic level");
+            
+            lock_guard lock(m_lock);
+            return m_prompts.at(l);
+        }
+        
+        void prompt(level_e l, const std::string &prompt)
+        {
+            if (! is_basic_level(l))
+                throw std::logic_error("not a valid basic level");
+            lock_guard lock(m_lock);
+            m_prompts[l] = prompt_str;
+        }
         
         /* set & get the current logging level
         * valid levels: debug-fatal */
-        void level(level_e l);
+        void level(level_e l)
+        {
+            if (! is_basic_level(l))
+                throw std::logic_error("not a valid basic level");
+            
+            lock_guard lock(m_lock);
+            m_level = l;
+        }
+        
         level_e level() const { return m_level; }
         
         /* print a message to a given log level,
@@ -178,9 +203,22 @@ namespace elib { namespace logging
                 (is_basic_level(l) && m_level <= l)));
         }
         
-        void m_log_to(level_e l, const std::string & s);
+        void m_log_to(level_e l, const std::string & msg)
+        {
+            if (! m_should_print(l)) return;
+
+            lock_guard lock(m_lock);
+            
+            std::ostream & out = m_get_stream(l);
+            if (! out.good()) return;
+            
+            out << m_prompts[l] << msg << std::endl;
+        }
         
-        std::mutex & m_get_lock() const;
+        std::mutex & m_get_lock() const
+        {
+            return m_lock;
+        }
         
         virtual std::ostream & m_get_stream(level_e l) = 0;
 
@@ -205,5 +243,5 @@ namespace elib { namespace logging
 #   pragma clang diagnostic pop
 # endif
 
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_LOGGING_BASIC_LOG_HPP */

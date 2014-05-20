@@ -5,7 +5,7 @@
 # include <elib/logging/log_level.hpp>
 # include <iostream>
 
-namespace elib { namespace logging
+namespace elib { namespace logging { inline namespace v1
 {
 # if defined(__clang__)
 #   pragma clang diagnostic push
@@ -32,5 +32,5 @@ namespace elib { namespace logging
 #   pragma clang diagnostic pop
 # endif
  
-}}                                                          // namespace elib
+}}}                                                         // namespace elib
 #endif /* ELIB_LOGGING_LOG_HPP */

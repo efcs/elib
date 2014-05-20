@@ -5,10 +5,9 @@
 # include <elib/logging/log.hpp>
 # include <elib/aux.hpp>
 # include <elib/fmt.hpp>
-# include <cstdarg>
 # include <string>
 
-namespace elib { namespace logging
+namespace elib { namespace logging { inline namespace v1
 {
           
     /* global logging class, it logs to std::cout and std::cerr,
@@ -193,5 +192,5 @@ namespace elib { namespace logging
 #   pragma clang diagnostic pop
 # endif
 
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_LOGGING_STATIC_LOG_HPP */

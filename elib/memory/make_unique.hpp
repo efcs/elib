@@ -1,11 +1,19 @@
 #ifndef ELIB_MEMORY_MAKE_UNIQUE_HPP
 #define ELIB_MEMORY_MAKE_UNIQUE_HPP
 
+# include <elib/config.hpp>
 # include <elib/aux/always.hpp>
 # include <elib/aux/forward.hpp>
 # include <elib/aux/traits/remove_extent.hpp>
 # include <memory>
 # include <cstddef>
+
+/** Workaround for GCC. size of initializer list cannot be compared to
+ *  the requested size at compile time. 
+ */
+# include <elib/assert.hpp>
+
+
 
 namespace elib { namespace memory
 {
@@ -70,10 +78,18 @@ namespace elib { namespace memory
     ////////////////////////////////////////////////////////////////////////////
     template <class T, class ...Args>
     typename detail::unique_if<T>::unknown_bound
-    make_unique_value_init(std::size_t n, Args &&... args)
+    make_unique_value_init(std::size_t const n, Args &&... args)
     {
         using U = typename aux::remove_extent<T>::type;
+# if defined(ELIB_CONFIG_GCC) && ELIB_COMPILER_VERSION <= 40802L
+        ELIB_ASSERT_ALWAYS(n == sizeof...(Args));
+        return std::unique_ptr<T>(
+            new U[sizeof...(Args)]{std::forward<Args>(args)...}
+          );
+#  else
+        ELIB_ASSERT_ALWAYS(n == sizeof...(Args));
         return std::unique_ptr<T>(new U[n]{std::forward<Args>(args)...});
+#  endif
     }
     
     ////////////////////////////////////////////////////////////////////////////

@@ -7,7 +7,7 @@
 # include <elib/aux/traits/underlying_type.hpp>
 # include <iterator>
 
-namespace elib { namespace enumeration
+namespace elib { namespace enumeration { inline namespace v1
 {
     
     namespace detail
@@ -165,5 +165,5 @@ namespace elib { namespace enumeration
         }
     };                                                   // class enum_iterator
     
-}}                                                          // namespace elib
+}}}                                                         // namespace elib
 #endif /* ELIB_ENUMERATION_ITERATOR_HPP */

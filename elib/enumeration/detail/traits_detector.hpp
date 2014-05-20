@@ -4,7 +4,7 @@
 # include <elib/enumeration/basic_traits.hpp>
 # include <elib/aux/integral_constant.hpp>
 
-namespace elib { namespace enumeration
+namespace elib { namespace enumeration { inline namespace v1
 {
     namespace detail
     {
@@ -172,5 +172,5 @@ namespace elib { namespace enumeration
         using intrusive_traits_detector = traits_detector<Enum, Enum>;
       
     }                                                       // namespace detail
-}}                                                          // namespace elib::enumeration
+}}}                                                         // namespace elib::enumeration
 #endif /* ELIB_ENUMERATION_DETAIL_TRAITS_DETECTOR_HPP */

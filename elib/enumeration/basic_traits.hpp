@@ -5,7 +5,7 @@
 # include <string>
 # include <map>
 
-namespace elib { namespace enumeration
+namespace elib { namespace enumeration { inline namespace v1
 {
     
 # if defined(ELIB_ENUMERATION_EXPOSITION)
@@ -97,5 +97,5 @@ namespace elib { namespace enumeration
           >::value
         >
     {};
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_ENUMERATION_BASIC_TRAITS_HPP */

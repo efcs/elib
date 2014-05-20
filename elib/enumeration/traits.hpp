@@ -7,7 +7,7 @@
 # include <cstddef>
 
 
-namespace elib { namespace enumeration
+namespace elib { namespace enumeration { inline namespace v1
 {
     
 # define ELIB_ENUM_MERGE_HAS(name) (basic_t::has_##name || intrusive_t::has_##name)
@@ -205,5 +205,5 @@ namespace elib { namespace enumeration
       return basic_enum_traits<Enum>::name_map.count(v) > 0;
     }
     
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_ENUMERATION_TRAITS_HPP */

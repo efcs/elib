@@ -6,7 +6,7 @@
 # include <string>
 # include <stdexcept>
 
-namespace elib { namespace enumeration
+namespace elib { namespace enumeration { inline namespace v1
 {
 
     
@@ -193,5 +193,5 @@ namespace elib { namespace enumeration
     template <class T>
     using opt_cast_t = decltype(detail::opt_cast_impl<T>(0));
     
-}}                                                           // namespace elib
+}}}                                                           // namespace elib
 #endif /* ELIB_ENUMERATION_CAST_HPP */

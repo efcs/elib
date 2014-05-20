@@ -1,7 +1,7 @@
 #include <elib/filesystem/directory_iterator.hpp>
 #include <elib/filesystem/filesystem_error.hpp>
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
     
     namespace detail
@@ -224,4 +224,4 @@ namespace elib { namespace fs
     {
         m_stack_ptr.reset();
     }
-}}                                                          // namespace elib
+}}}                                                          // namespace elib

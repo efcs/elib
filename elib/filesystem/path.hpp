@@ -13,7 +13,7 @@
 # include <utility>
 # include <cstddef>
 
-namespace elib { namespace fs 
+namespace elib { namespace fs { inline namespace v1
 {    
     ////////////////////////////////////////////////////////////////////////////
     class path 
@@ -583,5 +583,5 @@ namespace elib { namespace fs
         return !(lhs == rhs);
     }
     
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_PATH_HPP */

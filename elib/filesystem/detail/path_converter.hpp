@@ -10,7 +10,7 @@
 #include <type_traits>
 
 
-namespace elib { namespace fs 
+namespace elib { namespace fs { inline namespace v1
 {
     
     class directory_entry;    
@@ -87,5 +87,5 @@ namespace elib { namespace fs
         dispatch(const directory_entry& from);
     
     }                                                       // namespace detail
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP */

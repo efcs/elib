@@ -14,7 +14,7 @@
 
 # include <dirent.h>
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
 
     ////////////////////////////////////////////////////////////////////////////
@@ -272,5 +272,5 @@ namespace elib { namespace fs
         return recursive_directory_iterator{}; 
     }
 
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 # endif                                       // ELIB_FILESYSTEM_DIRECTORY_ITERATOR_HPP

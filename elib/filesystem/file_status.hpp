@@ -3,7 +3,7 @@
 
 # include <elib/filesystem/config.hpp>
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     enum class file_type
@@ -130,5 +130,5 @@ namespace elib { namespace fs
         perms m_perms;
     };
     
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_FILE_STATUS_HPP */

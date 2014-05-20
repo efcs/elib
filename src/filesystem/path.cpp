@@ -3,7 +3,7 @@
 #include <utility> // for pair 
 
 
-namespace elib { namespace fs 
+namespace elib { namespace fs { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     constexpr path::value_type path::preferred_separator;
@@ -356,4 +356,4 @@ namespace elib { namespace fs
       return m_path_ptr->native();
     }
 
-}}                                                          // namespace elib
+}}}                                                          // namespace elib

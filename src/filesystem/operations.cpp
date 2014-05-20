@@ -19,7 +19,7 @@
 #include <sys/statvfs.h>
 #include <fcntl.h>  /* values for fchmodat */
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -502,13 +502,13 @@ namespace elib { namespace fs
 #endif
     }}                                                       // namespace detail 
   
-}}                                                        // namespace elib::fs
+}}}                                                        // namespace elib::fs
 
 ////////////////////////////////////////////////////////////////////////////////
 //                        DETAIL::OPERATORS DEFINITIONS                                                        
 ////////////////////////////////////////////////////////////////////////////////
 
-namespace elib { namespace fs { namespace detail
+namespace elib { namespace fs { inline namespace v1 { namespace detail
 {
     ////////////////////////////////////////////////////////////////////////////
     path canonical(const path& p, const path& base, std::error_code *ec)
@@ -1159,13 +1159,13 @@ namespace elib { namespace fs { namespace detail
         return path {tmp_str};
     }                                                     // unique_path
       
-}}}                                               // namespace elib::fs::detail
+}}}}                                          // namespace elib::fs::v1::detail
     
     
 ////////////////////////////////////////////////////////////////////////////////
 //                      OPERATORS DEFINITION                                                    
 ////////////////////////////////////////////////////////////////////////////////
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
     
     //since the specification of absolute in the current specification
@@ -1203,4 +1203,4 @@ namespace elib { namespace fs
       return p;
     }
       
-}}                                                          // namespace elib
+}}}                                                          // namespace elib

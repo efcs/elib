@@ -11,7 +11,7 @@
 # include <cstdint>
 
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     struct space_info  // returned by space function
@@ -544,5 +544,5 @@ namespace elib { namespace fs
     inline path unique_path(const path& model, std::error_code& ec)
     { return detail::unique_path(model, &ec); }
 
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_OPERATIONS_HPP */

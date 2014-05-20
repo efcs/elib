@@ -9,7 +9,7 @@
 # include <string>
 # include <cerrno>
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
 
 # if defined(__clang__)
@@ -69,9 +69,6 @@ namespace elib { namespace fs
 #   pragma clang diagnostic pop
 # endif
 
-////////////////////////////////////////////////////////////////////////////////
-//                      MISC ERROR HELPERS                                                      
-////////////////////////////////////////////////////////////////////////////////
     namespace detail 
     {
         ////////////////////////////////////////////////////////////////////////
@@ -81,5 +78,5 @@ namespace elib { namespace fs
             return std::error_code{errno, std::system_category()};
         }
     }                                                       // namespace detail
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_FILESYSTEM_ERROR_HPP */

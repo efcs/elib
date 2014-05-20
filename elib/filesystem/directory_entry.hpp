@@ -6,7 +6,7 @@
 # include <elib/filesystem/file_status.hpp>
 # include <elib/filesystem/operations.hpp>
 
-namespace elib { namespace fs
+namespace elib { namespace fs { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     class directory_entry
@@ -129,5 +129,5 @@ namespace elib { namespace fs
     }; // class directory_entry
       
     
-}}                                                        // namespace elib::fs
+}}}                                                       // namespace elib::fs
 #endif /* ELIB_FILESYSTEM_DIRECTORY_ENTRY_HPP */

@@ -59,7 +59,7 @@ namespace elib { namespace memory
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
     typename detail::unique_if<T>::unknown_bound
-    make_unique(std::size_t n)
+    make_unique(std::size_t const n)
     {
         using U = typename aux::remove_extent<T>::type;
         return std::unique_ptr<T>(new U[n]());
@@ -68,7 +68,7 @@ namespace elib { namespace memory
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
     typename detail::unique_if<T>::unknown_bound
-    make_unique_default_init(std::size_t n)
+    make_unique_default_init(std::size_t const n)
     {
         using U = typename aux::remove_extent<T>::type;
         return std::unique_ptr<T>(new U[n]);

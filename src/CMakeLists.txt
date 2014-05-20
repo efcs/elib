@@ -59,7 +59,6 @@ if (CONFIG_ALL_WARNINGS)
 endif()
 
 set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
-#set(UNIT_TEST_FLAGS "${UNIT_TEST_FLAGS} ${WARNING_FLAGS}")
 
 ################################################################################
 ##                             Library Parts
@@ -120,6 +119,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
+set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
 	
 include_directories(${Boost_INCLUDE_DIRS})
 set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})

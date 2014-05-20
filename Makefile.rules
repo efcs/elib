@@ -144,9 +144,9 @@ coverage:
 ################################################################################
 batch_build_command:
 ifdef BATCH_VERBOSE
-	$(CMD_VERB) $(MAKE) -j$(THREADS) --no-print-directory -C build all
+	$(CMD_VERB) $(MAKE)  --no-print-directory -C build -j$(THREADS) all
 else
-	$(CMD_VERB) $(MAKE) -j$(THREADS) --no-print-directory -C build all  1> /dev/null
+	$(CMD_VERB) $(MAKE)  --no-print-directory -C build -j$(THREADS) all 1> /dev/null
 endif
 
 

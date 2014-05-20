@@ -3,7 +3,7 @@ SHELL := /bin/bash
 ################################################################################
 #				ElibTargets
 ################################################################################
-ElibTargets := all everything e elib elib_static clean configure reconfigure distclean install \
+ElibTargets := all everything e elib elib_static clean configure redep distclean install \
 	       check check_static check_shared
 
 .PHONY: $(ElibTargets)
@@ -48,8 +48,8 @@ configure:
 
 
 ################################################################################
-reconfigure: 
-	$(CMD_VERB) cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
+redep: 
+	$(CMD_VERB) cd build/ ; cmake .. ; cd ..
 	
 
 ################################################################################

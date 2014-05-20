@@ -44,7 +44,7 @@ namespace elib
             any_storage_base(any_storage_base const &) = delete;
             any_storage_base(any_storage_base &&) = delete;
             
-            /* LCOV_EXCL_LINE */ virtual ~any_storage_base() { }
+            virtual ~any_storage_base() { }
             
             virtual any_storage_base* copy() const = 0;
             virtual any_storage_base* copy(void*) const = 0;

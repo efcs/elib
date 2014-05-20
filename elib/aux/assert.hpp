@@ -1,42 +1,33 @@
 // ELIB_AUX_ASSERT_HPP
 // header guard placed later in file
 
-#if defined(ELIB_AUX_ASSERT_ON)
-#   undef ELIB_AUX_ASSERT_ON
+#if defined(ELIB_ASSERT)
 #   undef ELIB_ASSERT
 #   undef ELIB_WARN
 #   undef ELIB_DEBUG
 #endif
-
-////////////////////////////////////////////////////////////////////////////////
-// ELIB_AUX_ASSERT_ON
-#if !defined(NDEBUG) && !defined(ELIB_ASSERT_OFF)
-# define ELIB_AUX_ASSERT_ON 1
-#else
-# define ELIB_AUX_ASSERT_ON 0
-#endif
     
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_ASSERT
-# if ELIB_AUX_ASSERT_ON && !defined(ELIB_ASSERT_NO_EXIT)
-#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO("ELIB_ASSERT :", __VA_ARGS__)
-# elif ELIB_AUX_ASSERT_ON
-#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_ASSERT: ", __VA_ARGS__)
+# if !defined(NDEBUG) && !defined(ELIB_ASSERT_OFF)
+#   define ELIB_ASSERT(...) ELIB_AUX_ASSERT_MACRO("ELIB_ASSERT: ", __VA_ARGS__)
 # else
 #   define ELIB_ASSERT(...) ((void)0)
 # endif
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_WARN
-# if ELIB_AUX_ASSERT_ON && !defined(ELIB_ASSERT_WARN_OFF)
+# if defined(ELIB_WARN_ON)
 #   define ELIB_WARN(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_WARN: ", __VA_ARGS__)
 # else
 #   define ELIB_WARN(...) ((void)0)
 # endif
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_DEBUG
-# if ELIB_AUX_ASSERT_ON && !defined(ELIB_ASSERT_DEBUG_OFF)
+# if defined(ELIB_DEBUG_ON)
 #   define ELIB_DEBUG(...) ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_DEBUG: ", __VA_ARGS__)
 # else
 #   define ELIB_DEBUG(...) ((void)0)
@@ -53,6 +44,15 @@
 # include <iostream>
 # include <cstdlib>
 
+////////////////////////////////////////////////////////////////////////////////
+#define ELIB_ASSERT_ALWAYS(...) \
+    ELIB_AUX_ASSERT_MACRO("ELIB_ASSERT_ALWAYS: ", __VA_ARGS__)
+#
+
+////////////////////////////////////////////////////////////////////////////////
+#define ELIB_WARN_ALWAYS(...) \
+    ELIB_AUX_ASSERT_MACRO_NOEXIT("ELIB_WARN_ALWAYS: ", __VA_ARGS__)
+#
 
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_AUX_ASSERT_MACRO
@@ -77,31 +77,28 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 // ELIB_AUX_ASSERT_FUNCTION
-# define ELIB_AUX_ASSERT_FUNCTION(Name, Stream, Abort)                 \
-    inline void                                                        \
-    Name( const char* prompt, const char* pred_str                     \
-        , const char* file, const char* func, int line                 \
-        , const char* opt_str = nullptr)                               \
-    {                                                                  \
-        Stream <<  prompt << file << "::" << line <<  std::endl;              \
+# define ELIB_AUX_ASSERT_FUNCTION(Name, Stream, Abort)                \
+    inline void                                                       \
+    Name( const char* prompt, const char* pred_str                    \
+        , const char* file, const char* func, int line                \
+        , const char* opt_str = nullptr)                              \
+    {                                                                 \
+        Stream <<  prompt << file << "::" << line <<  std::endl;      \
         Stream << " In " << func << ": ( " << pred_str << " ) FAILED" \
-               << std::endl;                                           \
-                                                                       \
-        if (opt_str) Stream << "  " << opt_str << std::endl;           \
-        Abort;                                                         \
+               << std::endl;                                          \
+                                                                      \
+        if (opt_str) Stream << "  " << opt_str << std::endl;          \
+        Abort;                                                        \
     }      
 # 
   
-namespace elib { namespace aux 
-{
-    namespace detail
-    {
-        /* LCOV_EXCL_LINE */ ELIB_NORETURN ELIB_AUX_ASSERT_FUNCTION(assert_failed, std::cerr, std::abort())
+namespace elib { namespace aux { namespace detail
+{   
+    ELIB_NORETURN 
+    ELIB_AUX_ASSERT_FUNCTION(assert_failed, std::cerr, std::abort()) /* LCOV_EXCL_LINE */ 
     
-        ELIB_AUX_ASSERT_FUNCTION(assert_failed_noexit, std::cerr, ((void)0))
-    }                                                       // namespace detail
-    
-}}                                                           // namespace elib
+    ELIB_AUX_ASSERT_FUNCTION(assert_failed_noexit, std::cerr, ((void)0))
+}}}                                                           // namespace elib
 
 # undef ELIB_AUX_ASSERT_FUNCTION
 

@@ -6,7 +6,7 @@
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #endif
 

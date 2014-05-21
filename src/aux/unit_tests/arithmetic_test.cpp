@@ -1,11 +1,14 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-
 #include <elib/aux/arithmetic.hpp>
 #include <elib/aux/integral_constant.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>
+
+#if defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
 
 #define TEST_1(x)                                                  \
     do {                                                           \

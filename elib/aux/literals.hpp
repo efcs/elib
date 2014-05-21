@@ -9,46 +9,48 @@ namespace elib
 { 
     namespace aux { namespace detail
     {
-        template <class To, unsigned long long Val, bool Done>
-        struct generate_literal_impl
+        template <unsigned Value, char ...Ch>
+        struct generate_binary_literal
+          : integral_constant<unsigned, Value>
         {
-            template <char ...>
-            using apply = integral_constant<To, static_cast<To>(Val)>;
-        };
-            
-        template <class To, unsigned long long Val>
-        struct generate_literal_impl<To, Val, false>
-        {
-            template <char First, char ...Rest>
-            using apply = typename 
-                generate_literal_impl<
-                    To
-                  , (Val*10) + (First - '0')
-                  , sizeof...(Rest) == 0
-                >::template apply<Rest...>;
+            static_assert(sizeof...(Ch) == 0, "Pack is empty");
         };
         
-        template <class To, char ...Ch>
-        using generate_literal_apply = typename
-            generate_literal_impl<To, 0, sizeof...(Ch) == 0>
-                ::template apply<Ch...>;
+        template <unsigned Value, char First, char ...Rest>
+        struct generate_binary_literal<Value, First, Rest...>
+          : generate_binary_literal<(Value << 1) + (First - '0'), Rest...>
+        {
+            static_assert(
+                First == '0' || First == '1'
+              , "Only 0 and 1 are allowed in a binary literal"
+              );
+        };
     }}                                                 // namespace aux::detail
     
 // Scan doesn't like user defined literals
 # if !defined(ELIB_CONFIG_COVERITY_SCAN)
     template <char ...Ch>
-    constexpr aux::detail::generate_literal_apply<int, Ch...>
-    operator "" _int() noexcept
-    { return {}; }
-    
-    template <char ...Ch>
-    constexpr aux::detail::generate_literal_apply<bool, Ch...>
-    operator "" _bool() noexcept
-    { return {}; }
-    
-    inline std::string operator "" _s(const char *s) 
+    constexpr unsigned operator "" _bin() noexcept
     {
-        return std::string(s);
+        static_assert(
+            sizeof...(Ch) <= sizeof(unsigned) * 8
+          , "binary literals can contain at most sizeof(unsigned) * 8 characters"
+          );
+        static_assert(
+            sizeof...(Ch) != 0
+          , "binary literals must contain at least 1 character"
+          );
+        return aux::detail::generate_binary_literal<0u, Ch...>::value; 
+    }
+    
+    inline std::string operator "" _str(const char *s)
+    {
+        return s;
+    }
+    
+    inline std::string operator "" _str(const char *s, std::size_t len) 
+    {
+        return std::string(s, len);
     }
 # endif /* ELIB_CONFIG_COVERITY_SCAN */
 }                                                           // namespace elib

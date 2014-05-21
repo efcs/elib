@@ -66,7 +66,7 @@ install:
 ################################################################################	
 check:
 	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) --no-print-directory -C build
+	$(CMD_VERB) $(MAKE) --no-print-directory -C build 
 	$(CMD_VERB) echo
 	$(CMD_VERB) echo === Running static tests ===
 	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short

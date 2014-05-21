@@ -7,27 +7,24 @@ namespace elib { namespace aux
 # pragma clang diagnostic push
 # pragma clang diagnostic ignored "-Wundefined-inline"
 #endif
-    namespace detail
+  
+    ////////////////////////////////////////////////////////////////////////
+    // anything_type
+    template <class Ignored = decltype(nullptr)>
+    struct anything_type
     {
-        ////////////////////////////////////////////////////////////////////////
-        // detail::anything
-        template <class Ignored = decltype(nullptr)>
-        struct anything
-        {
-            anything();
+        anything_type();
 
-            template <typename T>
-            constexpr anything(T &&) noexcept;
-
-            template <class T>
-            operator T &&() const noexcept;
-
-        };
-    }                                                   // namespace detail
+        template <typename T>
+        constexpr anything_type(T &&) noexcept;
+            
+        template <class T>
+        operator T() const noexcept;
+    };
 #if defined(__clang__)
 # pragma clang diagnostic pop
 #endif
     ////////////////////////////////////////////////////////////////////////////
-    using anything = detail::anything<>;
+    using anything = anything_type<>;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_ANYTHING_HPP */

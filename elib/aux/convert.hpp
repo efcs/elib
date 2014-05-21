@@ -8,7 +8,6 @@
 # include <elib/aux/traits/decay.hpp>
 # include <elib/aux/traits/is_reference.hpp>
 
-
 namespace elib { namespace aux
 {
     template <class T>

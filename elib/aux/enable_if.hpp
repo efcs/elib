@@ -40,18 +40,28 @@ namespace elib { namespace aux
 
     ////////////////////////////////////////////////////////////////////////
     // aux::lazy_enable_if, aux::lazy_enable_if_c
-    template <class Pred, class T = no_decay<void>>
-    using lazy_enable_if = enable_if_t<Pred, T>;
-
-    template <class Pred, class T = no_decay<void>>
-    using lazy_enable_if_t = typename enable_if_t<Pred, T>::type;
-
     template <bool Pred, class T = no_decay<void>>
-    using lazy_enable_if_c = enable_if_c_t<Pred, T>;
-
+    struct lazy_enable_if_c
+    {
+        static_assert(Pred, "This is the true case");
+        using type = typename T::type; 
+    };
+    
+    template <class T>
+    struct lazy_enable_if_c<false, T>
+    {
+    };
+    
     template <bool Pred, class T = no_decay<void>>
-    using lazy_enable_if_c_t = typename enable_if_c_t<Pred, T>::type;
+    using lazy_enable_if_c_t = typename lazy_enable_if_c<Pred, T>::type;
+    
+    template <class Pred, class T = no_decay<void>>
+    struct lazy_enable_if : lazy_enable_if_c<Pred::type::value, T> {};
 
+    template <class Pred, class T = no_decay<void>>
+    using lazy_enable_if_t = typename lazy_enable_if<Pred, T>::type;
+
+    
     ////////////////////////////////////////////////////////////////////////
     // aux::disable_if, aux::disable_if_c
     template <class Pred, class T = void>
@@ -69,17 +79,26 @@ namespace elib { namespace aux
 
     ////////////////////////////////////////////////////////////////////////
     // aux::lazy_disable_if, aux::lazy_disable_if_c
-    template <class Pred, class T = no_decay<void>>
-    using lazy_disable_if = disable_if_t<Pred, T>;
-
-    template <class Pred, class T = no_decay<void>>
-    using lazy_disable_if_t = typename disable_if_t<Pred, T>::type;
-
-    template<bool Pred, class T = no_decay<void>>
-    using lazy_disable_if_c = disable_if_c_t<Pred, T>;
-
     template <bool Pred, class T = no_decay<void>>
-    using lazy_disable_if_c_t = typename disable_if_c_t<Pred, T>::type;
+    struct lazy_disable_if_c
+    {
+        static_assert(Pred, "Function should be disabled");
+    };
+    
+    template <class T>
+    struct lazy_disable_if_c<false, T>
+    {
+        using type = typename T::type;
+    };
+    
+    template <bool Pred, class T = no_decay<void>>
+    using lazy_disable_if_c_t = typename lazy_disable_if_c<Pred, T>::type;
+    
+    template <class Pred, class T = no_decay<void>>
+    struct lazy_disable_if : lazy_disable_if_c<Pred::type::value, T> {};
+    
+    template <class Pred, class T = no_decay<void>>
+    using lazy_disable_if_t = typename lazy_disable_if<Pred, T>::type;
 }}                                                          // namespace elib
 namespace elib
 {

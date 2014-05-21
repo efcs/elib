@@ -2,7 +2,6 @@
 #define ELIB_AUX_DEMANGLE_HPP
 
 /// A function to demangle type-names using implementation defined-libraries.
-/// Currently the only supported compiler is GCC.
 /// Adapted (Read: almost stolen) from:
 /// boost/units/detail/utility.hpp
 # include <elib/config.hpp>
@@ -28,21 +27,15 @@ namespace elib { namespace aux
 # if defined(ELIB_AUX_HAS_DEMANGLE)
     inline std::string demangle(const char *name)
     {
-
-        // need to demangle C++ symbols
-        char*       realname;
         std::size_t len; 
-        int         stat;
-        
-        realname = abi::__cxa_demangle(name, nullptr, &len, &stat);
-        
+        int stat;
+        char* realname = abi::__cxa_demangle(name, nullptr, &len, &stat);
         if (realname != nullptr) {
             std::string out(realname);
             std::free(realname);
             return out;
-        }
-        else {
-            return std::string(name);
+        } else {
+            return name;
         }
     }
 # else /* ELIB_AUX_HAS_DEMANGLE */
@@ -51,7 +44,6 @@ namespace elib { namespace aux
         return name;
     }
 # endif
-
 
     ////////////////////////////////////////////////////////////////////////////
     inline std::string demangle(std::string const & name)

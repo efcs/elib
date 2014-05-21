@@ -8,6 +8,7 @@
 using namespace elib;
 using namespace elib::aux;
 
+#if !defined(ELIB_CONFIG_COVERITY_SCAN)
 BOOST_AUTO_TEST_SUITE(elib_aux_literals_test_suite)
 
 BOOST_AUTO_TEST_CASE(binary_literal_test)
@@ -50,3 +51,4 @@ BOOST_AUTO_TEST_CASE(number_to_string_literal_test)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+#endif /* ELIB_CONFIG_COVERITY_SCAN */

@@ -30,7 +30,7 @@ namespace elib { namespace enumeration
     template <>
     struct basic_enum_traits< ::B>
     {
-        static const std::map<::B, std::string> name_map;
+        static const std::map< ::B, std::string> name_map;
     };
     
     const std::map< ::B, std::string> basic_enum_traits< ::B>::name_map = 

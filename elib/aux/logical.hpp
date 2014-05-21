@@ -3,6 +3,7 @@
 
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/if.hpp>
+# include <elib/aux/none.hpp>
 
 namespace elib { namespace aux
 {

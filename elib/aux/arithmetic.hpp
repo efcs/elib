@@ -54,7 +54,7 @@ namespace elib { namespace aux
     using divide_t = typename detail::divide_apply<A0, A1, Args...>::type;
 
     ////////////////////////////////////////////////////////////////////////////
-    // modulus
+    // mod
     template <class T, class U>
     struct modulus : ELIB_AUTO_INTC( T::type::value % U::type::value ) {};
 
@@ -64,13 +64,13 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     // increment
     template <class T>
-    using increment = integral_constant< typename T::value_type, T::value + 1 >;
+    using increment = integral_constant< decltype(T::value + 1), T::value + 1 >;
 
     template <class T>
     using increment_t = increment<T>;
 
     template <class T>
-    using decrement = integral_constant< typename T::value_type, T::value - 1 >;
+    using decrement = integral_constant< decltype(T::value - 1), T::value - 1 >;
 
     template <class T>
     using decrement_t = decrement<T>;

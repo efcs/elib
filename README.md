@@ -222,6 +222,13 @@ Requirements (Library specific):
     
 ## Makefile Commands
 
+  * configure
+: Run the cmake configuration.
+  This only needs to be done once.
+
+  * redep
+: Rerun partial configuration. Detects new source files.
+
   * all 
 : build libraries and unit tests
 
@@ -231,21 +238,14 @@ Requirements (Library specific):
   * distclean
 : Clean all generated files.
 
-  * redep
-: execute Cmake
-
   * install
 : install using the generated Cmake command
 
-  * e
+  * everything
 : A helper command. equivalent to
     make distclean
-    make redep
+    make configure
     make 
-
-  * ej
-: A helper command. It is the same as 'e' except it runs
-  make -j2 as the last command
 
   * check
 : Run the unit tests

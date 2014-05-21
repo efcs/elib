@@ -132,14 +132,14 @@ namespace elib { namespace aux
             struct apply<true, Head, Tail...>
             {
                 using type = true_;
-                using which = none;
+                using which = Head;
             };
 
             template <class Head, class ...Tail>
             struct apply<false, Head, Tail...>
             {
                 using type = false_;
-                using which = Head;
+                using which = none;
             };
         };
 

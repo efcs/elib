@@ -3,6 +3,10 @@
 
 namespace elib { namespace aux
 {
+#if defined(__clang__)
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wundefined-inline"
+#endif
     namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
@@ -13,13 +17,16 @@ namespace elib { namespace aux
             anything();
 
             template <typename T>
-            constexpr anything(T const &) noexcept;
+            constexpr anything(T &&) noexcept;
 
             template <class T>
             operator T &&() const noexcept;
+
         };
     }                                                   // namespace detail
-
+#if defined(__clang__)
+# pragma clang diagnostic pop
+#endif
     ////////////////////////////////////////////////////////////////////////////
     using anything = detail::anything<>;
 }}                                                          // namespace elib

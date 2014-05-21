@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_BEGIN_END_HPP
 #define ELIB_AUX_BEGIN_END_HPP
 
+# include <elib/aux/anything.hpp>
 # include <elib/aux/declval.hpp>
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/forward.hpp>
@@ -22,7 +23,7 @@ namespace elib { namespace aux
         template <class T>
         struct get_begin_type_impl<T, false>
         {
-            using type = void(*)();
+            using type = aux::anything(*)(T &&);
         };
         
         template <class T, bool = has_end<T>::value>
@@ -34,7 +35,7 @@ namespace elib { namespace aux
         template <class T>
         struct get_end_type_impl<T, false>
         {
-            using type = void(*)();
+            using type = aux::anything(*)(T &&);
         };
     }                                                       // namespace detail
     ////////////////////////////////////////////////////////////////////////////

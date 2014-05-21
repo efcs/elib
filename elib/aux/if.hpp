@@ -3,25 +3,27 @@
 
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/no_decay.hpp>
-# include <elib/aux/none.hpp>
 # include <elib/aux/traits/conditional.hpp>
 
 namespace elib { namespace aux
 {
     namespace detail
     {
+        struct empty_branch {};
+        
         template <class T>
         struct conditional_branch_eval
         {
             using type = typename T::then;
         };
-
+    
         template <class Cond, class Then>
         struct conditional_branch
         {
             using condition = Cond;
             using then = Then;
         };
+        
 
         template <class ...Branches>
         struct conditional_evalute;
@@ -38,7 +40,7 @@ namespace elib { namespace aux
         template <class ...Branches>
         class conditional_accumulate 
         {
-            template <class Cond, class Then, class Else = aux::none>
+            template <class Cond, class Then, class Else = empty_branch>
             struct make_else_if
               : no_decay<
                   conditional_evalute<
@@ -52,34 +54,44 @@ namespace elib { namespace aux
             template <class Cond, class Then>
             struct make_else_if<Cond, Then>
               : no_decay<
-                    conditional_accumulate<
-                        Branches..., conditional_branch<Cond, Then>
+                  conditional_accumulate<
+                      Branches...
+                    , conditional_branch<Cond, Then>
                     >
                 >
             {};
 
         public:
 
-            template <class Cond, class Then, class Else = aux::none>
+            template <class Cond, class Then, class Else = empty_branch>
             using else_if = typename make_else_if<Cond, Then, Else>::type;
 
-            template <bool Cond, class Then, class Else = aux::none>
+            template <bool Cond, class Then, class Else = empty_branch>
             using else_if_c = typename make_else_if<bool_<Cond>, Then, Else>::type;
 
+            template <class Cond, class Then, class Else>
+            using else_if_t = typename else_if<Cond, Then, Else>::type;
+            
+            template <bool Cond, class Then, class Else>
+            using else_if_c_t = typename else_if_c<Cond, Then, Else>::type;
+            
             template <class Else>
             using else_ = 
                 conditional_evalute<
                     Branches...
                   , conditional_branch<true_, Else>
                   >;
+                
+            template <class Else>
+            using else_t = typename else_<Else>::type;
         };
     }                                                   // namespace detail
 
 
     template <
         class Cond
-      , class Then = aux::none
-      , class Else = aux::none
+      , class Then
+      , class Else = detail::empty_branch
       >
     struct if_;
     
@@ -89,15 +101,6 @@ namespace elib { namespace aux
           else_if<Cond, Then, Else>
     {};
 
-    template <class Cond>
-    struct if_<Cond>
-      : if_<
-            Cond
-          , aux::no_decay<void>
-          , aux::none
-          >
-    {};
-
     template <class Cond, class Then>
     struct if_<Cond, Then>
       : detail::conditional_accumulate<>::template else_if<Cond, Then>
@@ -105,24 +108,24 @@ namespace elib { namespace aux
 
     template <
         class Cond
-      , class Then = aux::none
-      , class Else = aux::none
+      , class Then
+      , class Else
       >
     using if_t = typename if_<Cond, Then, Else>::type;
 
 
     template <
         bool Cond
-      , class Then = aux::none
-      , class Else = aux::none
+      , class Then
+      , class Else = detail::empty_branch
       >
     using if_c = if_<bool_<Cond>, Then, Else>;
 
 
     template <
         bool Cond
-      , class Then = aux::none
-      , class Else = aux::none
+      , class Then
+      , class Else 
       >
     using if_c_t = typename if_<bool_<Cond>, Then, Else>::type;
 

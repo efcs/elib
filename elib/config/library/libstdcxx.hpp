@@ -21,5 +21,4 @@
 #   define ELIB_CONFIG_HAS_REGEX 1
 # endif
 # 
-# 
 #endif /* ELIB_CONFIG_LIBRARY_LIBSTDCXX_HPP */

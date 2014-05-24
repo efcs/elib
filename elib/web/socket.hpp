@@ -8,7 +8,7 @@
 # endif
 
 # include <elib/web/error.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/addressof.hpp>
 
 # include <memory>
 # include <string>

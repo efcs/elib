@@ -13,22 +13,24 @@ namespace elib
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
-  /* bad_cast error for lexical casts */
-  class bad_lexical_cast : public std::runtime_error 
-  {
-  public:
-/* EDG doesn't like binding rvalues to const lvalues */
-      explicit bad_lexical_cast(const char *what_arg)
-        : std::runtime_error(what_arg)
+    /* bad_cast error for lexical casts */
+    class bad_lexical_cast : public std::runtime_error 
+    {
+    public:
+        explicit bad_lexical_cast(const char *what_arg)
+          : std::runtime_error(what_arg)
         {}
       
-      explicit bad_lexical_cast(std::string const & what_arg)
-        : std::runtime_error(what_arg)
+        explicit bad_lexical_cast(std::string const & what_arg)
+          : std::runtime_error(what_arg)
         {}
         
-      ELIB_DEFAULT_COPY_MOVE(bad_lexical_cast);
-      
-      virtual ~bad_lexical_cast() noexcept {}
+        bad_lexical_cast(bad_lexical_cast const &) = default;
+        bad_lexical_cast(bad_lexical_cast &&) = default;
+        bad_lexical_cast & operator=(bad_lexical_cast const &) = default;
+        bad_lexical_cast & operator=(bad_lexical_cast &&) = default;
+        
+        virtual ~bad_lexical_cast() noexcept {}
   };
 # if defined(__clang__)
 #   pragma clang diagnostic pop

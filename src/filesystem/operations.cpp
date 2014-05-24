@@ -4,7 +4,6 @@
 #include <elib/filesystem/directory_iterator.hpp>
 #include <elib/filesystem/filesystem_error.hpp>
 
-#include <elib/aux.hpp>
 #include <elib/memory/make_unique.hpp>
 
 #include <cstdlib>

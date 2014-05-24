@@ -2,7 +2,12 @@
 #define ELIB_ENUMERATION_CAST_HPP
 
 # include <elib/enumeration/traits.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/traits/is_integral.hpp>
+# include <elib/aux/traits/is_enum.hpp>
+# include <elib/aux/traits/is_integral_enum.hpp>
+# include <elib/aux/traits/is_same.hpp>
+# include <elib/aux/traits/is_string_type.hpp>
+# include <elib/aux/traits/underlying_type.hpp>
 # include <string>
 # include <stdexcept>
 

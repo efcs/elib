@@ -2,7 +2,9 @@
 #define ELIB_WEB_HTTP_CORE_HPP
 
 # include <elib/web/http/fwd.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/forward.hpp>
+# include <elib/aux/traits/uncvref.hpp>
+# include <elib/aux/traits/underlying_type.hpp>
 # include <elib/enumeration.hpp>
 # include <elib/lexical_cast.hpp>
 # include <algorithm>

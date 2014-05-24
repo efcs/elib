@@ -13,7 +13,7 @@ namespace elib { namespace aux
     {
         ////////////////////////////////////////////////////////////////////////
         template <class T>
-        struct has_overload_addressof
+        struct has_overload_addressof_impl
         {
             template <
                 class U
@@ -26,6 +26,9 @@ namespace elib { namespace aux
                 
             using type = decltype(test<T>(0));
         };
+        
+        template <class T>
+        using has_overload_addressof = typename has_overload_addressof_impl<T>::type;
           
         ////////////////////////////////////////////////////////////////////////
         template <bool HasOverload>
@@ -58,7 +61,7 @@ namespace elib { namespace aux
     template <class T>
     constexpr T* addressof(T & t) noexcept
     {
-        using HasOverload = typename detail::has_overload_addressof<T>::type;
+        using HasOverload = typename detail::has_overload_addressof<T>;
         return detail::addressof_impl<HasOverload::value>::addressof(t);
     }
 }}                                                          // namespace elib

@@ -5,7 +5,6 @@
 #include <iterator>
 #include <regex>
 
-
 namespace elib { namespace web { namespace http
 {
     data_type::const_iterator 

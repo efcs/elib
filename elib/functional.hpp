@@ -1,11 +1,14 @@
 #ifndef ELIB_FUNCTIONAL_HPP
 #define ELIB_FUNCTIONAL_HPP
 
-# include <elib/aux.hpp>
-# include <elib/any.hpp>
-# include <elib/config.hpp>
-# include <type_traits>
-# include <utility>
+# include <elib/config.hpp> /* for ELIB_NORETURN */
+# include <elib/aux/auto_return.hpp>
+# include <elib/aux/anything.hpp>
+# include <elib/aux/forward.hpp>
+# include <elib/aux/integral_constant.hpp>
+# include <elib/aux/traits/is_convertible.hpp>
+# include <elib/aux/traits/is_lvalue_reference.hpp>
+# include <elib/aux/traits/is_same.hpp>
 # include <cstddef>
         
 namespace elib 
@@ -487,7 +490,7 @@ namespace elib
                 return (lhs == rhs);
                 
                 static_assert(
-                    aux::is_same<decltype(lhs == rhs), bool>::value
+                    aux::is_convertible<decltype(lhs == rhs), bool>::value
                   , "Must be boolean expression"
                 );
             }
@@ -519,7 +522,7 @@ namespace elib
                 return (lhs != rhs);
                 
                 static_assert(
-                    aux::is_same<decltype(lhs != rhs), bool>::value
+                    aux::is_convertible<decltype(lhs != rhs), bool>::value
                   , "Must be boolean expression"
                 );
             }
@@ -551,7 +554,7 @@ namespace elib
                 return (lhs > rhs);
                 
                 static_assert(
-                    aux::is_same<decltype(lhs>rhs), bool>::value
+                    aux::is_convertible<decltype(lhs>rhs), bool>::value
                   , "Must be boolean expression"
                 );
             }

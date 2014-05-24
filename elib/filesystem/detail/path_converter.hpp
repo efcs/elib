@@ -1,7 +1,8 @@
 #ifndef ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP
 #define ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP
 
-# include <elib/aux.hpp>
+# include <elib/aux/convert.hpp>
+# include <elib/aux/traits/decay.hpp>
 #include <locale>
 #include <string>
 #include <cwchar>

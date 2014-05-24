@@ -24,14 +24,14 @@ namespace elib { namespace aux
         
         template <
             class U 
-          , ELIB_ENABLE_IF_VALID_EXPR(
-                static_cast<U>( elib::move(elib::declval<T>()) )
-            )
+          , ELIB_ENABLE_IF_VALID_EXPR(static_cast<U>(elib::move(elib::declval<T>()) ))
           >
         operator U() 
         {
             return static_cast<U>(elib::move(m_value));
         }
+        
+        converter & operator=(converter const &) {}
         
     private:
         T m_value;

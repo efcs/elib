@@ -3,7 +3,7 @@
 
 # include <elib/filesystem/config.hpp>
 # include <elib/filesystem/path.hpp>
-
+# include <elib/assert.hpp>
 # include <system_error>
 # include <memory>
 # include <string>

@@ -1,5 +1,6 @@
 #include <elib/web/socket.hpp>
 #include <elib/assert.hpp>
+#include <elib/aux/move.hpp>
 
 #define ELIB_WEB_HANDLE_OR_THROW_ERROR(...) \
     ELIB_CATCH_AND_RETHROW(detail::handle_or_throw_error(__VA_ARGS__);)

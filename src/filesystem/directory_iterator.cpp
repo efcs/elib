@@ -34,7 +34,8 @@ namespace elib { namespace fs { inline namespace v1
             struct dirent *dir_entry_ptr{nullptr};
             
             int ret;
-            if ((ret = ::readdir_r(dir_stream,  &dir_entry,  &dir_entry_ptr)) != 0) {
+            if ((ret = ::readdir_r(dir_stream,  &dir_entry,  &dir_entry_ptr)) != 0)
+            {
                 std::error_code m_ec = capture_errno();
                 if (ec) {
                     *ec = m_ec;

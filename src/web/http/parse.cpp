@@ -1,5 +1,6 @@
 #include <elib/web/http/parse.hpp>
-#include <elib/aux.hpp>
+#include <elib/assert.hpp>
+#include <elib/aux/move.hpp>
 #include <elib/enumeration.hpp>
 #include <elib/lexical_cast.hpp>
 

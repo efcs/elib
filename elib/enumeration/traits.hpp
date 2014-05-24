@@ -3,7 +3,10 @@
 
 # include <elib/enumeration/basic_traits.hpp>
 # include <elib/enumeration/detail/traits_detector.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/enable_if.hpp>
+# include <elib/aux/integral_constant.hpp>
+# include <elib/aux/traits/is_enum.hpp>
+# include <elib/aux/traits/underlying_type.hpp>
 # include <cstddef>
 
 

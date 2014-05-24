@@ -3,7 +3,7 @@
 
 # include <elib/logging/log_level.hpp>
 # include <elib/logging/log.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/forward.hpp>
 # include <elib/fmt.hpp>
 # include <string>
 

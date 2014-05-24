@@ -5,7 +5,7 @@
 # include <elib/web/http/parse.hpp>
 # include <elib/web/error.hpp>
 # include <elib/web/socket.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/traits/is_same.hpp>
 # include <elib/fmt.hpp>
 # include <elib/lexical_cast.hpp>
 # include <algorithm>

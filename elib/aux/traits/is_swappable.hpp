@@ -5,10 +5,13 @@
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/declval.hpp>
 # include <elib/aux/enable_if.hpp>
+# include <elib/aux/traits/is_array.hpp>
 # include <elib/aux/traits/is_same.hpp>
 # include <elib/aux/traits/is_move_assignable.hpp>
 # include <elib/aux/traits/is_move_constructible.hpp>
+# include <elib/aux/traits/uncvref.hpp>
 # include <utility>
+# include <cstddef>
 
 namespace elib { namespace aux
 {
@@ -16,6 +19,23 @@ namespace elib { namespace aux
     {
         namespace traits_adl_barrier
         {
+            template <
+                class T, std::size_t N
+              , ELIB_ENABLE_IF(is_move_assignable<T>::value)
+              , ELIB_ENABLE_IF(is_move_constructible<T>::value)
+              >
+            elib::true_ try_array_swap(T (&)[N], T (&)[N]);
+            
+            template <class T, class U>
+            elib::false_ try_array_swap(T &&, U &&);
+            
+            template <class T, class U>
+            using is_array_swappable = decltype(
+                traits_adl_barrier::try_array_swap(
+                    elib::declval<T>(), elib::declval<U>()
+                  )
+              );
+            
             template <
                 class T, class U
               , ELIB_ENABLE_IF_VALID_EXPR(
@@ -26,9 +46,17 @@ namespace elib { namespace aux
             
             template <
                 class T, class U
+              , ELIB_ENABLE_IF(not aux::is_array<uncvref<T>>::value)
               , ELIB_ENABLE_IF(aux::is_same<T, U>::value)
               , ELIB_ENABLE_IF(aux::is_move_assignable<T>::value)
               , ELIB_ENABLE_IF(aux::is_move_constructible<T>::value)
+              >
+            elib::true_ is_swappable_impl(long);
+            
+            template <
+                class T, class U
+              , ELIB_ENABLE_IF(aux::is_array<uncvref<T>>::value)
+              , ELIB_ENABLE_IF(is_array_swappable<T, U>::value)
               >
             elib::true_ is_swappable_impl(long);
             

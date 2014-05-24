@@ -5,8 +5,6 @@
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/enable_if.hpp>
 # include <elib/aux/declval.hpp>
-# include <elib/aux/traits/is_convertible.hpp>
-
 
 namespace elib { namespace aux
 {
@@ -17,7 +15,6 @@ namespace elib { namespace aux
             template <
                 class From, class To
               , ELIB_ENABLE_IF_VALID_EXPR( static_cast<To>(declval<From>()) )
-              , ELIB_ENABLE_IF(not is_convertible<From, To>::value)
               >
             elib::true_ is_explicitly_convertible_impl(int);
             

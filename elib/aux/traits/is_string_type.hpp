@@ -14,7 +14,7 @@ namespace elib { namespace aux
     {
         namespace traits_detail
         {
-            auto is_string_type_impl(const volatile char* const) -> true_;
+            auto is_string_type_impl(const char* const) -> true_;
             auto is_string_type_impl(std::string) -> true_;
             auto is_string_type_impl(...) -> false_;
             
@@ -22,8 +22,6 @@ namespace elib { namespace aux
             using is_c_string_impl = elib::bool_<
                    is_same<char*, T>::value
                 or is_same<const char*, T>::value
-                or is_same<volatile char*, T>::value
-                or is_same<const volatile char*, T>::value
               >;
         }
                

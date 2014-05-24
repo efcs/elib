@@ -1,2 +1,3 @@
 add_header_test_src(header_tests)
 add_unit_test_src(unit_tests)
+add_unit_test_src(traits_unit_tests)

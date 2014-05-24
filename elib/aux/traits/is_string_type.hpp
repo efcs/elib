@@ -23,7 +23,12 @@ namespace elib { namespace aux
         }
                
         template <class T>
-        using is_c_string = decltype(traits_detail::is_c_string_impl(elib::declval<T>()));
+        struct is_c_string 
+          : decltype(traits_detail::is_c_string_impl(elib::declval<T>())
+        {};
+        
+        template <>
+        struct is_c_string<void> : elib::false_ {};
         
         template <class T>
         struct is_string_type 

@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_signed;
+    using std::is_signed;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_signed_v = is_signed<T>::value;
+    template <class T>
+    constexpr bool is_signed_v = is_signed<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_SIGNED_HPP */

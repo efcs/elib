@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_volatile;
+    using std::is_volatile;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_volatile_v = is_volatile<T>::value;
+    template <class T>
+    constexpr bool is_volatile_v = is_volatile<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_VOLATILE_HPP */

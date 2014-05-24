@@ -8,7 +8,7 @@
 
 namespace elib { namespace aux
 {
-    namespace traits { namespace traits_detail
+    namespace detail
     {
         template <class T, class U>
         using common_type_two = decltype(
@@ -31,19 +31,14 @@ namespace elib { namespace aux
           : common_type_impl<void, common_type_two<T, U>, Rest...>
         {
         };
-    }}                                                      // namespace traits
-    namespace traits
-    {
-        template <class ...Types>
-        struct sfinae_common_type
-          : traits_detail::common_type_impl<Types...>
-        {};
+    }                                                       // namespace detail
+
+    template <class ...Types>
+    struct sfinae_common_type
+      : detail::common_type_impl<Types...>
+    {};
         
-        template <class ...Types>
-        using sfinae_common_type_t = typename sfinae_common_type<Types...>::type;
-        
-    }                                                       // namespace traits
-    
-    using namespace traits;
+    template <class ...Types>
+    using sfinae_common_type_t = typename sfinae_common_type<Types...>::type;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_TRAITS_SFINAE_COMMON_TYPE_HPP */

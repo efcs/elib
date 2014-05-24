@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_function;
+    using std::is_function;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_function_v = is_function<T>::value;
+    template <class T>
+    constexpr bool is_function_v = is_function<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_FUNCTION_HPP */

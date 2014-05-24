@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_fundamental;
+    using std::is_fundamental;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_fundamental_v = is_fundamental<T>::value;
+    template <class T>
+    constexpr bool is_fundamental_v = is_fundamental<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_FUNDAMENTAL_HPP */

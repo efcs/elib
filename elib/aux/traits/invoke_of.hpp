@@ -15,7 +15,7 @@
 
 namespace elib { namespace aux
 {
-    namespace traits { namespace traits_detail
+    namespace detail
     {
         template <class Func, class Obj>
         using is_invoke_base_of = is_base_of<
@@ -90,30 +90,26 @@ namespace elib { namespace aux
         {
             using type = typename invoke_impl<Fn, Args...>::type;
         };
-    }}                                                      // namespace traits
-    namespace traits
-    {
-        template <class Fn, class ...Args>
-        using is_invokable = typename traits_detail::invoke_impl<Fn, Args...>::good;
+    }                                                       // namespace detail
+
+    template <class Fn, class ...Args>
+    using is_invokable = typename detail::invoke_impl<Fn, Args...>::good;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class Fn, class ...Args>
-        constexpr bool is_invokable_v = is_invokable<Fn, Args...>::value;
+    template <class Fn, class ...Args>
+    constexpr bool is_invokable_v = is_invokable<Fn, Args...>::value;
 #   endif
         
-        template <class Fn, class ...Args>
-        struct invoke_of 
-          : traits_detail::invoke_of_impl<
-              is_invokable<Fn, Args...>::value
-            , Fn, Args...
-            >
-        {
-        };
+    template <class Fn, class ...Args>
+    struct invoke_of 
+      : detail::invoke_of_impl<
+            is_invokable<Fn, Args...>::value
+          , Fn, Args...
+          >
+    {
+    };
         
-        template <class Fn, class ...Args>
-        using invoke_of_t = typename invoke_of<Fn, Args...>::type;
-    }                                                       // namespace traits
-    
-    using namespace traits;
+    template <class Fn, class ...Args>
+    using invoke_of_t = typename invoke_of<Fn, Args...>::type;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_TRAITS_INVOKE_OF_HPP */

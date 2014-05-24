@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_SUITE(elib_aux_traits_is_swappable_test_suite)
 
 BOOST_AUTO_TEST_CASE(swap_type_test)
 {
-    ELIB_STATIC_ASSERT(traits_adl_barrier::is_array_swappable<array_swap_t, array_swap_t>::value);
+    ELIB_STATIC_ASSERT(detail::is_array_swappable<array_swap_t, array_swap_t>::value);
     
     ELIB_STATIC_ASSERT(is_swappable<swap_t>::value);
     ELIB_STATIC_ASSERT(is_swappable<nothrow_swap_t>::value);

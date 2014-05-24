@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_abstract;
+    using std::is_abstract;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_abstract_v = is_abstract<T>::value;
+    template <class T>
+    constexpr bool is_abstract_v = is_abstract<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_ABSTRACT_HPP */

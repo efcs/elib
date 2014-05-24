@@ -6,23 +6,17 @@
 # include <elib/aux/traits/has_explicit_conversion.hpp>
 # include <elib/aux/traits/has_implicit_conversion.hpp>
 
-
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        template <class From, class To>
-        using has_conversion = elib::bool_<
-            has_explicit_conversion<From, To>::value
-              || has_implicit_conversion<From, To>::value
-          >;
+    template <class From, class To>
+    using has_conversion = elib::bool_<
+        has_explicit_conversion<From, To>::value
+            || has_implicit_conversion<From, To>::value
+        >;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class From, class To>
-        constexpr bool has_conversion_v = 
-            has_conversion<From, To>::value;
+    template <class From, class To>
+    constexpr bool has_conversion_v = has_conversion<From, To>::value;
 # endif
-    }                                                       // namespace traits
-    using namespace traits;
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_TRAITS_HAS_CONVERSION_HPP */

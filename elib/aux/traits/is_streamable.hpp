@@ -8,20 +8,15 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        template <class T>
-        using is_streamable = elib::bool_<
-            is_input_streamable<T>::value
-            && is_output_streamable<T>::value
-          >;
+    template <class T>
+    using is_streamable = elib::bool_<
+        is_input_streamable<T>::value
+        && is_output_streamable<T>::value
+      >;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_streamable_v = is_streamable<T>::value;
-# endif /* ELIB_CONFIG_HAS_VARIABLE_TEMPLATES */
-    }
-    
-    using namespace traits;
+    template <class T>
+    constexpr bool is_streamable_v = is_streamable<T>::value;
+# endif
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_STREAMABLE_HPP */

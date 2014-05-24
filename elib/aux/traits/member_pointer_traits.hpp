@@ -8,7 +8,7 @@
 
 namespace elib { namespace aux
 {
-    namespace traits { namespace traits_detail
+    namespace detail
     {
         ////////////////////////////////////////////////////////////////////////
         template <
@@ -161,16 +161,12 @@ namespace elib { namespace aux
             using class_type = ClassType;
         };
 
-    }}                                                      // namespace traits
-    namespace traits
-    {
-        ////////////////////////////////////////////////////////////////////////////
-        template <class MemPtr>
-        struct member_pointer_traits
-            : traits_detail::member_pointer_traits_impl<MemPtr>
-        {};
-    }
+    }                                                      // namespace detail
     
-    using namespace traits;
+    ////////////////////////////////////////////////////////////////////////////
+    template <class MemPtr>
+    struct member_pointer_traits
+      : detail::member_pointer_traits_impl<MemPtr>
+    {};
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_MEMBER_POINTER_TRAITS_HPP */

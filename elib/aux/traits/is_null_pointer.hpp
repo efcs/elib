@@ -10,21 +10,16 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
 # if __cplusplus >= 201303L
-        using std::is_null_pointer;
+    using std::is_null_pointer;
 # else
-        template <class T>
-        using is_null_pointer = is_same<T, decltype(nullptr)>;
+    template <class T>
+    using is_null_pointer = is_same<T, decltype(nullptr)>;
 # endif
   
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_null_pointer_v = is_null_pointer<T>::value;
+    template <class T>
+    constexpr bool is_null_pointer_v = is_null_pointer<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_NULL_POINTER_HPP */

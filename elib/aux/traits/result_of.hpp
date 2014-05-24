@@ -5,14 +5,9 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::result_of;
+    using std::result_of;
         
-        template <class T>
-        using result_of_t = typename result_of<T>::type;
-    }                                                       //namespace traits
-    
-    using namespace traits;
+    template <class T>
+    using result_of_t = typename result_of<T>::type;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_RESULT_OF_HPP */

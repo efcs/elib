@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_default_constructible;
+    using std::is_default_constructible;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T>
-        constexpr bool is_default_constructible_v = is_default_constructible<T>::value;
+    template <class T>
+    constexpr bool is_default_constructible_v = is_default_constructible<T>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_DEFAULT_CONSTRUCTIBLE_HPP */

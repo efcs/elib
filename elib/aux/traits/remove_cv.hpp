@@ -5,14 +5,9 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::remove_cv;
+    using std::remove_cv;
         
-        template <class T>
-        using remove_cv_t = typename remove_cv<T>::type;
-    }                                                       //namespace traits
-    
-    using namespace traits;
+    template <class T>
+    using remove_cv_t = typename remove_cv<T>::type;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_REMOVE_CV_HPP */

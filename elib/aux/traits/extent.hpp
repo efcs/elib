@@ -6,16 +6,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::extent;
+    using std::extent;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T, unsigned N = 0>
-        constexpr bool extent_v = extent<T, N>::value;
+    template <class T, unsigned N = 0>
+    constexpr bool extent_v = extent<T, N>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_EXTENT_HPP */

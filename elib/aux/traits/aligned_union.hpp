@@ -7,16 +7,11 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
 # if !ELIB_WORKAROUND(ELIB_CONFIG_LIBSTDCXX, LIBSTDCXX_LIMITED_TYPE_TRAITS)
-        using std::aligned_union;
+    using std::aligned_union;
         
-        template <std::size_t Len, class ...Types>
-        using aligned_union_t = typename aligned_union<Len, Types...>::type;
+    template <std::size_t Len, class ...Types>
+    using aligned_union_t = typename aligned_union<Len, Types...>::type;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_ALIGNED_UNION_HPP */

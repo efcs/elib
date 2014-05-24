@@ -160,8 +160,6 @@ if ( CXX_COMPILER_GCC )
         set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
     endif()
 
-    
-
     set(CXX_GCC_FLAGS " -fmax-errors=5 " )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
 

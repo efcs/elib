@@ -7,17 +7,13 @@
 
 namespace elib { namespace aux
 {
-    namespace traits 
-    {
-        template <class From, class To>
-        using has_implicit_conversion = is_convertible<From, To>;
+    template <class From, class To>
+    using has_implicit_conversion = is_convertible<From, To>;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class From, class To>
-        constexpr bool has_implicit_conversion_v = 
-            has_implicit_conversion<From, To>::value;
+    template <class From, class To>
+    constexpr bool has_implicit_conversion_v = 
+        has_implicit_conversion<From, To>::value;
 # endif
-    }                                                       // namespace traits
-    using namespace traits;
-}}                                                          // namespace elib
+}}                                                            // namespace elib
 #endif /* ELIB_AUX_TRAITS_HAS_IMPLICIT_CONVERSION_HPP */

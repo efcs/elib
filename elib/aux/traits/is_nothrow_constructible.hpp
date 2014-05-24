@@ -6,17 +6,12 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
-    {
-        using std::is_nothrow_constructible;
+    using std::is_nothrow_constructible;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
-        template <class T, class ...Args>
-        constexpr bool is_nothrow_constructible_v = 
-            is_nothrow_constructible<T, Args...>::value;
+    template <class T, class ...Args>
+    constexpr bool is_nothrow_constructible_v = 
+        is_nothrow_constructible<T, Args...>::value;
 # endif
-    }                                                       //namespace traits
-    
-    using namespace traits;
 }}                                                           //namespace elib
 #endif /* ELIB_AUX_TRAITS_IS_NOTHROW_CONSTRUCTIBLE_HPP */

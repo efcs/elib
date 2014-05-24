@@ -6,49 +6,45 @@
 
 namespace elib { namespace aux
 {
-    namespace traits
+
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using uncvptr = remove_cv_t<remove_pointer_t<T>>;
+        
+    ////////////////////////////////////////////////////////////////////////////
+    namespace detail
     {
-        ////////////////////////////////////////////////////////////////////////
         template <class T>
-        using uncvptr = remove_cv_t<remove_pointer_t<T>>;
-        
-        ////////////////////////////////////////////////////////////////////////
-        namespace traits_detail
+        struct uncvptr_all_impl
         {
-            template <class T>
-            struct uncvptr_all_impl
-            {
-                using type = T;
-            };
+            using type = T;
+        };
             
-            template <class T>
-            struct uncvptr_all_impl<T *> : uncvptr_all_impl<T>
-            {
-            };
-            
-            template <class T>
-            struct uncvptr_all_impl<T const> : uncvptr_all_impl<T>
-            {
-            };
-            
-            template <class T>
-            struct uncvptr_all_impl<T volatile> : uncvptr_all_impl<T>
-            {
-            };
-            
-            template <class T>
-            struct uncvptr_all_impl<T const volatile> : uncvptr_all_impl<T>
-            {
-            };
-        }                                            // namespace traits_detail
-        
-        ////////////////////////////////////////////////////////////////////////
         template <class T>
-        using uncvptr_all = typename traits_detail::uncvptr_all_impl<T>::type;
+        struct uncvptr_all_impl<T *> : uncvptr_all_impl<T>
+        {
+        };
+            
+        template <class T>
+        struct uncvptr_all_impl<T const> : uncvptr_all_impl<T>
+        {
+        };
+            
+        template <class T>
+        struct uncvptr_all_impl<T volatile> : uncvptr_all_impl<T>
+        {
+        };
+            
+        template <class T>
+        struct uncvptr_all_impl<T const volatile> : uncvptr_all_impl<T>
+        {
+        };
+    }                                                       // namespace detail
         
-    }                                                       // namespace traits
-    
-    using namespace traits;
+    ////////////////////////////////////////////////////////////////////////////
+    template <class T>
+    using uncvptr_all = typename detail::uncvptr_all_impl<T>::type;
+        
 }}                                                          // namespace elib
 namespace elib
 {

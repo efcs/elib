@@ -21,12 +21,12 @@ struct class_type
     int data{10};
 };
 
-#if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
+
 struct functor
 {
+#if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
     int operator()(int x, int) & { return x; }
     int operator()(int, int y) && { return y; }
-
 # else
     /* change the signature so all tests that use the functor must also work 
      * around this issue.

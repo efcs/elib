@@ -26,13 +26,14 @@ struct functor
 {
     int operator()(int x, int) & { return x; }
     int operator()(int, int y) && { return y; }
-};
+
 # else
     /* change the signature so all tests that use the functor must also work 
      * around this issue.
      */
     int operator()(int , int x, int) { return x; }
 #endif
+};
 
 
 int unpackable_function(int x, std::string, long)

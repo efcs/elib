@@ -127,7 +127,7 @@ namespace elib { namespace aux
     
     ////////////////////////////////////////////////////////////////////////////
     template <
-        class Func, class Pack
+        class Pack
       , ELIB_ENABLE_IF(aux::is_unpackable<Pack>::value)
       >
     auto invoke(invoke_unpack_t, Pack && p)

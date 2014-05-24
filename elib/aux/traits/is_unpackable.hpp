@@ -3,8 +3,9 @@
 
 # include <elib/config.hpp>
 # include <elib/aux/integral_constant.hpp>
-# include <type_traits>
+# include <elib/aux/traits/uncvref.hpp>
 # include <utility> /* for std::tuple_size */
+# include <cstddef> /* for std::size_t */
 
 namespace elib { namespace aux
 {
@@ -18,7 +19,7 @@ namespace elib { namespace aux
             private:
                 template <
                     class U
-                  , class = typename std::tuple_size<U>::type
+                  , std::size_t = std::tuple_size<U>::value
                   >
                 static elib::true_ test(int);
                 
@@ -31,7 +32,7 @@ namespace elib { namespace aux
         }                                            // namespace traits_detail
         
         template <class T>
-        using is_unpackable = typename traits_detail::is_unpackable_impl<T>::type;
+        using is_unpackable = typename traits_detail::is_unpackable_impl<uncvref<T>>::type;
         
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T>

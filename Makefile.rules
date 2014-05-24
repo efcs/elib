@@ -160,18 +160,18 @@ endif
 ################################################################################
 batch_build:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure HEADER_TESTS=ON
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure
 	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) check
 
 batch_build_shared:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure HEADER_TESTS=ON
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure 
 	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) check_shared
 
 batch_build_static:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure HEADER_TESTS=ON
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure 
 	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) check_static

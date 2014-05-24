@@ -10,6 +10,9 @@ struct class_type
 {
     class_type() {}
     
+    int none() { return 0; }
+    int const_none() const { return 1; }
+    
     int first(int x, int) { return x; }
     int second(int, int y) const { return y; }
 };
@@ -17,7 +20,7 @@ struct class_type
 
 BOOST_AUTO_TEST_SUITE(elib_aux_invoke_test_suite)
 
-BOOST_AUTO_TEST_CASE(non_const_member_function_test)
+BOOST_AUTO_TEST_CASE(non_const_member_function_from_ref_with_args_test)
 {
     class_type c;
     auto fn_ptr = &class_type::first;
@@ -25,7 +28,7 @@ BOOST_AUTO_TEST_CASE(non_const_member_function_test)
     BOOST_CHECK(ret == 2);
 }
 
-BOOST_AUTO_TEST_CASE(const_member_function_test)
+BOOST_AUTO_TEST_CASE(const_member_function_from_ref_with_args_test)
 {
     const class_type c;
     auto fn_ptr = &class_type::second;
@@ -33,7 +36,7 @@ BOOST_AUTO_TEST_CASE(const_member_function_test)
     BOOST_CHECK(ret == 3);
 }
 
-BOOST_AUTO_TEST_CASE(non_const_member_function_from_pointer_test)
+BOOST_AUTO_TEST_CASE(non_const_member_function_from_pointer_with_args_test)
 {
     class_type c;
     auto fn_ptr = &class_type::first;
@@ -41,7 +44,7 @@ BOOST_AUTO_TEST_CASE(non_const_member_function_from_pointer_test)
     BOOST_CHECK(ret == 2);
 }
 
-BOOST_AUTO_TEST_CASE(const_member_function_from_pointer_test)
+BOOST_AUTO_TEST_CASE(const_member_function_from_pointer_with_args_test)
 {
     const class_type c;
     auto fn_ptr = &class_type::second;
@@ -49,5 +52,36 @@ BOOST_AUTO_TEST_CASE(const_member_function_from_pointer_test)
     BOOST_CHECK(ret == 3);
 }
 
+BOOST_AUTO_TEST_CASE(non_const_member_function_from_ref_no_args_test)
+{
+    class_type c;
+    auto fn_ptr = &class_type::none;
+    auto ret = invoke(fn_ptr, c);
+    BOOST_CHECK(ret == 0);
+}
+
+BOOST_AUTO_TEST_CASE(const_member_function_from_ref_no_args_test)
+{
+    const class_type c;
+    auto fn_ptr = &class_type::const_none;
+    auto ret = invoke(fn_ptr, c);
+    BOOST_CHECK(ret == 1);
+}
+
+BOOST_AUTO_TEST_CASE(non_const_member_function_from_pointer_no_args_test)
+{
+    class_type c;
+    auto fn_ptr = &class_type::none;
+    auto ret = invoke(fn_ptr, &c);
+    BOOST_CHECK(ret == 0);
+}
+
+BOOST_AUTO_TEST_CASE(const_member_function_from_pointer_no_args_test)
+{
+    const class_type c;
+    auto fn_ptr = &class_type::const_none;
+    auto ret = invoke(fn_ptr, &c);
+    BOOST_CHECK(ret == 1);
+}
 
 BOOST_AUTO_TEST_SUITE_END()

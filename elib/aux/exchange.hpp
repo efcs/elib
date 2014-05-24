@@ -34,9 +34,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     template <
         class T, class U
-      , class IsNoExcept = elib::bool_<noexcept(noexcept(
-            elib::declval<T &>() = elib::declval<U>()
-          ))>
+      , class IsNoExcept = elib::bool_<noexcept(noexcept(T(elib::declval<U>())))>
       >
     inline T exchange(T & obj, U && new_val) 
     ELIB_RETURN_NOEXCEPT(

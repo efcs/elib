@@ -151,8 +151,6 @@ namespace elib { namespace fs { inline namespace v1
 //                 CLASS RECURSIVE_DIRECTORY_ITERATOR                                                         
 ////////////////////////////////////////////////////////////////////////////////
     
-    
-    
     recursive_directory_iterator::recursive_directory_iterator(const path& p, 
         directory_options opt, std::error_code *ec)
       : recursive_directory_iterator()
@@ -167,8 +165,6 @@ namespace elib { namespace fs { inline namespace v1
 
         m_stack_ptr->push(curr_iter);
     }
-    
-    
     
     recursive_directory_iterator& 
     recursive_directory_iterator::m_increment(std::error_code *ec)

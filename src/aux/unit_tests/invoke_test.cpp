@@ -1,6 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <elib/config.hpp>
 #include <elib/aux/invoke.hpp>
 #include <tuple>
 using namespace elib;
@@ -20,12 +21,19 @@ struct class_type
     int data{10};
 };
 
-
+#if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
 struct functor
 {
     int operator()(int x, int) & { return x; }
     int operator()(int, int y) && { return y; }
 };
+# else
+    /* change the signature so all tests that use the functor must also work 
+     * around this issue.
+     */
+    int operator()(int , int x, int) { return x; }
+#endif
+
 
 int unpackable_function(int x, std::string, long)
 {
@@ -114,6 +122,7 @@ BOOST_AUTO_TEST_CASE(member_object_from_ptr_test)
     BOOST_CHECK(ret == 10);
 }
 
+#if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
 BOOST_AUTO_TEST_CASE(functor_lvalue_test)
 {
     functor f;
@@ -126,6 +135,13 @@ BOOST_AUTO_TEST_CASE(functor_rvalue_test)
     auto ret = invoke(functor{}, 1, 2);
     BOOST_CHECK(ret == 2);
 }
+# else
+BOOST_AUTO_TEST_CASE(functor_test)
+{
+    auto ret = invoke(functor{}, 1, 2, 3);
+    BOOST_CHECK(ret == 2);
+}
+# endif
 
 BOOST_AUTO_TEST_CASE(unpackable_function_invoke_test)
 {

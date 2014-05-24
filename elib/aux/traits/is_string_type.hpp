@@ -2,10 +2,10 @@
 #define ELIB_AUX_TRAITS_IS_STRING_TYPE_HPP
 
 # include <elib/aux/integral_constant.hpp>
+# include <elib/aux/declval.hpp>
 # include <elib/aux/traits/is_same.hpp>
 # include <elib/aux/traits/decay.hpp>
 # include <string>
-# include <type_traits>
 # include <utility>
 
 namespace elib { namespace aux
@@ -18,19 +18,16 @@ namespace elib { namespace aux
             auto is_string_type_impl(std::string) -> true_;
             auto is_string_type_impl(...) -> false_;
             
-            template <class T>
-            using is_c_string_impl = elib::bool_<
-                   is_same<char*, T>::value
-                or is_same<const char*, T>::value
-              >;
+            auto is_c_string_impl(const char* const) -> true_;
+            auto is_c_string_impl(...) -> false_;
         }
                
         template <class T>
-        using is_c_string = traits_detail::is_c_string_impl<decay_t<T>>;
+        using is_c_string = decltype(traits_detail::is_c_string_impl(elib::declval<T>()));
         
         template <class T>
         struct is_string_type 
-          : decltype(traits_detail::is_string_type_impl(std::declval<T>()))
+          : decltype(traits_detail::is_string_type_impl(elib::declval<T>()))
         {};
         
         template <>

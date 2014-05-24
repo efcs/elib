@@ -29,11 +29,12 @@ namespace elib { namespace aux
         using is_c_string = traits_detail::is_c_string_impl<decay_t<T>>;
         
         template <class T>
-        using is_string_type = decltype(
-            traits_detail::is_string_type_impl(
-                std::declval<T>()
-              )
-          );
+        struct is_string_type 
+          : decltype(traits_detail::is_string_type_impl(std::declval<T>()))
+        {};
+        
+        template <>
+        struct is_string_type<void> : elib::false_ {};
 # if defined(ELIB_CONFIG_HAS_VARIABLE_TEMPLATES)
         template <class T>
         constexpr bool is_c_string_v = is_c_string<T>::value;

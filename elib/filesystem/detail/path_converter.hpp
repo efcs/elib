@@ -1,7 +1,6 @@
 #ifndef ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP
 #define ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP
 
-# include <elib/aux/convert.hpp>
 # include <elib/aux/traits/decay.hpp>
 #include <locale>
 #include <string>
@@ -13,7 +12,6 @@
 
 namespace elib { namespace fs { inline namespace v1
 {
-    
     class directory_entry;    
 
     namespace detail 
@@ -55,28 +53,28 @@ namespace elib { namespace fs { inline namespace v1
         inline Ret
         dispatch(const char* from)
         {
-            return convert<Ret>(std::string{from});
+            return {std::string{from}};
         }
 
         template <typename Ret>
         inline Ret
         dispatch(const std::string& from)
         {
-            return convert<Ret>(from);
+            return {from};
         }
 
         template <typename Ret>
         inline Ret
         dispatch(const std::vector<char>& from)
         {
-            return convert<Ret>(std::string{from.begin(), from.end()});
+            return {std::string{from.begin(), from.end()}};
         }
 
         template <typename Ret>
         inline Ret
         dispatch(const std::list<char>& from)
         {
-            return convert<Ret>(std::string{from.begin(), from.end()});
+            return {from.begin(), from.end()};
         }
 
         template <typename Ret>

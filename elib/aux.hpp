@@ -14,7 +14,6 @@
 # include <elib/aux/begin_end.hpp>
 # include <elib/aux/bitwise.hpp>
 # include <elib/aux/comparison.hpp>
-# include <elib/aux/convert.hpp>
 # include <elib/aux/declval.hpp>
 # include <elib/aux/default_class.hpp>
 # include <elib/aux/demangle.hpp>

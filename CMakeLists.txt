@@ -22,7 +22,7 @@ option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
 # libraries. Certain libraries require some configuration macros
 # not defined by default.
 option(CONFIG_ELIB_ASSERT_CONFIG 
-      "Ensure that a elib/config finds a valid configuration" OFF)
+      "Ensure that a elib/config finds a valid configuration" ON)
 
 # elib is a open source project that uses coverity scan for defect detection.
 # Certain parts of elib are unsupported on otherwise buggy for EDG.

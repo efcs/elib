@@ -42,12 +42,12 @@ namespace elib
     ///////////////////////////////////////////////////////////////////////////
     template <class T>
     using has_explicit_string_cast = 
-        aux::is_explicitly_convertible<T, std::string>;
+        aux::has_explicit_conversion<T, std::string>;
         
     ////////////////////////////////////////////////////////////////////////////
     template <class T>
     using has_implicit_string_cast = 
-        typename aux::is_convertible<T, std::string>::type;
+        typename aux::has_implicit_conversion<T, std::string>::type;
     
     ////////////////////////////////////////////////////////////////////////////
     template <class T>

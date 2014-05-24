@@ -93,13 +93,14 @@
 # /// Extended elib traits
 # include <elib/aux/traits/begin_end_result.hpp>
 # include <elib/aux/traits/has_begin_end.hpp>
+# include <elib/aux/traits/has_explicit_conversion.hpp>
+# include <elib/aux/traits/has_implicit_conversion.hpp>
+# include <elib/aux/traits/has_conversion.hpp>
 # include <elib/aux/traits/is_explicitly_convertible.hpp>
-# include <elib/aux/traits/is_explicitly_castable.hpp>
-# include <elib/aux/traits/is_implicitly_castable.hpp>
-# include <elib/aux/traits/is_castable.hpp>
 # include <elib/aux/traits/is_swappable.hpp>
 # include <elib/aux/traits/is_input_streamable.hpp>
 # include <elib/aux/traits/is_output_streamable.hpp>
+# include <elib/aux/traits/is_streamable.hpp>
 # include <elib/aux/traits/is_string_type.hpp>
 # include <elib/aux/traits/is_unpackable.hpp>
 # include <elib/aux/traits/invoke_of.hpp>

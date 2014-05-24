@@ -5,8 +5,11 @@
 #include <elib/aux/integral_constant.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>
-
 using namespace elib::aux;
+
+#if defined(__GNUC__) && !defined(__clang__)
+# pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif
 
 
 #define TEST_1(x)                                                  \

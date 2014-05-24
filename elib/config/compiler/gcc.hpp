@@ -15,7 +15,7 @@
 
 /** GCC claims they support ref qualifiers in 4.8.1
  * But they are buggy and cause compile errors */
-# if ELIB_COMPILER_VERSION < 40802L
+# if ELIB_COMPILER_VERSION <= 40802L
 #   define ELIB_CONFIG_NO_REF_QUALIFIERS 1
 # endif
 

@@ -38,13 +38,12 @@ namespace elib { namespace aux
             return name;
         }
     }
-# else /* ELIB_AUX_HAS_DEMANGLE */
-    inline std::string demangle(const char *name)
+    
+    inline std::string demangle(std::type_info const & info)
     {
-        return name;
+        return aux::demangle(info.name());
     }
-# endif
-
+    
     ////////////////////////////////////////////////////////////////////////////
     inline std::string demangle(std::string const & name)
     {
@@ -57,6 +56,27 @@ namespace elib { namespace aux
     {
         return aux::demangle(typeid(T).name());
     }
+# else /* ELIB_AUX_HAS_DEMANGLE */
+    inline std::string demangle(const char *name)
+    {
+        return name;
+    }
     
+    inline std::string demangle(std::type_info const & info)
+    {
+        return info.name();
+    }
+    
+    inline std::string demangle(std::string str)
+    {
+        return str;
+    }
+    
+    template <class T>
+    inline std::string demangle()
+    {
+        return typeid(T).name();
+    }
+# endif
 }}                                                          // namespace elib
 #endif /* ELIB_AUX_DEMANGLE_HPP */

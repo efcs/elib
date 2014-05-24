@@ -24,7 +24,7 @@ namespace elib { namespace aux
                
         template <class T>
         struct is_c_string 
-          : decltype(traits_detail::is_c_string_impl(elib::declval<T>())
+          : decltype(traits_detail::is_c_string_impl(elib::declval<T>()))
         {};
         
         template <>

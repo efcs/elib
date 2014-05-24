@@ -18,6 +18,14 @@ struct class_type
     int second(int, int y) const { return y; }
 };
 
+struct class_type_proxy
+{
+    class_type_proxy() : obj(), ptr(&obj) {}
+    
+    class_type obj;
+    class_type *ptr;
+};
+
 struct functor
 {
     int operator()(int x, int) & { return x; }
@@ -93,6 +101,22 @@ BOOST_AUTO_TEST_CASE(const_member_function_from_pointer_no_args_test)
     auto fn_ptr = &class_type::const_none;
     auto ret = invoke(fn_ptr, &c);
     BOOST_CHECK(ret == 1);
+}
+
+BOOST_AUTO_TEST_CASE(member_object_from_ref_test)
+{
+    class_type_proxy p;
+    auto fn_ptr = &class_type::none;
+    auto ret = invoke(fn_ptr, p.obj);
+    BOOST_CHECK(ret == 0);
+}
+
+BOOST_AUTO_TEST_CASE(member_object_from_ptr_test)
+{
+    class_type_proxy p;
+    auto fn_ptr = &class_type::none;
+    auto ret = invoke(fn_ptr, p.ptr);
+    BOOST_CHECK(ret == 0);
 }
 
 BOOST_AUTO_TEST_CASE(functor_lvalue_test)

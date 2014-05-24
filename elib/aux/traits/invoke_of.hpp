@@ -57,7 +57,7 @@ namespace elib { namespace aux
         ////////////////////////////////////////////////////////////////////////
         template <
             class Func, class First
-          , ELIB_ENABLE_IF(is_member_function_pointer<remove_ref_t<Func>>::value)
+          , ELIB_ENABLE_IF(is_member_object_pointer<remove_ref_t<Func>>::value)
           , ELIB_ENABLE_IF(is_invoke_base_of<Func, First>::value)
           >
         auto try_invoke(Func && fn, First && first)

@@ -64,7 +64,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     template <
         class Func, class First
-      , ELIB_ENABLE_IF(is_member_function_pointer<remove_ref_t<Func>>::value)
+      , ELIB_ENABLE_IF(is_member_object_pointer<remove_ref_t<Func>>::value)
       , ELIB_ENABLE_IF(not detail::is_invoke_base_of<Func, First>::value)
       >
     constexpr auto invoke(Func && fn, First && first)
@@ -81,21 +81,7 @@ namespace elib { namespace aux
     ELIB_AUTO_RETURN_NOEXCEPT(
         elib::forward<Func>(fn)(elib::forward<Args>(args)...)
     )
-    
-    template <
-        class Return, class Func, class ...Args
-      , ELIB_ENABLE_IF(aux::is_invokable<Func, Args...>::value)
-      >
-    constexpr Return invoke(Func && fn, Args &&...args)
-        noexcept(noexcept(::elib::aux::invoke(
-            elib::forward<Func>(fn), elib::forward<Args>(args)...
-          )))
-    {
-        return ::elib::aux::invoke(
-            elib::forward<Func>(fn), elib::forward<Args>(args)...
-          );
-    }
-    
+
     ////////////////////////////////////////////////////////////////////////////
     namespace detail
     {

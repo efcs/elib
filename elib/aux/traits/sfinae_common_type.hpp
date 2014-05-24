@@ -12,7 +12,7 @@ namespace elib { namespace aux
     {
         template <class T, class U>
         using common_type_two = decltype(
-            true ? elib::declval<T>() : elib::declval<U>()
+            elib::declval<bool>() ? elib::declval<T>() : elib::declval<U>()
           );
         
         template <class First, class ...Rest>
@@ -35,7 +35,7 @@ namespace elib { namespace aux
 
     template <class ...Types>
     struct sfinae_common_type
-      : detail::common_type_impl<Types...>
+      : detail::common_type_impl<void, Types...>
     {};
         
     template <class ...Types>

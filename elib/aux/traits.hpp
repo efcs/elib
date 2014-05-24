@@ -96,6 +96,8 @@
 # include <elib/aux/traits/has_explicit_conversion.hpp>
 # include <elib/aux/traits/has_implicit_conversion.hpp>
 # include <elib/aux/traits/has_conversion.hpp>
+# include <elib/aux/traits/has_type.hpp>
+# include <elib/aux/traits/has_value.hpp>
 # include <elib/aux/traits/is_explicitly_convertible.hpp>
 # include <elib/aux/traits/is_swappable.hpp>
 # include <elib/aux/traits/is_input_streamable.hpp>
@@ -103,6 +105,7 @@
 # include <elib/aux/traits/is_streamable.hpp>
 # include <elib/aux/traits/is_string_type.hpp>
 # include <elib/aux/traits/is_unpackable.hpp>
+# include <elib/aux/traits/is_incomplete.hpp>
 # include <elib/aux/traits/invoke_of.hpp>
 # include <elib/aux/traits/member_pointer_traits.hpp>
 # include <elib/aux/traits/sfinae_common_type.hpp>

@@ -439,7 +439,6 @@ namespace elib { namespace fs { inline namespace v1
     { return path(lhs) /= rhs;}
 
     ////////////////////////////////////////////////////////////////////////////
-    //TODO 
     template <class CharT, class Traits>
     inline std::basic_ostream<CharT, Traits> &
     operator<<(std::basic_ostream<CharT, Traits> & os, path const & p)
@@ -449,7 +448,6 @@ namespace elib { namespace fs { inline namespace v1
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //TODO
     template <class CharT, class Traits>
     inline std::basic_istream<CharT, Traits> &
     operator>>(std::basic_istream<CharT, Traits> & is, path & p)
@@ -468,7 +466,11 @@ namespace elib { namespace fs { inline namespace v1
     path u8path(InputIter begin, InputIter end); //TODO
 
     ////////////////////////////////////////////////////////////////////////////
-    std::size_t hash_value(const path& p) noexcept; //TODO
+    inline std::size_t hash_value(const path& p) noexcept
+    {
+        std::hash<path::string_type> h;
+        return h(p.native());
+    }
 
     
 ////////////////////////////////////////////////////////////////////////////////

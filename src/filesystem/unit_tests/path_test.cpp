@@ -310,7 +310,7 @@ BOOST_AUTO_TEST_CASE(replace_extension_test)
         std::string extension;
     };
     
-    const std::vector<extension_testcase> extension_testcases =
+    const std::vector<extension_testcase> testcases =
     {
         {"", "", ""}
       , {"", ".txt", "txt"}
@@ -367,9 +367,9 @@ BOOST_AUTO_TEST_CASE(compare_test)
     BOOST_CHECK(p1.compare(s1) == 0);
     BOOST_CHECK(p2.compare(s1) > 0);
     
-    BOOST_CHECK(p1.compare("/foo/bar/baz") < 0);
-    BOOST_CHECK(p1.compare("/foo/./bar/baz") == 0);
-    BOOST_CHECK(p2.compare("/foo/./bar/baz") > 0);
+    BOOST_CHECK(p1.compare(s2.c_str()) < 0);
+    BOOST_CHECK(p1.compare(s1.c_str()) == 0);
+    BOOST_CHECK(p2.compare(s1.c_str()) > 0);
     
     BOOST_CHECK(p1 < p2);
     BOOST_CHECK(p1 <= p2);

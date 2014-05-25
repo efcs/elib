@@ -148,6 +148,10 @@ coverage:
 	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
 	lcov --remove test_coverage.info '/usr/include/*' '/opt/*' 'src/*/unit_tests/*' --output-file test_coverage.info ;\
 	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
+	$(CMD_VERB) find test_coverage/ -type d -exec chmod 750 {} \; 
+	$(CMD_VERB) find test_coverage/ -type f -exec chmod 640 {} \;
+
+	
 
 ################################################################################
 batch_build_command:

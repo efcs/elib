@@ -10,9 +10,6 @@
 using namespace elib::fs;
 
 
-    
-
-
 BOOST_AUTO_TEST_SUITE(elib_filesystem_path_test_suite)
 
 BOOST_AUTO_TEST_CASE(default_ctor_test)
@@ -85,68 +82,30 @@ BOOST_AUTO_TEST_CASE(assign_iterator_test)
 
 BOOST_AUTO_TEST_CASE(append_operator_test)
 {
+    struct append_operator_testcase
     {
-        std::string expect("p1/p2");
-        path p1("p1");
-        path p2("p2");
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // redundant sep on lhs
-    {
-        std::string expect("p1/p2");
-        path p1("p1/");
-        path p2("p2");
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // redundant sep on rhs
-    {
-        std::string expect("p1/p2");
-        path p1("p1");
-        path p2("/p2");
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // redundant sep on both
-    {
-        std::string expect("p1//p2");
-        path p1("p1/");
-        path p2("/p2");
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // redundant sep on rhs (windows sep)
-    {
-        std::string expect("p1\\p2"); 
-        path p1("p1");
-        path p2("\\p2");
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // p is empty
-    {
-        std::string expect("p1");
-        path p1("p1");
-        path p2;
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // p2 is empty
-    {
-        std::string expect("p2");
-        path p1;
-        path p2("p2");
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
-    }
-    // both empty
-    {
+        std::string lhs;
+        std::string rhs;
         std::string expect;
-        path p1;
-        path p2;
-        p1 /= p2;
-        BOOST_CHECK(p1.native() == expect);
+    };
+    
+    const std::vector<append_operator_testcase> testcases =
+    {
+        {"", "", ""}
+      , {"p1", "p2", "p1/p2"}
+      , {"p1/", "p2", "p1/p2"}
+      , {"p1", "/p2", "p1/p2"}
+      , {"p1/", "/p2", "p1/p2"}
+      , {"p1", "\\p2", "p1\\p2"}
+      , {"p1", "", "p1"}
+      , {"", "p2", "p2"}
+    };
+    
+    for (auto const & testcase : testcases) {
+        path lhs(testcase.lhs);
+        path rhs(testcase.rhs);
+        lhs /= rhs;
+        BOOST_CHECK(lhs == testcase.expect);
     }
 }
 
@@ -242,282 +201,115 @@ BOOST_AUTO_TEST_CASE(clear_test)
 
 BOOST_AUTO_TEST_CASE(make_preferred_test)
 {
-    // empty test
+    struct make_preferred_testcase
     {
-        path expect;
-        path p;
-        p.make_preferred();
-        BOOST_CHECK(p == expect);
-    }
-    // no seperator test
+        std::string raw;
+        std::string expect;
+    };
+    
+    const std::vector<make_preferred_testcase> testcases =
     {
-        path expect("hello_world");
-        path p(expect);
+        {"", ""}
+      , {"hello_world", "hello_world"}
+      , {"/", "/"}
+      , {"/foo/bar/baz/", "/foo/bar/baz/"}
+      , {"\\", "/"}
+      , {"\\foo\\bar\\baz\\", "/foo/bar/baz/"}
+      , {"\\foo/bar\\/baz\\", "/foo/bar//baz/"}
+    };
+    
+    for (auto const & testcase : testcases) {
+        path p(testcase.raw);
         p.make_preferred();
-        BOOST_CHECK(p == expect);
-    }
-    // only prefered seperator
-    {
-        path expect("/");
-        path p(expect);
-        p.make_preferred();
-        BOOST_CHECK(p == expect);
-    }
-    // preferred seperator in path
-    {
-        path expect("/foo/bar/baz/");
-        path p(expect);
-        p.make_preferred();
-        BOOST_CHECK(p == expect);
-    }
-    // only non-preferred seperator
-    {
-        path expect("/");
-        path p("\\");
-        p.make_preferred();
-        BOOST_CHECK(p == expect);
-    }
-    // non-preferred in path
-    {
-        path expect("/foo/bar/baz/");
-        path p("\\foo\\bar\\baz\\");
-        p.make_preferred();
-        BOOST_CHECK(p == expect);
-    }
-    // mixed
-    {
-        path expect("/foo/bar//baz/");
-        path p("\\foo/bar\\/baz\\");
-        p.make_preferred();
-        BOOST_CHECK(p == expect);
+        BOOST_CHECK(p == testcase.expect);
     }
 }
 
 BOOST_AUTO_TEST_CASE(remove_filename_test)
 {
-    // empty string test
+    struct remove_filename_testcase
     {
-        path expect;
-        path p;
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-        BOOST_CHECK(not p.has_filename());
-    }
-    // root path test
+        std::string raw;
+        std::string expect;
+    };
+    
+    const std::vector<remove_filename_testcase> testcases =
     {
-        path expect;
-        path p("/");
+        {"", ""}
+      , {"/", ""}
+      , {"\\", ""}
+      , {".", ""}
+      , {"..", ""}
+      , {"/foo", "/"}
+      , {"/foo/", "/foo"}
+      , {"/foo/.", "/foo"}
+      , {"/foo/..", "/foo"}
+      , {"/foo/////", "/foo"}
+      , {"/foo//\\/", "/foo"}
+      , {"file.txt", ""}
+      , {"bar/../baz/./file.txt", "bar/../baz/."}
+    };
+    
+    for (auto const & testcase :  testcases) {
+        path p(testcase.raw);
         p.remove_filename();
-        BOOST_CHECK(p == expect);
-        BOOST_CHECK(not p.has_filename());
-    }
-    // root path test (other seperator)
-    {
-        path expect;
-        path p("\\");
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-        BOOST_CHECK(not p.has_filename());
-    }
-    // dot test
-    {
-        path expect;
-        path p(".");
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-        BOOST_CHECK(not p.has_filename());
-    }
-    // double dot test
-    {
-        path expect;
-        path p("..");
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-        BOOST_CHECK(not p.has_filename());
-    }
-    // with filename test
-    {
-        path expect("/");
-        path p("/foo");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // with slash test
-    {
-        path expect("/foo");
-        path p("/foo/");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // with dot after path
-    {
-        path expect("/foo");
-        path p("/foo/.");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // with double dot after path
-    {
-        path expect("/foo");
-        path p("/foo/..");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // with multiple seperators
-    {
-        path expect("/foo");
-        path p("/foo/////");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // with mixed seperator
-    {
-        path expect("/foo");
-        path p("/foo//\\/");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // pure file name
-    {
-        path expect;
-        path p("file.txt");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
-    }
-    // path with file name
-    {
-        path expect("bar/../baz/.");
-        path p("bar/../baz/./file.txt");
-        BOOST_REQUIRE(p.has_filename());
-        p.remove_filename();
-        BOOST_CHECK(p == expect);
+        BOOST_CHECK(p == testcase.expect);
     }
 }
 
 BOOST_AUTO_TEST_CASE(replace_filename_test)
 {
-    // with filename test
+    struct replace_filename_testcase
     {
-        path expect("/bar");
-        path p("/foo");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // with root as filename
+        std::string raw;
+        std::string expect;
+        std::string filename;
+    };
+    
+    const std::vector<replace_filename_testcase> testcases =
     {
-        path expect("bar");
-        path p("/");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // with non-preferred root
-    {
-        path expect("bar");
-        path p("\\");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // with multi token seperator
-    {
-        path expect("bar");
-        path p("///");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // with multi token non-prefered seperator
-    {
-        path expect("bar");
-        path p("\\\\");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // dot 
-    {
-        path expect("bar");
-        path p(".");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // double dot
-    {
-        path expect("bar");
-        path p("..");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // multi part path
-    {
-        path expect("/foo\\baz/bong/bar");
-        path p("/foo\\baz/bong/");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
-    }
-    // multi part path
-    {
-        path expect("/foo\\baz/bar");
-        path p("/foo\\baz/bong");
-        p.replace_filename("bar");
-        BOOST_CHECK(p == expect);
+        {"/foo", "/bar", "bar"}
+      , {"/", "bar", "bar"}
+      , {"\\", "bar", "bar"}
+      , {"///", "bar", "bar"}
+      , {"\\\\", "bar", "bar"}
+      , {".", "bar", "bar"}
+      , {"..", "bar", "bar"}
+      , {"/foo\\baz/bong/", "/foo\\baz/bong/bar", "bar"}
+      , {"/foo\\baz/bong", "/foo\\baz/bar", "bar"}
+    };
+    
+    for (auto const & testcase : testcases) {
+        path p(testcase.raw);
+        p.replace_filename(testcase.filename);
+        BOOST_CHECK(p == testcase.expect);
     }
 }
 
 BOOST_AUTO_TEST_CASE(replace_extension_test)
 {
-    // empty test
+    struct extension_test
     {
-        path expect;
-        path p;
-        p.replace_extension();
-        BOOST_CHECK(p == expect);
-    }
-    // empty path test no dot
+        std::string raw;
+        std::string expect;
+        std::string extension;
+    };
+    
+    const std::vector<extension_test> extension_test_list =
     {
-        path expect(".txt");
-        path p;
-        p.replace_extension("txt");
-        BOOST_CHECK(p == expect);
-    }
-    // empty path with dot
-    {
-        path expect(".txt");
-        path p;
-        p.replace_extension(".txt");
-        BOOST_CHECK(p == expect);
-    }
-    // non-empty path with no extension
-    {
-        path expect("/foo.txt");
-        path p("/foo");
-        p.replace_extension(".txt");
-        BOOST_CHECK(p == expect);
-    }
-    // non-empty path with no extension no dot
-    {
-        path expect("/foo.txt");
-        path p("/foo");
-        p.replace_extension("txt");
-        BOOST_CHECK(p == expect);
-    }
-    // non-empty path with extension
-    {
-        path expect("/foo.txt");
-        path p("/foo.cpp");
-        p.replace_extension(".txt");
-        BOOST_CHECK(p == expect);
-    }
-    // non-empty path with extension no dot
-    {
-        path expect("/foo.txt");
-        path p("/foo.cpp");
-        p.replace_extension("txt");
-        BOOST_CHECK(p == expect);
+        {"", "", ""}
+      , {"", ".txt", "txt"}
+      , {"", ".txt", ".txt"}
+      , {"/foo", "/foo.txt", ".txt"}
+      , {"/foo", "/foo.txt", "txt"}
+      , {"/foo.cpp", "/foo.txt", ".txt"}
+      , {"/foo.cpp", "/foo.txt", "txt"}
+    };
+    
+    for (auto const & test :  extension_test_list) {
+        path p(test.raw);
+        p.replace_extension(test.extension);
+        BOOST_CHECK(p == test.expect);
     }
 }
 

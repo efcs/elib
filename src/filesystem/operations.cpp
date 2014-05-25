@@ -874,8 +874,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
                 throw filesystem_error("elib::fs::file_size", p, tmp_ec);
             }
         } else {
-            ELIB_ASSERT(false);
-            throw "TODO";
+            ELIB_ASSERT_ALWAYS(!bool("TODO"));
         }
     }
 
@@ -1089,7 +1088,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     path temp_directory_path(std::error_code *ec)
     {
         const char* env_paths[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};
-        path p{};
+        path p;
         std::error_code m_ec;
         if (ec) ec->clear();
         for (auto & ep : env_paths) 
@@ -1107,7 +1106,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             }
         }
 
-        p = path{"/tmp"};
+        p = "/tmp";
         if (fs::is_directory(p, m_ec)) {
             if (ec) ec->clear();
             return p;
@@ -1119,7 +1118,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             throw filesystem_error("elib::fs::temp_directory_path", m_ec);
         } else {
             *ec = m_ec;
-            return path{};
+            return {};
         }
     }
 
@@ -1144,22 +1143,17 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         }  
     }                                                              // namespace 
 
-
-    //-------------------------------- unique_path --------------------------------// 
-
-
     path unique_path(const path& model, std::error_code *ec)
     {
         std::string tmp_str = model.native();
-        for (auto& ch : tmp_str) {
+        for (auto & ch : tmp_str) {
             if (ch == '%') ch = detail::random_hex_char();
         }
         if (ec) ec->clear();
-        return path {tmp_str};
+        return tmp_str;
     }                                                     // unique_path
       
 }}}}                                          // namespace elib::fs::v1::detail
-    
     
 ////////////////////////////////////////////////////////////////////////////////
 //                      OPERATORS DEFINITION                                                    

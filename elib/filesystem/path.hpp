@@ -556,9 +556,9 @@ namespace elib { namespace fs { inline namespace v1
         const string_type&
         m_path_str() const;
       
-        path m_element {};
+        path m_element;
         const path *m_path_ptr{nullptr};
-        std::size_t m_pos {};
+        std::size_t m_pos{};
     };
     
     ////////////////////////////////////////////////////////////////////////////

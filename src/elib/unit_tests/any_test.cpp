@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(bad_any_cast_test)
 BOOST_AUTO_TEST_CASE(default_ctor_test)
 {
     static_assert(
-        noexcept(noexcept(any()))
+        noexcept(any())
       , "any must be noexcept default constructible"
       );
     
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(large_value_assignment_test)
 BOOST_AUTO_TEST_CASE(clear_test)
 {
     static_assert(
-        noexcept(noexcept(elib::declval<any>().clear()))
+        noexcept(elib::declval<any>().clear())
       , "clear must be noexcept"
       );
     
@@ -312,7 +312,7 @@ BOOST_AUTO_TEST_CASE(clear_test)
 BOOST_AUTO_TEST_CASE(swap_member_noexcept_test)
 {
     static_assert(
-        noexcept(noexcept(elib::declval<any &>().swap(elib::declval<any &>())))
+        noexcept(elib::declval<any &>().swap(elib::declval<any &>()))
       , "Swap member must be noexcept"
       );
     BOOST_CHECK(true);

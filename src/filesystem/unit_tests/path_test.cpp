@@ -9,46 +9,9 @@
 #include <vector>
 using namespace elib::fs;
 
-struct path_decomp
-{
-    std::string raw;
-    std::vector<std::string> elements;
-    std::string root_path;
-    std::string root_name;
-    std::string root_directory;
-    std::string relative_path;
-    std::string parent_path;
-    std::string filename;
-};
 
-/// Path decomp table is given in boost filesystem documentation.
-const std::vector<path_decomp> decomp_list =
-    {
-        {"", {}, "", "", "", "", "", ""}
-      , {".", {"."}, "", "", "", ".", "", "."}
-      , {"..", {".."}, "", "", "", "..", "", ".."}
-      , {"foo", {"foo"}, "", "", "", "foo", "", "foo"}
-      , {"/", {"/"}, "/", "", "/", "", "", "/"}
-      , {"/foo", {"/", "foo"}, "/", "", "/", "foo", "/", "foo"}
-      , {"foo/", {"foo", "."}, "", "", "", "foo/", "foo", "."}
-      , {"/foo/", {"/", "foo", "."}, "/", "", "/", "foo/", "/foo", "."}
-      , {"foo/bar", {"foo","bar"}, "",  "", "",  "foo/bar", "foo", "bar"}
-      , {"/foo/bar", {"/","foo","bar"}, "/", "", "/", "foo/bar", "/foo", "bar"}
-      , {"//net", {"//net"}, "//net", "//net", "", "", "", "//net"}
-      , {"//net/foo", {"//net", "/", "foo"}, "//net", "//net", "/", "foo", "//net/", "foo"}
-      , {"///foo///", {"/", "foo", "."}, "/", "", "/", "foo///", "///foo", "."}
-      , {"///foo///bar", {"/", "foo", "bar"}, "/", "", "/", "foo///bar", "///foo", "bar"}
-      , {"/.", {"/", "."}, "/", "", "/", ".", "/", "."}
-      , {"./", {".", "."}, "", "", "", "./", ".", "."}
-      , {"/..", {"/", ".."}, "/", "", "/", "..", "/", ".."}
-      , {"../", {"..", "."}, "", "", "", "../", "..", "."}
-      , {"foo/.", {"foo", "."}, "", "", "", "foo/.", "foo", "."}
-      , {"foo/..", {"foo", ".."}, "", "", "", "foo/..", "foo", ".."}
-      , {"foo/./", {"foo", ".", "."}, "", "", "", "foo/./", "foo/.", "."}
-      , {"foo/./bar", {"foo", ".", "bar"}, "", "", "", "foo/./bar", "foo/.", "bar"}
-      , {"foo/../", {"foo", "..", "."}, "", "", "", "foo/../", "foo/..", "."}
-      , {"foo/../bar", {"foo", "..", "bar"}, "", "", "", "foo/../bar", "foo/..", "bar"}
-    };
+    
+
 
 BOOST_AUTO_TEST_SUITE(elib_filesystem_path_test_suite)
 
@@ -601,18 +564,108 @@ BOOST_AUTO_TEST_CASE(compare_test)
 
 BOOST_AUTO_TEST_CASE(path_decomp_test)
 {
-    for (auto const & decomp : decomp_list) {
+    
+    struct path_decomp
+    {
+        std::string raw;
+        std::vector<std::string> elements;
+        std::string root_path;
+        std::string root_name;
+        std::string root_directory;
+        std::string relative_path;
+        std::string parent_path;
+        std::string filename;
+    };
+
+    /// Path decomp table is given in boost filesystem documentation.
+    const std::vector<path_decomp> path_decomp_list =
+    {
+        {"", {}, "", "", "", "", "", ""}
+      , {".", {"."}, "", "", "", ".", "", "."}
+      , {"..", {".."}, "", "", "", "..", "", ".."}
+      , {"foo", {"foo"}, "", "", "", "foo", "", "foo"}
+      , {"/", {"/"}, "/", "", "/", "", "", "/"}
+      , {"/foo", {"/", "foo"}, "/", "", "/", "foo", "/", "foo"}
+      , {"foo/", {"foo", "."}, "", "", "", "foo/", "foo", "."}
+      , {"/foo/", {"/", "foo", "."}, "/", "", "/", "foo/", "/foo", "."}
+      , {"foo/bar", {"foo","bar"}, "",  "", "",  "foo/bar", "foo", "bar"}
+      , {"/foo/bar", {"/","foo","bar"}, "/", "", "/", "foo/bar", "/foo", "bar"}
+      , {"//net", {"//net"}, "//net", "//net", "", "", "", "//net"}
+      , {"//net/foo", {"//net", "/", "foo"}, "//net/", "//net", "/", "foo", "//net/", "foo"}
+      , {"///foo///", {"/", "foo", "."}, "/", "", "/", "foo///", "///foo", "."}
+      , {"///foo///bar", {"/", "foo", "bar"}, "/", "", "/", "foo///bar", "///foo", "bar"}
+      , {"/.", {"/", "."}, "/", "", "/", ".", "/", "."}
+      , {"./", {".", "."}, "", "", "", "./", ".", "."}
+      , {"/..", {"/", ".."}, "/", "", "/", "..", "/", ".."}
+      , {"../", {"..", "."}, "", "", "", "../", "..", "."}
+      , {"foo/.", {"foo", "."}, "", "", "", "foo/.", "foo", "."}
+      , {"foo/..", {"foo", ".."}, "", "", "", "foo/..", "foo", ".."}
+      , {"foo/./", {"foo", ".", "."}, "", "", "", "foo/./", "foo/.", "."}
+      , {"foo/./bar", {"foo", ".", "bar"}, "", "", "", "foo/./bar", "foo/.", "bar"}
+      , {"foo/../", {"foo", "..", "."}, "", "", "", "foo/../", "foo/..", "."}
+      , {"foo/../bar", {"foo", "..", "bar"}, "", "", "", "foo/../bar", "foo/..", "bar"}
+    };
+    
+    for (auto const & decomp : path_decomp_list) {
         path p(decomp.raw);
         BOOST_REQUIRE(p == decomp.raw);
+        
         BOOST_CHECK(p.root_path() == decomp.root_path);
+        BOOST_CHECK(p.has_root_path() == not decomp.root_path.empty());
+        
         BOOST_CHECK(p.root_name() == decomp.root_name);
+        BOOST_CHECK(p.has_root_name() == not decomp.root_name.empty());
+        
         BOOST_CHECK(p.root_directory() == decomp.root_directory);
+        BOOST_CHECK(p.has_root_directory() == not decomp.root_directory.empty());
+        
         BOOST_CHECK(p.relative_path() == decomp.relative_path);
+        BOOST_CHECK(p.has_relative_path() == not decomp.relative_path.empty());
+        
         BOOST_CHECK(p.parent_path() == decomp.parent_path);
-        if (p.parent_path() != decomp.parent_path) {
-            std::cout << "parent path: " << p.parent_path() << " expect: " << decomp.parent_path << std::endl;
-        }
+        BOOST_CHECK(p.has_parent_path() == not decomp.parent_path.empty());
+        
         BOOST_CHECK(p.filename() == decomp.filename);
+        BOOST_CHECK(p.has_filename() == not decomp.filename.empty());
+        
+        BOOST_CHECK(p.is_absolute() == p.has_root_directory());
+        BOOST_CHECK(p.is_relative() == not p.is_absolute());
+    }
+}
+
+BOOST_AUTO_TEST_CASE(filename_decomp_test)
+{
+    struct filename_decomp
+    {
+        std::string raw;
+        std::string filename;
+        std::string stem;
+        std::string extension;
+    };
+    
+    const std::vector<filename_decomp> filename_decomp_list = 
+    {
+        {"", "", "", ""}
+      , {".", ".", ".", ""}
+      , {"..", "..", "..", ""}
+      , {"/", "/", "/", ""}
+      , {"foo", "foo", "foo", ""}
+      , {"/foo/bar.txt", "bar.txt", "bar", ".txt"}
+      , {"foo..txt", "foo..txt", "foo.", ".txt"}
+    };
+    
+    for (auto const & decomp : filename_decomp_list) {
+        path p(decomp.raw);
+        BOOST_REQUIRE(p == decomp.raw);
+        
+        BOOST_CHECK(p.filename() == decomp.filename);
+        BOOST_CHECK(p.has_filename() == not decomp.filename.empty());
+        
+        BOOST_CHECK(p.stem() == decomp.stem);
+        BOOST_CHECK(p.has_stem() == not decomp.stem.empty());
+        
+        BOOST_CHECK(p.extension() == decomp.extension);
+        BOOST_CHECK(p.has_extension() == not decomp.extension.empty());
     }
 }
 

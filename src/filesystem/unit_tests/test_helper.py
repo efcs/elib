@@ -85,6 +85,7 @@ def cwd(to):
     with open(to, 'w') as f:
         f.write(d + '\n')
 
+
 def stat(p, to):
     p = sanitize_env_path(p)
     to = sanitize_env_path(to)

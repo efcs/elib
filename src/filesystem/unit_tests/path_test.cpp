@@ -36,14 +36,14 @@ BOOST_AUTO_TEST_CASE(string_ctor_test)
 {
     std::string str_path("my_path");
     path p(str_path);
-    BOOST_CHECK(p.native() == str_path);
+    BOOST_CHECK(p == str_path);
 }
 
 BOOST_AUTO_TEST_CASE(iterator_ctor_test)
 {
     std::string str_path("my_path");
     path p(str_path.begin(), str_path.end());
-    BOOST_CHECK(p.native() == str_path);
+    BOOST_CHECK(p== str_path);
 }
 
 BOOST_AUTO_TEST_CASE(assign_operator_copy_test)
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(assign_operator_copy_test)
     path p;
     const path p2(expect);
     p = p2;
-    BOOST_CHECK(p.native() == expect);
+    BOOST_CHECK(p == expect);
 }
 
 BOOST_AUTO_TEST_CASE(assign_operator_move_test)
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(append_string_operator_test)
     path p1("p1");
     std::string p2("p2");
     p1 /= p2;
-    BOOST_CHECK(p1.native() == expect);
+    BOOST_CHECK(p1 == expect);
 }
 
 BOOST_AUTO_TEST_CASE(append_string_method_test)
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(append_string_method_test)
     path p1("p1");
     std::string p2("p2");
     p1.append(p2);
-    BOOST_CHECK(p1.native() == expect);
+    BOOST_CHECK(p1 == expect);
 }
 
 BOOST_AUTO_TEST_CASE(append_iterator_method_test)
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(append_iterator_method_test)
     path p1("p1");
     std::string p2("p2");
     p1.append(p2.begin(), p2.end());
-    BOOST_CHECK(p1.native() == expect);
+    BOOST_CHECK(p1 == expect);
 }
 
 BOOST_AUTO_TEST_CASE(concat_test)
@@ -254,6 +254,7 @@ BOOST_AUTO_TEST_CASE(remove_filename_test)
       , {"/foo/.", "/foo"}
       , {"/foo/..", "/foo"}
       , {"/foo/////", "/foo"}
+      , {"/foo\\\\", "/foo"}
       , {"/foo//\\/", "/foo"}
       , {"file.txt", ""}
       , {"bar/../baz/./file.txt", "bar/../baz/."}
@@ -263,6 +264,11 @@ BOOST_AUTO_TEST_CASE(remove_filename_test)
         path p(testcase.raw);
         p.remove_filename();
         BOOST_CHECK(p == testcase.expect);
+        if (p != testcase.expect) {
+            std::cout << "raw: " << testcase.raw << std::endl;
+            std::cout << "expect: " << testcase.expect << std::endl;
+            std::cout << "got: " << p << std::endl;
+        }
     }
 }
 
@@ -389,7 +395,7 @@ BOOST_AUTO_TEST_CASE(compare_test)
 
 BOOST_AUTO_TEST_CASE(path_decomp_test)
 {
-    struct path_decomp
+    struct path_decomp_testcase
     {
         std::string raw;
         std::vector<std::string> elements;
@@ -402,7 +408,7 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
     };
 
     /// Path decomp table is given in boost filesystem documentation.
-    const std::vector<path_decomp> path_decomp_list =
+    const std::vector<path_decomp_testcase> testcases =
     {
         {"", {}, "", "", "", "", "", ""}
       , {".", {"."}, "", "", "", ".", "", "."}
@@ -430,41 +436,41 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
       , {"foo/../bar", {"foo", "..", "bar"}, "", "", "", "foo/../bar", "foo/..", "bar"}
     };
     
-    for (auto const & decomp : path_decomp_list) {
-        path p(decomp.raw);
-        BOOST_REQUIRE(p == decomp.raw);
+    for (auto const & testcase : testcases) {
+        path p(testcase.raw);
+        BOOST_REQUIRE(p == testcase.raw);
         
-        BOOST_CHECK(p.root_path() == decomp.root_path);
-        BOOST_CHECK(p.has_root_path() == not decomp.root_path.empty());
+        BOOST_CHECK(p.root_path() == testcase.root_path);
+        BOOST_CHECK(p.has_root_path() == not testcase.root_path.empty());
         
-        BOOST_CHECK(p.root_name() == decomp.root_name);
-        BOOST_CHECK(p.has_root_name() == not decomp.root_name.empty());
+        BOOST_CHECK(p.root_name() == testcase.root_name);
+        BOOST_CHECK(p.has_root_name() == not testcase.root_name.empty());
         
-        BOOST_CHECK(p.root_directory() == decomp.root_directory);
-        BOOST_CHECK(p.has_root_directory() == not decomp.root_directory.empty());
+        BOOST_CHECK(p.root_directory() == testcase.root_directory);
+        BOOST_CHECK(p.has_root_directory() == not testcase.root_directory.empty());
         
-        BOOST_CHECK(p.relative_path() == decomp.relative_path);
-        BOOST_CHECK(p.has_relative_path() == not decomp.relative_path.empty());
+        BOOST_CHECK(p.relative_path() == testcase.relative_path);
+        BOOST_CHECK(p.has_relative_path() == not testcase.relative_path.empty());
         
-        BOOST_CHECK(p.parent_path() == decomp.parent_path);
-        BOOST_CHECK(p.has_parent_path() == not decomp.parent_path.empty());
+        BOOST_CHECK(p.parent_path() == testcase.parent_path);
+        BOOST_CHECK(p.has_parent_path() == not testcase.parent_path.empty());
         
-        BOOST_CHECK(p.filename() == decomp.filename);
-        BOOST_CHECK(p.has_filename() == not decomp.filename.empty());
+        BOOST_CHECK(p.filename() == testcase.filename);
+        BOOST_CHECK(p.has_filename() == not testcase.filename.empty());
         
         BOOST_CHECK(p.is_absolute() == p.has_root_directory());
         BOOST_CHECK(p.is_relative() == not p.is_absolute());
         
         BOOST_CHECK_EQUAL_COLLECTIONS(
             p.begin(), p.end()
-          , decomp.elements.begin(), decomp.elements.end()
+          , testcase.elements.begin(), testcase.elements.end()
           );
     }
 }
 
 BOOST_AUTO_TEST_CASE(filename_decomp_test)
 {
-    struct filename_decomp
+    struct filename_decomp_testcase
     {
         std::string raw;
         std::string filename;
@@ -472,7 +478,7 @@ BOOST_AUTO_TEST_CASE(filename_decomp_test)
         std::string extension;
     };
     
-    const std::vector<filename_decomp> filename_decomp_list = 
+    const std::vector<filename_decomp_testcase> testcases = 
     {
         {"", "", "", ""}
       , {".", ".", ".", ""}
@@ -483,18 +489,18 @@ BOOST_AUTO_TEST_CASE(filename_decomp_test)
       , {"foo..txt", "foo..txt", "foo.", ".txt"}
     };
     
-    for (auto const & decomp : filename_decomp_list) {
-        path p(decomp.raw);
-        BOOST_REQUIRE(p == decomp.raw);
+    for (auto const & testcase : testcases) {
+        path p(testcase.raw);
+        BOOST_REQUIRE(p == testcase.raw);
         
-        BOOST_CHECK(p.filename() == decomp.filename);
-        BOOST_CHECK(p.has_filename() == not decomp.filename.empty());
+        BOOST_CHECK(p.filename() == testcase.filename);
+        BOOST_CHECK(p.has_filename() == not testcase.filename.empty());
         
-        BOOST_CHECK(p.stem() == decomp.stem);
-        BOOST_CHECK(p.has_stem() == not decomp.stem.empty());
+        BOOST_CHECK(p.stem() == testcase.stem);
+        BOOST_CHECK(p.has_stem() == not testcase.stem.empty());
         
-        BOOST_CHECK(p.extension() == decomp.extension);
-        BOOST_CHECK(p.has_extension() == not decomp.extension.empty());
+        BOOST_CHECK(p.extension() == testcase.extension);
+        BOOST_CHECK(p.has_extension() == not testcase.extension.empty());
     }
 }
 

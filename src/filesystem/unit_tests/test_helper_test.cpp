@@ -19,6 +19,7 @@ BOOST_AUTO_TEST_CASE(python_test)
     python_create_fifo("fifo1");
     python_create_node("node1");
     python_remove("f2");
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

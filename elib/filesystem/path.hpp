@@ -25,7 +25,7 @@ namespace elib { namespace fs { inline namespace v1
         static constexpr value_type preferred_separator = '/';
         static constexpr value_type other_separator = '\\';
        
-        path() = default;
+        path() {}
         path(path const &) = default;
         path(path &&) = default;
         
@@ -112,7 +112,9 @@ namespace elib { namespace fs { inline namespace v1
             bool const append_sep = 
                 not empty() && not p.empty() 
                   && p.m_pathname[0] != preferred_separator 
-                  && m_pathname.back() != preferred_separator;
+                  && p.m_pathname[0] != other_separator
+                  && m_pathname.back() != preferred_separator
+                  && m_pathname.back() != other_separator;
                 
             if (append_sep)  m_pathname += preferred_separator;
             
@@ -255,18 +257,8 @@ namespace elib { namespace fs { inline namespace v1
             remove_filename();
             return (*this /= replacement);
         }
-    
-        ////////////////////////////////////////////////////////////////////////
-        path & replace_extension(path const & replacement);
         
-        // This is a workaround for using a defaulted constructor
-        path & replace_extension()
-        {
-            return replace_extension(path{});
-        }
-        
-        // TODO use this version
-        // path & replace_extension(path const & replacement = path());
+        path & replace_extension(path const & replacement = path());
         
         ////////////////////////////////////////////////////////////////////////
         void swap(path& rhs) noexcept
@@ -417,6 +409,13 @@ namespace elib { namespace fs { inline namespace v1
         
         iterator begin() const;
         iterator end() const;
+        
+    private:
+        
+        bool m_is_sep(char ch) const noexcept
+        {
+            return ch == preferred_separator || ch == other_separator;
+        }
         
     private:
         string_type m_pathname{};

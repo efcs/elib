@@ -4,6 +4,7 @@
 # include <elib/filesystem/config.hpp>
 # include <elib/filesystem/path.hpp>
 # include <elib/assert.hpp>
+# include <elib/fmt.hpp>
 # include <system_error>
 # include <memory>
 # include <string>
@@ -22,23 +23,25 @@ namespace elib { namespace fs { inline namespace v1
     public:
 
         filesystem_error(const std::string& what_arg, std::error_code ec)
-            : std::system_error{ec}, m_impl{std::make_shared<impl_t>()}
+            : std::system_error{ec}, m_impl(std::make_shared<storage_t>())
         {
-            m_impl->what_arg = what_arg;
+            m_impl->what_arg = elib::fmt("%s: %s ", ec.message(), what_arg);
         }
             
         filesystem_error(const std::string& what_arg, const path& p,
                         std::error_code ec)
-            : filesystem_error{what_arg, ec}
+            : std::system_error{ec}, m_impl{std::make_shared<storage_t>(p)}
         {
-            m_impl->p1 = p;
+            m_impl->what_arg = elib::fmt("%s: %s (path=%s)", ec.message(), what_arg, p.native());
         }
             
         filesystem_error(const std::string& what_arg, const path& p1,
                         const path& p2, std::error_code ec)
-            : filesystem_error{what_arg, p1, ec}
+            : std::system_error{ec}, m_impl(std::make_shared<storage_t>(p1, p2))
         {
-            m_impl->p2 = p2;
+            m_impl->what_arg = elib::fmt("%s: %s (path=%s) (path=%s)"
+              , ec.message(), what_arg, p1.native(), p2.native()
+              );
         }
             
         const path&
@@ -56,14 +59,23 @@ namespace elib { namespace fs { inline namespace v1
             
     private:
         
-        struct impl_t 
+        struct storage_t
         {
-            std::string what_arg {};
-            path p1 {};
-            path p2 {};
+            storage_t() {}
+            
+            storage_t(path xp1) 
+              : p1(elib::move(xp1))
+            {}
+              
+            storage_t(path xp1, path xp2) 
+              : p1(elib::move(xp1)), p2(elib::move(xp2))
+            {}
+            
+            path p1, p2;
+            std::string what_arg;
         };
             
-        std::shared_ptr<impl_t> m_impl;
+        std::shared_ptr<storage_t> m_impl;
     };
 # if defined(__clang__)
 #   pragma clang diagnostic pop

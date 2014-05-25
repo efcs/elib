@@ -35,7 +35,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     template <
         class T, class U
-      , class IsNoExcept = bool_<aux::is_nothrow_assignable<T, U &&>::value>
+      , class IsNoExcept = bool_<noexcept(elib::declval<T &>() = elib::declval<U>())>
       >
     inline T exchange(T & obj, U && new_val) 
     ELIB_RETURN_NOEXCEPT(

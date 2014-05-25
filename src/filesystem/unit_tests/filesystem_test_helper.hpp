@@ -29,7 +29,7 @@
 const elib::fs::path test_root = ELIB_FILESYSTEM_UNIT_TEST_PATH;
 const elib::fs::path test_env_path = test_root / elib::fs::path("test_env");
 
-using stat_t = struct ::stat;
+using stat_t = stat;
 
 inline elib::fs::path make_env_path(elib::fs::path const & p)
 {

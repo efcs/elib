@@ -254,8 +254,8 @@ BOOST_AUTO_TEST_CASE(remove_filename_test)
       , {"/foo/.", "/foo"}
       , {"/foo/..", "/foo"}
       , {"/foo/////", "/foo"}
-      , {"/foo\\\\", "/foo"}
-      , {"/foo//\\/", "/foo"}
+      , {"/foo\\\\", "/"}
+      , {"/foo//\\/", "/foo//\\"}
       , {"file.txt", ""}
       , {"bar/../baz/./file.txt", "bar/../baz/."}
     };

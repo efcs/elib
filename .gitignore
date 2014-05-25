@@ -12,7 +12,11 @@
 /build
 /bin
 /test_files
+
+# coverity scan files
 /cov-int
+cov-int.tar.gz
+
 /tmp
 /local
 /test_coverage

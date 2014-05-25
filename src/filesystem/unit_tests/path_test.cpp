@@ -303,14 +303,14 @@ BOOST_AUTO_TEST_CASE(replace_filename_test)
 
 BOOST_AUTO_TEST_CASE(replace_extension_test)
 {
-    struct extension_test
+    struct extension_testcase
     {
         std::string raw;
         std::string expect;
         std::string extension;
     };
     
-    const std::vector<extension_test> extension_test_list =
+    const std::vector<extension_testcase> extension_testcases =
     {
         {"", "", ""}
       , {"", ".txt", "txt"}
@@ -321,10 +321,10 @@ BOOST_AUTO_TEST_CASE(replace_extension_test)
       , {"/foo.cpp", "/foo.txt", "txt"}
     };
     
-    for (auto const & test :  extension_test_list) {
-        path p(test.raw);
-        p.replace_extension(test.extension);
-        BOOST_CHECK(p == test.expect);
+    for (auto const & testcase : testcases) {
+        path p(testcase.raw);
+        p.replace_extension(testcase.extension);
+        BOOST_CHECK(p == testcase.expect);
     }
 }
 
@@ -408,6 +408,8 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
     };
 
     /// Path decomp table is given in boost filesystem documentation.
+    /// http://www.boost.org/doc/libs/1_55_0/libs/filesystem/doc/
+    /// reference.html#Path-decomposition-table
     const std::vector<path_decomp_testcase> testcases =
     {
         {"", {}, "", "", "", "", "", ""}

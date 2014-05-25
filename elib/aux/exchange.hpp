@@ -6,6 +6,7 @@
 # include <elib/aux/forward.hpp>
 # include <elib/aux/integral_constant.hpp>
 # include <elib/aux/move.hpp>
+# include <elib/aux/traits/is_nothrow_assignable.hpp>
 
 namespace elib { namespace aux
 {
@@ -34,7 +35,7 @@ namespace elib { namespace aux
     ////////////////////////////////////////////////////////////////////////////
     template <
         class T, class U
-      , class IsNoExcept = elib::bool_<noexcept(noexcept(T(elib::declval<U>())))>
+      , class IsNoExcept = bool_<aux::is_nothrow_assignable<T, U &&>::value>
       >
     inline T exchange(T & obj, U && new_val) 
     ELIB_RETURN_NOEXCEPT(

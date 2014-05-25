@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(dismissed_exception_test)
         guard.dismiss();
         throw 0;
     } catch (...) {
-    
+        
     }
     BOOST_CHECK(x == 0);
 }

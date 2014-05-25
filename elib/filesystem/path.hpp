@@ -411,13 +411,6 @@ namespace elib { namespace fs { inline namespace v1
         iterator end() const;
         
     private:
-        
-        bool m_is_sep(char ch) const noexcept
-        {
-            return ch == preferred_separator || ch == other_separator;
-        }
-        
-    private:
         string_type m_pathname{};
     };                                                       // class path
     

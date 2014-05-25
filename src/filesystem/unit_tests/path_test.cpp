@@ -350,9 +350,28 @@ BOOST_AUTO_TEST_CASE(compare_test)
     BOOST_CHECK(p1.compare("/foo/bar/baz") < 0);
     BOOST_CHECK(p1.compare("/foo/./bar/baz") == 0);
     BOOST_CHECK(p2.compare("/foo/./bar/baz") > 0);
+    
+    BOOST_CHECK(p1 < p2);
+    BOOST_CHECK(p1 <= p2);
+    BOOST_CHECK(not (p1 > p2));
+    BOOST_CHECK(not (p1 >= p2));
+    BOOST_CHECK(not (p1 == p2));
+    BOOST_CHECK(p1 != p2);
+    
+    BOOST_CHECK(not (p2 < p1));
+    BOOST_CHECK(not (p2 <= p1));
+    BOOST_CHECK(p2 > p1);
+    BOOST_CHECK(p2 >= p1);
+    BOOST_CHECK(not (p2 == p1));
+    BOOST_CHECK(p2 != p1);
+    
+    BOOST_CHECK(p1 == p1);
+    BOOST_CHECK(not (p1 != p1));
+    BOOST_CHECK(not (p1 < p1));
+    BOOST_CHECK(p1 <= p1);
+    BOOST_CHECK(not (p1 > p1));
+    BOOST_CHECK(p1 >= p1);
 }
-
-
 
 BOOST_AUTO_TEST_CASE(path_decomp_test)
 {
@@ -422,6 +441,11 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
         
         BOOST_CHECK(p.is_absolute() == p.has_root_directory());
         BOOST_CHECK(p.is_relative() == not p.is_absolute());
+        
+        BOOST_CHECK_EQUAL_COLLECTIONS(
+            p.begin(), p.end()
+          , decomp.elements.begin(), decomp.elements.end()
+          );
     }
 }
 

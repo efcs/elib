@@ -11,7 +11,10 @@ BOOST_AUTO_TEST_CASE(python_test)
 {
     scoped_test_env env;
     python_create_file("f1");
+    python_stat("f1");
     python_create_empty_file("f2");
+    python_stat("f2");
+    python_lstat("f2");
     python_create_dir("d1");
     python_create_dirs("d2/d3");
     python_create_symlink("f1", "s1");

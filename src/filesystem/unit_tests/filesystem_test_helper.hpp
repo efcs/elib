@@ -29,6 +29,7 @@
 const elib::fs::path test_root = ELIB_FILESYSTEM_UNIT_TEST_PATH;
 const elib::fs::path test_env_path = test_root / elib::fs::path("test_env");
 
+using stat_t = struct ::stat;
 
 inline elib::fs::path make_env_path(elib::fs::path const & p)
 {
@@ -73,6 +74,50 @@ struct scoped_test_env
     }
 };
 
+
+
+# define READ(name)            \
+    in >> tmp;                 \
+    ELIB_ASSERT(tmp == #name); \
+    ELIB_ASSERT(in);           \
+    in >> dest.name;           \
+    ELIB_ASSERT(in)
+#
+inline stat_t read_stat(std::string filename)
+{
+    elib::fs::path p = make_env_path(filename);
+    std::ifstream in(p.native());
+    
+    stat_t dest;
+    std::string tmp;
+    
+    READ(st_mode);
+    READ(st_ino);
+    READ(st_dev);
+    READ(st_nlink);
+    READ(st_uid);
+    READ(st_gid);
+    READ(st_size);
+    READ(st_atime);
+    READ(st_mtime);
+    
+    return dest;
+}
+# undef READ
+
+inline stat_t python_stat(std::string const & filename)
+{
+    static std::string to = "stat_tmp_file";
+    python_run(elib::fmt("stat('%s', '%s')", filename, to));
+    return read_stat(to);
+}
+
+inline stat_t python_lstat(std::string const & filename)
+{
+    static std::string to = "stat_tmp_file";
+    python_run(elib::fmt("lstat('%s', '%s')", filename, to));
+    return read_stat(to);
+}
 
 inline elib::fs::path python_cwd()
 {

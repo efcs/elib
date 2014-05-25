@@ -8,6 +8,7 @@
 # include <system_error>
 # include <memory>
 # include <string>
+# include <utility>
 # include <cerrno>
 
 namespace elib { namespace fs { inline namespace v1
@@ -17,64 +18,39 @@ namespace elib { namespace fs { inline namespace v1
 #   pragma clang diagnostic push
 #   pragma clang diagnostic ignored "-Wweak-vtables"
 # endif
-    class filesystem_error 
-      : public std::system_error 
+    class filesystem_error : public std::system_error 
     {
     public:
-
         filesystem_error(const std::string& what_arg, std::error_code ec)
-            : std::system_error{ec}, m_impl(std::make_shared<storage_t>())
+            : std::system_error(ec, what_arg)
+            , m_impl(std::make_shared<storage_t>())
         {
-            m_impl->what_arg = elib::fmt("%s: %s ", ec.message(), what_arg);
         }
             
-        filesystem_error(const std::string& what_arg, const path& p,
-                        std::error_code ec)
-            : std::system_error{ec}, m_impl{std::make_shared<storage_t>(p)}
-        {
-            m_impl->what_arg = elib::fmt("%s: %s (path=%s)", ec.message(), what_arg, p.native());
-        }
+        /// NOTE: two parameters have to be given to make_shared (ie pair<path, path>)
+        /// to prevent ambigious overload resolution
+        filesystem_error(
+            const std::string& what_arg
+          , const path& p, std::error_code ec
+          )
+            : std::system_error(ec, what_arg)
+            , m_impl(std::make_shared<storage_t>(p, path()))
+        {}
             
-        filesystem_error(const std::string& what_arg, const path& p1,
-                        const path& p2, std::error_code ec)
-            : std::system_error{ec}, m_impl(std::make_shared<storage_t>(p1, p2))
-        {
-            m_impl->what_arg = elib::fmt("%s: %s (path=%s) (path=%s)"
-              , ec.message(), what_arg, p1.native(), p2.native()
-              );
-        }
+        filesystem_error(
+            const std::string& what_arg
+          , const path& p1, const path& p2
+          , std::error_code ec
+          )
+            : std::system_error(ec, what_arg)
+            , m_impl(std::make_shared<storage_t>(p1, p2))
+        {}
             
-        const path&
-        path1() const noexcept
-        { return m_impl->p1; }
-            
-        const path&
-        path2() const noexcept
-        { return m_impl->p2; }
-            
-        //TODO add meaningful message
-        const char* 
-        what() const noexcept
-        { return m_impl->what_arg.c_str(); } 
+        path const & path1() const noexcept { return m_impl->first; }
+        path const & path2() const noexcept { return m_impl->second; }
             
     private:
-        
-        struct storage_t
-        {
-            storage_t() {}
-            
-            storage_t(path xp1) 
-              : p1(elib::move(xp1))
-            {}
-              
-            storage_t(path xp1, path xp2) 
-              : p1(elib::move(xp1)), p2(elib::move(xp2))
-            {}
-            
-            path p1, p2;
-            std::string what_arg;
-        };
-            
+        using storage_t = std::pair<path, path>;
         std::shared_ptr<storage_t> m_impl;
     };
 # if defined(__clang__)

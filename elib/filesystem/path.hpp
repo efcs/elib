@@ -195,6 +195,8 @@ namespace elib { namespace fs { inline namespace v1
             return this->operator+=(detail::dispatch<string_type>(src));
         }
         
+        static_assert(detail::is_pathable<std::basic_string<char>>::value, "shit");
+        
         ////////////////////////////////////////////////////////////////////////
         template <
             class CharT
@@ -273,12 +275,6 @@ namespace elib { namespace fs { inline namespace v1
             return m_pathname; 
         }
   
-        ////////////////////////////////////////////////////////////////////////
-        string_type const & str() const noexcept
-        { 
-            return m_pathname; 
-        }
-        
         ////////////////////////////////////////////////////////////////////////
         value_type const* c_str() const noexcept
         { 

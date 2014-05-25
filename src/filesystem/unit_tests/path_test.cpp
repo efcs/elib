@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(assign_operator_move_test)
     path p;
     path p2(expect);
     p = elib::move(p2);
-    BOOST_CHECK(p.native() == expect);
+    BOOST_CHECK(p == expect);
 }
 
 BOOST_AUTO_TEST_CASE(assign_string_test)
@@ -69,7 +69,16 @@ BOOST_AUTO_TEST_CASE(assign_string_test)
     std::string expect("my_path");
     path p;
     p.assign(expect);
-    BOOST_CHECK(p.native() == expect);
+    BOOST_CHECK(p == expect);
+}
+
+BOOST_AUTO_TEST_CASE(assign_source_type_test)
+{
+    std::string expect("my_path");
+    std::vector<char> source(expect.begin(), expect.end());
+    path p;
+    p.assign(source);
+    BOOST_CHECK(p == expect);
 }
 
 BOOST_AUTO_TEST_CASE(assign_iterator_test)
@@ -77,7 +86,7 @@ BOOST_AUTO_TEST_CASE(assign_iterator_test)
     std::string expect("my_path");
     path p;
     p.assign(expect.begin(), expect.end());
-    BOOST_CHECK(p.native() == expect);
+    BOOST_CHECK(p == expect);
 }
 
 BOOST_AUTO_TEST_CASE(append_operator_test)
@@ -317,9 +326,14 @@ BOOST_AUTO_TEST_CASE(swap_test)
 {
     path p1("hello");
     path p2("world");
+    
     p1.swap(p2);
     BOOST_CHECK(p1 == "world");
     BOOST_CHECK(p2 == "hello");
+    
+    swap(p1, p2);
+    BOOST_CHECK(p1 == "hello");
+    BOOST_CHECK(p2 == "world");
 }
 
 BOOST_AUTO_TEST_CASE(to_string_converters_test)
@@ -375,7 +389,6 @@ BOOST_AUTO_TEST_CASE(compare_test)
 
 BOOST_AUTO_TEST_CASE(path_decomp_test)
 {
-    
     struct path_decomp
     {
         std::string raw;

@@ -106,7 +106,7 @@ ElibToolTargets := scan scan_test scan_build valgrind_check coverage \
 scan:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
 	$(CMD_VERB) rm -rf cov-int
-	$(CMD_VERB) rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON -DALL_WARNINGS=OFF .. ; cd ..
+	$(CMD_VERB) rm -rf build/ ;  mkdir -p build/ ; cd build/ ; cmake -DCONFIG_COVERITY_SCAN=ON -DCONFIG_ALL_WARNINGS=OFF .. ; cd ..
 	$(CMD_VERB) cov-build --dir cov-int $(MAKE) $(NOPRINTD) -C build all
 	$(CMD_VERB) tar -zcvf cov-int.tar.gz cov-int/
 

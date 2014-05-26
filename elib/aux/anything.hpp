@@ -5,6 +5,9 @@ namespace elib { namespace aux
 {
 #if defined(__clang__)
 # pragma clang diagnostic push
+// Some clang version don't support undefined inlines. 
+// suppress unknown pragma warning as well.
+# pragma clang diagnostic ignored "-Wunknown-pragmas"
 # pragma clang diagnostic ignored "-Wundefined-inline"
 #endif
   

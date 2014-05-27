@@ -10,7 +10,9 @@ using namespace elib::fs;
 // putenv takes a char* (not const char*) so suppress the warning
 #if defined(__clang__)
 # pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
-# endif
+# elif defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Wwriteable-strings"
+#endif
 
 namespace
 {

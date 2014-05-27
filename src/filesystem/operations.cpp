@@ -404,44 +404,6 @@ namespace elib { namespace fs { inline namespace v1
         
     namespace detail { namespace 
     {
-#if defined(__GNUC__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wunused-function"
-#endif
-        ////////////////////////////////////////////////////////////////////////
-        inline bool verify_copy_options(copy_options& opt) noexcept
-        {
-            if (opt == copy_options::none) return true;
-            copy_options g1 = copy_options::skip_existing | 
-                            copy_options::overwrite_existing |
-                            copy_options::update_existing;
-                            
-            copy_options g2 = copy_options::recursive;
-            
-            copy_options g3 = copy_options::copy_symlinks |
-                            copy_options::skip_symlinks;
-            
-            copy_options g4 = copy_options::directories_only |
-                            copy_options::create_symlinks |
-                            copy_options::create_hard_links;
-                            
-            int gcount = 0;
-            if (static_cast<bool>(opt & g1)) ++gcount;
-            if (static_cast<bool>(opt & g2)) ++gcount;
-            if (static_cast<bool>(opt & g3)) ++gcount;
-            if (static_cast<bool>(opt & g4)) ++gcount;
-            
-            return (gcount <= 1);
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool verify_exists(const path& p)
-        {
-            std::error_code ec;
-            auto fst = detail::status(p, &ec);
-            return (status_known(fst) && exists(fst));
-        }
-        
         ////////////////////////////////////////////////////////////////////////
         // TODO
         bool copy_file_impl(
@@ -474,9 +436,7 @@ namespace elib { namespace fs { inline namespace v1
             
             return true;
         }
-#if defined(__GNUC__)
-# pragma GCC diagnostic pop
-#endif
+
     }}                                                       // namespace detail 
   
 }}}                                                        // namespace elib::fs

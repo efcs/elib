@@ -81,4 +81,19 @@ BOOST_AUTO_TEST_CASE(symlink_test)
     BOOST_REQUIRE(read_symlink(to) == file);
 }
 
+BOOST_AUTO_TEST_CASE(already_exists_test)
+{
+    scoped_test_env env;
+    path const file = make_env_path("file1");
+    path const to = make_env_path("file2");
+    
+    python_create_file(file);
+    python_create_file(to);
+ 
+    std::error_code ec;
+    create_symlink(file, to, ec);
+    BOOST_REQUIRE(ec);
+    BOOST_REQUIRE(is_regular_file(to));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

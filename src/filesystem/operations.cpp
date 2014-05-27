@@ -807,7 +807,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         std::error_code *ec
       )
     {
-        detail::posix_link(to.native(), new_symlink.native(), ec);
+        detail::posix_symlink(to.native(), new_symlink.native(), ec);
     }
     
     ////////////////////////////////////////////////////////////////////////////

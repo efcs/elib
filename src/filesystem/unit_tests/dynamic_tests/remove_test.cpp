@@ -76,5 +76,4 @@ BOOST_AUTO_TEST_CASE(remove_symlink_test)
     BOOST_REQUIRE(is_regular_file(real_file));
 }
 
-
 BOOST_AUTO_TEST_SUITE_END()

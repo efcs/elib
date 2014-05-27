@@ -29,19 +29,15 @@ namespace elib { namespace fs { inline namespace v1
         using value_type = path::value_type;
         using string_type = path::string_type;
         
-        
-        // NOTE: The below functions are marked as inline so that they
-        // do not set off the "-Wmissing-prototypes" warning
-        
         ////////////////////////////////////////////////////////////////////////
         // set the permissions as described in stat
-        inline perms posix_get_perms(const struct ::stat & st) noexcept
+        perms posix_get_perms(const struct ::stat & st) noexcept
         {
             return static_cast<perms>(st.st_mode) & perms::mask;
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline ::mode_t posix_convert_perms(perms prms)
+        ::mode_t posix_convert_perms(perms prms)
         {
             return static_cast<::mode_t>(
                 prms & perms::mask
@@ -49,7 +45,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline file_status posix_stat(
+        file_status posix_stat(
             path const & p
           , struct ::stat & path_stat
           , std::error_code* ec
@@ -90,7 +86,7 @@ namespace elib { namespace fs { inline namespace v1
         }
                     
         ////////////////////////////////////////////////////////////////////////
-        inline file_status posix_lstat(
+        file_status posix_lstat(
             path const & p
           , struct ::stat & path_stat
           , std::error_code* ec
@@ -131,7 +127,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_statvfs(
+        bool posix_statvfs(
             path const & p
           , struct ::statvfs & sv
           , std::error_code *ec
@@ -151,7 +147,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline path posix_realpath(const path& p, 
+        path posix_realpath(const path& p, 
                         std::error_code *ec)
         {
             char buff[PATH_MAX + 1];
@@ -175,7 +171,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline string_type posix_getcwd(std::error_code *ec)
+        string_type posix_getcwd(std::error_code *ec)
         {
             auto size = pathconf(".", _PC_PATH_MAX);
             ELIB_ASSERT(size >= 0);
@@ -203,7 +199,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_chdir(const string_type& s, std::error_code *ec)
+        bool posix_chdir(const string_type& s, std::error_code *ec)
         {
             std::error_code m_ec;
             if (::chdir(s.c_str()) == -1) {
@@ -220,7 +216,7 @@ namespace elib { namespace fs { inline namespace v1
         
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_utime(
+        bool posix_utime(
             const string_type& s
           , const ::utimbuf & ut
           , std::error_code *ec
@@ -240,7 +236,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_symlink(
+        bool posix_symlink(
             const string_type& from
           , const string_type& to
           , std::error_code *ec
@@ -264,7 +260,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_link(
+        bool posix_link(
             const string_type& from
           , const string_type& to
           , std::error_code *ec)
@@ -285,7 +281,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline string_type posix_readlink(
+        string_type posix_readlink(
             const string_type& s
           , std::error_code *ec
           )
@@ -313,7 +309,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_truncate(const string_type& s, std::uintmax_t size, 
+        bool posix_truncate(const string_type& s, std::uintmax_t size, 
                             std::error_code *ec)
         {
             std::error_code m_ec;
@@ -330,7 +326,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_rename(
+        bool posix_rename(
             const string_type& from
           , const string_type& to
           , std::error_code *ec
@@ -352,7 +348,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_remove(const string_type& s, std::error_code *ec)
+        bool posix_remove(const string_type& s, std::error_code *ec)
         {
             std::error_code m_ec;
             if (::remove(s.c_str()) == -1) {
@@ -367,7 +363,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_mkdir(const string_type& s, mode_t m, std::error_code *ec)
+        bool posix_mkdir(const string_type& s, mode_t m, std::error_code *ec)
         {
             std::error_code m_ec;
             if (::mkdir(s.c_str(), m) == -1) {
@@ -382,7 +378,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool posix_chmod(const string_type& s, ::mode_t mode,
+        bool posix_chmod(const string_type& s, ::mode_t mode,
                 std::error_code *ec)
         {
             std::error_code m_ec;

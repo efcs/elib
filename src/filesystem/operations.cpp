@@ -834,8 +834,8 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             }
         } else {
             ELIB_ASSERT_ALWAYS(!bool("TODO"));
+            return static_cast<std::uintmax_t>(-1);
         }
-        return static_cast<std::uintmax_t>(-1);
     }
 
     ////////////////////////////////////////////////////////////////////////////

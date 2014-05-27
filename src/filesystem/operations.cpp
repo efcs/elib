@@ -273,7 +273,7 @@ namespace elib { namespace fs { inline namespace v1
           )
         {
             std::error_code m_ec;
-            if (::symlink(from.c_str(), to.c_str()) == -1) {
+            if (::symlink(from.c_str(), to.c_str()) != 0) {
                 m_ec = detail::capture_errno();
                 ELIB_ASSERT(m_ec);
             }
@@ -478,9 +478,10 @@ namespace elib { namespace fs { inline namespace v1
             std::ofstream out(to.c_str(),  std::ios::binary);
             
             if (in.good() && out.good())
-            out <<  in.rdbuf();
+                out << in.rdbuf();
             
-            if (!out.good() || !in.good()) {
+            if (out.fail() || in.fail()) {
+                
                 std::error_code m_ec(
                     static_cast<int>(std::errc::operation_not_permitted)
                   , std::system_category()
@@ -646,10 +647,31 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
       , copy_options options, std::error_code *ec
       )
     {
-        const bool to_exists = ec ? fs::exists(to, *ec) : fs::exists(to);
-        if (ec && *ec) {
-            return false;
+        if (ec) ec->clear();
+            
+        std::error_code m_ec;
+        const bool good_from = fs::is_regular_file(from, m_ec);
+        if (not good_from) {
+            
+            if (not m_ec) {
+                m_ec = std::error_code(
+                    static_cast<int>(std::errc::no_such_file_or_directory)
+                    , std::system_category()
+                    );
+            }
+                
+            if (ec) {
+                *ec = m_ec;
+                return false;
+            } else {
+                throw filesystem_error(
+                    "elib::fs::copy_file source file is not a regular file"
+                , from, to, m_ec
+                );
+            }
         }
+        
+        const bool to_exists = fs::exists(to, m_ec);
         
         if (to_exists && not bool(options & 
             (copy_options::skip_existing 
@@ -800,6 +822,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
       , std::error_code *ec
       )
     {
+        
         detail::posix_symlink(to.native(), new_symlink.native(), ec);
     }
 
@@ -905,8 +928,10 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    std::time_t last_write_time(const path& p, std::error_code *ec)
+    file_time_type last_write_time(const path& p, std::error_code *ec)
     {
+        using Clock = std::chrono::system_clock;
+        
         std::error_code m_ec;
         struct ::stat st;
         detail::posix_stat(p, st, &m_ec);
@@ -916,9 +941,13 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             throw filesystem_error("elib::fs::last_write_time", p, m_ec);
         } 
         else if (m_ec) {
-            return static_cast<std::time_t>(-1);
+            return Clock::from_time_t(
+                static_cast<std::time_t>(-1)
+              );
         } else {
-            return static_cast<std::time_t>(st.st_mtime);
+            return Clock::from_time_t(
+                static_cast<std::time_t>(st.st_mtime)
+              );
         }
     }
 
@@ -926,10 +955,12 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     // TODO
     void last_write_time(
         const path& p
-      , std::time_t new_time
+      , file_time_type new_time
       , std::error_code *ec
       )
     {
+        using Clock = std::chrono::system_clock;
+        
         std::error_code m_ec;
         struct ::stat st;
         detail::posix_stat(p, st, &m_ec);
@@ -944,7 +975,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         
         ::utimbuf tbuf;
         tbuf.actime = st.st_atime;
-        tbuf.modtime = new_time;
+        tbuf.modtime = Clock::to_time_t(new_time);
         
         detail::posix_utime(p.native(), tbuf, &m_ec);
         if (ec) *ec = m_ec;
@@ -1090,19 +1121,33 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         const char* env_paths[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};
         path p;
         std::error_code m_ec;
-        if (ec) ec->clear();
+        if (ec) { ec->clear(); }
+            
         for (auto & ep : env_paths) 
         {
-            char *ret = std::getenv(ep);
-            if (ret) {
-                p = path{ret};
-            } else {
-                p = path{};
-            }
+            char const* ret = std::getenv(ep);
+            if (not ret) continue;
+            
+            p = ret;
             
             if (fs::is_directory(p, m_ec)) {
                 if (ec) ec->clear();
                 return p;
+            } else {
+                m_ec = std::error_code(
+                    static_cast<int>(std::errc::no_such_file_or_directory)
+                    , std::system_category()
+                  );
+                    
+                if (ec) {
+                    *ec = m_ec;
+                    return path{};
+                } else {
+                    throw filesystem_error(
+                        "elib::fs::temp_directory_path given path is not a directory"
+                      , m_ec
+                      );
+                }
             }
         }
 
@@ -1113,7 +1158,10 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         } 
         // else
 
-        m_ec = std::make_error_code(std::errc::no_such_file_or_directory);
+        m_ec = std::error_code(
+                    static_cast<int>(std::errc::no_such_file_or_directory)
+                    , std::system_category()
+                  );
         if (not ec) {
             throw filesystem_error("elib::fs::temp_directory_path", m_ec);
         } else {

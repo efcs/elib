@@ -1,12 +1,13 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include "filesystem_test_helper.hpp"
 
 #include <elib/filesystem/path.hpp>
 #include <elib/aux.hpp>
 #include <string>
 #include <vector>
+#include <sstream>
+#include "../static_test_helper.hpp"
 using namespace elib::fs;
 
 
@@ -46,47 +47,54 @@ BOOST_AUTO_TEST_CASE(iterator_ctor_test)
     BOOST_CHECK(p== str_path);
 }
 
-BOOST_AUTO_TEST_CASE(assign_operator_copy_test)
+BOOST_AUTO_TEST_CASE(assign_test)
 {
-    std::string expect("my_path");
-    path p;
-    const path p2(expect);
-    p = p2;
-    BOOST_CHECK(p == expect);
-}
-
-BOOST_AUTO_TEST_CASE(assign_operator_move_test)
-{
-    std::string expect("my_path");
-    path p;
-    path p2(expect);
-    p = elib::move(p2);
-    BOOST_CHECK(p == expect);
-}
-
-BOOST_AUTO_TEST_CASE(assign_string_test)
-{
-    std::string expect("my_path");
-    path p;
-    p.assign(expect);
-    BOOST_CHECK(p == expect);
-}
-
-BOOST_AUTO_TEST_CASE(assign_source_type_test)
-{
-    std::string expect("my_path");
-    std::vector<char> source(expect.begin(), expect.end());
-    path p;
-    p.assign(source);
-    BOOST_CHECK(p == expect);
-}
-
-BOOST_AUTO_TEST_CASE(assign_iterator_test)
-{
-    std::string expect("my_path");
-    path p;
-    p.assign(expect.begin(), expect.end());
-    BOOST_CHECK(p == expect);
+    // assign operator copy
+    {
+        std::string expect("my_path");
+        path p;
+        const path p2(expect);
+        p = p2;
+        BOOST_CHECK(p == expect);
+    }
+    // assign operator move
+    {
+        std::string expect("my_path");
+        path p;
+        path p2(expect);
+        p = elib::move(p2);
+        BOOST_CHECK(p == expect);
+    }
+    // assign string test
+    {
+        std::string expect("my_path");
+        path p;
+        p.assign(expect);
+        BOOST_CHECK(p == expect);
+    }
+    // assign source type test
+    {
+        std::string expect("my_path");
+        std::vector<char> source(expect.begin(), expect.end());
+        path p;
+        p.assign(source);
+        BOOST_CHECK(p == expect);
+    }
+    // assign source type operator test
+    {
+        std::string expect("my_path");
+        std::vector<char> source(expect.begin(), expect.end());
+        path p;
+        p = source;
+        BOOST_CHECK(p == expect);
+    }
+    // assign iterator
+    {
+        std::string expect("my_path");
+        path p;
+        p.assign(expect.begin(), expect.end());
+        BOOST_CHECK(p == expect);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(append_operator_test)
@@ -183,6 +191,12 @@ BOOST_AUTO_TEST_CASE(concat_test)
         path p1(s1);
         p1 += 'p';
         BOOST_CHECK(p1 == path("p1/p"));
+    }
+    // concat wide char
+    {
+        path p(s1);
+        p += L'p';
+        BOOST_CHECK(p == path("p1/p"));
     }
     // concat source member type
     {
@@ -393,6 +407,19 @@ BOOST_AUTO_TEST_CASE(compare_test)
     BOOST_CHECK(p1 >= p1);
 }
 
+BOOST_AUTO_TEST_CASE(hash_value_test)
+{
+    const path p1("/foo/./bar");
+    const path p2("/foo/bar");
+    
+    auto const h1 = hash_value(p1);
+    auto const h2 = hash_value(p2);
+
+    BOOST_CHECK(h1 != h2);
+    BOOST_CHECK(h1 == hash_value(p1));
+    BOOST_CHECK(h2 == hash_value(p2));
+}
+
 BOOST_AUTO_TEST_CASE(path_decomp_test)
 {
     struct path_decomp_testcase
@@ -436,6 +463,20 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
       , {"foo/./bar", {"foo", ".", "bar"}, "", "", "", "foo/./bar", "foo/.", "bar"}
       , {"foo/../", {"foo", "..", "."}, "", "", "", "foo/../", "foo/..", "."}
       , {"foo/../bar", {"foo", "..", "bar"}, "", "", "", "foo/../bar", "foo/..", "bar"}
+      , {"c:", {"c:"}, "", "", "", "c:", "", "c:"}
+      , {"c:/", {"c:", "."}, "", "", "", "c:/", "c:", "."}
+      , {"c:foo", {"c:foo"}, "", "", "", "c:foo", "", "c:foo"}
+      , {"c:/foo", {"c:", "foo"}, "", "", "", "c:/foo", "c:", "foo"}
+      , {"c:foo/", {"c:foo", "."}, "", "", "", "c:foo/", "c:foo", "."}
+      , {"c:/foo/", {"c:", "foo", "."}, "", "", "", "c:/foo/",  "c:/foo", "."}
+      , {"c:/foo/bar", {"c:", "foo", "bar"}, "", "", "", "c:/foo/bar", "c:/foo", "bar"}
+      , {"prn:", {"prn:"}, "", "", "", "prn:", "", "prn:"}
+      , {"c:\\", {"c:\\"}, "", "", "", "c:\\", "", "c:\\"}
+      , {"c:\\foo", {"c:\\foo"}, "", "", "", "c:\\foo", "", "c:\\foo"}
+      , {"c:foo\\", {"c:foo\\"}, "", "", "", "c:foo\\", "", "c:foo\\"}
+      , {"c:\\foo\\", {"c:\\foo\\"}, "", "", "", "c:\\foo\\", "", "c:\\foo\\"}
+      , {"c:\\foo/",  {"c:\\foo", "."}, "", "", "", "c:\\foo/", "c:\\foo", "."}
+      , {"c:/foo\\bar", {"c:", "foo\\bar"}, "", "", "", "c:/foo\\bar", "c:", "foo\\bar"}
     };
     
     for (auto const & testcase : testcases) {
@@ -504,6 +545,30 @@ BOOST_AUTO_TEST_CASE(filename_decomp_test)
         BOOST_CHECK(p.extension() == testcase.extension);
         BOOST_CHECK(p.has_extension() == not testcase.extension.empty());
     }
+}
+
+BOOST_AUTO_TEST_CASE(output_stream_test)
+{
+    const std::string s("/foo/bar/baz");
+    const path p(s);
+    
+    std::stringstream ss;
+    ss << p;
+    BOOST_REQUIRE(ss);
+    BOOST_CHECK(ss.str() == p.native());
+}
+
+BOOST_AUTO_TEST_CASE(input_stream_test)
+{
+    const std::string s("/foo/bar/baz");
+    const path expect(s);
+    path p;
+    
+    std::stringstream ss;
+    ss << s;
+    ss >> p;
+    BOOST_REQUIRE(ss);
+    BOOST_CHECK(p == expect);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,8 +1,8 @@
-#ifndef ELIB_FILESYSTEM_TEST_HELPER_HPP
-#define ELIB_FILESYSTEM_TEST_HELPER_HPP
+#ifndef DYNAMIC_TEST_HELPER_HPP
+#define DYNAMIC_TEST_HELPER_HPP
 
-# include <elib/filesystem/config.hpp>
-# include <elib/filesystem/path.hpp>
+# include "test_helper.hpp"
+
 # include <elib/fmt.hpp>
 
 # include <iostream>
@@ -16,17 +16,12 @@
 # include <sys/stat.h>
 # include <unistd.h>
 
-# define ELIB_ASSERT_ON
-# undef NDEBUG
 # include <elib/assert.hpp>
 
-#ifndef ELIB_FILESYSTEM_UNIT_TEST_PATH
-# error ELIB_FILESYSTEM_UNIT_TEST_PATH must be set to the directory of this file
-# endif
 
 #define PYTHON_RUN_STR "python " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
 
-const elib::fs::path test_root = ELIB_FILESYSTEM_UNIT_TEST_PATH;
+
 const elib::fs::path test_env_path = test_root / elib::fs::path("test_env");
 
 using stat_t = struct stat;
@@ -43,7 +38,7 @@ inline void python_run(const std::string& cmd)
   s += cmd;
   s += "\"";
   int ret = std::system(s.c_str());
-  ELIB_ASSERT(ret == 0);
+  ELIB_ASSERT_ALWAYS(ret == 0);
   ((void)ret);
 }
 
@@ -132,14 +127,9 @@ inline elib::fs::path python_cwd()
     return {in_str};
 }
 
-inline void python_create_file(std::string const & filename)
+inline void python_create_file(std::string const & filename, std::size_t size = 0)
 {
-    python_run(elib::fmt("create_file('%s')", filename));
-}
-
-inline void python_create_empty_file(std::string const & filename)
-{
-    python_run(elib::fmt("create_empty_file('%s')", filename));
+    python_run(elib::fmt("create_file('%s', %u)", filename, size));
 }
 
 inline void python_create_dir(std::string const & filename)
@@ -167,6 +157,11 @@ inline void python_create_fifo(std::string const & file)
     python_run(elib::fmt("create_fifo('%s')", file));
 }
 
+inline void python_create_socket(std::string const & file)
+{
+    python_run(elib::fmt("create_socket('%s')", file));
+}
+
 inline void python_create_node(std::string const & file)
 {
     python_run(elib::fmt("create_node('%s')", file));
@@ -177,4 +172,4 @@ inline void python_remove(std::string const & file)
     python_run(elib::fmt("remove('%s')", file));
 }
 
-#endif /* ELIB_FILESYSTEM_TEST_HELPER_HPP */
+#endif /* DYNAMIC_TEST_HELPER_HPP */

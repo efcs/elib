@@ -3,6 +3,7 @@ import sys
 import os
 import subprocess
 import shutil
+import socket
 
 # Ensure that this is being run on a specific platform
 assert sys.platform.startswith('linux') or sys.platform.startswith('darwin')
@@ -15,6 +16,8 @@ env_path = os.path.join(dot_path, "test_env/")
 list_path = os.path.join(dot_path, "test_files")
 
 
+# Make sure we don't try and write outside of env_path.
+# All paths used should be sanitized
 def sanitize_env_path(p):
     p = os.path.join(env_path, p)
     p = os.path.realpath(p)
@@ -31,16 +34,12 @@ def clean():
     shutil.rmtree(env_path, ignore_errors=True)
     
     
-def create_file(fname):
+def create_file(fname, size):
     fname = sanitize_env_path(fname)
     with open(fname, 'w') as f:
-        f.write("Hello World\n")
-        
-def create_empty_file(fname):
-    fname = sanitize_env_path(fname)
-    with open(fname, 'w') as f:
-        pass
-    
+        for c in ['a'] * size:
+            f.write(c)
+      
     
 def create_dir(dname, mode=0777):
     dname = sanitize_env_path(dname)
@@ -73,6 +72,10 @@ def create_node(source, mode=0600, device=0):
     source = sanitize_env_path(source)
     os.mknod(source, mode, device)
     
+def create_socket(source):
+    source = sanitize_env_path(source)
+    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    s.bind(source)
     
 def remove(source):
     source = sanitize_env_path(source)

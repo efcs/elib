@@ -435,7 +435,7 @@ namespace elib { namespace fs { inline namespace v1
 # pragma clang diagnostic ignored "-Wunused-function"
 #endif
         ////////////////////////////////////////////////////////////////////////
-        inline bool verify_copy_options(copy_options& opt) noexcept
+        bool verify_copy_options(copy_options& opt) noexcept
         {
             if (opt == copy_options::none) return true;
             copy_options g1 = copy_options::skip_existing | 
@@ -461,7 +461,7 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline bool verify_exists(const path& p)
+        bool verify_exists(const path& p)
         {
             std::error_code ec;
             auto fst = detail::status(p, &ec);
@@ -470,7 +470,7 @@ namespace elib { namespace fs { inline namespace v1
         
         ////////////////////////////////////////////////////////////////////////
         // TODO
-        inline bool copy_file_impl(
+        bool copy_file_impl(
             const path& from, const path& to
           , std::error_code *ec
           )
@@ -1006,33 +1006,36 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         return detail::posix_remove(p.native(), ec);
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    inline std::uintmax_t remove_all_impl(
-        path const & p, file_status const & st
-      , std::error_code *ec)
+    namespace
     {
-        static constexpr std::uintmax_t npos = static_cast<std::uintmax_t>(-1);
-        std::uintmax_t count = 1;
-        if (is_directory(st)) {
-            for (directory_iterator it(p); it != directory_iterator(); ++it) {
-                const file_status fst = detail::symlink_status(it->path(), ec);
-                if (ec && *ec) {
-                    return npos;
+        ////////////////////////////////////////////////////////////////////////
+        std::uintmax_t remove_all_impl(
+            path const & p, file_status const & st
+        , std::error_code *ec)
+        {
+            static constexpr std::uintmax_t npos = static_cast<std::uintmax_t>(-1);
+            std::uintmax_t count = 1;
+            if (is_directory(st)) {
+                for (directory_iterator it(p); it != directory_iterator(); ++it) {
+                    const file_status fst = detail::symlink_status(it->path(), ec);
+                    if (ec && *ec) {
+                        return npos;
+                    }
+                    const std::uintmax_t other_count = 
+                        detail::remove_all_impl(it->path(), fst, ec);
+                    if ((ec && *ec) || other_count == npos) {
+                        return npos;
+                    }
+                    count += other_count;
                 }
-                const std::uintmax_t other_count = 
-                    detail::remove_all_impl(it->path(), fst, ec);
-                if ((ec && *ec) || other_count == npos) {
-                    return npos;
-                }
-                count += other_count;
             }
-        }
-        const bool ret = detail::remove(p, ec);
-        ELIB_ASSERT(ret); ((void)ret);
-        if (ec && *ec) {
-            return npos;
-        } else {
-            return count;
+            const bool ret = detail::remove(p, ec);
+            ELIB_ASSERT(ret); ((void)ret);
+            if (ec && *ec) {
+                return npos;
+            } else {
+                return count;
+            }
         }
     }
     
@@ -1155,7 +1158,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     namespace 
     {
         ////////////////////////////////////////////////////////////////////////
-        inline char to_hex(int ch) noexcept
+        char to_hex(int ch) noexcept
         {
             if (ch < 10) {
                 return static_cast<char>('0' + ch);
@@ -1165,7 +1168,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         }
         
         ////////////////////////////////////////////////////////////////////////
-        inline char random_hex_char()
+        char random_hex_char()
         {
             static std::mt19937 rd { std::random_device{}() };
             static std::uniform_int_distribution<int> mrand{0, 15};

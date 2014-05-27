@@ -66,11 +66,7 @@ def create_hardlink(source, link):
 def create_fifo(source, mode=0666):
     source = sanitize_env_path(source)
     os.mkfifo(source, mode)
-    
-    
-def create_node(source, mode=0600, device=0):
-    source = sanitize_env_path(source)
-    os.mknod(source, mode, device)
+
     
 def create_socket(source):
     source = sanitize_env_path(source)
@@ -87,33 +83,6 @@ def cwd(to):
     d = os.getcwd()
     with open(to, 'w') as f:
         f.write(d + '\n')
-
-
-def stat(p, to):
-    p = sanitize_env_path(p)
-    to = sanitize_env_path(to)
-    st = os.stat(p)
-    _write_stat(st, to)
-    
-    
-def lstat(p, to):
-    p = sanitize_env_path(p)
-    to = sanitize_env_path(to)
-    st = os.lstat(p)
-    _write_stat(st, p)
-    
-    
-def _write_stat(st, to):
-    with open(to, 'w') as f:
-        f.write('st_mode ' + str(st.st_mode) + '\n')
-        f.write('st_ino ' + str(st.st_ino) + '\n')
-        f.write('st_dev ' + str(st.st_dev) + '\n')
-        f.write('st_nlink ' + str(st.st_nlink) + '\n')
-        f.write('st_uid ' + str(st.st_uid) + '\n')
-        f.write('st_gid ' + str(st.st_gid) + '\n')
-        f.write('st_size ' + str(st.st_size) + '\n')
-        f.write('st_atime ' + str(int(st.st_atime)) + '\n')
-        f.write('st_mtime ' + str(int(st.st_mtime)) + '\n')
         
 
 if __name__ == '__main__':

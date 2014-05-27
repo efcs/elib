@@ -63,8 +63,8 @@ BOOST_AUTO_TEST_CASE(file_copy_test)
     std::error_code ec;
     BOOST_REQUIRE(copy_file(file, to, ec));
     BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
-    BOOST_REQUIRE(is_regular_file(to) && file_size(file) == 42);
+    BOOST_REQUIRE(file_size(file) == 42);
+    BOOST_REQUIRE(file_size(file) == 42);
 }
 
 BOOST_AUTO_TEST_CASE(file_copy_existing_test)
@@ -79,8 +79,21 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_test)
     std::error_code ec;
     BOOST_REQUIRE(not copy_file(file, to, ec));
     BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
-    BOOST_REQUIRE(is_regular_file(to) && file_size(to) == 1);
+    BOOST_REQUIRE(file_size(file) == 42);
+    BOOST_REQUIRE(file_size(to) == 1);
+}
+
+BOOST_AUTO_TEST_CASE(file_copy_existing_throw_test)
+{
+    scoped_test_env env;
+    path const file = make_env_path("file1");
+    path const to = make_env_path("file2");
+    
+    python_create_file(file, 42);
+    python_create_file(to, 1);
+    
+    BOOST_REQUIRE_THROW(copy_file(file, to), filesystem_error);
+    BOOST_REQUIRE(file_size(to) == 1);
 }
 
 BOOST_AUTO_TEST_CASE(file_copy_existing_skip_test)
@@ -95,8 +108,8 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_skip_test)
     std::error_code ec;
     BOOST_REQUIRE(not copy_file(file, to, copy_options::skip_existing, ec));
     BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
-    BOOST_REQUIRE(is_regular_file(to) && file_size(to) == 1);
+    BOOST_REQUIRE(file_size(file) == 42);
+    BOOST_REQUIRE(file_size(to) == 1);
 }
 
 BOOST_AUTO_TEST_CASE(file_copy_existing_overwrite_test)
@@ -111,8 +124,8 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_overwrite_test)
     std::error_code ec;
     BOOST_REQUIRE(copy_file(file, to, copy_options::overwrite_existing, ec));
     BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
-    BOOST_REQUIRE(is_regular_file(to) && file_size(file) == 42);
+    BOOST_REQUIRE(file_size(file) == 42);
+    BOOST_REQUIRE(file_size(file) == 42);
 }
 
 BOOST_AUTO_TEST_CASE(file_copy_update_existing_older)
@@ -130,8 +143,8 @@ BOOST_AUTO_TEST_CASE(file_copy_update_existing_older)
     std::error_code ec;
     BOOST_REQUIRE(not copy_file(file, to, copy_options::update_existing, ec));
     BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
-    BOOST_REQUIRE(is_regular_file(to) && file_size(to) == 1);
+    BOOST_REQUIRE(file_size(file) == 42);
+    BOOST_REQUIRE(file_size(to) == 1);
 }
 
 BOOST_AUTO_TEST_CASE(file_copy_update_existing_newer)
@@ -151,8 +164,8 @@ BOOST_AUTO_TEST_CASE(file_copy_update_existing_newer)
     //BOOST_REQUIRE(copy_file(file, to, copy_options::update_existing, ec));
     copy_file(file, to, copy_options::update_existing, ec);
     BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
-    BOOST_REQUIRE(is_regular_file(to) && file_size(to) == 42);
+    BOOST_REQUIRE(file_size(file) == 42);
+    BOOST_REQUIRE(file_size(to) == 42);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

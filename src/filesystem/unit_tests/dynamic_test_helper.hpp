@@ -69,51 +69,6 @@ struct scoped_test_env
     }
 };
 
-
-
-# define READ(name)            \
-    in >> tmp;                 \
-    ELIB_ASSERT(tmp == #name); \
-    ELIB_ASSERT(in);           \
-    in >> dest.name;           \
-    ELIB_ASSERT(in)
-#
-inline stat_t read_stat(std::string filename)
-{
-    elib::fs::path p = make_env_path(filename);
-    std::ifstream in(p.native());
-    
-    stat_t dest;
-    std::string tmp;
-    
-    READ(st_mode);
-    READ(st_ino);
-    READ(st_dev);
-    READ(st_nlink);
-    READ(st_uid);
-    READ(st_gid);
-    READ(st_size);
-    READ(st_atime);
-    READ(st_mtime);
-    
-    return dest;
-}
-# undef READ
-
-inline stat_t python_stat(std::string const & filename)
-{
-    static std::string to = "stat_tmp_file";
-    python_run(elib::fmt("stat('%s', '%s')", filename, to));
-    return read_stat(to);
-}
-
-inline stat_t python_lstat(std::string const & filename)
-{
-    static std::string to = "stat_tmp_file";
-    python_run(elib::fmt("lstat('%s', '%s')", filename, to));
-    return read_stat(to);
-}
-
 inline elib::fs::path python_cwd()
 {
     static std::string to = "python_tmp_file";
@@ -162,10 +117,6 @@ inline void python_create_socket(std::string const & file)
     python_run(elib::fmt("create_socket('%s')", file));
 }
 
-inline void python_create_node(std::string const & file)
-{
-    python_run(elib::fmt("create_node('%s')", file));
-}
 
 inline void python_remove(std::string const & file)
 {

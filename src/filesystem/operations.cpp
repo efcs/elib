@@ -807,7 +807,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     std::uintmax_t file_size(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
@@ -826,7 +825,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             return static_cast<std::uintmax_t>(-1);
         }
         else if (not fs::is_regular_file(fst)) {
-            std::error_code tmp_ec{EPERM, std::system_category()};
+            std::error_code tmp_ec(EPERM, std::system_category());
             if (ec) {
                 *ec = tmp_ec;
                 return static_cast<std::uintmax_t>(-1);
@@ -835,8 +834,8 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             }
         } else {
             ELIB_ASSERT_ALWAYS(!bool("TODO"));
-            return static_cast<std::uintmax_t>(-1);
         }
+        return static_cast<std::uintmax_t>(-1);
     }
 
     ////////////////////////////////////////////////////////////////////////////

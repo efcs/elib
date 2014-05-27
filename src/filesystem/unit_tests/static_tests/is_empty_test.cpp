@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(empty_file_test)
     }
     // no error code
     {
-        bool ret;
+        bool ret = true;
         BOOST_REQUIRE_NO_THROW(ret = is_empty(file));
         BOOST_REQUIRE(ret);
     }
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(non_empty_file_test)
     }
     // no error code
     {
-        bool ret;
+        bool ret = true;
         BOOST_REQUIRE_NO_THROW(ret = is_empty(file));
         BOOST_REQUIRE(not ret);
     }

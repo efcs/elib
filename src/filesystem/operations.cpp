@@ -409,7 +409,7 @@ namespace elib { namespace fs { inline namespace v1
 # pragma GCC diagnostic ignored "-Wunused-function"
 #endif
         ////////////////////////////////////////////////////////////////////////
-        bool verify_copy_options(copy_options& opt) noexcept
+        inline bool verify_copy_options(copy_options& opt) noexcept
         {
             if (opt == copy_options::none) return true;
             copy_options g1 = copy_options::skip_existing | 

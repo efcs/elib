@@ -11,7 +11,7 @@ using namespace elib::fs;
 #if defined(__clang__)
 # pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
 # elif defined(__GNUC__)
-# pragma GCC diagnostic ignored "-Wwriteable-strings"
+# pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 
 namespace

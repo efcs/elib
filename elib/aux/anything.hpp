@@ -10,9 +10,7 @@ namespace elib { namespace aux
 # pragma clang diagnostic ignored "-Wunknown-pragmas"
 # pragma clang diagnostic ignored "-Wundefined-inline"
 #endif
-  
-    ////////////////////////////////////////////////////////////////////////
-    // anything_type
+    ////////////////////////////////////////////////////////////////////////////
     template <class Ignored = decltype(nullptr)>
     struct anything_type
     {

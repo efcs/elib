@@ -562,5 +562,4 @@ BOOST_AUTO_TEST_CASE(character_file_test)
 }
 
 
-
 BOOST_AUTO_TEST_SUITE_END()

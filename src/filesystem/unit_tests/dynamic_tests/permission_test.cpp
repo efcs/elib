@@ -95,6 +95,4 @@ BOOST_AUTO_TEST_CASE(remove_permissions_test)
     BOOST_REQUIRE(st.permissions() == perms::owner_all);
 }
 
-
-
 BOOST_AUTO_TEST_SUITE_END()

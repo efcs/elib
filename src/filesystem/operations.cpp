@@ -229,7 +229,6 @@ namespace elib { namespace fs { inline namespace v1
             std::error_code m_ec;
             if (::utime(s.c_str(), &ut) == -1) {
                 m_ec = detail::capture_errno();
-                ELIB_ASSERT(m_ec);
             }
             if (ec) *ec = m_ec;
             

@@ -15,14 +15,21 @@ BOOST_AUTO_TEST_CASE(dne_test)
     path const to = make_env_path("sym1");
     
     // with error code
-    {
-        std::error_code ec;
-        create_symlink(file, to, ec);
-        BOOST_REQUIRE(ec);
-    }
-    {
-        BOOST_REQUIRE_THROW(create_symlink(file, to), filesystem_error);
-    }
+    std::error_code ec;
+    create_symlink(file, to, ec);
+    BOOST_REQUIRE(not ec);
+    BOOST_REQUIRE(is_symlink(to));
+}
+
+BOOST_AUTO_TEST_CASE(dne_no_error_code_test)
+{
+    scoped_test_env env;
+    path const file = make_env_path("dne");
+    path const to = make_env_path("sym1");
+    
+    // with error code
+    BOOST_REQUIRE_NO_THROW(create_symlink(file, to));
+    BOOST_REQUIRE(is_symlink(to));
 }
 
 BOOST_AUTO_TEST_CASE(file_test)
@@ -38,7 +45,7 @@ BOOST_AUTO_TEST_CASE(file_test)
     BOOST_REQUIRE(not ec);
     BOOST_REQUIRE(is_regular_file(file));
     BOOST_REQUIRE(is_symlink(to));
-    BOOST_REQUIRE(read_symlink(to) == file);
+    BOOST_REQUIRE(read_symlink(to).native() == file.native());
 }
 
 BOOST_AUTO_TEST_CASE(directory_test)
@@ -71,7 +78,7 @@ BOOST_AUTO_TEST_CASE(symlink_test)
     create_symlink(file, to, ec);
     BOOST_REQUIRE(not ec);
     BOOST_REQUIRE(is_symlink(to));
-    BOOST_REQUIRE(read_symlink(to) == real_file);
+    BOOST_REQUIRE(read_symlink(to) == file);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

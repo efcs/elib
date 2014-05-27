@@ -206,7 +206,7 @@ namespace elib { namespace fs { inline namespace v1
             ELIB_ASSERT(size >= 0);
             
             auto buff = elib::make_unique<char[]>( 
-                static_cast<std::size_t>(size) 
+                static_cast<std::size_t>(size + 1) 
               );
             
             char* ret = ::getcwd(buff.get(), static_cast<size_t>(size));
@@ -282,7 +282,7 @@ namespace elib { namespace fs { inline namespace v1
             if (m_ec && not ec) {
                 throw filesystem_error(
                     "elib::fs::posix_symlink"
-                  , path{from}, path{to}, m_ec
+                  , path(from), path(to), m_ec
                 );
             }
             
@@ -316,22 +316,25 @@ namespace elib { namespace fs { inline namespace v1
           , std::error_code *ec
           )
         {
-            
-            char buff[PATH_MAX];
+            char buff[PATH_MAX + 1];
             std::error_code m_ec;
-            if (::readlink(s.c_str(), buff, PATH_MAX) == -1) {
+            ::ssize_t ret;
+            if ((ret = ::readlink(s.c_str(), buff, PATH_MAX)) == -1) {
                 m_ec = detail::capture_errno();
+            } else {
+                ELIB_ASSERT(ret <= PATH_MAX);
+                ELIB_ASSERT(ret > 0);
+                buff[ret] = 0;
             }
             if (ec) *ec = m_ec;
             
             if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_readlink", path{s}, m_ec);
+                throw filesystem_error("elib::fs::posix_readlink", path(s), m_ec);
             }
             else if (m_ec) {
-                return string_type{};
-            }
-            else {
-                return string_type{buff};
+                return {};
+            } else {
+                return string_type(buff);
             }
         }
         
@@ -994,7 +997,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     ////////////////////////////////////////////////////////////////////////////
     path read_symlink(const path& p, std::error_code *ec)
     {
-        return path{detail::posix_readlink(p.native(), ec)};
+        return detail::posix_readlink(p.native(), ec);
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -18,11 +18,9 @@ namespace elib { namespace aux
 {
     namespace detail
     {
-        template <class Func, class Obj>
-        using is_invoke_base_of = is_base_of<
-            typename member_pointer_traits<remove_ref_t<Func>>::class_type
-          , remove_ref_t<Obj>
-          >;
+        /// is_invoke_base_of is provided by traits/invoke_of
+        // template <class Func, class Obj>
+        // using is_invoke_base_of;
     }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////////

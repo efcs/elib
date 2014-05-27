@@ -51,7 +51,7 @@ struct dest_throws_from_lvalue
 
 struct dest_throws_from_rvalue
 {
-    dest_throws_from_rvalue() {}
+    dest_throws_from_rvalue() : x(0) {}
     explicit dest_throws_from_rvalue(int xx) : x(xx) {}
     dest_throws_from_rvalue & operator=(from_type && f) noexcept(false) 
     { 

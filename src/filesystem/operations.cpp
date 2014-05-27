@@ -1122,49 +1122,28 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     path temp_directory_path(std::error_code *ec)
     {
         const char* env_paths[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};
-        path p;
+        path p("/tmp");
         std::error_code m_ec;
-        if (ec) { ec->clear(); }
             
         for (auto & ep : env_paths) 
         {
             char const* ret = std::getenv(ep);
-            if (not ret) continue;
-            
-            p = ret;
-            
-            if (fs::is_directory(p, m_ec)) {
-                if (ec) ec->clear();
-                return p;
-            } else {
-                m_ec = std::error_code(
-                    static_cast<int>(std::errc::no_such_file_or_directory)
-                    , std::system_category()
-                  );
-                    
-                if (ec) {
-                    *ec = m_ec;
-                    return path{};
-                } else {
-                    throw filesystem_error(
-                        "elib::fs::temp_directory_path given path is not a directory"
-                      , m_ec
-                      );
-                }
+            if (ret) {
+                p = ret;
+                break;
             }
         }
 
-        p = "/tmp";
         if (fs::is_directory(p, m_ec)) {
             if (ec) ec->clear();
             return p;
         } 
-        // else
 
         m_ec = std::error_code(
-                    static_cast<int>(std::errc::no_such_file_or_directory)
-                    , std::system_category()
-                  );
+            static_cast<int>(std::errc::no_such_file_or_directory)
+          , std::system_category()
+          );
+        
         if (not ec) {
             throw filesystem_error("elib::fs::temp_directory_path", m_ec);
         } else {

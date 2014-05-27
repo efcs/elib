@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(empty_directory_test)
     }
     // without error code
     {
-        bool ret;
+        bool ret = false;
         BOOST_REQUIRE_NO_THROW(ret = is_empty(file));
         BOOST_REQUIRE(ret);
     }

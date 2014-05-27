@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(both_dne_test)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(not ret);
     }
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(not_equiv_both_exist)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(not ret);
     }
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(same_file_test)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(ret);
     } 
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(symlink_test)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(ret);
     }

@@ -404,9 +404,9 @@ namespace elib { namespace fs { inline namespace v1
         
     namespace detail { namespace 
     {
-#if defined(__clang__)
-# pragma clang diagnostic push
-# pragma clang diagnostic ignored "-Wunused-function"
+#if defined(__GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-function"
 #endif
         ////////////////////////////////////////////////////////////////////////
         bool verify_copy_options(copy_options& opt) noexcept
@@ -474,8 +474,8 @@ namespace elib { namespace fs { inline namespace v1
             
             return true;
         }
-#if defined(__clang__)
-# pragma clang diagnostic pop
+#if defined(__GNUC__)
+# pragma GCC diagnostic pop
 #endif
     }}                                                       // namespace detail 
   

@@ -37,40 +37,15 @@ namespace elib { namespace fs { inline namespace v1
         // set the permissions as described in stat
         inline perms posix_get_perms(const struct ::stat & st) noexcept
         {
-            perms pmask = perms::none;
-            auto const mode = st.st_mode;
-            if (S_IRUSR & mode) pmask |= perms::owner_read;
-            if (S_IWUSR & mode) pmask |= perms::owner_write;
-            if (S_IXUSR & mode) pmask |= perms::owner_exec;
-            if (S_IRGRP & mode) pmask |= perms::group_read;
-            if (S_IWGRP & mode) pmask |= perms::group_write;
-            if (S_IXGRP & mode) pmask |= perms::group_exec;
-            if (S_IROTH & mode) pmask |= perms::others_read;
-            if (S_IWOTH & mode) pmask |= perms::others_write;
-            if (S_IXOTH & mode) pmask |= perms::others_exec;
-            if (S_ISUID & mode) pmask |= perms::set_uid;
-            if (S_ISGID & mode) pmask |= perms::set_gid;
-            if (S_ISVTX & mode) pmask |= perms::sticky_bit;
-            return pmask;
+            return static_cast<perms>(st.st_mode) & perms::mask;
         }
         
         ////////////////////////////////////////////////////////////////////////
         inline ::mode_t posix_convert_perms(perms prms)
         {
-            ::mode_t p = 0;
-            if ((bool)(prms & perms::owner_read))   p |= S_IRUSR;
-            if ((bool)(prms & perms::owner_write))  p |= S_IWUSR;
-            if ((bool)(prms & perms::owner_exec))   p |= S_IXUSR;
-            if ((bool)(prms & perms::group_read))   p |= S_IRGRP;
-            if ((bool)(prms & perms::group_write))  p |= S_IWGRP;
-            if ((bool)(prms & perms::group_exec))   p |= S_IXGRP;
-            if ((bool)(prms & perms::others_read))  p |= S_IROTH;
-            if ((bool)(prms & perms::others_write)) p |= S_IWOTH;
-            if ((bool)(prms & perms::others_exec))  p |= S_IXOTH;
-            if ((bool)(prms & perms::set_uid))      p |= S_ISUID;
-            if ((bool)(prms & perms::set_gid))      p |= S_ISGID;
-            if ((bool)(prms & perms::sticky_bit))   p |= S_ISVTX;
-            return p;
+            return static_cast<::mode_t>(
+                prms & perms::mask
+              );
         }
         
         ////////////////////////////////////////////////////////////////////////
@@ -989,8 +964,33 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    void permissions(const path& p,  perms prms,  std::error_code *ec)
+    void permissions(
+        const path& p, perms prms, permissions_options opts
+      , std::error_code *ec
+      )
     {
+        ELIB_ASSERT(not (bool(permissions_options::add_bits & opts) 
+                     && bool(permissions_options::remove_bits & opts)));
+                     
+        // TODO not supported
+        ELIB_ASSERT(not bool(permissions_options::follow_symlinks & opts));
+          
+        file_status st = detail::status(p, ec);
+        if (!exists(st)) {
+            if (ec && *ec) { return; }
+            std::error_code m_ec(
+                static_cast<int>(std::errc::no_such_file_or_directory)
+              , std::system_category()
+              );
+            throw filesystem_error("elib::fs::permissions", p, m_ec);
+        }
+          
+        if (bool(permissions_options::add_bits & opts)) {
+            prms |= st.permissions();
+        }
+        else if (bool(permissions_options::remove_bits & opts)) {
+            prms = st.permissions() & ~prms;
+        }
         detail::posix_chmod(p.string(), detail::posix_convert_perms(prms), ec);
     }
 

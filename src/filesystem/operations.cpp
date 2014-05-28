@@ -164,9 +164,9 @@ namespace elib { namespace fs { inline namespace v1
                 throw filesystem_error("elib::fs::posix_realpath", p, m_ec);
             }
             else if (m_ec) {
-                return path{};
+                return {};
             } else {
-                return path{ret};
+                return {ret};
             }
         }
         

@@ -700,7 +700,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     
-    void create_directory(
+    bool create_directory(
         path const & p, path const & attributes
       , std::error_code *ec
       )
@@ -710,23 +710,27 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         detail::posix_stat(attributes, attr_stat, &mec);
         if (mec && ec) {
             *ec = mec;
-            return;
+            return false;
         }
         else if (mec) {
             throw filesystem_error("fs::create_directory", p, attributes, mec);
         }
     
+        if (ec) ec->clear();
+            
         if (::mkdir(p.c_str(), attr_stat.st_mode) == -1) {
             mec = std::error_code(errno, std::system_category());
-            if (ec) {
+            if (mec.value() == EEXIST && fs::is_directory(p)) {
+                return false;
+            }
+            else if (ec) {
                 *ec = mec;
-                return;
+                return false;
             } else {
                 throw filesystem_error("fs::create_directory", p, attributes, mec);
             }
-        } else {
-            if (ec) ec->clear();
         }
+        return true;
     }
 
     ////////////////////////////////////////////////////////////////////////////

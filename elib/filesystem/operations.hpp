@@ -187,7 +187,7 @@ namespace elib { namespace fs { inline namespace v1
         bool create_directory(const path& p, std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
-        void create_directory(const path& p, const path & attributes, 
+        bool create_directory(const path& p, const path & attributes, 
                 std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
@@ -343,12 +343,14 @@ namespace elib { namespace fs { inline namespace v1
     { return detail::create_directory(p, &ec); }
     
     ////////////////////////////////////////////////////////////////////////////
-    inline void create_directory(const path& p, const path& attributes)
-    { detail::create_directory(p, attributes); }
+    inline bool create_directory(const path& p, const path& attributes)
+    { return detail::create_directory(p, attributes); }
       
-    inline void create_directory(const path& p, const path& attributes, 
-            std::error_code& ec) noexcept
-    { detail::create_directory(p, attributes, &ec); }
+    inline bool create_directory(
+        const path& p, const path& attributes
+      , std::error_code& ec
+      ) noexcept
+    { return detail::create_directory(p, attributes, &ec); }
     
     ////////////////////////////////////////////////////////////////////////////
     inline void create_directory_symlink(const path& to, const path& new_symlink)

@@ -42,7 +42,6 @@ inline void python_run(const std::string& cmd)
 
 inline void python_init()
 {
-    python_run("clean()");
     python_run("init()");
 }
 
@@ -67,18 +66,6 @@ struct scoped_test_env
     }
 };
 
-inline elib::fs::path python_cwd()
-{
-    static std::string to = "python_tmp_file";
-    python_run(elib::fmt("cwd('%s')", to));
-    
-    elib::fs::path p = test_env_path / elib::fs::path(to);
-    std::ifstream in(p.native());
-    
-    std::string in_str;
-    in >> in_str;
-    return {in_str};
-}
 
 inline void python_create_file(std::string const & filename, std::size_t size = 0)
 {

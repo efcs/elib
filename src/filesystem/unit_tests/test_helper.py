@@ -68,13 +68,15 @@ def remove_all_impl_2():
 
 def remove_all():
     remove_all_impl_1()
-    remove_all_impl_2()
+    if os.path.exists(env_path):
+        remove_all_impl_2()
         
     
 def init():
     if os.path.exists(env_path):
         remove_all()
     os.mkdir(env_path)
+
 
 def clean():
     set_env_perms()
@@ -91,12 +93,6 @@ def create_file(fname, size):
 def create_dir(dname, mode=0777):
     dname = sanitize_env_path(dname)
     os.mkdir(dname, mode)
-    
-    
-def create_dirs(dname, mode=0777):
-    dname = sanitize_env_path(dname)
-    os.makedirs(dname,mode)
-    
     
 def create_symlink(source, link):
     source = sanitize_env_path(source)
@@ -120,15 +116,6 @@ def create_socket(source):
     s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     s.bind(source)
     
-
-    
-    
-def cwd(to):
-    to = sanitize_env_path(to)
-    d = os.getcwd()
-    with open(to, 'w') as f:
-        f.write(d + '\n')
-        
 
 if __name__ == '__main__':
     command = " ".join(sys.argv[1:])

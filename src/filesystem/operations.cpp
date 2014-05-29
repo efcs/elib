@@ -211,29 +211,32 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         const bool sym_status = bool(options & 
             (copy_options::create_symlinks | copy_options::skip_symlinks));
         
+        std::error_code m_ec;
         struct ::stat f_st;
-        const file_status f = sym_status ? detail::posix_lstat(from, f_st, ec)
-                                         : detail::posix_stat(from, f_st, ec);
-        if (ec && *ec) { return; }
-            
-        if (not exists(f)) {
-            const std::error_code mec(
-                static_cast<int>(std::errc::no_such_file_or_directory)
-              , std::system_category()
-              );
+        const file_status f = sym_status ? detail::posix_lstat(from, f_st, &m_ec)
+                                         : detail::posix_stat(from, f_st, &m_ec);
+        
+        if (m_ec && ec) {
+            *ec = m_ec;
+            return;
+        } else if (m_ec) {
+            throw filesystem_error("fs::copy", from, m_ec);
+        }
+        
+        
+        struct ::stat t_st;
+        const file_status t = sym_status ? detail::posix_lstat(to, t_st, &m_ec)
+                                         : detail::posix_stat(to, t_st, &m_ec);
+        
+        if (!status_known(t)) {
             if (ec) {
-                *ec = mec;
+                *ec = m_ec;
                 return;
             } else {
-                throw filesystem_error("fs::copy", from, mec);
+                throw filesystem_error("elib::fs::copy", from, to, m_ec);
             }
         }
         
-        struct ::stat t_st;
-        const file_status t = sym_status ? detail::posix_lstat(to, t_st, ec)
-                                         : detail::posix_stat(to, t_st, ec);
-        if (ec && *ec) { return; }
-            
         if ((f_st.st_dev == t_st.st_dev && f_st.st_ino == t_st.st_ino)
           || is_other(f) || is_other(t) 
           || (is_directory(f) && is_regular_file(t)))

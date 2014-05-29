@@ -24,14 +24,59 @@ def sanitize_env_path(p):
     pre = os.path.commonprefix([env_path, p])
     assert pre == env_path
     return p
-    
+
+def set_env_perms():
+    for root,dirs,files in os.walk(env_path):
+        for d in dirs:
+            d = os.path.join(root,d)
+            try:
+                os.chmod(d, 0777)
+            except OSError as e:
+                pass
+        for f in files:
+            f = os.path.join(root,f)
+            try:
+                os.chmod(f, 0777)
+            except OSError as e:
+                pass
+                
+def remove_all_impl():
+    for root,dirs,files in os.walk(env_path,topdown=False):
+        for f in files:
+            try:
+                os.unlink(os.path.join(root,f))
+            except OSError:
+                pass
+            if os.path.exists(os.path.join(root,f)):
+                try:
+                    os.unlink(os.path.join(root,f))
+                except OSError:
+                    pass
+        for d in dirs:
+            try:
+                os.rmdir(os.path.join(root,d))
+            except OSError as e:
+                pass
+        try:
+            os.rmdir(root)
+        except OSError:
+            pass
+
+
+def remove_all():
+    remove_all_impl()
+    remove_all_impl()
+    if os.path.exists(env_path):
+        os.rmdir(env_path)
+        
     
 def init():
-    os.mkdir(env_path)
-
+    if not os.path.exists(env_path):
+        os.mkdir(env_path)
 
 def clean():
-    shutil.rmtree(env_path, ignore_errors=True)
+    set_env_perms()
+    remove_all()
     
     
 def create_file(fname, size):
@@ -73,9 +118,7 @@ def create_socket(source):
     s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     s.bind(source)
     
-def remove(source):
-    source = sanitize_env_path(source)
-    shutil.rmtree(source, ignore_errors=True)
+
     
     
 def cwd(to):
@@ -87,9 +130,9 @@ def cwd(to):
 
 if __name__ == '__main__':
     command = " ".join(sys.argv[1:])
-    try: 
-        eval(command)
-    except OSError:
-        pass
+    eval(command)
+    sys.exit(0)
+   
+
     
     

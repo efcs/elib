@@ -128,7 +128,6 @@ BOOST_AUTO_TEST_CASE(different_paths_same_file_test)
     path const p1 = make_env_path("file1");
     path const p2 = test_env_path / "../test_env/./file1";
     python_create_file(p1);
-    python_create_dir(p2);
     
     {
         std::error_code ec;

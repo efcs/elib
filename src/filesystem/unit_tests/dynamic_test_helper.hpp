@@ -15,6 +15,10 @@
 
 # include <elib/assert.hpp>
 
+# ifndef BOOST_REQUIRE
+#   error boost unit test must be included before this file
+# endif
+
 
 #define PYTHON_RUN_STR "python " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
 
@@ -34,12 +38,12 @@ inline void python_run(const std::string& cmd)
   s += "\"";
   int ret = std::system(s.c_str());
   ELIB_ASSERT_ALWAYS(ret == 0);
-  ((void)ret);
 }
 
 inline void python_init()
 {
-    python_run("clean(), init()");
+    python_run("clean()");
+    python_run("init()");
 }
 
 inline void python_clean()
@@ -86,11 +90,6 @@ inline void python_create_dir(std::string const & filename)
     python_run(elib::fmt("create_dir('%s')", filename));
 }
 
-inline void python_create_dirs(std::string const & filename)
-{
-    python_run(elib::fmt("create_dirs('%s')", filename));
-}
-
 inline void python_create_symlink(std::string const & source, std::string const & to)
 {
     python_run(elib::fmt("create_symlink('%s', '%s')", source, to));
@@ -111,9 +110,5 @@ inline void python_create_socket(std::string const & file)
     python_run(elib::fmt("create_socket('%s')", file));
 }
 
-inline void python_remove(std::string const & file)
-{
-    python_run(elib::fmt("remove('%s')", file));
-}
 
 #endif /* DYNAMIC_TEST_HELPER_HPP */

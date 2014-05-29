@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE(dne_test)
     BOOST_REQUIRE(is_symlink(to));
 }
 
+
 BOOST_AUTO_TEST_CASE(dne_no_error_code_test)
 {
     scoped_test_env env;

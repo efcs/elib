@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(stat_fail_test)
 {
     scoped_test_env env;
     path const dir = make_env_path("dir");
-    path const file = dir / file;
+    path const file = dir / "file1";
     python_create_dir(dir);
     python_create_file(file, 42);
     
@@ -109,8 +109,6 @@ BOOST_AUTO_TEST_CASE(stat_fail_test)
     }
     
     permissions(dir, perms::all);
-    
-    
 }
 
 BOOST_AUTO_TEST_SUITE_END()

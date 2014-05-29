@@ -692,7 +692,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     void last_write_time(
         const path& p
       , file_time_type new_time
@@ -891,7 +890,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     space_info space(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
@@ -941,7 +939,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     path temp_directory_path(std::error_code *ec)
     {
         const char* env_paths[] = {"TMPDIR", "TMP", "TEMP", "TEMPDIR"};

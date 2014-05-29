@@ -688,10 +688,9 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         
         if (not m_ec) return true;
             
-        std::error_code tmp_ec;
-        if (m_ec.value() == EEXIST && fs::is_directory(p, tmp_ec)) {
+        if (m_ec.value() == EEXIST && fs::is_directory(p)) {
             if (ec) ec->clear();
-            return true;
+            return false;
         }
         else if (not ec) {
             throw filesystem_error("elib::fs::create_directory", p, m_ec);

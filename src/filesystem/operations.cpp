@@ -102,7 +102,7 @@ namespace elib { namespace fs { inline namespace v1
                 return file_status(file_type::not_found);
             }
             else if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::status", p, m_ec);
+                throw filesystem_error("elib::fs::posix_lstat", p, m_ec);
             }
             else if (m_ec) {
                 return file_status(file_type::none);
@@ -124,270 +124,7 @@ namespace elib { namespace fs { inline namespace v1
             fs_tmp.permissions(detail::posix_get_perms(path_stat));
             return fs_tmp;
         }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_statvfs(
-            path const & p
-          , struct ::statvfs & sv
-          , std::error_code *ec
-          )
-        {
-            std::error_code m_ec;
-            if (statvfs(p.c_str(), &sv) == -1)  {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_statvfs", p, m_ec);
-            }
-            
-            return !bool(m_ec);
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        path posix_realpath(const path& p, 
-                        std::error_code *ec)
-        {
-            char buff[PATH_MAX + 1];
-            char *ret = ::realpath(p.c_str(), buff);
-            
-            std::error_code m_ec;
-            if (not ret) {
-                m_ec = detail::capture_errno();
-                ELIB_ASSERT(m_ec);
-            }
-            if (ec) *ec = m_ec;
-                
-            if (m_ec && not ec) { 
-                throw filesystem_error("elib::fs::posix_realpath", p, m_ec);
-            }
-            else if (m_ec) {
-                return {};
-            } else {
-                return {ret};
-            }
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        string_type posix_getcwd(std::error_code *ec)
-        {
-            auto size = pathconf(".", _PC_PATH_MAX);
-            ELIB_ASSERT(size >= 0);
-            
-            auto buff = elib::make_unique<char[]>( 
-                static_cast<std::size_t>(size + 1) 
-              );
-            
-            char* ret = ::getcwd(buff.get(), static_cast<size_t>(size));
-            
-            std::error_code m_ec;
-            if (not ret) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_getcwd", m_ec);
-            }
-            else if (m_ec) {
-                return string_type{};
-            } else {
-                return string_type{buff.get()};
-            }
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_chdir(const string_type& s, std::error_code *ec)
-        {
-            std::error_code m_ec;
-            if (::chdir(s.c_str()) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-                
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_chdir", path{s}, m_ec);
-            }
-            
-            return !m_ec;
-        }
-        
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_utime(
-            const string_type& s
-          , const ::utimbuf & ut
-          , std::error_code *ec
-          )
-        {
-            std::error_code m_ec;
-            if (::utime(s.c_str(), &ut) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_utime", path{s}, m_ec);
-            }
-            
-            return !m_ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_symlink(
-            const string_type& from
-          , const string_type& to
-          , std::error_code *ec
-          )
-        {
-            std::error_code m_ec;
-            if (::symlink(from.c_str(), to.c_str()) != 0) {
-                m_ec = detail::capture_errno();
-                ELIB_ASSERT(m_ec);
-            }
-            if (ec) *ec = m_ec;
-                
-            if (m_ec && not ec) {
-                throw filesystem_error(
-                    "elib::fs::posix_symlink"
-                  , path(from), path(to), m_ec
-                );
-            }
-            
-            return !m_ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_link(
-            const string_type& from
-          , const string_type& to
-          , std::error_code *ec)
-        {
-            std::error_code m_ec;
-            if (::link(from.c_str(), to.c_str()) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_link"
-                  , path{from}, path{to}, m_ec
-                  );
-            }
-            
-            return !m_ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        string_type posix_readlink(
-            const string_type& s
-          , std::error_code *ec
-          )
-        {
-            char buff[PATH_MAX + 1];
-            std::error_code m_ec;
-            ::ssize_t ret;
-            if ((ret = ::readlink(s.c_str(), buff, PATH_MAX)) == -1) {
-                m_ec = detail::capture_errno();
-            } else {
-                ELIB_ASSERT(ret <= PATH_MAX);
-                ELIB_ASSERT(ret > 0);
-                buff[ret] = 0;
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_readlink", path(s), m_ec);
-            }
-            else if (m_ec) {
-                return {};
-            } else {
-                return string_type(buff);
-            }
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_truncate(const string_type& s, std::uintmax_t size, 
-                            std::error_code *ec)
-        {
-            std::error_code m_ec;
-            if (::truncate(s.c_str(), static_cast<long>(size)) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_truncate", path{s}, m_ec);
-            }
-            
-            return not m_ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_rename(
-            const string_type& from
-          , const string_type& to
-          , std::error_code *ec
-          )
-        {
-            std::error_code m_ec;
-            if (::rename(from.c_str(), to.c_str()) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_rename"
-                    , path{from}, path{to}, m_ec
-                  );
-            }
-            
-            return !m_ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_remove(const string_type& s, std::error_code *ec)
-        {
-            std::error_code m_ec;
-            if (::remove(s.c_str()) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_remove", path{s}, m_ec);
-            }
-            return !m_ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_mkdir(const string_type& s, mode_t md, std::error_code & ec)
-        {
-            if (::mkdir(s.c_str(), md) == -1) {
-                ec = detail::capture_errno();
-            } else {
-                ec.clear();
-            }
-            return !ec;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        bool posix_chmod(const string_type& s, ::mode_t mode,
-                std::error_code *ec)
-        {
-            std::error_code m_ec;
-            if (::chmod(s.c_str(), mode) == -1) {
-                m_ec = detail::capture_errno();
-            }
-            if (ec) *ec = m_ec;
-            
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_chmod", path{s}, m_ec);
-            }
-            return !m_ec;
-        }
-        
+
     }}                                                      // namespace detail
 ////////////////////////////////////////////////////////////////////////////////
 //                           DETAIL::MISC                                           
@@ -439,12 +176,28 @@ namespace elib { namespace fs { inline namespace v1
 namespace elib { namespace fs { inline namespace v1 { namespace detail
 {
     ////////////////////////////////////////////////////////////////////////////
-    path canonical(const path& p, const path& base, std::error_code *ec)
+    path canonical(path const & orig_p, const path& base, std::error_code *ec)
     {
-        auto ap = absolute(p, base);
-        // on failure posix_read_path will throw or
-        // return str == "". no need to check further
-        return detail::posix_realpath(ap, ec);
+        path p = absolute(orig_p, base);
+        
+        char buff[PATH_MAX + 1];
+        char *ret = ::realpath(p.c_str(), buff);
+            
+        std::error_code m_ec;
+        if (not ret) {
+            m_ec = detail::capture_errno();
+            ELIB_ASSERT(m_ec);
+        }
+        if (ec) *ec = m_ec;
+                
+        if (m_ec && not ec) { 
+            throw filesystem_error("elib::fs::canonical", orig_p, m_ec);
+        }
+        else if (m_ec) {
+            return {};
+        } else {
+            return {ret};
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -679,7 +432,9 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     bool create_directory(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
-        detail::posix_mkdir(p.native(), S_IRWXU|S_IRWXG|S_IRWXO, m_ec);
+        if (::mkdir(p.c_str(), S_IRWXU|S_IRWXG|S_IRWXO) == -1) {
+            m_ec = detail::capture_errno();
+        }
         if (ec) *ec = m_ec;
         
         if (not m_ec) return true;
@@ -731,42 +486,101 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
 
     ////////////////////////////////////////////////////////////////////////////
     void create_directory_symlink(
-        const path& to, const path& new_symlink,
-        std::error_code *ec
+        path const & from, path const & to
+      , std::error_code *ec
       )
     {
-        detail::posix_symlink(to.native(), new_symlink.native(), ec);
+        std::error_code m_ec;
+        if (::symlink(from.c_str(), to.c_str()) != 0) {
+            m_ec = detail::capture_errno();
+            ELIB_ASSERT(m_ec);
+        }
+        if (ec) *ec = m_ec;
+                
+        if (m_ec && not ec) {
+            throw filesystem_error(
+                "elib::fs::create_directory_symlink"
+              , from, to, m_ec
+              );
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////
     void create_hard_link(
-        const path& to, const path& new_hard_link,
+        const path& from, const path& to,
         std::error_code *ec
       )
     {
-        detail::posix_link(to.native(), new_hard_link.native(), ec);
+        std::error_code m_ec;
+        if (::link(from.c_str(), to.c_str()) == -1) {
+            m_ec = detail::capture_errno();
+        }
+        if (ec) *ec = m_ec;
+            
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::create_hard_link", from, to, m_ec);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
     void create_symlink(
-        const path& to, const path& new_symlink
+        path const & from, path const & to
       , std::error_code *ec
       )
     {
-        
-        detail::posix_symlink(to.native(), new_symlink.native(), ec);
+        std::error_code m_ec;
+        if (::symlink(from.c_str(), to.c_str()) != 0) {
+            m_ec = detail::capture_errno();
+            ELIB_ASSERT(m_ec);
+        }
+        if (ec) *ec = m_ec;
+                
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::create_symlink", from, to, m_ec);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
     path current_path(std::error_code *ec)
     {
-        return path{detail::posix_getcwd(ec)};
+        auto size = ::pathconf(".", _PC_PATH_MAX);
+        ELIB_ASSERT(size >= 0);
+            
+        auto buff = elib::make_unique<char[]>( 
+            static_cast<std::size_t>(size + 1) 
+            );
+            
+        char* ret = ::getcwd(buff.get(), static_cast<size_t>(size));
+            
+        std::error_code m_ec;
+        if (not ret) {
+                m_ec = detail::capture_errno();
+        }
+        if (ec) *ec = m_ec;
+            
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::current_path", m_ec);
+        }
+        else if (m_ec) {
+            return {};
+        } else {
+            return {buff.get()};
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
     void current_path(const path& p, std::error_code *ec)
     {
-        detail::posix_chdir(p.native(), ec);
+        std::error_code m_ec;
+        if (::chdir(p.c_str()) == -1) {
+            m_ec = detail::capture_errno();
+        }
+        if (ec) *ec = m_ec;
+                
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::current_path", p, m_ec);
+        }
+
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -908,7 +722,9 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         tbuf.actime = st.st_atime;
         tbuf.modtime = Clock::to_time_t(new_time);
         
-        detail::posix_utime(p.native(), tbuf, &m_ec);
+        if (::utime(p.c_str(), &tbuf) == -1) {
+            m_ec = detail::capture_errno();
+        }
         if (ec) *ec = m_ec;
             
         if (m_ec && not ec) {
@@ -944,19 +760,56 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         else if (bool(permissions_options::remove_bits & opts)) {
             prms = st.permissions() & ~prms;
         }
-        detail::posix_chmod(p.string(), detail::posix_convert_perms(prms), ec);
+        if (::chmod(p.c_str(), detail::posix_convert_perms(prms)) == -1) {
+            std::error_code m_ec = detail::capture_errno();
+            if (ec) {
+                *ec = m_ec;
+                return;
+            } else {
+                throw filesystem_error("elib::fs::permissions", p, m_ec);
+            }
+        } 
+        if (ec) ec->clear();
     }
 
     ////////////////////////////////////////////////////////////////////////////
     path read_symlink(const path& p, std::error_code *ec)
     {
-        return detail::posix_readlink(p.native(), ec);
+        char buff[PATH_MAX + 1];
+        std::error_code m_ec;
+        ::ssize_t ret;
+        if ((ret = ::readlink(p.c_str(), buff, PATH_MAX)) == -1) {
+            m_ec = detail::capture_errno();
+        } else {
+            ELIB_ASSERT(ret <= PATH_MAX);
+            ELIB_ASSERT(ret > 0);
+            buff[ret] = 0;
+        }
+        if (ec) *ec = m_ec;
+            
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::read_symlink", p, m_ec);
+        }
+        else if (m_ec) {
+            return {};
+        } else {
+            return path(buff);
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////
     bool remove(const path& p, std::error_code *ec)
     {
-        return detail::posix_remove(p.native(), ec);
+        std::error_code m_ec;
+        if (::remove(p.c_str()) == -1) {
+            m_ec = detail::capture_errno();
+        }
+        if (ec) *ec = m_ec;
+            
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::remove", p, m_ec);
+        }
+        return !m_ec;
     }
 
     namespace
@@ -1017,13 +870,29 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     ////////////////////////////////////////////////////////////////////////////
     void rename(const path& from, const path& to, std::error_code *ec)
     {
-        detail::posix_rename(from.native(), to.native(), ec);
+        std::error_code m_ec;
+        if (::rename(from.c_str(), to.c_str()) == -1) {
+            m_ec = detail::capture_errno();
+        }
+        if (ec) *ec = m_ec;
+            
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::rename", from, to, m_ec);
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    void resize_file(const path& p, uintmax_t size, std::error_code *ec)
+    void resize_file(const path& p, std::uintmax_t size, std::error_code *ec)
     {
-        detail::posix_truncate(p, size, ec);
+        std::error_code m_ec;
+        if (::truncate(p.c_str(), static_cast<long>(size)) == -1) {
+            m_ec = detail::capture_errno();
+        }
+        if (ec) *ec = m_ec;
+        
+        if (m_ec && not ec) {
+            throw filesystem_error("elib::fs::resize_file", p, m_ec);
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -1033,12 +902,14 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         std::error_code m_ec;
         struct statvfs m_svfs;
         //if we fail but don't throw
-        detail::posix_statvfs(p.native(), m_svfs, &m_ec);
+        if (::statvfs(p.c_str(), &m_svfs) == -1)  {
+            m_ec = detail::capture_errno();
+        }
         if (ec) *ec = m_ec;
             
         if (m_ec && not ec) {
             throw filesystem_error("elib::fs::space", p, m_ec);
-        } 
+        }
         else if (m_ec) {
             space_info si;
             si.capacity = si.free = si.available = 

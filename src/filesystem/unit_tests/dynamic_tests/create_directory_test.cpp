@@ -30,9 +30,11 @@ BOOST_AUTO_TEST_CASE(file_exists_test)
     path const file = make_env_path("file1");
     python_create_file(file);
 
-    std::error_code ec;
-    BOOST_REQUIRE(not create_directory(file, ec));
-    BOOST_REQUIRE(ec);
+    {
+        std::error_code ec;
+        BOOST_REQUIRE(not create_directory(file, ec));
+        BOOST_REQUIRE(ec);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(bad_parent)

@@ -362,18 +362,14 @@ namespace elib { namespace fs { inline namespace v1
         }
         
         ////////////////////////////////////////////////////////////////////////
-        bool posix_mkdir(const string_type& s, mode_t m, std::error_code *ec)
+        bool posix_mkdir(const string_type& s, mode_t md, std::error_code & ec)
         {
-            std::error_code m_ec;
-            if (::mkdir(s.c_str(), m) == -1) {
-                m_ec = detail::capture_errno();
+            if (::mkdir(s.c_str(), md) == -1) {
+                ec = detail::capture_errno();
+            } else {
+                ec.clear();
             }
-            if (ec) *ec = m_ec;
-                
-            if (m_ec && not ec) {
-                throw filesystem_error("elib::fs::posix_mkdir", path{s}, m_ec);
-            }
-            return !m_ec;
+            return !ec;
         }
         
         ////////////////////////////////////////////////////////////////////////
@@ -683,7 +679,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     bool create_directory(const path& p, std::error_code *ec)
     {
         std::error_code m_ec;
-        detail::posix_mkdir(p.native(), S_IRWXU|S_IRWXG|S_IRWXO, &m_ec);
+        detail::posix_mkdir(p.native(), S_IRWXU|S_IRWXG|S_IRWXO, m_ec);
         if (ec) *ec = m_ec;
         
         if (not m_ec) return true;

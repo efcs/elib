@@ -290,7 +290,7 @@ namespace elib
             {
                 default:
                     throw std::logic_error(
-                        std::string{"Invalid format char: "} + *f
+                        std::string("Invalid format char: ") + *f
                         );
                 case 'd': case 'i': case 'u': case 'o': 
                 case 'x': case 'X': case 'c':

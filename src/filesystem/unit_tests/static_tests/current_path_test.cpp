@@ -31,11 +31,16 @@ BOOST_AUTO_TEST_CASE(bad_set_test)
     const path curr_path = current_path();
     
     const path new_path = make_static_env_path("dne");
-    std::error_code ec;
-    current_path(new_path, ec);
-    BOOST_REQUIRE(ec);
-    BOOST_CHECK(current_path() == curr_path);
-    
+    {
+        std::error_code ec;
+        current_path(new_path, ec);
+        BOOST_REQUIRE(ec);
+        BOOST_CHECK(current_path() == curr_path);
+    }
+    {
+        BOOST_REQUIRE_THROW(current_path(new_path), filesystem_error);
+    }
+        
     current_path(curr_path);
 }
 

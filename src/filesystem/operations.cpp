@@ -144,11 +144,11 @@ namespace elib { namespace fs { inline namespace v1
             std::ifstream in(from.c_str(), std::ios::binary);
             std::ofstream out(to.c_str(),  std::ios::binary);
             
-            if (in.good() && out.good())
+            if (in.good() && out.good()) {
                 out << in.rdbuf();
+            }
             
             if (out.fail() || in.fail()) {
-                
                 std::error_code m_ec(
                     static_cast<int>(std::errc::operation_not_permitted)
                   , std::system_category()
@@ -336,7 +336,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         std::error_code m_ec;
         const bool good_from = fs::is_regular_file(from, m_ec);
         if (not good_from) {
-            
             if (not m_ec) {
                 m_ec = std::error_code(
                     static_cast<int>(std::errc::no_such_file_or_directory)

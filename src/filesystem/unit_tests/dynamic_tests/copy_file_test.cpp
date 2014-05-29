@@ -168,4 +168,21 @@ BOOST_AUTO_TEST_CASE(file_copy_update_existing_newer)
     BOOST_REQUIRE(file_size(to) == 42);
 }
 
+BOOST_AUTO_TEST_CASE(empty_file_test)
+{
+    scoped_test_env env;
+    path const file = make_env_path("file1");
+    path const to = make_env_path("file2");
+    
+    // create with size of 0
+    python_create_file(file, 0);
+    BOOST_REQUIRE(is_regular_file(file));
+    
+    std::error_code ec;
+    copy_file(file, to, ec);
+    BOOST_REQUIRE(not ec);
+    BOOST_REQUIRE(is_regular_file(to));
+    BOOST_REQUIRE(file_size(to) == 0);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

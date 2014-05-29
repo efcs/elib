@@ -40,18 +40,13 @@ def set_env_perms():
             except OSError as e:
                 pass
                 
-def remove_all_impl():
+def remove_all_impl_1():
     for root,dirs,files in os.walk(env_path,topdown=False):
         for f in files:
             try:
-                os.unlink(os.path.join(root,f))
+                os.remove(os.path.join(root,f))
             except OSError:
                 pass
-            if os.path.exists(os.path.join(root,f)):
-                try:
-                    os.unlink(os.path.join(root,f))
-                except OSError:
-                    pass
         for d in dirs:
             try:
                 os.rmdir(os.path.join(root,d))
@@ -61,18 +56,25 @@ def remove_all_impl():
             os.rmdir(root)
         except OSError:
             pass
-
+        
+def remove_all_impl_2():
+    for root,dirs,files in os.walk(env_path,topdown=False):
+        for f in files:
+            os.remove(os.path.join(root,f))           
+        for d in dirs:
+            os.rmdir(os.path.join(root,d))
+        os.rmdir(root)
+ 
 
 def remove_all():
-    remove_all_impl()
-    remove_all_impl()
-    if os.path.exists(env_path):
-        os.rmdir(env_path)
+    remove_all_impl_1()
+    remove_all_impl_2()
         
     
 def init():
-    if not os.path.exists(env_path):
-        os.mkdir(env_path)
+    if os.path.exists(env_path):
+        remove_all()
+    os.mkdir(env_path)
 
 def clean():
     set_env_perms()

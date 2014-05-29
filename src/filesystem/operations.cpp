@@ -990,6 +990,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             ELIB_ASSERT(ret); ((void)ret);
             if (ec && *ec) {
                 return npos;
+            
             } else {
                 return count;
             }

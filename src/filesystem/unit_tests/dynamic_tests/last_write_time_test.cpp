@@ -89,4 +89,28 @@ BOOST_AUTO_TEST_CASE(write_time_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(stat_fail_test)
+{
+    scoped_test_env env;
+    path const dir = make_env_path("dir");
+    path const file = dir / file;
+    python_create_dir(dir);
+    python_create_file(file, 42);
+    
+    permissions(dir, perms::none);
+    
+    {
+        std::error_code ec;
+        last_write_time(file, Clock::now(), ec);
+        BOOST_REQUIRE(ec);
+    }
+    {
+        BOOST_REQUIRE_THROW(last_write_time(file, Clock::now()), filesystem_error);
+    }
+    
+    permissions(dir, perms::all);
+    
+    
+}
+
 BOOST_AUTO_TEST_SUITE_END()

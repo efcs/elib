@@ -39,7 +39,7 @@ namespace elib { namespace fs { inline namespace v1
         ////////////////////////////////////////////////////////////////////////
         ::mode_t posix_convert_perms(perms prms)
         {
-            return static_cast<::mode_t>(
+            return static_cast< ::mode_t>(
                 prms & perms::mask
               );
         }
@@ -618,7 +618,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         std::error_code m_ec;
         struct ::stat st;
         file_status fst = detail::posix_stat(p, st, &m_ec);
-        if (fs::exists(fst) && fs::is_regular_file(fst)) {
+        if (fs::is_regular_file(fst)) {
             ELIB_ASSERT(not m_ec);
             if (ec) ec->clear();
             return static_cast<std::uintmax_t>(st.st_size);
@@ -629,8 +629,8 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         else if (m_ec) {
             *ec = m_ec;
             return static_cast<std::uintmax_t>(-1);
-        }
-        else if (not fs::is_regular_file(fst)) {
+        // else !is_regular_file(fst)
+        } else {
             std::error_code tmp_ec(EPERM, std::system_category());
             if (ec) {
                 *ec = tmp_ec;
@@ -638,10 +638,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             } else {
                 throw filesystem_error("elib::fs::file_size", p, tmp_ec);
             }
-        } else {
-            ELIB_ASSERT_ALWAYS(!bool("TODO"));
-            return static_cast<std::uintmax_t>(-1);
-        }
+        } 
     }
 
     ////////////////////////////////////////////////////////////////////////////

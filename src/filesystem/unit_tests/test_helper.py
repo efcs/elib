@@ -25,6 +25,12 @@ def sanitize_env_path(p):
     assert pre == env_path
     return p
 
+
+"""
+Some of the tests restrict permissions to induce failures.
+Before we delete the test enviroment, we have to walk it and re-raise the
+permissions.
+"""
 def set_env_perms():
     for root,dirs,files in os.walk(env_path):
         for d in dirs:
@@ -39,7 +45,8 @@ def set_env_perms():
                 os.chmod(f, 0777)
             except OSError as e:
                 pass
-                
+            
+
 def remove_all_impl_1():
     for root,dirs,files in os.walk(env_path,topdown=False):
         for f in files:
@@ -57,6 +64,7 @@ def remove_all_impl_1():
         except OSError:
             pass
         
+        
 def remove_all_impl_2():
     for root,dirs,files in os.walk(env_path,topdown=False):
         for f in files:
@@ -65,7 +73,11 @@ def remove_all_impl_2():
             os.rmdir(os.path.join(root,d))
         os.rmdir(root)
  
-
+"""
+Nothing in pythons os module seems to work for recursive deletion.
+Symlinks don't get removed the first time. Sometimes we have to make a second
+pass to actually delete the directory.
+"""
 def remove_all():
     remove_all_impl_1()
     if os.path.exists(env_path):
@@ -121,7 +133,5 @@ if __name__ == '__main__':
     command = " ".join(sys.argv[1:])
     eval(command)
     sys.exit(0)
-   
-
-    
+       
     

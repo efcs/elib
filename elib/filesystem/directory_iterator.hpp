@@ -47,9 +47,6 @@ namespace elib { namespace fs { inline namespace v1
             bool good() const noexcept
             { return m_dir_stream != nullptr; }
             
-            operator bool() const noexcept
-            { return this->good(); }
-            
             path advance(std::error_code *ec=nullptr);
             
             void close(std::error_code *ec=nullptr);

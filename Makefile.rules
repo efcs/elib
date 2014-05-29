@@ -4,7 +4,7 @@ SHELL := /bin/bash
 #				ElibTargets
 ################################################################################
 ElibTargets := all everything e elib elib_static clean configure redep distclean install \
-	       check check_static check_shared
+	       check check_all check_static check_shared
 
 .PHONY: $(ElibTargets)
 
@@ -64,7 +64,7 @@ install:
 
 
 ################################################################################	
-check:
+check_all:
 	$(CMD_VERB) echo === Building tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build 
 	$(CMD_VERB) echo
@@ -74,6 +74,10 @@ check:
 	$(CMD_VERB) echo === Running shared tests ===
 	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short
 
+
+################################################################################
+check:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) check_shared
 
 ################################################################################
 check_shared:

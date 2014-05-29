@@ -1,4 +1,3 @@
-#include <elib/config.hpp>
 #include <elib/filesystem/operations.hpp>
 #include <elib/filesystem/directory_entry.hpp>
 #include <elib/filesystem/directory_iterator.hpp>

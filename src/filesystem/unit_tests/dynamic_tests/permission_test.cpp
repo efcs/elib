@@ -28,7 +28,6 @@ BOOST_AUTO_TEST_CASE(dne_test)
             permissions(file, perms::none, permissions_options::replace_bits)
           , filesystem_error
           );
-        
     }
 }
 

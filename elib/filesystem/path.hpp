@@ -42,9 +42,7 @@ namespace elib { namespace fs { inline namespace v1
         path(InputIter xbegin, InputIter xend)
         {
             using vtype = typename std::iterator_traits<InputIter>::value_type;
-                
-            if (xbegin != xend) 
-            {
+            if (xbegin != xend) {
                 std::basic_string<vtype> s{xbegin, xend};
                 m_pathname = detail::convert<string_type>(s);
             }
@@ -127,7 +125,7 @@ namespace elib { namespace fs { inline namespace v1
             class Source
           , ELIB_ENABLE_IF(detail::is_pathable<Source>::value)
           >
-        path & operator/=(Source const & src)
+        path & operator/=(Source const & src) 
         {
             path p{detail::dispatch<string_type>(src)};
             return this->operator/=(p);

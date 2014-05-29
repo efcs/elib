@@ -12,9 +12,6 @@
 # include <vector>
 # include <cstdlib>
 
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <unistd.h>
 
 # include <elib/assert.hpp>
 
@@ -23,8 +20,6 @@
 
 
 const elib::fs::path test_env_path = test_root / elib::fs::path("test_env");
-
-using stat_t = struct stat;
 
 inline elib::fs::path make_env_path(elib::fs::path const & p)
 {
@@ -44,8 +39,7 @@ inline void python_run(const std::string& cmd)
 
 inline void python_init()
 {
-    python_run("clean()");
-    python_run("init()");
+    python_run("clean(), init()");
 }
 
 inline void python_clean()
@@ -116,7 +110,6 @@ inline void python_create_socket(std::string const & file)
 {
     python_run(elib::fmt("create_socket('%s')", file));
 }
-
 
 inline void python_remove(std::string const & file)
 {

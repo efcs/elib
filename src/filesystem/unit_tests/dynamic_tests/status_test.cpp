@@ -8,7 +8,7 @@
 using namespace elib::fs;
 
 
-/// NOTE: queries for file's that can be done staticly are in the static tests
+/// NOTE: queries for files that can be done staticly are in the static tests
 BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_status_test_suite)
 
 BOOST_AUTO_TEST_CASE(symlink_to_filetest)

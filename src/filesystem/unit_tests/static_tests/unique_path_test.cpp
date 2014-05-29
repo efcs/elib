@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE(default_model_test)
     BOOST_CHECK(p2.native().size() == 19);
     BOOST_CHECK(p2.native().size() == 19);
     
-    // Use two paths in case p1 == p2 or p1 == p3 happen to be the same
+    // Use two paths in case p1 == p2 or p1 == p3.
     BOOST_CHECK(p1 != p2 || p1 != p3);
 }
 
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(custom_model_test)
     BOOST_CHECK(p2.native().size() == 9);
     BOOST_CHECK(p2.native().size() == 9);
     
-    // Use two paths in case p1 == p2 or p1 == p3 happen to be the same
+    // Use two paths in case p1 == p2 or p1 == p3.
     BOOST_CHECK(p1 != p2 || p1 != p3);
     BOOST_CHECK(p1.native().substr(0, 5) == "test-");
     BOOST_CHECK(p2.native().substr(0, 5) == "test-");

@@ -88,7 +88,6 @@ BOOST_AUTO_TEST_CASE(non_symlink_test)
         BOOST_REQUIRE_THROW(copy_symlink(file, to), filesystem_error);
         BOOST_CHECK(not exists(to));
     }
-    
 }
 
 BOOST_AUTO_TEST_SUITE_END()

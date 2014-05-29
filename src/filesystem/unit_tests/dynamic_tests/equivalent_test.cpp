@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(hardlink_test)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(ret);
     }
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(different_paths_same_file_test)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(ret);
     }
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(two_symlinks_to_same_file_test)
         BOOST_REQUIRE(not ec);
     }
     {
-        bool ret;
+        bool ret{};
         BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
         BOOST_REQUIRE(ret);
     }

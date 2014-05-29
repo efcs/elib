@@ -23,7 +23,6 @@ namespace elib { namespace fs { inline namespace v1
     };
   
     ////////////////////////////////////////////////////////////////////////////
-    //
     enum class copy_options
     {
         none = 0,
@@ -230,7 +229,8 @@ namespace elib { namespace fs { inline namespace v1
         
         ////////////////////////////////////////////////////////////////////////
         void permissions(
-            const path& p, perms prms, permissions_options opts
+            const path& p, perms prms
+          , permissions_options opts
           , std::error_code *ec=nullptr
           );
         

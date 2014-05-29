@@ -40,10 +40,15 @@ BOOST_AUTO_TEST_CASE(bad_parent)
     scoped_test_env env;
     path const file = make_env_path("dir1/dir2");
     
-    std::error_code ec;
-    BOOST_REQUIRE(not create_directory(file, ec));
-    BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(not is_directory(make_env_path("dir1")));
+    {
+        std::error_code ec;
+        BOOST_REQUIRE(not create_directory(file, ec));
+        BOOST_REQUIRE(ec);
+        BOOST_REQUIRE(not is_directory(make_env_path("dir1")));
+    }
+    {
+        BOOST_REQUIRE_THROW(create_directory(file), filesystem_error);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(success_test)

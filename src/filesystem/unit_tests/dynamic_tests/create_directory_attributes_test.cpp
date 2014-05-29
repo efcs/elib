@@ -49,10 +49,15 @@ BOOST_AUTO_TEST_CASE(bad_parent)
     path const existing = make_env_path("existing");
     python_create_dir("existing");
     
-    std::error_code ec;
-    BOOST_REQUIRE(not create_directory(file, existing, ec));
-    BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(not is_directory(make_env_path("dir1")));
+    {
+        std::error_code ec;
+        BOOST_REQUIRE(not create_directory(file, existing, ec));
+        BOOST_REQUIRE(ec);
+        BOOST_REQUIRE(not is_directory(make_env_path("dir1")));
+    }
+    {
+        BOOST_REQUIRE_THROW(create_directory(file, existing), filesystem_error);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(bad_existing_test)
@@ -61,10 +66,15 @@ BOOST_AUTO_TEST_CASE(bad_existing_test)
     path const file = make_env_path("dir1");
     path const existing = make_env_path("existing");
     
-    std::error_code ec;
-    BOOST_REQUIRE(not create_directory(file, existing, ec));
-    BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(not is_directory(file));
+    {
+        std::error_code ec;
+        BOOST_REQUIRE(not create_directory(file, existing, ec));
+        BOOST_REQUIRE(ec);
+        BOOST_REQUIRE(not is_directory(file));
+    }
+    {
+        BOOST_REQUIRE_THROW(create_directory(file, existing), filesystem_error);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(existing_file_test)

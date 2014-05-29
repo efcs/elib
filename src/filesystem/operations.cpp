@@ -5,11 +5,12 @@
 
 #include <elib/memory/make_unique.hpp>
 
-#include <cstdlib>
-#include <climits>
+#include <iterator>
 #include <fstream>
 #include <type_traits>
 #include <random>  /* for unique_path */
+#include <cstdlib>
+#include <climits>
 
 #include <unistd.h>
 #include <utime.h>
@@ -145,7 +146,12 @@ namespace elib { namespace fs { inline namespace v1
             std::ofstream out(to.c_str(),  std::ios::binary);
             
             if (in.good() && out.good()) {
-                out << in.rdbuf();
+                using InIt = std::istreambuf_iterator<char>;
+                using OutIt = std::ostreambuf_iterator<char>;
+                InIt bin(in);
+                InIt ein;
+                OutIt bout(out);
+                std::copy(bin, ein, bout);
             }
             
             if (out.fail() || in.fail()) {

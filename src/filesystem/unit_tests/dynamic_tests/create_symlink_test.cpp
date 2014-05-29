@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(already_exists_test)
         BOOST_REQUIRE(is_regular_file(to));
     }
     {
-        BOOST_REQUIRE_THROW(create_symlink(file, to));
+        BOOST_REQUIRE_THROW(create_symlink(file, to), filesystem_error);
         BOOST_REQUIRE(is_regular_file(to));
     }
 }

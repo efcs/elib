@@ -29,10 +29,15 @@ BOOST_AUTO_TEST_CASE(equivalent_test)
     scoped_test_env env;
     path const file = make_env_path("file1");
     python_create_file(file);
-    
-    std::error_code ec;
-    copy(file, file, ec);
-    BOOST_REQUIRE(ec);
+        
+    {
+        std::error_code ec;
+        copy(file, file, ec);
+        BOOST_REQUIRE(ec);
+    }
+    {
+        BOOST_REQUIRE_THROW(copy(file, file), filesystem_error);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(from_is_other)
@@ -278,6 +283,28 @@ BOOST_AUTO_TEST_CASE(copy_dir_recursive_dir_only_test)
     BOOST_REQUIRE(not is_regular_file(to_f1));
     BOOST_REQUIRE(is_directory(to_d1));
     BOOST_REQUIRE(not is_regular_file(to_f2));
+}
+
+BOOST_AUTO_TEST_CASE(not_status_known_for_to)
+{
+    scoped_test_env env;
+    path const from = make_env_path("from");
+    path const to_dir = make_env_path("to_dir");
+    path const to = to_dir / "to";
+    
+    python_create_file(from, 42);
+    python_create_dir(to_dir);
+    
+    permissions(to_dir, perms::none);
+    
+    {
+        std::error_code ec;
+        copy(from, to, ec);
+        BOOST_REQUIRE(ec);
+    }
+    {
+        BOOST_REQUIRE_THROW(copy(from, to), filesystem_error);
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

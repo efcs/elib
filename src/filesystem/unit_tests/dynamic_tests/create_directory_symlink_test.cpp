@@ -91,10 +91,15 @@ BOOST_AUTO_TEST_CASE(already_exists_test)
     python_create_file(file);
     python_create_file(to);
  
-    std::error_code ec;
-    create_directory_symlink(file, to, ec);
-    BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(is_regular_file(to));
+    {
+        std::error_code ec;
+        create_directory_symlink(file, to, ec);
+        BOOST_REQUIRE(ec);
+        BOOST_REQUIRE(is_regular_file(to));
+    }
+    {
+        BOOST_REQUIRE_THROW(create_directory_symlink(file, to), filesystem_error);
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

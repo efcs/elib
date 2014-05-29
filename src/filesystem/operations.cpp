@@ -320,7 +320,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             // TODO shouldn't be here
             ELIB_ASSERT(false);
         }
-
     }
     
 

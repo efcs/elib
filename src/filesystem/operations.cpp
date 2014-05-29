@@ -400,8 +400,8 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
 
     bool create_directories(const path& p, std::error_code *ec)
     {
-        std::error_code mec;
-        auto const st = fs::status(p, mec);
+        std::error_code m_ec;
+        auto const st = fs::status(p, m_ec);
         
         if (is_directory(st)) {
             if (ec) ec->clear();
@@ -410,16 +410,19 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         
         const path parent = p.parent_path();
         if (!parent.empty()) {
-            const file_status parent_st = fs::status(parent, mec);
-            if (not exists(parent_st)) {
-                fs::create_directories(parent, mec);
-                if (mec && ec) {
-                    *ec = mec;
+            const file_status parent_st = fs::status(parent, m_ec);
+            if (not status_known(parent_st)) {
+                ELIB_ASSERT(m_ec);
+                if (ec) {
+                    *ec = m_ec;
                     return false;
-                } 
-                else if (mec) {
-                    throw filesystem_error("fs::create_directories", parent, mec);
+                } else {
+                    throw filesystem_error("elib::fs::create_directories", p, m_ec);
                 }
+            }
+            if (not exists(parent_st)) {
+                detail::create_directories(parent, ec);
+                if (ec && *ec) { return false; }
             }
         }
         

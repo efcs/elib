@@ -246,7 +246,7 @@ BOOST_AUTO_TEST_CASE(parse_field_types_test)
         "Hello-World:  Value\r\n"
         "this: is 'a' test\r\n"
         "This-World-Is:  Going Down!\r\n";
-    std::vector<char> s{s_.begin(), s_.end()};
+    std::vector<char> s(s_.begin(), s_.end());
     auto begin = s.begin();
     auto end = s.end();
         
@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(parse_request_header_test)
 BOOST_AUTO_TEST_CASE(parse_response_header_test)
 {
     std::string s_ = "HTTP/1.0 404 Page Not Found\r\n";
-    std::vector<char> s{s_.begin(), s_.end()};
+    std::vector<char> s(s_.begin(), s_.end());
     response_header h;
     
     BOOST_CHECK(parse(s.begin(), s.end(), h) == s.end());

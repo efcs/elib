@@ -134,7 +134,6 @@ namespace elib { namespace fs { inline namespace v1
     namespace detail { namespace 
     {
         ////////////////////////////////////////////////////////////////////////
-        // TODO
         bool copy_file_impl(
             const path& from, const path& to
           , std::error_code *ec
@@ -167,12 +166,11 @@ namespace elib { namespace fs { inline namespace v1
                     throw filesystem_error("fs::copy_file_impl", from, to, m_ec);
                 }
             }
-            
             return true;
         }
 
+        
     }}                                                       // namespace detail 
-  
 }}}                                                        // namespace elib::fs
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +232,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         const file_status t = sym_status ? detail::posix_lstat(to, t_st, &m_ec)
                                          : detail::posix_stat(to, t_st, &m_ec);
         
-        if (!status_known(t)) {
+        if (not status_known(t)) {
             if (ec) {
                 *ec = m_ec;
                 return;
@@ -243,9 +241,10 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             }
         }
         
-        if ((f_st.st_dev == t_st.st_dev && f_st.st_ino == t_st.st_ino)
-          || is_other(f) || is_other(t) 
-          || (is_directory(f) && is_regular_file(t)))
+        
+        if ( is_other(f) || is_other(t) 
+            || (is_directory(f) && is_regular_file(t))
+            || fs::equivalent(from, to, m_ec))
         {
             const std::error_code mec(
                 static_cast<int>(std::errc::function_not_supported)
@@ -323,8 +322,11 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             }
             return;
         } else {
-            // TODO shouldn't be here
-            ELIB_ASSERT(false);
+            const std::error_code tmp_ec(
+                    static_cast<int>(std::errc::function_not_supported)
+                  , std::system_category()
+                  );
+            throw filesystem_error("elib::fs::copy", from, to, tmp_ec);
         }
     }
     

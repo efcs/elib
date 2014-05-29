@@ -257,10 +257,11 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             
         if (is_symlink(f)) {
             if (bool(copy_options::skip_symlinks & options)) {
-                // do nothing
+                return;
             }
             else if (not exists(t)) {
                 detail::copy_symlink(from, to, ec);
+                return;
             } else {
                 const std::error_code mec(
                     static_cast<int>(std::errc::file_exists)
@@ -273,7 +274,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
                 // else
                 throw filesystem_error("fs::copy", from, to, mec);
             }
-            return;
+            ELIB_ASSERT(false);
         }
         else if (is_regular_file(f)) {
             if (bool(copy_options::directories_only & options)) {
@@ -287,7 +288,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             }
             else if (is_directory(t)) {
                 detail::copy_file(from, to/from.filename(), options, ec);
-           
             } else {
                 detail::copy_file(from, to, options, ec);
             }

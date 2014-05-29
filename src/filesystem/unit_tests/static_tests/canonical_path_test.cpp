@@ -50,9 +50,12 @@ BOOST_AUTO_TEST_CASE(canonical_test)
         BOOST_CHECK(!ec);
         BOOST_CHECK(ret == curr.parent_path());
         
-        ret = fs::canonical(p, path("/tmp"), ec);
+        /// NOTE: on mac /tmp's canonical path is not /tmp.
+        /// So to make this test path,  we have to find tmp's canonical path.
+        path canon_tmp = fs::canonical("/tmp");
+        ret = fs::canonical(p, canon_tmp, ec);
         BOOST_CHECK(!ec);
-        BOOST_CHECK(ret == path("/"));
+        BOOST_CHECK(ret == canon_tmp.parent_path());
     }
     // TODO symlink test
 }

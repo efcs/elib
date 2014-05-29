@@ -449,8 +449,8 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
       , {"/foo/", {"/", "foo", "."}, "/", "", "/", "foo/", "/foo", "."}
       , {"foo/bar", {"foo","bar"}, "",  "", "",  "foo/bar", "foo", "bar"}
       , {"/foo/bar", {"/","foo","bar"}, "/", "", "/", "foo/bar", "/foo", "bar"}
-      , {"//net", {"//net"}, "//net", "//net", "", "", "", "//net"}
-      , {"//net/foo", {"//net", "/", "foo"}, "//net/", "//net", "/", "foo", "//net/", "foo"}
+      , {"//", {"//"}, "//", "//", "", "", "", "//"}
+      , {"///foo", {"//", "/", "foo"}, "///", "//", "/", "foo", "///", "foo"}
       , {"///foo///", {"/", "foo", "."}, "/", "", "/", "foo///", "///foo", "."}
       , {"///foo///bar", {"/", "foo", "bar"}, "/", "", "/", "foo///bar", "///foo", "bar"}
       , {"/.", {"/", "."}, "/", "", "/", ".", "/", "."}
@@ -477,6 +477,8 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
       , {"c:\\foo\\", {"c:\\foo\\"}, "", "", "", "c:\\foo\\", "", "c:\\foo\\"}
       , {"c:\\foo/",  {"c:\\foo", "."}, "", "", "", "c:\\foo/", "c:\\foo", "."}
       , {"c:/foo\\bar", {"c:", "foo\\bar"}, "", "", "", "c:/foo\\bar", "c:", "foo\\bar"}
+      
+      , {"//", {"//"}, "//", "//", "", "", "", "//"}
     };
     
     for (auto const & testcase : testcases) {

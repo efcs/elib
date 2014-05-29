@@ -76,7 +76,6 @@ BOOST_AUTO_TEST_CASE(symlink_test)
     BOOST_REQUIRE(equivalent(file, to));
 }
 
-
 BOOST_AUTO_TEST_CASE(already_exists_test)
 {
     scoped_test_env env;
@@ -91,6 +90,5 @@ BOOST_AUTO_TEST_CASE(already_exists_test)
     BOOST_REQUIRE(ec);
     BOOST_REQUIRE(is_regular_file(to));
 }
-
 
 BOOST_AUTO_TEST_SUITE_END()

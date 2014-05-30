@@ -30,7 +30,7 @@ namespace elib { namespace web
             if (!ec)
             {
                 ELIB_THROW_EXCEPTION(
-                    socket_error{elib::move(msg), elib::move(m_ec)}
+                    socket_error(elib::move(msg), elib::move(m_ec))
                   );
             }
             // else

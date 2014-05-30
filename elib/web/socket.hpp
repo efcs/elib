@@ -437,7 +437,7 @@ namespace elib { namespace web
             m_ec.clear();
         }
         
-        void swap(socket & other) noexcept
+        void swap(socket & other) noexcept 
         {
             std::swap(m_fd, other.m_fd);
             std::swap(m_ec, other.m_ec);
@@ -458,7 +458,7 @@ namespace elib { namespace web
     };
     
     
-    inline void swap(web::socket & lhs, web::socket & rhs)
+    inline void swap(web::socket & lhs, web::socket & rhs) noexcept
     {
         lhs.swap(rhs);
     }

@@ -169,7 +169,6 @@ namespace elib { namespace fs { inline namespace v1
             return true;
         }
 
-        
     }}                                                       // namespace detail 
 }}}                                                        // namespace elib::fs
 
@@ -205,7 +204,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     void copy(
         const path& from, const path& to
       , copy_options options
@@ -604,7 +602,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
                 return false;
             } else {
                 throw filesystem_error(
-                    "elib::fs::equivalent"
+                  "elib::fs::equivalent"
                 , p1, p2
                 , ec1 ? ec1 : ec2
                 );

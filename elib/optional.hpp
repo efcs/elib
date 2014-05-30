@@ -9,6 +9,7 @@
 # include <initializer_list>
 # include <stdexcept>
 # include <string>
+# include <new>
 # include <utility> /* for swap */
 
 namespace elib 

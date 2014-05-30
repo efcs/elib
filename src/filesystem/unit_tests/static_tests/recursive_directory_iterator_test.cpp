@@ -226,6 +226,7 @@ BOOST_AUTO_TEST_CASE(pop_test)
         ++it;
     }
     BOOST_REQUIRE(it != end_it);
+    BOOST_REQUIRE(not top_level_files.count(*it));
     it.pop();
     while (it != end_it) {
         BOOST_REQUIRE(not seen.count(*it));

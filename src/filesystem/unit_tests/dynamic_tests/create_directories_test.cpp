@@ -60,4 +60,24 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
     BOOST_REQUIRE(not ec);
 }
 
+BOOST_AUTO_TEST_CASE(bad_perms_test)
+{
+    scoped_test_env env;
+    path const dir1 = make_env_path("dir1");
+    path const dir2 = dir1 / "dir2";
+    python_create_dir(dir1);
+    
+    permissions(dir1, perms::none);
+    
+    {
+        std::error_code ec;
+        create_directories(dir2, ec);
+        BOOST_CHECK(ec);
+    }{
+        BOOST_CHECK_THROW(create_directories(dir2), filesystem_error);
+    }
+    
+    permissions(dir1, perms::all);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

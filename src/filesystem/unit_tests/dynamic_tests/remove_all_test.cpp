@@ -109,4 +109,5 @@ BOOST_AUTO_TEST_CASE(bad_perms_test)
     permissions(dir1, perms::all);
 }
 
+
 BOOST_AUTO_TEST_SUITE_END()

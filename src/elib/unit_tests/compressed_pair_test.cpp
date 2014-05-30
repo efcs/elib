@@ -4,12 +4,35 @@
 #include <elib/compressed_pair.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/move.hpp>
+#include <cstdlib>
 using namespace elib;
 
-struct empty1 {};
-struct empty2 {};
-struct t1 {int x {};};
-struct t2 {int x {};};
+struct empty1 {
+    empty1() {
+        static int x = std::rand();
+        ((void)x);
+    }
+};
+struct empty2 {
+    empty2() {
+        static int x = std::rand();
+        ((void)x);
+    }
+};
+struct t1 {
+    t1() {
+        static int xx = std::rand();
+        ((void)xx);
+    }
+    int x {};
+};
+struct t2 {
+    t2() {
+        static int xx = std::rand();
+        ((void)xx);
+    }
+    int x {};
+};
 
 #define OPERATORS(Class)                                              \
     constexpr bool operator==(Class const &, Class const &) noexcept  \

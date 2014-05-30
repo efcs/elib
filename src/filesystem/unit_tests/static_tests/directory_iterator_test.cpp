@@ -112,5 +112,16 @@ BOOST_AUTO_TEST_CASE(iterate_test)
       );
 }
 
+BOOST_AUTO_TEST_CASE(cmp_test)
+{
+    path const dir = make_static_env_path("");
+    directory_iterator it(dir);
+    directory_iterator const end_it;
+    
+    BOOST_REQUIRE(it != end_it);
+    BOOST_REQUIRE(not (it == end_it));
+    BOOST_REQUIRE(it == it);
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

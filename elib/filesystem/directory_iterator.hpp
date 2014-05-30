@@ -94,7 +94,7 @@ namespace elib { namespace fs { inline namespace v1
             
         directory_iterator operator++(int)
         { 
-            directory_iterator it{*this}; 
+            directory_iterator it(*this); 
             m_increment();
             return it;
         }
@@ -177,10 +177,10 @@ namespace elib { namespace fs { inline namespace v1
         ////////////////////////////////////////////////////////////////////////
         //
         const directory_entry& operator*() const
-        { return *(m_stack_ptr->top()); }
+        { return m_entry; }
         
         const directory_entry* operator->() const
-        { return &(*(m_stack_ptr->top())); }
+        { return &m_entry; }
         
         ////////////////////////////////////////////////////////////////////////
         recursive_directory_iterator& operator++()
@@ -248,6 +248,8 @@ namespace elib { namespace fs { inline namespace v1
         
         std::shared_ptr<std::stack<directory_iterator>> 
         m_stack_ptr{nullptr};
+        
+        directory_entry m_entry;
         
         directory_options 
         m_options{directory_options::none};

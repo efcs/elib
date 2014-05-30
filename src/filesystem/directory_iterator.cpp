@@ -164,6 +164,7 @@ namespace elib { namespace fs { inline namespace v1
                         >();
 
         m_stack_ptr->push(curr_iter);
+        m_entry = *curr_iter;
     }
     
     recursive_directory_iterator& 
@@ -171,8 +172,9 @@ namespace elib { namespace fs { inline namespace v1
     {
         if (!m_stack_ptr) return *this;
         
-        if (m_try_recursion(ec) || (ec && *ec))
+        if (m_try_recursion(ec) || (ec && *ec)) {
             return *this;
+        }
             
         const directory_iterator end_it;
         while (m_stack_ptr->size() > 0)
@@ -184,8 +186,12 @@ namespace elib { namespace fs { inline namespace v1
             m_stack_ptr->pop();
         }
         
-        if ((ec && *ec) || m_stack_ptr->size() == 0)
+        if ((ec && *ec) || m_stack_ptr->size() == 0) {
             m_make_end();
+        } else {
+            ELIB_ASSERT(m_stack_ptr->top() != directory_iterator{});
+            m_entry = *m_stack_ptr->top();
+        }
             
         m_rec = true;
         return *this;
@@ -206,12 +212,14 @@ namespace elib { namespace fs { inline namespace v1
         if (recursion_pending() && is_directory(curr_it->status()) &&
             (!is_symlink(curr_it->symlink_status()) || rec_sym))
         {
-            auto tmp = directory_iterator{curr_it->path(), ec};
-            if ((ec && *ec) || tmp == directory_iterator{})
+            auto tmp = directory_iterator(curr_it->path(), ec);
+            if ((ec && *ec) || tmp == directory_iterator{}) {
                 return false;
-            //else
-            m_stack_ptr->push(tmp);
-            return true;
+            } else {
+                m_stack_ptr->push(tmp);
+                m_entry = *tmp;
+                return true;
+            }
         }
         
         return false;
@@ -220,5 +228,6 @@ namespace elib { namespace fs { inline namespace v1
     void recursive_directory_iterator::m_make_end()
     {
         m_stack_ptr.reset();
+        m_entry = directory_entry{};
     }
 }}}                                                          // namespace elib

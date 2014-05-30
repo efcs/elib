@@ -329,7 +329,8 @@ BOOST_AUTO_TEST_CASE(equality_compare_test)
         ret = (p1 > p2);
         ret = (p1 >= p2);
     }
-    BOOST_CHECK(true);
+    ret = true;
+    BOOST_CHECK(ret);
 }
 
 BOOST_AUTO_TEST_CASE(make_compressed_pair_test)

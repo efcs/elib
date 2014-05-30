@@ -219,6 +219,34 @@ BOOST_AUTO_TEST_CASE(walk_dir_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(pop_test)
+{
+    const std::vector<directory_entry> expected =
+    {
+        _("empty_file")
+      , _("dir1")
+      , _("dir1/file1")
+      , _("non_empty_file")
+    };
+    
+    recursive_directory_iterator const end_it;
+    recursive_directory_iterator it(make_static_env_path(""));
+    
+    
+    BOOST_REQUIRE(*it == expected[0]);
+    ++it;
+    BOOST_REQUIRE(it != end_it);
+    BOOST_REQUIRE(*it == expected[1]);
+    ++it;
+    BOOST_REQUIRE(it != end_it);
+    BOOST_REQUIRE(*it == expected[2]);
+    BOOST_CHECK(it.depth() == 1);
+    it.pop();
+    BOOST_REQUIRE(it != end_it);
+    BOOST_REQUIRE(*it == expected[3]);
+    BOOST_CHECK(it.depth() == 0);
+}
+
 #undef _
 
 BOOST_AUTO_TEST_CASE(cmp_test)

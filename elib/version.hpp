@@ -3,10 +3,10 @@
 # 
 # define ELIB_MAJOR 0
 # define ELIB_MINOR 1
-# define ELIB_PATCHLEVEL 3
+# define ELIB_PATCHLEVEL 4
 # 
-# define ELIB_VERSION 000103
+# define ELIB_VERSION 000104
 # 
-# define ELIB_LIBRARY_VERSION "0_1_3"
+# define ELIB_LIBRARY_VERSION "0_1_4"
 # 
 #endif /* ELIB_VERSION_HPP */

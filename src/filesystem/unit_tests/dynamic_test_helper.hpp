@@ -27,7 +27,8 @@ const elib::fs::path test_env_path = test_root / elib::fs::path("test_env");
 
 inline elib::fs::path make_env_path(elib::fs::path const & p)
 {
-    return test_env_path / p;
+    static const elib::fs::path root_p = ELIB_FILESYSTEM_UNIT_TEST_PATH / elib::fs::path("test_env");
+    return root_p / p;
 }
 
 inline void python_run(const std::string& cmd)

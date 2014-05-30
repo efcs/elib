@@ -4,7 +4,6 @@
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../static_test_helper.hpp"
-#include <vector>
 #include <set>
 #include <cstddef>
 using namespace elib::fs;

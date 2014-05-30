@@ -3,7 +3,7 @@
 
 # include "test_helper.hpp"
 
-const elib::fs::path static_test_env_path = test_root / elib::fs::path("static_test_env");
+const elib::fs::path static_test_env_path = ELIB_FILESYSTEM_UNIT_TEST_PATH / elib::fs::path("static_test_env");
 
 inline elib::fs::path make_static_env_path(elib::fs::path const & p)
 {

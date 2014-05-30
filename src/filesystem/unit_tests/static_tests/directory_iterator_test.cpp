@@ -5,7 +5,6 @@
 #include <system_error>
 #include "../static_test_helper.hpp"
 #include <vector>
-#include <iostream>
 using namespace elib::fs;
 
 

@@ -10,7 +10,7 @@
 using namespace elib::fs;
 
 #define _(File) directory_entry(make_static_env_path(File))
-const std::set<directory_entry> file_list =
+const std::multi_set<directory_entry> file_list =
     {
         _("empty_file")
       , _("dir1")
@@ -22,7 +22,7 @@ const std::set<directory_entry> file_list =
       , _("non_empty_file")
     };
     
-const std::set<directory_entry> top_level_files =
+const std::multi_set<directory_entry> top_level_files =
     {
         _("empty_file")
       , _("dir1")

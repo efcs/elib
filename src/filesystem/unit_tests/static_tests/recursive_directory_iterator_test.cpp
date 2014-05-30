@@ -10,7 +10,7 @@
 using namespace elib::fs;
 
 #define _(File) directory_entry(make_static_env_path(File))
-const std::multiset<directory_entry> file_list =
+static const std::set<directory_entry> file_list =
     {
         _("empty_file")
       , _("dir1")
@@ -22,7 +22,7 @@ const std::multiset<directory_entry> file_list =
       , _("non_empty_file")
     };
     
-const std::multiset<directory_entry> top_level_files =
+static const std::set<directory_entry> top_level_files =
     {
         _("empty_file")
       , _("dir1")
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(simple_iterate_test)
     recursive_directory_iterator it(static_test_env_path);
     recursive_directory_iterator const end_it;
     
-    std::multiset<directory_entry> seen;
+    std::set<directory_entry> seen;
     
     for (auto & part : it) {
         BOOST_REQUIRE(not seen.count(part));
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(disable_recursion_pending_test)
     recursive_directory_iterator it(static_test_env_path);
     recursive_directory_iterator const end_it;
     
-    std::multiset<directory_entry> seen;
+    std::set<directory_entry> seen;
     
     for (; it != end_it; ++it) {
         BOOST_REQUIRE(not seen.count(*it));
@@ -219,7 +219,7 @@ BOOST_AUTO_TEST_CASE(pop_test)
     recursive_directory_iterator const end_it;
     recursive_directory_iterator it(make_static_env_path(""));
     
-    std::multiset<directory_entry> seen;
+    std::set<directory_entry> seen;
     while (it != end_it && top_level_files.count(*it)) {
         BOOST_REQUIRE(not seen.count(*it));
         seen.insert(*it);

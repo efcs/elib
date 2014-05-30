@@ -123,5 +123,4 @@ BOOST_AUTO_TEST_CASE(cmp_test)
     BOOST_REQUIRE(it == it);
 }
 
-
 BOOST_AUTO_TEST_SUITE_END()

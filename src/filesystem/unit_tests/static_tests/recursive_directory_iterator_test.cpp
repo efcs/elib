@@ -10,7 +10,8 @@
 using namespace elib::fs;
 
 #define _(File) directory_entry(make_static_env_path(File))
-static const std::set<directory_entry> file_list =
+namespace {
+const std::set<directory_entry> file_list =
     {
         _("empty_file")
       , _("dir1")
@@ -22,7 +23,7 @@ static const std::set<directory_entry> file_list =
       , _("non_empty_file")
     };
     
-static const std::set<directory_entry> top_level_files =
+const std::set<directory_entry> top_level_files =
     {
         _("empty_file")
       , _("dir1")
@@ -30,6 +31,7 @@ static const std::set<directory_entry> top_level_files =
     };
     
 #undef _
+}
 
 BOOST_AUTO_TEST_SUITE(elib_filesystem_static_recursive_directory_iterator_test_suite)
 

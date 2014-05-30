@@ -1,7 +1,7 @@
 #ifndef ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP
 #define ELIB_FILESYSTEM_DETAIL_PATH_CONVERTER_HPP
 
-# include <elib/aux/traits/decay.hpp>
+#include <elib/aux/traits/decay.hpp>
 #include <locale>
 #include <string>
 #include <cwchar>
@@ -41,49 +41,43 @@ namespace elib { namespace fs { inline namespace v1
         using is_pathable = is_pathable_impl<aux::decay_t<T>>;
 
         template <typename Ret>
-        Ret
-        convert(const std::string& s);
+        Ret convert(const std::string& s);
 
         template <>
-        inline std::string
-        convert(const std::string& s)
+        inline std::string convert(const std::string& s)
         { return s; }
 
         template <typename Ret>
-        inline Ret
-        dispatch(const char* from)
+        Ret dispatch(const char* from)
         {
             return {std::string{from}};
         }
 
         template <typename Ret>
-        inline Ret
-        dispatch(const std::string& from)
+        Ret dispatch(const std::string& from)
         {
             return {from};
         }
 
         template <typename Ret>
-        inline Ret
-        dispatch(const std::vector<char>& from)
+        Ret dispatch(const std::vector<char>& from)
         {
             return {std::string{from.begin(), from.end()}};
         }
 
         template <typename Ret>
-        inline Ret
-        dispatch(const std::list<char>& from)
+        Ret dispatch(const std::list<char>& from)
         {
             return {from.begin(), from.end()};
         }
 
         template <typename Ret>
-        Ret
-        dispatch(const directory_entry& from);
+        Ret dispatch(const directory_entry & from)
+        {
+            return dispatch<Ret>(dispatch<std::string>(from));
+        }
 
-        template <>
-        std::string
-        dispatch(const directory_entry& from);
+        template <> std::string dispatch(const directory_entry & from);
     
     }                                                       // namespace detail
 }}}                                                       // namespace elib::fs

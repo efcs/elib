@@ -7,6 +7,7 @@
 #include <cstdlib>
 using namespace elib;
 
+// weird constructor hopefully prevent compilers eliding it.
 struct empty1 {
     empty1() {
         static int x = std::rand();

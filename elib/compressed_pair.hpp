@@ -97,14 +97,6 @@ namespace elib
               : m_first(), m_second()
             {}
             
-            constexpr explicit compressed_pair_impl(First f)
-              : m_first(elib::forward<First>(f)), m_second()
-            {}
-            
-            constexpr explicit compressed_pair_impl(Second s)
-              : m_first(), m_second(elib::forward<Second>(s))
-            {}
-            
             constexpr compressed_pair_impl(First f, Second s)
               : m_first(elib::forward<First>(f))
               , m_second(elib::forward<Second>(s))
@@ -154,14 +146,6 @@ namespace elib
               : First(), m_second()
             {}
             
-            constexpr explicit compressed_pair_impl(First f)
-              : First(elib::forward<First>(f)), m_second()
-            {}
-            
-            constexpr explicit compressed_pair_impl(Second s)
-              : First(), m_second(elib::forward<Second>(s))
-            {}
-            
             constexpr compressed_pair_impl(First f, Second s)
               : First(elib::forward<First>(f))
               , m_second(elib::forward<Second>(s))
@@ -207,14 +191,6 @@ namespace elib
             
             constexpr compressed_pair_impl()
               : Second(), m_first()
-            {}
-            
-            constexpr explicit compressed_pair_impl(First f)
-              : Second(), m_first(elib::forward<First>(f))
-            {}
-            
-            constexpr explicit compressed_pair_impl(Second s)
-              : Second(elib::forward<Second>(s)), m_first()
             {}
             
             constexpr compressed_pair_impl(First f, Second s)
@@ -266,14 +242,6 @@ namespace elib
               : First(), Second() 
             {}
             
-            constexpr explicit compressed_pair_impl(First f)
-              : First(elib::forward<First>(f)), Second()
-            {}
-            
-            constexpr explicit compressed_pair_impl(Second s)
-              : First(), Second(elib::forward<Second>(s))
-            {}
-            
             constexpr compressed_pair_impl(First f, Second s)
               : First(elib::forward<First>(f))
               , Second(elib::forward<Second>(s))
@@ -318,14 +286,6 @@ namespace elib
     public:
         constexpr compressed_pair()
           : base()
-        {}
-        
-        constexpr explicit compressed_pair(first_type f)
-          : base(elib::forward<first_type>(f))
-        {}
-        
-        constexpr explicit compressed_pair(second_type f)
-          : base(elib::forward<second_type>(f))
         {}
         
         constexpr compressed_pair(first_type f, second_type s)

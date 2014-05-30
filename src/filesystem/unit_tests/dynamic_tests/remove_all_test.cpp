@@ -88,4 +88,25 @@ BOOST_AUTO_TEST_CASE(non_empty_recursive_dir_test)
     BOOST_REQUIRE(not ec);
 }
 
+BOOST_AUTO_TEST_CASE(bad_perms_test)
+{
+    scoped_test_env env;
+    path const dir1 = make_env_path("dir1");
+    path const dir2 = dir1 / "dir2";
+    python_create_dir(dir1);
+    
+    permissions(dir1, perms::none);
+    
+    {
+        std::error_code ec;
+        auto ret = remove_all(dir2, ec);
+        BOOST_CHECK(ec);
+        BOOST_CHECK(ret == bad_count);
+    }{
+        BOOST_CHECK_THROW(remove_all(dir2), filesystem_error);
+    }
+    
+    permissions(dir1, perms::all);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

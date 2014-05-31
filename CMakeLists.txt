@@ -14,6 +14,9 @@ endif()
 # NOTE: Default is C++11
 option(CONFIG_CXX1Y "Compile using c++1y standard" OFF)
 
+# Enable experimental libraries
+option(CONFIG_ENABLE_EXPERIMENTAL "Enable experimental libraries" ON)
+
 # Adds a ton of warnings to the build. 
 # NOTE: ALL CODE SHOULD COMPILE CLEANLY WITH THIS ON!
 option(CONFIG_ALL_WARNINGS "Add warnings for GCC/Clang" ON)
@@ -49,7 +52,6 @@ option(CONFIG_HEADER_TESTS
 # config, any, fmt, lexical_cast, scope_guard are some examples.
 
 option(ELIB_SOURCE "Build top level source" ON)
-option(ELIB_ALGORITHM_SOURCE "Build Algorithm" ON)
 option(ELIB_AUX_SOURCE "Build aux" ON)
 option(ELIB_CONTAINER_SOURCE "Build containers" ON)
 option(ELIB_ENUMERATION_SOURCE "Build enumeration" ON)
@@ -63,6 +65,8 @@ option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
 option(ELIB_PP_SOURCE "Build preprocessor library" ON)
 option(ELIB_RANGES_SOURCE "Build ranges library" ON)
 option(ELIB_WEB_SOURCE "Build web library" ON)
+
+option(ELIB_ALGORITHM_SOURCE "Build Algorithm (experimental)" ON)
 
 ################################################################################
 #                            PROJECT ELIB

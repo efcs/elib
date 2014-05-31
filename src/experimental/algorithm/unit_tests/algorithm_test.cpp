@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/algorithm.hpp>
+#include <elib/experimental/algorithm.hpp>
 
 BOOST_AUTO_TEST_SUITE(algorithm_test_suite)
 

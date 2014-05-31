@@ -1,5 +1,5 @@
-#ifndef ELIB_ALGORITHM_HPP
-#define ELIB_ALGORITHM_HPP
+#ifndef ELIB_EXPERIMENTAL_ALGORITHM_HPP
+#define ELIB_EXPERIMENTAL_ALGORITHM_HPP
 
 # include <elib/aux.hpp>
 # include <elib/iterator/traits.hpp>
@@ -8,7 +8,7 @@
 # include <algorithm>
 # include <utility>
 
-namespace elib { namespace algo
+namespace elib { namespace experimental { namespace algo
 {
     using std::all_of;
     using std::any_of;
@@ -938,8 +938,8 @@ namespace elib { namespace algo
     auto prev_permutation(Iter1 first, Iter1 last, Compare cmp)
     ELIB_AUTO_RETURN( std::prev_permutation(first, last, cmp) )
     
-}}                                                          // namespace elib
-namespace elib
+}}}                                                          // namespace elib
+namespace elib { namespace experimental
 {
     using algo::all_of;
     using algo::any_of;
@@ -1029,5 +1029,5 @@ namespace elib
     using algo::is_permutation;
     using algo::next_permutation;
     using algo::prev_permutation;
-}                                                           // namespace elib
+}}                                                          // namespace elib
 #endif /* ELIB_ALGORITHM_HPP */

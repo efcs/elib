@@ -64,7 +64,6 @@ set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
 ##                             Library Parts
 ################################################################################
 include_library_if(ELIB_SOURCE             elib/build.cmake         )
-include_library_if(ELIB_ALGORITHM_SOURCE   algorithm/build.cmake    )
 include_library_if(ELIB_AUX_SOURCE         aux/build.cmake          )
 include_library_if(ELIB_CONTAINER_SOURCE   container/build.cmake    )
 include_library_if(ELIB_ENUMERATION_SOURCE enumeration/build.cmake  )
@@ -79,6 +78,9 @@ include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
 include_library_if(ELIB_RANGES_SOURCE      ranges/build.cmake       )
 include_library_if(ELIB_WEB_SOURCE         web/build.cmake          )
 
+if (CONFIG_ENABLE_EXPERIMENTAL)
+include_library_if(ELIB_ALGORITHM_SOURCE   experimental/algorithm/build.cmake)
+endif()
 
 ################################################################################
 ##                               Objects

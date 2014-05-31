@@ -7,7 +7,8 @@
 #include <cstdlib>
 using namespace elib;
 
-// weird constructor hopefully prevent compilers eliding it.
+/// weird constructor will hopefully prevent compilers from eliding it.
+/// eliding constructors causes problems with gcov.
 struct empty1 {
     empty1() {
         static int x = std::rand();

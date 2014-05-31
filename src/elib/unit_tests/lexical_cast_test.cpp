@@ -198,4 +198,40 @@ BOOST_AUTO_TEST_CASE(bool_specialization_reverse_test)
     BOOST_CHECK(dest == "false");
 }
 
+BOOST_AUTO_TEST_CASE(bool_specialization_reverse_nothrow_test)
+{
+    std::string dest;
+    bool x{};
+    
+    x = true;
+    BOOST_REQUIRE(lexical_cast(x, dest));
+    BOOST_CHECK(dest == "true");
+    
+    x = false;
+    BOOST_REQUIRE(lexical_cast(x, dest));
+    BOOST_CHECK(dest == "false");
+}
+
+BOOST_AUTO_TEST_CASE(string_to_string_test)
+{
+    std::string const expect = "Hello World!";
+    
+    std::string dest;
+    {
+        dest = lexical_cast<std::string>(expect);
+        BOOST_CHECK(dest == expect);
+    }{
+        dest = lexical_cast<std::string>("Hello World!");
+        BOOST_CHECK(dest == expect);
+    }{ 
+        dest.clear();
+        BOOST_REQUIRE(lexical_cast(expect, dest));
+        BOOST_CHECK(dest == expect);
+    }{
+        dest.clear();
+        BOOST_REQUIRE(lexical_cast("Hello World!", dest));
+        BOOST_CHECK(dest == expect);
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

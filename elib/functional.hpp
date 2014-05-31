@@ -217,7 +217,8 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T & lhs, const T & rhs) const noexcept(noexcept(lhs += rhs))
+            constexpr T& operator()(T & lhs, const T & rhs) const 
+                noexcept(noexcept(lhs += rhs))
             {
                 return (lhs += rhs);
                 
@@ -276,7 +277,8 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T & lhs, const T & rhs) const noexcept(noexcept(lhs -= rhs))
+            constexpr T& operator()(T & lhs, const T & rhs) const 
+                noexcept(noexcept(lhs -= rhs))
             {
                 return (lhs -= rhs);
                 
@@ -335,7 +337,8 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T & lhs, const T& rhs) const noexcept(noexcept(lhs *= rhs))
+            constexpr T& operator()(T & lhs, const T& rhs) const 
+                noexcept(noexcept(lhs *= rhs))
             {
                 return (lhs *= rhs);
                 
@@ -394,7 +397,8 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T& lhs, const T& rhs) const noexcept(noexcept(lhs /= rhs))
+            constexpr T& operator()(T& lhs, const T& rhs) const
+                noexcept(noexcept(lhs /= rhs))
             {
                 return (lhs /= rhs);
                 
@@ -453,7 +457,8 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T& lhs, const T& rhs) const noexcept(noexcept(lhs %= rhs))
+            constexpr T& operator()(T& lhs, const T& rhs) const 
+                noexcept(noexcept(lhs %= rhs))
             {
                 return (lhs %= rhs);
                 
@@ -485,7 +490,8 @@ namespace elib
             using first_argument_type = T;
             using second_argument_type = T;
             
-            constexpr bool operator()(const T& lhs, const T& rhs) const noexcept(noexcept(lhs == rhs))
+            constexpr bool operator()(const T& lhs, const T& rhs) const
+                noexcept(noexcept(lhs == rhs))
             {
                 return (lhs == rhs);
                 
@@ -517,7 +523,8 @@ namespace elib
             using first_argument_type = T;
             using second_argument_type = T;
             
-            constexpr bool operator()(const T& lhs, const T& rhs) const noexcept(noexcept(lhs != rhs))
+            constexpr bool operator()(const T& lhs, const T& rhs) const 
+                noexcept(noexcept(lhs != rhs))
             {
                 return (lhs != rhs);
                 
@@ -549,7 +556,8 @@ namespace elib
             using first_argument_type = T;
             using second_argument_type = T;
             
-            constexpr bool operator()(const T& lhs, const T& rhs) const noexcept(noexcept(lhs > rhs))
+            constexpr bool operator()(const T& lhs, const T& rhs) const 
+                noexcept(noexcept(lhs > rhs))
             {
                 return (lhs > rhs);
                 
@@ -1038,7 +1046,8 @@ namespace elib
             using result_type = T*;
             using argument_type = T;
             
-            constexpr const T* operator()(const T& arg) const noexcept(noexcept(&arg))
+            constexpr const T* operator()(const T& arg) const 
+                noexcept(noexcept(&arg))
             {
                 return (&arg);
                 
@@ -1080,7 +1089,8 @@ namespace elib
             using first_argument_type = T &;
             using second_argument_type = T;
             
-            constexpr T& operator()(T& lhs, const T& rhs) const noexcept(noexcept(lhs = rhs))
+            constexpr T& operator()(T& lhs, const T& rhs) const 
+                noexcept(noexcept(lhs = rhs))
              {
                 return (lhs = rhs);
                 
@@ -1139,7 +1149,8 @@ namespace elib
             using result_type = T&;
             using argument_type = T*;
             
-            constexpr const T& operator()(const T* t) const noexcept(noexcept(*t))
+            constexpr const T& operator()(const T* t) const 
+                noexcept(noexcept(*t))
             {
                 return (*t);
                 

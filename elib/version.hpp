@@ -7,6 +7,6 @@
 # 
 # define ELIB_VERSION 000202
 # 
-# define ELIB_LIBRARY_VERSION "0_2_2"
+# define ELIB_LIBRARY_VERSION 0_2_2
 # 
 #endif /* ELIB_VERSION_HPP */

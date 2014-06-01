@@ -3,8 +3,8 @@
 
 # include <elib/aux.hpp>
 # include <elib/iterator/traits.hpp>
-# include <elib/ranges/algorithm.hpp>
-# include <elib/ranges/traits.hpp>
+# include <elib/experimental/ranges/algorithm.hpp>
+# include <elib/experimental/ranges/traits.hpp>
 # include <algorithm>
 # include <utility>
 
@@ -939,95 +939,4 @@ namespace elib { namespace experimental { namespace algo
     ELIB_AUTO_RETURN( std::prev_permutation(first, last, cmp) )
     
 }}}                                                          // namespace elib
-namespace elib { namespace experimental
-{
-    using algo::all_of;
-    using algo::any_of;
-    using algo::none_of;
-    using algo::for_each;
-    using algo::count;
-    using algo::count_if;
-    using algo::mismatch;
-    using algo::equal;
-    using algo::find;
-    using algo::find_if;
-    using algo::find_if_not;
-    using algo::find_end;
-    using algo::find_first_of;
-    using algo::adjacent_find;
-    using algo::search;
-    using algo::search_n;
-    
-    using algo::copy;
-    using algo::copy_if;
-    using algo::copy_n;
-    using algo::copy_backward;
-    using algo::move;
-    using algo::move_backward;
-    using algo::fill;
-    using algo::fill_n;
-    using algo::transform;
-    using algo::generate;
-    using algo::generate_n;
-    using algo::remove;
-    using algo::remove_if;
-    using algo::remove_copy;
-    using algo::remove_copy_if;
-    using algo::replace;
-    using algo::replace_if;
-    using algo::replace_copy;
-    using algo::replace_copy_if;
-    using algo::swap_ranges;
-    using algo::iter_swap;
-    using algo::reverse;
-    using algo::reverse_copy;
-    using algo::rotate;
-    using algo::rotate_copy;
-    using algo::random_shuffle;
-    using algo::shuffle;
-    using algo::unique;
-    using algo::unique_copy;
-    
-    using algo::is_partitioned;
-    using algo::partition;
-    using algo::partition_copy;
-    using algo::stable_partition;
-    using algo::partition_point;
-    
-    using algo::is_sorted;
-    using algo::is_sorted_until;
-    using algo::sort;
-    using algo::partial_sort;
-    using algo::partial_sort_copy;
-    using algo::stable_sort;
-    using algo::nth_element;
-    
-    using algo::lower_bound;
-    using algo::upper_bound;
-    using algo::binary_search;
-    using algo::equal_range;
-    
-    using algo::merge;
-    using algo::inplace_merge;
-    using algo::includes;
-    using algo::set_difference;
-    using algo::set_symmetric_difference;
-    using algo::set_intersection;
-    using algo::set_union;
-    
-    using algo::is_heap;
-    using algo::is_heap_until;
-    using algo::make_heap;
-    using algo::push_heap;
-    using algo::pop_heap;
-    using algo::sort_heap;
-    
-    using algo::min_element;
-    using algo::max_element;
-    using algo::minmax_element;
-    using algo::lexicographical_compare;
-    using algo::is_permutation;
-    using algo::next_permutation;
-    using algo::prev_permutation;
-}}                                                          // namespace elib
 #endif /* ELIB_ALGORITHM_HPP */

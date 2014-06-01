@@ -1,13 +1,13 @@
-#ifndef ELIB_RANGES_ALGORITHM_HPP
-#define ELIB_RANGES_ALGORITHM_HPP
+#ifndef ELIB_EXPERIMENTAL_RANGES_ALGORITHM_HPP
+#define ELIB_EXPERIMENTAL_RANGES_ALGORITHM_HPP
 
-# include <elib/ranges/traits.hpp>
+# include <elib/experimental/ranges/traits.hpp>
 # include <elib/aux.hpp>
 # include <elib/config.hpp>
 
 # include <algorithm>
 
-namespace elib { namespace ranges { namespace algorithm_adl_barrier
+namespace elib { namespace experimental { namespace ranges { namespace algorithm_adl_barrier
 {
     template <class T>
     using not_range_or_iterator = 
@@ -2352,95 +2352,5 @@ namespace elib { namespace ranges { namespace algorithm_adl_barrier
       , cmp
     ))
     
-}}}                                                          // namespace elib
-namespace elib
-{
-    namespace ranges { using namespace algorithm_adl_barrier; }
-    
-    using ranges::all_of;
-    using ranges::any_of;
-    using ranges::none_of;
-    using ranges::for_each;
-    using ranges::count;
-    using ranges::count_if;
-    using ranges::mismatch;
-    using ranges::equal;
-    using ranges::find;
-    using ranges::find_if;
-    using ranges::find_if_not;
-    using ranges::find_end;
-    using ranges::find_first_of;
-    using ranges::adjacent_find;
-    using ranges::search;
-    using ranges::search_n;
-    
-    using ranges::copy;
-    using ranges::copy_if;
-    using ranges::copy_n;
-    using ranges::copy_backward;
-    using ranges::move;
-    using ranges::move_backward;
-    using ranges::fill;
-    using ranges::transform;
-    using ranges::generate;
-    using ranges::remove;
-    using ranges::remove_if;
-    using ranges::remove_copy;
-    using ranges::remove_copy_if;
-    using ranges::replace;
-    using ranges::replace_if;
-    using ranges::replace_copy_if;
-    using ranges::swap_ranges;
-    using ranges::reverse;
-    using ranges::reverse_copy;
-    using ranges::rotate;
-    using ranges::rotate_copy;
-    using ranges::random_shuffle;
-    using ranges::shuffle;
-    using ranges::unique;
-    using ranges::unique_copy;
-    
-    using ranges::is_partitioned;
-    using ranges::partition;
-    using ranges::partition_copy;
-    using ranges::stable_partition;
-    using ranges::partition_point;
-    
-    using ranges::is_sorted;
-    using ranges::is_sorted_until;
-    using ranges::sort;
-    using ranges::partial_sort;
-    using ranges::partial_sort_copy;
-    using ranges::stable_sort;
-    using ranges::nth_element;
-    
-    using ranges::lower_bound;
-    using ranges::upper_bound;
-    using ranges::binary_search;
-    using ranges::equal_range;
-    
-    using ranges::merge;
-    using ranges::inplace_merge;
-    using ranges::includes;
-    using ranges::set_difference;
-    using ranges::set_symmetric_difference;
-    using ranges::set_intersection;
-    using ranges::set_union;
-    
-    using ranges::is_heap;
-    using ranges::is_heap_until;
-    using ranges::make_heap;
-    using ranges::push_heap;
-    using ranges::pop_heap;
-    using ranges::sort_heap;
-    
-    using ranges::max_element;
-    using ranges::min_element;
-    using ranges::minmax_element;
-    using ranges::lexicographical_compare;
-    using ranges::is_permutation;
-    using ranges::next_permutation;
-    using ranges::prev_permutation;
-    
-}                                                           // namespace elib
-#endif /* ELIB_RANGES_ALGORITHM_HPP */
+}}}}                                                          // namespace elib
+#endif /* ELIB_EXPERIMENTAL_RANGES_ALGORITHM_HPP */

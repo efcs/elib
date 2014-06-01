@@ -1,15 +1,14 @@
-#ifndef ELIB_RANGES_TRAITS_HPP
-#define ELIB_RANGES_TRAITS_HPP
+#ifndef ELIB_EXPERIMENTAL_RANGES_TRAITS_HPP
+#define ELIB_EXPERIMENTAL_RANGES_TRAITS_HPP
 
 # include <elib/aux.hpp>
 # include <elib/iterator/traits.hpp>
-
 # include <array>
 # include <string>
 # include <vector>
 # include <cstddef>
 
-namespace elib { namespace ranges
+namespace elib { namespace experimental { namespace ranges
 {
     ////////////////////////////////////////////////////////////////////////////
     namespace detail
@@ -80,10 +79,5 @@ namespace elib { namespace ranges
     struct is_contigious_range : detail::is_contigious_range_impl<T>::type
     {};
         
-}}                                                          // namespace elib
-namespace elib
-{
-    using ranges::is_range;
-    using ranges::is_contigious_range;
-}                                                           // namespace elib
-#endif /* ELIB_RANGES_TRAITS_HPP */
+}}}                                                          // namespace elib
+#endif /* ELIB_EXPERIMENTAL_RANGES_TRAITS_HPP */

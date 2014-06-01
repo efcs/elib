@@ -1,12 +1,11 @@
-#ifndef ELIB_RANGES_NUMERIC_HPP
-#define ELIB_RANGES_NUMERIC_HPP
+#ifndef ELIB_EXPERIMENTAL_RANGES_NUMERIC_HPP
+#define ELIB_EXPERIMENTAL_RANGES_NUMERIC_HPP
 
-# include <elib/ranges/traits.hpp>
+# include <elib/experimental/ranges/traits.hpp>
 # include <elib/aux.hpp>
-
 # include <numeric>
 
-namespace elib { namespace ranges { namespace numeric_adl_barrier
+namespace elib { namespace experimental { namespace ranges { namespace numeric_adl_barrier
 {
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -68,12 +67,6 @@ namespace elib { namespace ranges { namespace numeric_adl_barrier
       , elib::adl_begin( elib::forward<Range2>(r2) )
       , init, op1, op2
     ))
-}}}                                                         // namespace elib
-namespace elib
-{
-    namespace ranges { using namespace numeric_adl_barrier; }
     
-    using ranges::accumulate;
-    using ranges::inner_product;
-}                                                           // namespace elib
-#endif /* ELIB_RANGES_NUMERIC_HPP */
+}}}}                                                         // namespace elib
+#endif /* ELIB_EXPERIMENTAL_RANGES_NUMERIC_HPP */

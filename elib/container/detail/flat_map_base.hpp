@@ -388,7 +388,14 @@ namespace elib { namespace container { inline namespace v1
           >
         std::pair<iterator, bool> 
         linear_insert(P && p)
-        { return linear_emplace(elib::forward<P>(p)); }
+        { 
+            value_type tmp(elib::forward<P>(p));
+            auto pos = linear_lower_bound(tmp.first);
+            if (pos != end() && pos->first == tmp.first) {
+                return std::make_pair(pos, false);
+            }
+            return std::make_pair(m_store.emplace(pos, elib::move(tmp)), true);
+        }
         
         template <
             class P
@@ -396,7 +403,14 @@ namespace elib { namespace container { inline namespace v1
           >
         std::pair<iterator, bool> 
         log_insert(P && p)
-        { return log_emplace(elib::forward<P>(p)); }
+        { 
+            value_type tmp(elib::forward<P>(p));
+            auto pos = log_lower_bound(tmp.first);
+            if (pos != end() && pos->first == tmp.first) {
+                return std::make_pair(pos, false);
+            }
+            return std::make_pair(m_store.emplace(pos, elib::move(tmp)), true);
+        }
         
         ////////////////////////////////////////////////////////////////////////
         iterator linear_insert(const_iterator, value_type const & v)
@@ -411,14 +425,14 @@ namespace elib { namespace container { inline namespace v1
           , ELIB_ENABLE_IF(aux::is_constructible<value_type, P &&>::value)
           >
         iterator linear_insert(const_iterator, P && p)
-        { return linear_emplace(elib::forward<P>(p)).first; }
+        { return linear_insert(elib::forward<P>(p)).first; }
         
         template <
             class P
           , ELIB_ENABLE_IF(aux::is_constructible<value_type, P &&>::value)
           >
         iterator log_insert(const_iterator, P && p)
-        { return log_emplace(elib::forward<P>(p)).first; }
+        { return log_insert(elib::forward<P>(p)).first; }
         
         ////////////////////////////////////////////////////////////////////////
         template <class InputIt>
@@ -444,39 +458,6 @@ namespace elib { namespace container { inline namespace v1
         void log_insert(std::initializer_list<value_type> il)
         { log_insert(il.begin(), il.end()); }
         
-        ////////////////////////////////////////////////////////////////////////
-        template <class ...Args>
-        std::pair<iterator, bool> 
-        linear_emplace(Args &&... args)
-        {
-            value_type tmp(elib::forward<Args>(args)...);
-            auto pos = linear_lower_bound(tmp.first);
-            if (pos != end() && pos->first == tmp.first) {
-                return std::make_pair(pos, false);
-            }
-            return std::make_pair(m_store.emplace(pos, elib::move(tmp)), true);
-        }
-        
-        template <class ...Args>
-        std::pair<iterator, bool> 
-        log_emplace(Args &&... args)
-        {
-            value_type tmp(elib::forward<Args>(args)...);
-            auto pos = log_lower_bound(tmp.first);
-            if (pos != end() && pos->first == tmp.first) {
-                return std::make_pair(pos, false);
-            }
-            return std::make_pair(m_store.emplace(pos, elib::move(tmp)), true);
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
-        template <class ...Args>
-        iterator linear_emplace_hint(const_iterator, Args &&... args)
-        { return linear_emplace(elib::forward<Args>(args)...).first; }
-        
-        template <class ...Args>
-        iterator log_emplace_hint(const_iterator, Args &&... args)
-        { return log_emplace(elib::forward<Args>(args)...).first; }
         
         ////////////////////////////////////////////////////////////////////////
         iterator erase(const_iterator pos)

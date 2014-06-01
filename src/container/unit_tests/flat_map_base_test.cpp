@@ -23,10 +23,7 @@ using const_reverse_iterator = map_type::const_reverse_iterator;
 
 BOOST_AUTO_TEST_SUITE(container_flat_map_base_test_suite)
 
-BOOST_AUTO_TEST_CASE(flat_map_base_init)
-{
-    BOOST_CHECK(true);
-}
+
 
 BOOST_AUTO_TEST_CASE(reverse_iterator_test)
 {

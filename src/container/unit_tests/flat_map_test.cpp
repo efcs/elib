@@ -212,35 +212,11 @@ BOOST_AUTO_TEST_CASE(insert_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(emplace_test)
-{
-    // emplace
-    {
-        map_type m;
-        m.emplace(0, 0);
-        BOOST_CHECK(m.size() == 1);
-        BOOST_CHECK(m.at(0) == 0);
-        m.emplace(0, 1);
-        BOOST_CHECK(m.size() == 1);
-        BOOST_CHECK(m.at(0) == 0);
-    }
-    // emplace_hint
-    {
-        map_type m;
-        m.emplace_hint(m.cbegin(), 0, 0);
-        BOOST_CHECK(m.size() == 1);
-        BOOST_CHECK(m.at(0) == 0);
-        m.emplace_hint(m.cbegin(), 0, 1);
-        BOOST_CHECK(m.size() == 1);
-        BOOST_CHECK(m.at(0) == 0);
-    }
-}
-
 BOOST_AUTO_TEST_CASE(erase_key_test)
 {
     map_type m;
     BOOST_CHECK(m.erase(0) == 0);
-    m.emplace(0, 0);
+    m.insert(std::make_pair(0, 0));
     BOOST_CHECK(m.size() == 1);
     BOOST_CHECK(m.at(0) == 0);
     m.erase(1);

@@ -120,20 +120,7 @@ namespace elib { namespace container { inline namespace v1
         
         void insert(std::initializer_list<value_type> il)
         { base_type::log_insert(il); }
-        
-        ////////////////////////////////////////////////////////////////////////
-        template <class ...Args>
-        std::pair<iterator, bool> 
-        emplace(Args &&... args)
-        { return base_type::log_emplace(elib::forward<Args>(args)...); }
-        
-        template <class ...Args>
-        iterator emplace_hint(const_iterator pos, Args &&... args)
-        { 
-            return base_type::log_emplace_hint(
-                pos, elib::forward<Args>(args)...
-              ); 
-        }
+
         
         ////////////////////////////////////////////////////////////////////////
         size_type erase(Key const & k)

@@ -123,20 +123,6 @@ namespace elib { namespace container { inline namespace v1
         { base_type::linear_insert(il); }
         
         ////////////////////////////////////////////////////////////////////////
-        template <class ...Args>
-        std::pair<iterator, bool> 
-        emplace(Args &&... args)
-        { return base_type::linear_emplace(elib::forward<Args>(args)...); }
-        
-        template <class ...Args>
-        iterator emplace_hint(const_iterator pos, Args &&... args)
-        { 
-            return base_type::linear_emplace_hint(
-                pos, elib::forward<Args>(args)...
-              ); 
-        }
-        
-        ////////////////////////////////////////////////////////////////////////
         size_type erase(Key const & k)
         { return base_type::linear_erase(k); }
         

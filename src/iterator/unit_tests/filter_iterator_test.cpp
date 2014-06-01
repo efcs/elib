@@ -2,10 +2,13 @@
 #include <boost/test/unit_test.hpp>
 
 #include <elib/iterator.hpp>
+#include <elib/aux/static_assert.hpp>
+#include <elib/aux/traits/is_same.hpp>
+#include <iterator>
 #include <vector>
 
+
 using vector_t = std::vector<int>;
-using iterator_t = vector_t::iterator;
 using const_iterator_t = vector_t::const_iterator;
 
 auto is_even = [](int x) { return x % 2 == 0; };
@@ -14,6 +17,19 @@ using pred_t = decltype(is_even);
 using filter_t = elib::iter::filter_iterator<const_iterator_t, pred_t>;
 
 BOOST_AUTO_TEST_SUITE(elib_iterator_filter_iterator_test_suite)
+
+#define ASSERT_SAME(...) ELIB_STATIC_ASSERT(::elib::aux::is_same<__VA_ARGS__>::value)
+BOOST_AUTO_TEST_CASE(traits_test)
+{
+    using Traits = std::iterator_traits<const_iterator_t>;
+    
+    ASSERT_SAME(filter_t::value_type, Traits::value_type);
+    ASSERT_SAME(filter_t::reference, filter_t::reference);
+    ASSERT_SAME(filter_t::pointer, Traits::pointer);
+    ASSERT_SAME(filter_t::difference_type, Traits::difference_type);
+    ASSERT_SAME(filter_t::iterator_category, std::forward_iterator_tag);
+}
+#undef ASSERT_SAME
 
 BOOST_AUTO_TEST_CASE(construct_test)
 {

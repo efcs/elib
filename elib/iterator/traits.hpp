@@ -59,13 +59,8 @@ namespace elib { namespace iter { inline namespace v1
     
     template <class Iter>
     using is_random_access_iterator = is_random_access_tag<iterator_category_t<Iter>>;
-    
-    template <class Iter>
-    using is_iterator = elib::or_<
-        is_input_iterator<Iter>
-      , is_output_iterator<Iter>
-      >;
-    
+  
+  
     ////////////////////////////////////////////////////////////////////////////
     template <class A, class B>
     using is_interoperable = aux::or_<

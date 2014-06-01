@@ -344,6 +344,13 @@ BOOST_AUTO_TEST_CASE(non_trivial_default_ctor_test)
     BOOST_CHECK(not o.good());
 }
 
+BOOST_AUTO_TEST_CASE(ref_default_ctor_test)
+{
+    using opt = elib::optional<int &>;
+    opt o;
+    BOOST_CHECK(not o.good());
+}
+
 BOOST_AUTO_TEST_CASE(trivial_nullopt_ctor_test)
 {
     using opt = elib::optional<int>;
@@ -354,6 +361,13 @@ BOOST_AUTO_TEST_CASE(trivial_nullopt_ctor_test)
 BOOST_AUTO_TEST_CASE(non_trivial_nullopt_ctor_test)
 {
     using opt = elib::optional<std::string>;
+    opt o(nullopt);
+    BOOST_CHECK(not o.good());
+}
+
+BOOST_AUTO_TEST_CASE(ref_nullopt_ctor_test)
+{
+    using opt = elib::optional<int &>;
     opt o(nullopt);
     BOOST_CHECK(not o.good());
 }

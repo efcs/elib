@@ -330,6 +330,34 @@ BOOST_AUTO_TEST_CASE(value_construct_ctor)
     }
 }
 
+BOOST_AUTO_TEST_CASE(trivial_default_ctor_test)
+{
+    using opt = elib::optional<int>;
+    opt o;
+    BOOST_CHECK(not o.good());
+}
+
+BOOST_AUTO_TEST_CASE(non_trivial_default_ctor_test)
+{
+    using opt = elib::optional<std::string>;
+    opt o;
+    BOOST_CHECK(not o.good());
+}
+
+BOOST_AUTO_TEST_CASE(trivial_nullopt_ctor_test)
+{
+    using opt = elib::optional<int>;
+    opt o(nullopt);
+    BOOST_CHECK(not o.good());
+}
+
+BOOST_AUTO_TEST_CASE(non_trivial_nullopt_ctor_test)
+{
+    using opt = elib::optional<std::string>;
+    opt o(nullopt);
+    BOOST_CHECK(not o.good());
+}
+
 BOOST_AUTO_TEST_CASE(trivial_copy_ctor_test)
 {
     using opt = elib::optional<int>;

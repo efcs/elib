@@ -23,9 +23,9 @@ using namespace elib::web;
 
 using elib::web::socket;
 
-BOOST_AUTO_TEST_SUITE(prox_socket_test_suite)
+BOOST_AUTO_TEST_SUITE(elib_web_socket_test_suite)
 
-BOOST_AUTO_TEST_CASE(prox_socket_error_test)
+BOOST_AUTO_TEST_CASE(socket_error_test)
 {
     socket_error e1{"se1", std::error_code{0, std::system_category()}};
     BOOST_CHECK(e1.what() == std::string{"se1"});
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(prox_socket_error_test)
     BOOST_CHECK(e2.error_code() == ec);
 }
 
-BOOST_AUTO_TEST_CASE(prox_socket_default_test)
+BOOST_AUTO_TEST_CASE(default_test)
 {
     socket s;
     BOOST_CHECK(s.raw_socket() == -1);
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(prox_socket_default_test)
     BOOST_CHECK((s.error_code() == std::error_code{0, std::system_category()}));
 }
 
-BOOST_AUTO_TEST_CASE(prox_socket_open_close_test)
+BOOST_AUTO_TEST_CASE(open_close_test)
 {    
     socket s{sock_domain::inet, sock_type::stream, 0};
     
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(prox_socket_open_close_test)
     BOOST_CHECK(s.raw_socket() == -1);
 }
 
-BOOST_AUTO_TEST_CASE(prox_socket_bind_listen_test)
+BOOST_AUTO_TEST_CASE(bind_listen_test)
 {
     sockaddr_in server;
     server.sin_family = AF_INET;

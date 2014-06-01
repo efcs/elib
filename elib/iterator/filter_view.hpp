@@ -28,14 +28,18 @@ namespace elib { namespace iter { inline namespace v1
         {}
         
         filter_view(Sequence & s, Pred p) 
-          : m_seq(elib::addressof(s)), m_pred(p)
+          : m_seq(elib::addressof(s)), m_pred(elib::move(p))
         {}
         
-        ELIB_DEFAULT_COPY_MOVE(filter_view);
+        filter_view(filter_view const &) = default;
+        filter_view(filter_view &&) = default;
+        filter_view & operator=(filter_view const &) = default;
+        filter_view & operator=(filter_view &&) = default;
         
         filter_view & operator=(Sequence & s)  
         { 
             m_seq = elib::addressof(s); 
+            return *this;
         }
         
         iterator begin() 
@@ -225,7 +229,10 @@ namespace elib { namespace iter { inline namespace v1
           : m_seq(elib::addressof(s)), m_pred(p)
         {}
         
-        ELIB_DEFAULT_COPY_MOVE(reverse_filter_view);
+        reverse_filter_view(reverse_filter_view const &) = default;
+        reverse_filter_view(reverse_filter_view &&) = default;
+        reverse_filter_view & operator=(reverse_filter_view const &) = default;
+        reverse_filter_view & operator=(reverse_filter_view &&) = default;
         
         reverse_filter_view & operator=(Sequence & s)  
         { 

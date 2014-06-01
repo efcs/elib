@@ -38,6 +38,8 @@ BOOST_AUTO_TEST_CASE(iterator_traits_t_test)
     ASSERT_SAME(iterator_value_t<T>, Tr::value_type);
     ASSERT_SAME(iterator_reference_t<T>, Tr::reference);
     ASSERT_SAME(iterator_pointer_t<T>, Tr::pointer);
+    
+    BOOST_CHECK(true);
 }
 #undef ASSERT_SAME
 
@@ -110,12 +112,14 @@ BOOST_AUTO_TEST_CASE(iterator_tag_traits_test)
         ELIB_STATIC_ASSERT(not is_random_access_iterator<bidir_it>::value);
         ELIB_STATIC_ASSERT(is_random_access_iterator<random_it>::value);
     }
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_CASE(is_iteroperable_test)
 {
     ELIB_STATIC_ASSERT(is_interoperable<convert_from_it, convert_to_it>::value);
     ELIB_STATIC_ASSERT(not is_interoperable<convert_from_it, convert_to_none>::value);
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_CASE(choose_iterator_traits_test)
@@ -123,6 +127,7 @@ BOOST_AUTO_TEST_CASE(choose_iterator_traits_test)
     using T = choose_iterator_traits<convert_from_it, convert_to_it>;
     using E = std::iterator_traits<convert_to_it>;
     ELIB_STATIC_ASSERT(elib::aux::is_same<T, E>::value);
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_CASE(choose_difference_type_test)
@@ -130,6 +135,7 @@ BOOST_AUTO_TEST_CASE(choose_difference_type_test)
     using T = choose_difference_type<convert_from_it, convert_to_it>;
     using E = unsigned long;
     ELIB_STATIC_ASSERT(elib::aux::is_same<T, E>::value);
+    BOOST_CHECK(true);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

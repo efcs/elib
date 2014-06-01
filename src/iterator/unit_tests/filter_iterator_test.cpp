@@ -28,6 +28,7 @@ BOOST_AUTO_TEST_CASE(traits_test)
     ASSERT_SAME(filter_t::pointer, Traits::pointer);
     ASSERT_SAME(filter_t::difference_type, Traits::difference_type);
     ASSERT_SAME(filter_t::iterator_category, std::forward_iterator_tag);
+    BOOST_CHECK(true);
 }
 #undef ASSERT_SAME
 
@@ -143,7 +144,7 @@ BOOST_AUTO_TEST_CASE(postfix_increment_test)
     BOOST_REQUIRE(it != end);
     BOOST_CHECK(it == it2);
     
-    filter_t it3 = ++it;
+    filter_t it3 = it++;
     BOOST_CHECK(it3 != it);
     BOOST_CHECK(it3 == it2);
 }

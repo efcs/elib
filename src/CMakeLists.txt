@@ -78,7 +78,6 @@ include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
 include_library_if(ELIB_WEB_SOURCE         web/build.cmake          )
 
 if (CONFIG_ENABLE_EXPERIMENTAL)
-  include_library_if(ELIB_ALGORITHM_SOURCE experimental/algorithm/build.cmake)
   include_library_if(ELIB_RANGES_SOURCE    experimental/ranges/build.cmake   )
 endif()
 

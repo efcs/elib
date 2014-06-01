@@ -66,7 +66,6 @@ option(ELIB_PP_SOURCE "Build preprocessor library" ON)
 option(ELIB_WEB_SOURCE "Build web library" ON)
 
 # Experimental libraries
-option(ELIB_ALGORITHM_SOURCE "Build algorithm library (experimental)" ON)
 option(ELIB_RANGES_SOURCE  "Build ranges library (experimental)" ON)
 
 ################################################################################

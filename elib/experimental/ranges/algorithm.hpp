@@ -9,11 +9,6 @@
 
 namespace elib { namespace experimental { namespace ranges { namespace algorithm_adl_barrier
 {
-    template <class T>
-    using not_range_or_iterator = 
-        elib::not_<elib::or_<
-            is_range<T>, iter::is_iterator<T>
-          >>;
     
 ////////////////////////////////////////////////////////////////////////////////
 //                        all_of, any_of, none_of
@@ -305,7 +300,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     template <
         class Range, class InputIt
       , ELIB_ENABLE_IF(is_range<Range>::value)
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       >
     auto find_end(Range && r, InputIt first, InputIt last)
     ELIB_AUTO_RETURN_NOEXCEPT(std::find_end(
@@ -319,7 +313,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
         class Range, class InputIt
       , class BinaryPred
       , ELIB_ENABLE_IF(is_range<Range>::value)
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       >
     auto find_end(Range && r, InputIt first, InputIt last, BinaryPred p)
     ELIB_AUTO_RETURN_NOEXCEPT(std::find_end(
@@ -332,7 +325,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     ////////////////////////////////////////////////////////////////////////////
     template <
         class InputIt, class Range
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
     auto find_end(InputIt first, InputIt last, Range && r)
@@ -347,7 +339,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     template <
         class InputIt, class Range
       , class BinaryPred
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
     auto find_end(InputIt first, InputIt last, Range && r, BinaryPred p)
@@ -398,7 +389,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     template <
         class Range, class InputIt
       , ELIB_ENABLE_IF(is_range<Range>::value)
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       >
     auto find_first_of(Range && r, InputIt first, InputIt last)
     ELIB_AUTO_RETURN_NOEXCEPT(std::find_first_of(
@@ -412,7 +402,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
         class Range, class InputIt
       , class BinaryPred
       , ELIB_ENABLE_IF(is_range<Range>::value)
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       >
     auto find_first_of(Range && r, InputIt first, InputIt last, BinaryPred p)
     ELIB_AUTO_RETURN_NOEXCEPT(std::find_first_of(
@@ -425,7 +414,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     ////////////////////////////////////////////////////////////////////////////
     template <
         class InputIt, class Range
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
     auto find_first_of(InputIt first, InputIt last, Range && r)
@@ -440,7 +428,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     template <
         class InputIt, class Range
       , class BinaryPred
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
     auto find_first_of(InputIt first, InputIt last, Range && r, BinaryPred p)
@@ -516,7 +503,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     template <
         class Range, class InputIt
       , ELIB_ENABLE_IF(is_range<Range>::value)
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       >
     auto search(Range && r, InputIt first, InputIt last)
     ELIB_AUTO_RETURN_NOEXCEPT(std::search(
@@ -530,7 +516,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
         class Range, class InputIt
       , class BinaryPred
       , ELIB_ENABLE_IF(is_range<Range>::value)
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       >
     auto search(Range && r, InputIt first, InputIt last, BinaryPred p)
     ELIB_AUTO_RETURN_NOEXCEPT(std::search(
@@ -543,7 +528,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     ////////////////////////////////////////////////////////////////////////////
     template <
         class InputIt, class Range
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
     auto search(InputIt first, InputIt last, Range && r)
@@ -557,7 +541,6 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
     template <
         class InputIt, class Range
       , class BinaryPred
-      , ELIB_ENABLE_IF(iter::is_iterator<InputIt>::value)
       , ELIB_ENABLE_IF(is_range<Range>::value)
       >
     auto search(InputIt first, InputIt last, Range && r, BinaryPred p)

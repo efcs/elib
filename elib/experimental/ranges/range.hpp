@@ -3,7 +3,6 @@
 
 # include <elib/experimental/ranges/traits.hpp>
 # include <elib/aux.hpp>
-# include <elib/iterator/algorithm.hpp>
 # include <elib/iterator/traits.hpp>
 # include <algorithm>
 # include <iostream>
@@ -93,9 +92,11 @@ namespace elib { namespace experimental { namespace ranges
         constexpr bool empty() const
         { return begin() == end(); }
         
-        ////////////////////////////////////////////////////////////////////////
-        constexpr difference_type size() const
-        { return iter::size(begin(), end(), range_category()); }
+/// TODO
+/// iter::size has been removed.
+//         ////////////////////////////////////////////////////////////////////////
+//         constexpr difference_type size() const
+//         { return iter::size(begin(), end(), range_category()); }
 
         ////////////////////////////////////////////////////////////////////////
         void pop_front()
@@ -106,19 +107,22 @@ namespace elib { namespace experimental { namespace ranges
         
         void pop_front(difference_type n)
         {
-            ELIB_ASSERT(size() <= n);
+            //TODO size is currently unimplemented
+            //ELIB_ASSERT(size() <= n);
             std::advance(m_begin, n);
         }
         
-        void pop_front_upto(difference_type n)
-        {
-            iter::advance_upto(
-                m_begin
-              , std::max((difference_type)0, n)
-              , m_end
-              , range_category()
-            );
-        }
+///TODO
+/// iter::advance_upto has been removed
+//         void pop_front_upto(difference_type n)
+//         {
+//             iter::advance_upto(
+//                 m_begin
+//               , std::max((difference_type)0, n)
+//               , m_end
+//               , range_category()
+//             );
+//         }
 
         ////////////////////////////////////////////////////////////////////////
         void pop_back()
@@ -140,19 +144,21 @@ namespace elib { namespace experimental { namespace ranges
             );
         }
         
-        void pop_back_upto(difference_type n)
-        {
-            iter::advance_upto(
-                m_end
-              , -std::max((difference_type)0, n)
-              , m_begin
-              , range_category()
-            );
-            static_assert(
-                iter::is_bidirectional_tag<range_category>::value
-              , "Must be bidirectional iterator"
-            );
-        }
+/// TODO
+/// iter::advance_upto has been removed. This must be changed.
+//         void pop_back_upto(difference_type n)
+//         {
+//             iter::advance_upto(
+//                 m_end
+//               , -std::max((difference_type)0, n)
+//               , m_begin
+//               , range_category()
+//             );
+//             static_assert(
+//                 iter::is_bidirectional_tag<range_category>::value
+//               , "Must be bidirectional iterator"
+//             );
+//         }
 
         ////////////////////////////////////////////////////////////////////////
         std::pair<range, range> split(difference_type index) const
@@ -203,7 +209,9 @@ namespace elib { namespace experimental { namespace ranges
           ) const
         {
             ELIB_ASSERT(n <= 0);
-            return split(std::max<difference_type>(0, size() + n));
+            // TODO size is commented out
+           // return split(std::max<difference_type>(0, size() + n));
+           return {};
         }
         
         std::pair<range, range> m_dispatch_split_neg(

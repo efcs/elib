@@ -5,7 +5,7 @@
 # include <elib/aux.hpp>
 # include <iterator>
 
-namespace elib { namespace iter
+namespace elib { namespace iter { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     template <class Sequence, class Pred>
@@ -325,5 +325,5 @@ namespace elib { namespace iter
     auto end(reverse_filter_view<Seq, Pred> const & v)
     ELIB_AUTO_RETURN( v.end() )
     
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_ITERATOR_FILTER_VIEW_HPP */

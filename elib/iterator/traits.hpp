@@ -5,7 +5,7 @@
 # include <elib/aux/traits/is_convertible.hpp>
 # include <iterator>
 
-namespace elib { namespace iter
+namespace elib { namespace iter { inline namespace v1
 {
     ////////////////////////////////////////////////////////////////////////////
     template <class Iter>
@@ -92,5 +92,5 @@ namespace elib { namespace iter
     using choose_difference_type = typename 
         choose_iterator_traits<I1, I2>::difference_type;
 
-}}                                                          // namespace elib
+}}}                                                          // namespace elib
 #endif /* ELIB_ITERATOR_TRAITS_HPP */

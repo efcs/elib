@@ -28,6 +28,7 @@ struct convert_to_none : std::iterator<std::forward_iterator_tag, int> {};
 BOOST_AUTO_TEST_SUITE(elib_iterator_traits_test_suite)
 
 #define ASSERT_SAME(...) ELIB_STATIC_ASSERT(::elib::aux::is_same<__VA_ARGS__>::value)
+
 BOOST_AUTO_TEST_CASE(iterator_traits_t_test)
 {
     using T = input_it;

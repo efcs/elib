@@ -14,9 +14,6 @@ no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
 
 ### Core Library
 
-Algorithm
-: Wrappers for <algorithm> that helps with use with ranges
-
 Any
 : a variant container. It implementations the std::any proposal
 
@@ -96,15 +93,18 @@ MP
 PP
 : A library that provides macros for working with the preprocessor
 
-Ranges
-: An implementation of the current std::range proposal as well as
-  algorithm adapters to work on ranges.
 
 Web
 : C++ Socket, HTTP parsing and other Web/Network utilities.
   stripped from a class project
   (No Windows Support)
 
+
+#### Experimental
+
+Ranges
+: An implementation of the current std::range proposal as well as
+  algorithm adapters to work on ranges.
 
 ## Building
 
@@ -144,6 +144,10 @@ Requirements (Library specific):
   compiler/library/platform information.
   Default: OFF
 
+  * CONFIG_ENABLE_EXPERIMENTAL
+: Make the experimental libraries
+  Default: ON
+
   * CONFIG_UNIT_TESTS
 : Build the unit tests
   Default: ON
@@ -159,10 +163,6 @@ Requirements (Library specific):
   
 ### Select what parts to build
   
-
-  * ELIB_ALGORITHM_SOURCE
-: build algorithm library
-  Default: ON
 
   * ELIB_AUX_SOURCE
 : build the utility library

@@ -330,6 +330,66 @@ BOOST_AUTO_TEST_CASE(value_construct_ctor)
     }
 }
 
+BOOST_AUTO_TEST_CASE(trivial_copy_ctor_test)
+{
+    using opt = elib::optional<int>;
+    {
+        opt const o1;
+        opt o2(o1);
+        BOOST_CHECK(not o2.good());
+    }{
+        opt const o1(42);
+        opt o2(o1);
+        BOOST_REQUIRE(o2.good());
+        BOOST_CHECK(o2.value() == 42);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(non_trivial_copy_ctor_test)
+{
+    using opt = elib::optional<std::string>;
+    {
+        opt const o1;
+        opt o2(o1);
+        BOOST_CHECK(not o2.good());
+    }{
+        opt const o1("hello");
+        opt o2(o1);
+        BOOST_REQUIRE(o2.good());
+        BOOST_CHECK(o2.value() == "hello");
+    }
+}
+
+BOOST_AUTO_TEST_CASE(trivial_move_ctor_test)
+{
+    using opt = elib::optional<int>;
+    {
+        opt o1;
+        opt o2(static_cast<opt &&>(o1));
+        BOOST_CHECK(not o2.good());
+    }{
+        opt o1(42);
+        opt o2(static_cast<opt &&>(o1));
+        BOOST_REQUIRE(o2.good());
+        BOOST_CHECK(o2.value() == 42);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(non_trivial_move_ctor_test)
+{
+    using opt = elib::optional<std::string>;
+    {
+        opt o1;
+        opt o2(static_cast<opt &&>(o1));
+        BOOST_CHECK(not o2.good());
+    }{
+        opt o1("hello");
+        opt o2(static_cast<opt &&>(o1));
+        BOOST_REQUIRE(o2.good());
+        BOOST_CHECK(o2.value() == "hello");
+    }
+}
+
 BOOST_AUTO_TEST_CASE(assign_test)
 {
     using opt = optional<int>;
@@ -386,6 +446,57 @@ BOOST_AUTO_TEST_CASE(assign_test)
         BOOST_CHECK(o);
     }
 }
+
+BOOST_AUTO_TEST_CASE(copy_assign_test)
+{
+    using opt = optional<std::string>;
+    
+    // to init
+    {
+        opt to("hello");
+        opt from;
+        to = from;
+        BOOST_CHECK(not to.good());
+    }{ /* from init */
+        opt to;
+        opt from("hello");
+        to = from;
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == "hello");
+    }{ /* both init */
+        opt to("hello");
+        opt from("world");
+        to = from;
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == "world");
+    }
+}
+
+BOOST_AUTO_TEST_CASE(move_assign_test)
+{
+    using opt = optional<std::string>;
+    
+    // to init
+    {
+        opt to("hello");
+        opt from;
+        to = static_cast<opt &&>(from);
+        BOOST_CHECK(not to.good());
+    }{ /* from init */
+        opt to;
+        opt from("hello");
+        to = static_cast<opt &&>(from);
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == "hello");
+    }{ /* both init */
+        opt to("hello");
+        opt from("world");
+        to = static_cast<opt &&>(from);
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == "world");
+    }
+}
+
 
 BOOST_AUTO_TEST_CASE(emplace_test)
 {

@@ -1,8 +1,8 @@
+#include <elib/config.hpp>
 #include <elib/filesystem/operations.hpp>
 #include <elib/filesystem/directory_entry.hpp>
 #include <elib/filesystem/directory_iterator.hpp>
 #include <elib/filesystem/filesystem_error.hpp>
-
 #include <elib/memory/make_unique.hpp>
 
 #include <iterator>
@@ -319,7 +319,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     
 
     ////////////////////////////////////////////////////////////////////////////
-    // TODO
     bool copy_file(
         const path& from, const path& to
       , copy_options options, std::error_code *ec
@@ -389,7 +388,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         const path real_path(detail::read_symlink(existing_symlink, ec));
         if (ec && *ec) { return; }
         
-        // TODO proposal says you should detect if you should call
+        // NOTE: proposal says you should detect if you should call
         // create_symlink or create_directory_symlink. I don't think this
         // is needed with POSIX
         detail::create_symlink(real_path, new_symlink, ec);
@@ -660,7 +659,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    //TODO
     bool is_empty(const path& p, std::error_code *ec)
     {
         auto is_dir = is_directory(detail::status(p, ec));
@@ -735,9 +733,6 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     {
         ELIB_ASSERT(not (bool(permissions_options::add_bits & opts) 
                      && bool(permissions_options::remove_bits & opts)));
-                     
-        // TODO not supported
-        ELIB_ASSERT(not bool(permissions_options::follow_symlinks & opts));
           
         file_status st = detail::status(p, ec);
         if (!exists(st)) {
@@ -755,7 +750,18 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         else if (bool(permissions_options::remove_bits & opts)) {
             prms = st.permissions() & ~prms;
         }
-        if (::chmod(p.c_str(), detail::posix_convert_perms(prms)) == -1) {
+        
+        auto const real_perms = detail::posix_convert_perms(prms);
+        
+# if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) \
+    && !defined(ELIB_CONFIG_LINUX)
+        const int flags = bool(permissions_options::follow_symlinks & opts)
+                       ? 0 : AT_SYMLINK_NOFOLLOW;
+                       
+        if (::fchmodat(AT_FDCWD, p.c_str(), real_perms, flags) == -1) {
+# else
+        if (::chmod(p.c_str(), real_perms) == -1) {
+# endif
             std::error_code m_ec = detail::capture_errno();
             if (ec) {
                 *ec = m_ec;

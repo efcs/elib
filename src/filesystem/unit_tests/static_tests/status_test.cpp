@@ -561,27 +561,4 @@ BOOST_AUTO_TEST_CASE(character_file_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(root_test)
-{
-    path const file("/root/test.txt");
-    
-    
-    {
-        BOOST_REQUIRE_THROW(status(file), filesystem_error);
-        BOOST_REQUIRE_THROW(symlink_status(file), filesystem_error);
-    }
-    {
-        std::error_code ec;
-        file_status st = status(file, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(not status_known(st));
-    }
-    {
-        std::error_code ec;
-        file_status st = symlink_status(file, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(not status_known(st));
-    }
-}
-
 BOOST_AUTO_TEST_SUITE_END()

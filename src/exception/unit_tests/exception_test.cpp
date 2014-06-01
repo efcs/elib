@@ -29,6 +29,17 @@ BOOST_AUTO_TEST_CASE(except_exception_basic_test)
     exception e4("hello world");
     e4 = e2;
     BOOST_CHECK(e4.what() == what_arg);
+    
+    ELIB_SET_EXCEPTION_THROW_SITE(e4);
+    BOOST_CHECK(e4.what() != what_arg);
+}
+
+BOOST_AUTO_TEST_CASE(throw_info_str_test)
+{
+    exception e("hello world");
+    BOOST_CHECK(e.throw_info_str() == "");
+    ELIB_SET_EXCEPTION_THROW_SITE(e);
+    BOOST_CHECK(e.throw_info_str() != "");
 }
 
 
@@ -67,6 +78,28 @@ BOOST_AUTO_TEST_CASE(except_exception_error_info_test)
     // Check get_error_info_value()
     BOOST_CHECK(get_error_info_value<throw_func>(e) == std::string(func.value()));
     BOOST_CHECK(get_error_info<throw_line>(e).value() == get_error_info_value<throw_line>(e));
+}
+
+BOOST_AUTO_TEST_CASE(emplace_error_info_test)
+{
+    exception e("except");
+    BOOST_CHECK(e.emplace_error_info<throw_line>(0));
+    BOOST_CHECK(e.has_error_info<throw_line>());
+}
+
+BOOST_AUTO_TEST_CASE(get_error_info_nothrow_test)
+{
+    {
+        exception const e("except");
+        throw_line const *ptr = e.get_error_info<throw_line>();
+        BOOST_CHECK(ptr == nullptr);
+    }{
+        exception e("except");
+        e.set_error_info(throw_line(__LINE__));
+        exception const & eref = e;
+        throw_line const *ptr = eref.get_error_info<throw_line>();
+        BOOST_CHECK(ptr != nullptr);
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

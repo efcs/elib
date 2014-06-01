@@ -253,3 +253,6 @@ Requirements (Library specific):
   * scan_build
 : Run clangs scan-build over the build
 
+  * valgrind_check
+: Run the tests against valgrind.
+

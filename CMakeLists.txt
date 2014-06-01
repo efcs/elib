@@ -30,7 +30,7 @@ option(CONFIG_ELIB_ASSERT_CONFIG
 # elib is a open source project that uses coverity scan for defect detection.
 # Certain parts of elib are unsupported on otherwise buggy for EDG.
 # This configures the enviroment to only shouw EDG what it can handle.
-option(CONFIG_ELIB_COVERITY_SCAN
+option(CONFIG_COVERITY_SCAN
       "Setup build for when doing a build with coverity scan" OFF)
 
 # Unit tests require the boost test library.

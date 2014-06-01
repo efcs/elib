@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 
-#include "elib/optional.hpp"
+#include <elib/config.hpp>
+#include <elib/optional.hpp>
 
 
 // instantiation tests
@@ -664,6 +665,40 @@ BOOST_AUTO_TEST_CASE(emplace_test)
         BOOST_CHECK(o == s);
     }
 }
+
+#if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
+BOOST_AUTO_TEST_CASE(non_trivial_value_or_test_rvalue)
+{
+    using opt = elib::optional<std::string>;
+    std::string const value = "hello";
+    std::string const other = "world";
+    {
+        opt o;
+        auto ret = static_cast<opt &&>(o).value_or(other);
+        BOOST_CHECK(ret == other);
+    }{
+        opt o(value);
+        auto ret = static_cast<opt &&>(o).value_or(other);
+        BOOST_CHECK(ret == value);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(trivial_value_or_test_rvalue)
+{
+    using opt = elib::optional<int>;
+    int const value = 42;
+    int const other = -1;
+    {
+        opt o;
+        auto ret = static_cast<opt &&>(o).value_or(other);
+        BOOST_CHECK(ret == other);
+    }{
+        opt o(value);
+        auto ret = static_cast<opt &&>(o).value_or(other);
+        BOOST_CHECK(ret == value);
+    }
+}
+# endif
 
 BOOST_AUTO_TEST_CASE(equality_test)
 {

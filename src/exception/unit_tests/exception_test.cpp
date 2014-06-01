@@ -102,4 +102,37 @@ BOOST_AUTO_TEST_CASE(get_error_info_nothrow_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(insert_error_info_function_move_test)
+{
+    exception e("");
+    throw_line l(0);
+    BOOST_CHECK(insert_error_info(e, static_cast<throw_line &&>(l)));
+    BOOST_CHECK(e.has_error_info<throw_line>());
+}
+
+BOOST_AUTO_TEST_CASE(emplace_error_info_function_test)
+{
+    exception e("");
+    BOOST_CHECK(emplace_error_info<throw_line>(e, 0));
+    BOOST_CHECK(e.has_error_info<throw_line>());
+}
+
+BOOST_AUTO_TEST_CASE(set_error_info_function_test)
+{
+    exception e("");
+    throw_line l(0);
+    set_error_info(e, static_cast<throw_line &&>(l));
+    BOOST_CHECK(e.has_error_info<throw_line>());
+}
+
+BOOST_AUTO_TEST_CASE(get_error_info_const_funtion_test)
+{
+    exception e("");
+    BOOST_CHECK(emplace_error_info<throw_line>(e, 1));
+    exception const & eref = e;
+    
+    auto const & val = get_error_info_value<throw_line>(eref);
+    BOOST_CHECK(val == 1);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

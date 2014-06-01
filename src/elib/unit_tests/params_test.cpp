@@ -74,6 +74,7 @@ BOOST_AUTO_TEST_CASE(param_pack_c_test)
     }{
         using T = param_pack_c<bool, true, false>;
         using E = param_pack<true_, false_>;
+        TEST_SAME(T, E);
     }
     BOOST_CHECK(true);
 }

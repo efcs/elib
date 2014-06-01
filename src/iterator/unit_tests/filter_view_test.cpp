@@ -42,6 +42,18 @@ BOOST_AUTO_TEST_CASE(non_const_ctor_test)
         const_filter_t v(cs);
     }{ 
         const_filter_t v(cs, p);
+    }{
+        rfilter_t v(s);
+    }{
+        rfilter_t v(s, p);
+    }{
+        const_rfilter_t v(s);
+    }{
+        const_rfilter_t v(s, p);
+    }{
+        const_rfilter_t v(cs);
+    }{ 
+        const_rfilter_t v(cs, p);
     }
     BOOST_CHECK(true);
 }
@@ -56,6 +68,12 @@ BOOST_AUTO_TEST_CASE(assign_test)
         v = s2;
     }{
         const_filter_t v(s);
+        v = cs;
+    }{
+        rfilter_t v(s);
+        v = s2;
+    }{
+        const_rfilter_t v(s);
         v = cs;
     }
     BOOST_CHECK(true);
@@ -74,6 +92,16 @@ BOOST_AUTO_TEST_CASE(swap_test)
     }{
         const_filter_t v1(s);
         const_filter_t v2(s2);
+        v1.swap(v2);
+        swap(v1, v2);
+    }{
+        rfilter_t v1(s);
+        rfilter_t v2(s2);
+        v1.swap(v2);
+        swap(v1, v2);
+    }{
+        const_rfilter_t v1(s);
+        const_rfilter_t v2(s2);
         v1.swap(v2);
         swap(v1, v2);
     }

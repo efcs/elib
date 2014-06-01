@@ -2,7 +2,10 @@
 #define ELIB_ITERATOR_FILTER_VIEW_HPP
 
 # include <elib/iterator/filter_iterator.hpp>
-# include <elib/aux.hpp>
+# include <elib/aux/addressof.hpp>
+# include <elib/aux/auto_return.hpp>
+# include <elib/aux/declval.hpp>
+# include <elib/aux/move.hpp>
 # include <iterator>
 
 namespace elib { namespace iter { inline namespace v1
@@ -237,6 +240,7 @@ namespace elib { namespace iter { inline namespace v1
         reverse_filter_view & operator=(Sequence & s)  
         { 
             m_seq = elib::addressof(s); 
+            return *this;
         }
         
         iterator begin() 

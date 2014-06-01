@@ -403,6 +403,22 @@ BOOST_AUTO_TEST_CASE(non_trivial_copy_ctor_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(ref_copy_ctor_test)
+{
+    using opt = elib::optional<int &>;
+    {
+        opt const o1;
+        opt o2(o1);
+        BOOST_CHECK(not o2.good());
+    }{
+        int x;
+        opt const o1(x);
+        opt o2(o1);
+        BOOST_REQUIRE(o2.good());
+        BOOST_CHECK(&o2.value() == &x);
+    }
+}
+
 BOOST_AUTO_TEST_CASE(trivial_move_ctor_test)
 {
     using opt = elib::optional<int>;

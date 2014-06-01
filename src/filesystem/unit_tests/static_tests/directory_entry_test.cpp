@@ -15,5 +15,6 @@ BOOST_AUTO_TEST_CASE(symlink_status_test)
     BOOST_CHECK(d.status().type() == file_type::regular);
     BOOST_CHECK(d.symlink_status().type() == file_type::regular);
 }
+ 
 
 BOOST_AUTO_TEST_SUITE_END()

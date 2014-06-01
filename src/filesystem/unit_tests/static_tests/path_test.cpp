@@ -2,7 +2,7 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include <elib/filesystem/path.hpp>
+#include <elib/filesystem.hpp>
 #include <elib/aux.hpp>
 #include <string>
 #include <vector>
@@ -46,6 +46,14 @@ BOOST_AUTO_TEST_CASE(iterator_ctor_test)
     path p(str_path.begin(), str_path.end());
     BOOST_CHECK(p== str_path);
 }
+
+BOOST_AUTO_TEST_CASE(dentry_ctor_test)
+{
+    directory_entry d(".");
+    path const p(d);
+    BOOST_CHECK(p == d.path());
+}
+
 
 BOOST_AUTO_TEST_CASE(assign_test)
 {

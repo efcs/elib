@@ -1,7 +1,7 @@
 #ifndef ELIB_ITERATOR_FILTER_ITERATOR_HPP
 #define ELIB_ITERATOR_FILTER_ITERATOR_HPP
 
-# include <elib/aux.hpp>
+# include <elib/aux/move.hpp>
 # include <iterator>
 
 namespace elib { namespace iter { inline namespace v1
@@ -21,14 +21,17 @@ namespace elib { namespace iter { inline namespace v1
         using iterator_category = std::forward_iterator_tag;
         
     public:
-
+    
         filter_iterator(Pred p, Iterator b, Iterator e = Iterator())
-          : m_pred(p), m_pos(b), m_end(e)
+          : m_pred(elib::move(p)), m_pos(b), m_end(e)
         {
             satify_pred();
         }
         
-        ELIB_DEFAULT_COPY_MOVE(filter_iterator);
+        filter_iterator(filter_iterator const &) = default;
+        filter_iterator(filter_iterator &&) = default;
+        filter_iterator & operator=(filter_iterator const &) = default;
+        filter_iterator & operator=(filter_iterator &&) = default;
         
         bool operator==(self const & other) const { return m_pos == other.m_pos; }
         bool operator!=(self const & other) const { return m_pos != other.m_pos; }
@@ -37,6 +40,13 @@ namespace elib { namespace iter { inline namespace v1
         pointer   operator->() const { return m_pos.operator->(); }
         
         self & operator++() { increment(); return *this; }
+        
+        filter_iterator operator++(int)
+        {
+            auto cp = *this;
+            increment();
+            return cp;
+        }
         
         Iterator position() { return m_pos; }
         

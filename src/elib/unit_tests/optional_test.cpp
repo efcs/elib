@@ -347,14 +347,14 @@ BOOST_AUTO_TEST_CASE(non_trivial_default_ctor_test)
 BOOST_AUTO_TEST_CASE(trivial_nullopt_ctor_test)
 {
     using opt = elib::optional<int>;
-    volatile opt o(nullopt);
+    opt o(nullopt);
     BOOST_CHECK(not o.good());
 }
 
 BOOST_AUTO_TEST_CASE(non_trivial_nullopt_ctor_test)
 {
     using opt = elib::optional<std::string>;
-    volatile opt o(nullopt);
+    opt o(nullopt);
     BOOST_CHECK(not o.good());
 }
 
@@ -475,56 +475,156 @@ BOOST_AUTO_TEST_CASE(assign_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(copy_assign_test)
+BOOST_AUTO_TEST_CASE(non_trivial_copy_assign_test)
 {
     using opt = optional<std::string>;
     
+    std::string const bad = "bad";
+    std::string const value = "hello";
+    
     // to init
     {
-        opt to("hello");
+        opt to(value);
         opt from;
         to = from;
         BOOST_CHECK(not to.good());
     }{ /* from init */
         opt to;
-        opt from("hello");
+        opt from(value);
         to = from;
         BOOST_REQUIRE(to.good());
-        BOOST_CHECK(to.value() == "hello");
+        BOOST_CHECK(to.value() == value);
     }{ /* both init */
-        opt to("hello");
-        opt from("world");
+        opt to(bad);
+        opt from(value);
         to = from;
         BOOST_REQUIRE(to.good());
-        BOOST_CHECK(to.value() == "world");
+        BOOST_CHECK(to.value() == value);
     }
 }
 
-BOOST_AUTO_TEST_CASE(move_assign_test)
+BOOST_AUTO_TEST_CASE(trivial_copy_assign_test)
 {
-    using opt = optional<std::string>;
+    using opt = optional<int>;
+    
+    int const bad = -1;
+    int const value = 42;
     
     // to init
     {
-        opt to("hello");
+        opt to(value);
+        opt from;
+        to = from;
+        BOOST_CHECK(not to.good());
+    }{ /* from init */
+        opt to;
+        opt from(value);
+        to = from;
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == value);
+    }{ /* both init */
+        opt to(bad);
+        opt from(value);
+        to = from;
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == value);
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE(non_trivial_move_assign_test)
+{
+    using opt = optional<std::string>;
+    
+    std::string const bad = "bad";
+    std::string const value = "hello";
+    
+    // to init
+    {
+        opt to(value);
         opt from;
         to = static_cast<opt &&>(from);
         BOOST_CHECK(not to.good());
     }{ /* from init */
         opt to;
-        opt from("hello");
+        opt from(value);
         to = static_cast<opt &&>(from);
         BOOST_REQUIRE(to.good());
-        BOOST_CHECK(to.value() == "hello");
+        BOOST_CHECK(to.value() == value);
     }{ /* both init */
-        opt to("hello");
-        opt from("world");
+        opt to(bad);
+        opt from(value);
         to = static_cast<opt &&>(from);
         BOOST_REQUIRE(to.good());
-        BOOST_CHECK(to.value() == "world");
+        BOOST_CHECK(to.value() == value);
     }
 }
 
+BOOST_AUTO_TEST_CASE(trivial_move_assign_test)
+{
+    using opt = optional<int>;
+    
+    int const bad = -1;
+    int const value = 42;
+    
+    // to init
+    {
+        opt to(value);
+        opt from;
+        to = static_cast<opt &&>(from);
+        BOOST_CHECK(not to.good());
+    }{ /* from init */
+        opt to;
+        opt from(value);
+        to = static_cast<opt &&>(from);
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == value);
+    }{ /* both init */
+        opt to(bad);
+        opt from(value);
+        to = static_cast<opt &&>(from);
+        BOOST_REQUIRE(to.good());
+        BOOST_CHECK(to.value() == value);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(non_trivial_value_assign_test)
+{
+    using opt = elib::optional<std::string>;
+    
+    std::string bad("bad");
+    std::string s("hello");
+    {
+        opt o;
+        o = s;
+        BOOST_REQUIRE(o.good());
+        BOOST_CHECK(o.value() == s);
+    }{
+        opt o(bad);
+        o = s;
+        BOOST_REQUIRE(o.good());
+        BOOST_CHECK(o.value() == s);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(trivial_value_assign_test)
+{
+    using opt = elib::optional<int>;
+    
+    int bad = -1;
+    int n = 42;
+    {
+        opt o;
+        o = n;
+        BOOST_REQUIRE(o.good());
+        BOOST_CHECK(o.value() == n);
+    }{
+        opt o(bad);
+        o = n;
+        BOOST_REQUIRE(o.good());
+        BOOST_CHECK(o.value() == n);
+    }
+}
 
 BOOST_AUTO_TEST_CASE(emplace_test)
 {

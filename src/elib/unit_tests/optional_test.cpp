@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(nullopt_ctor_tests)
         BOOST_CHECK(o1.value_or(s) == s);
         BOOST_CHECK(o1.value_or("Hello") == s);
         
-        const opt o2(nullopt);
+        opt o2(nullopt);
         BOOST_CHECK( not o2 );
         BOOST_CHECK( not o2.good() );
         BOOST_CHECK_THROW(o2.value(), bad_optional_access);

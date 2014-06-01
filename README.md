@@ -1,9 +1,9 @@
 # Elib
 
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
-It can be found at github.com/EricWF/elib
+It can be found at github.com/efcs/elib
 WARNING: This file is update very infrequently
-LAST UPDATE: 02/05/2014
+LAST UPDATE: 31/05/2014
 
 ## Platform Support
 Elib currently only supports Linux and OS X. Although most libraries would

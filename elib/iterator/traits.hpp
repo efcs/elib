@@ -74,11 +74,6 @@ namespace elib { namespace iter { inline namespace v1
     >;
     
     ////////////////////////////////////////////////////////////////////////////
-    template <class A, class B>
-    using enable_if_iteroperable_t = 
-        aux::enable_if_t<is_interoperable<A, B>>;
-        
-    ////////////////////////////////////////////////////////////////////////////
     template <class I1, class I2>
     using choose_iterator_traits = 
         elib::if_t<

@@ -5,6 +5,10 @@
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+
+#include <sys/stat.h>
+#include <fcntl.h>
+
 using namespace elib::fs;
 
 BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_permission_test_suite)
@@ -96,7 +100,7 @@ BOOST_AUTO_TEST_CASE(remove_permissions_test)
 }
 
 // linux doesn't support permissions on symlinks
-#if !defined(ELIB_CONFIG_LINUX)
+#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
 BOOST_AUTO_TEST_CASE(not_follow_symlink_test)
 {
     scoped_test_env env;
@@ -118,7 +122,7 @@ BOOST_AUTO_TEST_CASE(not_follow_symlink_test)
     BOOST_CHECK(rst.permissions() == perms::all);
     BOOST_CHECK(lst.permissions() == pm);
 }
-# endif /* !defined(ELIB_CONFIG_LINUX) */
+# endif 
 
 BOOST_AUTO_TEST_CASE(follow_symlink_test)
 {
@@ -141,7 +145,7 @@ BOOST_AUTO_TEST_CASE(follow_symlink_test)
     BOOST_CHECK(rst.permissions() == pm);
     
 /// On linux a symlinks permissions are always 0777 (perms::all)
-#if !defined(ELIB_CONFIG_LINUX)
+#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
     BOOST_CHECK(lst.permissions() == pm);
 #else
     BOOST_CHECK(lst.permissions() == perms::all);

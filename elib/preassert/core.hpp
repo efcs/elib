@@ -2,6 +2,7 @@
 #define ELIB_PREASSERT_CORE_HPP
 
 # include <elib/config.hpp>
+# include <elib/assert.hpp>
 # include <atomic>
 # include <exception> /* for std::terminate */
 # include <iostream>
@@ -65,7 +66,7 @@ namespace elib { namespace preassert
                 case mode::opt:
                     assert_name = "ELIB_PRE_ASSERT_OPT";
                     break;
-            };
+            }; ELIB_ASSERT(assert_name);
             
             std::cerr <<  assert_name << "::" << file << "::" << line <<  std::endl;      
             std::cerr << " In " << func << ": ( " << pred_str << " ) FAILED" 
@@ -76,7 +77,9 @@ namespace elib { namespace preassert
         
         inline std::atomic<violation_handler>* get_violation_handler_impl() noexcept
         {
-            static std::atomic<violation_handler> m_handler{default_violation_handler};
+            static std::atomic<violation_handler> m_handler{
+                default_violation_handler
+            };
             return &m_handler;
         }
     }                                                       // namespace detail
@@ -103,6 +106,7 @@ namespace elib { namespace preassert
     {
         violation_handler h = get_violation_handler();
         h(which, msg, file, func, line);
+        // If h does return we have to enforce the noreturn attribute.
         std::terminate();
     }
     

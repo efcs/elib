@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(follow_symlink_test)
     
     BOOST_REQUIRE_NO_THROW(permissions(real_file, perms::group_all|perms::owner_all));
     
-#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
+#if !defined(ELIB_CONFIG_LINUX)
     auto before_lst = symlink_status(file);
 #endif
     
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE(follow_symlink_test)
     BOOST_CHECK(rst.permissions() == pm);
     
 /// On linux a symlinks permissions are always 0777 (perms::all)
-#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
+#if !defined(ELIB_CONFIG_LINUX)
     BOOST_CHECK(lst.permissions() == before_lst.permissions());
 # else /* LINUX */
     BOOST_CHECK(lst.permissions() == perms::all);

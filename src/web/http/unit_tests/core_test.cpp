@@ -138,5 +138,48 @@ BOOST_AUTO_TEST_CASE(status_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(generate_default_request_test)
+{
+    struct generate_request_testcase
+    {
+        method m;
+        std::string s;
+    };
+    
+    std::vector<generate_request_testcase> const testcases =
+    {
+        {method::OPTIONS, ""}
+      , {method::GET, "/testfile"}
+    };
+    
+    for (auto const & tc : testcases) {
+        request ret = generate_default_request(tc.m, tc.s);
+        BOOST_CHECK(ret.header.http_version == default_version);
+        BOOST_CHECK(ret.header.code == tc.m);
+        BOOST_CHECK(ret.header.value == tc.s);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(generate_default_response_test)
+{
+    struct generate_response_testcase
+    {
+        status st;
+    };
+    
+    std::vector<generate_response_testcase> const testcases =
+    {
+        {status::OK}
+      , {status::REDIRECT_MOVED_PERM}
+    };
+    
+    for (auto const & tc : testcases) {
+        response ret = generate_default_response(tc.st);
+        BOOST_CHECK(ret.header.http_version == default_version);
+        BOOST_CHECK(ret.header.code == tc.st);
+        BOOST_CHECK(ret.header.value == to_string(tc.st));
+    }
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

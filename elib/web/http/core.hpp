@@ -25,6 +25,8 @@ namespace elib { namespace web { namespace http
         ONE_ONE
     };
     
+    constexpr const version default_version = version::ONE_ONE;
+    
 /* I don't care If clang thinks the default case is covered.
  * All it takes is one bad cast, or uninitialized enum, and
  * these assumptions go to shit.*/
@@ -256,7 +258,11 @@ namespace elib { namespace web { namespace http
     struct message
     {
         using header_type = HeaderType;
+        using field_list_type = std::vector<field_type>;
+        using field_iterator = field_list_type::iterator;
+        using const_field_iterator = field_list_type::const_iterator;
         
+    public:
         header_type header;
         std::vector<field_type> fields;
         data_type data;
@@ -271,19 +277,19 @@ namespace elib { namespace web { namespace http
     
     ////////////////////////////////////////////////////////////////////////////
     //
-    inline request generate_request(method m, std::string value = "")
+    inline request generate_default_request(method m, std::string value = "")
     {
         request r;
-        r.header.http_version = version::ONE_ZERO;
+        r.header.http_version = default_version;
         r.header.code = m;
         r.header.value = value;
         return r;
     }
     
-    inline response generate_response(status s)
+    inline response generate_default_response(status s)
     {
         response r;
-        r.header.http_version = version::ONE_ZERO;
+        r.header.http_version = default_version;
         r.header.code = s;
         r.header.value = to_string(s);
         return r;

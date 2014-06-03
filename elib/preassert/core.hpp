@@ -2,6 +2,8 @@
 #define ELIB_PREASSERT_CORE_HPP
 
 # include <elib/config.hpp>
+# include <atomic>
+# include <iostream>
 # include <string>
 # include <cstddef>
 # include <cstdlib>
@@ -42,16 +44,55 @@ namespace elib { namespace preassert
     using violation_handler = 
         void(*)(mode, const char *msg, const char *file, const char* func, std::size_t line);
     
+    namespace detail
+    {
+        ELIB_NORETURN
+        inline void default_violation_handler(
+            mode m, const char *pred_str
+          , const char *file, const char *func, std::size_t line
+          )
+        {
+            std::cerr <<  to_string(m) << file << "::" << line <<  std::endl;      
+            std::cerr << " In " << func << ": ( " << pred_str << " ) FAILED" 
+               << std::endl;                                          
+                                                                      
+            std::abort();                                                        
+        }
+        
+        inline std::atomic<violation_handler>* get_violation_handler_impl() noexcept
+        {
+            static std::atomic<violation_handler> m_handler{default_violation_handler};
+            return &m_handler;
+        }
+    }                                                       // namespace detail
     
     ////////////////////////////////////////////////////////////////////////////
-    violation_handler get_violation_handler(violation_handler handler) noexcept;
-    violation_handler get_violation_handler() noexcept;
+    inline violation_handler get_violation_handler(violation_handler handler) noexcept
+    {
+        return std::atomic_exchange(detail::get_violation_handler_impl(), handler);
+    }
     
     ////////////////////////////////////////////////////////////////////////////
-    ELIB_NORETURN void assert_fail(
+    inline violation_handler get_violation_handler() noexcept
+    {
+        return std::atomic_load(detail::get_violation_handler_impl());
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    ELIB_NORETURN 
+    inline void assert_fail(
         mode which, const char *msg
       , const char *file, const char *func, std::size_t line
-      );
+      )
+    {
+        violation_handler h = get_violation_handler();
+        if (h) {
+            try {
+                h(which, msg, file, func, line);
+            } catch (...) { }
+        }
+        std::abort();
+    }
     
 }}                                                          // namespace elib
 #endif /* ELIB_PREASSERT_CORE_HPP */

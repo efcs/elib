@@ -3,7 +3,7 @@
 # 
 # include <elib/preassert/core.hpp>
 #
-# endif /* ELIB_PREASSERT_TEST_MACROS_HPP */
+#endif /* ELIB_PREASSERT_TEST_MACROS_HPP */
 
 #if defined(ELIB_PRE_ASSERT_PASS)
 # undef ELIB_TEST_PRE_ASSERT_PASS
@@ -15,25 +15,28 @@
 #endif
 
 #if defined(ELIB_PRE_ASSERT_IS_ACTIVE)
-# define ELIB_TEST_PRE_ASSERT_PASS(...)
-# define ELIB_TEST_PRE_ASSERT_FAIL(...)
+# // TODO
+# define ELIB_TEST_PRE_ASSERT_PASS(...) (true)
+# define ELIB_TEST_PRE_ASSERT_FAIL(...) (true)
 #else
-# define ELIB_TEST_PRE_ASSERT_PASS(...)
-# define ELIB_TEST_PRE_ASSERT_FAIL(...)
+# define ELIB_TEST_PRE_ASSERT_PASS(...) (true)
+# define ELIB_TEST_PRE_ASSERT_FAIL(...) (true)
 # endif /* ELIB_PRE_ASSERT_IS_ACTIVE */
 
 #if defined(ELIB_PRE_ASSERT_SAFE_IS_ACTIVE)
-# define ELIB_TEST_PRE_ASSERT_SAFE_PASS(...)
-# define ELIB_TEST_PRE_ASSERT_SAFE_FAIL(...)
+# // TODO
+# define ELIB_TEST_PRE_ASSERT_SAFE_PASS(...) (true)
+# define ELIB_TEST_PRE_ASSERT_SAFE_FAIL(...) (true)
 #else
-# define ELIB_TEST_PRE_ASSERT_SAFE_PASS(...)
-# define ELIB_TEST_PRE_ASSERT_SAFE_FAIL(...)
+# define ELIB_TEST_PRE_ASSERT_SAFE_PASS(...) (true)
+# define ELIB_TEST_PRE_ASSERT_SAFE_FAIL(...) (true)
 #endif /* ELIB_PRE_ASSERT_SAFE_IS_ACTIVE */
 
 #if defined(ELIB_PRE_ASSERT_OPT_IS_ACTIVE)
-# define ELIB_TEST_PRE_ASSERT_OPT_PASS(...)
-# define ELIB_TEST_PRE_ASSERT_OPT_FAIL(...)
+# // TODO
+# define ELIB_TEST_PRE_ASSERT_OPT_PASS(...) (true)
+# define ELIB_TEST_PRE_ASSERT_OPT_FAIL(...) (true)
 #else
-# define ELIB_TEST_PRE_ASSERT_OPT_PASS(...)
-# define ELIB_TEST_PRE_ASSERT_OPT_FAIL(...)
+# define ELIB_TEST_PRE_ASSERT_OPT_PASS(...) (true)
+# define ELIB_TEST_PRE_ASSERT_OPT_FAIL(...) (true)
 #endif /* ELIB_PRE_ASSERT_OPT_IS_ACTIVE */

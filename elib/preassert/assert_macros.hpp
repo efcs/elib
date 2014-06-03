@@ -4,13 +4,15 @@
 # include <elib/preassert/core.hpp>
 # 
 #endif /* ELIB_PREASSERT_ASSERT_MACROS_HPP */
-
+#
+#
 #if defined(ELIB_PRE_ASSERT)
 # undef ELIB_PRE_ASSERT
 # undef ELIB_PRE_ASSERT_SAFE
 # undef ELIB_PRE_ASSERT_OPT
 #endif
-
+#
+#
 #if defined(ELIB_PRE_ASSERT_IS_ACTIVE)
 # 
 # define ELIB_PRE_ASSERT(...)                            \
@@ -27,7 +29,8 @@
 # define ELIB_PRE_ASSERT(...) ((void)0)
 # 
 #endif /* ELIB_PRE_ASSERT_IS_ACTIVE */
-
+#
+#
 #if defined(ELIB_PRE_ASSERT_SAFE_IS_ACTIVE)
 # 
 # define ELIB_PRE_ASSERT_SAFE(...)                       \
@@ -44,7 +47,8 @@
 # define ELIB_PRE_ASSERT_SAFE(...) ((void)0)
 # 
 #endif /* ELIB_PRE_ASSERT_SAFE_IS_ACTIVE */
-
+#
+#
 #if defined(ELIB_PRE_ASSERT_OPT_IS_ACTIVE)
 # 
 # define ELIB_PRE_ASSERT_OPT(...)                        \
@@ -61,5 +65,4 @@
 # define ELIB_PRE_ASSERT_OPT(...) ((void)0)
 # 
 #endif /* ELIB_PRE_ASSERT_OPT_IS_ACTIVE */
-#
 #

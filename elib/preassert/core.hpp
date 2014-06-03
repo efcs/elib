@@ -3,6 +3,7 @@
 
 # include <elib/config.hpp>
 # include <atomic>
+# include <exception> /* for std::terminate */
 # include <iostream>
 # include <string>
 # include <cstddef>
@@ -52,7 +53,21 @@ namespace elib { namespace preassert
           , const char *file, const char *func, std::size_t line
           )
         {
-            std::cerr <<  to_string(m) << file << "::" << line <<  std::endl;      
+            const char *assert_name{nullptr};
+            switch (m)
+            {
+                case mode::dbg:
+                    assert_name = "ELIB_PRE_ASSERT";
+                    break;
+                case mode::safe:
+                    assert_name = "ELIB_PRE_ASSERT_SAFE";
+                    break;
+                case mode::opt:
+                    assert_name = "ELIB_PRE_ASSERT_OPT";
+                    break;
+            };
+            
+            std::cerr <<  assert_name << "::" << file << "::" << line <<  std::endl;      
             std::cerr << " In " << func << ": ( " << pred_str << " ) FAILED" 
                << std::endl;                                          
                                                                       
@@ -69,7 +84,8 @@ namespace elib { namespace preassert
     ////////////////////////////////////////////////////////////////////////////
     inline violation_handler get_violation_handler(violation_handler handler) noexcept
     {
-        return std::atomic_exchange(detail::get_violation_handler_impl(), handler);
+        violation_handler to_swap = handler ? handler : detail::default_violation_handler;
+        return std::atomic_exchange(detail::get_violation_handler_impl(), to_swap);
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -86,12 +102,8 @@ namespace elib { namespace preassert
       )
     {
         violation_handler h = get_violation_handler();
-        if (h) {
-            try {
-                h(which, msg, file, func, line);
-            } catch (...) { }
-        }
-        std::abort();
+        h(which, msg, file, func, line);
+        std::terminate();
     }
     
 }}                                                          // namespace elib

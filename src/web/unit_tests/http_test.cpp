@@ -19,11 +19,11 @@ BOOST_AUTO_TEST_CASE(prox_http_version_test)
     version zero = version::ONE_ZERO;
     version one = version::ONE_ONE;
     
-    BOOST_CHECK(std::string{"HTTP/1.0"} == version_to_string(zero));
-    BOOST_CHECK(std::string{"HTTP/1.1"} == version_to_string(one));
+    BOOST_CHECK(std::string{"HTTP/1.0"} == to_string(zero));
+    BOOST_CHECK(std::string{"HTTP/1.1"} == to_string(one));
     
-    BOOST_CHECK(zero == string_to_version("HTTP/1.0"));
-    BOOST_CHECK(one == string_to_version("HTTP/1.1"));
+    BOOST_CHECK(zero == to_version("HTTP/1.0"));
+    BOOST_CHECK(one == to_version("HTTP/1.1"));
 }
 
 #define TEST_STR_MAP(Name) \

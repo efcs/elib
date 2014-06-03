@@ -8,14 +8,14 @@ namespace elib { namespace web { namespace http
     {        
         std::string str = 
             elib::enumeration::enum_cast<std::string>(h.code)
-            + " " + h.value + " " + version_to_string(h.http_version) + '\r' + '\n';
+            + " " + h.value + " " + to_string(h.http_version) + '\r' + '\n';
         
         return data_type(str.begin(), str.end());
     }
     
     data_type serialize(response_header const & h)
     {
-        std::string str = version_to_string(h.http_version);
+        std::string str = to_string(h.http_version);
         str = str + " " + elib::lexical_cast<std::string>(static_cast<int>(h.code))
               + " " + h.value
               + '\r' + '\n';

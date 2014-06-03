@@ -2,6 +2,8 @@
 #define ELIB_WEB_HTTP_CORE_HPP
 
 # include <elib/web/http/fwd.hpp>
+# include <elib/web/error.hpp>
+# include <elib/assert.hpp>
 # include <elib/aux/forward.hpp>
 # include <elib/aux/traits/uncvref.hpp>
 # include <elib/aux/traits/underlying_type.hpp>
@@ -33,7 +35,7 @@ namespace elib { namespace web { namespace http
 # endif
     ////////////////////////////////////////////////////////////////////////////
     //
-    inline std::string version_to_string(version v)
+    inline std::string to_string(version v)
     {
         switch (v)
         {
@@ -42,29 +44,24 @@ namespace elib { namespace web { namespace http
             case version::ONE_ONE:
                 return "HTTP/1.1";
             default:
-                throw "In default case!";
+                ELIB_ASSERT_ALWAYS(!bool("in default case"));
         }
     }
-    
-    inline std::string to_string(version v)
-    {
-        return version_to_string(v);
-    }
-    
 # if defined(__clang__)
 #   pragma clang diagnostic pop
 # endif
+
     
+
     ////////////////////////////////////////////////////////////////////////////
-    //
-    inline version string_to_version(std::string const & s)
+    inline version to_version(std::string const & s)
     {
         if (s == "HTTP/1.0")
             return version::ONE_ZERO;
         else if (s == "HTTP/1.1")
             return version::ONE_ONE;
         else
-            throw "In default case!";
+            ELIB_THROW_EXCEPTION(web_error("bad version string"));
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -107,6 +104,11 @@ namespace elib { namespace web { namespace http
     inline std::string to_string(method m)
     {
         return elib::enumeration::enum_cast<std::string>(m);
+    }
+    
+    inline method to_method(std::string const & s)
+    {
+        return elib::enumeration::enum_cast<method>(s);
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -181,6 +183,11 @@ namespace elib { namespace web { namespace http
         return elib::enumeration::enum_cast<std::string>(s);
     }
     
+    inline status to_status(std::string const & s)
+    {
+        return elib::enumeration::enum_cast<status>(s);
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
     //
     constexpr bool status_is_information(status s) noexcept
@@ -200,7 +207,6 @@ namespace elib { namespace web { namespace http
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     constexpr bool status_is_redirect(status s) noexcept
     {
         using UnderT = aux::underlying_type_t<status>;
@@ -209,7 +215,6 @@ namespace elib { namespace web { namespace http
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     constexpr bool status_is_client_error(status s) noexcept
     {
         using UnderT = aux::underlying_type_t<status>;
@@ -218,7 +223,6 @@ namespace elib { namespace web { namespace http
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     constexpr bool status_is_server_error(status s) noexcept
     {
         using UnderT = aux::underlying_type_t<status>;
@@ -227,14 +231,12 @@ namespace elib { namespace web { namespace http
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     constexpr bool status_is_error(status s) noexcept
     {
         return (status_is_client_error(s) || status_is_server_error(s));
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    //
     template <class EnumType>
     struct message_header
     {

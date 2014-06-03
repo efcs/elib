@@ -23,7 +23,7 @@ namespace elib { namespace web { namespace http
             
         dest.code = elib::enumeration::enum_cast<method>(m[1].str());
         dest.value = m[2].str();
-        dest.http_version = string_to_version(m[3]);
+        dest.http_version = to_version(m[3]);
         
         std::advance(begin, m[0].length());
         return begin;
@@ -42,7 +42,7 @@ namespace elib { namespace web { namespace http
         if (!std::regex_search(begin, end, m, re))
             return begin;
             
-        dest.http_version = string_to_version(m[1].str());
+        dest.http_version = to_version(m[1].str());
         dest.code = static_cast<status>(
                             elib::lexical_cast<int>(m[2].str())
                         );

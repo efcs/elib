@@ -74,6 +74,7 @@ include_library_if(ELIB_ITERATOR_SOURCE    iterator/build.cmake     )
 include_library_if(ELIB_LOGGING_SOURCE     logging/build.cmake      )
 include_library_if(ELIB_MEMORY_SOURCE      memory/build.cmake       )
 include_library_if(ELIB_MP_SOURCE          mp/build.cmake           )
+include_library_if(ELIB_PREASSERT_SOURCE   preassert/build.cmake    )
 include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
 
 

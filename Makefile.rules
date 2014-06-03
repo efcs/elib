@@ -172,14 +172,14 @@ batch_check_shared:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running shared tests ===
-	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short --build_info=yes --show_progress=yes
+	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short --build_info=yes
 
 batch_check_static:
 	$(CMD_VERB) echo === Building tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running static tests ===
-	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short --build_info=yes --show_progress=yes
+	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short --build_info=yes
 
 ################################################################################
 batch_build:

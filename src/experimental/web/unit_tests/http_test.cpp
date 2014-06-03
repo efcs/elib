@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/web/http.hpp>
+#include <elib/experimental/web/http.hpp>
 #include <elib/aux.hpp>
 #include <elib/enumeration.hpp>
 #include <elib/lexical_cast.hpp>

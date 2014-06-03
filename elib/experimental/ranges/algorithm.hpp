@@ -1,5 +1,5 @@
-#ifndef ELIB_EXPERIMENTAL_RANGES_ALGORITHM_HPP
-#define ELIB_EXPERIMENTAL_RANGES_ALGORITHM_HPP
+#ifndef ELIB_RANGES_ALGORITHM_HPP
+#define ELIB_RANGES_ALGORITHM_HPP
 
 # include <elib/experimental/ranges/traits.hpp>
 # include <elib/aux.hpp>
@@ -7,7 +7,7 @@
 
 # include <algorithm>
 
-namespace elib { namespace experimental { namespace ranges { namespace algorithm_adl_barrier
+namespace elib { namespace ranges { namespace algorithm_adl_barrier
 {
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -2335,5 +2335,5 @@ namespace elib { namespace experimental { namespace ranges { namespace algorithm
       , cmp
     ))
     
-}}}}                                                          // namespace elib
-#endif /* ELIB_EXPERIMENTAL_RANGES_ALGORITHM_HPP */
+}}}                                                           // namespace elib
+#endif /* ELIB_RANGES_ALGORITHM_HPP */

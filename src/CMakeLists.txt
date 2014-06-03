@@ -75,10 +75,11 @@ include_library_if(ELIB_LOGGING_SOURCE     logging/build.cmake      )
 include_library_if(ELIB_MEMORY_SOURCE      memory/build.cmake       )
 include_library_if(ELIB_MP_SOURCE          mp/build.cmake           )
 include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
-include_library_if(ELIB_WEB_SOURCE         web/build.cmake          )
+
 
 if (CONFIG_ENABLE_EXPERIMENTAL)
   include_library_if(ELIB_RANGES_SOURCE    experimental/ranges/build.cmake   )
+  include_library_if(ELIB_WEB_SOURCE       experimental/web/build.cmake      )
 endif()
 
 ################################################################################

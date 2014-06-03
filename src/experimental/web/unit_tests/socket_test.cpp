@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/web/socket.hpp>
+#include <elib/experimental/web/socket.hpp>
 
 #include <string>
 #include <system_error>

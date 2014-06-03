@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-#include <elib/web/error.hpp>
+#include <elib/experimental/web/error.hpp>
 using namespace elib::web;
 
 BOOST_AUTO_TEST_SUITE(elib_web_error_test_suite)

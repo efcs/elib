@@ -63,10 +63,11 @@ option(ELIB_LOGGING_SOURCE "Build logging library" ON)
 option(ELIB_MEMORY_SOURCE "Build memory library" ON)
 option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
 option(ELIB_PP_SOURCE "Build preprocessor library" ON)
-option(ELIB_WEB_SOURCE "Build web library" ON)
+
 
 # Experimental libraries
 option(ELIB_RANGES_SOURCE  "Build ranges library (experimental)" ON)
+option(ELIB_WEB_SOURCE "Build web library (experimental)" ON)
 
 ################################################################################
 #                            PROJECT ELIB

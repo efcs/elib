@@ -7,7 +7,7 @@
           "please use the CMake option CONFIG_LIB_WEB to disable this library"
 # endif
 
-# include <elib/web/error.hpp>
+# include <elib/experimental/web/error.hpp>
 # include <elib/aux/addressof.hpp>
 
 # include <memory>

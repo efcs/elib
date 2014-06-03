@@ -1,5 +1,5 @@
-#ifndef ELIB_EXPERIMENTAL_RANGES_RANGE_HPP
-#define ELIB_EXPERIMENTAL_RANGES_RANGE_HPP
+#ifndef ELIB_RANGES_RANGE_HPP
+#define ELIB_RANGES_RANGE_HPP
 
 # include <elib/experimental/ranges/traits.hpp>
 # include <elib/aux.hpp>
@@ -9,7 +9,7 @@
 # include <iterator>
 # include <utility>
 
-namespace elib { namespace experimental { namespace ranges
+namespace elib { namespace ranges
 {
     
     ////////////////////////////////////////////////////////////////////////////
@@ -281,5 +281,5 @@ namespace elib { namespace experimental { namespace ranges
           );
     }
 
-}}}                                                          // namespace elib
-#endif /* ELIB_EXPERIMENTAL_RANGES_RANGE_HPP */
+}}                                                           // namespace elib
+#endif /* ELIB_RANGES_RANGE_HPP */

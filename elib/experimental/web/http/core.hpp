@@ -1,8 +1,8 @@
 #ifndef ELIB_WEB_HTTP_CORE_HPP
 #define ELIB_WEB_HTTP_CORE_HPP
 
-# include <elib/web/http/fwd.hpp>
-# include <elib/web/error.hpp>
+# include <elib/experimental/web/http/fwd.hpp>
+# include <elib/experimental/web/error.hpp>
 # include <elib/assert.hpp>
 # include <elib/aux/forward.hpp>
 # include <elib/aux/traits/uncvref.hpp>

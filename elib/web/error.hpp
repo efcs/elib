@@ -25,5 +25,8 @@ namespace elib { namespace web
 #   pragma clang diagnostic pop
 # endif
 }}                                                       // namespace elib::web
-namespace elib { using elib::web::web_error; }
+namespace elib 
+{ 
+    using elib::web::web_error; 
+}                                                           // namespace elib
 #endif /* ELIB_WEB_BASIC_WEB_ERROR_HPP */

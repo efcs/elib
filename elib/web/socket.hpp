@@ -29,6 +29,11 @@ namespace elib { namespace web
 {
     using sock_fd_t = int;
     using message_t = struct msghdr;
+    using sockaddr_type = struct sockaddr;
+    using sockaddr_in4_type = struct sockaddr_in;
+    using sockaddr_in6_type = struct sockaddr_in6;
+    using in4_addr_type = in_addr_t;
+    using in6_addr_type = struct in6_addr;
     
     ////////////////////////////////////////////////////////////////////////////
     //

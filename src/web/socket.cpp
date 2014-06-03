@@ -1,4 +1,5 @@
 #include <elib/web/socket.hpp>
+#include <elib/config.hpp>
 #include <elib/assert.hpp>
 #include <elib/aux/move.hpp>
 
@@ -283,6 +284,10 @@ namespace elib { namespace web
             return ret;
         }
         
+# if defined(__GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
         ::sockaddr_in get_peer_name_impl(socket const & s, std::error_code *ec)
         {
             if (ec) ec->clear();
@@ -309,8 +314,14 @@ namespace elib { namespace web
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }
+#if defined(__GNUC__)
+# pragma GCC diagnostic pop
+#endif
         
-        
+# if defined(__GNUC__)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
         ::sockaddr_in get_sock_name_impl(socket const & s, std::error_code *ec)
         {
             if (ec) ec->clear();
@@ -337,5 +348,8 @@ namespace elib { namespace web
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }
+#if defined(__GNUC__)
+# pragma GCC diagnostic pop
+#endif
     }                                                       // namespace detail
 }}                                                       // namespace elib::web

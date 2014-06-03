@@ -32,10 +32,10 @@
     } while (false)
 # 
   
-# define ELIB_RETHROW_BLOCK_BEGIN() try 
+# define ELIB_RETHROW_BLOCK_BEGIN() try {
         
 # define ELIB_RETHROW_BLOCK_END()                           \
-    catch (::elib::exception & _elib_exception) {           \
+    } catch (::elib::exception & _elib_exception) {         \
         ::elib::except::set_exception_throw_site(           \
             _elib_exception, __FILE__, __func__, __LINE__); \
         throw;                                              \

@@ -4,6 +4,7 @@
 #include <elib/aux/integral_constant.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>
+#include <type_traits>
 
 using namespace elib;
 
@@ -76,6 +77,21 @@ BOOST_AUTO_TEST_CASE(false_type_test)
     ELIB_STATIC_ASSERT(
         aux::is_same<aux::false_, T>::value
       );
+    BOOST_CHECK(true);
+}
+
+// Issue #29
+BOOST_AUTO_TEST_CASE(convert_ctor_test)
+{
+    constexpr true_ t(std::true_type);
+    BOOST_CHECK(true);
+}
+
+// Issue #29
+BOOST_AUTO_TEST_CASE(convert_operator_test)
+{
+    constexpr std::true_type t = true_{};
+    ((void)t);
     BOOST_CHECK(true);
 }
 

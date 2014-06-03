@@ -1,6 +1,7 @@
 #ifndef ELIB_AUX_INTEGRAL_CONSTANT_HPP
 #define ELIB_AUX_INTEGRAL_CONSTANT_HPP
 
+# include <type_traits>
 # include <cstddef>
 
 # /* type deduction macro for integral_constant */
@@ -25,6 +26,15 @@ namespace elib { namespace aux
             
         constexpr T operator()() const noexcept
         { return Val; }
+    
+    // Issue #29
+    public:
+        constexpr integral_constant() noexcept {}
+        constexpr integral_constant(integral_constant const &) noexcept {}
+        constexpr integral_constant(std::integral_constant<T, Val> const &) noexcept {}
+        
+        constexpr operator std::integral_constant<T, Val>() const noexcept
+        { return {}; }
     };
     
     template <class T, T Val>

@@ -135,6 +135,10 @@ BOOST_AUTO_TEST_CASE(follow_symlink_test)
     
     BOOST_REQUIRE_NO_THROW(permissions(real_file, perms::group_all|perms::owner_all));
     
+#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
+    auto before_lst = symlink_status(file);
+#endif
+    
     perms const pm = perms::owner_all;
     std::error_code ec;
     permissions(file, pm, permissions_options::follow_symlinks, ec);
@@ -146,8 +150,8 @@ BOOST_AUTO_TEST_CASE(follow_symlink_test)
     
 /// On linux a symlinks permissions are always 0777 (perms::all)
 #if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
-    BOOST_CHECK(lst.permissions() == pm);
-#else
+    BOOST_CHECK(lst.permissions() == before_lst.permissions());
+# else /* LINUX */
     BOOST_CHECK(lst.permissions() == perms::all);
 #endif
 }

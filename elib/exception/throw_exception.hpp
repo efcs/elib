@@ -7,6 +7,10 @@
 # include <elib/config.hpp>
 # include <elib/aux.hpp>
 
+# define ELIB_THROW(...) \
+    ::elib::except::throw_exception_from(__VA_ARGS__, __FILE__, __func__, __LINE__)
+# 
+
 # define ELIB_THROW_EXCEPTION(...) \
   ::elib::except::throw_exception_from(__VA_ARGS__, __FILE__, __func__, __LINE__)
 # 

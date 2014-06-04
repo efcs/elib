@@ -19,18 +19,21 @@ namespace elib { namespace aux
 {
     namespace detail
     {
+        ////////////////////////////////////////////////////////////////////////
         template <class T>
         struct is_ref_wrapper : false_ {};
         
         template <class T>
         struct is_ref_wrapper<std::reference_wrapper<T>> : true_ {};
         
+        ////////////////////////////////////////////////////////////////////////
         // NOTE: leading true's are to make sure and_c gets at least 2 values.
         template <class ...Args>
         using none_are_ref_wrappers = and_c<true, true, 
             not is_ref_wrapper<uncvref<Args>>::value...
           >;
         
+        ////////////////////////////////////////////////////////////////////////
         template <class T, std::size_t N, std::size_t ...Indexes>
         constexpr std::array<remove_cv_t<T>, N> 
         to_array_impl(T (&ar)[N], index_sequence<Indexes...>)
@@ -39,6 +42,7 @@ namespace elib { namespace aux
         }
     }                                                       // namespace detail
     
+    ////////////////////////////////////////////////////////////////////////////
     template <
         class ...Args
       , ELIB_ENABLE_IF(detail::none_are_ref_wrappers<Args...>::value)
@@ -50,6 +54,7 @@ namespace elib { namespace aux
         return {{ static_cast<T>(elib::forward<Args>(args))... }};
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class D, class ...Args>
     constexpr std::array<D, sizeof...(Args)> 
     make_array(Args&&... args)
@@ -57,6 +62,7 @@ namespace elib { namespace aux
         return {{ static_cast<D>(elib::forward<Args>(args))... }};
     }
     
+    ////////////////////////////////////////////////////////////////////////////
     template <class T, std::size_t N>
     constexpr std::array<remove_cv_t<T>, N> 
     to_array(T (&ar)[N] )

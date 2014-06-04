@@ -74,11 +74,11 @@ include_library_if(ELIB_ITERATOR_SOURCE    iterator/build.cmake     )
 include_library_if(ELIB_LOGGING_SOURCE     logging/build.cmake      )
 include_library_if(ELIB_MEMORY_SOURCE      memory/build.cmake       )
 include_library_if(ELIB_MP_SOURCE          mp/build.cmake           )
-include_library_if(ELIB_PREASSERT_SOURCE   preassert/build.cmake    )
 include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
 
 
 if (CONFIG_ENABLE_EXPERIMENTAL)
+  include_library_if(ELIB_CONTRACT_ASSERT_SOURCE  experimental/contract_assert/build.cmake)
   include_library_if(ELIB_RANGES_SOURCE    experimental/ranges/build.cmake   )
   include_library_if(ELIB_WEB_SOURCE       experimental/web/build.cmake      )
 endif()

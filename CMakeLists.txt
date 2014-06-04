@@ -62,11 +62,11 @@ option(ELIB_ITERATOR_SOURCE "Build iterators" ON)
 option(ELIB_LOGGING_SOURCE "Build logging library" ON)
 option(ELIB_MEMORY_SOURCE "Build memory library" ON)
 option(ELIB_MP_SOURCE "Build metaprogramming library" ON)
-option(ELIB_PREASSERT_SOURCE "Build preassert source" ON)
 option(ELIB_PP_SOURCE "Build preprocessor library" ON)
 
 
 # Experimental libraries
+option(ELIB_CONTRACT_ASSERT_SOURCE "Build contract assert source" ON)
 option(ELIB_RANGES_SOURCE  "Build ranges library (experimental)" ON)
 option(ELIB_WEB_SOURCE "Build web library (experimental)" ON)
 

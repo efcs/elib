@@ -204,11 +204,11 @@ namespace elib { namespace ranges
         
         ////////////////////////////////////////////////////////////////////////
         std::pair<range, range> m_dispatch_split_neg(
-            difference_type n
+            difference_type //n
           , std::forward_iterator_tag
           ) const
         {
-            ELIB_ASSERT(n <= 0);
+            // ELIB_ASSERT(n <= 0);
             // TODO size is commented out
            // return split(std::max<difference_type>(0, size() + n));
            return {};

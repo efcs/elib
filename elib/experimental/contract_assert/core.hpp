@@ -1,5 +1,5 @@
-#ifndef ELIB_PREASSERT_CORE_HPP
-#define ELIB_PREASSERT_CORE_HPP
+#ifndef ELIB_CONTRACT_ASSERT_CORE_HPP
+#define ELIB_CONTRACT_ASSERT_CORE_HPP
 
 # include <elib/config.hpp>
 # include <elib/assert.hpp>
@@ -10,10 +10,10 @@
 # include <cstddef>
 # include <cstdlib>
 
-namespace elib { namespace preassert
+namespace elib { namespace contract_assert
 {
     ////////////////////////////////////////////////////////////////////////////
-    enum class mode
+    enum class contract_assert_mode
     {
         opt, dbg, safe
     };
@@ -24,15 +24,15 @@ namespace elib { namespace preassert
 #   pragma clang diagnostic ignored "-Wunreachable-code"
 # endif
     ////////////////////////////////////////////////////////////////////////////
-    inline std::string to_string(mode m) noexcept
+    inline std::string to_string(contract_assert_mode m) noexcept
     {
         switch (m)
         {
-            case mode::opt:
+            case contract_assert_mode::opt:
                 return "opt";
-            case mode::dbg:
+            case contract_assert_mode::dbg:
                 return "dbg";
-            case mode::safe:
+            case contract_assert_mode::safe:
                 return "safe";
             default:
                 std::abort();
@@ -44,27 +44,31 @@ namespace elib { namespace preassert
 
     ////////////////////////////////////////////////////////////////////////////
     using violation_handler = 
-        void(*)(mode, const char *msg, const char *file, const char* func, std::size_t line);
+        void(*)(contract_assert_mode, const char *msg, const char *file, const char* func, std::size_t line);
     
     namespace detail
     {
+# if defined(__GNUC__) && !defined(__clang__)
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wswitch-default"
+#endif
         ELIB_NORETURN
         inline void default_violation_handler(
-            mode m, const char *pred_str
+            contract_assert_mode m, const char *pred_str
           , const char *file, const char *func, std::size_t line
           )
         {
             const char *assert_name{nullptr};
             switch (m)
             {
-                case mode::dbg:
+                case contract_assert_mode::dbg:
                     assert_name = "ELIB_PRE_ASSERT";
                     break;
-                case mode::safe:
-                    assert_name = "ELIB_PRE_ASSERT_SAFE";
+                case contract_assert_mode::safe:
+                    assert_name = "ELIB_CONTRACT_ASSERT_SAFE";
                     break;
-                case mode::opt:
-                    assert_name = "ELIB_PRE_ASSERT_OPT";
+                case contract_assert_mode::opt:
+                    assert_name = "ELIB_CONTRACT_ASSERT_OPT";
                     break;
             }; ELIB_ASSERT(assert_name);
             
@@ -74,6 +78,10 @@ namespace elib { namespace preassert
                                                                       
             std::abort();                                                        
         }
+# if defined(__GNUC__) && !defined(__clang__)
+#   pragma GCC diagnostic pop
+# endif
+
         
         inline std::atomic<violation_handler>* get_violation_handler_impl() noexcept
         {
@@ -100,7 +108,7 @@ namespace elib { namespace preassert
     ////////////////////////////////////////////////////////////////////////////
     ELIB_NORETURN 
     inline void assert_fail(
-        mode which, const char *msg
+        contract_assert_mode which, const char *msg
       , const char *file, const char *func, std::size_t line
       )
     {
@@ -111,4 +119,4 @@ namespace elib { namespace preassert
     }
     
 }}                                                          // namespace elib
-#endif /* ELIB_PREASSERT_CORE_HPP */
+#endif /* ELIB_CONTRACT_ASSERT_CORE_HPP */

@@ -10,6 +10,9 @@ Elib currently only supports Linux and OS X. Although most libraries would
 build on Windows (See Library Summary for specifics), the build system has
 no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
 
+## Compiler Support.
+Elib supports GCC 4.8 and 4.9. It also supports LLVM/Clang 3.4 and libc++.
+
 ## Library Summary
 
 ### Core Library

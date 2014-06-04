@@ -335,8 +335,9 @@ namespace elib
             }
         }
         
+
         ////////////////////////////////////////////////////////////////////////
-        constexpr T const* operator ->() const
+        constexpr T const* operator->() const
         {
 #       ifndef NDEBUG
             return m_init() ? m_ptr() : throw bad_optional_access("bad optional access");
@@ -345,12 +346,49 @@ namespace elib
 #       endif
         }
         
-        T* operator ->()
+        ELIB_CXX1Y_CONSTEXPR T* operator->()
         {
-            ELIB_ASSERT(m_init());
+#       ifndef NDEBUG
+            return m_init() ? m_ptr() : throw bad_optional_access("bad optional access");
+#       else
             return m_ptr();
+#       endif
         }
         
+        
+# if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
+        ////////////////////////////////////////////////////////////////////////
+        constexpr T const & operator*() const &
+        {
+#       ifndef NDEBUG
+            return *(m_init() ? m_ptr() : throw bad_optional_access("bad optional access"));
+#       else
+            return m_ref();
+#       endif
+        }
+        
+        ELIB_CXX1Y_CONSTEXPR T & operator*() &
+        {
+#       ifndef NDEBUG
+            return *(m_init() ? m_ptr() : throw bad_optional_access("bad optional access"));
+#       else
+            return m_ref();
+#       endif
+        }
+        
+        ELIB_CXX1Y_CONSTEXPR T && operator*() &&
+        {
+#       ifndef NDEBUG
+            return elib::move(
+                *(m_init() ? m_ptr() : throw bad_optional_access("bad optional access"))
+              );
+#       else
+            return elib::move(m_ref());
+#       endif
+        }
+        
+# else /* ELIB_CONFIG_NO_REF_QUALIFIERS */
+
         ////////////////////////////////////////////////////////////////////////
         constexpr T const & operator *() const
         {
@@ -363,10 +401,16 @@ namespace elib
         
         T & operator *()
         {
-            ELIB_ASSERT(m_init());
+#       ifndef NDEBUG
+            return *(m_init() ? m_ptr() : throw bad_optional_access("bad optional access"));
+#       else
             return m_ref();
+#       endif
         }
         
+# endif /* !defined(ELIB_CONFIG_NO_REF_QUALIFIERS) */
+        
+       
         ////////////////////////////////////////////////////////////////////////
         constexpr explicit operator bool() const noexcept
         {
@@ -378,7 +422,27 @@ namespace elib
             return m_init();
         }
         
+        
+# if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
+
         ////////////////////////////////////////////////////////////////////////
+        constexpr T const & value() const &
+        {
+            return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
+        }
+        
+        ELIB_CXX1Y_CONSTEXPR T & value() &
+        {
+            return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
+        }
+        
+        ELIB_CXX1Y_CONSTEXPR T && value() &&
+        {
+            return std::move(
+                *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"))
+              );
+        }
+# else /* ELIB_CONFIG_NO_REF_QUALIFIERS */
         constexpr T const & value() const
         {
             return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
@@ -388,9 +452,11 @@ namespace elib
         {
             return *(bool(*this) ? m_ptr() : throw bad_optional_access("bad optional access"));
         }
+# endif /* !defined(ELIB_CONFIG_NO_REF_QUALIFIERS) */
         
+        
+# if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
         ////////////////////////////////////////////////////////////////////////
-# if ! defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
         template <
             class U
           , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
@@ -404,7 +470,7 @@ namespace elib
             class U
           , ELIB_ENABLE_IF(aux::is_convertible<U &&, T>::value)
           > 
-        T value_or(U && v) &&
+        ELIB_CXX1Y_CONSTEXPR T value_or(U && v) &&
         {
             return bool(*this) ? elib::move(**this) 
                                : static_cast<T>(elib::forward<U>(v));

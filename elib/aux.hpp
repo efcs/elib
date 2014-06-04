@@ -26,6 +26,7 @@
 # include <elib/aux/invoke.hpp>
 # include <elib/aux/literals.hpp>
 # include <elib/aux/logical.hpp>
+# include <elib/aux/make_array.hpp>
 # include <elib/aux/move.hpp>
 # include <elib/aux/no_decay.hpp>
 # include <elib/aux/none.hpp>

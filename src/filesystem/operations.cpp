@@ -726,13 +726,10 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    void permissions(
-        const path& p, perms prms, permissions_options opts
-      , std::error_code *ec
-      )
+    void permissions(const path& p, perms prms, std::error_code *ec)
     {
-        ELIB_ASSERT(not (bool(permissions_options::add_bits & opts) 
-                     && bool(permissions_options::remove_bits & opts)));
+        ELIB_ASSERT(not (bool(perms::add_perms & prms) 
+                     && bool(perms::remove_perms & prms)));
           
         file_status st = detail::status(p, ec);
         if (!exists(st)) {
@@ -744,10 +741,10 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             throw filesystem_error("elib::fs::permissions", p, m_ec);
         }
           
-        if (bool(permissions_options::add_bits & opts)) {
+        if (bool(perms::add_perms & prms)) {
             prms |= st.permissions();
         }
-        else if (bool(permissions_options::remove_bits & opts)) {
+        else if (bool(perms::remove_perms & prms)) {
             prms = st.permissions() & ~prms;
         }
         
@@ -755,7 +752,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         
 # if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) \
     && !defined(ELIB_CONFIG_LINUX)
-        const int flags = bool(permissions_options::follow_symlinks & opts)
+        const int flags = bool(perms::resolve_symlinks & prms)
                        ? 0 : AT_SYMLINK_NOFOLLOW;
                        
         if (::fchmodat(AT_FDCWD, p.c_str(), real_perms, flags) == -1) {

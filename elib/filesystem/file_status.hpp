@@ -48,7 +48,10 @@ namespace elib { namespace fs { inline namespace v1
         
         mask = 07777,
         unknown = 0xFFFF,
-        symlink_perms = 0x4000
+        
+        add_perms = 0x10000, 
+        remove_perms = 0x20000, 
+        resolve_symlinks = 0x40000
     };
     
     ////////////////////////////////////////////////////////////////////////////

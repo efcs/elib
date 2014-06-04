@@ -128,8 +128,8 @@ namespace elib { namespace fs { inline namespace v1
     };                                                 // class directory_entry
     
     ////////////////////////////////////////////////////////////////////////////
-    inline directory_iterator const & 
-    begin(directory_iterator const & iter) noexcept
+    inline directory_iterator 
+    begin(directory_iterator iter) noexcept
     { 
         return iter; 
     }
@@ -258,8 +258,8 @@ namespace elib { namespace fs { inline namespace v1
     };                                     // class recursive_directory_iterator
     
     ////////////////////////////////////////////////////////////////////////////
-    inline recursive_directory_iterator const & 
-    begin(recursive_directory_iterator const & iter) noexcept
+    inline recursive_directory_iterator 
+    begin(recursive_directory_iterator iter) noexcept
     { 
         return iter; 
     }

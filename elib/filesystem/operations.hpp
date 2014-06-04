@@ -94,71 +94,6 @@ namespace elib { namespace fs { inline namespace v1
         return lhs = lhs ^ rhs;
     }
     
-    ////////////////////////////////////////////////////////////////////////////
-    enum class permissions_options
-    {
-        replace_bits = 0, 
-        add_bits = 1, 
-        remove_bits = 2, 
-        follow_symlinks = 4
-    };
-    
-    ////////////////////////////////////////////////////////////////////////////
-    constexpr permissions_options
-    operator~(permissions_options lhs) noexcept
-    {
-        return static_cast<permissions_options>(
-            ~ static_cast<int>(lhs) 
-          );
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    constexpr permissions_options 
-    operator&(permissions_options lhs, permissions_options rhs) noexcept
-    {
-        return static_cast<permissions_options>(
-            static_cast<int>(lhs) & static_cast<int>(rhs)
-          );
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    inline permissions_options & 
-    operator&=(permissions_options & lhs, permissions_options rhs) noexcept
-    {
-        return lhs = lhs & rhs;
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    constexpr permissions_options
-    operator|(permissions_options lhs, permissions_options rhs) noexcept
-    {
-        return static_cast<permissions_options>(
-            static_cast<int>(lhs) | static_cast<int>(rhs)
-          );
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    inline permissions_options & 
-    operator|=(permissions_options & lhs, permissions_options rhs) noexcept
-    {
-        return lhs = lhs | rhs;
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    constexpr permissions_options 
-    operator^(permissions_options lhs, permissions_options rhs) noexcept
-    {
-        return static_cast<permissions_options>(
-            static_cast<int>(lhs) ^ static_cast<int>(rhs)
-          );
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////
-    inline permissions_options & 
-    operator^=(permissions_options & lhs, permissions_options rhs) noexcept
-    {
-        return lhs = lhs ^ rhs;
-    }
 
     // operations handling is similar to the boost version
     // both except && no-except function signatures call a wrapper
@@ -228,11 +163,7 @@ namespace elib { namespace fs { inline namespace v1
                 std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
-        void permissions(
-            const path& p, perms prms
-          , permissions_options opts
-          , std::error_code *ec=nullptr
-          );
+        void permissions(const path& p, perms prms, std::error_code *ec=nullptr);
         
         ////////////////////////////////////////////////////////////////////////
         path read_symlink(const path& p, std::error_code *ec=nullptr);
@@ -529,20 +460,11 @@ namespace elib { namespace fs { inline namespace v1
     { detail::last_write_time(p, new_time, &ec); }
     
     ////////////////////////////////////////////////////////////////////////////
-    inline void permissions(
-        const path& p, perms prms
-      , permissions_options opts = permissions_options::replace_bits
-      )
-    { detail::permissions(p, prms, opts); }
-      
-    inline void permissions(const path& p, perms prms, std::error_code& ec) noexcept
-    { detail::permissions(p, prms, permissions_options::replace_bits, &ec); }
+    inline void permissions(path const & p, perms prms)
+    { detail::permissions(p, prms); }
     
-    inline void permissions(
-        path const & p, perms prms, permissions_options opts
-      , std::error_code & ec
-      )
-    { detail::permissions(p, prms, opts, &ec); }
+    inline void permissions(path const & p, perms prms, std::error_code & ec) noexcept
+    { detail::permissions(p, prms, &ec); }
       
     ////////////////////////////////////////////////////////////////////////////
     inline path read_symlink(const path& p)

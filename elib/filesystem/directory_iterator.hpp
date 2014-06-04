@@ -11,6 +11,7 @@
 # include <iterator>
 # include <stack>
 # include <system_error>
+# include <cstddef>
 
 # include <dirent.h>
 
@@ -58,8 +59,14 @@ namespace elib { namespace fs { inline namespace v1
 
     ////////////////////////////////////////////////////////////////////////////
     class directory_iterator
-      : public std::iterator<std::input_iterator_tag, directory_entry>
     {
+    public:
+        using value_type = directory_entry;
+        using difference_type = std::ptrdiff_t;
+        using pointer = directory_entry const *;
+        using reference = directory_entry const &;
+        using iterator_category = std::input_iterator_tag;
+        
     public:
     //ctor & dtor 
         directory_iterator() noexcept
@@ -142,8 +149,14 @@ namespace elib { namespace fs { inline namespace v1
     
     ////////////////////////////////////////////////////////////////////////////
     class recursive_directory_iterator
-      : public std::iterator<std::input_iterator_tag,  directory_entry>
     {
+    public:
+        using value_type = directory_entry;
+        using difference_type = std::ptrdiff_t;
+        using pointer = directory_entry const *;
+        using reference = directory_entry const &;
+        using iterator_category = std::input_iterator_tag;
+        
     public:
         // constructors and destructor
         recursive_directory_iterator() noexcept

@@ -680,9 +680,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
             throw filesystem_error("elib::fs::last_write_time", p, m_ec);
         } 
         else if (m_ec) {
-            return Clock::from_time_t(
-                static_cast<std::time_t>(-1)
-              );
+            return file_time_type::min();
         } else {
             return Clock::from_time_t(
                 static_cast<std::time_t>(st.st_mtime)

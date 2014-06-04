@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(dne_test)
     
     // with error code
     {
-        file_time_type expect = Clock::from_time_t((std::time_t)-1);
+        file_time_type expect = file_time_type::min();
         std::error_code ec;
         file_time_type const time = last_write_time(file, ec);
         BOOST_REQUIRE(ec);
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(read_time_test)
     scoped_test_env env;
     path const file = make_env_path("file1");
     python_create_file(file);
-    file_time_type bad_result = Clock::from_time_t((std::time_t)-1);
+    file_time_type bad_result = file_time_type::min();
     file_time_type expect_before = Clock::now() + std::chrono::seconds(1);
     file_time_type expect_after = expect_before - std::chrono::seconds(10);
     
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(write_time_test)
     scoped_test_env env;
     path const file = make_env_path("file1");
     python_create_file(file);
-    file_time_type const bad_result = Clock::from_time_t((std::time_t)-1);
+    file_time_type const bad_result = file_time_type::min();
     file_time_type const new_time = Clock::now() + std::chrono::seconds(100);
     
     // check old time

@@ -132,6 +132,14 @@ BOOST_AUTO_TEST_CASE(copy_assign_empty_to_empty_test)
     BOOST_CHECK(not t2.good());
 }
 
+BOOST_AUTO_TEST_CASE(copy_assign_empty_to_non_empty)
+{
+    opt const t1;
+    opt t2(1);
+    t2 = t1;
+    BOOST_CHECK(not t2.good());
+}
+
 BOOST_AUTO_TEST_CASE(copy_assign_non_empty_to_empty_test)
 {
     opt const t1(1);
@@ -157,6 +165,14 @@ BOOST_AUTO_TEST_CASE(move_assign_empty_to_empty_test)
     opt t2;
     t2 = static_cast<opt &&>(t1);
     BOOST_CHECK(not t2.good());
+}
+
+BOOST_AUTO_TEST_CASE(move_assign_empty_to_non_empty_test)
+{
+    opt t1;
+    opt t2(1);
+    t2 = static_cast<opt &&>(t1);
+    BOOST_REQUIRE(not t2.good());
 }
 
 BOOST_AUTO_TEST_CASE(move_assign_non_empty_to_empty_test)

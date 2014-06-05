@@ -10,6 +10,6 @@ then
     export CXXFLAGS="$CXXFLAGS -Wno-writable-strings -Wno-mismatched-tags"
 fi
 
-make configure
+make HEADER_TESTS=ON configure
 make -j2
 make check

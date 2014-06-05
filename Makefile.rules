@@ -55,7 +55,7 @@ redep:
 ################################################################################
 distclean: 
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) clean
-	$(CMD_VERB) rm -rf ./build ./bin 
+	$(CMD_VERB) rm -rf ./build ./bin ./test_coverage ./cov-int ./cov-int.tar.gz
 
 
 ################################################################################	

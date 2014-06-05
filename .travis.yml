@@ -8,7 +8,7 @@ before_install:
     - sudo apt-get update -qq
 # g++ even if CXX=clang, for libc++
     - sudo apt-cache search clang
-    - sudo apt-cache search libc\+
+    - sudo apt-cache search libc\\+
     - sudo apt-get install -qq cmake boost1.55 g++-4.8
 script: bash ./script.sh
 branches:

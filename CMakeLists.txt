@@ -156,7 +156,7 @@ if ( CXX_COMPILER_GCC )
    
     # check min version
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
-        message(FATAL_ERROR "Insufficient GCC Version")
+        message(FATAL_ERROR "Insufficient GCC Version ${CMAKE_CXX_COMPILER_VERSION}")
     endif()
     
     if(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9.0"

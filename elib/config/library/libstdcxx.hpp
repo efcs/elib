@@ -23,7 +23,8 @@
 # 
 # /** GCC claims they support ref qualifiers in 4.8.1
  * But they are buggy and cause compile errors */
-# if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 8) 
+# if (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ <= 8))  \
+    && !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
 #   define ELIB_CONFIG_NO_REF_QUALIFIERS 1
 # endif
 # 

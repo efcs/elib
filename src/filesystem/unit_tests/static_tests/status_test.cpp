@@ -338,6 +338,7 @@ BOOST_AUTO_TEST_CASE(directory_test)
     }
 }
 
+#if 0
 BOOST_AUTO_TEST_CASE(block_file_test)
 {
 
@@ -452,6 +453,7 @@ BOOST_AUTO_TEST_CASE(block_file_test)
         BOOST_REQUIRE(not ret);
     }
 }
+# endif
 
 BOOST_AUTO_TEST_CASE(character_file_test)
 {

@@ -5,5 +5,5 @@ then
 fi
 
 make configure
-make
+make -j2
 make check

@@ -177,7 +177,7 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
 
     set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
     if (DEFINED ENV{TRAVIS})
-        set(CXX_CLANG_FLAGS "$CXX_CLANG_FLAGS  -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast")
+        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS}  -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast")
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 

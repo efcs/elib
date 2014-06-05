@@ -742,38 +742,5 @@ BOOST_AUTO_TEST_CASE(trivial_value_or_test_rvalue)
 # endif
 
 
-BOOST_AUTO_TEST_CASE(make_optional_test)
-{
-    using opt = optional<std::string>;
-    std::string s("Hello");
-    
-    const opt o1(s);
-    const opt o2 = make_optional(s);
-    BOOST_CHECK(o2);
-    BOOST_CHECK(o1 == o2);
-}
-
-BOOST_AUTO_TEST_CASE(hash_test)
-{
-    using opt = optional<std::string>;
-    using opt_hash = std::hash<opt>;
-    using val_hash = std::hash<std::string>;
-    using result_type = opt_hash::result_type;
-    
-    // empty
-    {
-        const opt o;
-        const opt_hash h{};
-        BOOST_CHECK(h(o) == result_type{});
-    }
-    // non-empty
-    {
-        const std::string s("Hello");
-        const opt o(s);
-        const opt_hash oh{};
-        const val_hash vh{};
-        BOOST_CHECK(oh(o) == vh(s));
-    }
-}
 
 BOOST_AUTO_TEST_SUITE_END()

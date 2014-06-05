@@ -88,7 +88,7 @@ endif()
 ################################################################################
 # Compile source files into "Object Libraries"
 add_library(ObjLib OBJECT ${LIBRARY_SRC})
-set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS} ${LIBRARY_FLAGS}")
 
 
 ################################################################################

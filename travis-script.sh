@@ -5,7 +5,7 @@ then
 fi
 if [[ "$CXX" == "clang++" ]]
 then
-    sudo apt-get install llvm-3.5 clang-3.5
+    sudo apt-get install -qq clang-3.5
     export CXX="clang++-3.5"
     export CC="clang-3.5"
     export CXXFLAGS="$CXXFLAGS -Wno-writable-strings -Wno-mismatched-tags"

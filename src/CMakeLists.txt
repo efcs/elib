@@ -45,8 +45,7 @@ if (CONFIG_ALL_WARNINGS)
   elseif (CXX_COMPILER_CLANG)
         add_flags( WARNING_FLAGS
             -Weverything -Wno-c++98-compat 
-            -Wno-c++98-compat-pedantic -Wno-newline-eof
-            -Wno-mismatched-tags)
+            -Wno-c++98-compat-pedantic -Wno-newline-eof)
         add_flags(UNIT_TEST_FLAGS -Wno-global-constructors -Wno-exit-time-destructors)
   endif()
   

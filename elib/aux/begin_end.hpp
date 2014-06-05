@@ -67,7 +67,7 @@ namespace elib { namespace aux
         template <class T>
         get_begin_t<T> get_begin_impl(long)
         {
-            return ((get_begin_t<T>)nullptr);
+            return nullptr;
         }
         
         template <
@@ -89,7 +89,7 @@ namespace elib { namespace aux
         template <class T>
         get_end_t<T> get_end_impl(long)
         {
-            return ((get_end_t<T>)nullptr);
+            return nullptr;
         }
     }                                                       // namespace detail
    

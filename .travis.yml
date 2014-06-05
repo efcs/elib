@@ -10,7 +10,7 @@ before_install:
     - sudo apt-cache search clang
     - sudo apt-cache search libc\\+\\+
     - sudo apt-get install -qq cmake boost1.55 g++-4.8
-script: sh ./script.sh
+script: bash ./script.sh
 branches:
     only:
         - travis

@@ -2,8 +2,10 @@ language: cpp
 compiler: g++
 before_install:
     - sudo add-apt-repository -y ppa:boost-latest/ppa
-    - sudo apt-get update -q
-    - sudo apt-get install -y cmake boost1.55
+    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get update -qq
+# g++ even if CXX=clang, for libc++
+    - sudo apt-get install -qq cmake boost1.55 g++-4.8
 script: make UNIT_TESTS=OFF configure && make
 branches:
     only:

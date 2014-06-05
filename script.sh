@@ -6,3 +6,4 @@ fi
 
 make configure
 make
+make check

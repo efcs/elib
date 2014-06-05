@@ -683,6 +683,31 @@ BOOST_AUTO_TEST_CASE(emplace_test)
 }
 
 #if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
+BOOST_AUTO_TEST_CASE(trivial_deref_rvalue_test)
+{
+    using opt = elib::optional<int>;
+    opt t(1);
+    int x = *static_cast<opt &&>(t);
+    BOOST_CHECK(x == 1);
+}
+
+BOOST_AUTO_TEST_CASE(trivial_value_rvalue_test)
+{
+    using opt = elib::optional<int>;
+    opt t(1);
+    int x = static_cast<opt &&>(t).value();
+    BOOST_CHECK(x == 1);
+}
+
+BOOST_AUTO_TEST_CASE(trivial_value_rvalue_throw_test)
+{
+    using opt = elib::optional<int>;
+    opt t;
+    BOOST_CHECK_THROW(static_cast<opt &&>(t).value(), elib::bad_optional_access);
+}
+#endif
+
+#if !defined(ELIB_CONFIG_NO_REF_QUALIFIERS)
 BOOST_AUTO_TEST_CASE(non_trivial_value_or_test_rvalue)
 {
     using opt = elib::optional<std::string>;
@@ -716,234 +741,6 @@ BOOST_AUTO_TEST_CASE(trivial_value_or_test_rvalue)
 }
 # endif
 
-BOOST_AUTO_TEST_CASE(equality_test)
-{
-    const optional<int> o1;
-    const optional<int> o2(0);
-    const optional<int> o3(1);
-    
-    // identity compare
-    {
-        BOOST_CHECK( o1 == o1 );
-        BOOST_CHECK( o2 == o2 );
-        
-        BOOST_CHECK( not (o1 != o1) );
-        BOOST_CHECK( not (o2 != o2) );
-        
-        BOOST_CHECK( not (o1 < o1) );
-        BOOST_CHECK( not (o2 < o2) );
-        
-        BOOST_CHECK( not (o1 > o1) );
-        BOOST_CHECK( not (o2 > o2) );
-        
-        BOOST_CHECK( o1 <= o1 );
-        BOOST_CHECK( o2 <= o2 );
-        
-        BOOST_CHECK( o1 >= o1 );
-        BOOST_CHECK( o2 >= o2 );
-    }
-    // compare against empty
-    {
-        BOOST_CHECK( not (o1 == o2) );
-        BOOST_CHECK( not (o2 == o1) );
-        
-        BOOST_CHECK( o1 != o2 );
-        BOOST_CHECK( o2 != o1 );
-        
-        BOOST_CHECK( o1 < o2 );
-        BOOST_CHECK( not (o2 < o1) );
-        
-        BOOST_CHECK( not (o1 > o2) );
-        BOOST_CHECK( o2 > o1 );
-        
-        BOOST_CHECK( o1 <= o2 );
-        BOOST_CHECK( not (o2 <= o1) );
-        
-        BOOST_CHECK( not (o1 >= o2) );
-        BOOST_CHECK( o2 >= o1 );
-    }
-    // compare against different non-empty
-    {
-        BOOST_CHECK( not (o2 == o3) );
-        BOOST_CHECK( not (o3 == o2) );
-        
-        BOOST_CHECK( o2 != o3 );
-        BOOST_CHECK( o3 != o2 );
-        
-        BOOST_CHECK( o2 < o3 );
-        BOOST_CHECK( not (o3 < o2) );
-        
-        BOOST_CHECK( not (o2 > o3) );
-        BOOST_CHECK( o3 > o2 );
-        
-        BOOST_CHECK( o2 <= o3 );
-        BOOST_CHECK( not (o3 <= o2) );
-        
-        BOOST_CHECK( not (o2 >= o3) );
-        BOOST_CHECK( o3 >= o2 );
-    }
-    // nullopt compare empty
-    {
-        BOOST_CHECK( o1 == nullopt );
-        BOOST_CHECK( nullopt == o1 );
-        
-        BOOST_CHECK( not (o1 != nullopt) );
-        BOOST_CHECK( not (nullopt != o1) );
-        
-        BOOST_CHECK( not (o1 < nullopt) );
-        BOOST_CHECK( not (nullopt < o1) );
-        
-        BOOST_CHECK( not (o1 > nullopt) );
-        BOOST_CHECK( not (nullopt > o1) );
-        
-        BOOST_CHECK( o1 <= nullopt );
-        BOOST_CHECK( nullopt <= o1 );
-        
-        BOOST_CHECK( o1 >= nullopt );
-        BOOST_CHECK( nullopt >= o1 );
-    }
-    // nullopt compare not empty
-    {
-        BOOST_CHECK( not (o2 == nullopt) );
-        BOOST_CHECK( not (nullopt == o2) );
-        
-        BOOST_CHECK( o2 != nullopt );
-        BOOST_CHECK( nullopt != o2 );
-        
-        BOOST_CHECK( not (o2 < nullopt) );
-        BOOST_CHECK( nullopt < o2 );
-        
-        BOOST_CHECK( o2 > nullopt );
-        BOOST_CHECK( not (nullopt > o2) );
-        
-        BOOST_CHECK( not (o2 <= nullopt) );
-        BOOST_CHECK( nullopt <= o2 );
-        
-        BOOST_CHECK( o2 >= nullopt );
-        BOOST_CHECK( not (nullopt >= o2) );
-    }
-    // empty compare value
-    {
-        BOOST_CHECK( not (o1 == 0) );
-        BOOST_CHECK( not (0 == o1) );
-        
-        BOOST_CHECK( o1 != 0 );
-        BOOST_CHECK( 0 != o1 );
-        
-        BOOST_CHECK( o1 < 0 );
-        BOOST_CHECK( not (0 < o1) );
-        
-        BOOST_CHECK( not (o1 > 0) );
-        BOOST_CHECK( 0 > o1 );
-        
-        BOOST_CHECK( o1 <= 0 );
-        BOOST_CHECK( not (0 <= o1) );
-        
-        BOOST_CHECK( not (o1 >= 0) );
-        BOOST_CHECK( 0 >= o1 );
-    }
-    // non-empty compare with value
-    {
-        BOOST_CHECK( o2 == 0 );
-        BOOST_CHECK( 0 == o2 );
-        BOOST_CHECK( not (o2 == 1) );
-        BOOST_CHECK( not (1 == o2) );
-        
-        BOOST_CHECK( not (o2 != 0) );
-        BOOST_CHECK( not (0 != o2) );
-        BOOST_CHECK( o2 != 1 );
-        BOOST_CHECK( 1 != o2 );
-        
-        BOOST_CHECK( not (o2 < 0) );
-        BOOST_CHECK( not (0 < o2) );
-        BOOST_CHECK( -1 < o2 );
-        BOOST_CHECK( not (1 < o2) );
-        BOOST_CHECK( o2 < 1 );
-        BOOST_CHECK( not (o2 < -1) );
-        
-        BOOST_CHECK( not (o2 > 0) );
-        BOOST_CHECK( not (0 > o2) );
-        BOOST_CHECK( 1 > o2 );
-        BOOST_CHECK( not (-1 > o2) );
-        BOOST_CHECK( o2 > -1 );
-        BOOST_CHECK( not (o2 > 1) );
-        
-        BOOST_CHECK( o2 <= 0 );
-        BOOST_CHECK( 0 <= o2 );
-        BOOST_CHECK( -1 <= o2 );
-        BOOST_CHECK( not (1 <= o2) );
-        BOOST_CHECK( o2 <= 1 );
-        BOOST_CHECK( not (o2 <= -1) );
-        
-        BOOST_CHECK( o2 >= 0 );
-        BOOST_CHECK( 0 >= o2 );
-        BOOST_CHECK( 1 >= o2 );
-        BOOST_CHECK( not (-1 >= o2) );
-        BOOST_CHECK( o2 >= -1 );
-        BOOST_CHECK( not (o2 >= 1) );
-    }
-}
-
-BOOST_AUTO_TEST_CASE(swap_test)
-{
-    // non-init values
-    {
-        
-        optional<int> o1;
-        optional<int> o2;
-        o1.swap(o2);
-            
-        BOOST_CHECK(not o1);
-        BOOST_CHECK(not o2);
-            
-        swap(o1, o2);
-        BOOST_CHECK(not o1);
-        BOOST_CHECK(not o2);
-    }
-    // one init value
-    {
-        optional<int> o1;
-        BOOST_CHECK(not o1);
-        
-        optional<int> o2(1);
-        BOOST_CHECK(o2);
-        
-        o1.swap(o2);
-        BOOST_CHECK(o1);
-        BOOST_CHECK(not o2);
-        BOOST_REQUIRE_NO_THROW(o1.value());
-        BOOST_CHECK(*o1 == 1);
-        
-        swap(o1, o2);
-        BOOST_CHECK(not o1);
-        BOOST_CHECK(o2);
-        BOOST_REQUIRE_NO_THROW(o2.value());
-        BOOST_CHECK(*o2 == 1);
-    }
-    // both init
-    {
-        optional<int> o1(1);
-        optional<int> o2(2);
-        BOOST_CHECK(o1);
-        BOOST_CHECK(o2);
-        
-        o1.swap(o2);
-        BOOST_CHECK(o1);
-        BOOST_CHECK(o2);
-        BOOST_REQUIRE_NO_THROW(o1.value());
-        BOOST_REQUIRE_NO_THROW(o2.value());
-        BOOST_CHECK(*o1 == 2);
-        BOOST_CHECK(*o2 == 1);
-        
-        swap(o1, o2);
-        BOOST_CHECK(o1);
-        BOOST_CHECK(o2);
-        BOOST_REQUIRE_NO_THROW(o1.value());
-        BOOST_REQUIRE_NO_THROW(o2.value());
-        BOOST_CHECK(*o1 == 1);
-        BOOST_CHECK(*o2 == 2);
-    }
-}
 
 BOOST_AUTO_TEST_CASE(make_optional_test)
 {

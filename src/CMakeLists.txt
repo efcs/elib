@@ -83,18 +83,35 @@ if (CONFIG_ENABLE_EXPERIMENTAL)
   include_library_if(ELIB_WEB_SOURCE       experimental/web/build.cmake      )
 endif()
 
+################################################################################
+##                               Objects
+################################################################################
+# Compile source files into "Object Libraries"
+add_library(ObjLib OBJECT ${LIBRARY_SRC})
+set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+
 
 ################################################################################
 ##                             Libraries
 ################################################################################
-add_library(elib SHARED ${LIBRARY_SRC})
-set_target_properties(elib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
+add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
 target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
+target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 
 # Installation information
 install(TARGETS elib LIBRARY DESTINATION lib)
+install(TARGETS elib_static ARCHIVE DESTINATION lib)
 install(DIRECTORY ${ELIB_ROOT_PATH}/elib DESTINATION include)
   
+################################################################################
+#
+################################################################################
+if (CONFIG_HEADER_TESTS)
+    add_library(HeaderTestLib OBJECT ${HEADER_TEST_SRC})
+    set_target_properties(HeaderTestLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+endif()
+
 
 ################################################################################
 ##                            Unit Tests
@@ -106,11 +123,15 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
-	
+    
 include_directories(${Boost_INCLUDE_DIRS})
 set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
-add_executable(elib_test_shared ${UNIT_TEST_SRC} unit_test_main.cpp )
+add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
+set_target_properties(TestObj PROPERTIES COMPILE_FLAGS "${UNIT_TEST_FLAGS}")
+add_executable(elib_test_static $<TARGET_OBJECTS:TestObj> )
+add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj> )
+target_link_libraries(elib_test_static elib_static ${ELIB_TEST_LINK_FLAGS})
 target_link_libraries(elib_test_shared elib ${ELIB_TEST_LINK_FLAGS})
          
 endif()

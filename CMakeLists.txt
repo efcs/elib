@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.7)
+make_minimum_required (VERSION 2.8.8)
 
 include(macros.cmake)
 
@@ -154,6 +154,11 @@ endif()
 ################################################################################
 if ( CXX_COMPILER_GCC )
    
+    # check min version
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
+        message(WARNING "Insufficient GCC Version")
+    endif()
+    
     if(CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL "4.9.0"
         OR CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "4.9.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fdiagnostics-color=auto ")
@@ -170,7 +175,7 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
         message(FATAL_ERROR "Insufficient Clang Version for C++1y")
     endif()
 
-    set(CXX_CLANG_FLAGS " -ferror-limit=3" )
+    set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 
     string(REPLACE " " ";" CXX_FLAGS_LIST ${CMAKE_CXX_FLAGS})

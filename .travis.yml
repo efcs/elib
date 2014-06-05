@@ -13,7 +13,7 @@ before_install:
     - sudo apt-add-repository -y ppa:kalakris/cmake
     - sudo apt-get update -qq
     - sudo apt-cache search cmake
-    - sudo apt-get install -qq boost1.55 g++-4.8 llvm-3.5 clang-3.5 cmake
+    - sudo apt-get install -qq boost1.55 g++-4.8  cmake
     - cmake --version
 script: bash ./script.sh
 branches:

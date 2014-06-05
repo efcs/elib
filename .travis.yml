@@ -15,7 +15,7 @@ before_install:
     - sudo apt-cache search cmake
     - sudo apt-get install -qq boost1.55 g++-4.8  cmake
     - cmake --version
-script: bash ./script.sh
+script: bash ./travis-script.sh
 branches:
     only:
         - travis

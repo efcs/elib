@@ -58,7 +58,7 @@ if (CONFIG_ALL_WARNINGS)
   
 endif()
 
-set(LIBRARY_FLAGS "${LIBRARY_FLAGS} ${WARNING_FLAGS}")
+set(LIBRARY_FLAGS "${WARNING_FLAGS} ${LIBRARY_FLAGS}")
 
 ################################################################################
 ##                             Library Parts

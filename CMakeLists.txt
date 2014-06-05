@@ -175,7 +175,10 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
         message(FATAL_ERROR "Insufficient Clang Version for C++1y")
     endif()
 
-    set(CXX_CLANG_FLAGS " -ferror-limit=3  -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast" )
+    set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
+    if (DEFINED ENV{TRAVIS})
+        set(CXX_CLANG_FLAGS "$CXX_CLANG_FLAGS  -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast")
+    endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 
     string(REPLACE " " ";" CXX_FLAGS_LIST ${CMAKE_CXX_FLAGS})

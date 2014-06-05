@@ -247,8 +247,6 @@ namespace elib
           : base_type(in_place, il, elib::forward<Args>(args)...)
         {}
         
-        ////////////////////////////////////////////////////////////////////////
-        ~optional() = default;
         
         ////////////////////////////////////////////////////////////////////////
         optional & operator=(nullopt_t) noexcept
@@ -593,9 +591,6 @@ namespace elib
         {}
         
         explicit optional(in_place_t, T &&)  = delete;
-        
-        ////////////////////////////////////////////////////////////////////////
-        ~optional() = default;
         
         ////////////////////////////////////////////////////////////////////////
         optional & operator=(nullopt_t) noexcept

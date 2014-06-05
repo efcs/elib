@@ -4,5 +4,5 @@ then
     export CC="gcc-4.8"
 fi
 
-make UNIT_TESTS=OFF configure
+make configure
 make

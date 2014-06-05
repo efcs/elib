@@ -7,6 +7,7 @@ if [[ "$CXX" == "clang++" ]]
 then
     export CXX="clang++-3.5"
     export CC="clang-3.5"
+    export CXXFLAGS="$CXXFLAGS -Wno-writable-strings -Wno-mismatched-tags"
 fi
 
 make configure

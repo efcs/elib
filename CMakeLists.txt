@@ -166,6 +166,9 @@ if ( CXX_COMPILER_GCC )
     endif()
 
     set(CXX_GCC_FLAGS " -fmax-errors=5 " )
+    if (DEFINED ENV{TRAVIS})
+        set(CXX_GCC_FLAGS "${CXX_GCC_FLAGS} -ferror")
+    endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
 
 elseif( CXX_COMPILER_CLANG ) ###################################################
@@ -175,8 +178,9 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
     endif()
 
     set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
+
     if (DEFINED ENV{TRAVIS})
-        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS}  -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast")
+        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS} -ferror -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast")
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 

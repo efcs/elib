@@ -1,3 +1,4 @@
+set -e
 if [[ "$CXX" == "g++" ]]
 then
     export CXX="g++-4.8"

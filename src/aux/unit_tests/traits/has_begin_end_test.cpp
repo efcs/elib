@@ -102,9 +102,7 @@ BOOST_AUTO_TEST_CASE(has_begin_member_iterable_test)
 BOOST_AUTO_TEST_CASE(has_begin_array_iterable_test)
 {
     ELIB_STATIC_ASSERT(has_begin<array_iterable>::value);
-    ELIB_STATIC_ASSERT(has_begin<array_iterable const>::value);
     ELIB_STATIC_ASSERT(has_begin<array_iterable &>::value);
-    ELIB_STATIC_ASSERT(has_begin<array_iterable const &>::value);
     BOOST_CHECK(true);
 }
 
@@ -156,9 +154,7 @@ BOOST_AUTO_TEST_CASE(has_end_member_iterable_test)
 BOOST_AUTO_TEST_CASE(has_end_array_iterable_test)
 {
     ELIB_STATIC_ASSERT(has_end<array_iterable>::value);
-    ELIB_STATIC_ASSERT(has_end<array_iterable const>::value);
     ELIB_STATIC_ASSERT(has_end<array_iterable &>::value);
-    ELIB_STATIC_ASSERT(has_end<array_iterable const &>::value);
     BOOST_CHECK(true);
 }
 

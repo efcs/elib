@@ -67,7 +67,6 @@ option(ELIB_PP_SOURCE "Build preprocessor library" ON)
 
 # Experimental libraries
 option(ELIB_CONTRACT_ASSERT_SOURCE "Build contract assert source" ON)
-option(ELIB_RANGES_SOURCE  "Build ranges library (experimental)" ON)
 option(ELIB_WEB_SOURCE "Build web library (experimental)" ON)
 
 ################################################################################

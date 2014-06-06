@@ -79,7 +79,6 @@ include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
 
 if (CONFIG_ENABLE_EXPERIMENTAL)
   include_library_if(ELIB_CONTRACT_ASSERT_SOURCE  experimental/contract_assert/build.cmake)
-  include_library_if(ELIB_RANGES_SOURCE    experimental/ranges/build.cmake   )
   include_library_if(ELIB_WEB_SOURCE       experimental/web/build.cmake      )
 endif()
 

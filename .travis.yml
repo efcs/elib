@@ -21,4 +21,7 @@ before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq boost1.55 g++-4.8  cmake
 script: bash ./travis-script.sh
+notifications:
+    email:
+        - build@efcs.ca
 

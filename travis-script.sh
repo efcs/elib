@@ -13,4 +13,4 @@ fi
 
 make HEADER_TESTS=ON configure
 make -j2
-make check_all
+make check

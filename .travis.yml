@@ -19,7 +19,7 @@ before_install:
     # Hurray for random cmake ppa. This gives >= 2.8.8
     - sudo apt-add-repository -y ppa:kalakris/cmake
     - sudo apt-get update -qq
-    - sudo apt-get install -qq boost g++-4.8  cmake
+    - sudo apt-get install -qq libboost-dev g++-4.8  cmake
 script: bash ./travis-script.sh
 notifications:
     email:

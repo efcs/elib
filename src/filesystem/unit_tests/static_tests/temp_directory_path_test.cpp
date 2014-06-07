@@ -1,6 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <elib/config.hpp>
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include <stdlib.h> /* for putenv */
@@ -8,8 +9,10 @@
 using namespace elib::fs;
 
 // putenv takes a char* (not const char*) so suppress the warning
-#if defined(__clang__)
+#if defined(__clang__) && ELIB_COMPILER_VERSION < 30500L
 # pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
+# elif defined(__clang__)
+# pragma clang diagnostic ignored "-Wwritable-strings"
 # elif defined(__GNUC__)
 # pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif

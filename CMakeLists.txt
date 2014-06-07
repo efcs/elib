@@ -104,8 +104,8 @@ set( CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG" )
 set( CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG" )
 set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DDELIB_WARN_ON " )
-set( CMAKE_C_FLAGS_TEST "-g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors --coverage")
-set( CMAKE_CXX_FLAGS_TEST "-g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors --coverage")
+set( CMAKE_C_FLAGS_TEST "-v -g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors --coverage")
+set( CMAKE_CXX_FLAGS_TEST "-v -g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors --coverage")
 
 
 if (DEFINED ENV{ELIB_CMAKE_OPTIONS})
@@ -167,7 +167,7 @@ if ( CXX_COMPILER_GCC )
 
     set(CXX_GCC_FLAGS " -fmax-errors=5 " )
     if (DEFINED ENV{TRAVIS})
-        set(CXX_GCC_FLAGS "${CXX_GCC_FLAGS} -ferror")
+        set(CXX_GCC_FLAGS "${CXX_GCC_FLAGS} -Werror")
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
 
@@ -180,7 +180,7 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
     set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
 
     if (DEFINED ENV{TRAVIS})
-        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS} -ferror -Wno-writable-strings -Wno-mismatched-tags -Wno-old-style-cast")
+        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS} -Werror -Wno-mismatched-tags -Wno-old-style-cast")
     endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 

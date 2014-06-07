@@ -100,7 +100,7 @@ namespace elib
                 std::unique_ptr<any_storage_type, Dtor> tmp(
                     a.allocate(1), Dtor(a, 1)
                   );
-                ::new ((void*)tmp.get()) any_storage_type(
+                ::new (static_cast<void*>(tmp.get())) any_storage_type(
                     m_pair.first(), Alloc(a)
                   );
                 return tmp.release();
@@ -187,7 +187,7 @@ namespace elib
           : m_store_ptr(nullptr)
         {
             if (other.m_stored_locally()) {
-                m_store_ptr = other.m_store_ptr->copy((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->copy(static_cast<void*>(&m_buff));
             }
             else if (other.m_stored_remotely()) {
                 m_store_ptr = other.m_store_ptr->copy();
@@ -199,7 +199,7 @@ namespace elib
           : m_store_ptr(nullptr)
         {
             if (other.m_stored_locally()) {
-                m_store_ptr = other.m_store_ptr->move((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->move(static_cast<void*>(&m_buff));
             } 
             else if (other.m_stored_remotely()) {
                 m_store_ptr = other.m_store_ptr;
@@ -219,7 +219,7 @@ namespace elib
             using Storage = any_storage_type<StoredValue>;
             
             if (store_locally<Storage>::value) {
-                m_store_ptr = ::new ((void*)&m_buff) Storage(
+                m_store_ptr = ::new (static_cast<void*>(&m_buff)) Storage(
                     elib::forward<ValueType>(value)
                   );
             } else {
@@ -227,7 +227,7 @@ namespace elib
                 using Dtor = allocator_destructor<Alloc>;
                 Alloc a;
                 std::unique_ptr<Storage, Dtor> tmp(a.allocate(1), Dtor(a, 1));
-                ::new ((void*)tmp.get()) Storage(
+                ::new (static_cast<void*>(tmp.get())) Storage(
                     elib::forward<ValueType>(value)
                   , typename Storage::allocator_type(a)
                   );
@@ -255,7 +255,7 @@ namespace elib
             using Storage = any_storage_type<StoredValue, StoredAlloc>;
             
             if (store_locally<Storage>::value) {
-                m_store_ptr = ::new ((void*)&m_buff) Storage(
+                m_store_ptr = ::new (static_cast<void*>(&m_buff)) Storage(
                     elib::forward<ValueType>(value)
                   , StoredAlloc(alloc)
                   );
@@ -268,7 +268,7 @@ namespace elib
                 std::unique_ptr<Storage, Dtor> tmp(
                     a.allocate(1), Dtor(a, 1)
                   );
-                ::new ((void*)tmp.get()) Storage(
+                ::new (static_cast<void*>(tmp.get())) Storage(
                     elib::forward<ValueType>(value)
                   , StoredAlloc(a)
                   );
@@ -291,7 +291,7 @@ namespace elib
         {
             clear();
             if (other.m_stored_locally()) {
-                m_store_ptr = other.m_store_ptr->move((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->move(static_cast<void*>(&m_buff));
             } 
             else if (other.m_stored_remotely()) {
                 m_store_ptr = other.m_store_ptr;
@@ -330,35 +330,36 @@ namespace elib
             if (m_stored_locally() && other.m_stored_locally()) {
                 // move our value to tmp_buff, destroy our value
                 any_buffer_t tmp_buff;
-                any_storage_base* tmp_ptr = m_store_ptr->move((void*)&tmp_buff);
+                any_storage_base* tmp_ptr = 
+                    m_store_ptr->move(static_cast<void*>(&tmp_buff));
                 m_store_ptr->destroy();
                 // move other's value in, destroy other
-                m_store_ptr = other.m_store_ptr->move((void*)&m_buff);
+                m_store_ptr = other.m_store_ptr->move(static_cast<void*>(&m_buff));
                 other.m_store_ptr->destroy();
                 // move tmp_buff into other. destroy tmp_buff
-                other.m_store_ptr = tmp_ptr->move((void*)&other.m_buff);
+                other.m_store_ptr = tmp_ptr->move(static_cast<void*>(&other.m_buff));
                 tmp_ptr->destroy();
             } 
             // Our object is local, other's object is remote (or null)
             else if (m_stored_locally()) {
                 // move our object into others buffer. 
                 // other.m_store_base remains unchanged.
-                m_store_ptr->move((void*)&other.m_buff);
+                m_store_ptr->move(static_cast<void*>(&other.m_buff));
                 m_store_ptr->destroy();
                 // steal other's remote object
                 m_store_ptr = other.m_store_ptr;
                 // point other at local object
                 other.m_store_ptr = static_cast<any_storage_base*>(
-                    (void*)&other.m_buff
+                    static_cast<void*>(&other.m_buff)
                   );
             }
             // Our object is remote (or null), other's object is local
             else if (other.m_stored_locally()) {
-                other.m_store_ptr->move((void*)&m_buff);
+                other.m_store_ptr->move(static_cast<void*>(&m_buff));
                 other.m_store_ptr->destroy();
                 other.m_store_ptr = m_store_ptr;
                 m_store_ptr = static_cast<any_storage_base*>(
-                    (void*)&m_buff
+                    static_cast<void*>(&m_buff)
                   );
             // Both objects are remote.
             } else {               

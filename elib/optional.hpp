@@ -496,7 +496,7 @@ namespace elib
 # endif
         {
             ELIB_ASSERT( not m_init() );
-            ::new ((void*)m_ptr()) T(elib::forward<Args>(args)...);
+            ::new (static_cast<void*>(m_ptr())) T(elib::forward<Args>(args)...);
             base_type::init = true;
         }
         
@@ -507,7 +507,7 @@ namespace elib
 # endif
         {
             ELIB_ASSERT( not m_init() );
-            ::new ((void*)m_ptr()) T(il, elib::forward<Args>(args)...);
+            ::new (static_cast<void*>(m_ptr())) T(il, elib::forward<Args>(args)...);
             base_type::init = true;
         }
         

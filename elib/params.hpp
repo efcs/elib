@@ -381,7 +381,7 @@ namespace elib { namespace params { inline namespace v1
         using at_impl = 
             decltype(
                 at_impl_1_< typename fill<N, decltype(nullptr)>::type >
-                    ::eval( (aux::no_decay<Args>*)nullptr... )
+                    ::eval( static_cast<aux::no_decay<Args>*>(nullptr)... )
             );
 
     }                                               // namespace detail

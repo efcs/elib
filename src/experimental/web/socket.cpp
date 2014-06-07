@@ -284,7 +284,7 @@ namespace elib { namespace web
             return ret;
         }
         
-# if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
@@ -303,7 +303,11 @@ namespace elib { namespace web
             ELIB_RETHROW_BLOCK_END()
             
             ::socklen_t len = sizeof(::sockaddr_in);
-            int ret = ::getpeername(s.raw_socket(), (::sockaddr*)&in, &len);
+            int ret = ::getpeername(
+                s.raw_socket()
+              , reinterpret_cast<::sockaddr*>(&in)
+              , &len
+              );
             
             if (ret == -1) 
             {
@@ -314,11 +318,12 @@ namespace elib { namespace web
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic pop
 #endif
         
-# if defined(__GNUC__)
+        
+#if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
@@ -337,7 +342,11 @@ namespace elib { namespace web
             ELIB_RETHROW_BLOCK_END()
             
             ::socklen_t len = sizeof(::sockaddr_in);
-            int ret = ::getsockname(s.raw_socket(), (::sockaddr*)&in, &len);
+            int ret = ::getsockname(
+                s.raw_socket()
+              , reinterpret_cast<::sockaddr*>(&in)
+              , &len
+              );
             
             if (ret == -1)
             {
@@ -348,8 +357,9 @@ namespace elib { namespace web
             ELIB_ASSERT(len <= sizeof(::sockaddr_in));
             return in;
         }
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic pop
 #endif
+
     }                                                       // namespace detail
 }}                                                       // namespace elib::web

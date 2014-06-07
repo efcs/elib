@@ -404,13 +404,19 @@ namespace elib { namespace web
         template <class SockAddr>
         bool bind(SockAddr const & addr) noexcept
         {
-            return m_bind((const sockaddr*)elib::addressof(addr), sizeof(SockAddr));
+            return m_bind(
+                reinterpret_cast<const sockaddr*>(elib::addressof(addr))
+              , sizeof(SockAddr)
+              );
         }
         
         template <class SockAddr>
         bool connect(SockAddr const & addr) noexcept
         {
-            return m_connect((const sockaddr*)elib::addressof(addr), sizeof(SockAddr));
+            return m_connect(
+                reinterpret_cast<const sockaddr*>(elib::addressof(addr))
+              , sizeof(SockAddr)
+              );
         }
         
         bool listen(int backlog) noexcept;
@@ -479,14 +485,20 @@ namespace elib { namespace web
     socket accept(socket const & s, SockAddr & addr)
     {
         socklen_t m_len = sizeof(SockAddr);
-        return detail::accept_impl(s, (sockaddr*)elib::addressof(addr), &m_len);
+        return detail::accept_impl(s
+          , reinterpret_cast<sockaddr*>(elib::addressof(addr))
+          , &m_len
+          );
     }
     
     template <class SockAddr>
     socket accept(socket const & s, SockAddr & addr, socklen_t & len)
     {
         len = sizeof(SockAddr);
-        return detail::accept_impl(s, (sockaddr*)elib::addressof(addr), &len);
+        return detail::accept_impl(s
+          , reinterpret_cast<sockaddr*>(elib::addressof(addr))
+          , &len
+          );
     }
     
     inline socket accept(socket const & s, std::error_code & ec) noexcept
@@ -498,7 +510,10 @@ namespace elib { namespace web
     socket accept(socket const & s, SockAddr & addr, std::error_code & ec) noexcept
     {
         socklen_t m_len = sizeof(SockAddr);
-        return detail::accept_impl(s, (sockaddr*)elib::addressof(addr), &m_len, &ec);
+        return detail::accept_impl(s
+          , reinterpret_cast<sockaddr*>(elib::addressof(addr))
+          , &m_len, &ec
+          );
     }
     
     template <class SockAddr>
@@ -506,7 +521,10 @@ namespace elib { namespace web
                 , std::error_code & ec) noexcept
     {
         len = sizeof(SockAddr);
-        return detail::accept_impl(s, (sockaddr*)elib::addressof(addr), &len, &ec);
+        return detail::accept_impl(s
+          , reinterpret_cast<sockaddr*>(elib::addressof(addr))
+          , &len, &ec
+          );
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -658,9 +676,10 @@ namespace elib { namespace web
     send_to(socket const & s, std::vector<char> const & v, SockAddr const & addr)
     {
         return detail::send_to_impl(
-                      s, v, msg_flags::none
-                    , (const sockaddr*)elib::addressof(addr), sizeof(SockAddr)
-                );
+            s, v, msg_flags::none
+          , reinterpret_cast<const sockaddr*>(elib::addressof(addr))
+          , sizeof(SockAddr)
+          );
     }
     
     template <class SockAddr>
@@ -669,9 +688,10 @@ namespace elib { namespace web
           , SockAddr const & addr)
     {
         return detail::send_to_impl(
-                      s, v, f
-                    , (const sockaddr*)elib::addressof(addr), sizeof(SockAddr)
-                );
+            s, v, f
+          , reinterpret_cast<const sockaddr*>(elib::addressof(addr))
+          , sizeof(SockAddr)
+          );
     }
     
     template <class SockAddr>
@@ -680,10 +700,10 @@ namespace elib { namespace web
           , std::error_code & ec) noexcept
     {
         return detail::send_to_impl(
-                    s, v, msg_flags::none
-                  , (const sockaddr*)elib::addressof(addr), sizeof(SockAddr)
-                  , &ec
-            );
+            s, v, msg_flags::none
+          , reinterpret_cast<const sockaddr*>(elib::addressof(addr))
+          , sizeof(SockAddr), &ec
+          );
     }
     
     template <class SockAddr>
@@ -692,10 +712,10 @@ namespace elib { namespace web
           , SockAddr const & addr, std::error_code & ec) noexcept
     {
         return detail::send_to_impl(
-                    s, v, f
-                  , (const sockaddr*)elib::addressof(addr), sizeof(SockAddr)
-                  , &ec
-            );
+            s, v, f
+          , reinterpret_cast<const sockaddr*>(elib::addressof(addr))
+          , sizeof(SockAddr), &ec
+          );
     }
     
     ////////////////////////////////////////////////////////////////////////////

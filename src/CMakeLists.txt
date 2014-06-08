@@ -117,6 +117,17 @@ endif()
 ################################################################################
 if(CONFIG_UNIT_TESTS) 
 
+# Check for a python interpreter the first time we run configuration.
+if (NOT DEFINED CONFIGURATION_DONE)
+    include (FindPythonInterp)
+    if (NOT PYTHONINTERP_FOUND)
+        message(FATAL_ERROR
+            "Cannot find python interpreter. 
+            Python is required to run the test suite."
+           )
+    endif()
+endif() 
+
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)

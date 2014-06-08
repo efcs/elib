@@ -1,9 +1,10 @@
 # Elib
 
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
-It can be found at github.com/efcs/elib
+It can be found at github.com/efcs/elib. The homepage for elib is http://elib.efcs.ca
+
 WARNING: This file is update very infrequently
-LAST UPDATE: 31/05/2014
+LAST UPDATE: 07/06/2014
 
 ## Platform Support
 Elib currently only supports Linux and OS X. Although most libraries would
@@ -11,7 +12,12 @@ build on Windows (See Library Summary for specifics), the build system has
 no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
 
 ## Compiler Support.
-Elib supports GCC 4.8 and 4.9. It also supports LLVM/Clang 3.4 and libc++.
+Elib supports the following compiler/library configurations:
+ - GCC 4.8
+ - GCC 4.9
+ - Clang 3.4 (with/without libc++)
+ - Clang 3.5 trunk (with/without libc++)
+
 
 ## Library Summary
 
@@ -97,17 +103,12 @@ PP
 : A library that provides macros for working with the preprocessor
 
 
+#### Experimental
+
 Web
 : C++ Socket, HTTP parsing and other Web/Network utilities.
   stripped from a class project
   (No Windows Support)
-
-
-#### Experimental
-
-Ranges
-: An implementation of the current std::range proposal as well as
-  algorithm adapters to work on ranges.
 
 ## Building
 
@@ -124,12 +125,11 @@ Requirements (Library specific):
     Native library used by <mutex> (pthread on linux)
 
   Filesystem:
-    POSIX headers
-    Boost System (Unit Test Only)
-    Boost Filesystem (Unit Test Only)
+    POSIX support
+    (Python)
 
   Web:
-    POSIX thread headers
+    POSIX support
     Support for <regex>
 
 
@@ -171,10 +171,6 @@ Requirements (Library specific):
 : build the utility library
   Default: ON
 
-  * ELIB_CMD_OPTIONS_SOURCE
-: build command line parser library
-  Default: ON
-
   * ELIB_CONTAINER_SOURCE
 : build containers
   Default: ON
@@ -213,10 +209,6 @@ Requirements (Library specific):
 
   * ELIB_PP_SOURCE
 : build preprocessor library
-  Default: ON
-
-  * ELIB_RANGES_SOURCE
-: Build the ranges library
   Default: ON
 
   * ELIB_WEB_SOURCE

@@ -29,12 +29,11 @@ option(CONFIG_ELIB_ASSERT_CONFIG
 
 # elib is a open source project that uses coverity scan for defect detection.
 # Certain parts of elib are unsupported on otherwise buggy for EDG.
-# This configures the enviroment to only shouw EDG what it can handle.
+# This configures the enviroment to only show EDG what it can handle.
 option(CONFIG_COVERITY_SCAN
       "Setup build for when doing a build with coverity scan" OFF)
 
 # Unit tests require the boost test library.
-# And a version that also uses the configured standard library
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
 
 # Source files in header only source directories are uneeded.
@@ -91,6 +90,9 @@ if (CONFIG_COVERITY_SCAN)
     config_message( STATUS "Configuring for Coverity Scan")
     add_definitions( -DELIB_CONFIG_COVERITY_SCAN )
 endif()
+
+
+
 
 ################################################################################
 #                                Build Type Config
@@ -166,9 +168,6 @@ if ( CXX_COMPILER_GCC )
     endif()
 
     set(CXX_GCC_FLAGS " -fmax-errors=5 " )
-    if (DEFINED ENV{TRAVIS})
-        set(CXX_GCC_FLAGS "${CXX_GCC_FLAGS} -Werror")
-    endif()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_GCC_FLAGS}")
 
 elseif( CXX_COMPILER_CLANG ) ###################################################
@@ -179,9 +178,13 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
 
     set(CXX_CLANG_FLAGS " -ferror-limit=3 " )
 
+    # The current TRAVIS enviroment for clang and libstdc++ emits this
+    # warning for std::hash since libstdc++ declares std::hash as a class
+    # not a struct.
     if (DEFINED ENV{TRAVIS})
-        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS} -Werror -Wno-mismatched-tags")
+        set(CXX_CLANG_FLAGS "${CXX_CLANG_FLAGS} -Wno-mismatched-tags")
     endif()
+
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_CLANG_FLAGS}")
 
     string(REPLACE " " ";" CXX_FLAGS_LIST ${CMAKE_CXX_FLAGS})
@@ -193,15 +196,31 @@ elseif( CXX_COMPILER_CLANG ) ###################################################
 endif()
 
 ################################################################################
+#                              Environment Configuration
+################################################################################
+
+# Travis CI enviroment specific configuration.
+if (DEFINED ENV{TRAVIS})
+    config_message(STATUS "Configuring for Environment: Travis")
+    # On Travis, warnings should cause the build to fail.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+endif()
+
+################################################################################
 #                          Build & Installation Config
 ################################################################################
 
+# Output all the binaries in ./bin
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin) 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
-################################################################################
+# The Guts. The build targets are in src/CMakelists.txt
 add_subdirectory(src)
 
-################################################################################
+# NOTE: This should be the last line of this file.
+# When reconfiguring CMake some commands are noisy. We only need information
+# about build configuration to be printed the first time cmake is run. 
+# This variable is put in the cache to signal that CMake has completed its
+# configuration step.
 set(CONFIGURATION_DONE ON CACHE BOOL "Configuration has been done" FORCE)

@@ -1,9 +1,4 @@
 # Author: Eric Fiselier
-# Compiler: GCC/Clang
-# 
-# I apologize to windows users, I have built it this project on windows,
-# but the project configurations in this make file DO NOT WORK and they 
-# must be commented out.
 
 set(LIBRARY_FLAGS "")
 set(WARNING_FLAGS "")
@@ -23,8 +18,7 @@ add_flags(LIBRARY_FLAGS -fPIC)
 if (CONFIG_ALL_WARNINGS)
 
     add_flags( WARNING_FLAGS
-    -Wall  -pedantic  
-    -pedantic-errors -Wextra  -Wall -Waggregate-return -Wcast-align 
+    -pedantic-errors  -Waggregate-return -Wcast-align 
     -Wcast-qual  -Wchar-subscripts  -Wcomment -Wconversion 
     -Wdisabled-optimization -Wfloat-equal  -Wformat  -Wformat=2 
     -Wformat-nonliteral -Wformat-security  -Wformat-y2k -Wimport  -Winit-self  
@@ -78,8 +72,10 @@ include_library_if(ELIB_PP_SOURCE          preprocessor/build.cmake )
 
 
 if (CONFIG_ENABLE_EXPERIMENTAL)
-  include_library_if(ELIB_CONTRACT_ASSERT_SOURCE  experimental/contract_assert/build.cmake)
-  include_library_if(ELIB_WEB_SOURCE       experimental/web/build.cmake      )
+  include_library_if(ELIB_CONTRACT_ASSERT_SOURCE 
+                     experimental/contract_assert/build.cmake)
+  include_library_if(ELIB_WEB_SOURCE
+                     experimental/web/build.cmake)
 endif()
 
 ################################################################################
@@ -104,11 +100,11 @@ install(TARGETS elib_static ARCHIVE DESTINATION lib)
 install(DIRECTORY ${ELIB_ROOT_PATH}/elib DESTINATION include)
   
 ################################################################################
-#
+#                            Header Tests
 ################################################################################
 if (CONFIG_HEADER_TESTS)
     add_library(HeaderTestLib OBJECT ${HEADER_TEST_SRC})
-    set_target_properties(HeaderTestLib PROPERTIES COMPILE_FLAGS "${LIBRARY_FLAGS}")
+    set_target_properties(HeaderTestLib PROPERTIES COMPILE_FLAGS "-fsyntax-only")
 endif()
 
 
@@ -117,6 +113,7 @@ endif()
 ################################################################################
 if(CONFIG_UNIT_TESTS) 
 
+################################### PYTHON #####################################
 # Check for a python interpreter the first time we run configuration.
 if (NOT DEFINED CONFIGURATION_DONE)
     include (FindPythonInterp)
@@ -128,15 +125,16 @@ if (NOT DEFINED CONFIGURATION_DONE)
     endif()
 endif() 
 
+################################### BOOST ######################################
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
-    
 include_directories(${Boost_INCLUDE_DIRS})
-set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
+############################# Test Executables #################################
+set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 add_library(TestObj OBJECT ${UNIT_TEST_SRC} unit_test_main.cpp)
 set_target_properties(TestObj PROPERTIES COMPILE_FLAGS "${UNIT_TEST_FLAGS}")
 add_executable(elib_test_static $<TARGET_OBJECTS:TestObj> )

@@ -120,7 +120,7 @@ if (NOT DEFINED CONFIGURATION_DONE)
     if (NOT PYTHONINTERP_FOUND)
         message(FATAL_ERROR
             "Cannot find python interpreter. 
-            Python is required to run the test suite."
+             Python is required to run the test suite."
            )
     endif()
 endif() 

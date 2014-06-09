@@ -14,9 +14,6 @@ target_link_libraries( SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIE
 include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)
 
-
-################################################################################
-  
   set(ELIB_TEST_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
   
 

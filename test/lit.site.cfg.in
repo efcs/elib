@@ -1,10 +1,14 @@
 @AUTO_GEN_COMMENT@
-config.cxx_compiler          = "@CMAKE_CXX_COMPILER@"
-config.cxx_compile_flags     = "@CMAKE_CXX_FLAGS@"
-config.cxx_link_flags        = "@ELIB_TEST_LINK_FLAGS@"
-config.libcxx_src_root       = "@ELIB_ROOT_PATH@"
-config.libcxx_obj_root       = "@ELIB_TEST_BINARY_DIR@"
-config.python_executable     = "@PYTHON_EXECUTABLE@"
+config.cxx_compiler          = '@CMAKE_CXX_COMPILER@'
+config.cxx_compile_flags     = '@ELIB_TEST_COMPILE_FLAGS@'
+config.cxx_link_flags        = '@ELIB_TEST_LINK_FLAGS@'
+
+config.libcxx_src_root       = '@ELIB_ROOT_PATH@'
+config.libcxx_obj_root       = '@ELIB_TEST_BINARY_DIR@'
+
+config.sample_object         = '@SAMPLE_OBJECT@'
+
+config.python_executable     = '@PYTHON_EXECUTABLE@'
 
 # Let the main config do the real work.
 lit_config.load_config(config, "@ELIB_ROOT_PATH@/test/lit.cfg")

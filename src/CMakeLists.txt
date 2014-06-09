@@ -46,10 +46,7 @@ if (CONFIG_ALL_WARNINGS)
   add_flags( WARNING_FLAGS 
         -Wno-padded -Wno-aggregate-return -Wno-inline -Wno-long-long)
 
-  if (CONFIG_ELIB_COVERITY_SCAN)
-    add_flags( WARNING_FLAGS -Wno-unknown-pragmas )
-  endif()
-  
+
 endif()
 
 set(LIBRARY_FLAGS "${WARNING_FLAGS} ${LIBRARY_FLAGS}")
@@ -120,7 +117,8 @@ if (NOT DEFINED CONFIGURATION_DONE)
     if (NOT PYTHONINTERP_FOUND)
         message(FATAL_ERROR
             "Cannot find python interpreter. 
-             Python is required to run the test suite."
+             Python is required to run the test suite.
+             Please configure using make UNIT_TESTS=OFF configure."
            )
     endif()
 endif() 

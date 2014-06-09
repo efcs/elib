@@ -168,7 +168,7 @@ namespace elib
         elib::and_c<
             sizeof(StorageType) <= sizeof(any_buffer_t)
           , aux::alignment_of<any_buffer_t>::value 
-                % std::alignment_of<StorageType>::value == 0
+                % aux::alignment_of<StorageType>::value == 0
           , aux::is_nothrow_move_constructible<typename StorageType::value_type>::value
         >;
     }                                                       // namespace detail

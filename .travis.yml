@@ -3,6 +3,7 @@ branches:
     only:
         - development
         - master
+        - lit
 compiler:
     - g++
     - clang

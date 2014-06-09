@@ -29,6 +29,8 @@ using namespace cexpr_test;
 
 BOOST_AUTO_TEST_SUITE(elib_optional_constexpr_test_suite)
 
+
+#if !defined(ELIB_CONFIG_COVERITY_SCAN)
 BOOST_AUTO_TEST_CASE(check_good_compile_time)
 {
     static_assert(not o1.good(), "");
@@ -39,6 +41,7 @@ BOOST_AUTO_TEST_CASE(check_good_compile_time)
     static_assert(o6.good(), "");
     BOOST_CHECK(true);
 }
+#endif
 
 BOOST_AUTO_TEST_CASE(check_good_runtime)
 {

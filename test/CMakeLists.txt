@@ -24,8 +24,6 @@ add_definitions(
     -DELIB_FILESYSTEM_UNIT_TEST_PATH="${CMAKE_CURRENT_LIST_DIR}/filesystem"
   )
 
-get_directory_property(value DIRECTORY . COMPILE_DEFINITIONS)
-message(STATUS "DEFS: ${value}")
 
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
 target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})

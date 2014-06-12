@@ -139,6 +139,9 @@ add_executable(elib_test_static $<TARGET_OBJECTS:TestObj> )
 add_executable(elib_test_shared $<TARGET_OBJECTS:TestObj> )
 target_link_libraries(elib_test_static elib_static ${ELIB_TEST_LINK_FLAGS})
 target_link_libraries(elib_test_shared elib ${ELIB_TEST_LINK_FLAGS})
+set_target_properties(elib_test_static PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${ELIB_ROOT_PATH}/bin)
+set_target_properties(elib_test_shared PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${ELIB_ROOT_PATH}/bin)
+
          
 endif()
 ################################################################################

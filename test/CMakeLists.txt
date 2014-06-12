@@ -13,7 +13,7 @@ add_definitions(
   )
 
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
-target_link_libraries( SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFAULT_BUILD ON)
 
 include (FindPythonInterp)

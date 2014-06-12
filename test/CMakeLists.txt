@@ -32,9 +32,6 @@ set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFA
 include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)
 
-  set(ELIB_TEST_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-  
-
   set(LIT_EXECUTABLE "${ELIB_ROOT_PATH}/packages/lit/lit.py" CACHE FILEPATH "Path to LLVM's lit.py.")
   set(LIT_ARGS_DEFAULT "-sv" CACHE STRING "Default lit args")
   set(LIT_ARGS "${LIT_ARGS_DEFAULT}")

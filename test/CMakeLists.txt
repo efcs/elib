@@ -8,6 +8,17 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
 include_directories(${Boost_INCLUDE_DIRS})
 
+get_directory_property(value DIRECTORY ${ELIB_ROOT_PATH}/src COMPILE_DEFINITIONS)
+if (value)
+    message(STATUS "DEFINES: ${value}")
+    foreach(item ${value})
+        list(FIND flags "-D${item}" FOUND)
+        if (FOUND EQUAL -1)
+            add_definitions(-D${item})
+        endif()
+    endforeach()
+endif()
+
 add_definitions( 
     -DELIB_FILESYSTEM_UNIT_TEST_PATH="${CMAKE_CURRENT_LIST_DIR}/filesystem"
   )
@@ -15,6 +26,9 @@ add_definitions(
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
 target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFAULT_BUILD ON)
+
+add_subdirectory(lit_test)
+
 
 include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)

@@ -4,7 +4,7 @@ SHELL := /bin/bash
 #				ElibTargets
 ################################################################################
 ElibTargets := all everything e elib elib_static clean configure redep distclean install \
-	       check check_all check_static check_shared check-elib
+	       check check_all check_static check_shared check-elib test
 
 .PHONY: $(ElibTargets)
 
@@ -99,6 +99,10 @@ check_static:
 check-elib:
 	$(CMD_VERB) echo ==== Running Lit tests ====
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-elib
+
+test:
+	$(CMD_VERB) echo === Running CTest tests ===
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build test
 
 ################################################################################
 #				ElibToolTargets

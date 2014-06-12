@@ -10,6 +10,14 @@ set(UNIT_TEST_SRC "")
 
 find_package( Threads REQUIRED )
 
+################################### BOOST ######################################
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_flags(LIBRARY_FLAGS -fPIC)
 
 ################################################################################
@@ -123,13 +131,7 @@ if (NOT DEFINED CONFIGURATION_DONE)
     endif()
 endif() 
 
-################################### BOOST ######################################
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
-include_directories(${Boost_INCLUDE_DIRS})
+
 
 ############################# Test Executables #################################
 set(ELIB_TEST_LINK_FLAGS ${STDLIB_LINK} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})

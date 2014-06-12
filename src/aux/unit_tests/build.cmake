@@ -1,2 +1,2 @@
-add_unit_test_src()
-add_unit_test_src(traits)
+add_test_dir()
+add_test_dir(traits)

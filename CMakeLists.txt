@@ -73,7 +73,7 @@ option(ELIB_WEB_SOURCE "Build web library (experimental)" ON)
 ################################################################################
 # need C to get the pthreads library 
 project(EricsLibrary CXX C)
-
+enable_testing()
 ################################################################################
 #                            ELIB config
 ################################################################################

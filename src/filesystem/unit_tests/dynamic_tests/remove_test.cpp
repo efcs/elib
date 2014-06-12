@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_remove_test_suite)
 BOOST_AUTO_TEST_CASE(dne_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dne");
+    path const file = env.make_env_path("dne");
     
     {
         std::error_code ec;
@@ -26,8 +26,8 @@ BOOST_AUTO_TEST_CASE(dne_test)
 BOOST_AUTO_TEST_CASE(remove_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
     
     std::error_code ec;
     BOOST_REQUIRE(remove(file, ec));
@@ -38,8 +38,8 @@ BOOST_AUTO_TEST_CASE(remove_file_test)
 BOOST_AUTO_TEST_CASE(remove_empty_directory_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_dir(file);
+    path const file = env.make_env_path("file1");
+    env.create_dir(file);
     
     std::error_code ec;
     BOOST_REQUIRE(remove(file, ec));
@@ -50,10 +50,10 @@ BOOST_AUTO_TEST_CASE(remove_empty_directory_test)
 BOOST_AUTO_TEST_CASE(remove_non_empty_directory_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
+    path const file = env.make_env_path("file1");
     path const nested_file = file / "file2";
-    python_create_dir(file);
-    python_create_file(nested_file);
+    env.create_dir(file);
+    env.create_file(nested_file);
     
     std::error_code ec;
     BOOST_REQUIRE(not remove(file, ec));
@@ -64,10 +64,10 @@ BOOST_AUTO_TEST_CASE(remove_non_empty_directory_test)
 BOOST_AUTO_TEST_CASE(remove_symlink_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("file1");
-    python_create_file(real_file);
-    python_create_symlink(real_file, file);
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("file1");
+    env.create_file(real_file);
+    env.create_symlink(real_file, file);
     
     std::error_code ec;
     BOOST_REQUIRE(remove(file, ec));

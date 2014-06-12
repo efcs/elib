@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_create_directory_test_suite)
 BOOST_AUTO_TEST_CASE(dir_exists_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
-    python_create_dir(file);
+    path const file = env.make_env_path("dir1");
+    env.create_dir(file);
     
     {
         std::error_code ec;
@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
 BOOST_AUTO_TEST_CASE(file_exists_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
 
     {
         std::error_code ec;
@@ -40,13 +40,13 @@ BOOST_AUTO_TEST_CASE(file_exists_test)
 BOOST_AUTO_TEST_CASE(bad_parent)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1/dir2");
+    path const file = env.make_env_path("dir1/dir2");
     
     {
         std::error_code ec;
         BOOST_REQUIRE(not create_directory(file, ec));
         BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(not is_directory(make_env_path("dir1")));
+        BOOST_REQUIRE(not is_directory(env.make_env_path("dir1")));
     }
     {
         BOOST_REQUIRE_THROW(create_directory(file), filesystem_error);
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(bad_parent)
 BOOST_AUTO_TEST_CASE(success_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
+    path const file = env.make_env_path("dir1");
     
     std::error_code ec;
     BOOST_REQUIRE(create_directory(file, ec));

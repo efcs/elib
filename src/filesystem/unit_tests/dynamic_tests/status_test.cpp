@@ -14,11 +14,11 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_status_test_suite)
 BOOST_AUTO_TEST_CASE(symlink_to_filetest)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("file1");
-    python_create_file(real_file);
+    path const real_file = env.make_env_path("file1");
+    env.create_file(real_file);
     
-    path const file = make_env_path("sym1");
-    python_create_symlink(real_file, file);
+    path const file = env.make_env_path("sym1");
+    env.create_symlink(real_file, file);
     
     // status test
     {
@@ -127,11 +127,11 @@ BOOST_AUTO_TEST_CASE(symlink_to_filetest)
 BOOST_AUTO_TEST_CASE(hardlink_to_filetest)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("file1");
-    python_create_file(real_file);
+    path const real_file = env.make_env_path("file1");
+    env.create_file(real_file);
     
-    path const file = make_env_path("link1");
-    python_create_hardlink(real_file, file);
+    path const file = env.make_env_path("link1");
+    env.create_hardlink(real_file, file);
     
     // status test
     {
@@ -240,8 +240,8 @@ BOOST_AUTO_TEST_CASE(hardlink_to_filetest)
 BOOST_AUTO_TEST_CASE(fifo_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_fifo(file);
+    path const file = env.make_env_path("file1");
+    env.create_fifo(file);
     
     // status test
     {
@@ -350,8 +350,8 @@ BOOST_AUTO_TEST_CASE(fifo_test)
 BOOST_AUTO_TEST_CASE(socket_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("socket1");
-    python_create_socket(file);
+    path const file = env.make_env_path("socket1");
+    env.create_socket(file);
     
     // status test
     {
@@ -460,11 +460,11 @@ BOOST_AUTO_TEST_CASE(socket_test)
 BOOST_AUTO_TEST_CASE(status_bad_perms_test)
 {
     scoped_test_env env;
-    path const dir = make_env_path("dir1");
+    path const dir = env.make_env_path("dir1");
     path const file = dir / "file1";
     
-    python_create_dir(dir);
-    python_create_file(file, 42);
+    env.create_dir(dir);
+    env.create_file(file, 42);
     
     permissions(dir, perms::none);
     

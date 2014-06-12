@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_copy_test_test_suite)
 BOOST_AUTO_TEST_CASE(from_dne_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dne");
-    path const to = make_env_path("dne2");
+    path const file = env.make_env_path("dne");
+    path const to = env.make_env_path("dne2");
     
     {
         std::error_code ec;
@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_CASE(from_dne_test)
 BOOST_AUTO_TEST_CASE(equivalent_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
         
     {
         std::error_code ec;
@@ -43,9 +43,9 @@ BOOST_AUTO_TEST_CASE(equivalent_test)
 BOOST_AUTO_TEST_CASE(from_is_other)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
-    python_create_socket(file);
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
+    env.create_socket(file);
     
     std::error_code ec;
     copy(file, to, ec);
@@ -55,10 +55,10 @@ BOOST_AUTO_TEST_CASE(from_is_other)
 BOOST_AUTO_TEST_CASE(to_is_other)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
-    python_create_file(file);
-    python_create_socket(to);
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
+    env.create_file(file);
+    env.create_socket(to);
     
     std::error_code ec;
     copy(file, to, ec);
@@ -68,10 +68,10 @@ BOOST_AUTO_TEST_CASE(to_is_other)
 BOOST_AUTO_TEST_CASE(directory_to_regular_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
-    python_create_dir(file);
-    python_create_file(to);
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
+    env.create_dir(file);
+    env.create_file(to);
     
     std::error_code ec;
     copy(file, to, ec);
@@ -81,12 +81,12 @@ BOOST_AUTO_TEST_CASE(directory_to_regular_file_test)
 BOOST_AUTO_TEST_CASE(skip_symlinks_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("sym1");
-    path const to = make_env_path("to");
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("sym1");
+    path const to = env.make_env_path("to");
     
-    python_create_file(real_file);
-    python_create_symlink(real_file, file);
+    env.create_file(real_file);
+    env.create_symlink(real_file, file);
     
     std::error_code ec;
     copy(file, to, copy_options::skip_symlinks, ec);
@@ -97,12 +97,12 @@ BOOST_AUTO_TEST_CASE(skip_symlinks_test)
 BOOST_AUTO_TEST_CASE(copy_symlink_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("sym1");
-    path const to = make_env_path("to");
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("sym1");
+    path const to = env.make_env_path("to");
     
-    python_create_file(real_file);
-    python_create_symlink(real_file, file);
+    env.create_file(real_file);
+    env.create_symlink(real_file, file);
     
     std::error_code ec;
     copy(file, to, copy_options::create_symlinks, ec);
@@ -114,13 +114,13 @@ BOOST_AUTO_TEST_CASE(copy_symlink_test)
 BOOST_AUTO_TEST_CASE(copy_symlink_to_exists_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("sym1");
-    path const to = make_env_path("to");
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("sym1");
+    path const to = env.make_env_path("to");
     
-    python_create_file(real_file);
-    python_create_symlink(real_file, file);
-    python_create_file(to);
+    env.create_file(real_file);
+    env.create_symlink(real_file, file);
+    env.create_file(to);
     
     {
         std::error_code ec;
@@ -138,10 +138,10 @@ BOOST_AUTO_TEST_CASE(copy_symlink_to_exists_test)
 BOOST_AUTO_TEST_CASE(directory_only_regular_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("to");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("to");
     
-    python_create_file(file);
+    env.create_file(file);
     
     std::error_code ec;
     copy(file, to, copy_options::directories_only, ec);
@@ -152,10 +152,10 @@ BOOST_AUTO_TEST_CASE(directory_only_regular_file_test)
 BOOST_AUTO_TEST_CASE(regular_file_create_symlinks_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("to");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("to");
     
-    python_create_file(file);
+    env.create_file(file);
     
     std::error_code ec;
     copy(file, to, copy_options::create_symlinks, ec);
@@ -167,10 +167,10 @@ BOOST_AUTO_TEST_CASE(regular_file_create_symlinks_test)
 BOOST_AUTO_TEST_CASE(regular_file_create_hard_link_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("to");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("to");
     
-    python_create_file(file);
+    env.create_file(file);
     
     std::error_code ec;
     copy(file, to, copy_options::create_hard_links, ec);
@@ -182,12 +182,12 @@ BOOST_AUTO_TEST_CASE(regular_file_create_hard_link_test)
 BOOST_AUTO_TEST_CASE(regular_file_copy_to_dir)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to_dir = make_env_path("dir1");
+    path const file = env.make_env_path("file1");
+    path const to_dir = env.make_env_path("dir1");
     path const to = to_dir / "file1";
     
     
-    python_create_file(file, 42);
+    env.create_file(file, 42);
     create_directory(to_dir);
     BOOST_REQUIRE(is_directory(to_dir));
     
@@ -200,10 +200,10 @@ BOOST_AUTO_TEST_CASE(regular_file_copy_to_dir)
 BOOST_AUTO_TEST_CASE(regular_file_copy)
 {
     scoped_test_env env;
-    path const file = make_env_path("file");
-    path const to = make_env_path("to");
+    path const file = env.make_env_path("file");
+    path const to = env.make_env_path("to");
     
-    python_create_file(file, 42);
+    env.create_file(file, 42);
     
     std::error_code ec;
     copy(file, to, ec);
@@ -214,16 +214,16 @@ BOOST_AUTO_TEST_CASE(regular_file_copy)
 BOOST_AUTO_TEST_CASE(copy_dir_test)
 {
     scoped_test_env env;
-    path const dir = make_env_path("dir1");
+    path const dir = env.make_env_path("dir1");
     path const f1 = dir / "file1";
     path const d1 = dir / "dir1";
-    path const to = make_env_path("to");
+    path const to = env.make_env_path("to");
     path const to_f1 = to / "file1";
     path const to_d1 = to / "dir1";
     
-    python_create_dir(dir);
-    python_create_file(f1, 42);
-    python_create_dir(d1);
+    env.create_dir(dir);
+    env.create_file(f1, 42);
+    env.create_dir(d1);
     
     std::error_code ec;
     copy(dir, to, ec);
@@ -236,19 +236,19 @@ BOOST_AUTO_TEST_CASE(copy_dir_test)
 BOOST_AUTO_TEST_CASE(copy_dir_recursive_test)
 {
     scoped_test_env env;
-    path const dir = make_env_path("dir1");
+    path const dir = env.make_env_path("dir1");
     path const f1 = dir / "file1";
     path const d1 = dir / "dir1";
     path const f2 = d1 / "file2";
-    path const to = make_env_path("to");
+    path const to = env.make_env_path("to");
     path const to_f1 = to / "file1";
     path const to_d1 = to / "dir1";
     path const to_f2 = to_d1 / "file2";
     
-    python_create_dir(dir);
-    python_create_file(f1, 42);
-    python_create_dir(d1);
-    python_create_file(f2, 42);
+    env.create_dir(dir);
+    env.create_file(f1, 42);
+    env.create_dir(d1);
+    env.create_file(f2, 42);
     
     std::error_code ec;
     copy(dir, to, copy_options::recursive, ec);
@@ -262,19 +262,19 @@ BOOST_AUTO_TEST_CASE(copy_dir_recursive_test)
 BOOST_AUTO_TEST_CASE(copy_dir_recursive_dir_only_test)
 {
     scoped_test_env env;
-    path const dir = make_env_path("dir1");
+    path const dir = env.make_env_path("dir1");
     path const f1 = dir / "file1";
     path const d1 = dir / "dir1";
     path const f2 = d1 / "file2";
-    path const to = make_env_path("to");
+    path const to = env.make_env_path("to");
     path const to_f1 = to / "file1";
     path const to_d1 = to / "dir1";
     path const to_f2 = to_d1 / "file2";
     
-    python_create_dir(dir);
-    python_create_file(f1, 42);
-    python_create_dir(d1);
-    python_create_file(f2, 42);
+    env.create_dir(dir);
+    env.create_file(f1, 42);
+    env.create_dir(d1);
+    env.create_file(f2, 42);
     
     std::error_code ec;
     copy(dir, to, copy_options::recursive | copy_options::directories_only, ec);
@@ -288,12 +288,12 @@ BOOST_AUTO_TEST_CASE(copy_dir_recursive_dir_only_test)
 BOOST_AUTO_TEST_CASE(not_status_known_for_to)
 {
     scoped_test_env env;
-    path const from = make_env_path("from");
-    path const to_dir = make_env_path("to_dir");
+    path const from = env.make_env_path("from");
+    path const to_dir = env.make_env_path("to_dir");
     path const to = to_dir / "to";
     
-    python_create_file(from, 42);
-    python_create_dir(to_dir);
+    env.create_file(from, 42);
+    env.create_dir(to_dir);
     
     permissions(to_dir, perms::none);
     

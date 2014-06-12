@@ -12,11 +12,11 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
 {
     scoped_test_env env;
     
-    path const file = make_env_path("dir1");
-    python_create_dir(file);
+    path const file = env.make_env_path("dir1");
+    env.create_dir(file);
     
-    path const existing = make_env_path("existing");
-    python_create_dir("existing");
+    path const existing = env.make_env_path("existing");
+    env.create_dir(existing);
     
     {
         std::error_code ec;
@@ -31,10 +31,10 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
 BOOST_AUTO_TEST_CASE(file_exists_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
-    path const existing = make_env_path("existing");
-    python_create_dir("existing");
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
+    path const existing = env.make_env_path("existing");
+    env.create_dir(existing);
 
     std::error_code ec;
     BOOST_REQUIRE(not create_directory(file, existing, ec));
@@ -44,16 +44,16 @@ BOOST_AUTO_TEST_CASE(file_exists_test)
 BOOST_AUTO_TEST_CASE(bad_parent)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1/dir2");
+    path const file = env.make_env_path("dir1/dir2");
     
-    path const existing = make_env_path("existing");
-    python_create_dir("existing");
+    path const existing = env.make_env_path("existing");
+    env.create_dir(existing);
     
     {
         std::error_code ec;
         BOOST_REQUIRE(not create_directory(file, existing, ec));
         BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(not is_directory(make_env_path("dir1")));
+        BOOST_REQUIRE(not is_directory(env.make_env_path("dir1")));
     }
     {
         BOOST_REQUIRE_THROW(create_directory(file, existing), filesystem_error);
@@ -63,8 +63,8 @@ BOOST_AUTO_TEST_CASE(bad_parent)
 BOOST_AUTO_TEST_CASE(bad_existing_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
-    path const existing = make_env_path("existing");
+    path const file = env.make_env_path("dir1");
+    path const existing = env.make_env_path("existing");
     
     {
         std::error_code ec;
@@ -80,10 +80,10 @@ BOOST_AUTO_TEST_CASE(bad_existing_test)
 BOOST_AUTO_TEST_CASE(existing_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
-    path const existing = make_env_path("existing");
+    path const file = env.make_env_path("dir1");
+    path const existing = env.make_env_path("existing");
     
-    python_create_file(existing);
+    env.create_file(existing);
     
     /// Set the permissions to somthing non-default.
     file_status existing_st = status(existing);

@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_permission_test_suite)
 BOOST_AUTO_TEST_CASE(dne_test)
 {
     scoped_test_env env;
-    const path file = make_env_path("dne");
+    const path file = env.make_env_path("dne");
     
     {
         std::error_code ec;
@@ -39,8 +39,8 @@ BOOST_AUTO_TEST_CASE(dne_test)
 BOOST_AUTO_TEST_CASE(replace_permissions_test)
 {
     scoped_test_env env;
-    const path file = make_env_path("file1");
-    python_create_file(file);
+    const path file = env.make_env_path("file1");
+    env.create_file(file);
     
     std::error_code ec;
     
@@ -60,8 +60,8 @@ BOOST_AUTO_TEST_CASE(replace_permissions_test)
 BOOST_AUTO_TEST_CASE(add_permissions_test)
 {
     scoped_test_env env;
-    const path file = make_env_path("file1");
-    python_create_file(file);
+    const path file = env.make_env_path("file1");
+    env.create_file(file);
     
     std::error_code ec;
     
@@ -81,8 +81,8 @@ BOOST_AUTO_TEST_CASE(add_permissions_test)
 BOOST_AUTO_TEST_CASE(remove_permissions_test)
 {
     scoped_test_env env;
-    const path file = make_env_path("file1");
-    python_create_file(file);
+    const path file = env.make_env_path("file1");
+    env.create_file(file);
     
     std::error_code ec;
     
@@ -104,11 +104,11 @@ BOOST_AUTO_TEST_CASE(remove_permissions_test)
 BOOST_AUTO_TEST_CASE(not_follow_symlink_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("sym");
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("sym");
     
-    python_create_file(real_file, 42);
-    python_create_symlink(real_file, file);
+    env.create_file(real_file, 42);
+    env.create_symlink(real_file, file);
     
     BOOST_REQUIRE_NO_THROW(permissions(real_file, perms::all));
     
@@ -127,11 +127,11 @@ BOOST_AUTO_TEST_CASE(not_follow_symlink_test)
 BOOST_AUTO_TEST_CASE(follow_symlink_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("sym");
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("sym");
     
-    python_create_file(real_file, 42);
-    python_create_symlink(real_file, file);
+    env.create_file(real_file, 42);
+    env.create_symlink(real_file, file);
     
     BOOST_REQUIRE_NO_THROW(permissions(real_file, perms::group_all|perms::owner_all));
     

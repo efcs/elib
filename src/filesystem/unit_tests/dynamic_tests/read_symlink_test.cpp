@@ -12,10 +12,10 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_read_symlink_test_suite)
 BOOST_AUTO_TEST_CASE(symlink_test)
 {
     scoped_test_env env;
-    const path file = make_env_path("file1");
-    const path sym = make_env_path("sym1");
-    python_create_file(file);
-    python_create_symlink(file, sym);
+    const path file = env.make_env_path("file1");
+    const path sym = env.make_env_path("sym1");
+    env.create_file(file);
+    env.create_symlink(file, sym);
     // with error code
     {
         std::error_code ec;

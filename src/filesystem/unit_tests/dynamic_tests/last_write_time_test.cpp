@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_write_time_operations_test_suite)
 BOOST_AUTO_TEST_CASE(dne_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
+    path const file = env.make_env_path("file1");
     
     // with error code
     {
@@ -34,8 +34,8 @@ BOOST_AUTO_TEST_CASE(dne_test)
 BOOST_AUTO_TEST_CASE(read_time_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
     file_time_type bad_result = file_time_type::min();
     file_time_type expect_before = Clock::now() + std::chrono::seconds(1);
     file_time_type expect_after = expect_before - std::chrono::seconds(10);
@@ -61,8 +61,8 @@ BOOST_AUTO_TEST_CASE(read_time_test)
 BOOST_AUTO_TEST_CASE(write_time_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
     file_time_type const bad_result = file_time_type::min();
     file_time_type const new_time = Clock::now() + std::chrono::seconds(100);
     
@@ -92,10 +92,10 @@ BOOST_AUTO_TEST_CASE(write_time_test)
 BOOST_AUTO_TEST_CASE(stat_fail_test)
 {
     scoped_test_env env;
-    path const dir = make_env_path("dir");
+    path const dir = env.make_env_path("dir");
     path const file = dir / "file1";
-    python_create_dir(dir);
-    python_create_file(file, 42);
+    env.create_dir(dir);
+    env.create_file(file, 42);
     
     permissions(dir, perms::none);
     

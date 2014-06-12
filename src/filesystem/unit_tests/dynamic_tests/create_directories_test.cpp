@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_create_directories_test_suite)
 BOOST_AUTO_TEST_CASE(single_dir_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
+    path const file = env.make_env_path("dir1");
     
     std::error_code ec;
     BOOST_REQUIRE(create_directories(file, ec));
@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(single_dir_test)
 BOOST_AUTO_TEST_CASE(recursive_dir_test)
 {
     scoped_test_env env;
-    path const first_dir = make_env_path("dir1");
+    path const first_dir = env.make_env_path("dir1");
     path const second_dir = first_dir / "dir2";
     path const third_dir = second_dir / "dir3";
     
@@ -37,10 +37,10 @@ BOOST_AUTO_TEST_CASE(recursive_dir_test)
 BOOST_AUTO_TEST_CASE(file_already_exists_test)
 {
     scoped_test_env env;
-    path const first_dir = make_env_path("dir1");
+    path const first_dir = env.make_env_path("dir1");
     path const second_dir = first_dir / "dir2";
     
-    python_create_file(first_dir);
+    env.create_file(first_dir);
     
     std::error_code ec;
     BOOST_REQUIRE(not create_directories(second_dir, ec));
@@ -51,9 +51,9 @@ BOOST_AUTO_TEST_CASE(file_already_exists_test)
 BOOST_AUTO_TEST_CASE(dir_exists_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
+    path const file = env.make_env_path("dir1");
     
-    python_create_dir(file);
+    env.create_dir(file);
     
     std::error_code ec;
     BOOST_REQUIRE(not create_directories(file, ec));
@@ -63,10 +63,10 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
 BOOST_AUTO_TEST_CASE(bad_perms_test)
 {
     scoped_test_env env;
-    path const dir1 = make_env_path("dir1");
+    path const dir1 = env.make_env_path("dir1");
     path const dir2 = dir1 / "dir2";
     path const dir3 = dir2 / "dir3";
-    python_create_dir(dir1);
+    env.create_dir(dir1);
     
     permissions(dir1, perms::none);
     

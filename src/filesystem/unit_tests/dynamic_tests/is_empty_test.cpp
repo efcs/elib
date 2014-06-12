@@ -13,8 +13,8 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_is_empty_operation_test_suite)
 BOOST_AUTO_TEST_CASE(empty_directory_test)
 {
     scoped_test_env env;
-    const path file = make_env_path("empty_dir");
-    python_create_dir(file);
+    const path file = env.make_env_path("empty_dir");
+    env.create_dir(file);
     
     // with error code
     {

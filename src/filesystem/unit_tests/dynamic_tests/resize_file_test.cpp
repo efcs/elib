@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_resize_file_test_suite)
 BOOST_AUTO_TEST_CASE(dne_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dne");
+    path const file = env.make_env_path("dne");
     
     {
         std::error_code ec;
@@ -26,9 +26,9 @@ BOOST_AUTO_TEST_CASE(dne_test)
 BOOST_AUTO_TEST_CASE(directory_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir");
+    path const file = env.make_env_path("dir");
     
-    python_create_dir(file);
+    env.create_dir(file);
     BOOST_REQUIRE(is_directory(file));
     
     {
@@ -44,8 +44,8 @@ BOOST_AUTO_TEST_CASE(directory_test)
 BOOST_AUTO_TEST_CASE(increase_size_with_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file, 42);
+    path const file = env.make_env_path("file1");
+    env.create_file(file, 42);
     BOOST_REQUIRE(file_size(file) == 42);
     
     std::error_code ec;
@@ -57,8 +57,8 @@ BOOST_AUTO_TEST_CASE(increase_size_with_error_code_test)
 BOOST_AUTO_TEST_CASE(increase_size_without_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file, 42);
+    path const file = env.make_env_path("file1");
+    env.create_file(file, 42);
     BOOST_REQUIRE(file_size(file) == 42);
     
     std::error_code ec;
@@ -69,8 +69,8 @@ BOOST_AUTO_TEST_CASE(increase_size_without_error_code_test)
 BOOST_AUTO_TEST_CASE(decrease_size_with_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file, 42);
+    path const file = env.make_env_path("file1");
+    env.create_file(file, 42);
     BOOST_REQUIRE(file_size(file) == 42);
     
     std::error_code ec;
@@ -82,8 +82,8 @@ BOOST_AUTO_TEST_CASE(decrease_size_with_error_code_test)
 BOOST_AUTO_TEST_CASE(decrease_size_without_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file, 42);
+    path const file = env.make_env_path("file1");
+    env.create_file(file, 42);
     BOOST_REQUIRE(file_size(file) == 42);
     
     std::error_code ec;

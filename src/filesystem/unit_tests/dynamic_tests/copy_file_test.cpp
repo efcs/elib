@@ -14,8 +14,8 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_copy_file_test_suite)
 BOOST_AUTO_TEST_CASE(dne_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
     {
         std::error_code ec;
@@ -33,10 +33,10 @@ BOOST_AUTO_TEST_CASE(dne_test)
 BOOST_AUTO_TEST_CASE(directory_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_dir(file);
+    env.create_dir(file);
     BOOST_REQUIRE(is_directory(file));
     
     {
@@ -54,10 +54,10 @@ BOOST_AUTO_TEST_CASE(directory_test)
 BOOST_AUTO_TEST_CASE(file_copy_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
+    env.create_file(file, 42);
     BOOST_REQUIRE(not exists(to));
     
     std::error_code ec;
@@ -70,11 +70,11 @@ BOOST_AUTO_TEST_CASE(file_copy_test)
 BOOST_AUTO_TEST_CASE(file_copy_existing_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
-    python_create_file(to, 1);
+    env.create_file(file, 42);
+    env.create_file(to, 1);
     
     std::error_code ec;
     BOOST_REQUIRE(not copy_file(file, to, ec));
@@ -86,11 +86,11 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_test)
 BOOST_AUTO_TEST_CASE(file_copy_existing_throw_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
-    python_create_file(to, 1);
+    env.create_file(file, 42);
+    env.create_file(to, 1);
     
     BOOST_REQUIRE_THROW(copy_file(file, to), filesystem_error);
     BOOST_REQUIRE(file_size(to) == 1);
@@ -99,11 +99,11 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_throw_test)
 BOOST_AUTO_TEST_CASE(file_copy_existing_skip_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
-    python_create_file(to, 1);
+    env.create_file(file, 42);
+    env.create_file(to, 1);
     
     std::error_code ec;
     BOOST_REQUIRE(not copy_file(file, to, copy_options::skip_existing, ec));
@@ -115,11 +115,11 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_skip_test)
 BOOST_AUTO_TEST_CASE(file_copy_existing_overwrite_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
-    python_create_file(to, 1);
+    env.create_file(file, 42);
+    env.create_file(to, 1);
     
     std::error_code ec;
     BOOST_REQUIRE(copy_file(file, to, copy_options::overwrite_existing, ec));
@@ -131,11 +131,11 @@ BOOST_AUTO_TEST_CASE(file_copy_existing_overwrite_test)
 BOOST_AUTO_TEST_CASE(file_copy_update_existing_older)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
-    python_create_file(to, 1);
+    env.create_file(file, 42);
+    env.create_file(to, 1);
     
     file_time_type new_update = Clock::now() - std::chrono::seconds(100);
     last_write_time(file, new_update);
@@ -150,11 +150,11 @@ BOOST_AUTO_TEST_CASE(file_copy_update_existing_older)
 BOOST_AUTO_TEST_CASE(file_copy_update_existing_newer)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file, 42);
-    python_create_file(to, 1);
+    env.create_file(file, 42);
+    env.create_file(to, 1);
     
     file_time_type new_update = Clock::now() - std::chrono::seconds(100);
     last_write_time(to, new_update);
@@ -171,11 +171,11 @@ BOOST_AUTO_TEST_CASE(file_copy_update_existing_newer)
 BOOST_AUTO_TEST_CASE(empty_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
     // create with size of 0
-    python_create_file(file, 0);
+    env.create_file(file, 0);
     BOOST_REQUIRE(is_regular_file(file));
     
     std::error_code ec;

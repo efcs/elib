@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_hard_link_count_test_suite)
 BOOST_AUTO_TEST_CASE(dne_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dne");
+    path const file = env.make_env_path("dne");
     
     {
         std::error_code ec;
@@ -30,16 +30,16 @@ BOOST_AUTO_TEST_CASE(dne_test)
 BOOST_AUTO_TEST_CASE(basic_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    python_create_file(file);
+    path const file = env.make_env_path("file1");
+    env.create_file(file);
     
     std::error_code ec;
     std::uintmax_t count = hard_link_count(file, ec);
     BOOST_REQUIRE(not ec);
     BOOST_REQUIRE(count == 1);
     
-    path const link = make_env_path("link1");
-    python_create_hardlink(file, link);
+    path const link = env.make_env_path("link1");
+    env.create_hardlink(file, link);
     
     count = hard_link_count(file, ec);
     BOOST_REQUIRE(not ec);

@@ -11,8 +11,8 @@ BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_rename_test_suite)
 BOOST_AUTO_TEST_CASE(rename_dne_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
     BOOST_REQUIRE(not exists(file));
     
@@ -31,10 +31,10 @@ BOOST_AUTO_TEST_CASE(rename_dne_file_test)
 BOOST_AUTO_TEST_CASE(rename_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(file);
+    env.create_file(file);
     BOOST_REQUIRE(exists(file) && not exists(to));
     
     // with error code
@@ -56,10 +56,10 @@ BOOST_AUTO_TEST_CASE(rename_file_test)
 BOOST_AUTO_TEST_CASE(rename_empty_directory_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
-    path const to = make_env_path("dir2");
+    path const file = env.make_env_path("dir1");
+    path const to = env.make_env_path("dir2");
     
-    python_create_dir(file);
+    env.create_dir(file);
     BOOST_REQUIRE(is_directory(file) && not exists(to));
     
     // with error code
@@ -81,10 +81,10 @@ BOOST_AUTO_TEST_CASE(rename_empty_directory_test)
 BOOST_AUTO_TEST_CASE(rename_same_file_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file1");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file1");
     
-    python_create_file(file);
+    env.create_file(file);
     BOOST_REQUIRE(is_regular_file(file));
     
     // with error code
@@ -104,10 +104,10 @@ BOOST_AUTO_TEST_CASE(rename_same_file_test)
 BOOST_AUTO_TEST_CASE(rename_same_dir_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
-    path const to = make_env_path("dir1");
+    path const file = env.make_env_path("dir1");
+    path const to = env.make_env_path("dir1");
     
-    python_create_dir(file);
+    env.create_dir(file);
     BOOST_REQUIRE(is_directory(file));
     
     // with error code
@@ -127,13 +127,13 @@ BOOST_AUTO_TEST_CASE(rename_same_dir_test)
 BOOST_AUTO_TEST_CASE(rename_to_existing_file_with_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
     // create with size 42
-    python_create_file(file, 42);
+    env.create_file(file, 42);
     // create removed file with size 1
-    python_create_file(to, 1);
+    env.create_file(to, 1);
     
     BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
     BOOST_REQUIRE(is_regular_file(to) && file_size(to) == 1);
@@ -148,13 +148,13 @@ BOOST_AUTO_TEST_CASE(rename_to_existing_file_with_error_code_test)
 BOOST_AUTO_TEST_CASE(rename_to_existing_file_without_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
     // create with size 42
-    python_create_file(file, 42);
+    env.create_file(file, 42);
     // create removed file with size 1
-    python_create_file(to, 1);
+    env.create_file(to, 1);
     
     BOOST_REQUIRE(is_regular_file(file) && file_size(file) == 42);
     BOOST_REQUIRE(is_regular_file(to) && file_size(to) == 1);
@@ -167,14 +167,14 @@ BOOST_AUTO_TEST_CASE(rename_to_existing_file_without_error_code_test)
 BOOST_AUTO_TEST_CASE(rename_to_existing_empty_dir_with_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
+    path const file = env.make_env_path("dir1");
     path const nested_file = file / "file1";
-    path const to = make_env_path("file2");
+    path const to = env.make_env_path("file2");
     
     // create with size 42
-    python_create_dir(file);
-    python_create_file(nested_file, 42);
-    python_create_dir(to);
+    env.create_dir(file);
+    env.create_file(nested_file, 42);
+    env.create_dir(to);
     
     BOOST_REQUIRE(is_directory(file) && not is_empty(file));
     BOOST_REQUIRE(is_directory(to) && is_empty(to));
@@ -189,14 +189,14 @@ BOOST_AUTO_TEST_CASE(rename_to_existing_empty_dir_with_error_code_test)
 BOOST_AUTO_TEST_CASE(rename_to_existing_empty_dir_without_error_code_test)
 {
     scoped_test_env env;
-    path const file = make_env_path("dir1");
+    path const file = env.make_env_path("dir1");
     path const nested_file = file / "file1";
-    path const to = make_env_path("file2");
+    path const to = env.make_env_path("file2");
     
     // create with size 42
-    python_create_dir(file);
-    python_create_file(nested_file, 42);
-    python_create_dir(to);
+    env.create_dir(file);
+    env.create_file(nested_file, 42);
+    env.create_dir(to);
     
     BOOST_REQUIRE(is_directory(file) && not is_empty(file));
     BOOST_REQUIRE(is_directory(to) && is_empty(to));
@@ -209,14 +209,14 @@ BOOST_AUTO_TEST_CASE(rename_to_existing_empty_dir_without_error_code_test)
 BOOST_AUTO_TEST_CASE(rename_symlink_with_error_code_test)
 {
     scoped_test_env env;
-    path const real_file = make_env_path("real_file");
-    path const file = make_env_path("file1");
-    path const to = make_env_path("file2");
+    path const real_file = env.make_env_path("real_file");
+    path const file = env.make_env_path("file1");
+    path const to = env.make_env_path("file2");
     
-    python_create_file(real_file, 42);
+    env.create_file(real_file, 42);
     BOOST_REQUIRE(is_regular_file(real_file));
     
-    python_create_symlink(real_file, file);
+    env.create_symlink(real_file, file);
     BOOST_REQUIRE(is_symlink(file) && read_symlink(file) == real_file);
     
     BOOST_REQUIRE(not exists(to));

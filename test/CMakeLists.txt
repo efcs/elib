@@ -9,7 +9,7 @@ set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
 include_directories(${Boost_INCLUDE_DIRS})
 
 set(ELIB_AVAILABLE_FEATURES "")
-get_directory_property(value DIRECTORY ${ELIB_ROOT_PATH}/src COMPILE_DEFINITIONS)
+get_directory_property(value DIRECTORY COMPILE_DEFINITIONS)
 if (value)
     foreach(item ${value})
         list(FIND flags "-D${item}" FOUND)

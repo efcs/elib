@@ -4,7 +4,7 @@ SHELL := /bin/bash
 #				ElibTargets
 ################################################################################
 ElibTargets := all everything e elib elib_static clean configure redep distclean install \
-	       check check_all check_static check_shared check-elib test
+	       check check-elib test
 
 .PHONY: $(ElibTargets)
 
@@ -63,38 +63,13 @@ install:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build install
 
 
-################################################################################	
-check_all:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build 
-	$(CMD_VERB) echo
-	$(CMD_VERB) echo === Running static tests ===
-	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short --show_progress=yes
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running shared tests ===
-	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short --show_progress=yes
-
-
 ################################################################################
 check:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) check_shared
-
-################################################################################
-check_shared:
 	$(CMD_VERB) echo === Building tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build
 	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running shared tests ===
-	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short --show_progress=yes
-
-
-################################################################################
-check_static:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build
-	$(CMD_VERB) echo
-	$(CMD_VERB) echo === Running static tests ===
-	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short --show_progress=yes
+	$(CMD_VERB) echo === Running tests ===
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build test
 
 check-elib:
 	$(CMD_VERB) echo ==== Running Lit tests ====
@@ -109,8 +84,7 @@ test:
 ################################################################################
 
 ElibToolTargets := scan scan_test scan_build valgrind_check coverage \
-		   batch_build_command batch_build batch_build_shared batch_build_static \
-		   batch_check_shared batch_check_static
+		   batch_build_command batch_build 
 
 .PHONY: $(ElibTargets)
 
@@ -152,11 +126,10 @@ coverage:
 		cd ..
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build all
 	$(CMD_VERB) rm -rf test_coverage ; mkdir -p test_coverage
-	$(CMD_VERB) cp bin/elib_test_shared build/src/
 	cd build/src ; \
 	lcov --zerocounters --directory . ; \
 	lcov --capture --initial --directory . --output-file test_coverage ; \
-	./elib_test_shared --log_level=message --report_level=short ;\
+	$(MAKE) -C .. test;\
 	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
 	lcov --remove test_coverage.info '/usr/include/*' '/opt/*' 'src/*/unit_tests/*' --output-file test_coverage.info ;\
 	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
@@ -173,36 +146,10 @@ else
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build all 1> /dev/null
 endif
 
-################################################################################
-batch_check_shared:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running shared tests ===
-	$(CMD_VERB) ./bin/elib_test_shared --log_level=message --report_level=short --build_info=yes
-
-batch_check_static:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running static tests ===
-	$(CMD_VERB) ./bin/elib_test_static --log_level=message --report_level=short --build_info=yes
 
 ################################################################################
 batch_build:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure
 	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) batch_check_shared
-
-batch_build_shared:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure 
-	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) batch_check_shared
-
-batch_build_static:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure 
-	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) batch_check_static
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) check

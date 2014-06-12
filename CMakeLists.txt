@@ -213,7 +213,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
 # The Guts. The build targets are in src/CMakelists.txt
 add_subdirectory(src)
-add_subdirectory(test)
+#add_subdirectory(test)
 
 # NOTE: This should be the last line of this file.
 # When reconfiguring CMake some commands are noisy. We only need information

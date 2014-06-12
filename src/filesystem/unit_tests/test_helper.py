@@ -11,9 +11,7 @@ assert sys.platform.startswith('linux') or sys.platform.startswith('darwin')
 file_path = os.path.realpath(__file__)
 dot_path, file_name = os.path.split(file_path)
 # The root enviroment path
-env_path = os.path.join(dot_path, "test_env/")
-# The root path for writing lists
-list_path = os.path.join(dot_path, "test_files")
+env_path = os.path.join(dot_path, "dynamic_test_env/")
 
 
 # Make sure we don't try and write outside of env_path.

@@ -2,6 +2,11 @@
 ################################################################################
 #                           Macros & Functions
 ################################################################################
+macro(config_message level msg)
+    if (NOT CONFIGURATION_DONE)
+        message(${level} ${msg})
+    endif()
+endmacro()
 
 macro(set_dot_dir)
     set(dotDir ${CMAKE_CURRENT_LIST_DIR})
@@ -68,6 +73,7 @@ macro(add_test_dir)
         #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
         target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
         add_test(${TargetName} ${TargetName})
+        config_message(STATUS "Adding Target: ${TargetName}")
     endforeach()
 endmacro(add_test_dir)
 
@@ -80,8 +86,3 @@ macro(add_flags to)
     set(${to} "${${to}} ${_TMP}")
 endmacro(add_flags)
 
-macro(config_message level msg)
-    if (NOT CONFIGURATION_DONE)
-        message(${level} ${msg})
-    endif()
-endmacro()

@@ -1,3 +1,4 @@
+// REQUIRES: ELIB_CONTAINER_SOURCE, ELIB_BOOST_TEST
 #define BOOST_TEST_MODULE Main
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>

@@ -14,27 +14,25 @@ find_package( Threads REQUIRED )
 ##                            Unit Tests
 ################################################################################
 if(CONFIG_UNIT_TESTS) 
+    ################################### BOOST ######################################
+    set(Boost_USE_STATIC_LIBS OFF)
+    set(Boost_USE_MULTITHREADED ON)
+    set(Boost_USE_STATIC_RUNTIME OFF)
+    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+    set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
+    include_directories(${Boost_INCLUDE_DIRS})
 
-################################### BOOST ######################################
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
-include_directories(${Boost_INCLUDE_DIRS})
-
-################################### PYTHON #####################################
-# Check for a python interpreter the first time we run configuration.
-if (NOT DEFINED CONFIGURATION_DONE)
-    include (FindPythonInterp)
-    if (NOT PYTHONINTERP_FOUND)
-        message(FATAL_ERROR
-            "Cannot find python interpreter. 
-             Python is required to run the test suite.
-             Please configure using make UNIT_TESTS=OFF configure."
-           )
-    endif()
-
+    ################################### PYTHON #####################################
+    # Check for a python interpreter the first time we run configuration.
+    if (NOT DEFINED CONFIGURATION_DONE)
+        include (FindPythonInterp)
+        if (NOT PYTHONINTERP_FOUND)
+            message(FATAL_ERROR
+                "Cannot find python interpreter. 
+                Python is required to run the test suite.
+                Please configure using make UNIT_TESTS=OFF configure."
+            )
+        endif()
 endif() 
 
          
@@ -115,6 +113,7 @@ set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS} ${LIBRAR
 ################################################################################
 ##                             Libraries
 ################################################################################
+
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
 add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)  
 target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
@@ -136,11 +135,14 @@ endif()
 endif()
 ################################################################################
 
-
+# SAMPLEOBJ is used by lit.cfg to create a template build rule. 
+# When we LIT builds a negative compilation test it uses the flags for SAMPLEOBJ
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
 target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFAULT_BUILD ON)
 
+# We actually need to give sample_test a target that matches the naming convention
+# for tests. 
 add_executable(sample_test sample_test.pass.cpp)
 target_link_libraries(sample_test elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
@@ -152,7 +154,11 @@ if (PYTHONINTERP_FOUND)
   set(LIT_EXECUTABLE "${ELIB_ROOT_PATH}/packages/lit/lit.py" CACHE FILEPATH "Path to LLVM's lit.py.")
   set(LIT_ARGS_DEFAULT "-sv" CACHE STRING "Default lit args")
   set(LIT_ARGS "${LIT_ARGS_DEFAULT}")
+  set(LIT_BATCH_ARGS "${LIT_ARGS_DEFAULT} --no-progress-bar")
+  set(LIT_VALGRIND_ARGS "${LIT_ARGS_DEFAULT} --vg --vg-leak --threads=1")
   separate_arguments(LIT_ARGS)
+  separate_arguments(LIT_BATCH_ARGS)
+  separate_arguments(LIT_VALGRIND_ARGS)
 
   set(SAMPLE_OBJECT "SAMPLEOBJ")
 
@@ -170,6 +176,22 @@ if (PYTHONINTERP_FOUND)
             ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS elib
     COMMENT "Running elib tests")
+
+    add_custom_target(batch-check-elib
+    COMMAND ${PYTHON_EXECUTABLE}
+            ${LIT_EXECUTABLE}
+            ${LIT_BATCH_ARGS}
+            ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS elib
+    COMMENT "Running elib tests in batch mode")
+
+    add_custom_target(valgrind-check-elib
+    COMMAND ${PYTHON_EXECUTABLE}
+            ${LIT_EXECUTABLE}
+            ${LIT_VALGRIND_ARGS}
+            ${CMAKE_CURRENT_BINARY_DIR}
+    DEPENDS elib
+    COMMENT "Running elib tests in valgrind mode")
 else()
   message(WARNING "Could not find Python, no check target will be available!")
 endif()

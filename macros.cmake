@@ -49,7 +49,6 @@ endmacro(add_header_test_src)
     
 macro(add_test_dir)
     set_dot_dir()
-    
     if (${ARGC} EQUAL 0)
         string(REPLACE ${ELIB_ROOT_PATH}/src/ "" temp_prefix ${CMAKE_CURRENT_LIST_DIR})
         string(REPLACE "/" "_" prefix ${temp_prefix})
@@ -65,8 +64,10 @@ macro(add_test_dir)
         get_filename_component(MyExeName ${MyFile} NAME_WE)
         set(TargetName ${prefix}_${MyExeName})
         add_executable(${TargetName} ${MyFile})
+        # Currently way too noisy because of Boost.Test. 
+        #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
         target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-    add_test(${TargetName} ${TargetName})
+        add_test(${TargetName} ${TargetName})
     endforeach()
 endmacro(add_test_dir)
 

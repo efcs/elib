@@ -39,6 +39,7 @@ clean:
 	$(CMD_VERB) if [ -f build/Makefile ]; \
 		then $(MAKE) $(NOPRINTD) -C build clean ; \
 	fi
+	$(CMD_VERB) rm -rf src/filesystem/unit_tests/dynamic_test_env/
 	
 
 ################################################################################
@@ -84,7 +85,8 @@ test:
 ################################################################################
 
 ElibToolTargets := scan scan_test scan_build valgrind_check coverage \
-		   batch_build_command batch_build 
+		   batch_build_command batch_build batch-check-elib \
+		   valgrind-check-elib
 
 .PHONY: $(ElibTargets)
 
@@ -108,6 +110,10 @@ scan_test:
 scan_build:
 	$(CMD_VERB) rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make $(NOPRINTD) all; cd ..
 
+
+################################################################################
+valgrind-check-elib:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build valgrind-check-elib
 
 ################################################################################
 valgrind_check:
@@ -152,4 +158,8 @@ batch_build:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure
 	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch_build_command
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) check
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C batch-check-elib
+
+
+batch-check-elib:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build batch-check-elib

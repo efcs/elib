@@ -11,10 +11,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 set(ELIB_AVAILABLE_FEATURES "")
 get_directory_property(value DIRECTORY ${ELIB_ROOT_PATH}/src COMPILE_DEFINITIONS)
 if (value)
-    message(STATUS "DEFINES: ${value}")
     foreach(item ${value})
         list(FIND flags "-D${item}" FOUND)
-        if (FOUND EQUAL -1)
+        if (FOUND EQUAL -1 AND NOT ${item} MATCHES "ELIB_FILESYSTEM_UNIT_TEST_PATH(.*)")
             add_definitions(-D${item})
             list(APPEND ELIB_AVAILABLE_FEATURES ${item})
         endif()
@@ -24,6 +23,9 @@ endif()
 add_definitions( 
     -DELIB_FILESYSTEM_UNIT_TEST_PATH="${CMAKE_CURRENT_LIST_DIR}/filesystem"
   )
+
+get_directory_property(value DIRECTORY . COMPILE_DEFINITIONS)
+message(STATUS "DEFS: ${value}")
 
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
 target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})

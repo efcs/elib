@@ -5,6 +5,7 @@
 # include <elib/exception/error_info.hpp>
 # include <elib/aux.hpp>
 # include <elib/any.hpp>
+# include <elib/lexical_cast.hpp>
 # include <exception>
 # include <stdexcept>
 # include <memory>
@@ -67,7 +68,7 @@ namespace elib { namespace except { inline namespace v1
             
             s = get_error_info<throw_file>()->value();
             s += "::" 
-              + std::to_string( get_error_info<throw_line>()->value() );
+              + elib::lexical_cast<std::string>( get_error_info<throw_line>()->value() );
             s += " in function ";
             s += get_error_info<throw_func>()->value();
             

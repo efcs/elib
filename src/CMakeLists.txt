@@ -122,7 +122,7 @@ target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 # Installation information
 install(TARGETS elib LIBRARY DESTINATION lib)
 install(TARGETS elib_static ARCHIVE DESTINATION lib)
-install(DIRECTORY ${ELIB_ROOT_PATH}/elib DESTINATION include)
+install(DIRECTORY "${ELIB_ROOT_PATH}/elib" DESTINATION include)
   
 ################################################################################
 #                            Header Tests
@@ -145,6 +145,7 @@ set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFA
 # for tests. 
 add_executable(sample_test sample_test.pass.cpp)
 target_link_libraries(sample_test elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+
 
 include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)

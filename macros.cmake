@@ -73,7 +73,8 @@ macro(add_test_dir)
         #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
         target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
         add_test(${TargetName} ${TargetName})
-        config_message(STATUS "Adding Target: ${TargetName}")
+        # Print the name of the target that was added
+        #config_message(STATUS "Adding Target: ${TargetName}")
     endforeach()
 endmacro(add_test_dir)
 

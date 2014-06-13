@@ -167,7 +167,7 @@ else
 endif
 
 batch-check: 
-	$(CMD_VERB) python packages/lit/lit.py -sv --show-unsupported --no-progress-bar ./build/src
+	$(CMD_VERB) python packages/lit/lit.py -sv --show-unsupported --no-progress-bar --threads=$(THREADS) ./build/src
 
 ################################################################################
 batch-build:

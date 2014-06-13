@@ -210,7 +210,7 @@ if (DEFINED ENV{TRAVIS})
 endif()
 
 if (CYGWIN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -U__STRICT_ANSI__")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-include-dirs -U__STRICT_ANSI__")
 endif()
 
 ################################################################################
@@ -223,7 +223,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 
 # The Guts. The build targets are in src/CMakelists.txt
 add_subdirectory(src)
-#add_subdirectory(test)
 
 # NOTE: This should be the last line of this file.
 # When reconfiguring CMake some commands are noisy. We only need information

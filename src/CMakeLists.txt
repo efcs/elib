@@ -119,6 +119,10 @@ add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)
 target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 
+# Add a build rule to build both static and shared libraries
+add_custom_target(libs)
+add_dependencies(libs elib elib_static)
+
 # Installation information
 if (NOT DEFINED CYGWIN)
     install(TARGETS elib LIBRARY DESTINATION lib)

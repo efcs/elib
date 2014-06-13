@@ -120,7 +120,7 @@ target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT} ${STDLIB_LINK})
 
 # Installation information
-if (NOT CYGWIN)
+if (NOT DEFINED CYGWIN)
     install(TARGETS elib LIBRARY DESTINATION lib)
     install(TARGETS elib_static ARCHIVE DESTINATION lib)
     install(DIRECTORY "${ELIB_ROOT_PATH}/elib" DESTINATION include)

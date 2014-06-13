@@ -7,7 +7,7 @@
 #include <cassert>
 using namespace elib::fs;
 
-constexpr const std::uintmax_t bad_count = static_cast<std::uintmax_t>(-1);
+
 
 int main()
 {
@@ -16,6 +16,8 @@ int main()
     path const dir1 = env.make_env_path("dir1");
     path const dir2 = dir1 / "dir2";
     env.create_dir(dir1);
+    
+    constexpr const std::uintmax_t bad_count = static_cast<std::uintmax_t>(-1);
     
     permissions(dir1, perms::none);
     

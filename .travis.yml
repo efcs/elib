@@ -1,9 +1,8 @@
 language: cpp
 branches:
     only:
-        - development
+        - develop
         - master
-        - lit
 compiler:
     - g++
     - clang

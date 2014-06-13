@@ -227,8 +227,8 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             default_value<B>() == B::none, "default == none"
         );
-        TEST_ASSERT(default_value<A>() == A::none);
-        TEST_ASSERT(default_value<B>() == B::none);
+        TEST_CHECK(default_value<A>() == A::none);
+        TEST_CHECK(default_value<B>() == B::none);
     }
 
     // enumeration_error_value_test)
@@ -239,8 +239,8 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             error_value<B>() == B::one, "error == one"
         );
-        TEST_ASSERT(error_value<A>() == A::one);
-        TEST_ASSERT(error_value<B>() == B::one);
+        TEST_CHECK(error_value<A>() == A::one);
+        TEST_CHECK(error_value<B>() == B::one);
     }
 
     // enumeration_traits_first_value_test)
@@ -251,9 +251,9 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             first_value<B>() == B::none, "first == none"
         );
-        TEST_ASSERT(first_value<A>() == A::none);
-        TEST_ASSERT(first_value<B>() == B::none);
-        TEST_ASSERT(first_value<C>() == C::none);
+        TEST_CHECK(first_value<A>() == A::none);
+        TEST_CHECK(first_value<B>() == B::none);
+        TEST_CHECK(first_value<C>() == C::none);
     }
 
 
@@ -265,9 +265,9 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             last_value<B>() == B::two, "last == two"
         );
-        TEST_ASSERT(last_value<A>() == A::two);
-        TEST_ASSERT(last_value<B>() == B::two);
-        TEST_ASSERT(last_value<C>() == C::two);
+        TEST_CHECK(last_value<A>() == A::two);
+        TEST_CHECK(last_value<B>() == B::two);
+        TEST_CHECK(last_value<C>() == C::two);
     }
 
     // enumeration_traits_size_test)
@@ -278,9 +278,9 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             size<B>() == 3, "size == 3"
         );
-        TEST_ASSERT(size<A>() == 3);
-        TEST_ASSERT(size<B>() == 3);
-        TEST_ASSERT(size<C>() == 3);
+        TEST_CHECK(size<A>() == 3);
+        TEST_CHECK(size<B>() == 3);
+        TEST_CHECK(size<C>() == 3);
     }
 
     // enumeration_is_contigious_test)
@@ -291,9 +291,9 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             is_contigious<B>() == true, "is_contigious == true"
         );
-        TEST_ASSERT(is_contigious<A>());
-        TEST_ASSERT(is_contigious<B>());
-        TEST_ASSERT(is_contigious<C>());
+        TEST_CHECK(is_contigious<A>());
+        TEST_CHECK(is_contigious<B>());
+        TEST_CHECK(is_contigious<C>());
     }
 
     // enumeration_in_range_test)
@@ -316,16 +316,16 @@ TEST_CASE(enumeration_traits_test_suite)
         static_assert(
             not in_range(static_cast<A>(3)), "in range"
         );
-        TEST_ASSERT(in_range(A::none));
-        TEST_ASSERT(in_range(A::two));
-        TEST_ASSERT(not in_range(static_cast<A>(3)));
-        TEST_ASSERT(in_range(B::none));
-        TEST_ASSERT(in_range(B::two));
-        TEST_ASSERT(not in_range(static_cast<B>(3)));
-        TEST_ASSERT(in_range(C::none));
-        TEST_ASSERT(in_range(C::two));
-        TEST_ASSERT(not in_range(static_cast<C>(3)));
-        TEST_ASSERT(not in_range(static_cast<Empty>(0)));
+        TEST_CHECK(in_range(A::none));
+        TEST_CHECK(in_range(A::two));
+        TEST_CHECK(not in_range(static_cast<A>(3)));
+        TEST_CHECK(in_range(B::none));
+        TEST_CHECK(in_range(B::two));
+        TEST_CHECK(not in_range(static_cast<B>(3)));
+        TEST_CHECK(in_range(C::none));
+        TEST_CHECK(in_range(C::two));
+        TEST_CHECK(not in_range(static_cast<C>(3)));
+        TEST_CHECK(not in_range(static_cast<Empty>(0)));
     }
 
 }

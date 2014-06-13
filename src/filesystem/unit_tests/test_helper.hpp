@@ -1,5 +1,5 @@
-#ifndef TEST_HELPER_HPP
-#define TEST_HELPER_HPP
+#ifndef FILESYSTEM_UNIT_TEST_TEST_HELPER_HPP
+#define FILESYSTEM_UNIT_TEST_TEST_HELPER_HPP
 
 # include <elib/filesystem/config.hpp>
 # include <elib/filesystem/path.hpp>
@@ -15,4 +15,4 @@
 const elib::fs::path elib_root = ELIB_ROOT_PATH;
 const elib::fs::path test_root = ELIB_FILESYSTEM_UNIT_TEST_PATH;
 
-#endif /* TEST_HELPER_HPP */
+#endif /* FILESYSTEM_UNIT_TEST_TEST_HELPER_HPP */

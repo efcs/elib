@@ -107,12 +107,12 @@ TEST_CASE(enumeration_iterator_test_suite)
         {
             AIter last;
             AIter first(A::none);
-            TEST_ASSERT(*first == A::none);
+            TEST_CHECK(*first == A::none);
         }
         {
             BIter last;
             BIter first(B::none);
-            TEST_ASSERT(*first == B::none);
+            TEST_CHECK(*first == B::none);
         }
     }
 
@@ -120,15 +120,15 @@ TEST_CASE(enumeration_iterator_test_suite)
     {
         {
             const AIter it(A::none);
-            TEST_ASSERT(*it == A::none);
+            TEST_CHECK(*it == A::none);
             const AIter it2(A::two);
-            TEST_ASSERT(*it2 == A::two);
+            TEST_CHECK(*it2 == A::two);
         }
         {
             const BIter it(B::none);
-            TEST_ASSERT(*it == B::none);
+            TEST_CHECK(*it == B::none);
             const BIter it2(B::two);
-            TEST_ASSERT(*it2 == B::two);
+            TEST_CHECK(*it2 == B::two);
         }
     }
 
@@ -137,16 +137,16 @@ TEST_CASE(enumeration_iterator_test_suite)
         {
             const AIter last;
             const AIter first(A::none);
-            TEST_ASSERT(last == last);
-            TEST_ASSERT(first == first);
-            TEST_ASSERT(first != last);
+            TEST_CHECK(last == last);
+            TEST_CHECK(first == first);
+            TEST_CHECK(first != last);
         }
         {
             const BIter last;
             const BIter first(B::none);
-            TEST_ASSERT(last == last);
-            TEST_ASSERT(first == first);
-            TEST_ASSERT(first != last);
+            TEST_CHECK(last == last);
+            TEST_CHECK(first == first);
+            TEST_CHECK(first != last);
         }
     }
 
@@ -155,24 +155,24 @@ TEST_CASE(enumeration_iterator_test_suite)
         {
             const AIter last;
             AIter it(A::one);
-            TEST_ASSERT(*it == A::one);
-            TEST_ASSERT(it != last);
+            TEST_CHECK(*it == A::one);
+            TEST_CHECK(it != last);
             ++it;
-            TEST_ASSERT(*it == A::two);
-            TEST_ASSERT(it != last);
+            TEST_CHECK(*it == A::two);
+            TEST_CHECK(it != last);
             ++it;
-            TEST_ASSERT(it == last);
+            TEST_CHECK(it == last);
         }
         {
             const BIter last;
             BIter it(B::one);
-            TEST_ASSERT(*it == B::one);
-            TEST_ASSERT(it != last);
+            TEST_CHECK(*it == B::one);
+            TEST_CHECK(it != last);
             ++it;
-            TEST_ASSERT(*it == B::two);
-            TEST_ASSERT(it != last);
+            TEST_CHECK(*it == B::two);
+            TEST_CHECK(it != last);
             ++it;
-            TEST_ASSERT(it == last);
+            TEST_CHECK(it == last);
         }
     }
 
@@ -181,26 +181,26 @@ TEST_CASE(enumeration_iterator_test_suite)
         {
             const AIter last;
             AIter it(A::one);
-            TEST_ASSERT(*it == A::one);
-            TEST_ASSERT(it != last);
+            TEST_CHECK(*it == A::one);
+            TEST_CHECK(it != last);
             AIter cp = it++;
-            TEST_ASSERT(*it == A::two);
-            TEST_ASSERT(*cp == A::one);
+            TEST_CHECK(*it == A::two);
+            TEST_CHECK(*cp == A::one);
             cp = it++;
-            TEST_ASSERT(it == last);
-            TEST_ASSERT(*cp == A::two);
+            TEST_CHECK(it == last);
+            TEST_CHECK(*cp == A::two);
         }
         {
             const BIter last;
             BIter it(B::one);
-            TEST_ASSERT(*it == B::one);
-            TEST_ASSERT(it != last);
+            TEST_CHECK(*it == B::one);
+            TEST_CHECK(it != last);
             BIter cp = it++;
-            TEST_ASSERT(*it == B::two);
-            TEST_ASSERT(*cp == B::one);
+            TEST_CHECK(*it == B::two);
+            TEST_CHECK(*cp == B::one);
             cp = it++;
-            TEST_ASSERT(it == last);
-            TEST_ASSERT(*cp == B::two);
+            TEST_CHECK(it == last);
+            TEST_CHECK(*cp == B::two);
         }
     }
 
@@ -210,33 +210,33 @@ TEST_CASE(enumeration_iterator_test_suite)
             AIter first(A::none);
             AIter last;
             AIter it;
-            TEST_ASSERT(it == last);
+            TEST_CHECK(it == last);
             --it;
             TEST_REQUIRE(it != last);
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*it == A::two);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*it == A::two);
             --it;
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*it == A::one);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*it == A::one);
             --it;
-            TEST_ASSERT(it == first);
-            TEST_ASSERT(*it == A::none);
+            TEST_CHECK(it == first);
+            TEST_CHECK(*it == A::none);
         }
         {
             BIter first(B::none);
             BIter last;
             BIter it;
-            TEST_ASSERT(it == last);
+            TEST_CHECK(it == last);
             --it;
             TEST_REQUIRE(it != last);
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*it == B::two);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*it == B::two);
             --it;
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*it == B::one);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*it == B::one);
             --it;
-            TEST_ASSERT(it == first);
-            TEST_ASSERT(*it == B::none);
+            TEST_CHECK(it == first);
+            TEST_CHECK(*it == B::none);
         }
     }
 
@@ -246,51 +246,51 @@ TEST_CASE(enumeration_iterator_test_suite)
             const AIter last;
             const AIter first(A::none);
             AIter it(last);
-            TEST_ASSERT(it == last);
-            TEST_ASSERT(it != first);
+            TEST_CHECK(it == last);
+            TEST_CHECK(it != first);
             AIter cp = it--;
-            TEST_ASSERT(cp == last);
-            TEST_ASSERT(cp != first);
+            TEST_CHECK(cp == last);
+            TEST_CHECK(cp != first);
             TEST_REQUIRE(it != last);
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*it == A::two);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*it == A::two);
             cp = it--;
-            TEST_ASSERT(cp != last);
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*cp == A::two);
-            TEST_ASSERT(*it == A::one);
+            TEST_CHECK(cp != last);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*cp == A::two);
+            TEST_CHECK(*it == A::one);
             cp = it--;
-            TEST_ASSERT(cp != last);
-            TEST_ASSERT(cp != first);
-            TEST_ASSERT(it != last);
-            TEST_ASSERT(it == first);
-            TEST_ASSERT(*cp == A::one);
-            TEST_ASSERT(*it == A::none);
+            TEST_CHECK(cp != last);
+            TEST_CHECK(cp != first);
+            TEST_CHECK(it != last);
+            TEST_CHECK(it == first);
+            TEST_CHECK(*cp == A::one);
+            TEST_CHECK(*it == A::none);
         }
         {
             const BIter last;
             const BIter first(B::none);
             BIter it(last);
-            TEST_ASSERT(it == last);
-            TEST_ASSERT(it != first);
+            TEST_CHECK(it == last);
+            TEST_CHECK(it != first);
             BIter cp = it--;
-            TEST_ASSERT(cp == last);
-            TEST_ASSERT(cp != first);
+            TEST_CHECK(cp == last);
+            TEST_CHECK(cp != first);
             TEST_REQUIRE(it != last);
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*it == B::two);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*it == B::two);
             cp = it--;
-            TEST_ASSERT(cp != last);
-            TEST_ASSERT(it != first);
-            TEST_ASSERT(*cp == B::two);
-            TEST_ASSERT(*it == B::one);
+            TEST_CHECK(cp != last);
+            TEST_CHECK(it != first);
+            TEST_CHECK(*cp == B::two);
+            TEST_CHECK(*it == B::one);
             cp = it--;
-            TEST_ASSERT(cp != last);
-            TEST_ASSERT(cp != first);
-            TEST_ASSERT(it != last);
-            TEST_ASSERT(it == first);
-            TEST_ASSERT(*cp == B::one);
-            TEST_ASSERT(*it == B::none);
+            TEST_CHECK(cp != last);
+            TEST_CHECK(cp != first);
+            TEST_CHECK(it != last);
+            TEST_CHECK(it == first);
+            TEST_CHECK(*cp == B::one);
+            TEST_CHECK(*it == B::none);
         }
     }
 }

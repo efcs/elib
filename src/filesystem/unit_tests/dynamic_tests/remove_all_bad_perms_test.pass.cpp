@@ -3,13 +3,11 @@
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
-#undef NDEBUG
-#include <cassert>
+#include "test/helper.hpp"
 using namespace elib::fs;
 
 
-
-int main()
+TEST_CASE(remove_all_bad_perms_test)
 {
 #if !defined(ELIB_CONFIG_CYGWIN)
     scoped_test_env env;
@@ -24,19 +22,11 @@ int main()
     {
         std::error_code ec;
         auto ret = remove_all(dir2, ec);
-        assert(ec);
-        assert(ret == bad_count);
+        TEST_CHECK(ec);
+        TEST_CHECK(ret == bad_count);
     }{
-        try {
-            remove_all(dir2);
-            assert(false);
-        } catch (filesystem_error const &) {
-          
-        } catch (...) {
-            assert(false);
-        }
+        TEST_THROWS(remove_all(dir2), filesystem_error);
     }
-    
     permissions(dir1, perms::all);
 #endif
 }

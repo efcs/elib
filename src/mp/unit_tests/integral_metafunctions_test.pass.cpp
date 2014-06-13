@@ -2,14 +2,15 @@
 #define BOOST_TEST_MODULE Main
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-
-#include "elib/mp/arithmetic.hpp"
-#include "elib/mp/bitwise.hpp"
-#include "elib/mp/logical.hpp"
-#include "elib/mp/comparison.hpp"
-#include "elib/mp/void.hpp"
-#include "elib/preprocessor/overload.hpp"
+#include <elib/mp/arithmetic.hpp>
+#include <elib/mp/bitwise.hpp>
+#include <elib/mp/logical.hpp>
+#include <elib/mp/comparison.hpp>
+#include <elib/mp/void.hpp>
+#include <elib/preprocessor/overload.hpp>
+#include <elib/aux/traits/is_same.hpp>
 #include "mp_test_helper.hpp"
+#include "test/helper.hpp"
 
 using aux::char_;
 using aux::short_;
@@ -32,8 +33,8 @@ using aux::ullong_;
 #
 #
 #define CHECK_RESULT(R, CT, result)                                       \
-  CHECK( std::is_same<typename R::type::value_type, CT>::type::value ); \
-  CHECK( R::type::value == result )
+  TEST_CHECK( aux::is_same<typename R::type::value_type, CT>::type::value ); \
+  TEST_CHECK( R::type::value == result )
 #
 #
 #define TEST_OP(etype, eval, ...)                    \
@@ -368,7 +369,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 //                            LOGICAL                                              
 ////////////////////////////////////////////////////////////////////////////////
 
-#define SAME_INTC(v, ...) BOOST_CHECK((v() == __VA_ARGS__()));
+#define SAME_INTC(v, ...) TEST_CHECK((v() == __VA_ARGS__()));
 
   BOOST_AUTO_TEST_CASE(mp_logical_not)
   {
@@ -438,52 +439,52 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 
 
 #define EQUAL_TO(...)                    \
-  CHECK( equal_to<__VA_ARGS__>() );      \
-  CHECK( greater_equal<__VA_ARGS__>() ); \
-  CHECK( less_equal<__VA_ARGS__>() );    \
-  CHECK( !greater<__VA_ARGS__>() );      \
-  CHECK( !less<__VA_ARGS__>() );         \
-  CHECK( !not_equal_to<__VA_ARGS__>() )
+  TEST_CHECK( equal_to<__VA_ARGS__>() );      \
+  TEST_CHECK( greater_equal<__VA_ARGS__>() ); \
+  TEST_CHECK( less_equal<__VA_ARGS__>() );    \
+  TEST_CHECK( !greater<__VA_ARGS__>() );      \
+  TEST_CHECK( !less<__VA_ARGS__>() );         \
+  TEST_CHECK( !not_equal_to<__VA_ARGS__>() )
 #
 #
 #define NOT_EQUAL_TO(...)                                          \
-  CHECK( not_equal_to<__VA_ARGS__>() );                            \
-  CHECK( (less<__VA_ARGS__>() && less_equal<__VA_ARGS__>()         \
+  TEST_CHECK( not_equal_to<__VA_ARGS__>() );                            \
+  TEST_CHECK( (less<__VA_ARGS__>() && less_equal<__VA_ARGS__>()         \
           && !greater_equal<__VA_ARGS__>())                        \
         || (greater<__VA_ARGS__>() && greater_equal<__VA_ARGS__>() \
             && !less_equal<__VA_ARGS__>())                         \
         );                                                         \
-  CHECK( !equal_to<__VA_ARGS__>() )
+  TEST_CHECK( !equal_to<__VA_ARGS__>() )
 #
 #
 #define LESS(...)                                            \
-  CHECK( less<__VA_ARGS__>() && less_equal<__VA_ARGS__>() ); \
-  CHECK( not_equal_to<__VA_ARGS__>() && !equal_to<__VA_ARGS__>() ); \
-  CHECK( !greater<__VA_ARGS__>() && !greater_equal<__VA_ARGS__>() )
+  TEST_CHECK( less<__VA_ARGS__>() && less_equal<__VA_ARGS__>() ); \
+  TEST_CHECK( not_equal_to<__VA_ARGS__>() && !equal_to<__VA_ARGS__>() ); \
+  TEST_CHECK( !greater<__VA_ARGS__>() && !greater_equal<__VA_ARGS__>() )
 #
 #
 #define LESS_EQUAL(...)                                         \
-  CHECK( less_equal<__VA_ARGS__>() );                           \
-  CHECK( (equal_to<__VA_ARGS__>() && !less<__VA_ARGS__>())      \
+  TEST_CHECK( less_equal<__VA_ARGS__>() );                           \
+  TEST_CHECK( (equal_to<__VA_ARGS__>() && !less<__VA_ARGS__>())      \
         || (not_equal_to<__VA_ARGS__>() && less<__VA_ARGS__>()) \
         );                                                      \
-  CHECK( !greater<__VA_ARGS__>() );                             \
-  CHECK( equal_to<__VA_ARGS__>() == greater_equal<__VA_ARGS__>() )
+  TEST_CHECK( !greater<__VA_ARGS__>() );                             \
+  TEST_CHECK( equal_to<__VA_ARGS__>() == greater_equal<__VA_ARGS__>() )
 #
 #
 #define GREATER(...)                                                \
-  CHECK( greater<__VA_ARGS__>() && greater_equal<__VA_ARGS__>() );  \
-  CHECK( not_equal_to<__VA_ARGS__>() && !equal_to<__VA_ARGS__>() ); \
-  CHECK( !less<__VA_ARGS__>() && !less_equal<__VA_ARGS__>() )
+  TEST_CHECK( greater<__VA_ARGS__>() && greater_equal<__VA_ARGS__>() );  \
+  TEST_CHECK( not_equal_to<__VA_ARGS__>() && !equal_to<__VA_ARGS__>() ); \
+  TEST_CHECK( !less<__VA_ARGS__>() && !less_equal<__VA_ARGS__>() )
 #
 #
 #define GREATER_EQUAL(...)                                         \
-  CHECK( greater_equal<__VA_ARGS__>() );                           \
-  CHECK( (equal_to<__VA_ARGS__>() && !greater<__VA_ARGS__>())      \
+  TEST_CHECK( greater_equal<__VA_ARGS__>() );                           \
+  TEST_CHECK( (equal_to<__VA_ARGS__>() && !greater<__VA_ARGS__>())      \
         || (not_equal_to<__VA_ARGS__>() && greater<__VA_ARGS__>()) \
       );                                                           \
-  CHECK( less_equal<__VA_ARGS__>() == equal_to<__VA_ARGS__>() );   \
-  CHECK( !less<__VA_ARGS__>() )
+  TEST_CHECK( less_equal<__VA_ARGS__>() == equal_to<__VA_ARGS__>() );   \
+  TEST_CHECK( !less<__VA_ARGS__>() )
 #
   
   

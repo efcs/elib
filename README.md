@@ -9,9 +9,9 @@ LAST UPDATE: 07/06/2014
 NOTE: elib has git submodules! If this is a new repo please run `git submodule update --init`.
 
 ## Platform Support
-Elib currently only supports Linux and OS X. Although most libraries would
-build on Windows (See Library Summary for specifics), the build system has
-no support for MSVC. With enough trouble it should build in Cygwin and MinGW.
+Elib currently only supports Linux and OS X as well as Cygwin. 
+Although most libraries would build on Windows (See Library Summary for specifics), 
+the build system has no support for MSVC. 
 
 ## Compiler Support.
 Elib supports the following compiler/library configurations:
@@ -19,6 +19,7 @@ Elib supports the following compiler/library configurations:
  - GCC 4.9
  - Clang 3.4 (with/without libc++)
  - Clang 3.5 trunk (with/without libc++)
+ - GCC 4.8.3 (Cygwin)
 
 
 ## Library Summary

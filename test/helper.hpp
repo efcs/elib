@@ -14,7 +14,7 @@ namespace elib_test_detail
     template <class T>
     struct is_same<T, T>
     {
-        enum { value = 1; };
+        enum { value = 1 };
     };
 }
 # 
@@ -45,14 +45,14 @@ namespace elib_test_detail
     } while (false)
 # 
 # 
-# define TEST_CASE(...)                                                   \
-    void __VA_ARGS__();                                                   \
+# define TEST_CASE(Name)                                                   \
+    void Name();                                                   \
     int main() { try {                                                    \
-        __VA_ARGS__();                                                    \
+        Name();                                                    \
     } catch (...) {                                                       \
         ELIB_ASSERT_ALWAYS(!bool("Unexpected exception thrown in test")); \
     }}                                                                    \
-    void __VA_ARGS__()
+    void Name()
         
 # 
 #endif /* TEST_HELPER_HPP */

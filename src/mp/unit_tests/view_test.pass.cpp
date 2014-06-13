@@ -1,8 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_MP_SOURCE
 #include <elib/mp/sequence.hpp>
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/containers.hpp>
@@ -11,14 +7,13 @@
 #include <elib/mp/views.hpp>
 #include <elib/mp/print.hpp>
 #include <elib/aux.hpp>
-
 #include "mp_test_helper.hpp"
 #include "test/helper.hpp"
 
 
-BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
-  
-  BOOST_AUTO_TEST_CASE(mp_view_empty_sequence_test)
+TEST_CASE(mp_view_test_suite)
+{
+  // mp_view_empty_sequence_test)
   {
     // general
     {
@@ -62,7 +57,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     }
   }
 
-  BOOST_AUTO_TEST_CASE(mp_view_filter_view_test)
+  // mp_view_filter_view_test)
   {
     // general
     {
@@ -116,7 +111,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
   }                                                 // mp_view_filter_view_test
   
   
-  BOOST_AUTO_TEST_CASE(mp_view_single_view_test)
+  // mp_view_single_view_test)
   {
     // general
     {
@@ -176,7 +171,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
   }                                                 // mp_view_single_view_test
   
 
-  BOOST_AUTO_TEST_CASE(mp_view_joint_view_test)
+  // mp_view_joint_view_test)
   {
     // general
     {
@@ -243,7 +238,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     }
   }                                                  // mp_view_joint_view_test
   
-  BOOST_AUTO_TEST_CASE(mp_view_transform_view_test)
+  // mp_view_transform_view_test)
   {
     // general
     {
@@ -297,7 +292,7 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
 
   
 # if !defined(ELIB_CONFIG_COVERITY_SCAN) 
-  BOOST_AUTO_TEST_CASE(mp_view_zip_view_test)
+  // mp_view_zip_view_test)
   {
     // general
     {
@@ -379,4 +374,4 @@ BOOST_AUTO_TEST_SUITE(mp_view_test_suite)
     }
   }                                                    // mp_view_zip_view_test
 # endif /* ELIB_CONFIG_COVERITY_SCAN */
-BOOST_AUTO_TEST_SUITE_END()
+}

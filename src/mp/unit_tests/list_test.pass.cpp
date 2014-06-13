@@ -1,8 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_MP_SOURCE
 #include <elib/mp/list.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
@@ -14,9 +10,9 @@ using aux::long_;
 template <class ...Args>
 using l_iter = list_iterator<Args...>;
 
-BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
-
-  BOOST_AUTO_TEST_CASE(mp_list_construction)
+TEST_CASE(mp_list_test_suite)
+{
+  // mp_list_construction)
   {
     using T0 = list<>;
     using C0 = list_c<int>;
@@ -35,7 +31,7 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
   }                                                     // mp_list_construction
   
 
-  BOOST_AUTO_TEST_CASE(mp_list_intrinsics)
+  // mp_list_intrinsics)
   {
     // empty
     {
@@ -83,7 +79,7 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
   }                                                      // mp_list_intrinsics
 
   
-  BOOST_AUTO_TEST_CASE(mp_list_iterator_intrinsics)
+  // mp_list_iterator_intrinsics)
   {
     // model_of
     {
@@ -164,7 +160,7 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
     TEST_SAME_TYPE( typename T::model_type, list_model);              \
   } while (false)
   
-  BOOST_AUTO_TEST_CASE(mp_list_sequence_traits)
+  // mp_list_sequence_traits)
   {
     // empty
     TEST_CHECK_TRAITS(list<>);
@@ -192,6 +188,4 @@ BOOST_AUTO_TEST_SUITE(mp_list_test_suite)
   }                                                  // mp_list_sequence_traits
   
 #undef TEST_CHECK_TRAITS
-  
-  
-BOOST_AUTO_TEST_SUITE_END()
+}

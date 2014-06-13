@@ -1,7 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
+// REQUIRES: ELIB_MP_SOURCE
 #include <elib/mp/arithmetic.hpp>
 #include <elib/mp/bitwise.hpp>
 #include <elib/mp/logical.hpp>
@@ -121,8 +118,8 @@ using aux::ullong_;
 #
 
 
-BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
-
+TEST_CASE(mp_integral_metafunctions_test_suite)
+{
 ////////////////////////////////////////////////////////////////////////////////
 //                            arithmetic                                              
 ////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +127,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP -
 #define FN negate_t
 
-  BOOST_AUTO_TEST_CASE(mp_arithmetic_negate)
+  // mp_arithmetic_negate)
   {
     TEST_OP(int, 0, false_);
     TEST_OP(int, -1, true_);
@@ -150,7 +147,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP +
 #define FN add_t
     
-  BOOST_AUTO_TEST_CASE(mp_arithmetic_add)
+  // mp_arithmetic_add)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -174,7 +171,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP -
 #define FN subtract_t
   
-  BOOST_AUTO_TEST_CASE(mp_arithmetic_subtract)
+  // mp_arithmetic_subtract)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -198,7 +195,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP *
 #define FN multiply
 
-  BOOST_AUTO_TEST_CASE(mp_arithmetic_multiply)
+  // mp_arithmetic_multiply)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -222,7 +219,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP /
 #define FN divide_t
 
-  BOOST_AUTO_TEST_CASE(mp_arithmetic_divide)
+  // mp_arithmetic_divide)
   {
     // all (including bool)
     TEST_ALL_TYPES(0, 0, 1);
@@ -245,7 +242,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP %
 #define FN modulus_t
 
-  BOOST_AUTO_TEST_CASE(mp_arithmetic_modulus)
+  // mp_arithmetic_modulus)
   {
     TEST_ALL_TYPES(0, 0, 1);
     TEST_ALL_TYPES(0, 1, 1);
@@ -267,7 +264,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP ~
 #define FN bitnegate_
 
-  BOOST_AUTO_TEST_CASE(mp_bitwise_negate)
+  // mp_bitwise_negate)
   {
     TEST_OP(int, ~0, false_);
     TEST_OP(int, ~1, true_);
@@ -284,7 +281,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP &
 #define FN bitand_
   
-  BOOST_AUTO_TEST_CASE(mp_bitwise_and)
+  // mp_bitwise_and)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(0, 1, 0);
@@ -301,7 +298,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP |
 #define FN bitor_
 
-  BOOST_AUTO_TEST_CASE(mp_bitwise_or)
+  // mp_bitwise_or)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(1, 1, 0);
@@ -318,7 +315,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP ^
 #define FN bitxor_
 
-  BOOST_AUTO_TEST_CASE(mp_bitwise_xor)
+  // mp_bitwise_xor)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(1, 1, 0);
@@ -336,7 +333,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP << 
 #define FN shift_left
   
-  BOOST_AUTO_TEST_CASE(mp_bitwise_shift_left)
+  // mp_bitwise_shift_left)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -353,7 +350,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #define OP >>
 #define FN shift_right
   
-  BOOST_AUTO_TEST_CASE(mp_bitwise_shift_right)
+  // mp_bitwise_shift_right)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(0, 0, 1);
@@ -371,7 +368,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 
 #define SAME_INTC(v, ...) TEST_CHECK((v() == __VA_ARGS__()));
 
-  BOOST_AUTO_TEST_CASE(mp_logical_not)
+  // mp_logical_not)
   {
     SAME_INTC(false_, not_<true_>);
     SAME_INTC(true_, not_<false_>);
@@ -390,7 +387,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
     SAME_INTC(false_, not_c<static_cast<unsigned>(-1)>);
   }                                                         // mp_logical_not
   
-  BOOST_AUTO_TEST_CASE(mp_logical_and)
+  // mp_logical_and)
   {
     SAME_INTC(true_, and_<true_, true_>);
     SAME_INTC(true_, and_<true_, true_, true_>);
@@ -410,7 +407,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
   }                                                         // mp_logical_and
 
 
-  BOOST_AUTO_TEST_CASE(mp_logical_or)
+  // mp_logical_or)
   {
     SAME_INTC(true_, or_<true_, true_>);
     SAME_INTC(true_, or_<true_, true_, true_>);
@@ -488,7 +485,7 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
 #
   
   
- BOOST_AUTO_TEST_CASE(mp_comparision_test)
+ // mp_comparision_test)
   {
     // LHS == RHS
     EQUAL_TO(true_, true_);
@@ -521,4 +518,4 @@ BOOST_AUTO_TEST_SUITE(mp_integral_metafunctions_test_suite)
     GREATER_EQUAL(char_<10>, uint_<10>);
   }                                                  // mp_comparision_equality
   
-BOOST_AUTO_TEST_SUITE_END()
+}

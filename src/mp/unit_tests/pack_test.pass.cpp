@@ -1,8 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_MP_SOURCE
 #include <elib/mp/pack.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
@@ -15,10 +11,10 @@
 template <class Pack, std::size_t N>
 using p_iter = pack_iterator<Pack, N>;
 
-BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
+TEST_CASE(mp_pack_test_suite)
+{
 
-
-  BOOST_AUTO_TEST_CASE(mp_pack_construction)
+  // mp_pack_construction)
   {
     using namespace elib::mp::placeholders;
     using T0 = pack<>;
@@ -37,7 +33,7 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
     TEST_SAME_TYPE(typename T2::type, T2);
   }                                                     // mp_pack_construction
 
-  BOOST_AUTO_TEST_CASE(mp_pack_intrinsics)
+  // mp_pack_intrinsics)
   {
     // empty
     {
@@ -149,7 +145,7 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
     // TODO insert and erase tests
   }                                                       // mp_pack_intrinsics
 
-  BOOST_AUTO_TEST_CASE(mp_pack_iterator_intrinsics)
+  // mp_pack_iterator_intrinsics)
   {
     // model_type test
     {
@@ -247,7 +243,7 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
   } while (false)
 #
   
-  BOOST_AUTO_TEST_CASE(mp_pack_sequence_traits)
+  // mp_pack_sequence_traits)
   {
     // empty
     TEST_CHECK_TRAITS( pack<> );
@@ -272,5 +268,4 @@ BOOST_AUTO_TEST_SUITE(mp_pack_test_suite)
   
 #undef TEST_CHECK_TRAITS
 
-  
-BOOST_AUTO_TEST_SUITE_END()
+}

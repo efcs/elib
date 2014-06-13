@@ -1,15 +1,12 @@
 // REQUIRES: ELIB_MP_SOURCE
-#include "elib/mp/metafunctions.hpp"
-#include "elib/mp/identity.hpp"
-#include "elib/mp/pair.hpp"
-#include "elib/mp/void.hpp"
-#
-#include "mp_test_helper.hpp"
-#include "elib/aux.hpp"
-#
+#include <elib/mp/metafunctions.hpp>
+#include <elib/mp/identity.hpp>
+#include <elib/mp/pair.hpp>
+#include <elib/mp/void.hpp>
+#include <elib/aux.hpp>
 #include <type_traits>
 #include <utility>
-#
+#include "mp_test_helper.hpp"
 #include "test/helper.hpp"
 
 using namespace elib;

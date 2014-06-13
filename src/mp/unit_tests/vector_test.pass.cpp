@@ -1,16 +1,12 @@
-// REQUIRES: ELIB_MP_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_MP_SOURCE
 #include <elib/mp/vector.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/sequence.hpp>
 #include <elib/mp/sequence_traits.hpp>
+#include <cstddef>
 #include "mp_test_helper.hpp"
 #include "test/helper.hpp"
-#include <cstddef>
 
 
 template <class T, class V>
@@ -29,9 +25,9 @@ template <class Vector, std::size_t N>
 using v_iter = vector_iterator<Vector, N>;
 
 
-BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
-
-  BOOST_AUTO_TEST_CASE(mp_vector_construction)
+TEST_CASE(mp_vector_test_suite)
+{
+  // mp_vector_construction)
   {
     using T0 = vector<>;
     using C0 = vector_c<int>;
@@ -49,7 +45,7 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
     TEST_SAME_TYPE(typename T2::type, T2);
   }                                                   // mp_vector_construction
 
-  BOOST_AUTO_TEST_CASE(mp_vector_intrinsics)
+  // mp_vector_intrinsics)
   {
     // empty
     {
@@ -168,7 +164,7 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
   }                                                     // mp_vector_intrinsics
   
   
-  BOOST_AUTO_TEST_CASE(mp_vector_iterator_intrinsics)
+  // mp_vector_iterator_intrinsics)
   {
     // model_type
     {
@@ -255,7 +251,7 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
   } while (false)
 #
  
-  BOOST_AUTO_TEST_CASE(mp_vector_sequence_traits)
+  // mp_vector_sequence_traits)
   {
     // empty
     TEST_CHECK_TRAITS(vector<>);
@@ -284,4 +280,4 @@ BOOST_AUTO_TEST_SUITE(mp_vector_test_suite)
   
 # undef TEST_CHECK_TRAITS
   
-BOOST_AUTO_TEST_SUITE_END()
+}

@@ -166,14 +166,15 @@ else
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib 1> /dev/null
 endif
 
+batch-check: 
+	$(CMD_VERB) python packages/lit/lit.py -sv --show-unsupported --no-progress-bar ./build/src
 
 ################################################################################
 batch-build:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) configure
-	$(CMD_VERB) time $(MAKE) $(NOPRINTD) batch-build-command
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C batch-check
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) batch-build-command
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) batch-check
 
 
-batch-check: 
-	$(CMD_VERB) python packages/lit/lit.py -sv --show-unsupported --no-progress-bar ./build/src
+

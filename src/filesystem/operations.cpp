@@ -749,7 +749,7 @@ namespace elib { namespace fs { inline namespace v1 { namespace detail
         auto const real_perms = detail::posix_convert_perms(prms);
         
 # if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) \
-    && !defined(ELIB_CONFIG_LINUX)
+    && !defined(ELIB_CONFIG_LINUX) && !defined(ELIB_CONFIG_CYGWIN)
         const int flags = bool(perms::resolve_symlinks & prms)
                        ? 0 : AT_SYMLINK_NOFOLLOW;
                        

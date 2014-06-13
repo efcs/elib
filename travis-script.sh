@@ -12,4 +12,5 @@ then
 fi
 
 make HEADER_TESTS=ON configure
-make -j2 check
+make -j2 elib
+make batch-check

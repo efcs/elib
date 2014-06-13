@@ -1,2 +1,2 @@
 add_header_test_src(header_tests)
-add_test_dir(unit_tests)
+add_recursive_test_dir(unit_tests)

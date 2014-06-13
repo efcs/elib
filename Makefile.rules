@@ -161,9 +161,9 @@ coverage:
 ################################################################################
 batch-build-command:
 ifdef BATCH_VERBOSE
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  all
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib
 else
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build all 1> /dev/null
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib 1> /dev/null
 endif
 
 

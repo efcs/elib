@@ -3,6 +3,7 @@
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+#undef NDEBUG
 #include <cassert>
 using namespace elib::fs;
 

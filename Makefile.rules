@@ -115,7 +115,7 @@ valgrind-check:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build elib elib_static
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
-	$(CMD_VERB) python packages/lit/lit.py -v --max-time=180 --vg --vg-leak --vg-arg=--trace-children-skip=*python* ./build/src
+	$(CMD_VERB) python packages/lit/lit.py -v --vg --vg-leak --vg-arg=--trace-children-skip=*python* ./build/src
 
 ################################################################################
 scan:

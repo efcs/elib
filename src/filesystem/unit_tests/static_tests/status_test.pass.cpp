@@ -344,7 +344,7 @@ BOOST_AUTO_TEST_CASE(directory_test)
 BOOST_AUTO_TEST_CASE(block_file_test)
 {
 
-#if defined(ELIB_CONFIG_LINUX)
+#if defined(ELIB_CONFIG_LINUX) || defined(ELIB_CONFIG_CYGWIN)
     path const file("/dev/sda");
 #elif defined(ELIB_CONFIG_APPLE)
     path const file("/dev/disk0");

@@ -17,10 +17,6 @@
 
 # include <elib/assert.hpp>
 
-# ifndef BOOST_REQUIRE
-#   error boost unit test must be included before this file
-# endif
-
 
 #define PYTHON_RUN_STR "python " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
 

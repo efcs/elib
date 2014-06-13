@@ -3,6 +3,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <elib/config.hpp>
 #include <elib/filesystem.hpp>
 #include <chrono>
 #include <system_error>
@@ -91,6 +92,7 @@ BOOST_AUTO_TEST_CASE(write_time_test)
     }
 }
 
+#if !defined(ELIB_CONFIG_CYGWIN)
 BOOST_AUTO_TEST_CASE(stat_fail_test)
 {
     scoped_test_env env;
@@ -112,5 +114,6 @@ BOOST_AUTO_TEST_CASE(stat_fail_test)
     
     permissions(dir, perms::all);
 }
+# endif
 
 BOOST_AUTO_TEST_SUITE_END()

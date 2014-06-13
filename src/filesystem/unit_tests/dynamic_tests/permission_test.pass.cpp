@@ -102,7 +102,8 @@ BOOST_AUTO_TEST_CASE(remove_permissions_test)
 }
 
 // linux doesn't support permissions on symlinks
-#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && !defined(ELIB_CONFIG_LINUX)
+#if defined(AT_SYMLINK_NOFOLLOW) && defined(AT_FDCWD) && \
+   !defined(ELIB_CONFIG_LINUX) && !defined(ELIB_CONFIG_CYGWIN)
 BOOST_AUTO_TEST_CASE(not_follow_symlink_test)
 {
     scoped_test_env env;

@@ -9,7 +9,6 @@
 #include "../dynamic_test_helper.hpp"
 using namespace elib::fs;
 
-constexpr const std::uintmax_t bad_count = static_cast<std::uintmax_t>(-1);
 
 BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_remove_all_test_suite)
 

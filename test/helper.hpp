@@ -19,6 +19,8 @@ namespace elib_test_detail
 }
 # 
 # define TEST_ASSERT(...) ELIB_ASSERT_ALWAYS(__VA_ARGS__)
+# define TEST_CHECK(...) ELIB_ASSERT_ALWAYS(__VA_ARGS__)
+# define TEST_REQUIRE(...) ELIB_ASSERT_ALWAYS(__VA_ARGS__)
 # define TEST_WARN(...) ELIB_WARN_ALWAYS(__VA_ARGS__)
 # define TEST_STATIC_ASSERT(...) static_assert(__VA_ARGS__, #__VA_ARGS__)
 # define TEST_SAME_TYPE(...) TEST_STATIC_ASSERT(::elib_test_detail::is_same<__VA_ARGS__>::value)

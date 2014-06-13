@@ -1,8 +1,5 @@
-// REQUIRES: ELIB_ENUMERATION_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_ENUMERATION_SOURCE
+#include "test/helper.hpp"
 #include <elib/enumeration/basic_traits.hpp>
 #include <elib/enumeration/traits.hpp>
 #include <map>
@@ -75,259 +72,260 @@ namespace elib { namespace enumeration
 
 using namespace elib::enumeration;
 
-BOOST_AUTO_TEST_SUITE(enumeration_traits_test_suite)
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_enum_traits_A_test)
+TEST_CASE(enumeration_traits_test_suite)
 {
-    using tr = enum_traits<A>;
-    static_assert(
-        not tr::has_name_map, "no name map"
-    );
-    static_assert(
-        tr::has_default_value, "has default"
-    );
-     static_assert(
-        tr::default_value == A::none, "default == none"
-    );
-    static_assert(
-        tr::has_error_value, "has error"
-    );
-     static_assert(
-        tr::error_value == A::one, "error == one"
-    );
-    static_assert(
-        tr::has_first_value, "has first"
-    );
-    static_assert(
-        tr::first_value == A::none, "first == none"
-    );
-    static_assert(
-        tr::has_last_value, "has last"
-    );
-    static_assert(
-        tr::last_value == A::two, "last == two"
-    );
-    static_assert(
-        tr::has_is_contigious, "has is_contigious"
-    );
-    static_assert(
-        tr::is_contigious, "is contigious"
-    );
-    BOOST_CHECK(true);
+
+    // enumeration_traits_enum_traits_A_test)
+    {
+        using tr = enum_traits<A>;
+        static_assert(
+            not tr::has_name_map, "no name map"
+        );
+        static_assert(
+            tr::has_default_value, "has default"
+        );
+        static_assert(
+            tr::default_value == A::none, "default == none"
+        );
+        static_assert(
+            tr::has_error_value, "has error"
+        );
+        static_assert(
+            tr::error_value == A::one, "error == one"
+        );
+        static_assert(
+            tr::has_first_value, "has first"
+        );
+        static_assert(
+            tr::first_value == A::none, "first == none"
+        );
+        static_assert(
+            tr::has_last_value, "has last"
+        );
+        static_assert(
+            tr::last_value == A::two, "last == two"
+        );
+        static_assert(
+            tr::has_is_contigious, "has is_contigious"
+        );
+        static_assert(
+            tr::is_contigious, "is contigious"
+        );
+        
+    }
+
+    // enumeration_traits_enum_traits_B_test)
+    {
+        using tr = enum_traits<B>;
+        static_assert(
+            not tr::has_name_map, "no name map"
+        );
+        static_assert(
+            tr::has_default_value, "has default"
+        );
+        static_assert(
+            tr::default_value == B::none, "default == none"
+        );
+        static_assert(
+            tr::has_error_value, "has error"
+        );
+        static_assert(
+            tr::error_value == B::one, "error == one"
+        );
+        static_assert(
+            tr::has_first_value, "has first"
+        );
+        static_assert(
+            tr::first_value == B::none, "first == none"
+        );
+        static_assert(
+            tr::has_last_value, "has last"
+        );
+        static_assert(
+            tr::last_value == B::two, "last == two"
+        );
+        static_assert(
+            tr::has_is_contigious, "has is_contigious"
+        );
+        static_assert(
+            tr::is_contigious, "is contigious"
+        );
+        
+    }
+
+    // enumeration_traits_enum_traits_C_test)
+    {
+        using tr = enum_traits<C>;
+        static_assert(
+            tr::has_name_map, "has name map"
+        );
+        static_assert(
+            not tr::has_default_value, "does not have default"
+        );
+        static_assert(
+            not tr::has_error_value, "does not have error"
+        );
+        static_assert(
+            not tr::has_first_value, "does not have first"
+        );
+        static_assert(
+            not tr::has_last_value, "does not have last"
+        );
+        static_assert(
+            not tr::has_is_contigious, "does not have is_contigious"
+        );
+        
+    }
+
+    // enumeration_traits_enum_traits_D_test)
+    {
+        using tr = enum_traits<D>;
+        static_assert(
+            not tr::has_name_map, "does not have name map"
+        );
+        static_assert(
+            not tr::has_default_value, "does not have default"
+        );
+        static_assert(
+            not tr::has_error_value, "does not have error"
+        );
+        static_assert(
+            not tr::has_first_value, "does not have first"
+        );
+        static_assert(
+            not tr::has_last_value, "does not have last"
+        );
+        static_assert(
+            not tr::has_is_contigious, "does not have is_contigious"
+        );
+        
+    }
+
+    // enumeration_has_range_test)
+    {
+        static_assert(has_range<A>::value, "A has range");
+        static_assert(has_range<B>::value, "C has range");
+        static_assert(has_range<C>::value, "B has range");
+        static_assert(not has_range<D>::value, "D does not have range");
+        
+    }
+
+    // enumeration_has_constexpr_range_test)
+    {
+        static_assert(has_constexpr_range<A>::value, "A has constexpr range");
+        static_assert(has_constexpr_range<B>::value, "B has constexpr range");
+        static_assert(not has_constexpr_range<C>::value, "C does not have constexpr range");
+        static_assert(not has_constexpr_range<D>::value, "D does not have constexpr range");
+        
+    }
+
+    // enumeration_default_value_test)
+    {
+        static_assert(
+            default_value<A>() == A::none, "default == none"
+        );
+        static_assert(
+            default_value<B>() == B::none, "default == none"
+        );
+        TEST_ASSERT(default_value<A>() == A::none);
+        TEST_ASSERT(default_value<B>() == B::none);
+    }
+
+    // enumeration_error_value_test)
+    {
+        static_assert(
+            error_value<A>() == A::one, "error == one"
+        );
+        static_assert(
+            error_value<B>() == B::one, "error == one"
+        );
+        TEST_ASSERT(error_value<A>() == A::one);
+        TEST_ASSERT(error_value<B>() == B::one);
+    }
+
+    // enumeration_traits_first_value_test)
+    {
+        static_assert(
+            first_value<A>() == A::none, "first == none"
+        );
+        static_assert(
+            first_value<B>() == B::none, "first == none"
+        );
+        TEST_ASSERT(first_value<A>() == A::none);
+        TEST_ASSERT(first_value<B>() == B::none);
+        TEST_ASSERT(first_value<C>() == C::none);
+    }
+
+
+    // enumeration_traits_last_value_test)
+    {
+        static_assert(
+            last_value<A>() == A::two, "last == two"
+        );
+        static_assert(
+            last_value<B>() == B::two, "last == two"
+        );
+        TEST_ASSERT(last_value<A>() == A::two);
+        TEST_ASSERT(last_value<B>() == B::two);
+        TEST_ASSERT(last_value<C>() == C::two);
+    }
+
+    // enumeration_traits_size_test)
+    {
+        static_assert(
+            size<A>() == 3, "size == 3"
+        );
+        static_assert(
+            size<B>() == 3, "size == 3"
+        );
+        TEST_ASSERT(size<A>() == 3);
+        TEST_ASSERT(size<B>() == 3);
+        TEST_ASSERT(size<C>() == 3);
+    }
+
+    // enumeration_is_contigious_test)
+    {
+        static_assert(
+            is_contigious<A>() == true, "is_contigious == true"
+        );
+        static_assert(
+            is_contigious<B>() == true, "is_contigious == true"
+        );
+        TEST_ASSERT(is_contigious<A>());
+        TEST_ASSERT(is_contigious<B>());
+        TEST_ASSERT(is_contigious<C>());
+    }
+
+    // enumeration_in_range_test)
+    {
+        static_assert(
+            in_range(A::none), "in range"
+        );
+        static_assert(
+            in_range(A::two), "in range"
+        );
+        static_assert(
+            not in_range(static_cast<A>(3)), "in range"
+        );
+        static_assert(
+            in_range(B::none), "in range"
+        );
+        static_assert(
+            in_range(B::two), "in range"
+        );
+        static_assert(
+            not in_range(static_cast<A>(3)), "in range"
+        );
+        TEST_ASSERT(in_range(A::none));
+        TEST_ASSERT(in_range(A::two));
+        TEST_ASSERT(not in_range(static_cast<A>(3)));
+        TEST_ASSERT(in_range(B::none));
+        TEST_ASSERT(in_range(B::two));
+        TEST_ASSERT(not in_range(static_cast<B>(3)));
+        TEST_ASSERT(in_range(C::none));
+        TEST_ASSERT(in_range(C::two));
+        TEST_ASSERT(not in_range(static_cast<C>(3)));
+        TEST_ASSERT(not in_range(static_cast<Empty>(0)));
+    }
+
 }
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_enum_traits_B_test)
-{
-    using tr = enum_traits<B>;
-    static_assert(
-        not tr::has_name_map, "no name map"
-    );
-    static_assert(
-        tr::has_default_value, "has default"
-    );
-     static_assert(
-        tr::default_value == B::none, "default == none"
-    );
-    static_assert(
-        tr::has_error_value, "has error"
-    );
-     static_assert(
-        tr::error_value == B::one, "error == one"
-    );
-    static_assert(
-        tr::has_first_value, "has first"
-    );
-    static_assert(
-        tr::first_value == B::none, "first == none"
-    );
-    static_assert(
-        tr::has_last_value, "has last"
-    );
-    static_assert(
-        tr::last_value == B::two, "last == two"
-    );
-    static_assert(
-        tr::has_is_contigious, "has is_contigious"
-    );
-    static_assert(
-        tr::is_contigious, "is contigious"
-    );
-    BOOST_CHECK(true);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_enum_traits_C_test)
-{
-    using tr = enum_traits<C>;
-    static_assert(
-        tr::has_name_map, "has name map"
-    );
-    static_assert(
-        not tr::has_default_value, "does not have default"
-    );
-    static_assert(
-        not tr::has_error_value, "does not have error"
-    );
-    static_assert(
-        not tr::has_first_value, "does not have first"
-    );
-    static_assert(
-        not tr::has_last_value, "does not have last"
-    );
-    static_assert(
-        not tr::has_is_contigious, "does not have is_contigious"
-    );
-    BOOST_CHECK(true);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_enum_traits_D_test)
-{
-    using tr = enum_traits<D>;
-    static_assert(
-        not tr::has_name_map, "does not have name map"
-    );
-    static_assert(
-        not tr::has_default_value, "does not have default"
-    );
-    static_assert(
-        not tr::has_error_value, "does not have error"
-    );
-    static_assert(
-        not tr::has_first_value, "does not have first"
-    );
-    static_assert(
-        not tr::has_last_value, "does not have last"
-    );
-    static_assert(
-        not tr::has_is_contigious, "does not have is_contigious"
-    );
-    BOOST_CHECK(true);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_has_range_test)
-{
-    static_assert(has_range<A>::value, "A has range");
-    static_assert(has_range<B>::value, "C has range");
-    static_assert(has_range<C>::value, "B has range");
-    static_assert(not has_range<D>::value, "D does not have range");
-    BOOST_CHECK(true);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_has_constexpr_range_test)
-{
-    static_assert(has_constexpr_range<A>::value, "A has constexpr range");
-    static_assert(has_constexpr_range<B>::value, "B has constexpr range");
-    static_assert(not has_constexpr_range<C>::value, "C does not have constexpr range");
-    static_assert(not has_constexpr_range<D>::value, "D does not have constexpr range");
-    BOOST_CHECK(true);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_default_value_test)
-{
-    static_assert(
-        default_value<A>() == A::none, "default == none"
-    );
-    static_assert(
-        default_value<B>() == B::none, "default == none"
-    );
-    BOOST_CHECK(default_value<A>() == A::none);
-    BOOST_CHECK(default_value<B>() == B::none);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_error_value_test)
-{
-    static_assert(
-        error_value<A>() == A::one, "error == one"
-    );
-    static_assert(
-        error_value<B>() == B::one, "error == one"
-    );
-    BOOST_CHECK(error_value<A>() == A::one);
-    BOOST_CHECK(error_value<B>() == B::one);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_first_value_test)
-{
-    static_assert(
-        first_value<A>() == A::none, "first == none"
-    );
-    static_assert(
-        first_value<B>() == B::none, "first == none"
-    );
-    BOOST_CHECK(first_value<A>() == A::none);
-    BOOST_CHECK(first_value<B>() == B::none);
-    BOOST_CHECK(first_value<C>() == C::none);
-}
-
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_last_value_test)
-{
-    static_assert(
-        last_value<A>() == A::two, "last == two"
-    );
-    static_assert(
-        last_value<B>() == B::two, "last == two"
-    );
-    BOOST_CHECK(last_value<A>() == A::two);
-    BOOST_CHECK(last_value<B>() == B::two);
-    BOOST_CHECK(last_value<C>() == C::two);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_traits_size_test)
-{
-    static_assert(
-        size<A>() == 3, "size == 3"
-    );
-    static_assert(
-        size<B>() == 3, "size == 3"
-    );
-    BOOST_CHECK(size<A>() == 3);
-    BOOST_CHECK(size<B>() == 3);
-    BOOST_CHECK(size<C>() == 3);
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_is_contigious_test)
-{
-    static_assert(
-        is_contigious<A>() == true, "is_contigious == true"
-    );
-    static_assert(
-        is_contigious<B>() == true, "is_contigious == true"
-    );
-    BOOST_CHECK(is_contigious<A>());
-    BOOST_CHECK(is_contigious<B>());
-    BOOST_CHECK(is_contigious<C>());
-}
-
-BOOST_AUTO_TEST_CASE(enumeration_in_range_test)
-{
-    static_assert(
-        in_range(A::none), "in range"
-    );
-    static_assert(
-        in_range(A::two), "in range"
-    );
-    static_assert(
-        not in_range(static_cast<A>(3)), "in range"
-    );
-    static_assert(
-        in_range(B::none), "in range"
-    );
-    static_assert(
-        in_range(B::two), "in range"
-    );
-    static_assert(
-        not in_range(static_cast<A>(3)), "in range"
-    );
-    BOOST_CHECK(in_range(A::none));
-    BOOST_CHECK(in_range(A::two));
-    BOOST_CHECK(not in_range(static_cast<A>(3)));
-    BOOST_CHECK(in_range(B::none));
-    BOOST_CHECK(in_range(B::two));
-    BOOST_CHECK(not in_range(static_cast<B>(3)));
-    BOOST_CHECK(in_range(C::none));
-    BOOST_CHECK(in_range(C::two));
-    BOOST_CHECK(not in_range(static_cast<C>(3)));
-    BOOST_CHECK(not in_range(static_cast<Empty>(0)));
-}
-
-BOOST_AUTO_TEST_SUITE_END()

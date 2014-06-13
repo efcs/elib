@@ -1,11 +1,8 @@
-// REQUIRES: ELIB_ENUMERATION_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_ENUMERATION_SOURCE
 #include <elib/enumeration/basic_traits.hpp>
 #include <map>
 #include <string>
+#include "test/helper.hpp"
 
 enum class A
 {
@@ -45,21 +42,18 @@ namespace elib { namespace enumeration
 
 using namespace elib::enumeration;
 
-BOOST_AUTO_TEST_SUITE(enumeration_basic_traits_test_suite)
-
-BOOST_AUTO_TEST_CASE(enumeration_basic_traits_static)
+TEST_CASE(enumeration_basic_traits_test)
 {
-    static_assert(has_basic_enum_traits<A>::value, "A has traits");
-    static_assert(has_basic_enum_traits<B>::value, "B has traits");
-    static_assert(not has_basic_enum_traits<C>::value, "C does not have traits");
-    static_assert(not has_basic_enum_traits<void>::value, "void does not have traits");
-    
-    static_assert(not has_name_map<A>::value, "A does not have a name map");
-    static_assert(has_name_map<B>::value, "B has a name map");
-    static_assert(not has_name_map<C>::value, "C does not have a name map");
-    static_assert(not has_name_map<void>::value, "void does not have a name map");
-    
-    BOOST_CHECK(true);
+    // enumeration_basic_traits_static)
+    {
+        static_assert(has_basic_enum_traits<A>::value, "A has traits");
+        static_assert(has_basic_enum_traits<B>::value, "B has traits");
+        static_assert(not has_basic_enum_traits<C>::value, "C does not have traits");
+        static_assert(not has_basic_enum_traits<void>::value, "void does not have traits");
+        
+        static_assert(not has_name_map<A>::value, "A does not have a name map");
+        static_assert(has_name_map<B>::value, "B has a name map");
+        static_assert(not has_name_map<C>::value, "C does not have a name map");
+        static_assert(not has_name_map<void>::value, "void does not have a name map");
+    }
 }
-
-BOOST_AUTO_TEST_SUITE_END()

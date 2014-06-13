@@ -8,6 +8,8 @@
 # if !defined(ELIB_CONFIG_APPLE)
 #   define ELIB_COMPILER_VERSION (__clang_major__ * 10000) + (__clang_minor__ * 100) + (__clang_patchlevel__)
 # else /* ELIB_CONFIG_APPLE */
+#   warning Translating Apple Clang version to LLVM clang version. \
+        ELIB_COMPILER_VERSION will not match clang version.
 #   if __clang_major__ == 5
 #     if   __clang_minor__ == 0
 #       define ELIB_COMPILER_VERSION 30300

@@ -6,7 +6,8 @@ import shutil
 import socket
 
 # Ensure that this is being run on a specific platform
-assert sys.platform.startswith('linux') or sys.platform.startswith('darwin')
+assert sys.platform.startswith('linux') or sys.platform.startswith('darwin') or \
+    sys.platform.startswith('cygwin')
 
 file_path = os.path.realpath(__file__)
 dot_path, file_name = os.path.split(file_path)

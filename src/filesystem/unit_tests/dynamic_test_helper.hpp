@@ -62,7 +62,7 @@ struct scoped_test_env
     
     ~scoped_test_env()
     {
-        python_clean(test_root);
+        //python_clean(test_root);
     }
     
     elib::fs::path make_env_path(elib::fs::path const & p)

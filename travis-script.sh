@@ -13,4 +13,4 @@ fi
 
 make HEADER_TESTS=ON configure
 make -j8 elib
-make THREADS=16 batch-check
+make THREADS=18 batch-check

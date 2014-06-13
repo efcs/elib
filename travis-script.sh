@@ -14,3 +14,13 @@ fi
 make HEADER_TESTS=ON configure
 make -j2 elib
 make batch-check
+
+make distclean
+make configure
+make -j2 elib
+make batch-check
+
+make distclean
+make configure
+make -j2 elib
+make batch-check

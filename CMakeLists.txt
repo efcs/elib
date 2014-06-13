@@ -6,6 +6,12 @@ if ( WIN32 )
     message(FATAL_ERROR "Windows not supported")
 endif()
 
+if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/user_config.cmake")
+    config_message(STATUS "Including user_config.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/user_config.cmake")
+endif()
+
+
 ################################################################################
 #                            Toolchain config
 ################################################################################

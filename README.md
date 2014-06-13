@@ -6,6 +6,8 @@ It can be found at github.com/efcs/elib. The homepage for elib is http://elib.ef
 WARNING: This file is update very infrequently
 LAST UPDATE: 07/06/2014
 
+NOTE: elib has git submodules! If this is a new repo please run `git submodule update --init`.
+
 ## Platform Support
 Elib currently only supports Linux and OS X. Although most libraries would
 build on Windows (See Library Summary for specifics), the build system has
@@ -118,6 +120,7 @@ Note: Requirements marked with (Unit Test Only) are obviously only required
 Requirements (General):
   * C++11 compiler (GCC >= 4.8.1)
   * Boost Unit Test Framework (Unit Test Only)
+  * Python (Unit Test Only)
   Note: elib will compile with GCC 4.8.0 but some features have been disabled.
 
 Requirements (Library specific):
@@ -243,11 +246,20 @@ Requirements (Library specific):
     make 
 
   * check
-: Run the unit tests
+: Run the unit tests (using LIT)
 
-  * scan_build
+  * test
+: Run the unit tests (using CTest)
+
+  * vagrind-check
+: Run unit tests with valgrind
+
+  * scan-build
 : Run clangs scan-build over the build
 
-  * valgrind_check
-: Run the tests against valgrind.
+  * coverage
+: Generate code coverage data
+
+
+
 

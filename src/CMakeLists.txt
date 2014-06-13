@@ -150,15 +150,12 @@ include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)
 
   get_directory_property(ELIB_AVAILABLE_FEATURES DIRECTORY . COMPILE_DEFINITIONS)
+  list(APPEND ELIB_AVAILABLE_FEATURES "ELIB_BOOST_TEST")
 
   set(LIT_EXECUTABLE "${ELIB_ROOT_PATH}/packages/lit/lit.py" CACHE FILEPATH "Path to LLVM's lit.py.")
   set(LIT_ARGS_DEFAULT "-sv" CACHE STRING "Default lit args")
   set(LIT_ARGS "${LIT_ARGS_DEFAULT}")
-  set(LIT_BATCH_ARGS "${LIT_ARGS_DEFAULT} --no-progress-bar")
-  set(LIT_VALGRIND_ARGS "${LIT_ARGS_DEFAULT} --vg --vg-leak --threads=1")
   separate_arguments(LIT_ARGS)
-  separate_arguments(LIT_BATCH_ARGS)
-  separate_arguments(LIT_VALGRIND_ARGS)
 
   set(SAMPLE_OBJECT "SAMPLEOBJ")
 
@@ -169,7 +166,7 @@ if (PYTHONINTERP_FOUND)
     ${CMAKE_CURRENT_BINARY_DIR}/lit.site.cfg
     @ONLY)
 
-  add_custom_target(check-elib
+  add_custom_target(check-lit
     COMMAND ${PYTHON_EXECUTABLE}
             ${LIT_EXECUTABLE}
             ${LIT_ARGS}
@@ -177,21 +174,6 @@ if (PYTHONINTERP_FOUND)
     DEPENDS elib
     COMMENT "Running elib tests")
 
-    add_custom_target(batch-check-elib
-    COMMAND ${PYTHON_EXECUTABLE}
-            ${LIT_EXECUTABLE}
-            ${LIT_BATCH_ARGS}
-            ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS elib
-    COMMENT "Running elib tests in batch mode")
-
-    add_custom_target(valgrind-check-elib
-    COMMAND ${PYTHON_EXECUTABLE}
-            ${LIT_EXECUTABLE}
-            ${LIT_VALGRIND_ARGS}
-            ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS elib
-    COMMENT "Running elib tests in valgrind mode")
 else()
   message(WARNING "Could not find Python, no check target will be available!")
 endif()

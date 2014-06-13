@@ -12,5 +12,5 @@ then
 fi
 
 make HEADER_TESTS=ON configure
-make -j16 elib
+make -j8 elib
 make THREADS=16 batch-check

@@ -1,29 +1,26 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux.hpp>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 
 struct dummy {};
 
-BOOST_AUTO_TEST_SUITE(aux_forward_test_suite)
+TEST_SUITE(aux_forward_test_suite)
 
 /// Coverage test
-BOOST_AUTO_TEST_CASE(aux_forward_value)
+TEST_CASE(aux_forward_value)
 {
     elib::forward<dummy>(dummy{});
     static_assert(
         aux::is_rvalue_reference<decltype(elib::forward<dummy>(dummy{}))>::value
       , "Must return an rvalue"
     );
-    BOOST_CHECK(true);    
+    TEST_CHECK(true);    
 }
 
 /// Coverage test
-BOOST_AUTO_TEST_CASE(aux_forward_ref)
+TEST_CASE(aux_forward_ref)
 {
     dummy d;
     elib::forward<dummy &>(d);
@@ -31,7 +28,7 @@ BOOST_AUTO_TEST_CASE(aux_forward_ref)
         aux::is_lvalue_reference<decltype(elib::forward<dummy &>(d))>::value
       , "Must return an lvalue"
     );
-    BOOST_CHECK(true);    
+    TEST_CHECK(true);    
 }
 
 
@@ -39,4 +36,4 @@ BOOST_AUTO_TEST_CASE(aux_forward_ref)
 
 
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

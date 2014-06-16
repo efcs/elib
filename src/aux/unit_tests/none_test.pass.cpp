@@ -1,15 +1,12 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux/none.hpp>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_none_test_suite)
+TEST_SUITE(elib_aux_none_test_suite)
 
-BOOST_AUTO_TEST_CASE(is_none_test)
+TEST_CASE(is_none_test)
 {
     static_assert(
         aux::is_none<aux::none>::value
@@ -20,7 +17,7 @@ BOOST_AUTO_TEST_CASE(is_none_test)
         not aux::is_none<int>::value
       , "must not be none"
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

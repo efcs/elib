@@ -1,100 +1,96 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux/integral_constant.hpp>
-#include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>
 #include <type_traits>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_integral_constant_test_suite)
+TEST_SUITE(elib_aux_integral_constant_test_suite)
 
 
-BOOST_AUTO_TEST_CASE(int_zero_test)
+TEST_CASE(int_zero_test)
 {
     using T = aux::integral_constant<int, 0>;
-    ELIB_STATIC_ASSERT(aux::is_same<T, T::type>::value);
-    ELIB_STATIC_ASSERT(aux::is_same<int, T::value_type>::value);
-    ELIB_STATIC_ASSERT(T::value == 0);
+    TEST_STATIC_ASSERT(aux::is_same<T, T::type>::value);
+    TEST_STATIC_ASSERT(aux::is_same<int, T::value_type>::value);
+    TEST_STATIC_ASSERT(T::value == 0);
     
     T v;
     int x = v;
-    BOOST_CHECK(x == 0);
-    BOOST_CHECK(v() == 0);
+    TEST_CHECK(x == 0);
+    TEST_CHECK(v() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(int_one_test)
+TEST_CASE(int_one_test)
 {
     using T = aux::integral_constant<int, 1>;
-    ELIB_STATIC_ASSERT(aux::is_same<T, T::type>::value);
-    ELIB_STATIC_ASSERT(aux::is_same<int, T::value_type>::value);
-    ELIB_STATIC_ASSERT(T::value == 1);
+    TEST_STATIC_ASSERT(aux::is_same<T, T::type>::value);
+    TEST_STATIC_ASSERT(aux::is_same<int, T::value_type>::value);
+    TEST_STATIC_ASSERT(T::value == 1);
     
     T v;
     int x = v;
-    BOOST_CHECK(x == 1);
-    BOOST_CHECK(v() == 1);
+    TEST_CHECK(x == 1);
+    TEST_CHECK(v() == 1);
 }
 
-BOOST_AUTO_TEST_CASE(int_two_test)
+TEST_CASE(int_two_test)
 {
     using T = aux::integral_constant<int, 2>;
-    ELIB_STATIC_ASSERT(aux::is_same<T, T::type>::value);
-    ELIB_STATIC_ASSERT(aux::is_same<int, T::value_type>::value);
-    ELIB_STATIC_ASSERT(T::value == 2);
+    TEST_STATIC_ASSERT(aux::is_same<T, T::type>::value);
+    TEST_STATIC_ASSERT(aux::is_same<int, T::value_type>::value);
+    TEST_STATIC_ASSERT(T::value == 2);
     
     T v;
     int x = v;
-    BOOST_CHECK(x == 2);
-    BOOST_CHECK(v() == 2);
+    TEST_CHECK(x == 2);
+    TEST_CHECK(v() == 2);
 }
 
-BOOST_AUTO_TEST_CASE(true_type_test)
+TEST_CASE(true_type_test)
 {
-    ELIB_STATIC_ASSERT(
+    TEST_STATIC_ASSERT(
         aux::is_same<aux::true_, aux::bool_<true>>::value
       );
-    ELIB_STATIC_ASSERT(
+    TEST_STATIC_ASSERT(
         aux::is_same<aux::true_, aux::integral_constant<bool, true>>::value
       );
     using T = ELIB_AUTO_INTC(true);
-    ELIB_STATIC_ASSERT(
+    TEST_STATIC_ASSERT(
         aux::is_same<aux::true_, T>::value
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(false_type_test)
+TEST_CASE(false_type_test)
 {
-    ELIB_STATIC_ASSERT(
+    TEST_STATIC_ASSERT(
         aux::is_same<aux::false_, aux::bool_<false>>::value
       );
-    ELIB_STATIC_ASSERT(
+    TEST_STATIC_ASSERT(
         aux::is_same<aux::false_, aux::integral_constant<bool, false>>::value
       );
     using T = ELIB_AUTO_INTC(false);
-    ELIB_STATIC_ASSERT(
+    TEST_STATIC_ASSERT(
         aux::is_same<aux::false_, T>::value
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
 // Issue #29
-BOOST_AUTO_TEST_CASE(convert_ctor_test)
+TEST_CASE(convert_ctor_test)
 {
     constexpr true_ t(std::true_type);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
 // Issue #29
-BOOST_AUTO_TEST_CASE(convert_operator_test)
+TEST_CASE(convert_operator_test)
 {
     constexpr std::true_type t = true_{};
     ((void)t);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

@@ -1,12 +1,9 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux/anything.hpp>
 #include <elib/aux/declval.hpp>
 #include <elib/aux/enable_if.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
+
 
 using namespace elib::aux;
 
@@ -37,28 +34,27 @@ template <class T>
 constexpr bool test_convert() noexcept { return test_convert_impl<T>(0); }
 
 
-BOOST_AUTO_TEST_SUITE(elib_aux_anything_test_suite)
+TEST_SUITE(elib_aux_anything_test_suite)
 
-BOOST_AUTO_TEST_CASE(ctor_test)
+TEST_CASE(ctor_test)
 {
-    ELIB_STATIC_ASSERT(test_ctor<empty>());
-    ELIB_STATIC_ASSERT(test_ctor<empty const>());
-    ELIB_STATIC_ASSERT(test_ctor<empty &>());
-    ELIB_STATIC_ASSERT(test_ctor<empty const &>());
-    ELIB_STATIC_ASSERT(test_ctor<empty *>());
-    ELIB_STATIC_ASSERT(test_ctor<empty const *>());
-    ELIB_STATIC_ASSERT(test_ctor<empty[]>());
-    ELIB_STATIC_ASSERT(test_ctor<const empty[]>());
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(test_ctor<empty>());
+    TEST_STATIC_ASSERT(test_ctor<empty const>());
+    TEST_STATIC_ASSERT(test_ctor<empty &>());
+    TEST_STATIC_ASSERT(test_ctor<empty const &>());
+    TEST_STATIC_ASSERT(test_ctor<empty *>());
+    TEST_STATIC_ASSERT(test_ctor<empty const *>());
+    TEST_STATIC_ASSERT(test_ctor<empty[]>());
+    TEST_STATIC_ASSERT(test_ctor<const empty[]>());
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(convert_test)
+TEST_CASE(convert_test)
 {
     // TODO GCC fails on this
-    ELIB_STATIC_ASSERT(test_convert<empty>());
-    ELIB_STATIC_ASSERT(test_convert<empty &>());
-    //ELIB_STATIC_ASSERT(test_convert<empty &&>());
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(test_convert<empty>());
+    TEST_STATIC_ASSERT(test_convert<empty &>());
+    //TEST_STATIC_ASSERT(test_convert<empty &&>());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

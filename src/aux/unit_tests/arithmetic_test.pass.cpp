@@ -1,12 +1,9 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux/arithmetic.hpp>
 #include <elib/aux/integral_constant.hpp>
-#include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>
+#include "rapid-cxx-test.hpp"
+
 
 #if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic ignored "-Wunused-local-typedefs"
@@ -17,8 +14,8 @@
         using T = TEST_FN<ELIB_AUTO_INTC(x)>;                      \
         using T2 = TEST_FN_ALIAS<ELIB_AUTO_INTC(x)>;               \
         using Expect = ELIB_AUTO_INTC(TEST_OP (x));                \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
     } while (false)
 #
 
@@ -27,8 +24,8 @@
         using T = TEST_FN<ELIB_AUTO_INTC(x), ELIB_AUTO_INTC(y)>;        \
         using T2 = TEST_FN_ALIAS<ELIB_AUTO_INTC(x), ELIB_AUTO_INTC(y)>; \
         using Expect = ELIB_AUTO_INTC((x) TEST_OP (y));                 \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value);      \
-        ELIB_STATIC_ASSERT(is_same<T2::type, Expect::type>::value);     \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value);      \
+        TEST_STATIC_ASSERT(is_same<T2::type, Expect::type>::value);     \
     } while (false)   
 #
 
@@ -37,8 +34,8 @@
         using T = TEST_FN<ELIB_AUTO_INTC(x), ELIB_AUTO_INTC(y), ELIB_AUTO_INTC(z)>;        \
         using T2 = TEST_FN_ALIAS<ELIB_AUTO_INTC(x), ELIB_AUTO_INTC(y), ELIB_AUTO_INTC(z)>; \
         using Expect = ELIB_AUTO_INTC((x) TEST_OP (y) TEST_OP (z));                        \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value);                         \
-        ELIB_STATIC_ASSERT(is_same<T2::type, Expect::type>::value);                        \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value);                         \
+        TEST_STATIC_ASSERT(is_same<T2::type, Expect::type>::value);                        \
     } while (false)   
 #
 
@@ -47,8 +44,8 @@
         using T = TEST_FN<ELIB_AUTO_INTC(a), ELIB_AUTO_INTC(b), ELIB_AUTO_INTC(c), ELIB_AUTO_INTC(d)>;        \
         using T2 = TEST_FN_ALIAS<ELIB_AUTO_INTC(a), ELIB_AUTO_INTC(b), ELIB_AUTO_INTC(c), ELIB_AUTO_INTC(d)>; \
         using Expect = ELIB_AUTO_INTC((a) TEST_OP (b) TEST_OP (c) TEST_OP (d));                               \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect>::value);                                                  \
-        ELIB_STATIC_ASSERT(is_same<T2::type, Expect>::value);                                                 \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect>::value);                                                  \
+        TEST_STATIC_ASSERT(is_same<T2::type, Expect>::value);                                                 \
     } while (false)   
 #
 
@@ -57,19 +54,19 @@
         using T = TEST_FN<ELIB_AUTO_INTC(a), ELIB_AUTO_INTC(b), ELIB_AUTO_INTC(c), ELIB_AUTO_INTC(d), ELIB_AUTO_INTC(e)>;        \
         using T2 = TEST_FN_ALIAS<ELIB_AUTO_INTC(a), ELIB_AUTO_INTC(b), ELIB_AUTO_INTC(c), ELIB_AUTO_INTC(d), ELIB_AUTO_INTC(e)>; \
         using Expect = ELIB_AUTO_INTC((a) TEST_OP (b) TEST_OP (c) TEST_OP (d) TEST_OP (e));                                      \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value);                                                               \
-        ELIB_STATIC_ASSERT(is_same<T2::type, Expect::type>::value);                                                              \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value);                                                               \
+        TEST_STATIC_ASSERT(is_same<T2::type, Expect::type>::value);                                                              \
     } while (false)   
 #
 
 using namespace elib::aux;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_arithmetic_test_suite)
+TEST_SUITE(elib_aux_arithmetic_test_suite)
 
 #define TEST_FN negate
 #define TEST_FN_ALIAS negate_t
 #define TEST_OP -
-BOOST_AUTO_TEST_CASE(negate_test)
+TEST_CASE(negate_test)
 {
     TEST_1(true);
     TEST_1(false);
@@ -83,7 +80,7 @@ BOOST_AUTO_TEST_CASE(negate_test)
     TEST_1(0l);
     TEST_1(-1l);
     TEST_1(1l);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -91,7 +88,7 @@ BOOST_AUTO_TEST_CASE(negate_test)
 #define TEST_FN add
 #define TEST_FN_ALIAS add_t
 #define TEST_OP +
-BOOST_AUTO_TEST_CASE(add_test)
+TEST_CASE(add_test)
 {
     TEST_2(0, 0);
     TEST_2(0, 1);
@@ -132,7 +129,7 @@ BOOST_AUTO_TEST_CASE(add_test)
     TEST_3(-1, 2, -3);
     TEST_3(-1, -2, 3);
     TEST_5(0, 1, -1, 10u, -100l);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -140,7 +137,7 @@ BOOST_AUTO_TEST_CASE(add_test)
 #define TEST_FN subtract
 #define TEST_FN_ALIAS subtract_t
 #define TEST_OP -
-BOOST_AUTO_TEST_CASE(subtract_test)
+TEST_CASE(subtract_test)
 {
     TEST_2(0, 0);
     TEST_2(0, 1);
@@ -181,7 +178,7 @@ BOOST_AUTO_TEST_CASE(subtract_test)
     TEST_3(-1, 2, -3);
     TEST_3(-1, -2, 3);
     TEST_5(0, 1, -1, 10u, -100l);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -189,7 +186,7 @@ BOOST_AUTO_TEST_CASE(subtract_test)
 #define TEST_FN multiply
 #define TEST_FN_ALIAS multiply_t
 #define TEST_OP *
-BOOST_AUTO_TEST_CASE(multiply_test)
+TEST_CASE(multiply_test)
 {
     TEST_2(0, 0);
     TEST_2(0, 1);
@@ -230,7 +227,7 @@ BOOST_AUTO_TEST_CASE(multiply_test)
     TEST_3(-1, 2, -3);
     TEST_3(-1, -2, 3);
     TEST_5(0, 1, -1, 10u, -100l);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -238,7 +235,7 @@ BOOST_AUTO_TEST_CASE(multiply_test)
 #define TEST_FN divide
 #define TEST_FN_ALIAS divide_t
 #define TEST_OP /
-BOOST_AUTO_TEST_CASE(divide_test)
+TEST_CASE(divide_test)
 {
     TEST_2(0, 1);
     TEST_2(1, 1);
@@ -262,7 +259,7 @@ BOOST_AUTO_TEST_CASE(divide_test)
     TEST_3(-1, -2, 3);
     TEST_5(0, 1, -1, 10u, -100l);
     TEST_5(true, '0', -1, 10u, -100l);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -270,7 +267,7 @@ BOOST_AUTO_TEST_CASE(divide_test)
 #define TEST_FN modulus
 #define TEST_FN_ALIAS modulus_t
 #define TEST_OP %
-BOOST_AUTO_TEST_CASE(mod_test)
+TEST_CASE(mod_test)
 {
     TEST_2(0, 1);
     TEST_2(1, 1);
@@ -282,7 +279,7 @@ BOOST_AUTO_TEST_CASE(mod_test)
     TEST_2(-2, 1);
     TEST_2(-1, -1);
     TEST_2(-2, -1);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -293,11 +290,11 @@ BOOST_AUTO_TEST_CASE(mod_test)
         using T = increment<ELIB_AUTO_INTC(x)>;                    \
         using T2 = increment_t<ELIB_AUTO_INTC(x)>;                 \
         using Expect = ELIB_AUTO_INTC(1 + (x));                    \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
     } while (false)
 #
-BOOST_AUTO_TEST_CASE(increment_test)
+TEST_CASE(increment_test)
 {
     INC_TEST(true);
     INC_TEST(false);
@@ -317,18 +314,18 @@ BOOST_AUTO_TEST_CASE(increment_test)
     INC_TEST(1l);
     INC_TEST(0ul);
     INC_TEST(1ul);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #define DEC_TEST(x)                                                \
     do {                                                           \
         using T = decrement<ELIB_AUTO_INTC(x)>;                    \
         using T2 = decrement_t<ELIB_AUTO_INTC(x)>;                 \
         using Expect = ELIB_AUTO_INTC((x) - 1);                    \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
-        ELIB_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
+        TEST_STATIC_ASSERT(is_same<T::type, Expect::type>::value); \
     } while (false)
 #
-BOOST_AUTO_TEST_CASE(decrement_test)
+TEST_CASE(decrement_test)
 {
     DEC_TEST(true);
     DEC_TEST(false);
@@ -348,6 +345,6 @@ BOOST_AUTO_TEST_CASE(decrement_test)
     DEC_TEST(1l);
     DEC_TEST(0ul);
     DEC_TEST(1ul);
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

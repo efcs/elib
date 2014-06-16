@@ -1,12 +1,9 @@
-// REQUIRES: ELIB_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_SOURCE
 #include <elib/compressed_pair.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/move.hpp>
 #include <cstdlib>
+#include "rapid-cxx-test.hpp"
 using namespace elib;
 
 /// weird constructor will hopefully prevent compilers from eliding it.
@@ -77,9 +74,9 @@ using pair5 = compressed_pair<empty1, empty1>;
 using pair6 = compressed_pair<t1, t1>;
     
 
-BOOST_AUTO_TEST_SUITE(elib_compressed_pair_test_suite)
+TEST_SUITE(elib_compressed_pair_test_suite)
 
-BOOST_AUTO_TEST_CASE(compression_test)
+TEST_CASE(compression_test)
 {
     ELIB_STATIC_ASSERT(
         pair1::compression == compressed_pair_type::none
@@ -99,10 +96,10 @@ BOOST_AUTO_TEST_CASE(compression_test)
     ELIB_STATIC_ASSERT(
         pair6::compression == compressed_pair_type::none
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(default_ctor_test)
+TEST_CASE(default_ctor_test)
 {
     pair1 p1;
     pair2 p2;
@@ -110,10 +107,10 @@ BOOST_AUTO_TEST_CASE(default_ctor_test)
     pair4 p4;
     pair5 p5;
     pair6 p6;
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(value_ctor_test)
+TEST_CASE(value_ctor_test)
 {
     pair1 p1(t1{}, t2{});
     pair2 p2(empty1{}, t1{});
@@ -121,10 +118,10 @@ BOOST_AUTO_TEST_CASE(value_ctor_test)
     pair4 p4(empty1{}, empty2{});
     pair5 p5(empty1{}, empty1{});
     pair6 p6(t1{}, t1{});
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(copy_test)
+TEST_CASE(copy_test)
 {
     {
         pair1 const p1;
@@ -151,10 +148,10 @@ BOOST_AUTO_TEST_CASE(copy_test)
         pair6 const p2(p1);
         ((void)p2);
     }
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(move_test)
+TEST_CASE(move_test)
 {
     {
         pair1 p1;
@@ -181,10 +178,10 @@ BOOST_AUTO_TEST_CASE(move_test)
         pair6 p2(elib::move(p1));
         ((void)p2);
     }
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(first_second_test)
+TEST_CASE(first_second_test)
 {
     {
         pair1 p;
@@ -235,10 +232,10 @@ BOOST_AUTO_TEST_CASE(first_second_test)
         pc.first();
         pc.second();
     }
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(swap_test)
+TEST_CASE(swap_test)
 {
     {
         pair1 p1;
@@ -271,10 +268,10 @@ BOOST_AUTO_TEST_CASE(swap_test)
         p1.swap(p2);
         swap(p1, p2);
     }
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(equality_compare_test)
+TEST_CASE(equality_compare_test)
 {
     bool ret{};
     {
@@ -333,10 +330,10 @@ BOOST_AUTO_TEST_CASE(equality_compare_test)
         ret = (p1 >= p2);
     }
     ret = true;
-    BOOST_CHECK(ret);
+    TEST_CHECK(ret);
 }
 
-BOOST_AUTO_TEST_CASE(make_compressed_pair_test)
+TEST_CASE(make_compressed_pair_test)
 {
     make_compressed_pair(t1{}, t2{});
     make_compressed_pair(empty1{}, t1{});
@@ -344,7 +341,7 @@ BOOST_AUTO_TEST_CASE(make_compressed_pair_test)
     make_compressed_pair(empty1{}, empty2{});
     make_compressed_pair(empty1{}, empty1{});
     make_compressed_pair(t1{}, t1{});
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

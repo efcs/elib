@@ -1,14 +1,11 @@
-// REQUIRES: ELIB_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_SOURCE
 #include <elib/fmt.hpp>
 #include <elib/aux.hpp>
 #include <elib/config.hpp>
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include "rapid-cxx-test.hpp"
 
 #if defined(__GNUC__)
 # pragma GCC diagnostic ignored "-Wformat-zero-length"
@@ -87,31 +84,31 @@ struct none_type {};
 
 
 #define CHECK_ALL_TYPES(Trait, Type)        \
-    BOOST_CHECK(( Trait<Type>() ));         \
-    BOOST_CHECK(( Trait<Type const>() ));   \
-    BOOST_CHECK(( Trait<Type &>() ));       \
-    BOOST_CHECK(( Trait<Type &&>() ));      \
-    BOOST_CHECK(( Trait<Type const &>() )); \
-    BOOST_CHECK(( Trait<Type const &&>() ))
+    TEST_CHECK(( Trait<Type>() ));         \
+    TEST_CHECK(( Trait<Type const>() ));   \
+    TEST_CHECK(( Trait<Type &>() ));       \
+    TEST_CHECK(( Trait<Type &&>() ));      \
+    TEST_CHECK(( Trait<Type const &>() )); \
+    TEST_CHECK(( Trait<Type const &&>() ))
 #
 
 #define CHECK_ALL_PTR_TYPES(Trait, Type)           \
-    BOOST_CHECK(( Trait<Type*>() ));               \
-    BOOST_CHECK(( Trait<Type const*>() ));         \
-    BOOST_CHECK(( Trait<Type* const>() ));         \
-    BOOST_CHECK(( Trait<Type const* const>() ));   \
-    BOOST_CHECK(( Trait<Type* &>() ));             \
-    BOOST_CHECK(( Trait<Type* &&>() ));            \
-    BOOST_CHECK(( Trait<Type const* &>() ));       \
-    BOOST_CHECK(( Trait<Type const* &&>() ));      \
-    BOOST_CHECK(( Trait<Type const* const &>() )); \
-    BOOST_CHECK(( Trait<Type const* const &&>() ))
+    TEST_CHECK(( Trait<Type*>() ));               \
+    TEST_CHECK(( Trait<Type const*>() ));         \
+    TEST_CHECK(( Trait<Type* const>() ));         \
+    TEST_CHECK(( Trait<Type const* const>() ));   \
+    TEST_CHECK(( Trait<Type* &>() ));             \
+    TEST_CHECK(( Trait<Type* &&>() ));            \
+    TEST_CHECK(( Trait<Type const* &>() ));       \
+    TEST_CHECK(( Trait<Type const* &&>() ));      \
+    TEST_CHECK(( Trait<Type const* const &>() )); \
+    TEST_CHECK(( Trait<Type const* const &&>() ))
     
 
-BOOST_AUTO_TEST_SUITE(fmt_test_suite)
+TEST_SUITE(fmt_test_suite)
 
 
-BOOST_AUTO_TEST_CASE(implicit_conversion_test)
+TEST_CASE(implicit_conversion_test)
 {
     CHECK_ALL_TYPES( has_implicit_string_cast, std::string );
     CHECK_ALL_PTR_TYPES( not has_implicit_string_cast, std::string );
@@ -124,14 +121,14 @@ BOOST_AUTO_TEST_CASE(implicit_conversion_test)
     CHECK_ALL_TYPES( not has_implicit_string_cast, to_string_type );
     CHECK_ALL_TYPES( not has_implicit_string_cast, none_type );
     
-    BOOST_CHECK( not has_implicit_string_cast<void>() );
+    TEST_CHECK( not has_implicit_string_cast<void>() );
     CHECK_ALL_PTR_TYPES( not has_implicit_string_cast, void );
-    BOOST_CHECK( not has_implicit_string_cast<int>() );
-    BOOST_CHECK( not has_implicit_string_cast<float>() );
+    TEST_CHECK( not has_implicit_string_cast<int>() );
+    TEST_CHECK( not has_implicit_string_cast<float>() );
 }
 
 // NOTE: this should be false if the type is implicitly convertible
-BOOST_AUTO_TEST_CASE(explicit_conversion_test)
+TEST_CASE(explicit_conversion_test)
 {
     CHECK_ALL_TYPES( has_explicit_string_cast, explicit_type );
     
@@ -144,13 +141,13 @@ BOOST_AUTO_TEST_CASE(explicit_conversion_test)
     CHECK_ALL_TYPES( not has_explicit_string_cast, to_string_type );
     CHECK_ALL_TYPES( not has_explicit_string_cast, none_type );
     
-    BOOST_CHECK( not has_explicit_string_cast<void>() );
+    TEST_CHECK( not has_explicit_string_cast<void>() );
     CHECK_ALL_PTR_TYPES( not has_explicit_string_cast, void );
-    BOOST_CHECK( not has_explicit_string_cast<int>() );
-    BOOST_CHECK( not has_explicit_string_cast<float>() );
+    TEST_CHECK( not has_explicit_string_cast<int>() );
+    TEST_CHECK( not has_explicit_string_cast<float>() );
 }
 
-BOOST_AUTO_TEST_CASE(has_stream_insertion_test)
+TEST_CASE(has_stream_insertion_test)
 {
     CHECK_ALL_TYPES( has_stream_insertion, std::string );
     CHECK_ALL_PTR_TYPES( has_stream_insertion, char );
@@ -178,7 +175,7 @@ BOOST_AUTO_TEST_CASE(has_stream_insertion_test)
     CHECK_ALL_TYPES( has_stream_insertion, void* );
 }
 
-BOOST_AUTO_TEST_CASE( has_to_string_test )
+TEST_CASE( has_to_string_test )
 {
     CHECK_ALL_TYPES( has_to_string, to_string_type );
     
@@ -192,7 +189,7 @@ BOOST_AUTO_TEST_CASE( has_to_string_test )
     CHECK_ALL_TYPES( not has_to_string, none_type );
 }
 
-BOOST_AUTO_TEST_CASE( has_string_conversion_test )
+TEST_CASE( has_string_conversion_test )
 {
     CHECK_ALL_TYPES( has_string_conversion, std::string );
     CHECK_ALL_PTR_TYPES( has_string_conversion, char );
@@ -218,12 +215,12 @@ BOOST_AUTO_TEST_CASE( has_string_conversion_test )
     CHECK_ALL_TYPES( has_string_conversion, long double );
     CHECK_ALL_TYPES( has_string_conversion, void* );
     
-    BOOST_CHECK( not has_string_conversion<void>() );
+    TEST_CHECK( not has_string_conversion<void>() );
 }
 
 
 #define CHECK_TAG(Expect, Type) \
-    BOOST_CHECK(( aux::is_same<Expect, conversion_tag<Type>>() ))
+    TEST_CHECK(( aux::is_same<Expect, conversion_tag<Type>>() ))
 #
     
 #define CHECK_TAG_ALL_TYPES(Expect, Type) \
@@ -235,7 +232,7 @@ BOOST_AUTO_TEST_CASE( has_string_conversion_test )
     CHECK_TAG(Expect, Type const &&)
 #
 
-BOOST_AUTO_TEST_CASE(conversion_tag_test)
+TEST_CASE(conversion_tag_test)
 {
     using icast_tag = implicit_cast_conversion_tag;
     using ecast_tag = explicit_cast_conversion_tag;
@@ -272,14 +269,14 @@ BOOST_AUTO_TEST_CASE(conversion_tag_test)
 
 
 #define CHECK_MAKE_ALL_TYPES(Expect, Type, Value)                          \
-    BOOST_CHECK(( Expect == mkstr(static_cast<Type>(Value)) ));         \
-    BOOST_CHECK(( Expect == mkstr(static_cast<Type const>(Value)) ));   \
-    BOOST_CHECK(( Expect == mkstr(static_cast<Type &>(Value)) ));       \
-    BOOST_CHECK(( Expect == mkstr(static_cast<Type &&>(Value)) ));      \
-    BOOST_CHECK(( Expect == mkstr(static_cast<Type const &>(Value)) )); \
-    BOOST_CHECK(( Expect == mkstr(static_cast<Type const &&>(Value)) ))
+    TEST_CHECK(( Expect == mkstr(static_cast<Type>(Value)) ));         \
+    TEST_CHECK(( Expect == mkstr(static_cast<Type const>(Value)) ));   \
+    TEST_CHECK(( Expect == mkstr(static_cast<Type &>(Value)) ));       \
+    TEST_CHECK(( Expect == mkstr(static_cast<Type &&>(Value)) ));      \
+    TEST_CHECK(( Expect == mkstr(static_cast<Type const &>(Value)) )); \
+    TEST_CHECK(( Expect == mkstr(static_cast<Type const &&>(Value)) ))
 
-BOOST_AUTO_TEST_CASE( mkstr_test )
+TEST_CASE( mkstr_test )
 {
     // std::string test
     {
@@ -347,7 +344,7 @@ BOOST_AUTO_TEST_CASE( mkstr_test )
 
 #undef CHECK_MAKE_ALL_TYPES
 
-BOOST_AUTO_TEST_CASE( build_str_and_cat_str_test )
+TEST_CASE( build_str_and_cat_str_test )
 {
     std::ostringstream ss;
     
@@ -356,9 +353,9 @@ BOOST_AUTO_TEST_CASE( build_str_and_cat_str_test )
         ss.clear();
         ss.str("");
         build_str(ss, "");
-        BOOST_CHECK(ss);
-        BOOST_CHECK(ss.str() == "");
-        BOOST_CHECK(cat_str("") == "");
+        TEST_CHECK(ss);
+        TEST_CHECK(ss.str() == "");
+        TEST_CHECK(cat_str("") == "");
     }
     // std::string test
     {
@@ -366,9 +363,9 @@ BOOST_AUTO_TEST_CASE( build_str_and_cat_str_test )
         ss.str("");
         std::string s("hello");
         build_str(ss, s);
-        BOOST_CHECK(ss);
-        BOOST_CHECK(ss.str() == s);
-        BOOST_CHECK(cat_str(s) == s);
+        TEST_CHECK(ss);
+        TEST_CHECK(ss.str() == s);
+        TEST_CHECK(cat_str(s) == s);
     }
     // integral test
     {
@@ -380,9 +377,9 @@ BOOST_AUTO_TEST_CASE( build_str_and_cat_str_test )
         unsigned u = 1;
         build_str(ss, b, " ", ch, " ", i, " " , u);
         std::string cat = cat_str(b, " ", ch, " ", i, " ", u);
-        BOOST_CHECK(ss);
-        BOOST_CHECK( ss.str() == "true a -1 1");
-        BOOST_CHECK( cat      == "true a -1 1");
+        TEST_CHECK(ss);
+        TEST_CHECK( ss.str() == "true a -1 1");
+        TEST_CHECK( cat      == "true a -1 1");
     }
     {
         ss.clear();
@@ -393,13 +390,13 @@ BOOST_AUTO_TEST_CASE( build_str_and_cat_str_test )
         to_string_type t("to_string");
         build_str(ss, i, " ", e, " ", s, " ", t);
         std::string cat = cat_str(i, " ", e, " ", s, " ", t);
-        BOOST_CHECK(ss);
-        BOOST_CHECK(ss.str() == "implicit explicit stream to_string");
-        BOOST_CHECK(cat      == "implicit explicit stream to_string");
+        TEST_CHECK(ss);
+        TEST_CHECK(ss.str() == "implicit explicit stream to_string");
+        TEST_CHECK(cat      == "implicit explicit stream to_string");
     }
 }
 
-BOOST_AUTO_TEST_CASE( is_cfmt_type_test )
+TEST_CASE( is_cfmt_type_test )
 {
     CHECK_ALL_TYPES( is_cfmt_type, bool );
     CHECK_ALL_TYPES( is_cfmt_type, char );
@@ -417,7 +414,7 @@ BOOST_AUTO_TEST_CASE( is_cfmt_type_test )
     CHECK_ALL_PTR_TYPES( is_cfmt_type, char );
     CHECK_ALL_PTR_TYPES( is_cfmt_type, void );
     
-    BOOST_CHECK( not is_cfmt_type<void>() );
+    TEST_CHECK( not is_cfmt_type<void>() );
     CHECK_ALL_TYPES( not is_cfmt_type, std::string );
     CHECK_ALL_TYPES( not is_cfmt_type, implicit_type );
     CHECK_ALL_TYPES( not is_cfmt_type, explicit_type );
@@ -426,7 +423,7 @@ BOOST_AUTO_TEST_CASE( is_cfmt_type_test )
     CHECK_ALL_TYPES( not is_cfmt_type, none_type );
 }
 
-BOOST_AUTO_TEST_CASE( is_fmt_type_test )
+TEST_CASE( is_fmt_type_test )
 {
     CHECK_ALL_TYPES( is_fmt_type, bool );
     CHECK_ALL_TYPES( is_fmt_type, char );
@@ -446,7 +443,7 @@ BOOST_AUTO_TEST_CASE( is_fmt_type_test )
     
     CHECK_ALL_TYPES( is_fmt_type, std::string );
     
-    BOOST_CHECK( not is_fmt_type<void>() );
+    TEST_CHECK( not is_fmt_type<void>() );
     CHECK_ALL_TYPES( not is_fmt_type, implicit_type );
     CHECK_ALL_TYPES( not is_fmt_type, explicit_type );
     CHECK_ALL_TYPES( not is_fmt_type, stream_type );
@@ -454,7 +451,7 @@ BOOST_AUTO_TEST_CASE( is_fmt_type_test )
     CHECK_ALL_TYPES( not is_fmt_type, none_type );
 }
 
-BOOST_AUTO_TEST_CASE(is_ext_fmt_test)
+TEST_CASE(is_ext_fmt_test)
 {
     CHECK_ALL_TYPES( is_ext_fmt_type, bool );
     CHECK_ALL_TYPES( is_ext_fmt_type, char );
@@ -480,7 +477,7 @@ BOOST_AUTO_TEST_CASE(is_ext_fmt_test)
     CHECK_ALL_TYPES( is_ext_fmt_type, to_string_type );
     CHECK_ALL_TYPES( not is_ext_fmt_type, none_type );
     
-    BOOST_CHECK( not is_ext_fmt_type<void>() );
+    TEST_CHECK( not is_ext_fmt_type<void>() );
 }
 
 
@@ -491,7 +488,7 @@ using check_convert_is =
       , U
       >;
 
-#define CHECK_CONVERT(T, U) BOOST_CHECK(( check_convert_is<T, U>() ))
+#define CHECK_CONVERT(T, U) TEST_CHECK(( check_convert_is<T, U>() ))
 #define CHECK_NON_CONVERT_ALL_TYPES(T) \
     CHECK_CONVERT(T, T &&);               \
     CHECK_CONVERT(T const, T const &&);   \
@@ -510,7 +507,7 @@ using check_convert_is =
     CHECK_CONVERT(T const &&, std::string)
 #
 
-BOOST_AUTO_TEST_CASE(convert_arg_test)
+TEST_CASE(convert_arg_test)
 {
     CHECK_NON_CONVERT_ALL_TYPES(bool);
     CHECK_NON_CONVERT_ALL_TYPES(char);
@@ -536,8 +533,8 @@ using check_normalize_is =
       , U
       >;
 
-#define CHECK_NORMALIZE(...) BOOST_CHECK(( check_normalize_is<__VA_ARGS__>() ))
-BOOST_AUTO_TEST_CASE(normalize_arg_test)
+#define CHECK_NORMALIZE(...) TEST_CHECK(( check_normalize_is<__VA_ARGS__>() ))
+TEST_CASE(normalize_arg_test)
 {
     CHECK_NORMALIZE(bool, long);
     CHECK_NORMALIZE(char, long);
@@ -567,12 +564,12 @@ BOOST_AUTO_TEST_CASE(normalize_arg_test)
 }
 
 #define CHECK_SPEC(...) \
-    BOOST_CHECK_NO_THROW(( check_fmt(__VA_ARGS__) ))
+    TEST_CHECK_NO_THROW(( check_fmt(__VA_ARGS__) ))
     
 #define CHECK_THROW(...) \
-    BOOST_CHECK_THROW( (check_fmt(__VA_ARGS__)), std::logic_error )
+    TEST_CHECK_THROW(std::logic_error, (check_fmt(__VA_ARGS__)) )
 
-BOOST_AUTO_TEST_CASE(check_fmt_literal_specifier_test)
+TEST_CASE(check_fmt_literal_specifier_test)
 {
     CHECK_SPEC("%%");
     CHECK_SPEC("%%%%");
@@ -587,7 +584,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_literal_specifier_test)
     CHECK_THROW("%%", (none_type*)nullptr);
 }
     
-BOOST_AUTO_TEST_CASE(check_fmt_integral_test)
+TEST_CASE(check_fmt_integral_test)
 {
     CHECK_SPEC("%d", long());
     CHECK_SPEC("%i", long());
@@ -605,7 +602,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_integral_test)
     CHECK_THROW("%X", (none_type*)nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(check_fmt_float_test)
+TEST_CASE(check_fmt_float_test)
 {
     CHECK_SPEC("%f", double());
     CHECK_SPEC("%F", double());
@@ -623,7 +620,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_float_test)
     CHECK_THROW("%g", (none_type*)nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(check_fmt_string_test)
+TEST_CASE(check_fmt_string_test)
 {
     const char* s1 = "hello";
     const char* const s2 = "hello";
@@ -642,7 +639,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_string_test)
     CHECK_THROW("%s", (none_type*)nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(check_fmt_pointer_test)
+TEST_CASE(check_fmt_pointer_test)
 {
     CHECK_SPEC("%p", (void*)nullptr);
     CHECK_SPEC("%p", (const char*)nullptr);
@@ -653,7 +650,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_pointer_test)
     CHECK_THROW("%p", double());
 }
     
-BOOST_AUTO_TEST_CASE(check_fmt_count_test)
+TEST_CASE(check_fmt_count_test)
 {
     CHECK_SPEC("%n", (int*)nullptr);
     CHECK_SPEC("%n", (unsigned*)nullptr);
@@ -666,7 +663,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_count_test)
     CHECK_THROW("%n", (none_type*)nullptr);
 }
 
-BOOST_AUTO_TEST_CASE(check_fmt_arg_count_mismatch)
+TEST_CASE(check_fmt_arg_count_mismatch)
 {
     const char *s = "hello";
     long i = 0;
@@ -689,7 +686,7 @@ BOOST_AUTO_TEST_CASE(check_fmt_arg_count_mismatch)
 }
 
 
-BOOST_AUTO_TEST_CASE( check_fmt_general_test )
+TEST_CASE( check_fmt_general_test )
 {
     const char *s = "hello";
     long i = 0;
@@ -711,15 +708,15 @@ BOOST_AUTO_TEST_CASE( check_fmt_general_test )
     do {                                                           \
         std::string m_str__;                                       \
         char m_buff__[10024];                                      \
-        BOOST_REQUIRE_NO_THROW(( m_str__ = FMT_FN(__VA_ARGS__) )); \
+        TEST_REQUIRE_NO_THROW(( m_str__ = FMT_FN(__VA_ARGS__) )); \
         std::snprintf(m_buff__, sizeof(m_buff__), __VA_ARGS__);    \
-        BOOST_CHECK(m_buff__ == m_str__);                          \
+        TEST_CHECK(m_buff__ == m_str__);                          \
     } while (false)
     
 #define CHECK_THROW(...) \
-    BOOST_CHECK_THROW( (FMT_FN(__VA_ARGS__)), std::logic_error )
+    TEST_CHECK_THROW(std::logic_error, (FMT_FN(__VA_ARGS__)))
 
-BOOST_AUTO_TEST_CASE( check_cfmt_throw_test )
+TEST_CASE( check_cfmt_throw_test )
 {
 #define FMT_FN elib::checked_cfmt
   {
@@ -753,12 +750,12 @@ BOOST_AUTO_TEST_CASE( check_cfmt_throw_test )
     int n1 = -1;
     int n2 = -1;
     
-    BOOST_CHECK_NO_THROW((str = FMT_FN("%s %i %n %p", "Hello", 0, &n1, (void*)nullptr) ));
+    TEST_CHECK_NO_THROW((str = FMT_FN("%s %i %n %p", "Hello", 0, &n1, (void*)nullptr) ));
     std::snprintf(buff, sizeof(buff), "%s %i %n %p", "Hello", 0, &n2, (void*)nullptr);
     
-    BOOST_CHECK(buff == str);
-    BOOST_CHECK(n1 != -1);
-    BOOST_CHECK(n1 == n2);
+    TEST_CHECK(buff == str);
+    TEST_CHECK(n1 != -1);
+    TEST_CHECK(n1 == n2);
   }
 #undef FMT_FN
 #define FMT_FN elib::checked_fmt
@@ -793,16 +790,16 @@ BOOST_AUTO_TEST_CASE( check_cfmt_throw_test )
     int n1 = -1;
     int n2 = -1;
     
-    BOOST_CHECK_NO_THROW((str = FMT_FN("%s %i %n %p", "Hello", 0, &n1, (void*)nullptr) ));
+    TEST_CHECK_NO_THROW((str = FMT_FN("%s %i %n %p", "Hello", 0, &n1, (void*)nullptr) ));
     std::snprintf(buff, sizeof(buff), "%s %i %n %p", "Hello", 0, &n2, (void*)nullptr);
     
-    BOOST_CHECK(buff == str);
-    BOOST_CHECK(n1 != -1);
-    BOOST_CHECK(n1 == n2);
+    TEST_CHECK(buff == str);
+    TEST_CHECK(n1 != -1);
+    TEST_CHECK(n1 == n2);
     
-    BOOST_CHECK_NO_THROW(str = FMT_FN("%s", std::string("Hello")));
+    TEST_CHECK_NO_THROW(str = FMT_FN("%s", std::string("Hello")));
     std::snprintf(buff, sizeof(buff), "%s", "Hello");
-    BOOST_CHECK(str == buff);
+    TEST_CHECK(str == buff);
   }
 #undef FMT_FN
 #define FMT_FN elib::checked_ext_fmt
@@ -837,22 +834,22 @@ BOOST_AUTO_TEST_CASE( check_cfmt_throw_test )
     int n1 = -1;
     int n2 = -1;
     
-    BOOST_CHECK_NO_THROW((str = FMT_FN("%s %i %n %p", "Hello", 0, &n1, (void*)nullptr) ));
+    TEST_CHECK_NO_THROW((str = FMT_FN("%s %i %n %p", "Hello", 0, &n1, (void*)nullptr) ));
     std::snprintf(buff, sizeof(buff), "%s %i %n %p", "Hello", 0, &n2, (void*)nullptr);
     
-    BOOST_CHECK(buff == str);
-    BOOST_CHECK(n1 != -1);
-    BOOST_CHECK(n1 == n2);
+    TEST_CHECK(buff == str);
+    TEST_CHECK(n1 != -1);
+    TEST_CHECK(n1 == n2);
     
-    BOOST_CHECK_NO_THROW(str = FMT_FN("%s", std::string("Hello")));
+    TEST_CHECK_NO_THROW(str = FMT_FN("%s", std::string("Hello")));
     std::snprintf(buff, sizeof(buff), "%s", "Hello");
-    BOOST_CHECK(str == buff);
+    TEST_CHECK(str == buff);
   }
 #undef FMT_FN
 }
 
 
-BOOST_AUTO_TEST_CASE(ext_fmt_test)
+TEST_CASE(ext_fmt_test)
 {
     std::string dest;
     char buff[10024];
@@ -863,12 +860,12 @@ BOOST_AUTO_TEST_CASE(ext_fmt_test)
     stream_type s4("S4");
     to_string_type s5("S5");
     
-    BOOST_CHECK_NO_THROW(( 
+    TEST_CHECK_NO_THROW(( 
        dest = elib::checked_ext_fmt("%s %s %s %s %s", s1, s2, s3, s4, s5) 
     ));
     
     std::snprintf(buff, sizeof(buff), "%s %s %s %s %s", "S1", "S2", "S3", "S4", "S5");
     
-    BOOST_CHECK(buff == dest);
+    TEST_CHECK(buff == dest);
 }
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

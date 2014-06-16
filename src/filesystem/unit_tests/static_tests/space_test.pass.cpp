@@ -1,45 +1,42 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM_SOURCE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include <cstdint>
 #include "../static_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 constexpr const std::uintmax_t bad_size = static_cast<std::uintmax_t>(-1);
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_static_space_test_suite)
+TEST_SUITE(elib_filesystem_static_space_test_suite)
 
-BOOST_AUTO_TEST_CASE(dne_test)
+TEST_CASE(dne_test)
 {
     const path file = make_static_env_path("dne");
     
     {
         std::error_code ec;
         space_info info = space(file, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_CHECK(info.capacity == bad_size);
-        BOOST_CHECK(info.free == bad_size);
-        BOOST_CHECK(info.available == bad_size);
+        TEST_REQUIRE(ec);
+        TEST_CHECK(info.capacity == bad_size);
+        TEST_CHECK(info.free == bad_size);
+        TEST_CHECK(info.available == bad_size);
     }
     {
-        BOOST_REQUIRE_THROW(space(file), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error,  space(file));
     }
 }
 
-BOOST_AUTO_TEST_CASE(file_test)
+TEST_CASE(file_test)
 {
     const path file = make_static_env_path("empty_file");
     
     std::error_code ec;
     space_info info = space(file, ec);
-    BOOST_REQUIRE(not ec);
-    BOOST_CHECK(info.capacity > 0);
-    BOOST_CHECK(info.free > 0 && info.free < info.capacity);
-    BOOST_CHECK(info.available > 0 && info.available < info.capacity);
+    TEST_REQUIRE(not ec);
+    TEST_CHECK(info.capacity > 0);
+    TEST_CHECK(info.free > 0 && info.free < info.capacity);
+    TEST_CHECK(info.available > 0 && info.available < info.capacity);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

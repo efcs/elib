@@ -1,63 +1,59 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
-
+// REQUIRES: ELIB_FILESYSTEM_SOURCE
 #include <elib/filesystem.hpp>
 #include <elib/aux.hpp>
 #include <string>
 #include <vector>
 #include <sstream>
 #include "../static_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_path_test_suite)
+TEST_SUITE(elib_filesystem_path_test_suite)
 
-BOOST_AUTO_TEST_CASE(default_ctor_test)
+TEST_CASE(default_ctor_test)
 {
     path p;
-    BOOST_CHECK(p.empty());
+    TEST_CHECK(p.empty());
 }
 
-BOOST_AUTO_TEST_CASE(copy_ctor_test)
+TEST_CASE(copy_ctor_test)
 {
     path p("my_path");
     path p2(p);
-    BOOST_CHECK(p == p2);
+    TEST_CHECK(p == p2);
 }
 
-BOOST_AUTO_TEST_CASE(move_ctor_test)
+TEST_CASE(move_ctor_test)
 {
     path p("my_path");
     path p2(elib::move(p));
-    BOOST_CHECK(p2 == path("my_path"));
+    TEST_CHECK(p2 == path("my_path"));
 }
 
-BOOST_AUTO_TEST_CASE(string_ctor_test)
+TEST_CASE(string_ctor_test)
 {
     std::string str_path("my_path");
     path p(str_path);
-    BOOST_CHECK(p == str_path);
+    TEST_CHECK(p == str_path);
 }
 
-BOOST_AUTO_TEST_CASE(iterator_ctor_test)
+TEST_CASE(iterator_ctor_test)
 {
     std::string str_path("my_path");
     path p(str_path.begin(), str_path.end());
-    BOOST_CHECK(p== str_path);
+    TEST_CHECK(p== str_path);
 }
 
-BOOST_AUTO_TEST_CASE(dentry_ctor_test)
+TEST_CASE(dentry_ctor_test)
 {
     directory_entry d(".");
     path const p(d);
-    BOOST_CHECK(p == d.path());
+    TEST_CHECK(p == d.path());
 }
 
 
-BOOST_AUTO_TEST_CASE(assign_test)
+TEST_CASE(assign_test)
 {
     // assign operator copy
     {
@@ -65,7 +61,7 @@ BOOST_AUTO_TEST_CASE(assign_test)
         path p;
         const path p2(expect);
         p = p2;
-        BOOST_CHECK(p == expect);
+        TEST_CHECK(p == expect);
     }
     // assign operator move
     {
@@ -73,14 +69,14 @@ BOOST_AUTO_TEST_CASE(assign_test)
         path p;
         path p2(expect);
         p = elib::move(p2);
-        BOOST_CHECK(p == expect);
+        TEST_CHECK(p == expect);
     }
     // assign string test
     {
         std::string expect("my_path");
         path p;
         p.assign(expect);
-        BOOST_CHECK(p == expect);
+        TEST_CHECK(p == expect);
     }
     // assign source type test
     {
@@ -88,7 +84,7 @@ BOOST_AUTO_TEST_CASE(assign_test)
         std::vector<char> source(expect.begin(), expect.end());
         path p;
         p.assign(source);
-        BOOST_CHECK(p == expect);
+        TEST_CHECK(p == expect);
     }
     // assign source type operator test
     {
@@ -96,18 +92,18 @@ BOOST_AUTO_TEST_CASE(assign_test)
         std::vector<char> source(expect.begin(), expect.end());
         path p;
         p = source;
-        BOOST_CHECK(p == expect);
+        TEST_CHECK(p == expect);
     }
     // assign iterator
     {
         std::string expect("my_path");
         path p;
         p.assign(expect.begin(), expect.end());
-        BOOST_CHECK(p == expect);
+        TEST_CHECK(p == expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(append_operator_test)
+TEST_CASE(append_operator_test)
 {
     struct append_operator_testcase
     {
@@ -132,38 +128,38 @@ BOOST_AUTO_TEST_CASE(append_operator_test)
         path lhs(testcase.lhs);
         path rhs(testcase.rhs);
         lhs /= rhs;
-        BOOST_CHECK(lhs == testcase.expect);
+        TEST_CHECK(lhs == testcase.expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(append_string_operator_test)
+TEST_CASE(append_string_operator_test)
 {
     std::string expect("p1/p2");
     path p1("p1");
     std::string p2("p2");
     p1 /= p2;
-    BOOST_CHECK(p1 == expect);
+    TEST_CHECK(p1 == expect);
 }
 
-BOOST_AUTO_TEST_CASE(append_string_method_test)
+TEST_CASE(append_string_method_test)
 {
     std::string expect("p1/p2");
     path p1("p1");
     std::string p2("p2");
     p1.append(p2);
-    BOOST_CHECK(p1 == expect);
+    TEST_CHECK(p1 == expect);
 }
 
-BOOST_AUTO_TEST_CASE(append_iterator_method_test)
+TEST_CASE(append_iterator_method_test)
 {
     std::string expect("p1/p2");
     path p1("p1");
     std::string p2("p2");
     p1.append(p2.begin(), p2.end());
-    BOOST_CHECK(p1 == expect);
+    TEST_CHECK(p1 == expect);
 }
 
-BOOST_AUTO_TEST_CASE(concat_test)
+TEST_CASE(concat_test)
 {
     const std::string expect("p1/p2");
     const std::string s1("p1/");
@@ -174,65 +170,65 @@ BOOST_AUTO_TEST_CASE(concat_test)
         path p1(s1);
         path p2(s2);
         p1 += p2;
-        BOOST_CHECK(p1 == expect);
+        TEST_CHECK(p1 == expect);
     }
     // concat string
     {
         path p1(s1);
         std::string p2(s2);
         p1 += p2;
-        BOOST_CHECK(p1 == expect);
+        TEST_CHECK(p1 == expect);
     }
     // concat c string
     {
         path p1(s1);
         p1 += s2.c_str();
-        BOOST_CHECK(p1 == expect);
+        TEST_CHECK(p1 == expect);
     }
     // concat source type
     {
         path p1(s1);
         std::vector<char> p2(s2.begin(), s2.end());
         p1 += p2;
-        BOOST_CHECK(p1 == expect);
+        TEST_CHECK(p1 == expect);
     }
     // concat char
     {
         path p1(s1);
         p1 += 'p';
-        BOOST_CHECK(p1 == path("p1/p"));
+        TEST_CHECK(p1 == path("p1/p"));
     }
     // concat wide char
     {
         path p(s1);
         p += L'p';
-        BOOST_CHECK(p == path("p1/p"));
+        TEST_CHECK(p == path("p1/p"));
     }
     // concat source member type
     {
         path p1(s1);
         std::vector<char> p2(s2.begin(), s2.end());
         p1.concat(p2);
-        BOOST_CHECK(p1 == expect);
+        TEST_CHECK(p1 == expect);
     }
     // concat iterator member type
     {
         path p1(s1);
         std::vector<char> p2(s2.begin(), s2.end());
         p1.concat(p2.begin(), p2.end());
-        BOOST_CHECK(p1 == expect);
+        TEST_CHECK(p1 == expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(clear_test)
+TEST_CASE(clear_test)
 {
     path p1("non-empty");
-    BOOST_REQUIRE(not p1.empty());
+    TEST_REQUIRE(not p1.empty());
     p1.clear();
-    BOOST_CHECK(p1.empty());
+    TEST_CHECK(p1.empty());
 }
 
-BOOST_AUTO_TEST_CASE(make_preferred_test)
+TEST_CASE(make_preferred_test)
 {
     struct make_preferred_testcase
     {
@@ -254,11 +250,11 @@ BOOST_AUTO_TEST_CASE(make_preferred_test)
     for (auto const & testcase : testcases) {
         path p(testcase.raw);
         p.make_preferred();
-        BOOST_CHECK(p == testcase.expect);
+        TEST_CHECK(p == testcase.expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(remove_filename_test)
+TEST_CASE(remove_filename_test)
 {
     struct remove_filename_testcase
     {
@@ -287,7 +283,7 @@ BOOST_AUTO_TEST_CASE(remove_filename_test)
     for (auto const & testcase :  testcases) {
         path p(testcase.raw);
         p.remove_filename();
-        BOOST_CHECK(p == testcase.expect);
+        TEST_CHECK(p == testcase.expect);
         if (p != testcase.expect) {
             std::cout << "raw: " << testcase.raw << std::endl;
             std::cout << "expect: " << testcase.expect << std::endl;
@@ -296,7 +292,7 @@ BOOST_AUTO_TEST_CASE(remove_filename_test)
     }
 }
 
-BOOST_AUTO_TEST_CASE(replace_filename_test)
+TEST_CASE(replace_filename_test)
 {
     struct replace_filename_testcase
     {
@@ -321,11 +317,11 @@ BOOST_AUTO_TEST_CASE(replace_filename_test)
     for (auto const & testcase : testcases) {
         path p(testcase.raw);
         p.replace_filename(testcase.filename);
-        BOOST_CHECK(p == testcase.expect);
+        TEST_CHECK(p == testcase.expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(replace_extension_test)
+TEST_CASE(replace_extension_test)
 {
     struct extension_testcase
     {
@@ -348,76 +344,76 @@ BOOST_AUTO_TEST_CASE(replace_extension_test)
     for (auto const & testcase : testcases) {
         path p(testcase.raw);
         p.replace_extension(testcase.extension);
-        BOOST_CHECK(p == testcase.expect);
+        TEST_CHECK(p == testcase.expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(swap_test)
+TEST_CASE(swap_test)
 {
     path p1("hello");
     path p2("world");
     
     p1.swap(p2);
-    BOOST_CHECK(p1 == "world");
-    BOOST_CHECK(p2 == "hello");
+    TEST_CHECK(p1 == "world");
+    TEST_CHECK(p2 == "hello");
     
     swap(p1, p2);
-    BOOST_CHECK(p1 == "hello");
-    BOOST_CHECK(p2 == "world");
+    TEST_CHECK(p1 == "hello");
+    TEST_CHECK(p2 == "world");
 }
 
-BOOST_AUTO_TEST_CASE(to_string_converters_test)
+TEST_CASE(to_string_converters_test)
 {
     const std::string expect("/foo/bar/baz");
     const path p(expect);
-    BOOST_CHECK(p.native() == expect);
-    BOOST_CHECK(p.c_str() == expect);
-    BOOST_CHECK(static_cast<std::string>(p) == expect);
-    BOOST_CHECK(p.string() == expect);
+    TEST_CHECK(p.native() == expect);
+    TEST_CHECK(p.c_str() == expect);
+    TEST_CHECK(static_cast<std::string>(p) == expect);
+    TEST_CHECK(p.string() == expect);
 }
 
-BOOST_AUTO_TEST_CASE(compare_test)
+TEST_CASE(compare_test)
 {
     const std::string s1("/foo/./bar/baz");
     const std::string s2("/foo/bar/baz");
     const path p1(s1);
     const path p2(s2);
     
-    BOOST_CHECK(p1.compare(p2) < 0);
-    BOOST_CHECK(p1.compare(p1) == 0);
-    BOOST_CHECK(p2.compare(p1) > 0);
+    TEST_CHECK(p1.compare(p2) < 0);
+    TEST_CHECK(p1.compare(p1) == 0);
+    TEST_CHECK(p2.compare(p1) > 0);
     
-    BOOST_CHECK(p1.compare(s2) < 0);
-    BOOST_CHECK(p1.compare(s1) == 0);
-    BOOST_CHECK(p2.compare(s1) > 0);
+    TEST_CHECK(p1.compare(s2) < 0);
+    TEST_CHECK(p1.compare(s1) == 0);
+    TEST_CHECK(p2.compare(s1) > 0);
     
-    BOOST_CHECK(p1.compare(s2.c_str()) < 0);
-    BOOST_CHECK(p1.compare(s1.c_str()) == 0);
-    BOOST_CHECK(p2.compare(s1.c_str()) > 0);
+    TEST_CHECK(p1.compare(s2.c_str()) < 0);
+    TEST_CHECK(p1.compare(s1.c_str()) == 0);
+    TEST_CHECK(p2.compare(s1.c_str()) > 0);
     
-    BOOST_CHECK(p1 < p2);
-    BOOST_CHECK(p1 <= p2);
-    BOOST_CHECK(not (p1 > p2));
-    BOOST_CHECK(not (p1 >= p2));
-    BOOST_CHECK(not (p1 == p2));
-    BOOST_CHECK(p1 != p2);
+    TEST_CHECK(p1 < p2);
+    TEST_CHECK(p1 <= p2);
+    TEST_CHECK(not (p1 > p2));
+    TEST_CHECK(not (p1 >= p2));
+    TEST_CHECK(not (p1 == p2));
+    TEST_CHECK(p1 != p2);
     
-    BOOST_CHECK(not (p2 < p1));
-    BOOST_CHECK(not (p2 <= p1));
-    BOOST_CHECK(p2 > p1);
-    BOOST_CHECK(p2 >= p1);
-    BOOST_CHECK(not (p2 == p1));
-    BOOST_CHECK(p2 != p1);
+    TEST_CHECK(not (p2 < p1));
+    TEST_CHECK(not (p2 <= p1));
+    TEST_CHECK(p2 > p1);
+    TEST_CHECK(p2 >= p1);
+    TEST_CHECK(not (p2 == p1));
+    TEST_CHECK(p2 != p1);
     
-    BOOST_CHECK(p1 == p1);
-    BOOST_CHECK(not (p1 != p1));
-    BOOST_CHECK(not (p1 < p1));
-    BOOST_CHECK(p1 <= p1);
-    BOOST_CHECK(not (p1 > p1));
-    BOOST_CHECK(p1 >= p1);
+    TEST_CHECK(p1 == p1);
+    TEST_CHECK(not (p1 != p1));
+    TEST_CHECK(not (p1 < p1));
+    TEST_CHECK(p1 <= p1);
+    TEST_CHECK(not (p1 > p1));
+    TEST_CHECK(p1 >= p1);
 }
 
-BOOST_AUTO_TEST_CASE(hash_value_test)
+TEST_CASE(hash_value_test)
 {
     const path p1("/foo/./bar");
     const path p2("/foo/bar");
@@ -425,12 +421,12 @@ BOOST_AUTO_TEST_CASE(hash_value_test)
     auto const h1 = hash_value(p1);
     auto const h2 = hash_value(p2);
 
-    BOOST_CHECK(h1 != h2);
-    BOOST_CHECK(h1 == hash_value(p1));
-    BOOST_CHECK(h2 == hash_value(p2));
+    TEST_CHECK(h1 != h2);
+    TEST_CHECK(h1 == hash_value(p1));
+    TEST_CHECK(h2 == hash_value(p2));
 }
 
-BOOST_AUTO_TEST_CASE(path_decomp_test)
+TEST_CASE(path_decomp_test)
 {
     struct path_decomp_testcase
     {
@@ -493,37 +489,37 @@ BOOST_AUTO_TEST_CASE(path_decomp_test)
     
     for (auto const & testcase : testcases) {
         path p(testcase.raw);
-        BOOST_REQUIRE(p == testcase.raw);
+        TEST_REQUIRE(p == testcase.raw);
         
-        BOOST_CHECK(p.root_path() == testcase.root_path);
-        BOOST_CHECK(p.has_root_path() == not testcase.root_path.empty());
+        TEST_CHECK(p.root_path() == testcase.root_path);
+        TEST_CHECK(p.has_root_path() == not testcase.root_path.empty());
         
-        BOOST_CHECK(p.root_name() == testcase.root_name);
-        BOOST_CHECK(p.has_root_name() == not testcase.root_name.empty());
+        TEST_CHECK(p.root_name() == testcase.root_name);
+        TEST_CHECK(p.has_root_name() == not testcase.root_name.empty());
         
-        BOOST_CHECK(p.root_directory() == testcase.root_directory);
-        BOOST_CHECK(p.has_root_directory() == not testcase.root_directory.empty());
+        TEST_CHECK(p.root_directory() == testcase.root_directory);
+        TEST_CHECK(p.has_root_directory() == not testcase.root_directory.empty());
         
-        BOOST_CHECK(p.relative_path() == testcase.relative_path);
-        BOOST_CHECK(p.has_relative_path() == not testcase.relative_path.empty());
+        TEST_CHECK(p.relative_path() == testcase.relative_path);
+        TEST_CHECK(p.has_relative_path() == not testcase.relative_path.empty());
         
-        BOOST_CHECK(p.parent_path() == testcase.parent_path);
-        BOOST_CHECK(p.has_parent_path() == not testcase.parent_path.empty());
+        TEST_CHECK(p.parent_path() == testcase.parent_path);
+        TEST_CHECK(p.has_parent_path() == not testcase.parent_path.empty());
         
-        BOOST_CHECK(p.filename() == testcase.filename);
-        BOOST_CHECK(p.has_filename() == not testcase.filename.empty());
+        TEST_CHECK(p.filename() == testcase.filename);
+        TEST_CHECK(p.has_filename() == not testcase.filename.empty());
         
-        BOOST_CHECK(p.is_absolute() == p.has_root_directory());
-        BOOST_CHECK(p.is_relative() == not p.is_absolute());
+        TEST_CHECK(p.is_absolute() == p.has_root_directory());
+        TEST_CHECK(p.is_relative() == not p.is_absolute());
         
-        BOOST_CHECK_EQUAL_COLLECTIONS(
+        TEST_CHECK_EQUAL_COLLECTIONS(
             p.begin(), p.end()
           , testcase.elements.begin(), testcase.elements.end()
           );
     }
 }
 
-BOOST_AUTO_TEST_CASE(filename_decomp_test)
+TEST_CASE(filename_decomp_test)
 {
     struct filename_decomp_testcase
     {
@@ -546,31 +542,31 @@ BOOST_AUTO_TEST_CASE(filename_decomp_test)
     
     for (auto const & testcase : testcases) {
         path p(testcase.raw);
-        BOOST_REQUIRE(p == testcase.raw);
+        TEST_REQUIRE(p == testcase.raw);
         
-        BOOST_CHECK(p.filename() == testcase.filename);
-        BOOST_CHECK(p.has_filename() == not testcase.filename.empty());
+        TEST_CHECK(p.filename() == testcase.filename);
+        TEST_CHECK(p.has_filename() == not testcase.filename.empty());
         
-        BOOST_CHECK(p.stem() == testcase.stem);
-        BOOST_CHECK(p.has_stem() == not testcase.stem.empty());
+        TEST_CHECK(p.stem() == testcase.stem);
+        TEST_CHECK(p.has_stem() == not testcase.stem.empty());
         
-        BOOST_CHECK(p.extension() == testcase.extension);
-        BOOST_CHECK(p.has_extension() == not testcase.extension.empty());
+        TEST_CHECK(p.extension() == testcase.extension);
+        TEST_CHECK(p.has_extension() == not testcase.extension.empty());
     }
 }
 
-BOOST_AUTO_TEST_CASE(output_stream_test)
+TEST_CASE(output_stream_test)
 {
     const std::string s("/foo/bar/baz");
     const path p(s);
     
     std::stringstream ss;
     ss << p;
-    BOOST_REQUIRE(ss);
-    BOOST_CHECK(ss.str() == p.native());
+    TEST_REQUIRE(ss);
+    TEST_CHECK(ss.str() == p.native());
 }
 
-BOOST_AUTO_TEST_CASE(input_stream_test)
+TEST_CASE(input_stream_test)
 {
     const std::string s("/foo/bar/baz");
     const path expect(s);
@@ -579,8 +575,8 @@ BOOST_AUTO_TEST_CASE(input_stream_test)
     std::stringstream ss;
     ss << s;
     ss >> p;
-    BOOST_REQUIRE(ss);
-    BOOST_CHECK(p == expect);
+    TEST_REQUIRE(ss);
+    TEST_CHECK(p == expect);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

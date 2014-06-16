@@ -1,34 +1,31 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM_SOURCE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../static_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_static_current_path_test_suite)
+TEST_SUITE(elib_filesystem_static_current_path_test_suite)
 
-BOOST_AUTO_TEST_CASE(set_and_get_test)
+TEST_CASE(set_and_get_test)
 {
     const path curr_path = current_path();
     
     std::error_code ec;
     current_path(test_root, ec);
-    BOOST_REQUIRE(not ec);
+    TEST_REQUIRE(not ec);
     
-    BOOST_CHECK(current_path() == test_root);
+    TEST_CHECK(current_path() == test_root);
     
-    BOOST_REQUIRE_NO_THROW(current_path(elib_root));
-    BOOST_CHECK(current_path() == elib_root);
+    TEST_REQUIRE_NO_THROW(current_path(elib_root));
+    TEST_CHECK(current_path() == elib_root);
     
-    BOOST_REQUIRE_NO_THROW(current_path(curr_path));
-    BOOST_CHECK(current_path() == curr_path);
+    TEST_REQUIRE_NO_THROW(current_path(curr_path));
+    TEST_CHECK(current_path() == curr_path);
 }
 
-BOOST_AUTO_TEST_CASE(bad_set_test)
+TEST_CASE(bad_set_test)
 {
     const path curr_path = current_path();
     
@@ -36,14 +33,14 @@ BOOST_AUTO_TEST_CASE(bad_set_test)
     {
         std::error_code ec;
         current_path(new_path, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_CHECK(current_path() == curr_path);
+        TEST_REQUIRE(ec);
+        TEST_CHECK(current_path() == curr_path);
     }
     {
-        BOOST_REQUIRE_THROW(current_path(new_path), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error,  current_path(new_path));
     }
         
     current_path(curr_path);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

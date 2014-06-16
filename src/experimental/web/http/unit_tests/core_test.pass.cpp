@@ -1,42 +1,39 @@
-// REQUIRES: ELIB_WEB_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_WEB_SOURCE
 #include <elib/experimental/web/http.hpp>
 #include <vector>
 #include <string>
+#include "rapid-cxx-test.hpp"
 using namespace elib::web;
 using namespace elib::web::http;
 
-BOOST_AUTO_TEST_SUITE(elib_web_http_core_test_suite)
+TEST_SUITE(elib_web_http_core_test_suite)
 
-BOOST_AUTO_TEST_CASE(version_to_string_test)
+TEST_CASE(version_to_string_test)
 {
     {
         auto ret = to_string(version::ONE_ZERO);
-        BOOST_CHECK(ret == "HTTP/1.0");
+        TEST_CHECK(ret == "HTTP/1.0");
     }{
         auto ret = to_string(version::ONE_ONE);
-        BOOST_CHECK(ret == "HTTP/1.1");
+        TEST_CHECK(ret == "HTTP/1.1");
     }
 }
 
-BOOST_AUTO_TEST_CASE(string_to_version_test)
+TEST_CASE(string_to_version_test)
 {
     {
         auto ret = to_version("HTTP/1.0");
-        BOOST_CHECK(version::ONE_ZERO == ret);
+        TEST_CHECK(version::ONE_ZERO == ret);
     }{
         auto ret = to_version("HTTP/1.1");
-        BOOST_CHECK(version::ONE_ONE == ret);
+        TEST_CHECK(version::ONE_ONE == ret);
     }{
-        BOOST_CHECK_THROW(to_version("BAD"), web_error);
+        TEST_CHECK_THROW(web_error, to_version("BAD"));
     }
 }
 
 #define _(M) { method::M, #M }
-BOOST_AUTO_TEST_CASE(method_test)
+TEST_CASE(method_test)
 {
     struct method_testcase
     {
@@ -57,14 +54,14 @@ BOOST_AUTO_TEST_CASE(method_test)
     };
     
     for (auto & testcase : testcases) {
-        BOOST_CHECK(testcase.s == to_string(testcase.m));
-        BOOST_CHECK(testcase.m == to_method(testcase.s));
+        TEST_CHECK(testcase.s == to_string(testcase.m));
+        TEST_CHECK(testcase.m == to_method(testcase.s));
     }
 }
 #undef _
 
 #define _(S, ...) { status::S, #S, __VA_ARGS__}
-BOOST_AUTO_TEST_CASE(status_test)
+TEST_CASE(status_test)
 {
     struct status_testcase
     {
@@ -126,21 +123,21 @@ BOOST_AUTO_TEST_CASE(status_test)
     };
     
     for (auto const & testcase : testcases) {
-        BOOST_CHECK(testcase.str == to_string(testcase.s));
-        BOOST_CHECK(testcase.s == to_status(testcase.str));
-        BOOST_CHECK(testcase.is_info == status_is_information(testcase.s));
-        BOOST_CHECK(testcase.is_success == status_is_success(testcase.s));
-        BOOST_CHECK(testcase.is_redirect == status_is_redirect(testcase.s));
-        BOOST_CHECK(testcase.is_client_error == status_is_client_error(testcase.s));
-        BOOST_CHECK(testcase.is_server_error == status_is_server_error(testcase.s));
-        BOOST_CHECK(
+        TEST_CHECK(testcase.str == to_string(testcase.s));
+        TEST_CHECK(testcase.s == to_status(testcase.str));
+        TEST_CHECK(testcase.is_info == status_is_information(testcase.s));
+        TEST_CHECK(testcase.is_success == status_is_success(testcase.s));
+        TEST_CHECK(testcase.is_redirect == status_is_redirect(testcase.s));
+        TEST_CHECK(testcase.is_client_error == status_is_client_error(testcase.s));
+        TEST_CHECK(testcase.is_server_error == status_is_server_error(testcase.s));
+        TEST_CHECK(
             (testcase.is_client_error || testcase.is_server_error)
             == status_is_error(testcase.s)
           );
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_default_request_test)
+TEST_CASE(generate_default_request_test)
 {
     struct generate_request_testcase
     {
@@ -156,13 +153,13 @@ BOOST_AUTO_TEST_CASE(generate_default_request_test)
     
     for (auto const & tc : testcases) {
         request ret = generate_default_request(tc.m, tc.s);
-        BOOST_CHECK(ret.header.http_version == default_version);
-        BOOST_CHECK(ret.header.code == tc.m);
-        BOOST_CHECK(ret.header.value == tc.s);
+        TEST_CHECK(ret.header.http_version == default_version);
+        TEST_CHECK(ret.header.code == tc.m);
+        TEST_CHECK(ret.header.value == tc.s);
     }
 }
 
-BOOST_AUTO_TEST_CASE(generate_default_response_test)
+TEST_CASE(generate_default_response_test)
 {
     struct generate_response_testcase
     {
@@ -177,11 +174,11 @@ BOOST_AUTO_TEST_CASE(generate_default_response_test)
     
     for (auto const & tc : testcases) {
         response ret = generate_default_response(tc.st);
-        BOOST_CHECK(ret.header.http_version == default_version);
-        BOOST_CHECK(ret.header.code == tc.st);
-        BOOST_CHECK(ret.header.value == to_string(tc.st));
+        TEST_CHECK(ret.header.http_version == default_version);
+        TEST_CHECK(ret.header.code == tc.st);
+        TEST_CHECK(ret.header.value == to_string(tc.st));
     }
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

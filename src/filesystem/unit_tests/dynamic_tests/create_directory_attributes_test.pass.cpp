@@ -1,16 +1,13 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM_SOURCE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_create_directory_attributes_test_suite)
+TEST_SUITE(elib_filesystem_dynamic_create_directory_attributes_test_suite)
 
-BOOST_AUTO_TEST_CASE(dir_exists_test)
+TEST_CASE(dir_exists_test)
 {
     scoped_test_env env;
     
@@ -22,15 +19,15 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(not create_directory(file, existing, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(not create_directory(file, existing, ec));
+        TEST_REQUIRE(not ec);
     }
     {
-        BOOST_CHECK(not create_directory(file, existing));
+        TEST_CHECK(not create_directory(file, existing));
     }
 }
 
-BOOST_AUTO_TEST_CASE(file_exists_test)
+TEST_CASE(file_exists_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("file1");
@@ -39,11 +36,11 @@ BOOST_AUTO_TEST_CASE(file_exists_test)
     env.create_dir(existing);
 
     std::error_code ec;
-    BOOST_REQUIRE(not create_directory(file, existing, ec));
-    BOOST_REQUIRE(ec);
+    TEST_REQUIRE(not create_directory(file, existing, ec));
+    TEST_REQUIRE(ec);
 }
 
-BOOST_AUTO_TEST_CASE(bad_parent)
+TEST_CASE(bad_parent)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1/dir2");
@@ -53,16 +50,16 @@ BOOST_AUTO_TEST_CASE(bad_parent)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(not create_directory(file, existing, ec));
-        BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(not is_directory(env.make_env_path("dir1")));
+        TEST_REQUIRE(not create_directory(file, existing, ec));
+        TEST_REQUIRE(ec);
+        TEST_REQUIRE(not is_directory(env.make_env_path("dir1")));
     }
     {
-        BOOST_REQUIRE_THROW(create_directory(file, existing), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error, create_directory(file, existing));
     }
 }
 
-BOOST_AUTO_TEST_CASE(bad_existing_test)
+TEST_CASE(bad_existing_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
@@ -70,16 +67,16 @@ BOOST_AUTO_TEST_CASE(bad_existing_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(not create_directory(file, existing, ec));
-        BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(not is_directory(file));
+        TEST_REQUIRE(not create_directory(file, existing, ec));
+        TEST_REQUIRE(ec);
+        TEST_REQUIRE(not is_directory(file));
     }
     {
-        BOOST_REQUIRE_THROW(create_directory(file, existing), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error, create_directory(file, existing));
     }
 }
 
-BOOST_AUTO_TEST_CASE(existing_file_test)
+TEST_CASE(existing_file_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
@@ -89,16 +86,16 @@ BOOST_AUTO_TEST_CASE(existing_file_test)
     
     /// Set the permissions to somthing non-default.
     file_status existing_st = status(existing);
-    BOOST_REQUIRE(existing_st.permissions() != perms::owner_all);
+    TEST_REQUIRE(existing_st.permissions() != perms::owner_all);
     permissions(existing, perms::owner_all);
     
     std::error_code ec;
-    BOOST_REQUIRE(create_directory(file, existing, ec));
-    BOOST_REQUIRE(not ec);
+    TEST_REQUIRE(create_directory(file, existing, ec));
+    TEST_REQUIRE(not ec);
     
     file_status st = status(file);
-    BOOST_REQUIRE(is_directory(st));
-    BOOST_REQUIRE(st.permissions() == perms::owner_all);
+    TEST_REQUIRE(is_directory(st));
+    TEST_REQUIRE(st.permissions() == perms::owner_all);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

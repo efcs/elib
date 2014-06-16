@@ -1,20 +1,17 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM_SOURCE
 #include <elib/config.hpp>
 #include <elib/filesystem.hpp>
 #include <chrono>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 using Clock = std::chrono::system_clock;
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_write_time_operations_test_suite)
+TEST_SUITE(elib_filesystem_write_time_operations_test_suite)
 
-BOOST_AUTO_TEST_CASE(dne_test)
+TEST_CASE(dne_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("file1");
@@ -24,17 +21,17 @@ BOOST_AUTO_TEST_CASE(dne_test)
         file_time_type expect = file_time_type::min();
         std::error_code ec;
         file_time_type const time = last_write_time(file, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_REQUIRE(time == expect);
+        TEST_REQUIRE(ec);
+        TEST_REQUIRE(time == expect);
     }
     // without error code
     {
-        BOOST_REQUIRE_THROW(last_write_time(file), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error, last_write_time(file));
     }
 }
 
 /// We don't actually know what to expect. but make sure we get something normal
-BOOST_AUTO_TEST_CASE(read_time_test)
+TEST_CASE(read_time_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("file1");
@@ -48,20 +45,20 @@ BOOST_AUTO_TEST_CASE(read_time_test)
     {
         std::error_code ec;
         time = last_write_time(file, ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(time != bad_result);
-        BOOST_CHECK(time < expect_before);
-        BOOST_CHECK(time > expect_after);
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(time != bad_result);
+        TEST_CHECK(time < expect_before);
+        TEST_CHECK(time > expect_after);
     }
     // without error code
     {
         file_time_type other_time;
-        BOOST_REQUIRE_NO_THROW(other_time = last_write_time(file));
-        BOOST_REQUIRE(time == other_time);
+        TEST_REQUIRE_NO_THROW(other_time = last_write_time(file));
+        TEST_REQUIRE(time == other_time);
     }
 }
 
-BOOST_AUTO_TEST_CASE(write_time_test)
+TEST_CASE(write_time_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("file1");
@@ -73,27 +70,27 @@ BOOST_AUTO_TEST_CASE(write_time_test)
     {
         std::error_code ec;
         file_time_type const time = last_write_time(file, ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(time != bad_result);
-        BOOST_REQUIRE(time != new_time);
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(time != bad_result);
+        TEST_REQUIRE(time != new_time);
     }
     // set new time
     {
         std::error_code ec;
         last_write_time(file, new_time, ec);
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(not ec);
     }
     // check new time
     {
         std::error_code ec;
         file_time_type const time = last_write_time(file, ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(Clock::to_time_t(time) == Clock::to_time_t(new_time));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(Clock::to_time_t(time) == Clock::to_time_t(new_time));
     }
 }
 
 #if !defined(ELIB_CONFIG_CYGWIN)
-BOOST_AUTO_TEST_CASE(stat_fail_test)
+TEST_CASE(stat_fail_test)
 {
     scoped_test_env env;
     path const dir = env.make_env_path("dir");
@@ -106,14 +103,14 @@ BOOST_AUTO_TEST_CASE(stat_fail_test)
     {
         std::error_code ec;
         last_write_time(file, Clock::now(), ec);
-        BOOST_REQUIRE(ec);
+        TEST_REQUIRE(ec);
     }
     {
-        BOOST_REQUIRE_THROW(last_write_time(file, Clock::now()), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error, last_write_time(file, Clock::now()));
     }
     
     permissions(dir, perms::all);
 }
 # endif
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

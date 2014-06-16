@@ -1,33 +1,30 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM_SOURCE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include <cstdint>
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_remove_all_test_suite)
+TEST_SUITE(elib_filesystem_dynamic_remove_all_test_suite)
 
-BOOST_AUTO_TEST_CASE(dne_test)
+TEST_CASE(dne_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dne");
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(0 == remove_all(file, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(0 == remove_all(file, ec));
+        TEST_REQUIRE(not ec);
     }
     {
-        BOOST_REQUIRE(0 == remove_all(file));
+        TEST_REQUIRE(0 == remove_all(file));
     }
 }
 
-BOOST_AUTO_TEST_CASE(empty_dir_test)
+TEST_CASE(empty_dir_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
@@ -35,11 +32,11 @@ BOOST_AUTO_TEST_CASE(empty_dir_test)
     env.create_dir(file);
     
     std::error_code ec;
-    BOOST_REQUIRE(1 == remove_all(file, ec));
-    BOOST_REQUIRE(not ec);
+    TEST_REQUIRE(1 == remove_all(file, ec));
+    TEST_REQUIRE(not ec);
 }
 
-BOOST_AUTO_TEST_CASE(file_test)
+TEST_CASE(file_test)
 {
    scoped_test_env env;
     path const file = env.make_env_path("file1");
@@ -47,11 +44,11 @@ BOOST_AUTO_TEST_CASE(file_test)
     env.create_file(file);
     
     std::error_code ec;
-    BOOST_REQUIRE(1 == remove_all(file, ec));
-    BOOST_REQUIRE(not ec); 
+    TEST_REQUIRE(1 == remove_all(file, ec));
+    TEST_REQUIRE(not ec); 
 }
 
-BOOST_AUTO_TEST_CASE(non_empty_non_recursive_dir_test)
+TEST_CASE(non_empty_non_recursive_dir_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
@@ -63,11 +60,11 @@ BOOST_AUTO_TEST_CASE(non_empty_non_recursive_dir_test)
     env.create_file(f2);
     
     std::error_code ec;
-    BOOST_REQUIRE(3 == remove_all(file, ec));
-    BOOST_REQUIRE(not ec);
+    TEST_REQUIRE(3 == remove_all(file, ec));
+    TEST_REQUIRE(not ec);
 }
 
-BOOST_AUTO_TEST_CASE(non_empty_recursive_dir_test)
+TEST_CASE(non_empty_recursive_dir_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
@@ -85,8 +82,8 @@ BOOST_AUTO_TEST_CASE(non_empty_recursive_dir_test)
     env.create_file(f4);
     
     std::error_code ec;
-    BOOST_REQUIRE(6 == remove_all(file, ec));
-    BOOST_REQUIRE(not ec);
+    TEST_REQUIRE(6 == remove_all(file, ec));
+    TEST_REQUIRE(not ec);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

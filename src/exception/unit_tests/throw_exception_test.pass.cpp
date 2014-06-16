@@ -1,44 +1,40 @@
-// REQUIRES: ELIB_EXCEPTION_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_EXCEPTION_SOURCE
 #include <elib/exception/exception.hpp>
 #include <elib/exception/throw_exception.hpp>
 #include <elib/aux/move.hpp>
 #include <stdexcept>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib::except;
 
-BOOST_AUTO_TEST_SUITE(exception_throw_exception_test_suite)
+TEST_SUITE(exception_throw_exception_test_suite)
 
-BOOST_AUTO_TEST_CASE(throw_exception_test)
+TEST_CASE(throw_exception_test)
 {
     std::logic_error err("What");
-    BOOST_CHECK_THROW(throw_exception(err), std::logic_error);
+    TEST_CHECK_THROW(std::logic_error, throw_exception(err));
 }
 
-BOOST_AUTO_TEST_CASE(throw_exception_from_test)
+TEST_CASE(throw_exception_from_test)
 {
     // lvalue test
     {
         exception e("What");
-        BOOST_CHECK_THROW(throw_exception_from(e, "file", "func", 1), exception);
-        BOOST_CHECK(e.has_throw_info());
+        TEST_CHECK_THROW(exception, throw_exception_from(e, "file", "func", 1));
+        TEST_CHECK(e.has_throw_info());
     }
     // rvalue test
     {
         exception e("What");
-        BOOST_CHECK_THROW(throw_exception_from(elib::move(e), "file", "func", 1), exception);
-        BOOST_CHECK(e.has_throw_info());
+        TEST_CHECK_THROW(exception, throw_exception_from(elib::move(e), "file", "func", 1));
     }
 }
 
-BOOST_AUTO_TEST_CASE(set_exception_throw_site_test)
+TEST_CASE(set_exception_throw_site_test)
 {
     exception e("what");
     set_exception_throw_site(e, "file", "func", 1);
-    BOOST_CHECK(e.has_throw_info());
+    TEST_CHECK(e.has_throw_info());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

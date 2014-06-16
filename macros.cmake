@@ -51,6 +51,17 @@ macro(add_header_test_src)
     endif()
     list(APPEND HEADER_TEST_SRC ${_header_test_src})
 endmacro(add_header_test_src)
+
+macro(add_test_target TargetName File)
+    add_executable(${TargetName} ${File})
+    target_include_directories(${TargetName} PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
+    # Currently way too noisy because of Boost.Test. 
+    #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
+    target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT})
+    add_test(${TargetName} ${TargetName})
+    # Print the name of the target that was added
+    config_message(STATUS "Adding Target: ${TargetName}")
+endmacro(add_test_target)
     
 macro(add_test_dir)
     set_dot_dir()
@@ -68,14 +79,7 @@ macro(add_test_dir)
     foreach(MyFile ${MyOut})
         get_filename_component(MyExeName ${MyFile} NAME_WE)
         set(TargetName ${prefix}_${MyExeName})
-        add_executable(${TargetName} ${MyFile})
-        target_include_directories(${TargetName} PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
-        # Currently way too noisy because of Boost.Test. 
-        #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
-        target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-        add_test(${TargetName} ${TargetName})
-        # Print the name of the target that was added
-        config_message(STATUS "Adding Target: ${TargetName}")
+        add_test_target(${TargetName} ${MyFile})
     endforeach()
 endmacro(add_test_dir)
 
@@ -95,14 +99,7 @@ macro(add_recursive_test_dir)
     foreach(MyFile ${MyOut})
         get_filename_component(MyExeName ${MyFile} NAME_WE)
         set(TargetName ${prefix}_${MyExeName})
-        add_executable(${TargetName} ${MyFile})
-        target_include_directories(${TargetName} PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
-        # Currently way too noisy because of Boost.Test. 
-        #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
-        target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-        add_test(${TargetName} ${TargetName})
-        # Print the name of the target that was added
-        config_message(STATUS "Adding Target: ${TargetName}")
+        add_test_target(${TargetName} ${MyFile})
     endforeach()
 endmacro(add_recursive_test_dir)
 

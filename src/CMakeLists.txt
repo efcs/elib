@@ -14,14 +14,6 @@ find_package( Threads REQUIRED )
 ##                            Unit Tests
 ################################################################################
 if(CONFIG_UNIT_TESTS) 
-    ################################### TEST ######################################
-    set(Boost_USE_STATIC_LIBS OFF)
-    set(Boost_USE_MULTITHREADED ON)
-    set(Boost_USE_STATIC_RUNTIME OFF)
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-    set(Boost_FIND_QUIETLY ON CACHE BOOL "Find Boost Quietly" FORCE)
-    include_directories(${Boost_INCLUDE_DIRS})
-
     ################################### PYTHON #####################################
     # Check for a python interpreter the first time we run configuration.
     if (NOT DEFINED CONFIGURATION_DONE)
@@ -145,21 +137,18 @@ endif()
 # When we LIT builds a negative compilation test it uses the flags for SAMPLEOBJ
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
 target_include_directories(SAMPLEOBJ PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
-target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} )
 set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFAULT_BUILD ON)
 
 # We actually need to give sample_test a target that matches the naming convention
 # for tests. 
-add_executable(sample_test sample_test.pass.cpp)
-target_include_directories(SAMPLEOBJ PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
-target_link_libraries(sample_test elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+add_test_target(sample_test sample_test.pass.cpp)
 
 
 include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)
 
   get_directory_property(ELIB_AVAILABLE_FEATURES DIRECTORY . COMPILE_DEFINITIONS)
-  list(APPEND ELIB_AVAILABLE_FEATURES "ELIB_BOOST_TEST")
 
   set(LIT_EXECUTABLE "${ELIB_ROOT_PATH}/packages/lit/lit.py" CACHE FILEPATH "Path to LLVM's lit.py.")
   set(LIT_ARGS_DEFAULT "-sv" CACHE STRING "Default lit args")

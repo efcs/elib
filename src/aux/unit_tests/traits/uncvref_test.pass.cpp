@@ -1,31 +1,25 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux/traits/uncvref.hpp>
-#include <elib/aux/traits/is_same.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 using namespace elib::aux;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_uncvref_test_suite)
+TEST_SUITE(elib_aux_traits_uncvref_test_suite)
 
-BOOST_AUTO_TEST_CASE(uncvref_test)
+TEST_CASE(uncvref_test)
 {
-    ELIB_STATIC_ASSERT(is_same<uncvref<void>, void>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<void*>, void*>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<const int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<volatile int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<const volatile int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int &>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int &&>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int const &>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int volatile &>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int const volatile &>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int const &&>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int volatile &&>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvref<int const volatile &&>, int>::value);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(uncvref<void>, void);
+    TEST_SAME_TYPE(uncvref<void*>, void*);
+    TEST_SAME_TYPE(uncvref<const int>, int);
+    TEST_SAME_TYPE(uncvref<volatile int>, int);
+    TEST_SAME_TYPE(uncvref<const volatile int>, int);
+    TEST_SAME_TYPE(uncvref<int &>, int);
+    TEST_SAME_TYPE(uncvref<int &&>, int);
+    TEST_SAME_TYPE(uncvref<int const &>, int);
+    TEST_SAME_TYPE(uncvref<int volatile &>, int);
+    TEST_SAME_TYPE(uncvref<int const volatile &>, int);
+    TEST_SAME_TYPE(uncvref<int const &&>, int);
+    TEST_SAME_TYPE(uncvref<int volatile &&>, int);
+    TEST_SAME_TYPE(uncvref<int const volatile &&>, int);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

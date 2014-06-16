@@ -1,10 +1,6 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX_SOURCE
 #include <elib/aux/traits/is_swappable.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 using namespace elib::aux;
 
 #if defined(__clang__)
@@ -58,32 +54,29 @@ using array_swap_t = default_swap_t(&)[42];
 using adl_blocker::non_swap_t;
 
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_is_swappable_test_suite)
+TEST_SUITE(elib_aux_traits_is_swappable_test_suite)
 
-BOOST_AUTO_TEST_CASE(swap_type_test)
+TEST_CASE(swap_type_test)
 {
-    ELIB_STATIC_ASSERT(detail::is_array_swappable<array_swap_t, array_swap_t>::value);
+    TEST_STATIC_ASSERT(detail::is_array_swappable<array_swap_t, array_swap_t>::value);
     
-    ELIB_STATIC_ASSERT(is_swappable<swap_t>::value);
-    ELIB_STATIC_ASSERT(is_swappable<nothrow_swap_t>::value);
-    ELIB_STATIC_ASSERT(is_swappable<default_swap_t>::value);
-    ELIB_STATIC_ASSERT(is_swappable<array_swap_t>::value);
-    ELIB_STATIC_ASSERT(not is_swappable<non_swap_t>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(is_swappable<swap_t>::value);
+    TEST_STATIC_ASSERT(is_swappable<nothrow_swap_t>::value);
+    TEST_STATIC_ASSERT(is_swappable<default_swap_t>::value);
+    TEST_STATIC_ASSERT(is_swappable<array_swap_t>::value);
+    TEST_STATIC_ASSERT(not is_swappable<non_swap_t>::value);
 }
 
-BOOST_AUTO_TEST_CASE(swap_const_test)
+TEST_CASE(swap_const_test)
 {
-    ELIB_STATIC_ASSERT(not is_swappable<swap_t const>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(not is_swappable<swap_t const>::value);
 }
 
-BOOST_AUTO_TEST_CASE(swap_mixed_type_test)
+TEST_CASE(swap_mixed_type_test)
 {
-    ELIB_STATIC_ASSERT(not is_swappable<swap_t, nothrow_swap_t>::value);
-    ELIB_STATIC_ASSERT(not is_swappable<default_swap_t, default_swap_t*>::value);
-    ELIB_STATIC_ASSERT(not is_swappable<swap_t, array_swap_t>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(not is_swappable<swap_t, nothrow_swap_t>::value);
+    TEST_STATIC_ASSERT(not is_swappable<default_swap_t, default_swap_t*>::value);
+    TEST_STATIC_ASSERT(not is_swappable<swap_t, array_swap_t>::value);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

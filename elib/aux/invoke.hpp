@@ -12,6 +12,7 @@
 # include <elib/aux/traits/member_pointer_traits.hpp>
 # include <elib/aux/traits/remove_reference.hpp>
 # include <utility> /* for std::get */
+# include <tuple>
 # include <cstddef>
 
 namespace elib { namespace aux

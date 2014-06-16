@@ -14,7 +14,7 @@ find_package( Threads REQUIRED )
 ##                            Unit Tests
 ################################################################################
 if(CONFIG_UNIT_TESTS) 
-    ################################### BOOST ######################################
+    ################################### TEST ######################################
     set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_MULTITHREADED ON)
     set(Boost_USE_STATIC_RUNTIME OFF)
@@ -144,12 +144,14 @@ endif()
 # SAMPLEOBJ is used by lit.cfg to create a template build rule. 
 # When we LIT builds a negative compilation test it uses the flags for SAMPLEOBJ
 add_executable(SAMPLEOBJ sample_test.pass.cpp)
+target_include_directories(SAMPLEOBJ PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
 target_link_libraries(SAMPLEOBJ elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFAULT_BUILD ON)
 
 # We actually need to give sample_test a target that matches the naming convention
 # for tests. 
 add_executable(sample_test sample_test.pass.cpp)
+target_include_directories(SAMPLEOBJ PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
 target_link_libraries(sample_test elib ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 
 

@@ -6,14 +6,16 @@
 #include <elib/mp/algorithm/sequence_equal.hpp>
 #include <elib/mp/views.hpp>
 #include <elib/mp/print.hpp>
-#include <elib/aux.hpp>
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
+#include <elib/aux/integral_constant.hpp>
+#include <elib/aux/traits/is_same.hpp>
+#include "rapid-cxx-test.hpp"
 
+using namespace elib;
+using namespace elib::mp;
 
-TEST_CASE(mp_view_test_suite)
-{
-  // mp_view_empty_sequence_test)
+TEST_SUITE(mp_view_test_suite)
+  
+  TEST_CASE(mp_view_empty_sequence_test)
   {
     // general
     {
@@ -57,7 +59,7 @@ TEST_CASE(mp_view_test_suite)
     }
   }
 
-  // mp_view_filter_view_test)
+  TEST_CASE(mp_view_filter_view_test)
   {
     // general
     {
@@ -111,7 +113,7 @@ TEST_CASE(mp_view_test_suite)
   }                                                 // mp_view_filter_view_test
   
   
-  // mp_view_single_view_test)
+  TEST_CASE(mp_view_single_view_test)
   {
     // general
     {
@@ -171,7 +173,7 @@ TEST_CASE(mp_view_test_suite)
   }                                                 // mp_view_single_view_test
   
 
-  // mp_view_joint_view_test)
+  TEST_CASE(mp_view_joint_view_test)
   {
     // general
     {
@@ -238,7 +240,7 @@ TEST_CASE(mp_view_test_suite)
     }
   }                                                  // mp_view_joint_view_test
   
-  // mp_view_transform_view_test)
+  TEST_CASE(mp_view_transform_view_test)
   {
     // general
     {
@@ -292,7 +294,7 @@ TEST_CASE(mp_view_test_suite)
 
   
 # if !defined(ELIB_CONFIG_COVERITY_SCAN) 
-  // mp_view_zip_view_test)
+  TEST_CASE(mp_view_zip_view_test)
   {
     // general
     {
@@ -374,4 +376,4 @@ TEST_CASE(mp_view_test_suite)
     }
   }                                                    // mp_view_zip_view_test
 # endif /* ELIB_CONFIG_COVERITY_SCAN */
-}
+TEST_SUITE_END()

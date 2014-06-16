@@ -4,17 +4,20 @@
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/sequence.hpp>
 #include <elib/mp/sequence_traits.hpp>
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
+#include <elib/aux/integral_constant.hpp>
+#include "rapid-cxx-test.hpp"
+
+using namespace elib;
+using namespace elib::mp;
 
 
 template <class Pack, std::size_t N>
 using p_iter = pack_iterator<Pack, N>;
 
-TEST_CASE(mp_pack_test_suite)
-{
+TEST_SUITE(mp_pack_test_suite)
 
-  // mp_pack_construction)
+
+  TEST_CASE(mp_pack_construction)
   {
     using namespace elib::mp::placeholders;
     using T0 = pack<>;
@@ -33,7 +36,7 @@ TEST_CASE(mp_pack_test_suite)
     TEST_SAME_TYPE(typename T2::type, T2);
   }                                                     // mp_pack_construction
 
-  // mp_pack_intrinsics)
+  TEST_CASE(mp_pack_intrinsics)
   {
     // empty
     {
@@ -145,7 +148,7 @@ TEST_CASE(mp_pack_test_suite)
     // TODO insert and erase tests
   }                                                       // mp_pack_intrinsics
 
-  // mp_pack_iterator_intrinsics)
+  TEST_CASE(mp_pack_iterator_intrinsics)
   {
     // model_type test
     {
@@ -235,7 +238,7 @@ TEST_CASE(mp_pack_test_suite)
   }                                              // mp_pack_iterator_intrinsics
   
   
-#define TEST_CHECK_TRAITS(...)                           \
+#define CHECK_TRAITS(...)                           \
   do {                                              \
     using T = __VA_ARGS__;                          \
     TEST_SAME_TYPE( typename T::class_type, pack_tag );  \
@@ -243,12 +246,12 @@ TEST_CASE(mp_pack_test_suite)
   } while (false)
 #
   
-  // mp_pack_sequence_traits)
+  TEST_CASE(mp_pack_sequence_traits)
   {
     // empty
-    TEST_CHECK_TRAITS( pack<> );
+    CHECK_TRAITS( pack<> );
     // non-empty
-    TEST_CHECK_TRAITS( pack<int> );
+    CHECK_TRAITS( pack<int> );
     // all 
     {
       using T = pack<>;
@@ -266,6 +269,7 @@ TEST_CASE(mp_pack_test_suite)
     }
   }                                                  // mp_pack_sequence_traits
   
-#undef TEST_CHECK_TRAITS
+#undef CHECK_TRAITS
 
-}
+  
+TEST_SUITE_END()

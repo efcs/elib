@@ -3,11 +3,10 @@
 #include <elib/mp/identity.hpp>
 #include <elib/mp/pair.hpp>
 #include <elib/mp/void.hpp>
-#include <elib/aux.hpp>
-#include <type_traits>
-#include <utility>
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
+#include <elib/aux/integral_constant.hpp>
+#include <elib/aux/traits/is_base_of.hpp>
+#include <elib/aux/traits/is_same.hpp>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 using namespace elib::mp;
@@ -35,11 +34,11 @@ struct no_type_test : T
 {};
 
 
-TEST_CASE(mp_metafunctions_test_suite)
-{
+TEST_SUITE(mp_metafunctions_test_suite)
+
 //-------------------------------- if & eval_if -----------------------------// 
 
-  // mp_if_test)
+  TEST_CASE(mp_if_test)
   {
     TEST_CHECK( if_t<aux::is_same<_1, _1>, true_, false_>() );
     TEST_CHECK( if_t<aux::is_same<_1, _2>, false_, true_>() );
@@ -54,7 +53,7 @@ TEST_CASE(mp_metafunctions_test_suite)
   
 //-------------------------------- arg & placeholders -----------------------// 
 
-  // mp_arg_test)
+  TEST_CASE(mp_arg_test)
   {
     TEST_CHECK(_1::apply<true_>::type() );
     TEST_CHECK(_1::apply<true_, void, void>::type() );
@@ -65,7 +64,7 @@ TEST_CASE(mp_metafunctions_test_suite)
   
 //-------------------------------- apply_wrap -------------------------------// 
 
-  // mp_apply_wrap_test)
+  TEST_CASE(mp_apply_wrap_test)
   {
     TEST_CHECK( apply_wrap_t< always<true_> >() );
     TEST_CHECK( apply_wrap_t<_1, true_>() );
@@ -77,18 +76,18 @@ TEST_CASE(mp_metafunctions_test_suite)
    
 //-------------------------------- protect --------------------------------// 
 
-  // mp_protect_test)
+  TEST_CASE(mp_protect_test)
   {
     using NP = protect<void_>;
-    TEST_CHECK( std::is_base_of<void_, NP>::type::value );
+    TEST_CHECK( aux::is_base_of<void_, NP>::type::value );
     
     using P = protect< bind<void_> >;
-    TEST_CHECK( !std::is_base_of<void_, P>::type::value );
+    TEST_CHECK( !aux::is_base_of<void_, P>::type::value );
   }                                                         // mp_protect_test
    
 //-------------------------------- quote --------------------------------// 
   
-  // mp_quote_test)
+  TEST_CASE(mp_quote_test)
   {
     using IQ = quote< identity >;
     using IQA = typename IQ::template apply<true_>::type;
@@ -101,7 +100,7 @@ TEST_CASE(mp_metafunctions_test_suite)
   
 //-------------------------------- bind --------------------------------// 
   
-  // mp_bind_test)
+  TEST_CASE(mp_bind_test)
   {
     using AQ = quote< add >;
     using TripleFirst = bind< AQ, _1, _1, _1>;
@@ -123,7 +122,7 @@ TEST_CASE(mp_metafunctions_test_suite)
   
 //-------------------------------- lambda --------------------------------// 
 
-  // mp_is_lambda_expr_test)
+  TEST_CASE(mp_is_lambda_expr_test)
   {
     using Arg = _1;
     using QuoteExpr = quote< add >;
@@ -146,7 +145,7 @@ TEST_CASE(mp_metafunctions_test_suite)
     TEST_CHECK( is_lambda_expression<NestedLEExpr2>() );
   }                                                   // mp_is_lambda_expr_test
 
-  // mp_lambda_test)
+  TEST_CASE(mp_lambda_test)
   {
     using Inc = add<_1, int_<1>>;
     using IncL = lambda<Inc>;
@@ -157,4 +156,11 @@ TEST_CASE(mp_metafunctions_test_suite)
     //TODO
   }                                                         // mp_lambda_test
   
-}
+//-------------------------------- apply --------------------------------// 
+
+  TEST_CASE(mp_apply_test)
+  {
+    
+  }                                                         // mp_apply_test
+
+TEST_SUITE_END()

@@ -2,7 +2,7 @@
 #include <elib/enumeration/basic_traits.hpp>
 #include <map>
 #include <string>
-#include "test/helper.hpp"
+#include "rapid-cxx-test.hpp"
 
 enum class A
 {
@@ -42,18 +42,21 @@ namespace elib { namespace enumeration
 
 using namespace elib::enumeration;
 
-TEST_CASE(enumeration_basic_traits_test)
+TEST_SUITE(enumeration_basic_traits_test_suite)
+
+TEST_CASE(enumeration_basic_traits_static)
 {
-    // enumeration_basic_traits_static)
-    {
-        static_assert(has_basic_enum_traits<A>::value, "A has traits");
-        static_assert(has_basic_enum_traits<B>::value, "B has traits");
-        static_assert(not has_basic_enum_traits<C>::value, "C does not have traits");
-        static_assert(not has_basic_enum_traits<void>::value, "void does not have traits");
-        
-        static_assert(not has_name_map<A>::value, "A does not have a name map");
-        static_assert(has_name_map<B>::value, "B has a name map");
-        static_assert(not has_name_map<C>::value, "C does not have a name map");
-        static_assert(not has_name_map<void>::value, "void does not have a name map");
-    }
+    static_assert(has_basic_enum_traits<A>::value, "A has traits");
+    static_assert(has_basic_enum_traits<B>::value, "B has traits");
+    static_assert(not has_basic_enum_traits<C>::value, "C does not have traits");
+    static_assert(not has_basic_enum_traits<void>::value, "void does not have traits");
+    
+    static_assert(not has_name_map<A>::value, "A does not have a name map");
+    static_assert(has_name_map<B>::value, "B has a name map");
+    static_assert(not has_name_map<C>::value, "C does not have a name map");
+    static_assert(not has_name_map<void>::value, "void does not have a name map");
+    
+    TEST_CHECK(true);
 }
+
+TEST_SUITE_END()

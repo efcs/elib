@@ -83,7 +83,7 @@ enable_testing()
 ################################################################################
 #                            ELIB config
 ################################################################################
-set(ELIB_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
+set(ELIB_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR})
 add_definitions(-DELIB_ROOT_PATH="${ELIB_ROOT_PATH}")
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})

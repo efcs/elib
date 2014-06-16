@@ -1,10 +1,7 @@
-// REQUIRES: ELIB_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
-
+// REQUIRES: ELIB_SOURCE
 #include <elib/optional.hpp>
+#include "rapid-cxx-test.hpp"
+
 using namespace elib;
 
 #if defined(ELIB_CONFIG_COVERITY_SCAN)
@@ -29,11 +26,11 @@ namespace cexpr_test
 
 using namespace cexpr_test;
 
-BOOST_AUTO_TEST_SUITE(elib_optional_constexpr_test_suite)
+TEST_SUITE(elib_optional_constexpr_test_suite)
 
 
 #if !defined(ELIB_CONFIG_COVERITY_SCAN)
-BOOST_AUTO_TEST_CASE(check_good_compile_time)
+TEST_CASE(check_good_compile_time)
 {
     static_assert(not o1.good(), "");
     static_assert(not o2.good(), "");
@@ -41,18 +38,18 @@ BOOST_AUTO_TEST_CASE(check_good_compile_time)
     static_assert(o4.good(), "");
     static_assert(o5.good(), "");
     static_assert(o6.good(), "");
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 #endif
 
-BOOST_AUTO_TEST_CASE(check_good_runtime)
+TEST_CASE(check_good_runtime)
 {
-    BOOST_CHECK(not o1.good());
-    BOOST_CHECK(not o2.good());
-    BOOST_CHECK(o3.good());
-    BOOST_CHECK(o4.good());
-    BOOST_CHECK(o5.good());
-    BOOST_CHECK(o6.good());
+    TEST_CHECK(not o1.good());
+    TEST_CHECK(not o2.good());
+    TEST_CHECK(o3.good());
+    TEST_CHECK(o4.good());
+    TEST_CHECK(o5.good());
+    TEST_CHECK(o6.good());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

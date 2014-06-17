@@ -40,7 +40,7 @@ TEST_CASE(default_test)
     TEST_CHECK(!s.is_open());
     TEST_CHECK(!s.good());
     TEST_CHECK(!s.fail());
-    TEST_CHECK(!((bool)s));
+    TEST_CHECK(!bool(s));
     TEST_CHECK((s.error_code() == std::error_code{0, std::system_category()}));
 }
 
@@ -50,7 +50,7 @@ TEST_CASE(open_close_test)
     
     TEST_CHECK(s.is_open());
     TEST_CHECK(s.raw_socket() != 0);
-    TEST_CHECK(s.good() && ((bool)s) && !s.fail());
+    TEST_CHECK(s.good() && bool(s) && !s.fail());
     TEST_CHECK(s.error_code() == std::error_code{});
     
     s.close();

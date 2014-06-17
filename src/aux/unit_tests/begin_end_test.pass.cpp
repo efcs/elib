@@ -66,7 +66,7 @@ TEST_CASE(get_begin_test)
     
     {
         TEST_CHECK(get_begin(i));
-        TEST_CHECK(get_begin((iterable const &)i));
+        TEST_CHECK(get_begin(static_cast<iterable const &>(i)));
         TEST_CHECK(get_begin(elib::move(i)));
     }
     {
@@ -78,7 +78,7 @@ TEST_CASE(get_begin_test)
     }
     {
         TEST_CHECK(get_begin(memi));
-        TEST_CHECK(get_begin((member_iterable const &)memi));
+        TEST_CHECK(get_begin(static_cast<member_iterable const &>(memi)));
         TEST_CHECK(get_begin(elib::move(memi)));
     }
 }
@@ -93,7 +93,7 @@ TEST_CASE(get_begin_ptr_test)
     
     {
         TEST_CHECK(get_begin_ptr(i));
-        TEST_CHECK(get_begin_ptr((iterable const &)i));
+        TEST_CHECK(get_begin_ptr(static_cast<iterable const &>(i)));
         TEST_CHECK(get_begin_ptr(elib::move(i)));
     }
     {
@@ -103,18 +103,18 @@ TEST_CASE(get_begin_ptr_test)
     {
         TEST_CHECK(get_begin_ptr(elib::move(mi)));
         TEST_CHECK(not get_begin_ptr(mi));
-        TEST_CHECK(not get_begin_ptr(elib::move((move_iterable const &)mi)));
+        TEST_CHECK(not get_begin_ptr(elib::move(static_cast<move_iterable const &>(mi))));
     }
     {
         TEST_CHECK(get_begin_ptr(memi));
-        TEST_CHECK(get_begin_ptr((member_iterable const &)memi));
+        TEST_CHECK(get_begin_ptr(static_cast<member_iterable const &>(memi)));
         TEST_CHECK(get_begin_ptr(elib::move(memi)));
     }
     {
         TEST_CHECK(not get_begin_ptr(ni));
-        TEST_CHECK(not get_begin_ptr((non_iter const &)ni));
+        TEST_CHECK(not get_begin_ptr(static_cast<non_iter const &>(ni)));
         TEST_CHECK(not get_begin_ptr(elib::move(ni)));
-        TEST_CHECK(not get_begin_ptr(elib::move((non_iter const &)ni)));
+        TEST_CHECK(not get_begin_ptr(elib::move(static_cast<non_iter const &>(ni))));
     }
 }
 
@@ -127,7 +127,7 @@ TEST_CASE(get_end_test)
     
     {
         TEST_CHECK(get_end(i));
-        TEST_CHECK(get_end((iterable const &)i));
+        TEST_CHECK(get_end(static_cast<iterable const &>(i)));
         TEST_CHECK(get_end(elib::move(i)));
     }
     {
@@ -139,7 +139,7 @@ TEST_CASE(get_end_test)
     }
     {
         TEST_CHECK(get_end(memi));
-        TEST_CHECK(get_end((member_iterable const &)memi));
+        TEST_CHECK(get_end(static_cast<member_iterable const &>(memi)));
         TEST_CHECK(get_end(elib::move(memi)));
     }
 }
@@ -154,7 +154,7 @@ TEST_CASE(get_end_ptr_test)
     
     {
         TEST_CHECK(get_end_ptr(i));
-        TEST_CHECK(get_end_ptr((iterable const &)i));
+        TEST_CHECK(get_end_ptr(static_cast<iterable const &>(i)));
         TEST_CHECK(get_end_ptr(elib::move(i)));
     }
     {
@@ -164,18 +164,18 @@ TEST_CASE(get_end_ptr_test)
     {
         TEST_CHECK(get_end_ptr(elib::move(mi)));
         TEST_CHECK(not get_end_ptr(mi));
-        TEST_CHECK(not get_end_ptr(elib::move((move_iterable const &)mi)));
+        TEST_CHECK(not get_end_ptr(elib::move(static_cast<move_iterable const &>(mi))));
     }
     {
         TEST_CHECK(get_end_ptr(memi));
-        TEST_CHECK(get_end_ptr((member_iterable const &)memi));
+        TEST_CHECK(get_end_ptr(static_cast<member_iterable const &>(memi)));
         TEST_CHECK(get_end_ptr(elib::move(memi)));
     }
     {
         TEST_CHECK(not get_end_ptr(ni));
-        TEST_CHECK(not get_end_ptr((non_iter const &)ni));
+        TEST_CHECK(not get_end_ptr(static_cast<non_iter const &>(ni)));
         TEST_CHECK(not get_end_ptr(elib::move(ni)));
-        TEST_CHECK(not get_end_ptr(elib::move((non_iter const &)ni)));
+        TEST_CHECK(not get_end_ptr(elib::move(static_cast<non_iter const &>(ni))));
     }
 }
 
@@ -190,8 +190,8 @@ TEST_CASE(adl_begin_end_test)
     {
         iter it = elib::aux::adl_begin(i);
         it = elib::aux::adl_end(i);
-        const_iter cit = elib::aux::adl_begin((iterable const &)i);
-        cit = elib::aux::adl_end((iterable const &)i);
+        const_iter cit = elib::aux::adl_begin(static_cast<iterable const &>(i));
+        cit = elib::aux::adl_end(static_cast<iterable const &>(i));
     }
     {
         const_iter cit = elib::aux::adl_begin(ci);
@@ -204,8 +204,8 @@ TEST_CASE(adl_begin_end_test)
     {
         iter it = elib::aux::adl_begin(memi);
         it = elib::aux::adl_end(memi);
-        const_iter cit = elib::aux::adl_begin((member_iterable const &)memi);
-        cit = elib::aux::adl_end((member_iterable const &)memi);
+        const_iter cit = elib::aux::adl_begin(static_cast<member_iterable const &>(memi));
+        cit = elib::aux::adl_end(static_cast<member_iterable const &>(memi));
     }
     TEST_CHECK(true);
 }

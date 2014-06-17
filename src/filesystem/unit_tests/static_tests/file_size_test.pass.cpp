@@ -57,7 +57,7 @@ TEST_CASE(empty_file_test)
     }
     // without error code
     {
-        std::uintmax_t ret;
+        std::uintmax_t ret{};
         TEST_REQUIRE_NO_THROW(ret = file_size(file));
         TEST_REQUIRE(ret == 0);
     }

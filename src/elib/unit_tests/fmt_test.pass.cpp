@@ -12,6 +12,10 @@
 # pragma GCC diagnostic ignored "-Wformat"
 #endif
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wold-style-cast"
+#endif
+
 
 using namespace elib;
 

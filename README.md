@@ -56,8 +56,8 @@ Elib supports the following compiler/library configurations:
 
 * *Container*: (Header only) Provides containers not found in the standard
     library. It currently includes:
-    * flat_map
-    * linear_flat_map
+    * `flat_map`
+    * `linear_flat_map`
 
 * *Enumeration*: (Header only) Provides tools to deal with C++11 scoped
     enumerations, including checked casting, string casting, iteration, and
@@ -96,23 +96,21 @@ Elib supports the following compiler/library configurations:
 build the unit tests. 
 
 General requirements:
-
-    * C++11 compiler (GCC >= 4.8.1)
-    * Native library used by `<mutex>` header (pthread on Linux)
-    * Python 3.x (Unit Testing Only)
-    * CMake >= 2.8.8
+* C++11 compiler (GCC >= 4.8.1)
+* Native library used by `<mutex>` header (pthread on Linux)
+* Python 3.x (Unit Testing Only)
+* CMake >= 2.8.8
 
 **Note**: elib will compile with GCC 4.8.0 but some features have been
 disabled.
 
 Requirements (library specific):
+* Filesystem:
+    * POSIX-compatible compiler and execution environment
 
-    * Filesystem:
-        * POSIX-compatible compiler and execution environment
-
-    * Web:
-        * POSIX-compatible compiler and execution environment
-        * Support for the `<regex>` header
+* Web:
+    * POSIX-compatible compiler and execution environment
+    * Support for the `<regex>` header
 
 ## Build Options (CMake)
 These options are found in `CMakeLists.txt`. If the environment variable

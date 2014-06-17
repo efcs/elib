@@ -19,7 +19,9 @@ Elib supports the following compiler/library configurations:
  - GCC 4.9
  - Clang 3.4 (with/without libc++)
  - Clang 3.5 trunk (with/without libc++)
- - GCC 4.8.3 (Cygwin)
+ - GCC 4.8.3/4.9.0 (Cygwin)
+
+NOTE: Cygwin requires a workaround to get g
 
 
 ## Library Summary

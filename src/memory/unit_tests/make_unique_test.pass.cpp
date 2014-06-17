@@ -2,7 +2,6 @@
 #include <elib/memory/make_unique.hpp>
 #include <memory>
 #include <string>
-
 #include "rapid-cxx-test.hpp"
 
 

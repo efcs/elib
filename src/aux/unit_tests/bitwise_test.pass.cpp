@@ -78,7 +78,6 @@ TEST_CASE(negate_test)
     TEST_1(0u);
     TEST_1(1u);
     TEST_1(2u);
-    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -99,9 +98,8 @@ TEST_CASE(bitand_test)
     TEST_3(0, -1, 1);
     TEST_5(0, 1, 2, 3, 4);
     TEST_5(1, 2, 3, 4, 5);
-    TEST_5(true, 2, 3u, 4l, (char)5);
-    TEST_5(2, (short)2, 2u, 2l, (char)2);
-    TEST_CHECK(true);
+    TEST_5(true, 2, 3u, 4l, static_cast<char>(5));
+    TEST_5(2, static_cast<short>(2), 2u, 2l, static_cast<char>(2));
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -122,9 +120,8 @@ TEST_CASE(bitor_test)
     TEST_3(0, -1, 1);
     TEST_5(0, 1, 2, 3, 4);
     TEST_5(1, 2, 3, 4, 5);
-    TEST_5(true, 2, 3u, 4l, (char)5);
-    TEST_5(2, (short)2, 2u, 2l, (char)2);
-    TEST_CHECK(true);
+    TEST_5(true, 2, 3u, 4l, static_cast<char>(5));
+    TEST_5(2, static_cast<short>(2), 2u, 2l, static_cast<char>(2));
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -145,9 +142,8 @@ TEST_CASE(bitxor_test)
     TEST_3(0, -1, 1);
     TEST_5(0, 1, 2, 3, 4);
     TEST_5(1, 2, 3, 4, 5);
-    TEST_5(true, 2, 3u, 4l, (char)5);
-    TEST_5(2, (short)2, 2u, 2l, (char)2);
-    TEST_CHECK(true);
+    TEST_5(true, 2, 3u, 4l, static_cast<char>(5));
+    TEST_5(2, static_cast<short>(2), 2u, 2l, static_cast<char>(2));
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -163,7 +159,6 @@ TEST_CASE(shift_left_test)
     TEST_2(1, 1);
     TEST_2(1, 2);
     TEST_2(2, 2);
-    TEST_CHECK(true);
 }
 #undef TEST_FN
 #undef TEST_FN_ALIAS
@@ -182,6 +177,5 @@ TEST_CASE(shift_right_test)
     TEST_2(8, 1);
     TEST_2(4, 1);
     TEST_2(4, 2);
-    TEST_CHECK(true);
 }
 TEST_SUITE_END()

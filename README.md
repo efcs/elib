@@ -120,13 +120,11 @@ Note: Requirements marked with (Unit Test Only) are obviously only required
 
 Requirements (General):
   * C++11 compiler (GCC >= 4.8.1)
+  * Native library used by <mutex> (pthread on linux)
   * Python (Unit Test Only)
   Note: elib will compile with GCC 4.8.0 but some features have been disabled.
 
 Requirements (Library specific):
-  Log:
-    Native library used by <mutex> (pthread on linux)
-
   Filesystem:
     POSIX support
 

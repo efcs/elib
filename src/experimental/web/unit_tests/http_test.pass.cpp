@@ -127,14 +127,14 @@ TEST_CASE(prox_status_test)
 #undef TEST_E
 }
 
-bool operator==(data_type const & lhs, std::string const & rhs)
+inline bool operator==(data_type const & lhs, std::string const & rhs)
 {
     std::string lhs_s = std::string(lhs.begin(), lhs.end());
     return lhs_s == rhs;
 }
 
 
-std::ostream & operator <<(std::ostream & out, data_type const & dt)
+inline std::ostream & operator <<(std::ostream & out, data_type const & dt)
 {
     out << std::string{dt.begin(), dt.end()};
     return out;

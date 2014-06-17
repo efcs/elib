@@ -8,6 +8,8 @@ using namespace elib::aux;
 
 #if defined(__GNUC__) && !defined(__clang__)
 # pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#elif defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-macros"
 #endif
 
 

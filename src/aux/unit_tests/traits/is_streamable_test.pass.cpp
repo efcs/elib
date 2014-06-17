@@ -12,10 +12,10 @@ struct out_type {};
 struct in_out_type {};
 struct no_stream_type {};
 
-std::istream & operator>>(std::istream & s, in_type &) { return s; }
-std::ostream & operator<<(std::ostream & s, out_type &) { return s; }
-std::istream & operator>>(std::istream & s, in_out_type &) { return s; }
-std::ostream & operator<<(std::ostream & s, in_out_type &) { return s; }
+inline std::istream & operator>>(std::istream & s, in_type &) { return s; }
+inline std::ostream & operator<<(std::ostream & s, out_type &) { return s; }
+inline std::istream & operator>>(std::istream & s, in_out_type &) { return s; }
+inline std::ostream & operator<<(std::ostream & s, in_out_type &) { return s; }
 
 
 TEST_SUITE(elib_aux_traits_is_streamable_test_suite)

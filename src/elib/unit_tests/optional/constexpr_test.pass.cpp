@@ -4,6 +4,12 @@
 
 using namespace elib;
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+
+
 #if defined(ELIB_CONFIG_COVERITY_SCAN)
 # define ELIB_OPTIONAL_CONSTEXPR
 #else

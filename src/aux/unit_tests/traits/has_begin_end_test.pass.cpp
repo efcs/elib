@@ -6,6 +6,8 @@
 #if defined(__clang__)
 # pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
 # pragma clang diagnostic ignored "-Wunused-function"
+# pragma clang diagnostic ignored "-Wunused-member-function"
+# pragma clang diagnostic ignored "-Wmissing-prototypes"
 # endif
 
 namespace { namespace adl_barrier
@@ -17,22 +19,22 @@ namespace { namespace adl_barrier
     struct iterable {
         constexpr iterable() noexcept {}
     };
-    iter begin(iterable &) { return {}; }
-    iter end(iterable &) { return {}; }
-    const_iter begin(iterable const &) { return {}; }
-    const_iter end(iterable const &) { return {}; }
+    inline iter begin(iterable &) { return {}; }
+    inline iter end(iterable &) { return {}; }
+    inline const_iter begin(iterable const &) { return {}; }
+    inline const_iter end(iterable const &) { return {}; }
     
     struct move_iterable {
         constexpr move_iterable() noexcept {}
     };
-    move_iter begin(move_iterable &&) { return {}; }
-    move_iter end(move_iterable &&) { return {}; }
+    inline move_iter begin(move_iterable &&) { return {}; }
+    inline move_iter end(move_iterable &&) { return {}; }
     
     struct const_iterable {
         constexpr const_iterable() noexcept {}
     };
-    const_iter begin(const_iterable const &) { return {}; }
-    const_iter end(const_iterable const &) { return {}; }
+    inline const_iter begin(const_iterable const &) { return {}; }
+    inline const_iter end(const_iterable const &) { return {}; }
     
     struct member_iterable {
         constexpr member_iterable() noexcept {}

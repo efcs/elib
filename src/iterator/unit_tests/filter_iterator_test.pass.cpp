@@ -7,6 +7,11 @@
 #include "rapid-cxx-test.hpp"
 
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+
 using vector_t = std::vector<int>;
 using const_iterator_t = vector_t::const_iterator;
 

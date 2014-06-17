@@ -86,14 +86,18 @@ check:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build elib
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
-	$(CMD_VERB) python packages/lit/lit.py --threads=$(THREADS) $(LIT_FLAGS) ./build/src
+	$(CMD_VERB) python packages/lit/lit.py $(LIT_FLAGS) ./build/src
 
 verbose-check:
 	$(CMD_VERB) echo === Building tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
+ifdef LIT_THREADS
+	$(CMD_VERB) python packages/lit/lit.py --threads=$(LIT_THREADS) -v ./build/src
+else
 	$(CMD_VERB) python packages/lit/lit.py -v ./build/src
+endif
 
 test:
 	$(CMD_VERB) echo === Running CTest tests ===

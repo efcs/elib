@@ -6,6 +6,11 @@
 #include "../static_test_helper.hpp"
 #include "rapid-cxx-test.hpp"
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+
 using namespace elib::fs;
 
 #define _(File) directory_entry(make_static_env_path(File))
@@ -51,7 +56,7 @@ TEST_CASE(dne_test)
 
 TEST_CASE(simple_iterate_test)
 {
-    recursive_directory_iterator it(static_test_env_path);
+    recursive_directory_iterator it(static_test_env_path());
     recursive_directory_iterator const end_it;
     
     std::set<directory_entry> seen;
@@ -67,7 +72,7 @@ TEST_CASE(simple_iterate_test)
 TEST_CASE(disable_recursion_pending_test)
 {
     
-    recursive_directory_iterator it(static_test_env_path);
+    recursive_directory_iterator it(static_test_env_path());
     recursive_directory_iterator const end_it;
     
     std::set<directory_entry> seen;

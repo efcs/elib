@@ -13,13 +13,13 @@ TEST_CASE(set_and_get_test)
     const path curr_path = current_path();
     
     std::error_code ec;
-    current_path(test_root, ec);
+    current_path(ELIB_FILESYSTEM_UNIT_TEST_PATH, ec);
     TEST_REQUIRE(not ec);
     
-    TEST_CHECK(current_path() == test_root);
+    TEST_CHECK(current_path() == ELIB_FILESYSTEM_UNIT_TEST_PATH);
     
-    TEST_REQUIRE_NO_THROW(current_path(elib_root));
-    TEST_CHECK(current_path() == elib_root);
+    TEST_REQUIRE_NO_THROW(current_path(ELIB_ROOT_PATH));
+    TEST_CHECK(current_path() == ELIB_ROOT_PATH);
     
     TEST_REQUIRE_NO_THROW(current_path(curr_path));
     TEST_CHECK(current_path() == curr_path);

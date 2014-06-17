@@ -53,7 +53,7 @@ if (CONFIG_ALL_WARNINGS)
    )
   
   if (CXX_COMPILER_GCC)
-        add_flags( WARNING_FLAGS -Wunsafe-loop-optimizations )
+        #add_flags( WARNING_FLAGS -Wunsafe-loop-optimizations )
         #add_flags( WARNING_FLAGS -Weffc++)
   elseif (CXX_COMPILER_CLANG)
         add_flags( WARNING_FLAGS

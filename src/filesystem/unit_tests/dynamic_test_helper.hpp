@@ -21,12 +21,14 @@
 #define PYTHON_RUN_STR "python " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
 
 
-const elib::fs::path test_env_path = test_root / elib::fs::path("dynamic_test_env");
+inline elib::fs::path test_env_path()
+{
+    return ELIB_FILESYSTEM_UNIT_TEST_PATH / elib::fs::path("dynamic_test_env");
+}
 
 inline elib::fs::path random_env_path()
 {
-    static const elib::fs::path root_p = ELIB_FILESYSTEM_UNIT_TEST_PATH / elib::fs::path("dynamic_test_env");
-    return root_p / elib::fs::unique_path();
+    return test_env_path() / elib::fs::unique_path();
 }
 
 inline void python_run(const std::string& cmd)

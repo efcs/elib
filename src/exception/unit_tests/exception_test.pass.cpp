@@ -81,7 +81,7 @@ TEST_CASE(except_exception_error_info_test)
 TEST_CASE(emplace_error_info_test)
 {
     exception e("except");
-    TEST_CHECK(e.emplace_error_info<throw_line>(0));
+    TEST_CHECK(e.emplace_error_info<throw_line>(0u));
     TEST_CHECK(e.has_error_info<throw_line>());
 }
 
@@ -103,7 +103,7 @@ TEST_CASE(get_error_info_nothrow_test)
 TEST_CASE(insert_error_info_function_move_test)
 {
     exception e("");
-    throw_line l(0);
+    throw_line l(0u);
     TEST_CHECK(insert_error_info(e, static_cast<throw_line &&>(l)));
     TEST_CHECK(e.has_error_info<throw_line>());
 }
@@ -111,14 +111,14 @@ TEST_CASE(insert_error_info_function_move_test)
 TEST_CASE(emplace_error_info_function_test)
 {
     exception e("");
-    TEST_CHECK(emplace_error_info<throw_line>(e, 0));
+    TEST_CHECK(emplace_error_info<throw_line>(e, 0u));
     TEST_CHECK(e.has_error_info<throw_line>());
 }
 
 TEST_CASE(set_error_info_function_test)
 {
     exception e("");
-    throw_line l(0);
+    throw_line l(0u);
     set_error_info(e, static_cast<throw_line &&>(l));
     TEST_CHECK(e.has_error_info<throw_line>());
 }
@@ -126,11 +126,11 @@ TEST_CASE(set_error_info_function_test)
 TEST_CASE(get_error_info_const_funtion_test)
 {
     exception e("");
-    TEST_CHECK(emplace_error_info<throw_line>(e, 1));
+    TEST_CHECK(emplace_error_info<throw_line>(e, 1u));
     exception const & eref = e;
     
     auto const & val = get_error_info_value<throw_line>(eref);
-    TEST_CHECK(val == 1);
+    TEST_CHECK(val == 1u);
 }
 
 TEST_SUITE_END()

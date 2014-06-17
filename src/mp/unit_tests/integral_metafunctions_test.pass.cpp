@@ -20,6 +20,11 @@ using aux::ulong_;
 using aux::llong_;
 using aux::ullong_;
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-macros"
+#endif
+
+
 #define V_(x) x::type::value 
 #
 #define EXPAND_EXPR(...) ELIB_PP_OVERLOAD(EXPAND_EXPR_, __VA_ARGS__)(__VA_ARGS__)

@@ -6,7 +6,7 @@
 #include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
-std::uintmax_t bad_result = static_cast<std::uintmax_t>(-1);
+constexpr std::uintmax_t bad_result = static_cast<std::uintmax_t>(-1);
 
 TEST_SUITE(elib_filesystem_static_file_size_test_suite)
 
@@ -76,7 +76,7 @@ TEST_CASE(non_empty_file_test)
     }
     // without error code
     {
-        std::uintmax_t ret;
+        std::uintmax_t ret{};
         TEST_REQUIRE_NO_THROW(ret = file_size(file));
         TEST_REQUIRE(ret == 42);
     }

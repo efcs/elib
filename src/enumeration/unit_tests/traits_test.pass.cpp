@@ -5,6 +5,12 @@
 #include <string>
 #include "rapid-cxx-test.hpp"
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wduplicate-enum"
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+
 enum class A
 {
     none, one, two, 

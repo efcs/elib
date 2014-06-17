@@ -13,7 +13,7 @@ namespace adl_blocker
         swap_t(swap_t &&) = delete;
     };
     
-    void swap(swap_t & lhs, swap_t & rhs) 
+    inline void swap(swap_t & lhs, swap_t & rhs) 
     {
         int tmp = lhs.value;
         lhs.value = rhs.value;
@@ -27,7 +27,7 @@ namespace adl_blocker
         nothrow_swap_t(nothrow_swap_t &&) = delete;
     };
     
-    void swap(nothrow_swap_t & lhs, nothrow_swap_t & rhs) noexcept
+    inline void swap(nothrow_swap_t & lhs, nothrow_swap_t & rhs) noexcept
     {
         int tmp = lhs.value;
         lhs.value = rhs.value;

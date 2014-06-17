@@ -7,6 +7,11 @@
 #include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+
 #define _(File) directory_entry(make_static_env_path(File))
 const std::set<directory_entry> file_list = 
 {

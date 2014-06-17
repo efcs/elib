@@ -37,7 +37,7 @@ struct functor
 };
 
 
-int unpackable_function(int x, std::string, long)
+inline int unpackable_function(int x, std::string, long)
 {
     return x;
 }

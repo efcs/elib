@@ -599,22 +599,12 @@ namespace elib
             return *this;
         }
         
-        template <
-            class U
-          , ELIB_ENABLE_IF(aux::is_same<aux::decay_t<U>, optional<T &>>::value)
-          >
-        optional & operator=(U && u) noexcept
+        optional & operator=(optional const & other) noexcept
         {
-            m_data = u.m_data;
+            m_data = other.m_data;
             return *this;
         }
         
-        template <
-            class U
-          , ELIB_ENABLE_IF(not aux::is_same<aux::decay_t<U>, optional<T &>>::value)
-          >
-        optional & operator=(U && u) noexcept = delete;
-       
         void emplace(T & v) noexcept
         {
             m_data = elib::addressof(v);

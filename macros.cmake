@@ -56,11 +56,11 @@ macro(add_test_target TargetName File)
     add_executable(${TargetName} ${File})
     target_include_directories(${TargetName} PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)
     # Currently way too noisy because of Boost.Test. 
-    #set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
+    set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
     target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT})
     add_test(${TargetName} ${TargetName})
     # Print the name of the target that was added
-    config_message(STATUS "Adding Target: ${TargetName}")
+    # config_message(STATUS "Adding Target: ${TargetName}")
 endmacro(add_test_target)
     
 macro(add_test_dir)

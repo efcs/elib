@@ -12,7 +12,5 @@
 #   error ELIB_ROOT_PATH must point to the top level of elib
 # endif
 
-const elib::fs::path elib_root = ELIB_ROOT_PATH;
-const elib::fs::path test_root = ELIB_FILESYSTEM_UNIT_TEST_PATH;
 
 #endif /* FILESYSTEM_UNIT_TEST_TEST_HELPER_HPP */

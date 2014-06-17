@@ -713,9 +713,6 @@ TEST_CASE( check_fmt_general_test )
         TEST_CHECK(m_buff__ == m_str__);                          \
     } while (false)
     
-#define CHECK_THROW(...) \
-    TEST_CHECK_THROW(std::logic_error, (FMT_FN(__VA_ARGS__)))
-
 TEST_CASE( check_cfmt_throw_test )
 {
 #define FMT_FN elib::checked_cfmt

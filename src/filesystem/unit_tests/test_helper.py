@@ -36,13 +36,13 @@ def set_env_perms(root_p):
         for d in dirs:
             d = os.path.join(root,d)
             try:
-                os.chmod(d, 0777)
+                os.chmod(d, 0o777)
             except OSError as e:
                 pass
         for f in files:
             f = os.path.join(root,f)
             try:
-                os.chmod(f, 0777)
+                os.chmod(f, 0o777)
             except OSError as e:
                 pass
             
@@ -103,7 +103,7 @@ def create_file(fname, size):
             f.write(c)
       
     
-def create_dir(dname, mode=0777):
+def create_dir(dname, mode=0o777):
     dname = sanitize_env_path(dname)
     os.mkdir(dname, mode)
     
@@ -119,7 +119,7 @@ def create_hardlink(source, link):
     os.link(source, link)
     
     
-def create_fifo(source, mode=0666):
+def create_fifo(source, mode=0o666):
     source = sanitize_env_path(source)
     os.mkfifo(source, mode)
 

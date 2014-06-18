@@ -51,7 +51,7 @@ clean:
 ################################################################################
 configure:
 	$(CMD_VERB) rm -rf ./build/ ; mkdir -p build/
-	$(CMD_VERB) cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
+	$(CMD_VERB) cd build/ ; cmake $(INTERNAL_CMAKE_OPTIONS) .. ; cd ..
 
 
 ################################################################################

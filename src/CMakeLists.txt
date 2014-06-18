@@ -13,19 +13,23 @@ find_package( Threads REQUIRED )
 ################################################################################
 ##                            Unit Tests
 ################################################################################
-if(CONFIG_UNIT_TESTS) 
+if(CONFIG_UNIT_TESTS)
     ################################### PYTHON #####################################
     # Check for a python interpreter the first time we run configuration.
-    if (NOT DEFINED CONFIGURATION_DONE)
-        include (FindPythonInterp 3)
-        if (NOT PYTHONINTERP_FOUND)
-            message(FATAL_ERROR
-                "Cannot find python interpreter. 
-                Python is required to run the test suite.
-                Please configure using make UNIT_TESTS=OFF configure."
-            )
+    
+    if (CONFIG_PYTHON3)
+        set(PythonInterp_FIND_VERSION  "3.0")
+    endif()
+    include (FindPythonInterp)
+    if (NOT PYTHONINTERP_FOUND)
+        message(FATAL_ERROR
+            "Cannot find python interpreter. 
+             Python is required to run the test suite.
+             Please configure using make UNIT_TESTS=OFF configure.")
         endif()
-endif() 
+    add_definitions(-DELIB_CONFIG_PYTHON_INTERP=${PYTHON_EXECUTABLE})
+
+endif()
 
          
 if (NOT CYGWIN)
@@ -131,7 +135,6 @@ if (CONFIG_HEADER_TESTS)
     set_target_properties(HeaderTestLib PROPERTIES COMPILE_FLAGS "-fsyntax-only")
 endif()
 
-endif()
 ################################################################################
 
 # SAMPLEOBJ is used by lit.cfg to create a template build rule. 
@@ -146,7 +149,6 @@ set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFA
 add_test_target(sample_test sample_test.pass.cpp)
 
 
-include (FindPythonInterp)
 if (PYTHONINTERP_FOUND)
 
   get_directory_property(ELIB_AVAILABLE_FEATURES DIRECTORY . COMPILE_DEFINITIONS)
@@ -166,7 +168,7 @@ if (PYTHONINTERP_FOUND)
     @ONLY)
 
   add_custom_target(check-lit
-    COMMAND /usr/bin/python3
+    COMMAND ${PYTHON_EXECUTABLE}
             ${LIT_EXECUTABLE}
             ${LIT_ARGS}
             ${CMAKE_CURRENT_BINARY_DIR}

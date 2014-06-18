@@ -165,6 +165,10 @@ Requirements (Library specific):
 : Compile using -std=c++1y
   Default: OFF
   WARNING: c++1y support is experimental
+
+  * CONFIG_PYTHON3
+: Require that python 3 is found and used for tests.
+  Default: OFF
   
 ### Select what parts to build
   

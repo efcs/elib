@@ -17,7 +17,7 @@ if(CONFIG_UNIT_TESTS)
     ################################### PYTHON #####################################
     # Check for a python interpreter the first time we run configuration.
     if (NOT DEFINED CONFIGURATION_DONE)
-        include (FindPythonInterp)
+        include (FindPythonInterp 3)
         if (NOT PYTHONINTERP_FOUND)
             message(FATAL_ERROR
                 "Cannot find python interpreter. 
@@ -166,7 +166,7 @@ if (PYTHONINTERP_FOUND)
     @ONLY)
 
   add_custom_target(check-lit
-    COMMAND ${PYTHON_EXECUTABLE}
+    COMMAND /usr/bin/python3
             ${LIT_EXECUTABLE}
             ${LIT_ARGS}
             ${CMAKE_CURRENT_BINARY_DIR}

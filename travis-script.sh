@@ -1,6 +1,5 @@
 set -e
 
-
 if [[ "$BUILD" == "RELEASE" ]]
 then
     export THREADS=18

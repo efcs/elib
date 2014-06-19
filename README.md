@@ -3,15 +3,31 @@
 elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
 It can be found at github.com/efcs/elib. The homepage for elib is http://elib.efcs.ca
 
-WARNING: This file is update very infrequently
-LAST UPDATE: 07/06/2014
-
 NOTE: elib has git submodules! If this is a new repo please run `git submodule update --init`.
 
+## Getting Started
+To clone and build Elib use the following commands:
+
+    git clone https://github.com/efcs/elib.git
+    git submodule update --init
+    make configure
+    make elib
+
+It is suggested that you run the testsuite. The testsuite can be run using either
+LIT or CTest. The preferred method is LIT. To run the testsuite using LIT run:
+
+    make check
+
+To run the testsuite using CTest run:
+
+    make check-ctest
+
+
 ## Platform Support
-Elib currently only supports Linux and OS X as well as Cygwin. 
-Although most libraries would build on Windows (See Library Summary for specifics), 
-the build system has no support for MSVC. 
+Elib supports the following platforms:
+  - Linux
+  - Mac OSX
+  - Cygwin (See note under compiler support)
 
 ## Compiler Support.
 Elib supports the following compiler/library configurations:
@@ -21,7 +37,8 @@ Elib supports the following compiler/library configurations:
  - Clang 3.5 trunk (with/without libc++)
  - GCC 4.8.3/4.9.0 (Cygwin)
 
-NOTE: Cygwin requires a workaround to get g
+NOTE: Cygwin requires a non-trivial workaround to compile. The workaround involves 
+editing `<cstdio>` so that it provides `std::vsnprintf` in C++11 mode.
 
 
 ## Library Summary
@@ -96,12 +113,12 @@ Logging
 
 Memory
 : Utility functions and classes for working with memory. It currently includes:
-  * allocator_destructor: for destorying allocated memory that hasn't been initialized
+  * allocator_destructor: for destroying allocated memory that hasn't been initialized
   * make_unique: An implementation of the proposal for std::make_unique
 
 MP
 : A meta-programming library inspired by boosts mpl. It generally
-  has the same structure, files and iterface as boost::mpl
+  has the same structure, files and interface as boost::mpl
   (Header Only)
 
 PP
@@ -112,7 +129,6 @@ PP
 
 Web
 : C++ Socket, HTTP parsing and other Web/Network utilities.
-  stripped from a class project
   (No Windows Support)
 
 ## Building
@@ -123,55 +139,119 @@ Note: Requirements marked with (Unit Test Only) are obviously only required
 Requirements (General):
   * C++11 compiler (GCC >= 4.8.1)
   * Native library used by <mutex> (pthread on linux)
-  * Python (Unit Test Only)
+  * Python or CTest (Unit Test Only)
   Note: elib will compile with GCC 4.8.0 but some features have been disabled.
 
 Requirements (Library specific):
   Filesystem:
     POSIX support
+    Python (Unit Test Only)
 
   Web:
     POSIX support
     Support for <regex>
 
+    
+## Make Commands
 
-## Build Options (CMake)
-  These options are found in CMakeLists.txt. If the enviroment variable
-  ELIB_CMAKE_OPTIONS is set, those options are passed to cmake when configuring.
-  Not all options are documented here. 
+  * configure
+: Run the make configuration.
+  This only needs to be done once.
 
-  * CONFIG_ALL_WARNINGS 
-: Turn on all warnings for the compiler
+  * redep
+: Rerun partial configuration. Detects new source files.
+
+  * all 
+: build libraries and unit tests
+
+  * clean
+: Clean build files
+
+  * distclean
+: Clean all generated files including configuration files.
+
+  * install
+: install using the generated Cmake command
+
+  * everything
+: A helper command. equivalent to
+    make distclean
+    make configure
+    make 
+
+  * check
+: Run the unit tests (using LIT)
+  Requires: Python
+
+  * check-ctest
+: Run the unit tests (using CTest)
+  Note: While CTest does not require python, some libraries unit tests do.
+
+  * vagrind-check
+: Run unit tests with valgrind
+
+  * scan-build
+: Run clangs scan-build over the build
+
+  * coverage
+: Generate code coverage data
+
+## Make Build Options
+  These are the options currently supported by `make configure`. 
+
+  * ELIB_CMAKE_OPTIONS
+: This is a list of CMake build options that will be passed directly to CMake.
+  This is useful for turning libraries on and off.
+
+  * BUILD
+: Configure for a certain build type
+  Values: DEBUG, RELEASE
+  Default: DEBUG
+
+  * PREFIX
+: Set the install prefix
+  Default: Decided by CMake (usually /usr/local)
+
+  * CXX1Y
+: Build the code using the c++1y standard
+  Values: ON, OFF
+  Default: OFF
+
+  * ENABLE_EXPERIMENTAL
+: Build experimental libraries
+  Values: ON, OFF
   Default: ON
 
-  * CONFIG_ELIB_ASSERT_CONFIG
-: Make the config library fail to compile if it cannot deduce the
-  compiler/library/platform information.
-  Default: OFF
-
-  * CONFIG_ENABLE_EXPERIMENTAL
-: Make the experimental libraries
+  * ASSERT_CONFIG
+: Assert that Elib.Config supports the platform library and compiler.
+  Values: ON, OFF
   Default: ON
 
-  * CONFIG_UNIT_TESTS
-: Build the unit tests
+  * UNIT_TESTS
+: Enable building the testsuite.
+  Values: ON, OFF
   Default: ON
 
-  * CONFIG_HEADER_TESTS
-: Build the header tests
+  * HEADER_TESTS
+: Enable building the header tests. These tests each header file is syntatically valid.
+  Values: ON, OFF
   Default: OFF
 
-  * CONFIG_CXX1Y
-: Compile using -std=c++1y
-  Default: OFF
-  WARNING: c++1y support is experimental
+  * ALL_WARNINGS
+: Enable extra warnings flags to the build.
+  Values: ON, OFF
+  Default: ON
 
-  * CONFIG_PYTHON3
-: Require that python 3 is found and used for tests.
+  * PYTHON3
+: Python is used to run the LIT testsuite and some unit tests. This option 
+  will ensure that python >= 3.0 is used.
+  Values: ON, OFF
   Default: OFF
-  
-### Select what parts to build
-  
+
+
+## Select what parts to build (CMake)
+  Note: Disabling libraries only disables build that libraries source files and tests.
+  It does not prevent other libraries from using said library.
 
   * ELIB_AUX_SOURCE
 : build the utility library
@@ -219,50 +299,8 @@ Requirements (Library specific):
 
   * ELIB_WEB_SOURCE
 : build web library
-  Default: ON when compiling with GCC >= 4.9.0 or clang and libc++. Off otherwise. 
-    
-## Makefile Commands
-
-  * configure
-: Run the cmake configuration.
-  This only needs to be done once.
-
-  * redep
-: Rerun partial configuration. Detects new source files.
-
-  * all 
-: build libraries and unit tests
-
-  * clean
-: Clean build files
-
-  * distclean
-: Clean all generated files.
-
-  * install
-: install using the generated Cmake command
-
-  * everything
-: A helper command. equivalent to
-    make distclean
-    make configure
-    make 
-
-  * check
-: Run the unit tests (using LIT)
-
-  * test
-: Run the unit tests (using CTest)
-
-  * vagrind-check
-: Run unit tests with valgrind
-
-  * scan-build
-: Run clangs scan-build over the build
-
-  * coverage
-: Generate code coverage data
-
+  Default: ON when compiling with GCC >= 4.9.0 or clang and libc++. Off otherwise.
+  Note: This library is not supported on Cygwin.
 
 
 

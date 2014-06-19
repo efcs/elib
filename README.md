@@ -112,32 +112,71 @@ Requirements (library specific):
     * POSIX-compatible compiler and execution environment
     * Support for the `<regex>` header
 
-## Build Options (CMake)
-These options are found in `CMakeLists.txt`. If the environment variable
-`ELIB_CMAKE_OPTIONS` is set, those options are passed to CMake when
-configuring. Not all options are documented here. 
+## Makefile Targets
+* configure: Run the CMake configuration. This only needs to be done once.
 
-* `CONFIG_ALL_WARNINGS`: Turn on all warnings for the compiler.
-    * Default: ON
+* redep: Re-run partial configuration. Detects new source files.
 
-* `CONFIG_ELIB_ASSERT_CONFIG`: Make the config library fail to compile if it
-    cannot deduce the compiler/library/platform information.
-    * Default: OFF
+* all: Build libraries and unit tests.
 
-* `CONFIG_ENABLE_EXPERIMENTAL`: Build the experimental libraries.
-    * Default: ON
+* clean: Clean build files.
 
-* `CONFIG_UNIT_TESTS`: Build the unit tests.
-    * Default: ON
+* distclean: Clean all generated files.
 
-* `CONFIG_HEADER_TESTS`: Build the header tests.
-    * Default: OFF
+* install: Install using the generated CMake buildsystem's target directory.
 
-* `CONFIG_CXX1Y`: Compile using the `-std=c++1y` flag.
-    * Default: OFF
+* everything: A helper command. Equivalent to
+
+    make distclean
+    make configure
+    make 
+
+* check: Run the unit tests (using LIT).
+
+* test: Run the unit tests (using CTest).
+
+* valgrind-check: Run unit tests with valgrind.
+
+* scan-build: Run clang's scan-build over the build.
+
+* coverage: Generate code coverage data.
+
+## Makefile Options
+These are the options currently supported by `make configure`. For example
+`make BUILD=RELEASE configure`.
+
+* `ELIB_CMAKE_OPTIONS`: This is a list of CMake build options. It is passed
+    directly to CMake. This is useful when selecting what libraries to build.
+
+* `BUILD`: Configure the build type.
+    * Values: `DEBUG`, `RELEASE`
+    * Default: `DEBUG`
+
+* `CXX1Y`: Compile using the `-std=c++1y` flag.
+    * Default: `OFF`
     * **Note**: c++1y support is experimental
+
+* `PYTHON3`: Use Python3 as the python interpreter.
+    * Default: `OFF`
+
+* `ALL_WARNINGS`: Turn on all warnings for the compiler.
+    * Default: `ON`
+
+* `ASSERT_CONFIG`: Make the config library fail to compile if it
+    cannot deduce the compiler/library/platform information.
+    * Default: `OFF`
+
+* `ENABLE_EXPERIMENTAL`: Build the experimental libraries.
+    * Default: `ON`
+
+* `UNIT_TESTS`: Build the unit tests.
+    * Default: `ON`
+
+* `HEADER_TESTS`: Build the header tests.
+    * Default: `OFF`
+
   
-### Select what parts to build
+### Select what parts to build (CMake Options)
   
 * `ELIB_AUX_SOURCE`: Build the utility library.
     * Default: ON
@@ -176,35 +215,7 @@ configuring. Not all options are documented here.
     * Default: ON when compiling with GCC >= 4.9.0 or clang and libc++.
         Off otherwise. 
     
-## Makefile Targets
-* configure: Run the CMake configuration. This only needs to be done once.
-
-* redep: Re-run partial configuration. Detects new source files.
-
-* all: Build libraries and unit tests.
-
-* clean: Clean build files.
-
-* distclean: Clean all generated files.
-
-* install: Install using the generated CMake buildsystem's target directory.
-
-* everything: A helper command. Equivalent to
-
-    make distclean
-    make configure
-    make 
-
-* check: Run the unit tests (using LIT).
-
-* test: Run the unit tests (using CTest).
-
-* valgrind-check: Run unit tests with valgrind.
-
-* scan-build: Run clang's scan-build over the build.
-
-* coverage: Generate code coverage data.
 
 ## Author
 
-elib was written by Eric Fiselier.
+Elib was written by Eric Fiselier.

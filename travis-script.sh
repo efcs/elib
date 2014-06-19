@@ -18,8 +18,11 @@ then
     export CXX="clang++-3.5"
     export CC="clang-3.5"
 
-    if [[ "$BUILD" == "RELEASE" ]]
+    if [[ "$BUILD" == "DEBUG" ]]
     then
+        sudo apt-get install -qq clang-3.5
+    else
+        sudo apt-get install -qq clang-3.5 python3
         export ELIB_CMAKE_OPTIONS='$ELIB_CMAKE_OPTIONS -DCONFIG_PYTHON3=ON'
     fi
 

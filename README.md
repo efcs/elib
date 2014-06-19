@@ -8,6 +8,24 @@ is <http://elib.efcs.ca/>.
 **Note**: elib uses git submodules! If this is a new working directory, please
 run `git submodule update --init`.
 
+## Getting Started
+The get and build Elib run the following commands:
+
+    git clone https://github.com/efcs/elib.git
+    cd elib
+    git submodule update --init
+    make configure
+    make elib
+
+After building Elib it is recommended that you run the testsuite. You can
+do so using:
+
+    make check
+
+If do not have python or would rather use the CTest testsuite you can use:
+
+    make check-ctest
+
 ## Platform Support
 Elib currently only supports Linux, OS X, and Cygwin.
 
@@ -21,6 +39,10 @@ Elib supports the following compiler/library configurations:
  - Clang 3.4 (with/without libc++)
  - Clang 3.5 trunk (with/without libc++)
  - GCC 4.8.3 (Cygwin)
+
+Note: A non-trivial but easy to make workaround is required to compile elib
+in Cygwin. It requires editing `<cstdio>` so that it provides `std::vsnprintf` 
+in C++11 mode.
 
 ## Library Summary
 ### Core Library

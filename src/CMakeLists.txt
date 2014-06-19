@@ -14,9 +14,8 @@ find_package( Threads REQUIRED )
 ##                            Unit Tests
 ################################################################################
 if(CONFIG_UNIT_TESTS)
-    ################################### PYTHON #####################################
-    # Check for a python interpreter the first time we run configuration.
-    
+
+    # Check for a python interpreter the first time we run configuration.    
     if (CONFIG_PYTHON3)
         set(PythonInterp_FIND_VERSION  "3.0")
     endif()
@@ -26,7 +25,7 @@ if(CONFIG_UNIT_TESTS)
             "Cannot find python interpreter. 
              Python is required to run the test suite.
              Please configure using make UNIT_TESTS=OFF configure.")
-        endif()
+    endif()
     add_definitions(-DELIB_CONFIG_PYTHON_INTERP=${PYTHON_EXECUTABLE})
 
 endif()
@@ -35,6 +34,7 @@ endif()
 if (NOT CYGWIN)
     add_flags(LIBRARY_FLAGS -fPIC)
 endif()
+
 ################################################################################
 ##                               Warnings
 ################################################################################
@@ -178,3 +178,4 @@ if (PYTHONINTERP_FOUND)
 else()
   message(WARNING "Could not find Python, no check target will be available!")
 endif()
+

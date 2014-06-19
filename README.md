@@ -44,7 +44,6 @@ editing `<cstdio>` so that it provides `std::vsnprintf` in C++11 mode.
 ## Library Summary
 
 ### Core Library
-
 Any
 : a variant container. It implementations the std::any proposal
 
@@ -152,7 +151,7 @@ Requirements (Library specific):
     Support for <regex>
 
     
-## Make Commands
+### Make Commands
 
   * configure
 : Run the make configuration.
@@ -196,7 +195,7 @@ Requirements (Library specific):
   * coverage
 : Generate code coverage data
 
-## Make Build Options
+### Make Build Options
   These are the options currently supported by `make configure`. 
 
   * ELIB_CMAKE_OPTIONS
@@ -249,7 +248,7 @@ Requirements (Library specific):
   Default: OFF
 
 
-## Select what parts to build (CMake)
+### Select what parts to build (CMake)
   Note: Disabling libraries only disables build that libraries source files and tests.
   It does not prevent other libraries from using said library.
 

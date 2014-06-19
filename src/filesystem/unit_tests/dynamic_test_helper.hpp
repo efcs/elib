@@ -3,8 +3,8 @@
 
 # include "test_helper.hpp"
 # include <elib/filesystem/operations.hpp>
-
 # include <elib/fmt.hpp>
+# include <elib/preprocessor/str.hpp>
 
 # include <iostream>
 # include <fstream>
@@ -18,7 +18,12 @@
 # include <elib/assert.hpp>
 
 
-#define PYTHON_RUN_STR "python " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
+#if !defined(ELIB_CONFIG_PYTHON_INTERP)
+#   define ELIB_CONFIG_PYTHON_INTERP python
+# endif
+
+#define PYTHON_RUN_STR ELIB_PP_STR(ELIB_CONFIG_PYTHON_INTERP) \
+    " " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
 
 
 inline elib::fs::path test_env_path()

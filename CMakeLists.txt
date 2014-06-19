@@ -50,6 +50,11 @@ option(CONFIG_HEADER_TESTS
         " Build source files that simple include the matching header.
           This is used in  header only librarys to check for errors" OFF)
 
+# Make LIT and filesystem's test-helper use python3 instead of python
+option(CONFIG_PYTHON3
+        "Require that the python interpreter used in the testsuite is 
+         Python 3.0 or greater" OFF)
+
 ################################################################################
 ##                         Library Parts                                      ##
 ################################################################################
@@ -111,11 +116,6 @@ set( CMAKE_C_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DELIB_WARN_ON " )
 set( CMAKE_CXX_FLAGS_DEBUG " -g -fno-omit-frame-pointer -DDELIB_WARN_ON " )
 set( CMAKE_C_FLAGS_TEST " -g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors --coverage")
 set( CMAKE_CXX_FLAGS_TEST " -g -O0 -fno-omit-frame-pointer -DDELIB_WARN_ON -fno-elide-constructors --coverage")
-
-
-if (DEFINED ENV{ELIB_CMAKE_OPTIONS})
-    config_message(STATUS "Configuring with ELIB_CMAKE_OPTIONS: $ENV{ELIB_CMAKE_OPTIONS}")
-endif()
 
 config_message( STATUS "Configuring for Build Type: ${CMAKE_BUILD_TYPE}")
 
@@ -210,7 +210,8 @@ if (DEFINED ENV{TRAVIS})
 endif()
 
 if (CYGWIN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -U__STRICT_ANSI__")
+    set(ELIB_WEB_SOURCE OFF CACHE BOOL "Build web library" FORCE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-include-dirs -U__STRICT_ANSI__")
 endif()
 
 ################################################################################

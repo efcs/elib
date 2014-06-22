@@ -13,8 +13,12 @@ all:
 ifeq ($(wildcard build/Makefile),)
 	$(error make configure must be run)
 else
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) check
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
 endif
+
+.PHONY: header_tests
+header_tests:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build HeaderTestLib
 
 ################################################################################
 everything:
@@ -86,15 +90,20 @@ check:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build elib
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
+ifdef THREADS
+	$(CMD_VERB) python packages/lit/lit.py --threads=$(THREADS) $(LIT_FLAGS) ./build/src
+else
 	$(CMD_VERB) python packages/lit/lit.py $(LIT_FLAGS) ./build/src
+endif
+
 
 verbose-check:
 	$(CMD_VERB) echo === Building tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
-ifdef LIT_THREADS
-	$(CMD_VERB) python packages/lit/lit.py --threads=$(LIT_THREADS) -v ./build/src
+ifdef THREADS
+	$(CMD_VERB) python packages/lit/lit.py --threads=$(THREADS) -v ./build/src
 else
 	$(CMD_VERB) python packages/lit/lit.py -v ./build/src
 endif
@@ -138,16 +147,16 @@ scan-test:
 
 ################################################################################
 scan-build:
-	$(CMD_VERB) rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make $(NOPRINTD) all; cd ..
+	$(CMD_VERB) rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(INTERNAL_CMAKE_OPTIONS) .. ; scan-build make $(NOPRINTD) all; cd ..
 
 
 ################################################################################
 coverage:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
 	$(CMD_VERB) rm -rf build/ ; mkdir -p build/ ; cd build/ ; \
-		cmake -DCMAKE_BUILD_TYPE=TEST $(ELIB_CMAKE_OPTIONS) ..  ; \
+		cmake -DCMAKE_BUILD_TYPE=TEST $(INTERNAL_CMAKE_OPTIONS) ..  ; \
 		cd ..
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build all
+	$(CMD_VERB) $(MAKE) $(NOPRINTD)  -C build all
 	$(CMD_VERB) rm -rf test_coverage ; mkdir -p test_coverage
 	cd build/src ; \
 	lcov --zerocounters --directory . ; \
@@ -164,10 +173,11 @@ coverage:
 ################################################################################
 batch-build-command:
 ifdef BATCH_VERBOSE
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(DEFAULT_THREADS) -C build  elib
 else
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib 1> /dev/null
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(DEFAULT_THREADS) -C build  elib 1> /dev/null
 endif
+
 
 batch-check: 
 	$(CMD_VERB) python packages/lit/lit.py -sv --show-unsupported --no-progress-bar --threads=$(THREADS) ./build/src

@@ -234,7 +234,7 @@ These are the options currently supported by `make configure`. For example
     * Default: ON
 
 * `ELIB_WEB_SOURCE`: Build web library.
-    * Default: ON when compiling with GCC >= 4.9.0 or clang and libc++.
+    * Default: ON when compiling with GCC >= 4.8.3 or clang and libc++.
         Off otherwise. 
     
 

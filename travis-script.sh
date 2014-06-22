@@ -27,6 +27,6 @@ then
 
 fi
 
-make HEADER_TESTS=ON configure
+make configure
 make -j8 elib
 make batch-check

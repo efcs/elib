@@ -15,15 +15,27 @@ macro(set_dot_dir)
     set(dotDir ${CMAKE_CURRENT_LIST_DIR})
 endmacro(set_dot_dir)
 
+
+macro(parent_scope Val)
+    set(${Val} ${${Val}} PARENT_SCOPE)
+endmacro(parent_scope)
+
 ################################################################################
 # Use the library configuration option to selectivly 
 # build build a library. 
 macro(include_library_if Pred CFile)
     if (${Pred})
-        include(${CFile})
+        include(${CFile}/build.cmake)
         list(APPEND ELIB_LIBRARIES ${Pred})
-        set(ELIB_LIBRARIES ${ELIB_LIBRARIES} PARENT_SCOPE)
+        parent_scope(ELIB_LIBRARIES)
+        list(APPEND ELIB_INCLUDE_DIRECTORIES elib/${CFile})
+        parent_scope(ELIB_INCLUDE_DIRECTORIES)
         add_definitions( -D${Pred} )
+    else()
+        list(APPEND ELIB_EXCLUDE_LIBRARIES ${Pred})
+        parent_scope(ELIB_EXCLUDE_LIBRARIES)
+        list(APPEND ELIB_EXCLUDE_DIRECTORIES ${CFile})
+        parent_scope(ELIB_EXCLUDE_DIRECTORIES)
     endif()
 endmacro(include_library_if)
 

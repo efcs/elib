@@ -20,6 +20,8 @@ include(cmake/config.cmake)
 include(cmake/depends.cmake)
 
 set(ELIB_TEST_SUITES "")
+set(ELIB_EXCLUDE_DIRECTORIES "")
+set(ELIB_INCLUDE_DIRECTORIES "")
 add_custom_target(check-all-depends)
 
 add_subdirectory(src)

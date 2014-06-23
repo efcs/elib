@@ -2,6 +2,10 @@
 config.cxx_compiler          = '@CMAKE_CXX_COMPILER@'
 config.elib_src_root         = '@ELIB_ROOT_PATH@'
 config.elib_obj_root         = '@CMAKE_CURRENT_BINARY_DIR@'
+config.elib_include_libraries = list((value.strip() for value in str('@ELIB_INCLUDE_LIBRARIES@').split(';')))
+config.elib_exclude_libraries = list((value.strip() for value in str('@ELIB_EXCLUDE_LIBRARIES@').split(';')))
+config.elib_include_directories = list((value.strip() for value in str('@ELIB_INCLUDE_DIRECTORIES@').split(';')))
+config.elib_exclude_directories = list((value.strip() for value in str('@ELIB_EXCLUDE_DIRECTORIES@').split(';')))
 config.sample_object         = '@SAMPLE_OBJECT@'
 config.python_executable     = '@ELIB_PYTHON_EXECUTABLE@'
 config.available_features    = '@ELIB_AVAILABLE_FEATURES@'

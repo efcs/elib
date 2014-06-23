@@ -12,16 +12,23 @@ project(EricsLibrary CXX C)
 enable_testing()
 
 set(ELIB_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR})
+set(ELIB_MAKEFILE_RULE_PATH ${ELIB_ROOT_PATH}/build/rules/)
 add_definitions(-DELIB_ROOT_PATH="${ELIB_ROOT_PATH}")
 include_directories(${ELIB_ROOT_PATH})
 
 include(cmake/config.cmake)
 include(cmake/depends.cmake)
-#include(cmake/libraries.cmake)
 
-# The Guts. The build targets are in src/CMakelists.txt
+set(ELIB_TEST_SUITES "")
+add_custom_target(check-all-depends)
+
 add_subdirectory(src)
 add_subdirectory(header_tests)
+
+configure_file(
+    ${ELIB_ROOT_PATH}/cmake/check-all.mk.in
+    ${ELIB_ROOT_PATH}/build/rules/check-all.mk
+    @ONLY)
 
 
 # NOTE: This should be the last line of this file.

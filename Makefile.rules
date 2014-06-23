@@ -4,7 +4,7 @@ SHELL := /bin/bash
 #				ElibTargets
 ################################################################################
 ElibTargets := all everything e elib elib_static libs clean configure redep distclean \
-	       install check check-ctest check-lit check-headers verbose-check test 
+	       install check check-ctest
 
 .PHONY: $(ElibTargets)
 
@@ -13,13 +13,9 @@ all:
 ifeq ($(wildcard build/Makefile),)
 	$(error make configure must be run)
 else
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build depends
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
 endif
 
-.PHONY: depends
-depends:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build depends
 
 ################################################################################
 everything:
@@ -84,39 +80,16 @@ check-ctest:
 	$(CMD_VERB) echo === Running tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build test
 
-check-lit:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit
 
 check:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit-depends
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running tests ===
-ifdef THREADS
-	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py --threads=$(THREADS) $(LIT_FLAGS) ./build/src
-else
-	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py $(LIT_FLAGS) ./build/src
-endif
-
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) check-lit
 
 verbose-check:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit-depends
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running tests ===
-ifdef THREADS
-	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py --threads=$(THREADS) -v ./build
-else
-	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py -v ./build/src
-endif
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) VERBOSE=1 check-lit
 
 test:
 	$(CMD_VERB) echo === Running CTest tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build test
-
-
-check-headers:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-headers
 
 ################################################################################
 #				ElibToolTargets
@@ -186,8 +159,11 @@ endif
 
 
 batch-check: 
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit-depends
-	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py -sv --show-unsupported --no-progress-bar --threads=$(THREADS) ./build/src
+	$(CMD_VERB) $(MAKE) $(NOPRINTD)  LIT_INTERNAL_ARGS="--no-progress-bar --threads=$(DEFAULT_THREADS)" check-lit
+
+batch-check-all:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) LIT_DEFAULT_ARGS="-v" LIT_INTERNAL_ARGS=" --show-unsupported --no-progress-bar --threads=$(DEFAULT_THREADS)" check-all
+	
 
 ################################################################################
 batch-build:

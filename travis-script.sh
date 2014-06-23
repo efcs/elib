@@ -13,7 +13,6 @@ then
 fi
 if [[ "$CXX" == "clang++" ]]
 then
-    sudo apt-get install -qq clang-3.5
     export CXX="clang++-3.5"
     export CC="clang-3.5"
 
@@ -22,11 +21,12 @@ then
         sudo apt-get install -qq clang-3.5
     else
         sudo apt-get install -qq clang-3.5 python3
-        export ELIB_CMAKE_OPTIONS='$ELIB_CMAKE_OPTIONS -DCONFIG_PYTHON3=ON'
+        export ELIB_CMAKE_OPTIONS="$ELIB_CMAKE_OPTIONS -DCONFIG_PYTHON3=ON"
     fi
 
 fi
 
 make configure
 make -j8 elib
-make batch-check
+make batch-check-all
+

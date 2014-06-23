@@ -1,0 +1,5 @@
+.PHONY: check-headers
+check-headers:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C @ELIB_ROOT_PATH@/build check-headers-depends
+	$(CMD_VERB) @PYTHON_EXECUTABLE@ @LIT_EXECUTABLE@ $(LIT_DEFAULT_ARGS) $(LIT_INTERNAL_ARGS) $(LIT_ARGS) @CMAKE_CURRENT_BINARY_DIR@
+

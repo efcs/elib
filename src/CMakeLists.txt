@@ -46,14 +46,12 @@ set_target_properties(ObjLib PROPERTIES COMPILE_FLAGS "${OBJECT_FLAGS}")
 
 ################################################################################
 add_library(elib SHARED $<TARGET_OBJECTS:ObjLib>)
-add_dependencies(elib depends)
 target_link_libraries(elib ${CMAKE_THREAD_LIBS_INIT})
 set_target_properties(elib PROPERTIES 
                            LIBRARY_OUTPUT_DIRECTORY ${ELIB_ROOT_PATH}/bin)
 
 ################################################################################
 add_library(elib_static STATIC $<TARGET_OBJECTS:ObjLib>)
-add_dependencies(elib_static depends)  
 target_link_libraries(elib_static ${CMAKE_THREAD_LIBS_INIT})
 set_target_properties(elib_static PROPERTIES
                                   ARCHIVE_OUTPUT_DIRECTORY ${ELIB_ROOT_PATH}/bin)

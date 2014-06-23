@@ -1,1 +1,0 @@
-#include <elib/scope_guard.hpp>

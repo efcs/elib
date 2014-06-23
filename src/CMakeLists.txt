@@ -6,9 +6,6 @@ set(UNIT_TEST_SRC "")
 
 include(libraries.cmake)
 
-if (CONFIG_HEADER_TESTS)
-    include(header_tests.cmake)
-endif()
 
 if (CONFIG_UNIT_TESTS)
     include(unit_tests.cmake)

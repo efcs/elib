@@ -20,6 +20,8 @@ include(cmake/depends.cmake)
 
 # The Guts. The build targets are in src/CMakelists.txt
 add_subdirectory(src)
+add_subdirectory(header_tests)
+
 
 # NOTE: This should be the last line of this file.
 # When reconfiguring CMake some commands are noisy. We only need information

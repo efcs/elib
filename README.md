@@ -194,9 +194,6 @@ These are the options currently supported by `make configure`. For example
 * `UNIT_TESTS`: Build the unit tests.
     * Default: `ON`
 
-* `HEADER_TESTS`: Build the header tests.
-    * Default: `OFF`
-
   
 ### Select what parts to build (CMake Options)
   

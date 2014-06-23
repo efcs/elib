@@ -48,16 +48,6 @@ endif()
 # Unit tests require the boost test library.
 option(CONFIG_UNIT_TESTS "build unit tests" ON)
 
-
-################################################################################
-# Source files in header only source directories are uneeded.
-# When this option is on those files are removed from the build.
-# The disadvantage of this is it does not perform any include tests
-# on the build but the build is MUCH faster.
-option(CONFIG_HEADER_TESTS
-        " Build source files that simple include the matching header.
-          This is used in  header only librarys to check for errors" OFF)
-
 ################################################################################
 # Make LIT and filesystem's test-helper use python3 instead of python
 option(CONFIG_PYTHON3

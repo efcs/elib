@@ -1,16 +1,4 @@
 
-if (CONFIG_PYTHON3)
-    set(PythonInterp_FIND_VERSION  "3.0")
-endif()
-
-include (FindPythonInterp)
-if (NOT PYTHONINTERP_FOUND)
-    message(FATAL_ERROR
-            "Cannot find python interpreter. 
-             Python is required to run the test suite.
-             Please configure using make UNIT_TESTS=OFF configure.")
-endif()
-add_definitions(-DELIB_CONFIG_PYTHON_INTERP=${PYTHON_EXECUTABLE})
 ################################################################################
 
 # SAMPLEOBJ is used by lit.cfg to create a template build rule. 
@@ -26,7 +14,7 @@ add_test_target(sample_test sample_test.pass.cpp)
 
 
 if (PYTHONINTERP_FOUND)
-
+    
   get_directory_property(ELIB_AVAILABLE_FEATURES DIRECTORY . COMPILE_DEFINITIONS)
 
   set(LIT_EXECUTABLE "${ELIB_ROOT_PATH}/packages/lit/lit.py" CACHE FILEPATH "Path to LLVM's lit.py.")
@@ -44,11 +32,11 @@ if (PYTHONINTERP_FOUND)
     @ONLY)
 
   add_custom_target(check-lit
-    COMMAND ${PYTHON_EXECUTABLE}
+    COMMAND ${ELIB_PYTHON_EXECUTABLE}
             ${LIT_EXECUTABLE}
             ${LIT_ARGS}
             ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS elib
+    DEPENDS elib elib_python_executable
     COMMENT "Running elib tests")
 
 else()

@@ -1,2 +1,1 @@
-include_build_dir(header_tests)
 include_build_dir(unit_tests)

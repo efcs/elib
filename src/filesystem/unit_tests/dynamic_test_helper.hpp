@@ -18,11 +18,11 @@
 # include <elib/assert.hpp>
 
 
-#if !defined(ELIB_CONFIG_PYTHON_INTERP)
-#   define ELIB_CONFIG_PYTHON_INTERP python
+#if !defined(ELIB_PYTHON_EXECUTABLE)
+#   define ELIB_PYTHON_EXECUTABLE python
 # endif
 
-#define PYTHON_RUN_STR ELIB_PP_STR(ELIB_CONFIG_PYTHON_INTERP) \
+#define PYTHON_RUN_STR ELIB_PP_STR(ELIB_PYTHON_EXECUTABLE) \
     " " ELIB_FILESYSTEM_UNIT_TEST_PATH "/test_helper.py "
 
 

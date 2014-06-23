@@ -47,19 +47,6 @@ endmacro(add_library_src)
 
 
 ################################################################################
-macro(add_header_test_src)
-    set_dot_dir()
-    if (${ARGC} EQUAL 0)
-        aux_source_directory(${dotDir} _header_test_src)
-    elseif(${ARGC} EQUAL 1)
-        aux_source_directory(${dotDir}/${ARGV0} _header_test_src)
-    else()
-        message(FATAL_ERROR "Cannot use macro add_header_test_src with args ${ARGV}")
-    endif()
-    list(APPEND HEADER_TEST_SRC ${_header_test_src})
-endmacro(add_header_test_src)
-
-################################################################################
 macro(add_test_target TargetName File)
     add_executable(${TargetName} ${File})
     target_include_directories(${TargetName} PUBLIC ${ELIB_ROOT_PATH}/packages/rapid-cxx-test/)

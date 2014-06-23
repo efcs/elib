@@ -37,7 +37,7 @@ if (CONFIG_ALL_WARNINGS)
 endif()
 
 ################################################################################
-#                              Environment Configuration
+#                          Environment Configuration
 ################################################################################
 
 if ( WIN32 )
@@ -52,5 +52,14 @@ if (DEFINED ENV{TRAVIS})
 endif()
 
 
+################################################################################
+#                       Enviroment Variables
+################################################################################
+if (DEFINED ENV{CXXFLAGS})
+    config_message(STATUS "Configuring with CXXFLAGS: $ENV{CXXFLAGS}")
+endif()
 
+if (DEFINED ENV{LDFLAGS})
+    config_message(STATUS "Configuring with LDFLAGS: $ENV{LDFLAGS}")
+endif()
 

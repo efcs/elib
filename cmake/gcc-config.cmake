@@ -5,7 +5,7 @@ if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.0")
     message(WARNING "Insufficient GCC Version")
 endif()
 
-if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.8.3")
+if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9.0")
     set(ELIB_WEB_SOURCE OFF CACHE BOOL "build web library" FORCE)
 endif()
     

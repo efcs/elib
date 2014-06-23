@@ -17,6 +17,7 @@ include_directories(${ELIB_ROOT_PATH})
 
 include(cmake/config.cmake)
 include(cmake/depends.cmake)
+#include(cmake/libraries.cmake)
 
 # The Guts. The build targets are in src/CMakelists.txt
 add_subdirectory(src)

@@ -89,7 +89,7 @@ check-lit:
 
 check:
 	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit-depends
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
 ifdef THREADS
@@ -101,11 +101,11 @@ endif
 
 verbose-check:
 	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit-depends
 	$(CMD_VERB) echo 
 	$(CMD_VERB) echo === Running tests ===
 ifdef THREADS
-	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py --threads=$(THREADS) -v ./build/src
+	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py --threads=$(THREADS) -v ./build
 else
 	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py -v ./build/src
 endif
@@ -186,7 +186,7 @@ endif
 
 
 batch-check: 
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build depends
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit-depends
 	$(CMD_VERB) ./bin/elib_python_executable packages/lit/lit.py -sv --show-unsupported --no-progress-bar --threads=$(THREADS) ./build/src
 
 ################################################################################

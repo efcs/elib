@@ -31,12 +31,15 @@ if (PYTHONINTERP_FOUND)
     ${CMAKE_CURRENT_BINARY_DIR}/lit.site.cfg
     @ONLY)
 
+  add_custom_target(check-lit-depends
+        DEPENDS elib elib_python_executable)
+
   add_custom_target(check-lit
     COMMAND ${ELIB_PYTHON_EXECUTABLE}
             ${LIT_EXECUTABLE}
             ${LIT_ARGS}
             ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS elib elib_python_executable
+    DEPENDS check-lit-depends
     COMMENT "Running elib tests")
 
 else()

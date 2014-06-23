@@ -7,4 +7,4 @@ config.python_executable     = '@ELIB_PYTHON_EXECUTABLE@'
 config.available_features    = '@ELIB_AVAILABLE_FEATURES@'
 
 # Let the main config do the real work.
-lit_config.load_config(config, "@CMAKE_CURRENT_LIST_DIR@/lit.cfg")
+lit_config.load_config(config, "@ELIB_ROOT_PATH@/src/lit.cfg")

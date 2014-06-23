@@ -16,6 +16,8 @@ if (ELIB_SOURCE)
 else()
     config_message(WARN "ELIB_SOURCE should not be disabled")
 endif()
+
+
 include_library_if(ELIB_AUX_SOURCE         aux          )
 include_library_if(ELIB_CONTAINER_SOURCE   container    )
 include_library_if(ELIB_ENUMERATION_SOURCE enumeration  )

@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 2.8.11)
 
-include(cmake/macros.cmake)
-include(cmake/options.cmake)
-include(cmake/library-options.cmake)
+include(config/macros.cmake)
+include(config/options.cmake)
+include(config/library-options.cmake)
 
 ################################################################################
 #                            PROJECT ELIB
@@ -16,8 +16,8 @@ set(ELIB_MAKEFILE_RULE_PATH ${ELIB_ROOT_PATH}/build/rules/)
 add_definitions(-DELIB_ROOT_PATH="${ELIB_ROOT_PATH}")
 include_directories(${ELIB_ROOT_PATH})
 
-include(cmake/config.cmake)
-include(cmake/depends.cmake)
+include(config/config.cmake)
+include(config/depends.cmake)
 
 set(ELIB_TEST_SUITES "")
 set(ELIB_EXCLUDE_DIRECTORIES "")
@@ -28,8 +28,8 @@ add_subdirectory(src)
 add_subdirectory(header_tests)
 
 configure_file(
-    ${ELIB_ROOT_PATH}/cmake/check-all.mk.in
-    ${ELIB_ROOT_PATH}/build/rules/check-all.mk
+    ${ELIB_ROOT_PATH}/config/check-all.mk.in
+    ${ELIB_MAKEFILE_RULE_PATH}/check-all.mk
     @ONLY)
 
 

@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_CONTAINER_SOURCE
+// REQUIRES: ELIB_CONTAINER
 #include <elib/container/flat_map.hpp>
 #include <string>
 #include <utility>

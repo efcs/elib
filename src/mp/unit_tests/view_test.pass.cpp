@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/sequence.hpp>
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/containers.hpp>

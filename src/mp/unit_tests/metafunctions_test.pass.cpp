@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/metafunctions.hpp>
 #include <elib/mp/identity.hpp>
 #include <elib/mp/pair.hpp>

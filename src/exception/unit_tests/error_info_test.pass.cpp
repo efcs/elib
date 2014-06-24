@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_EXCEPTION_SOURCE
+// REQUIRES: ELIB_EXCEPTION
 #include <elib/exception/error_info.hpp>
 #include <elib/aux.hpp>
 #include <string>

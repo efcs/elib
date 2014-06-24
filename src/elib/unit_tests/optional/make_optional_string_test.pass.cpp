@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/optional.hpp>
 #include <elib/aux/traits/is_same.hpp>
 #include <string>

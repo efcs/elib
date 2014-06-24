@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/config.hpp>
 #include <elib/aux/traits/invoke_of.hpp>
 #include "rapid-cxx-test.hpp"

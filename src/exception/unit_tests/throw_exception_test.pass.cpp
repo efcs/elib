@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_EXCEPTION_SOURCE
+// REQUIRES: ELIB_EXCEPTION
 #include <elib/exception/exception.hpp>
 #include <elib/exception/throw_exception.hpp>
 #include <elib/aux/move.hpp>

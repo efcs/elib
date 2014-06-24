@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_ENUMERATION_SOURCE
+// REQUIRES: ELIB_ENUMERATION
 #include <elib/enumeration/cast.hpp>
 #include <elib/enumeration/operators.hpp>
 #include "rapid-cxx-test.hpp"

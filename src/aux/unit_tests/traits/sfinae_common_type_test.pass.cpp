@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/sfinae_common_type.hpp>
 #include <elib/aux/traits/has_type.hpp>
 #include <type_traits> /* for std::common_type */

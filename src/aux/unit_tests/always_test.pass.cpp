@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/always.hpp>
 #include <elib/aux/traits/is_same.hpp>
 #include "rapid-cxx-test.hpp"

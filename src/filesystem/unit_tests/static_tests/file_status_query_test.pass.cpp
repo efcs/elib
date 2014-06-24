@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE
+// REQUIRES: ELIB_FILESYSTEM
 #include <elib/filesystem/file_status.hpp>
 #include <elib/filesystem/filesystem_error.hpp>
 #include <elib/filesystem/operations.hpp>

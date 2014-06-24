@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_WEB_SOURCE
+// REQUIRES: ELIB_WEB
 #include <elib/experimental/web/socket.hpp>
 #include <string>
 #include <system_error>

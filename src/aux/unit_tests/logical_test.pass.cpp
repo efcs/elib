@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/logical.hpp>
 #include <elib/aux/integral_constant.hpp>
 #include <elib/aux/none.hpp>

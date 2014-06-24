@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE
+// REQUIRES: ELIB_FILESYSTEM, ELIB_PYTHON_EXECUTABLE
 #include <elib/config.hpp>
 #include <elib/filesystem.hpp>
 #include <chrono>

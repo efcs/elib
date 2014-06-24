@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/lexical_cast.hpp>
 #include <string>
 #include <cstring>

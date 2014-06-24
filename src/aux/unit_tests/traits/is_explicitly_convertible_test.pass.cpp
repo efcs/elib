@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/is_explicitly_convertible.hpp>
 #include <elib/aux/traits/is_convertible.hpp>
 #include "rapid-cxx-test.hpp"

@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/optional.hpp>
 #include "rapid-cxx-test.hpp"
 

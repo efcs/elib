@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/is_input_streamable.hpp>
 #include <elib/aux/traits/is_output_streamable.hpp>
 #include <elib/aux/traits/is_streamable.hpp>

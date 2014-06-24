@@ -4,7 +4,7 @@ config.elib_src_root         = '@ELIB_ROOT_PATH@'
 config.elib_obj_root         = '@CMAKE_CURRENT_BINARY_DIR@'
 config.sample_object         = '@SAMPLE_OBJECT@'
 config.python_executable     = '@ELIB_PYTHON_EXECUTABLE@'
-config.available_features    = '@ELIB_AVAILABLE_FEATURES@'
+config.available_features    = '@ELIB_AVAILABLE_FEATURES@'.split(';')
 
 # Let the main config do the real work.
 lit_config.load_config(config, "@ELIB_ROOT_PATH@/src/lit.cfg")

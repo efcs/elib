@@ -197,40 +197,43 @@ These are the options currently supported by `make configure`. For example
   
 ### Select what parts to build (CMake Options)
   
-* `ELIB_AUX_SOURCE`: Build the utility library.
+* `ELIB_AUX`: Build the utility library.
     * Default: ON
 
-* `ELIB_CONTAINER_SOURCE`: Build containers library.
+* `ELIB_CONFIG`: Build configuration library.
     * Default: ON
 
-* `ELIB_ENUMERATION_SOURCE`: Build enumeration library.
+* `ELIB_CONTAINER`: Build containers library.
     * Default: ON
 
-* `ELIB_EXCEPT_SOURCE`: Build exception library.
+* `ELIB_ENUMERATION`: Build enumeration library.
     * Default: ON
 
-* `ELIB_FILESYSTEM_SOURCE`: Build the filesystem library.
+* `ELIB_EXCEPT`: Build exception library.
+    * Default: ON
+
+* `ELIB_FILESYSTEM`: Build the filesystem library.
     * Default: ON 
 
-* `ELIB_FUNCTIONAL_SOURCE`: Build functional source.
+* `ELIB_FUNCTIONAL`: Build functional source.
     * Default: ON
 
-* `ELIB_ITERATOR_SOURCE`: Build iterator source.
+* `ELIB_ITERATOR`: Build iterator source.
     * Default: ON
 
-* `ELIB_LOGGING_SOURCE`: Build logging library.
+* `ELIB_LOGGING`: Build logging library.
     * Default: ON
 
-* `ELIB_MEMORY_SOURCE`: Build memory library.
+* `ELIB_MEMORY`: Build memory library.
     * Default: ON
 
-* `ELIB_MP_SOURCE`: Build the MPL.
+* `ELIB_MP`: Build the MPL.
     * Default: ON
 
-* `ELIB_PP_SOURCE`: Build preprocessor library.
+* `ELIB_PREPROCESSOR`: Build preprocessor library.
     * Default: ON
 
-* `ELIB_WEB_SOURCE`: Build web library.
+* `ELIB_WEB`: Build web library.
     * Default: ON when compiling with GCC >= 4.8.3 or clang and libc++.
         Off otherwise. 
     

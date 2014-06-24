@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_ITERATOR_SOURCE
+// REQUIRES: ELIB_ITERATOR
 #include <elib/iterator.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/traits/is_same.hpp>

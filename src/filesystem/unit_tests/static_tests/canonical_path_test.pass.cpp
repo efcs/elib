@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE
+// REQUIRES: ELIB_FILESYSTEM
 #include <elib/filesystem.hpp>
 #include "rapid-cxx-test.hpp"
 using namespace elib;

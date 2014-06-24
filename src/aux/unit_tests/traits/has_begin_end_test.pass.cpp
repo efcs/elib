@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/has_begin_end.hpp>
 #include <iterator>
 #include "rapid-cxx-test.hpp"

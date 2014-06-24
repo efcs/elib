@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/is_unpackable.hpp>
 #include <tuple>
 #include <utility> /* for std::pair */

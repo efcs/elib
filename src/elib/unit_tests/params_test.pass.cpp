@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/params.hpp>
 #include <elib/aux/integral_constant.hpp>
 #include <cstddef>

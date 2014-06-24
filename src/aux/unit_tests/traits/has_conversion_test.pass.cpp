@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/has_explicit_conversion.hpp>
 #include <elib/aux/traits/has_implicit_conversion.hpp>
 #include <elib/aux/traits/has_conversion.hpp>

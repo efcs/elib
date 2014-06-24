@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/uncvrefptr.hpp>
 #include "rapid-cxx-test.hpp"
 using namespace elib::aux;

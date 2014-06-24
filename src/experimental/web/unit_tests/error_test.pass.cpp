@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_WEB_SOURCE
+// REQUIRES: ELIB_WEB
 #include <elib/experimental/web/error.hpp>
 #include "rapid-cxx-test.hpp"
 using namespace elib::web;

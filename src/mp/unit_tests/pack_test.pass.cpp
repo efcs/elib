@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/pack.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>

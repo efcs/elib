@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/config.hpp>
 #include <elib/aux/invoke.hpp>
 #include <elib/aux.hpp>

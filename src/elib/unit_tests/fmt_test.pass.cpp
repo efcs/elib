@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/fmt.hpp>
 #include <elib/aux.hpp>
 #include <elib/config.hpp>

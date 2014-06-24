@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/make_array.hpp>
 #include <elib/aux/traits/is_same.hpp>
 #include <array>

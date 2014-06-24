@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/literals.hpp>
 #include <string>
 #include "rapid-cxx-test.hpp"

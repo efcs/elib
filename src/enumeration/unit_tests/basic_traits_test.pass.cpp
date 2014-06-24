@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_ENUMERATION_SOURCE
+// REQUIRES: ELIB_ENUMERATION
 #include <elib/enumeration/basic_traits.hpp>
 #include <map>
 #include <string>

@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/compressed_pair.hpp>
 #include <elib/aux/static_assert.hpp>
 #include <elib/aux/move.hpp>

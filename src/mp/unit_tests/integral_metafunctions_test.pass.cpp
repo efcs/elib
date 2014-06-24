@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/arithmetic.hpp>
 #include <elib/mp/bitwise.hpp>
 #include <elib/mp/logical.hpp>

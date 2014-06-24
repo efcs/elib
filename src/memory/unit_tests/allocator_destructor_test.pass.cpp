@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_MEMORY_SOURCE
+// REQUIRES: ELIB_MEMORY
 #include <elib/memory/allocator_destructor.hpp>
 #include <memory>
 

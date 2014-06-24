@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/strip_ref_wrapper.hpp>
 #include <functional>
 #include "rapid-cxx-test.hpp"

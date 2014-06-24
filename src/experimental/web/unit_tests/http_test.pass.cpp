@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_WEB_SOURCE
+// REQUIRES: ELIB_WEB
 #include <elib/experimental/web/http.hpp>
 #include <elib/aux.hpp>
 #include <elib/enumeration.hpp>

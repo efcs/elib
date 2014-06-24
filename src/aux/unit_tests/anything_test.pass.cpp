@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_AUX_SOURCE
+// REQUIRES: ELIB_AUX
 #include <elib/aux/anything.hpp>
 #include <elib/aux/declval.hpp>
 #include <elib/aux/enable_if.hpp>

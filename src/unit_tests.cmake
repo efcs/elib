@@ -13,8 +13,6 @@ set_target_properties(SAMPLEOBJ PROPERTIES EXCLUDE_FROM_ALL ON EXCLUDE_FROM_DEFA
 add_test_target(sample_test sample_test.pass.cpp)
 
 if (PYTHONINTERP_FOUND)
-    
-  get_directory_property(ELIB_AVAILABLE_FEATURES DIRECTORY . COMPILE_DEFINITIONS)
 
   set(SAMPLE_OBJECT "SAMPLEOBJ")
 

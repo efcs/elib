@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_SOURCE
+// REQUIRES: ELIB_CORE
 #include <elib/scope_guard.hpp>
 #include <elib/aux/move.hpp>
 #include "rapid-cxx-test.hpp"

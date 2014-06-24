@@ -7,38 +7,36 @@ set(LIBRARY_FLAGS "")
 
 # Include the core elib library. 
 # NOTE: this should not be turned off.
-if (ELIB_SOURCE)
+if (ELIB_CORE)
     include(elib/build.cmake)
-    list(APPEND ELIB_LIBRARIES "ELIB_SOURCE")
-    set(ELIB_LIBRARIES ${ELIB_LIBRARIES} PARENT_SCOPE)
-    add_definitions( -DELIB_SOURCE )
 else()
-    config_message(WARN "ELIB_SOURCE should not be disabled")
+    append_parent_scope(ELIB_EXCLUDE_LIBRARIES ELIB_CORE)
+    config_message(WARNING "ELIB_CORE should not be disabled")
 endif()
 
 # Include each library if its option is enabled.
-include_library_if(ELIB_AUX_SOURCE         aux          )
-include_library_if(ELIB_CONTAINER_SOURCE   container    )
-include_library_if(ELIB_ENUMERATION_SOURCE enumeration  )
-include_library_if(ELIB_EXCEPTION_SOURCE   exception    )
-include_library_if(ELIB_FILESYSTEM_SOURCE  filesystem   )
-include_library_if(ELIB_FUNCTIONAL_SOURCE  functional   )
-include_library_if(ELIB_ITERATOR_SOURCE    iterator     )
-include_library_if(ELIB_LOGGING_SOURCE     logging      )
-include_library_if(ELIB_MEMORY_SOURCE      memory       )
-include_library_if(ELIB_MP_SOURCE          mp           )
-include_library_if(ELIB_PP_SOURCE          preprocessor )
+include_library_if(ELIB_AUX          aux          )
+include_library_if(ELIB_CONFIG       config       )
+include_library_if(ELIB_CONTAINER    container    )
+include_library_if(ELIB_ENUMERATION  enumeration  )
+include_library_if(ELIB_EXCEPTION    exception    )
+include_library_if(ELIB_FILESYSTEM   filesystem   )
+include_library_if(ELIB_FUNCTIONAL   functional   )
+include_library_if(ELIB_ITERATOR     iterator     )
+include_library_if(ELIB_LOGGING      logging      )
+include_library_if(ELIB_MEMORY       memory       )
+include_library_if(ELIB_MP           mp           )
+include_library_if(ELIB_PREPROCESSOR preprocessor )
 
 
 # Include experimental libraries.
 if (CONFIG_ENABLE_EXPERIMENTAL)
-  include_library_if(ELIB_CONTRACT_ASSERT_SOURCE 
+  include_library_if(ELIB_CONTRACT_ASSERT 
                      experimental/contract_assert)
-  include_library_if(ELIB_WEB_SOURCE
+  include_library_if(ELIB_WEB
                      experimental/web)
 else()
-    list(APPEND ELIB_EXCLUDE_DIRECTORIES "experimental")
-    set(ELIB_EXCLUDE_DIRECTORIES ${ELIB_EXCLUDE_DIRECTORIES} PARENT_SCOPE)
+    append_parent_scope(ELIB_EXCLUDE_DIRECTORIES experimental)
 endif()
 
 ################################################################################

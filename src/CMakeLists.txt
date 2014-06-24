@@ -4,20 +4,19 @@
 ################################################################################
 set(LIBRARY_SRC "")
 set(LIBRARY_FLAGS "")
-set(ELIB_LIBRARIES "")
 
+# Include the core elib library. 
+# NOTE: this should not be turned off.
 if (ELIB_SOURCE)
     include(elib/build.cmake)
     list(APPEND ELIB_LIBRARIES "ELIB_SOURCE")
     set(ELIB_LIBRARIES ${ELIB_LIBRARIES} PARENT_SCOPE)
-    list(APPEND ELIB_INCLUDE_DIRECTORIES elib)
-    set(ELIB_EXCLUDE_DIRECTORIES ${ELIB_EXCLUDE_DIRECTORIES} PARENT_SCOPE)
     add_definitions( -DELIB_SOURCE )
 else()
     config_message(WARN "ELIB_SOURCE should not be disabled")
 endif()
 
-
+# Include each library if its option is enabled.
 include_library_if(ELIB_AUX_SOURCE         aux          )
 include_library_if(ELIB_CONTAINER_SOURCE   container    )
 include_library_if(ELIB_ENUMERATION_SOURCE enumeration  )
@@ -31,6 +30,7 @@ include_library_if(ELIB_MP_SOURCE          mp           )
 include_library_if(ELIB_PP_SOURCE          preprocessor )
 
 
+# Include experimental libraries.
 if (CONFIG_ENABLE_EXPERIMENTAL)
   include_library_if(ELIB_CONTRACT_ASSERT_SOURCE 
                      experimental/contract_assert)
@@ -72,6 +72,7 @@ set_target_properties(elib_static PROPERTIES
 
 
 # Installation information
+# NOTE: For some reason this will not work on CYGWIN
 if (NOT DEFINED CYGWIN)
     install(TARGETS elib LIBRARY DESTINATION lib)
     install(TARGETS elib_static ARCHIVE DESTINATION lib)

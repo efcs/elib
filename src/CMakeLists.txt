@@ -9,6 +9,9 @@ set(LIBRARY_FLAGS "")
 # NOTE: this should not be turned off.
 if (ELIB_CORE)
     include(elib/build.cmake)
+    append_parent_scope(ELIB_LIBRARIES ELIB_CORE)
+    append_parent_scope(ELIB_AVAILABLE_FEATURES ELIB_CORE)
+    append_parent_scope(ELIB_INCLUDE_DIRECTORIES ELIB_CORE)
 else()
     append_parent_scope(ELIB_EXCLUDE_LIBRARIES ELIB_CORE)
     config_message(WARNING "ELIB_CORE should not be disabled")
@@ -28,16 +31,10 @@ include_library_if(ELIB_MEMORY       memory       )
 include_library_if(ELIB_MP           mp           )
 include_library_if(ELIB_PREPROCESSOR preprocessor )
 
-
 # Include experimental libraries.
-if (CONFIG_ENABLE_EXPERIMENTAL)
-  include_library_if(ELIB_CONTRACT_ASSERT 
-                     experimental/contract_assert)
-  include_library_if(ELIB_WEB
-                     experimental/web)
-else()
-    append_parent_scope(ELIB_EXCLUDE_DIRECTORIES experimental)
-endif()
+include_experimental_library_if(ELIB_CONTRACT_ASSERT experimental/contract_assert)
+include_experimental_library_if(ELIB_WEB experimental/web)
+
 
 ################################################################################
 ##                               Objects

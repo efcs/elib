@@ -11,6 +11,27 @@ macro(config_message level msg)
 endmacro()
 
 ################################################################################
+macro(stringify_list m_list dest)
+    string(REPLACE ";" " " ${dest} "${m_list}")
+endmacro(stringify_list)
+
+################################################################################
+macro(add_flags to)
+    stringify_list("${ARGN}" _TMP)
+    set(${to} "${${to}} ${_TMP}")
+endmacro(add_flags)
+
+################################################################################
+macro(parent_scope Val)
+    set(${Val} ${${Val}} PARENT_SCOPE)
+endmacro(parent_scope)
+
+macro(append_parent_scope List Value)
+    list(APPEND ${List} ${Value})
+    set(${List} ${${List}} PARENT_SCOPE)
+endmacro(append_parent_scope)
+
+################################################################################
 macro(make_abs_path Path Out)
     string(FIND ${Path} "/" Pos)
     if (${Pos} EQUAL 0)
@@ -30,16 +51,6 @@ macro(mangle_path File Out)
     set(${Out} ${_Prefix}_${_Suffix})
 endmacro(mangle_path)
 
-################################################################################
-
-macro(append_parent_scope List Value)
-    list(APPEND ${List} ${Value})
-    set(${List} ${${List}} PARENT_SCOPE)
-endmacro(append_parent_scope)
-
-macro(parent_scope Val)
-    set(${Val} ${${Val}} PARENT_SCOPE)
-endmacro(parent_scope)
 
 ################################################################################
 # Use the library configuration option to selectivly 
@@ -55,6 +66,18 @@ macro(include_library_if Pred CFile)
         append_parent_scope(ELIB_EXCLUDE_DIRECTORIES elib/${CFile})
     endif()
 endmacro(include_library_if)
+
+macro(include_experimental_library_if Pred CFile)
+    if (CONFIG_ENABLE_EXPERIMENTAL AND ${Pred})
+        include(${CFile}/build.cmake)
+        append_parent_scope(ELIB_LIBRARIES ${Pred})
+        append_parent_scope(ELIB_INCLUDE_DIRECTORIES elib/${CFile})
+        append_parent_scope(ELIB_AVAILABLE_FEATURES ${Pred})
+    else()
+        append_parent_scope(ELIB_EXCLUDE_LIBRARIES ${Pred})
+        append_parent_scope(ELIB_EXCLUDE_DIRECTORIES elib/${CFile})
+    endif()
+endmacro(include_experimental_library_if)
 
 ################################################################################
 macro(include_build_dir BuildDir)
@@ -122,15 +145,4 @@ macro(add_recursive_test_dir)
 endmacro(add_recursive_test_dir)
 
 
-
-################################################################################
-macro(stringify_list m_list dest)
-    string(REPLACE ";" " " ${dest} "${m_list}")
-endmacro(stringify_list)
-
-################################################################################
-macro(add_flags to)
-    stringify_list("${ARGN}" _TMP)
-    set(${to} "${${to}} ${_TMP}")
-endmacro(add_flags)
 

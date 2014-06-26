@@ -195,7 +195,7 @@ These are the options currently supported by `make configure`. For example
     * Default: `ON`
 
   
-### Select what parts to build (CMake Options)
+### Select what parts to build and test (CMake Options)
   
 * `ELIB_AUX`: Build the utility library.
     * Default: ON
@@ -234,7 +234,7 @@ These are the options currently supported by `make configure`. For example
     * Default: ON
 
 * `ELIB_WEB`: Build web library.
-    * Default: ON when compiling with GCC >= 4.8.3 or clang and libc++.
+    * Default: ON when compiling with GCC >= 4.8.3 or clang with libc++.
         Off otherwise. 
     
 

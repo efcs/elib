@@ -21,4 +21,4 @@ option(ELIB_PREPROCESSOR "Build preprocessor library" ON)
 
 # Experimental libraries
 option(ELIB_CONTRACT_ASSERT "Build contract assert source" ON)
-option(ELIB_WEB "Build web library (experimental)" OFF)
+option(ELIB_WEB "Build web library (experimental)" ON)

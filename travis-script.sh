@@ -13,8 +13,8 @@ then
 fi
 if [[ "$CXX" == "clang++" ]]
 then
-    export CXX="clang++-3.5"
-    export CC="clang-3.5"
+    export CXX="clang++-3.6"
+    export CC="clang-3.6"
 
     if [[ "$BUILD" == "DEBUG" ]]
     then

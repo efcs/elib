@@ -18,9 +18,9 @@ then
 
     if [[ "$BUILD" == "DEBUG" ]]
     then
-        sudo apt-get install -qq clang-3.5
+        sudo apt-get install -qq clang-3.6
     else
-        sudo apt-get install -qq clang-3.5 python3
+        sudo apt-get install -qq clang-3.6 python3
         export ELIB_CMAKE_OPTIONS="$ELIB_CMAKE_OPTIONS -DCONFIG_PYTHON3=ON"
     fi
 

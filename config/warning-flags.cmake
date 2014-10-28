@@ -26,7 +26,7 @@ if (CONFIG_ALL_WARNINGS)
         add_flags( WARNING_FLAGS
             -Weverything -Wno-c++98-compat 
             -Wno-c++98-compat-pedantic -Wno-newline-eof)
-        add_flags(UNIT_TEST_FLAGS -Wno-global-constructors -Wno-exit-time-destructors)
+        add_flags(UNIT_TEST_FLAGS -Wno-global-constructors -Wno-exit-time-destructors -Wno-unused-local-typedef)
   endif()
   
   add_flags( WARNING_FLAGS

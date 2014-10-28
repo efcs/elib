@@ -102,7 +102,7 @@ endmacro(add_library_src)
 macro(add_test_target TargetName File)
     add_executable(${TargetName} ${File})
     target_include_directories(${TargetName} PUBLIC ${RAPID_CXX_TEST_INCLUDE_DIRS})
-    set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS}")
+    set_target_properties(${TargetName} PROPERTIES COMPILE_FLAGS "${WARNING_FLAGS} ${UNIT_TEST_FLAGS}")
     target_link_libraries(${TargetName} elib ${CMAKE_THREAD_LIBS_INIT})
     add_test(${TargetName} ${TargetName})
     # Print the name of the target that was added

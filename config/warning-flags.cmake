@@ -1,4 +1,5 @@
-set(WARNING_FLAGS"")
+set(WARNING_FLAGS "")
+set(UNIT_TEST_FLAGS "")
 
 if (CONFIG_ALL_WARNINGS)
 

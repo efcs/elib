@@ -1,13 +1,10 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM, ELIB_PYTHON_EXECUTABLE
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_helper_test_suite)
+TEST_SUITE(elib_filesystem_helper_test_suite)
 
-BOOST_AUTO_TEST_CASE(env_test)
+TEST_CASE(env_test)
 {
     scoped_test_env env;
     env.create_file("f1");
@@ -16,7 +13,7 @@ BOOST_AUTO_TEST_CASE(env_test)
     env.create_hardlink("f1", "h1");
     env.create_fifo("fifo1");
     env.create_socket("socket1");
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

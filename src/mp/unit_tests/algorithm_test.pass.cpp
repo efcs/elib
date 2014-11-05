@@ -1,4 +1,4 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/algorithm.hpp>
 #include <elib/mp/metafunctions.hpp>
 #include <elib/mp/sequence.hpp>
@@ -8,13 +8,13 @@
 #include <elib/mp/vector.hpp>
 #include <elib/mp/void.hpp>
 #include <elib/mp/identity.hpp>
-
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
-
+#include <elib/aux.hpp>
 #include <iostream>
+#include "rapid-cxx-test.hpp"
+
 
 using namespace elib;
+using namespace elib::mp;
 
 template <class T>
 struct IterCountOpImpl
@@ -90,21 +90,8 @@ using foldl_count = foldl_t<P, int_<0>, CountOp<T>>;
 template <class P, class T>
 using foldr_count = foldr_t<P, int_<0>, CountOp<T>>;
 
-template <class N>
-struct is_odd : bool_<(N::value % 2)>
-  {};
-  
-  
-template <class P, class P1>
-using pair_equal_t = 
-    and_< 
-        sequence_equal<first_t<P>, first_t<P1>>
-      , sequence_equal<second_t<P>, second_t<P1>>
-      >;
 
-
-TEST_CASE(mp_algorithm_test_suite)
-{
+TEST_SUITE(mp_algorithm_test_suite)
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +101,7 @@ TEST_CASE(mp_algorithm_test_suite)
 
 //---------------------------- iter_fold_n ----------------------------------// 
 
-  // mp_iter_foldl_n)
+  TEST_CASE(mp_iter_foldl_n)
   {
     // pack
     {
@@ -173,7 +160,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- iter_fold_if -----------------------------// 
 
-  // mp_iter_foldl_if)
+  TEST_CASE(mp_iter_foldl_if)
   {
     // pack
     {
@@ -230,7 +217,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- iter_fold --------------------------------// 
 
-   // mp_iter_foldl)
+   TEST_CASE(mp_iter_foldl)
   {
     // pack
     {
@@ -288,7 +275,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //---------------------------- fold_n ----------------------------------// 
 
-  // mp_foldl_n)
+  TEST_CASE(mp_foldl_n)
   {
     // pack
     {
@@ -346,7 +333,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- fold_if -----------------------------// 
 
-  // mp_foldl_if)
+  TEST_CASE(mp_foldl_if)
   {
     // pack
     {
@@ -405,7 +392,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- fold --------------------------------// 
 
-   // mp_foldl)
+   TEST_CASE(mp_foldl)
   {
     // pack
     {
@@ -468,7 +455,7 @@ TEST_CASE(mp_algorithm_test_suite)
 
 //-------------------------------- find & find_if ------------------------// 
 
-  // mp_algorithm_foldl_variadic)
+  TEST_CASE(mp_algorithm_foldl_variadic)
   {
     // pack
     {
@@ -535,7 +522,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- count --------------------------------// 
 
-  // mp_algorithm_count_test)
+  TEST_CASE(mp_algorithm_count_test)
   {
     // pack
     {
@@ -578,7 +565,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- sequence equal ---------------------------// 
 
-  // mp_algorithm_sequence_equal)
+  TEST_CASE(mp_algorithm_sequence_equal)
   {
     // pack tests
     {
@@ -647,7 +634,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- lower bound ------------------------------// 
 
-  // mp_algorithm_lower_bound_test)
+  TEST_CASE(mp_algorithm_lower_bound_test)
   {
     // pack
     {
@@ -716,7 +703,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
 //-------------------------------- upper bound -------------------------------/
   
-  // mp_algorithm_upper_bound_test)
+  TEST_CASE(mp_algorithm_upper_bound_test)
   {
     // pack
     {
@@ -790,7 +777,7 @@ TEST_CASE(mp_algorithm_test_suite)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-  // mp_algorithm_copy_test)
+  TEST_CASE(mp_algorithm_copy_test)
   {
     // copy test
     {
@@ -811,7 +798,7 @@ TEST_CASE(mp_algorithm_test_suite)
   }                                                   // mp_algorithm_copy_test
   
 
-  // mp_algorithm_remove_test)
+  TEST_CASE(mp_algorithm_remove_test)
   {
     using P = pack  <int, void, void, int, int, void, int>;
     using V = vector<int, void, void, int, int, void, int>;
@@ -829,7 +816,7 @@ TEST_CASE(mp_algorithm_test_suite)
   }                                                 // mp_algorithm_remove_test
   
 
-  // mp_algorithm_replace_test)
+  TEST_CASE(mp_algorithm_replace_test)
   {
     using P = pack  <int, void, void, int, int, void, int>;
     using V = vector<int, void, void, int, int, void, int>;
@@ -847,7 +834,7 @@ TEST_CASE(mp_algorithm_test_suite)
   }                                                 // mp_algorithm_replace_test
   
   
-  // mp_algorithm_unique_test)
+  TEST_CASE(mp_algorithm_unique_test)
   {
     using P = pack< int, long, long, long, void, void, char, void >;
     using V = vector< int, long, long, long, void, void, char, void >;
@@ -866,7 +853,7 @@ TEST_CASE(mp_algorithm_test_suite)
   
   /* For some reason, this section makes cov-build hang */
 #if !defined(ELIB_CONFIG_COVERITY_SCAN)
-  // mp_algorithm_transform_test)
+  TEST_CASE(mp_algorithm_transform_test)
   {
     // unary
     {
@@ -915,7 +902,20 @@ TEST_CASE(mp_algorithm_test_suite)
   }                                                // mp_algorithm_transform_test
   
 
-  // mp_algorithm_partition_test)
+  template <class N>
+  struct is_odd : bool_<(N::value % 2)>
+  {};
+  
+  
+  template <class P, class P1>
+  using pair_equal_t = 
+    and_< 
+      sequence_equal<first_t<P>, first_t<P1>>
+    , sequence_equal<second_t<P>, second_t<P1>>
+    >;
+  
+  
+  TEST_CASE(mp_algorithm_partition_test)
   {
     using P = pack_c   <int, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10>;
     using V = vector_c <int, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10>;
@@ -935,4 +935,4 @@ TEST_CASE(mp_algorithm_test_suite)
   }                                              // mp_algorithm_partition_test
   
 #endif /* ELIB_CONFIG_COVERITY_SCAN_HPP */
-}
+TEST_SUITE_END()

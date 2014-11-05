@@ -1,10 +1,5 @@
-// REQUIRES: ELIB_WEB_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_WEB
 #include <elib/experimental/web/socket.hpp>
-
 #include <string>
 #include <system_error>
 #include <vector>
@@ -17,61 +12,59 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-// needed to disambiguate web::socket from ::socket
-namespace test
-{
-    
-using namespace elib::web;
+#include "rapid-cxx-test.hpp"
 
+
+TEST_SUITE(elib_web_socket_test_suite)
+
+using namespace elib::web;
 using elib::web::socket;
 
-BOOST_AUTO_TEST_SUITE(elib_web_socket_test_suite)
-
-BOOST_AUTO_TEST_CASE(socket_error_test)
+TEST_CASE(socket_error_test)
 {
     socket_error e1{"se1", std::error_code{0, std::system_category()}};
-    BOOST_CHECK(e1.what() == std::string{"se1"});
-    BOOST_CHECK((e1.error_code() == std::error_code{0, std::system_category()}));
+    TEST_CHECK(e1.what() == std::string{"se1"});
+    TEST_CHECK((e1.error_code() == std::error_code{0, std::system_category()}));
     
     const std::error_code ec{EBADF, std::system_category()};
     const std::string s{"This is What!"};
     socket_error e2{s, ec};
-    BOOST_CHECK(e2.what() == s);
-    BOOST_CHECK(e2.error_code() == ec);
+    TEST_CHECK(e2.what() == s);
+    TEST_CHECK(e2.error_code() == ec);
 }
 
-BOOST_AUTO_TEST_CASE(default_test)
+TEST_CASE(default_test)
 {
     socket s;
-    BOOST_CHECK(s.raw_socket() == -1);
-    BOOST_CHECK(!s.is_open());
-    BOOST_CHECK(!s.good());
-    BOOST_CHECK(!s.fail());
-    BOOST_CHECK(!((bool)s));
-    BOOST_CHECK((s.error_code() == std::error_code{0, std::system_category()}));
+    TEST_CHECK(s.raw_socket() == -1);
+    TEST_CHECK(!s.is_open());
+    TEST_CHECK(!s.good());
+    TEST_CHECK(!s.fail());
+    TEST_CHECK(!bool(s));
+    TEST_CHECK((s.error_code() == std::error_code{0, std::system_category()}));
 }
 
-BOOST_AUTO_TEST_CASE(open_close_test)
+TEST_CASE(open_close_test)
 {    
     socket s{sock_domain::inet, sock_type::stream, 0};
     
-    BOOST_CHECK(s.is_open());
-    BOOST_CHECK(s.raw_socket() != 0);
-    BOOST_CHECK(s.good() && ((bool)s) && !s.fail());
-    BOOST_CHECK(s.error_code() == std::error_code{});
+    TEST_CHECK(s.is_open());
+    TEST_CHECK(s.raw_socket() != 0);
+    TEST_CHECK(s.good() && bool(s) && !s.fail());
+    TEST_CHECK(s.error_code() == std::error_code{});
     
     s.close();
-    BOOST_CHECK(!s.fail() && !s.good() && !s.is_open());
-    BOOST_CHECK(s.error_code() == std::error_code{});
-    BOOST_CHECK(s.raw_socket() == -1);
+    TEST_CHECK(!s.fail() && !s.good() && !s.is_open());
+    TEST_CHECK(s.error_code() == std::error_code{});
+    TEST_CHECK(s.raw_socket() == -1);
     
     s.close();
-    BOOST_CHECK(!s.fail() && !s.good() && !s.is_open());
-    BOOST_CHECK(s.error_code() == std::error_code{});
-    BOOST_CHECK(s.raw_socket() == -1);
+    TEST_CHECK(!s.fail() && !s.good() && !s.is_open());
+    TEST_CHECK(s.error_code() == std::error_code{});
+    TEST_CHECK(s.raw_socket() == -1);
 }
 
-BOOST_AUTO_TEST_CASE(bind_listen_test)
+TEST_CASE(bind_listen_test)
 {
     sockaddr_in server;
     server.sin_family = AF_INET;
@@ -79,18 +72,16 @@ BOOST_AUTO_TEST_CASE(bind_listen_test)
     server.sin_addr.s_addr = htonl(INADDR_ANY);
     
     socket s{sock_domain::inet, sock_type::stream, 0};
-    BOOST_REQUIRE(s.good());
+    TEST_REQUIRE(s.good());
 
     s.bind(server);
-    BOOST_CHECK(s.good());
+    TEST_CHECK(s.good());
     
     s.listen(5);
-    BOOST_CHECK(s.good());
+    TEST_CHECK(s.good());
     
     s.close();
-    BOOST_CHECK(!s.fail() && !s.is_open());
+    TEST_CHECK(!s.fail() && !s.is_open());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
-
-}                                                           // namespace test
+TEST_SUITE_END()

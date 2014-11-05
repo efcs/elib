@@ -1,15 +1,11 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/begin_end_result.hpp>
-#include <elib/aux/traits/is_same.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 
 #if defined(__clang__)
 # pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
 # pragma clang diagnostic ignored "-Wunused-function"
+# pragma clang diagnostic ignored "-Wunused-member-function"
 # endif
 
 namespace { namespace adl_barrier
@@ -21,22 +17,22 @@ namespace { namespace adl_barrier
     struct iterable {
         constexpr iterable() noexcept {}
     };
-    iter begin(iterable &) { return {}; }
-    iter end(iterable &) { return {}; }
-    const_iter begin(iterable const &) { return {}; }
-    const_iter end(iterable const &) { return {}; }
+    inline iter begin(iterable &) { return {}; }
+    inline iter end(iterable &) { return {}; }
+    inline const_iter begin(iterable const &) { return {}; }
+    inline const_iter end(iterable const &) { return {}; }
     
     struct move_iterable {
         constexpr move_iterable() noexcept {}
     };
-    move_iter begin(move_iterable &&) { return {}; }
-    move_iter end(move_iterable &&) { return {}; }
+    inline move_iter begin(move_iterable &&) { return {}; }
+    inline move_iter end(move_iterable &&) { return {}; }
     
     struct const_iterable {
         constexpr const_iterable() noexcept {}
     };
-    const_iter begin(const_iterable const &) { return {}; }
-    const_iter end(const_iterable const &) { return {}; }
+    inline const_iter begin(const_iterable const &) { return {}; }
+    inline const_iter end(const_iterable const &) { return {}; }
     
     struct member_iterable {
         constexpr member_iterable() noexcept {}
@@ -64,56 +60,48 @@ using adl_barrier::non_iter;
 
 using namespace elib::aux;
 
-#define CHECK_SAME(...) ELIB_STATIC_ASSERT(is_same<__VA_ARGS__>::value)
+TEST_SUITE(elib_aux_traits_begin_end_result_test_suite)
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_begin_end_result_test_suite)
-
-BOOST_AUTO_TEST_CASE(iterable_test)
+TEST_CASE(iterable_test)
 {
-    CHECK_SAME(begin_result_t<iterable &>, iter);
-    CHECK_SAME(end_result_t<iterable &>, iter);
-    CHECK_SAME(begin_result_t<iterable const &>, const_iter);
-    CHECK_SAME(end_result_t<iterable const &>, const_iter);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(begin_result_t<iterable &>, iter);
+    TEST_SAME_TYPE(end_result_t<iterable &>, iter);
+    TEST_SAME_TYPE(begin_result_t<iterable const &>, const_iter);
+    TEST_SAME_TYPE(end_result_t<iterable const &>, const_iter);
 }
 
-BOOST_AUTO_TEST_CASE(const_iterable_test)
+TEST_CASE(const_iterable_test)
 {
-    CHECK_SAME(begin_result_t<const_iterable &>, const_iter);
-    CHECK_SAME(end_result_t<const_iterable &>, const_iter);
-    CHECK_SAME(begin_result_t<const_iterable const &>, const_iter);
-    CHECK_SAME(end_result_t<const_iterable const &>, const_iter);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(begin_result_t<const_iterable &>, const_iter);
+    TEST_SAME_TYPE(end_result_t<const_iterable &>, const_iter);
+    TEST_SAME_TYPE(begin_result_t<const_iterable const &>, const_iter);
+    TEST_SAME_TYPE(end_result_t<const_iterable const &>, const_iter);
 }
 
-BOOST_AUTO_TEST_CASE(move_iterable_test)
+TEST_CASE(move_iterable_test)
 {
-    CHECK_SAME(begin_result_t<move_iterable>, move_iter);
-    CHECK_SAME(end_result_t<move_iterable>, move_iter);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(begin_result_t<move_iterable>, move_iter);
+    TEST_SAME_TYPE(end_result_t<move_iterable>, move_iter);
 }
 
-BOOST_AUTO_TEST_CASE(member_iterable_test)
+TEST_CASE(member_iterable_test)
 {
-    CHECK_SAME(begin_result_t<member_iterable &>, iter);
-    CHECK_SAME(end_result_t<member_iterable &>, iter);
-    CHECK_SAME(begin_result_t<member_iterable const &>, const_iter);
-    CHECK_SAME(end_result_t<member_iterable const &>, const_iter);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(begin_result_t<member_iterable &>, iter);
+    TEST_SAME_TYPE(end_result_t<member_iterable &>, iter);
+    TEST_SAME_TYPE(begin_result_t<member_iterable const &>, const_iter);
+    TEST_SAME_TYPE(end_result_t<member_iterable const &>, const_iter);
 }
 
-BOOST_AUTO_TEST_CASE(array_iterable_test)
+TEST_CASE(array_iterable_test)
 {
-    CHECK_SAME(begin_result_t<array_iterable>, int*);
-    CHECK_SAME(end_result_t<array_iterable>, int*);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(begin_result_t<array_iterable>, int*);
+    TEST_SAME_TYPE(end_result_t<array_iterable>, int*);
 }
 
-BOOST_AUTO_TEST_CASE(const_array_iterable_test)
+TEST_CASE(const_array_iterable_test)
 {
-    CHECK_SAME(begin_result_t<const_array_iterable>, int const*);
-    CHECK_SAME(end_result_t<const_array_iterable>, int const*);
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(begin_result_t<const_array_iterable>, int const*);
+    TEST_SAME_TYPE(end_result_t<const_array_iterable>, int const*);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

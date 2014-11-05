@@ -12,19 +12,13 @@
 # include <elib/aux/traits/member_pointer_traits.hpp>
 # include <elib/aux/traits/remove_reference.hpp>
 # include <utility> /* for std::get */
+# include <tuple>
 # include <cstddef>
 
 namespace elib { namespace aux
 {
-    namespace detail
-    {
-        /// is_invoke_base_of is provided by traits/invoke_of
-        // template <class Func, class Obj>
-        // using is_invoke_base_of;
-    }                                                       // namespace detail
-    
     ////////////////////////////////////////////////////////////////////////////
-    constexpr struct invoke_unpack_t {} invoke_unpack {};
+    constexpr struct invoke_unpack_t { constexpr invoke_unpack_t() {} } invoke_unpack {};
     
     ////////////////////////////////////////////////////////////////////////////
     template <

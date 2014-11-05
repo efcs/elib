@@ -1,27 +1,22 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/type_pair.hpp>
 #include <elib/aux/traits/is_same.hpp>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_type_pair_test_suite)
+TEST_SUITE(elib_aux_type_pair_test_suite)
 
-BOOST_AUTO_TEST_CASE(type_test)
+TEST_CASE(type_test)
 {
     using pair = aux::type_pair<int, void>;
     static_assert(
         aux::is_same<pair::type, pair>::value
       , "pair::type == pair"
       );
-    
-    BOOST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(first_test)
+TEST_CASE(first_test)
 {
     using pair = aux::type_pair<int, void>;
     static_assert(
@@ -32,10 +27,9 @@ BOOST_AUTO_TEST_CASE(first_test)
         aux::is_same<aux::first_t<pair>, int>::value
       , "first_t<pair> == int"
       );
-    BOOST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(second_test)
+TEST_CASE(second_test)
 {
     using pair = aux::type_pair<int, void>;
     static_assert(
@@ -46,7 +40,6 @@ BOOST_AUTO_TEST_CASE(second_test)
         aux::is_same<aux::second_t<pair>, void>::value
       , "second_t<pair> == int"
       );
-    BOOST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

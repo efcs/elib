@@ -1,18 +1,21 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/list.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
+#include <elib/aux/integral_constant.hpp>
+#include "rapid-cxx-test.hpp"
+
+using namespace elib;
+using namespace elib::mp;
 
 using aux::long_;
 
 template <class ...Args>
 using l_iter = list_iterator<Args...>;
 
-TEST_CASE(mp_list_test_suite)
-{
-  // mp_list_construction)
+TEST_SUITE(mp_list_test_suite)
+
+  TEST_CASE(mp_list_construction)
   {
     using T0 = list<>;
     using C0 = list_c<int>;
@@ -31,7 +34,7 @@ TEST_CASE(mp_list_test_suite)
   }                                                     // mp_list_construction
   
 
-  // mp_list_intrinsics)
+  TEST_CASE(mp_list_intrinsics)
   {
     // empty
     {
@@ -79,7 +82,7 @@ TEST_CASE(mp_list_test_suite)
   }                                                      // mp_list_intrinsics
 
   
-  // mp_list_iterator_intrinsics)
+  TEST_CASE(mp_list_iterator_intrinsics)
   {
     // model_of
     {
@@ -153,23 +156,23 @@ TEST_CASE(mp_list_test_suite)
   }                                              // mp_list_iterator_intrinsics
   
     
-#define TEST_CHECK_TRAITS(...)                                        \
+#define CHECK_TRAITS(...)                                        \
   do {                                                           \
     using T = __VA_ARGS__;                                       \
     TEST_SAME_TYPE( typename T::class_type, list_tag );               \
     TEST_SAME_TYPE( typename T::model_type, list_model);              \
   } while (false)
   
-  // mp_list_sequence_traits)
+  TEST_CASE(mp_list_sequence_traits)
   {
     // empty
-    TEST_CHECK_TRAITS(list<>);
+    CHECK_TRAITS(list<>);
     // one elem
-    TEST_CHECK_TRAITS(list<int>);
+    CHECK_TRAITS(list<int>);
     // after insert
-    TEST_CHECK_TRAITS(push_front_t<list<void>, int>);
+    CHECK_TRAITS(push_front_t<list<void>, int>);
     // after erase
-    TEST_CHECK_TRAITS( pop_front_t<list<int>> );
+    CHECK_TRAITS( pop_front_t<list<int>> );
     // all 
     {
       using T = list<>;
@@ -187,5 +190,7 @@ TEST_CASE(mp_list_test_suite)
     }
   }                                                  // mp_list_sequence_traits
   
-#undef TEST_CHECK_TRAITS
-}
+#undef CHECK_TRAITS
+  
+  
+TEST_SUITE_END()

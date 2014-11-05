@@ -1,6 +1,6 @@
-/* Implementation stolen from githup/Idionne */
-#ifndef ELIB_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP
-#define ELIB_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP
+// Implementation stolen from githup/Idionne 
+#ifndef ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP
+#define ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP
 
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/lambda.hpp>
@@ -57,4 +57,4 @@ namespace elib
     }                                                       // namespace detail
   }                                                         // namespace mp
 }                                                           // namespace elib
-#endif /* ELIB_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP */
+#endif /* ELIB_MP_ALGORITHM_DETAIL_VARIADIC_FOLDL_HPP */

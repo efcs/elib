@@ -1,17 +1,14 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM, ELIB_PYTHON_EXECUTABLE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_copy_symlink_test_suite)
+TEST_SUITE(elib_filesystem_dynamic_copy_symlink_test_suite)
 
-BOOST_AUTO_TEST_CASE(dne_test)
+TEST_CASE(dne_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dne");
@@ -20,14 +17,14 @@ BOOST_AUTO_TEST_CASE(dne_test)
     {
         std::error_code ec;
         copy_symlink(file, to, ec);
-        BOOST_REQUIRE(ec);
+        TEST_REQUIRE(ec);
     }
     {
-        BOOST_REQUIRE_THROW(copy_symlink(file, to), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error, copy_symlink(file, to));
     }
 }
 
-BOOST_AUTO_TEST_CASE(already_exists_test)
+TEST_CASE(already_exists_test)
 {
     scoped_test_env env;
     path const real_file = env.make_env_path("real_file");
@@ -39,11 +36,11 @@ BOOST_AUTO_TEST_CASE(already_exists_test)
     
     std::error_code ec;
     copy_symlink(file, to, ec);
-    BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(not is_symlink(to) && is_regular_file(to));
+    TEST_REQUIRE(ec);
+    TEST_REQUIRE(not is_symlink(to) && is_regular_file(to));
 }
 
-BOOST_AUTO_TEST_CASE(symlink_to_file_test)
+TEST_CASE(symlink_to_file_test)
 {
     scoped_test_env env;
     path const real_file = env.make_env_path("real_file");
@@ -54,11 +51,11 @@ BOOST_AUTO_TEST_CASE(symlink_to_file_test)
     
     std::error_code ec;
     copy_symlink(file, to, ec);
-    BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_symlink(to) && equivalent(to, real_file));
+    TEST_REQUIRE(not ec);
+    TEST_REQUIRE(is_symlink(to) && equivalent(to, real_file));
 }
 
-BOOST_AUTO_TEST_CASE(symlink_to_dir_test)
+TEST_CASE(symlink_to_dir_test)
 {
     scoped_test_env env;
     path const real_file = env.make_env_path("real_file");
@@ -69,11 +66,11 @@ BOOST_AUTO_TEST_CASE(symlink_to_dir_test)
     
     std::error_code ec;
     copy_symlink(file, to, ec);
-    BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_symlink(to) && equivalent(to, real_file));
+    TEST_REQUIRE(not ec);
+    TEST_REQUIRE(is_symlink(to) && equivalent(to, real_file));
 }
 
-BOOST_AUTO_TEST_CASE(non_symlink_test)
+TEST_CASE(non_symlink_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("file1");
@@ -83,13 +80,13 @@ BOOST_AUTO_TEST_CASE(non_symlink_test)
     {
         std::error_code ec;
         copy_symlink(file, to, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_CHECK(not exists(to));
+        TEST_REQUIRE(ec);
+        TEST_CHECK(not exists(to));
     }
     {
-        BOOST_REQUIRE_THROW(copy_symlink(file, to), filesystem_error);
-        BOOST_CHECK(not exists(to));
+        TEST_REQUIRE_THROW(filesystem_error, copy_symlink(file, to));
+        TEST_CHECK(not exists(to));
     }
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

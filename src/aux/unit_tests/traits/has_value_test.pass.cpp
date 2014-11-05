@@ -1,10 +1,6 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/has_value.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 using namespace elib::aux;
 
 struct empty {};
@@ -17,17 +13,16 @@ constexpr int with_value::value;
 struct with_empty_value { static empty value; };
 empty with_empty_value::value;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_has_value_test_suite)
+TEST_SUITE(elib_aux_traits_has_value_test_suite)
 
-BOOST_AUTO_TEST_CASE(has_value_test)
+TEST_CASE(has_value_test)
 {
-    ELIB_STATIC_ASSERT(not has_value<void>::value);
-    ELIB_STATIC_ASSERT(not has_value<empty>::value);
-    ELIB_STATIC_ASSERT(not has_value<type_value>::value);
-    ELIB_STATIC_ASSERT(not has_value<void_value>::value);
-    ELIB_STATIC_ASSERT(has_value<with_value>::value);
-    ELIB_STATIC_ASSERT(has_value<with_empty_value>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(not has_value<void>::value);
+    TEST_STATIC_ASSERT(not has_value<empty>::value);
+    TEST_STATIC_ASSERT(not has_value<type_value>::value);
+    TEST_STATIC_ASSERT(not has_value<void_value>::value);
+    TEST_STATIC_ASSERT(has_value<with_value>::value);
+    TEST_STATIC_ASSERT(has_value<with_empty_value>::value);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

@@ -1,14 +1,16 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM
 #include <elib/filesystem.hpp>
 #include <system_error>
-#include "../static_test_helper.hpp"
 #include <vector>
 #include <set>
+#include "../static_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
+
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
 
 #define _(File) directory_entry(make_static_env_path(File))
 const std::set<directory_entry> file_list = 
@@ -19,34 +21,34 @@ const std::set<directory_entry> file_list =
 };
 #undef _
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_static_directory_iterator_test_suite)
+TEST_SUITE(elib_filesystem_static_directory_iterator_test_suite)
 
-BOOST_AUTO_TEST_CASE(dne_test)
+TEST_CASE(dne_test)
 {
     path const dir = make_static_env_path("dne");
     directory_iterator const end_it;
     {
         std::error_code ec;
         directory_iterator it(dir, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_CHECK(it == end_it);
+        TEST_REQUIRE(ec);
+        TEST_CHECK(it == end_it);
     }{
         directory_iterator it;
-        BOOST_CHECK_THROW(it = directory_iterator(dir), filesystem_error);
+        TEST_CHECK_THROW(filesystem_error, it = directory_iterator(dir));
     }
 }
 
-BOOST_AUTO_TEST_CASE(deref_test)
+TEST_CASE(deref_test)
 {
     directory_entry expected(make_static_env_path("empty_file"));
     path const dir = make_static_env_path("");
     directory_iterator it(dir);
     
-    BOOST_REQUIRE(it != directory_iterator{});
-    BOOST_CHECK(file_list.count(*it));
+    TEST_REQUIRE(it != directory_iterator{});
+    TEST_CHECK(file_list.count(*it));
 }
 
-BOOST_AUTO_TEST_CASE(increment_test)
+TEST_CASE(increment_test)
 {
     path const dir = make_static_env_path("");
     
@@ -54,68 +56,68 @@ BOOST_AUTO_TEST_CASE(increment_test)
     
     {
         directory_iterator it(dir);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it == end_it);
+        TEST_REQUIRE(it == end_it);
     }{
         std::error_code ec;
         directory_iterator it(dir);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it == end_it);
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it == end_it);
     }{
         directory_iterator it(dir);
         directory_iterator it_cp;
         directory_entry old;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         old = *it;
         it_cp = it++;
-        BOOST_REQUIRE(it_cp != end_it);
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it_cp != end_it);
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         old = *it;
         it_cp = it++;
-        BOOST_REQUIRE(it_cp != end_it);
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it_cp != end_it);
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         old  = *it;
         it_cp = it++;
-        BOOST_REQUIRE(it_cp != end_it);
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it == end_it);
+        TEST_REQUIRE(it_cp != end_it);
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it == end_it);
     }
 }
 
 
-BOOST_AUTO_TEST_CASE(cmp_test)
+TEST_CASE(cmp_test)
 {
     path const dir = make_static_env_path("");
     directory_iterator it(dir);
     directory_iterator const end_it;
     
-    BOOST_REQUIRE(it != end_it);
-    BOOST_REQUIRE(not (it == end_it));
-    BOOST_REQUIRE(it == it);
+    TEST_REQUIRE(it != end_it);
+    TEST_REQUIRE(not (it == end_it));
+    TEST_REQUIRE(it == it);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

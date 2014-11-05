@@ -13,6 +13,13 @@ namespace elib { namespace web { namespace http
      * TODO: Fix this */
     constexpr const char newl[2] = {'\r', '\n'};
     
+    namespace detail { namespace
+    {
+        // suppress unused newl warning
+        constexpr struct unused_newl_t {
+            constexpr unused_newl_t(const char *) {}
+        } unused_newl{newl};
+    }}
     
     enum class version;
     enum class method;

@@ -4,7 +4,7 @@ SHELL := /bin/bash
 #				ElibTargets
 ################################################################################
 ElibTargets := all everything e elib elib_static libs clean configure redep distclean \
-	       install check check-ctest check-lit verbose-check test
+	       install check check-ctest
 
 .PHONY: $(ElibTargets)
 
@@ -13,8 +13,9 @@ all:
 ifeq ($(wildcard build/Makefile),)
 	$(error make configure must be run)
 else
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) check
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
 endif
+
 
 ################################################################################
 everything:
@@ -46,12 +47,13 @@ clean:
 		then chmod -R ug+rwx src/filesystem/unit_tests/dynamic_test_env/ ;\
 		rm -rf src/filesystem/unit_tests/dynamic_test_env/ ;\
 	fi
+	rm -rf header_tests/elib/
 	
 
 ################################################################################
 configure:
 	$(CMD_VERB) rm -rf ./build/ ; mkdir -p build/
-	$(CMD_VERB) cd build/ ; cmake  $(ELIB_CMAKE_OPTIONS) $(ELIB_INTERNAL_CMAKE_OPTIONS) .. ; cd ..
+	$(CMD_VERB) cd build/ ; cmake $(INTERNAL_CMAKE_OPTIONS) .. ; cd ..
 
 
 ################################################################################
@@ -78,22 +80,12 @@ check-ctest:
 	$(CMD_VERB) echo === Running tests ===
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build test
 
-check-lit:
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build check-lit
 
 check:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build elib
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running tests ===
-	$(CMD_VERB) python packages/lit/lit.py $(LIT_FLAGS) ./build/src
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) check-lit
 
 verbose-check:
-	$(CMD_VERB) echo === Building tests ===
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -C build libs
-	$(CMD_VERB) echo 
-	$(CMD_VERB) echo === Running tests ===
-	$(CMD_VERB) python packages/lit/lit.py -v ./build/src
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) VERBOSE=1 check-lit
 
 test:
 	$(CMD_VERB) echo === Running CTest tests ===
@@ -134,23 +126,23 @@ scan-test:
 
 ################################################################################
 scan-build:
-	$(CMD_VERB) rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(ELIB_CMAKE_OPTIONS) .. ; scan-build make $(NOPRINTD) all; cd ..
+	$(CMD_VERB) rm -rf build/ ; mkdir -p build ; cd build/ ; cmake $(INTERNAL_CMAKE_OPTIONS) .. ; scan-build make $(NOPRINTD) all; cd ..
 
 
 ################################################################################
 coverage:
 	$(CMD_VERB) $(MAKE) $(NOPRINTD) distclean
 	$(CMD_VERB) rm -rf build/ ; mkdir -p build/ ; cd build/ ; \
-		cmake -DCMAKE_BUILD_TYPE=TEST $(ELIB_CMAKE_OPTIONS) ..  ; \
+		cmake -DCMAKE_BUILD_TYPE=TEST $(INTERNAL_CMAKE_OPTIONS) ..  ; \
 		cd ..
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build all
+	$(CMD_VERB) $(MAKE) $(NOPRINTD)  -C build all
 	$(CMD_VERB) rm -rf test_coverage ; mkdir -p test_coverage
 	cd build/src ; \
 	lcov --zerocounters --directory . ; \
 	lcov --capture --initial --directory . --output-file test_coverage ; \
 	$(MAKE) -C .. test;\
 	lcov --no-checksum --directory . --capture --output-file test_coverage.info ;\
-	lcov --remove test_coverage.info '/usr/include/*' '/opt/*' 'src/*/unit_tests/*' --output-file test_coverage.info ;\
+	lcov --remove test_coverage.info '/usr/include/*' '/opt/*' 'src/*/unit_tests/*' 'packages/*' --output-file test_coverage.info ;\
 	genhtml --demangle-cpp test_coverage.info -o ../../test_coverage
 	$(CMD_VERB) find test_coverage/ -type d -exec chmod 750 {} \; 
 	$(CMD_VERB) find test_coverage/ -type f -exec chmod 640 {} \;
@@ -160,13 +152,18 @@ coverage:
 ################################################################################
 batch-build-command:
 ifdef BATCH_VERBOSE
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(DEFAULT_THREADS) -C build  elib
 else
-	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(THREADS) -C build  elib 1> /dev/null
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) -j$(DEFAULT_THREADS) -C build  elib 1> /dev/null
 endif
 
+
 batch-check: 
-	$(CMD_VERB) python packages/lit/lit.py -sv --show-unsupported --no-progress-bar --threads=$(THREADS) ./build/src
+	$(CMD_VERB) $(MAKE) $(NOPRINTD)  LIT_INTERNAL_ARGS="--no-progress-bar --threads=$(DEFAULT_THREADS)" check-lit
+
+batch-check-all:
+	$(CMD_VERB) $(MAKE) $(NOPRINTD) LIT_DEFAULT_ARGS="-v" LIT_INTERNAL_ARGS=" --show-unsupported --no-progress-bar --threads=$(DEFAULT_THREADS)" check-all
+	
 
 ################################################################################
 batch-build:

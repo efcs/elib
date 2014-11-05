@@ -4,7 +4,6 @@
 # include <elib/mp/identity.hpp>
 # include <elib/mp/iterator.hpp>
 # include <elib/mp/sequence.hpp>
-# include <elib/mp/algorithm/count.hpp>
 # include <elib/aux.hpp>
 
 namespace elib 
@@ -14,8 +13,9 @@ namespace elib
     
     struct forward_sequence_intrinsics
     {
-      template <class Seq>
-      using sequence_size = count<Seq>;
+      //TODO Fix this
+      //template <class Seq>
+      //using sequence_size = count<Seq>;
       
       template <class Seq>
       using empty = bool_<mp::sequence_size_t<Seq>::value == 0>;

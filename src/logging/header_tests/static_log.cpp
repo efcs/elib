@@ -1,1 +1,0 @@
-#include <elib/logging/static_log.hpp>

@@ -1,11 +1,7 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/is_explicitly_convertible.hpp>
 #include <elib/aux/traits/is_convertible.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 using namespace elib::aux;
 
 struct To;
@@ -31,31 +27,29 @@ struct from_explicit_conversion
 
 struct not_castable {};
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_is_explicitly_convertible_test_suite)
+TEST_SUITE(elib_aux_traits_is_explicitly_convertible_test_suite)
 
-BOOST_AUTO_TEST_CASE(is_explicitly_convertible_test)
+TEST_CASE(is_explicitly_convertible_test)
 {
-    ELIB_STATIC_ASSERT(is_explicitly_convertible<from_explicit_construct, To>::value);
-    ELIB_STATIC_ASSERT(is_explicitly_convertible<from_implicit_construct, To>::value);
-    ELIB_STATIC_ASSERT(is_explicitly_convertible<from_implicit_conversion, To>::value);
-    ELIB_STATIC_ASSERT(is_explicitly_convertible<from_explicit_conversion, To>::value);
-    ELIB_STATIC_ASSERT(not is_explicitly_convertible<not_castable, To>::value);
-    ELIB_STATIC_ASSERT(not is_explicitly_convertible<int, To>::value);
-    ELIB_STATIC_ASSERT(not is_explicitly_convertible<void, To>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(is_explicitly_convertible<from_explicit_construct, To>::value);
+    TEST_STATIC_ASSERT(is_explicitly_convertible<from_implicit_construct, To>::value);
+    TEST_STATIC_ASSERT(is_explicitly_convertible<from_implicit_conversion, To>::value);
+    TEST_STATIC_ASSERT(is_explicitly_convertible<from_explicit_conversion, To>::value);
+    TEST_STATIC_ASSERT(not is_explicitly_convertible<not_castable, To>::value);
+    TEST_STATIC_ASSERT(not is_explicitly_convertible<int, To>::value);
+    TEST_STATIC_ASSERT(not is_explicitly_convertible<void, To>::value);
 }
 
-BOOST_AUTO_TEST_CASE(is_convertible_test)
+TEST_CASE(is_convertible_test)
 {
-    ELIB_STATIC_ASSERT(is_convertible<from_implicit_construct, To>::value);
-    ELIB_STATIC_ASSERT(not is_convertible<from_explicit_construct, To>::value);
-    ELIB_STATIC_ASSERT(is_convertible<from_implicit_conversion, To>::value);
-    ELIB_STATIC_ASSERT(not is_convertible<from_explicit_conversion, To>::value);
-    ELIB_STATIC_ASSERT(not is_convertible<not_castable, To>::value);
-    ELIB_STATIC_ASSERT(not is_convertible<int, To>::value);
-    ELIB_STATIC_ASSERT(not is_convertible<void, To>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(is_convertible<from_implicit_construct, To>::value);
+    TEST_STATIC_ASSERT(not is_convertible<from_explicit_construct, To>::value);
+    TEST_STATIC_ASSERT(is_convertible<from_implicit_conversion, To>::value);
+    TEST_STATIC_ASSERT(not is_convertible<from_explicit_conversion, To>::value);
+    TEST_STATIC_ASSERT(not is_convertible<not_castable, To>::value);
+    TEST_STATIC_ASSERT(not is_convertible<int, To>::value);
+    TEST_STATIC_ASSERT(not is_convertible<void, To>::value);
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

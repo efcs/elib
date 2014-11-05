@@ -3,6 +3,7 @@
 
 
 # include <elib/mp/iterator/fwd.hpp>
+# include <elib/mp/iterator/iterator.hpp>
 # include <elib/mp/iterator/forward_iterator_intrinsics.hpp>
 # include <elib/mp/identity.hpp>
 

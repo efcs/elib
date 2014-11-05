@@ -1,33 +1,29 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
+// REQUIRES: ELIB_AUX
+#include <elib/aux/integer_sequence.hpp>
+#include <elib/aux/traits/is_same.hpp>
+#include "rapid-cxx-test.hpp"
 
-#include "elib/aux/integer_sequence.hpp"
-#include "elib/aux/traits/is_same.hpp"
+TEST_SUITE(utility_integer_sequence_test_suite)
 
-
-BOOST_AUTO_TEST_SUITE(utility_integer_sequence_test_suite)
-
-BOOST_AUTO_TEST_CASE(utility_integer_sequence_test)
+TEST_CASE(utility_integer_sequence_test)
 {
   using namespace elib::aux;
   
-  BOOST_CHECK((
+  TEST_CHECK((
     is_same<
         make_integer_sequence<int, 0>
       , integer_sequence<int> 
     >::value
   ));
 
-  BOOST_CHECK((
+  TEST_CHECK((
     is_same<
         make_index_sequence<5>
       , index_sequence<0, 1, 2, 3, 4>
     >::value
   ));
 
-  BOOST_CHECK((
+  TEST_CHECK((
       is_same<
           index_sequence_for<void, void, void, void, void
                            , void, void, void, void, void>
@@ -36,4 +32,4 @@ BOOST_AUTO_TEST_CASE(utility_integer_sequence_test)
   ));
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

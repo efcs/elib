@@ -1,52 +1,43 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/uncvptr.hpp>
-#include <elib/aux/traits/is_same.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 using namespace elib::aux;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_uncvptr_test_suite)
+TEST_SUITE(elib_aux_traits_uncvptr_test_suite)
 
-BOOST_AUTO_TEST_CASE(uncvptr_test)
+TEST_CASE(uncvptr_test)
 {
-    ELIB_STATIC_ASSERT(is_same<uncvptr<void>, void>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<void*>, void>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<const int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<volatile int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<const volatile int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<int *>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<int const *>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<int volatile *>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<int const volatile*>, int>::value);
+    TEST_SAME_TYPE(uncvptr<void>, void);
+    TEST_SAME_TYPE(uncvptr<void*>, void);
+    TEST_SAME_TYPE(uncvptr<const int>, int);
+    TEST_SAME_TYPE(uncvptr<volatile int>, int);
+    TEST_SAME_TYPE(uncvptr<const volatile int>, int);
+    TEST_SAME_TYPE(uncvptr<int *>, int);
+    TEST_SAME_TYPE(uncvptr<int const *>, int);
+    TEST_SAME_TYPE(uncvptr<int volatile *>, int);
+    TEST_SAME_TYPE(uncvptr<int const volatile*>, int);
     
-    ELIB_STATIC_ASSERT(is_same<uncvptr<int const* const>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr<int const volatile* const volatile>, int>::value);
-    
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(uncvptr<int const* const>, int);
+    TEST_SAME_TYPE(uncvptr<int const volatile* const volatile>, int);
 }
 
-BOOST_AUTO_TEST_CASE(uncvptr_all_test)
+TEST_CASE(uncvptr_all_test)
 {
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<void>, void>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<void*>, void>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<const int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<volatile int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<const volatile int>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int *>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int const *>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int volatile *>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int const volatile*>, int>::value);
+    TEST_SAME_TYPE(uncvptr_all<void>, void);
+    TEST_SAME_TYPE(uncvptr_all<void*>, void);
+    TEST_SAME_TYPE(uncvptr_all<const int>, int);
+    TEST_SAME_TYPE(uncvptr_all<volatile int>, int);
+    TEST_SAME_TYPE(uncvptr_all<const volatile int>, int);
+    TEST_SAME_TYPE(uncvptr_all<int *>, int);
+    TEST_SAME_TYPE(uncvptr_all<int const *>, int);
+    TEST_SAME_TYPE(uncvptr_all<int volatile *>, int);
+    TEST_SAME_TYPE(uncvptr_all<int const volatile*>, int);
     
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int const* const>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int const volatile* const volatile>, int>::value);
+    TEST_SAME_TYPE(uncvptr_all<int const* const>, int);
+    TEST_SAME_TYPE(uncvptr_all<int const volatile* const volatile>, int);
     
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int* const * volatile * const volatile>, int>::value);
-    ELIB_STATIC_ASSERT(is_same<uncvptr_all<int const volatile********>, int>::value);
-    
-    BOOST_CHECK(true);
+    TEST_SAME_TYPE(uncvptr_all<int* const * volatile * const volatile>, int);
+    TEST_SAME_TYPE(uncvptr_all<int const volatile********>, int);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

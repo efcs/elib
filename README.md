@@ -1,17 +1,36 @@
 # Elib
+elib is a personal C\+\+ library and an excuse to learn/practice more parts of
+C\+\+.  It can be found at <http://github.com/efcs/elib>. The homepage for elib
+is <http://elib.efcs.ca/>.
 
-elib is a personal C\+\+ library and an excuse to learn/practice more parts of C\+\+.
-It can be found at github.com/efcs/elib. The homepage for elib is http://elib.efcs.ca
+**Warning**: This file is updated very infrequently. Last updated on 2014-06-17.
 
-WARNING: This file is update very infrequently
-LAST UPDATE: 07/06/2014
+**Note**: elib uses git submodules! If this is a new working directory, please
+run `git submodule update --init`.
 
-NOTE: elib has git submodules! If this is a new repo please run `git submodule update --init`.
+## Getting Started
+The get and build Elib run the following commands:
+
+    git clone https://github.com/efcs/elib.git
+    cd elib
+    git submodule update --init
+    make configure
+    make elib
+
+After building Elib it is recommended that you run the testsuite. You can
+do so using:
+
+    make check
+
+If do not have python or would rather use the CTest testsuite you can use:
+
+    make check-ctest
 
 ## Platform Support
-Elib currently only supports Linux and OS X as well as Cygwin. 
-Although most libraries would build on Windows (See Library Summary for specifics), 
-the build system has no support for MSVC. 
+Elib currently only supports Linux, OS X, and Cygwin.
+
+Most libraries will build on Windows (See Library Summary for specifics);
+however, the build system has no support for MSVC. 
 
 ## Compiler Support.
 Elib supports the following compiler/library configurations:
@@ -21,246 +40,204 @@ Elib supports the following compiler/library configurations:
  - Clang 3.5 trunk (with/without libc++)
  - GCC 4.8.3 (Cygwin)
 
+Note: A non-trivial but easy to make workaround is required to compile elib
+in Cygwin. It requires editing `<cstdio>` so that it provides `std::vsnprintf` 
+in C++11 mode.
 
 ## Library Summary
-
 ### Core Library
+* *Any*: A variant container. It provides an implementation of the `std::any`
+    proposal.
 
-Any
-: a variant container. It implementations the std::any proposal
+* *Aux*: (Header only) Miscellaneous functionality that is frequently needed.
+    It includes:
+    * `forward`, `move`, `declval`
+    * `integral_constant`, `true_`, `false_`, `int_`, `size_type`
+    * `not_`, `and_`, `or_`, `if_`, `enable_if`
+    * a `type_traits` implementation (C++11 or C++14)
+    * `invoke`
+    * `ELIB_ASSERT`
 
-Aux
-: misc functionality that is frequently needed.
-  it includes:
-  * forward, move, declval
-  * integral_constant, true_, false_, int_, size_type
-  * not_, and_, or_, if_, enable_if
-  * a type_traits implementation (C++11 Or C++14)
-  * invoke
-  * ELIB_ASSERT
-  (Header Only)
+* *Config*: A compiler/library/platform configuration system.
 
-Config
-: A compiler/library/platform configuration system
+* *Compressed Pair*: A pair class that utilizes the empty base class
+    optimization. It is very handy for storing allocators.
 
-Compressed Pair
-: A pair class that takes advantage of the empty base class optimization.
-  It is very handy for storing allocators
+* *Fmt*: A set of tools for formatting strings and printing.
 
-Fmt
-: A set of tools for formatting strings and printing
+* *Lexical Cast*: Provides a lexical type-conversion function.
 
-Lexical Cast
-: a function to convert between lexical types
+* *Optional*: An implementation of the `std::optional` proposal.
 
-Optional
-: An implementation of the std::optional proposal
+* *Params*: A set of meta-functions for working with C\+\+ typelists.
 
-Params
-: A let of meta-functions for working with typelists
+* *Scope Guard*: A utility library that provides the ability to invoke a
+    function on scope exit.
 
-Scope Guard
-: A utility to invoke a function on scope exit.
+### Extended Libraries
 
+* *Container*: (Header only) Provides containers not found in the standard
+    library. It currently includes:
+    * `flat_map`
+    * `linear_flat_map`
 
+* *Enumeration*: (Header only) Provides tools to deal with C++11 scoped
+    enumerations, including checked casting, string casting, iteration, and
+    non-default operators.
 
-### Extended Librarys
+* *Except*: (Header only) Similar to `boost::exception`; allows exceptions to
+    store arbitrary data.
 
-Container
-: a header only library that contains containers not found in the standard library.
-  It currently includes:
-  * flat_map
-  * linear_flat_map
+* *Filesystem*: (No Windows support) An implementation of the C++14 filesystem
+    library.
 
-Enumeration:
-: A header-only library for dealing with C++11 scoped enumerations.
-  It is a way to provide checked casting, string casting, iteration
-  and non-default operators
-  (Header Only)
+* *Iter*: Utility library that provides creation and manipulation of iterators
+    and views.
 
-Except:
-: A header only exception library similar to boost::exception. It allows
-  exceptions to store arbitrary data
+* *Logging*: A basic message logging and formatting library, intended for use
+    with log files.
 
-Filesystem
-: A posix only implementation of the C++14 filesystem library.
-  (No Windows Support)
+* *Memory*: Utility functions and classes for working with memory and allocators.
+    It currently includes:
+    * `allocator_destructor`: for destroying allocated memory that hasn't been
+        initialized
+    * `make_unique`: An implementation of the proposal for `std::make_unique`
 
-Iter
-: A library for manipulating and creating iterators and views.
+* *MP*: (Header only) A meta-programming library, generally using the same
+    structure, file names, and interface as `boost::mpl`, which it draws
+    inspiration from.
 
-Logging
-: Exactly what it sounds like. A basic message logging library.
-
-Memory
-: Utility functions and classes for working with memory. It currently includes:
-  * allocator_destructor: for destorying allocated memory that hasn't been initialized
-  * make_unique: An implementation of the proposal for std::make_unique
-
-MP
-: A meta-programming library inspired by boosts mpl. It generally
-  has the same structure, files and iterface as boost::mpl
-  (Header Only)
-
-PP
-: A library that provides macros for working with the preprocessor
-
+*PP*: Library of macros for working with the C\+\+ preprocessor.
 
 #### Experimental
-
-Web
-: C++ Socket, HTTP parsing and other Web/Network utilities.
-  stripped from a class project
-  (No Windows Support)
+*Web*: (No windows support) Various network utilities, including a C++ socket
+    class and HTTP parsing.
 
 ## Building
+**Note**: Requirements marked with (Unit Testing Only) are only required to
+build the unit tests. 
 
-Note: Requirements marked with (Unit Test Only) are obviously only required
-  to build the unit tests. 
+General requirements:
+* C++11 compiler (GCC >= 4.8.1)
+* Native library used by `<mutex>` header (pthread on Linux)
+* Python 3.x (Unit Testing Only)
+* CMake >= 2.8.8
 
-Requirements (General):
-  * C++11 compiler (GCC >= 4.8.1)
-  * Boost Unit Test Framework (Unit Test Only)
-  * Python (Unit Test Only)
-  Note: elib will compile with GCC 4.8.0 but some features have been disabled.
+**Note**: elib will compile with GCC 4.8.0 but some features have been
+disabled.
 
-Requirements (Library specific):
-  Log:
-    Native library used by <mutex> (pthread on linux)
+Requirements (library specific):
+* Filesystem:
+    * POSIX-compatible compiler and execution environment
 
-  Filesystem:
-    POSIX support
-    (Python)
+* Web:
+    * POSIX-compatible compiler and execution environment
+    * Support for the `<regex>` header
 
-  Web:
-    POSIX support
-    Support for <regex>
+## Makefile Targets
+* configure: Run the CMake configuration. This only needs to be done once.
 
+* redep: Re-run partial configuration. Detects new source files.
 
-## Build Options (CMake)
-  These options are found in CMakeLists.txt. If the enviroment variable
-  ELIB_CMAKE_OPTIONS is set, those options are passed to cmake when configuring.
-  Not all options are documented here. 
+* all: Build libraries and unit tests.
 
-  * CONFIG_ALL_WARNINGS 
-: Turn on all warnings for the compiler
-  Default: ON
+* clean: Clean build files.
 
-  * CONFIG_ELIB_ASSERT_CONFIG
-: Make the config library fail to compile if it cannot deduce the
-  compiler/library/platform information.
-  Default: OFF
+* distclean: Clean all generated files.
 
-  * CONFIG_ENABLE_EXPERIMENTAL
-: Make the experimental libraries
-  Default: ON
+* install: Install using the generated CMake buildsystem's target directory.
 
-  * CONFIG_UNIT_TESTS
-: Build the unit tests
-  Default: ON
+* everything: A helper command. Equivalent to
 
-  * CONFIG_HEADER_TESTS
-: Build the header tests
-  Default: OFF
-
-  * CONFIG_CXX1Y
-: Compile using -std=c++1y
-  Default: OFF
-  WARNING: c++1y support is experimental
-  
-### Select what parts to build
-  
-
-  * ELIB_AUX_SOURCE
-: build the utility library
-  Default: ON
-
-  * ELIB_CONTAINER_SOURCE
-: build containers
-  Default: ON
-
-  * ELIB_ENUMERATION_SOURCE
-: build enumeration library
-  Default: ON
-
-  * ELIB_EXCEPT_SOURCE
-: build exception library
-  Default: ON
-
-  * ELIB_FILESYSTEM_SOURCE
-: build the filesystem library
-  Default: ON 
-
-  * ELIB_FUNCTIONAL_SOURCE
-: build functional source
-  Default: ON
-
-  * ELIB_ITERATOR_SOURCE
-: build iterator source
-  Default: ON
-
-  * ELIB_LOGGING_SOURCE
-: build logging library
-  Default: ON
-
-  * ELIB_MEMORY_SOURCE
-: build memory library
-  Default: ON
-
-  * ELIB_MP_SOURCE
-: build the MPL
-  Default: ON
-
-  * ELIB_PP_SOURCE
-: build preprocessor library
-  Default: ON
-
-  * ELIB_WEB_SOURCE
-: build web library
-  Default: ON when compiling with GCC >= 4.9.0 or clang and libc++. Off otherwise. 
-    
-## Makefile Commands
-
-  * configure
-: Run the cmake configuration.
-  This only needs to be done once.
-
-  * redep
-: Rerun partial configuration. Detects new source files.
-
-  * all 
-: build libraries and unit tests
-
-  * clean
-: Clean build files
-
-  * distclean
-: Clean all generated files.
-
-  * install
-: install using the generated Cmake command
-
-  * everything
-: A helper command. equivalent to
     make distclean
     make configure
     make 
 
-  * check
-: Run the unit tests (using LIT)
+* check: Run the unit tests (using LIT).
 
-  * test
-: Run the unit tests (using CTest)
+* test: Run the unit tests (using CTest).
 
-  * vagrind-check
-: Run unit tests with valgrind
+* valgrind-check: Run unit tests with valgrind.
 
-  * scan-build
-: Run clangs scan-build over the build
+* scan-build: Run clang's scan-build over the build.
 
-  * coverage
-: Generate code coverage data
+* coverage: Generate code coverage data.
 
+## Makefile Options
+These are the options currently supported by `make configure`. For example
+`make BUILD=RELEASE configure`.
 
+* `ELIB_CMAKE_OPTIONS`: This is a list of CMake build options. It is passed
+    directly to CMake. This is useful when selecting what libraries to build.
 
+* `BUILD`: Configure the build type.
+    * Values: `DEBUG`, `RELEASE`
+    * Default: `DEBUG`
 
+* `CXX1Y`: Compile using the `-std=c++1y` flag.
+    * Default: `OFF`
+    * **Note**: c++1y support is experimental
+
+* `PYTHON3`: Use Python3 as the python interpreter.
+    * Default: `OFF`
+
+* `ALL_WARNINGS`: Turn on all warnings for the compiler.
+    * Default: `ON`
+
+* `ASSERT_CONFIG`: Make the config library fail to compile if it
+    cannot deduce the compiler/library/platform information.
+    * Default: `OFF`
+
+* `ENABLE_EXPERIMENTAL`: Build the experimental libraries.
+    * Default: `ON`
+
+* `UNIT_TESTS`: Build the unit tests.
+    * Default: `ON`
+
+  
+### Select what parts to build and test (CMake Options)
+  
+* `ELIB_AUX`: Build the utility library.
+    * Default: ON
+
+* `ELIB_CONFIG`: Build configuration library.
+    * Default: ON
+
+* `ELIB_CONTAINER`: Build containers library.
+    * Default: ON
+
+* `ELIB_ENUMERATION`: Build enumeration library.
+    * Default: ON
+
+* `ELIB_EXCEPT`: Build exception library.
+    * Default: ON
+
+* `ELIB_FILESYSTEM`: Build the filesystem library.
+    * Default: ON 
+
+* `ELIB_FUNCTIONAL`: Build functional source.
+    * Default: ON
+
+* `ELIB_ITERATOR`: Build iterator source.
+    * Default: ON
+
+* `ELIB_LOGGING`: Build logging library.
+    * Default: ON
+
+* `ELIB_MEMORY`: Build memory library.
+    * Default: ON
+
+* `ELIB_MP`: Build the MPL.
+    * Default: ON
+
+* `ELIB_PREPROCESSOR`: Build preprocessor library.
+    * Default: ON
+
+* `ELIB_WEB`: Build web library.
+    * Default: ON when compiling with GCC >= 4.8.3 or clang with libc++.
+        Off otherwise. 
+    
+
+## Author
+
+Elib was written by Eric Fiselier.

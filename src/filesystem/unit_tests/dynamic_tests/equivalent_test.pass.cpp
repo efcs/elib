@@ -1,16 +1,13 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM, ELIB_PYTHON_EXECUTABLE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_equivalent_test_suite)
+TEST_SUITE(elib_filesystem_dynamic_equivalent_test_suite)
 
-BOOST_AUTO_TEST_CASE(both_dne_test)
+TEST_CASE(both_dne_test)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("dne1");
@@ -18,17 +15,17 @@ BOOST_AUTO_TEST_CASE(both_dne_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(not equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(not equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(not ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(not ret);
     }
 }
 
-BOOST_AUTO_TEST_CASE(one_dne_test)
+TEST_CASE(one_dne_test)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("file1");
@@ -37,15 +34,15 @@ BOOST_AUTO_TEST_CASE(one_dne_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(not equivalent(p1, p2, ec));
-        BOOST_REQUIRE(ec);
+        TEST_REQUIRE(not equivalent(p1, p2, ec));
+        TEST_REQUIRE(ec);
     }
     {
-        BOOST_REQUIRE_THROW(equivalent(p1, p2), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error, equivalent(p1, p2));
     }
 }
 
-BOOST_AUTO_TEST_CASE(not_equiv_both_exist)
+TEST_CASE(not_equiv_both_exist)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("file1");
@@ -55,17 +52,17 @@ BOOST_AUTO_TEST_CASE(not_equiv_both_exist)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(not equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(not equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(not ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(not ret);
     }
 }
 
-BOOST_AUTO_TEST_CASE(same_file_test)
+TEST_CASE(same_file_test)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("file1");
@@ -74,17 +71,17 @@ BOOST_AUTO_TEST_CASE(same_file_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(ret);
     } 
 }
 
-BOOST_AUTO_TEST_CASE(symlink_test)
+TEST_CASE(symlink_test)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("file1");
@@ -94,17 +91,17 @@ BOOST_AUTO_TEST_CASE(symlink_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(ret);
     }
 }
 
-BOOST_AUTO_TEST_CASE(hardlink_test)
+TEST_CASE(hardlink_test)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("file1");
@@ -114,17 +111,17 @@ BOOST_AUTO_TEST_CASE(hardlink_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(ret);
     }
 }
 
-BOOST_AUTO_TEST_CASE(different_paths_same_file_test)
+TEST_CASE(different_paths_same_file_test)
 {
     scoped_test_env env;
     path const p1 = env.make_env_path("file1");
@@ -133,17 +130,17 @@ BOOST_AUTO_TEST_CASE(different_paths_same_file_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(ret);
     }
 }
 
-BOOST_AUTO_TEST_CASE(two_symlinks_to_same_file_test)
+TEST_CASE(two_symlinks_to_same_file_test)
 {
     scoped_test_env env;
     path const real_file = env.make_env_path("real_file");
@@ -155,14 +152,14 @@ BOOST_AUTO_TEST_CASE(two_symlinks_to_same_file_test)
     
     {
         std::error_code ec;
-        BOOST_REQUIRE(equivalent(p1, p2, ec));
-        BOOST_REQUIRE(not ec);
+        TEST_REQUIRE(equivalent(p1, p2, ec));
+        TEST_REQUIRE(not ec);
     }
     {
         bool ret{};
-        BOOST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
-        BOOST_REQUIRE(ret);
+        TEST_REQUIRE_NO_THROW(ret = equivalent(p1, p2));
+        TEST_REQUIRE(ret);
     }
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

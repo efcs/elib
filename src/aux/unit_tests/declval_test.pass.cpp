@@ -1,54 +1,50 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/declval.hpp>
 #include <elib/aux/traits/is_same.hpp>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 
-BOOST_AUTO_TEST_SUITE(elib_aux_declval_test_suite)
+TEST_SUITE(elib_aux_declval_test_suite)
 
-BOOST_AUTO_TEST_CASE(rvalue_test)
+TEST_CASE(rvalue_test)
 {
     using T = decltype(elib::declval<int>());
     static_assert(
         aux::is_same<T, int &&>::value
       , "T == int &&"
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(lvalue_test)
+TEST_CASE(lvalue_test)
 {
     using T = decltype(elib::declval<int &>());
     static_assert(
         aux::is_same<T, int &>::value
       , "T == int &"
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(const_rvalue_test)
+TEST_CASE(const_rvalue_test)
 {
     using T = decltype(elib::declval<int const>());
     static_assert(
         aux::is_same<T, int const &&>::value
       , "T == int const &&"
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(const_lvalue_test)
+TEST_CASE(const_lvalue_test)
 {
     using T = decltype(elib::declval<int const &>());
     static_assert(
         aux::is_same<T, int const &>::value
       , "T == int const &"
       );
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

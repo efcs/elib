@@ -2,6 +2,7 @@
 #define ELIB_MP_ITERATOR_FORWARD_ITERATOR_INTRINSICS_HPP
 
 # include <elib/mp/iterator/fwd.hpp>
+# include <elib/mp/iterator/iterator.hpp>
 # include <elib/mp/iterator/iterator_traits.hpp>
 
 namespace elib 

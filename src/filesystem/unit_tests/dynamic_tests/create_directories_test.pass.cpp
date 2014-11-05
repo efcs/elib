@@ -1,27 +1,24 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM, ELIB_PYTHON_EXECUTABLE
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include "../dynamic_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_dynamic_create_directories_test_suite)
+TEST_SUITE(elib_filesystem_dynamic_create_directories_test_suite)
 
-BOOST_AUTO_TEST_CASE(single_dir_test)
+TEST_CASE(single_dir_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
     
     std::error_code ec;
-    BOOST_REQUIRE(create_directories(file, ec));
-    BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_directory(file));
+    TEST_REQUIRE(create_directories(file, ec));
+    TEST_REQUIRE(not ec);
+    TEST_REQUIRE(is_directory(file));
 }
 
-BOOST_AUTO_TEST_CASE(recursive_dir_test)
+TEST_CASE(recursive_dir_test)
 {
     scoped_test_env env;
     path const first_dir = env.make_env_path("dir1");
@@ -29,14 +26,14 @@ BOOST_AUTO_TEST_CASE(recursive_dir_test)
     path const third_dir = second_dir / "dir3";
     
     std::error_code ec;
-    BOOST_REQUIRE(create_directories(third_dir, ec));
-    BOOST_REQUIRE(not ec);
-    BOOST_REQUIRE(is_directory(first_dir));
-    BOOST_REQUIRE(is_directory(second_dir));
-    BOOST_REQUIRE(is_directory(third_dir));
+    TEST_REQUIRE(create_directories(third_dir, ec));
+    TEST_REQUIRE(not ec);
+    TEST_REQUIRE(is_directory(first_dir));
+    TEST_REQUIRE(is_directory(second_dir));
+    TEST_REQUIRE(is_directory(third_dir));
 }
 
-BOOST_AUTO_TEST_CASE(file_already_exists_test)
+TEST_CASE(file_already_exists_test)
 {
     scoped_test_env env;
     path const first_dir = env.make_env_path("dir1");
@@ -45,12 +42,12 @@ BOOST_AUTO_TEST_CASE(file_already_exists_test)
     env.create_file(first_dir);
     
     std::error_code ec;
-    BOOST_REQUIRE(not create_directories(second_dir, ec));
-    BOOST_REQUIRE(ec);
-    BOOST_REQUIRE(is_regular_file(first_dir));
+    TEST_REQUIRE(not create_directories(second_dir, ec));
+    TEST_REQUIRE(ec);
+    TEST_REQUIRE(is_regular_file(first_dir));
 }
 
-BOOST_AUTO_TEST_CASE(dir_exists_test)
+TEST_CASE(dir_exists_test)
 {
     scoped_test_env env;
     path const file = env.make_env_path("dir1");
@@ -58,11 +55,11 @@ BOOST_AUTO_TEST_CASE(dir_exists_test)
     env.create_dir(file);
     
     std::error_code ec;
-    BOOST_REQUIRE(not create_directories(file, ec));
-    BOOST_REQUIRE(not ec);
+    TEST_REQUIRE(not create_directories(file, ec));
+    TEST_REQUIRE(not ec);
 }
 
-BOOST_AUTO_TEST_CASE(bad_perms_test)
+TEST_CASE(bad_perms_test)
 {
     scoped_test_env env;
     path const dir1 = env.make_env_path("dir1");
@@ -75,12 +72,12 @@ BOOST_AUTO_TEST_CASE(bad_perms_test)
     {
         std::error_code ec;
         create_directories(dir3, ec);
-        BOOST_CHECK(ec);
+        TEST_CHECK(ec);
     }{
-        BOOST_CHECK_THROW(create_directories(dir3), filesystem_error);
+        TEST_CHECK_THROW(filesystem_error, create_directories(dir3));
     }
     
     permissions(dir1, perms::all);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

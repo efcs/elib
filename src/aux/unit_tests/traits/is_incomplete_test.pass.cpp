@@ -1,23 +1,18 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/traits/is_incomplete.hpp>
-#include <elib/aux/static_assert.hpp>
+#include "rapid-cxx-test.hpp"
 using namespace elib::aux;
 
 struct incomplete_type;
 struct complete_type {};
 
-BOOST_AUTO_TEST_SUITE(elib_aux_traits_is_incomplete_test_suite)
+TEST_SUITE(elib_aux_traits_is_incomplete_test_suite)
 
-BOOST_AUTO_TEST_CASE(incomplete_type_test)
+TEST_CASE(incomplete_type_test)
 {
-    ELIB_STATIC_ASSERT(is_incomplete<incomplete_type>::value);
-    ELIB_STATIC_ASSERT(not is_incomplete<complete_type>::value);
-    ELIB_STATIC_ASSERT(is_incomplete<void>::value);
-    BOOST_CHECK(true);
+    TEST_STATIC_ASSERT(is_incomplete<incomplete_type>::value);
+    TEST_STATIC_ASSERT(not is_incomplete<complete_type>::value);
+    TEST_STATIC_ASSERT(is_incomplete<void>::value);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

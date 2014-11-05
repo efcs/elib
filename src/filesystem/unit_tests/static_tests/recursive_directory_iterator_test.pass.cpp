@@ -1,13 +1,16 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM
 #include <elib/filesystem.hpp>
 #include <system_error>
-#include "../static_test_helper.hpp"
 #include <set>
 #include <cstddef>
+#include "../static_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
+
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wglobal-constructors"
+# pragma clang diagnostic ignored "-Wexit-time-destructors"
+#endif
+
 using namespace elib::fs;
 
 #define _(File) directory_entry(make_static_env_path(File))
@@ -34,189 +37,189 @@ const std::set<directory_entry> top_level_files =
 #undef _
 }
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_static_recursive_directory_iterator_test_suite)
+TEST_SUITE(elib_filesystem_static_recursive_directory_iterator_test_suite)
 
-BOOST_AUTO_TEST_CASE(dne_test)
+TEST_CASE(dne_test)
 {
     path const dir = make_static_env_path("dne");
     recursive_directory_iterator const end_it;
     {
         std::error_code ec;
         recursive_directory_iterator it(dir, ec);
-        BOOST_REQUIRE(ec);
-        BOOST_CHECK(it == end_it);
+        TEST_REQUIRE(ec);
+        TEST_CHECK(it == end_it);
     }{
         recursive_directory_iterator it;
-        BOOST_CHECK_THROW(it = recursive_directory_iterator(dir), filesystem_error);
+        TEST_CHECK_THROW(filesystem_error, it = recursive_directory_iterator(dir));
     }
 }
 
-BOOST_AUTO_TEST_CASE(simple_iterate_test)
+TEST_CASE(simple_iterate_test)
 {
-    recursive_directory_iterator it(static_test_env_path);
+    recursive_directory_iterator it(static_test_env_path());
     recursive_directory_iterator const end_it;
     
     std::set<directory_entry> seen;
     
     for (auto & part : it) {
-        BOOST_REQUIRE(not seen.count(part));
+        TEST_REQUIRE(not seen.count(part));
         seen.insert(part);
     }
     
-    BOOST_REQUIRE(seen == file_list);
+    TEST_REQUIRE(seen == file_list);
 }
 
-BOOST_AUTO_TEST_CASE(disable_recursion_pending_test)
+TEST_CASE(disable_recursion_pending_test)
 {
     
-    recursive_directory_iterator it(static_test_env_path);
+    recursive_directory_iterator it(static_test_env_path());
     recursive_directory_iterator const end_it;
     
     std::set<directory_entry> seen;
     
     for (; it != end_it; ++it) {
-        BOOST_REQUIRE(not seen.count(*it));
+        TEST_REQUIRE(not seen.count(*it));
         seen.insert(*it);
         it.disable_recursion_pending();
     }
     
-    BOOST_CHECK(seen == top_level_files);
+    TEST_CHECK(seen == top_level_files);
 }
 
-BOOST_AUTO_TEST_CASE(walk_dir_test)
+TEST_CASE(walk_dir_test)
 {
     
     recursive_directory_iterator const end_it;
     
     {
         recursive_directory_iterator it(make_static_env_path(""));
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         ++it;
-        BOOST_REQUIRE(it == end_it);
+        TEST_REQUIRE(it == end_it);
     }{ 
         std::error_code ec;
         recursive_directory_iterator it(make_static_env_path(""));
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
                 
         it.increment(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_REQUIRE(it == end_it);
+        TEST_REQUIRE(not ec);
+        TEST_REQUIRE(it == end_it);
     }{ 
         recursive_directory_iterator it(make_static_env_path(""));
         recursive_directory_iterator it_cp;
         directory_entry old;
         
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
 
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it != end_it);
-        BOOST_CHECK(file_list.count(*it));
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it != end_it);
+        TEST_CHECK(file_list.count(*it));
         
         old = *it;
         it_cp = it++;
-        BOOST_CHECK(*it_cp == old);
-        BOOST_REQUIRE(it == end_it);
+        TEST_CHECK(*it_cp == old);
+        TEST_REQUIRE(it == end_it);
     }
 }
 
-BOOST_AUTO_TEST_CASE(pop_test)
+TEST_CASE(pop_test)
 {
     
     recursive_directory_iterator const end_it;
@@ -224,30 +227,30 @@ BOOST_AUTO_TEST_CASE(pop_test)
     
     std::set<directory_entry> seen;
     while (it != end_it && top_level_files.count(*it)) {
-        BOOST_REQUIRE(not seen.count(*it));
+        TEST_REQUIRE(not seen.count(*it));
         seen.insert(*it);
         ++it;
     }
-    BOOST_REQUIRE(it != end_it);
-    BOOST_REQUIRE(not top_level_files.count(*it));
+    TEST_REQUIRE(it != end_it);
+    TEST_REQUIRE(not top_level_files.count(*it));
     it.pop();
     while (it != end_it) {
-        BOOST_REQUIRE(not seen.count(*it));
+        TEST_REQUIRE(not seen.count(*it));
         seen.insert(*it);
         ++it;
     }
-    BOOST_REQUIRE(seen == top_level_files);
+    TEST_REQUIRE(seen == top_level_files);
 }
 
 #undef _
 
-BOOST_AUTO_TEST_CASE(cmp_test)
+TEST_CASE(cmp_test)
 {
     recursive_directory_iterator const end_it;
     recursive_directory_iterator it(make_static_env_path(""));
     
-    BOOST_REQUIRE(it != end_it);
-    BOOST_REQUIRE(not (it == end_it));
+    TEST_REQUIRE(it != end_it);
+    TEST_REQUIRE(not (it == end_it));
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

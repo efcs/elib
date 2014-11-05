@@ -1,13 +1,10 @@
-// REQUIRES: ELIB_FILESYSTEM_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_FILESYSTEM
 #include <elib/config.hpp>
 #include <elib/filesystem.hpp>
 #include <system_error>
 #include <stdlib.h> /* for putenv */
 #include "../static_test_helper.hpp"
+#include "rapid-cxx-test.hpp"
 using namespace elib::fs;
 
 // putenv takes a char* (not const char*) so suppress the warning
@@ -30,9 +27,9 @@ namespace
     }
 }                                                           // namespace
 
-BOOST_AUTO_TEST_SUITE(elib_filesystem_static_temp_directory_path_test_suite)
+TEST_SUITE(elib_filesystem_static_temp_directory_path_test_suite)
 
-BOOST_AUTO_TEST_CASE(tmpdir_env_test)
+TEST_CASE(tmpdir_env_test)
 {
     clean_env();
     ELIB_ASSERT_ALWAYS(::putenv("TMPDIR=/") == 0);
@@ -46,18 +43,18 @@ BOOST_AUTO_TEST_CASE(tmpdir_env_test)
     {
         std::error_code ec;
         path const ret = temp_directory_path(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE(not ec);
+        TEST_CHECK(ret == expect);
     }
     // no error code
     {
         path ret;
-        BOOST_REQUIRE_NO_THROW(ret = temp_directory_path());
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE_NO_THROW(ret = temp_directory_path());
+        TEST_CHECK(ret == expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(tmp_env_test)
+TEST_CASE(tmp_env_test)
 {
     clean_env();
     ELIB_ASSERT_ALWAYS(::putenv("TMP=/") == 0);
@@ -69,18 +66,18 @@ BOOST_AUTO_TEST_CASE(tmp_env_test)
     {
         std::error_code ec;
         path const ret = temp_directory_path(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE(not ec);
+        TEST_CHECK(ret == expect);
     }
     // no error code
     {
         path ret;
-        BOOST_REQUIRE_NO_THROW(ret = temp_directory_path());
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE_NO_THROW(ret = temp_directory_path());
+        TEST_CHECK(ret == expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(temp_env_test)
+TEST_CASE(temp_env_test)
 {
     clean_env();
     ELIB_ASSERT_ALWAYS(::putenv("TEMP=/") == 0);
@@ -91,18 +88,18 @@ BOOST_AUTO_TEST_CASE(temp_env_test)
     {
         std::error_code ec;
         path const ret = temp_directory_path(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE(not ec);
+        TEST_CHECK(ret == expect);
     }
     // no error code
     {
         path ret;
-        BOOST_REQUIRE_NO_THROW(ret = temp_directory_path());
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE_NO_THROW(ret = temp_directory_path());
+        TEST_CHECK(ret == expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(tempdir_env_test)
+TEST_CASE(tempdir_env_test)
 {
     clean_env();
     ELIB_ASSERT_ALWAYS(::putenv("TEMPDIR=/") == 0);
@@ -112,18 +109,18 @@ BOOST_AUTO_TEST_CASE(tempdir_env_test)
     {
         std::error_code ec;
         path const ret = temp_directory_path(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE(not ec);
+        TEST_CHECK(ret == expect);
     }
     // no error code
     {
         path ret;
-        BOOST_REQUIRE_NO_THROW(ret = temp_directory_path());
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE_NO_THROW(ret = temp_directory_path());
+        TEST_CHECK(ret == expect);
     }
 }
 
-BOOST_AUTO_TEST_CASE(bad_env_test)
+TEST_CASE(bad_env_test)
 {
     clean_env();
     ELIB_ASSERT_ALWAYS(::putenv("TMPDIR=/DNE") == 0);
@@ -135,16 +132,16 @@ BOOST_AUTO_TEST_CASE(bad_env_test)
     {
         std::error_code ec;
         path const ret = temp_directory_path(ec);
-        BOOST_REQUIRE(ec);
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE(ec);
+        TEST_CHECK(ret == expect);
     }
     // no error code
     {
-        BOOST_REQUIRE_THROW(temp_directory_path(), filesystem_error);
+        TEST_REQUIRE_THROW(filesystem_error,  temp_directory_path());
     }
 }
 
-BOOST_AUTO_TEST_CASE(no_env_set_test)
+TEST_CASE(no_env_set_test)
 {
     clean_env();
     path const expect("/tmp");
@@ -152,16 +149,16 @@ BOOST_AUTO_TEST_CASE(no_env_set_test)
     {
         std::error_code ec;
         path const ret = temp_directory_path(ec);
-        BOOST_REQUIRE(not ec);
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE(not ec);
+        TEST_CHECK(ret == expect);
     }
     // no error code
     {
         path ret;
-        BOOST_REQUIRE_NO_THROW(ret = temp_directory_path());
-        BOOST_CHECK(ret == expect);
+        TEST_REQUIRE_NO_THROW(ret = temp_directory_path());
+        TEST_CHECK(ret == expect);
     }
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

@@ -1,13 +1,15 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/arithmetic.hpp>
 #include <elib/mp/bitwise.hpp>
 #include <elib/mp/logical.hpp>
 #include <elib/mp/comparison.hpp>
 #include <elib/mp/void.hpp>
 #include <elib/preprocessor/overload.hpp>
-#include <elib/aux/traits/is_same.hpp>
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
+#include <elib/aux/integral_constant.hpp>
+#include "rapid-cxx-test.hpp"
+
+using namespace elib;
+using namespace elib::mp;
 
 using aux::char_;
 using aux::short_;
@@ -17,6 +19,11 @@ using aux::long_;
 using aux::ulong_;
 using aux::llong_;
 using aux::ullong_;
+
+#if defined(__clang__)
+# pragma clang diagnostic ignored "-Wunused-macros"
+#endif
+
 
 #define V_(x) x::type::value 
 #
@@ -30,7 +37,7 @@ using aux::ullong_;
 #
 #
 #define CHECK_RESULT(R, CT, result)                                       \
-  TEST_CHECK( aux::is_same<typename R::type::value_type, CT>::type::value ); \
+  TEST_CHECK( std::is_same<typename R::type::value_type, CT>::type::value ); \
   TEST_CHECK( R::type::value == result )
 #
 #
@@ -118,8 +125,8 @@ using aux::ullong_;
 #
 
 
-TEST_CASE(mp_integral_metafunctions_test_suite)
-{
+TEST_SUITE(mp_integral_metafunctions_test_suite)
+
 ////////////////////////////////////////////////////////////////////////////////
 //                            arithmetic                                              
 ////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +134,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP -
 #define FN negate_t
 
-  // mp_arithmetic_negate)
+  TEST_CASE(mp_arithmetic_negate)
   {
     TEST_OP(int, 0, false_);
     TEST_OP(int, -1, true_);
@@ -147,7 +154,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP +
 #define FN add_t
     
-  // mp_arithmetic_add)
+  TEST_CASE(mp_arithmetic_add)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -171,7 +178,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP -
 #define FN subtract_t
   
-  // mp_arithmetic_subtract)
+  TEST_CASE(mp_arithmetic_subtract)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -195,7 +202,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP *
 #define FN multiply
 
-  // mp_arithmetic_multiply)
+  TEST_CASE(mp_arithmetic_multiply)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -219,7 +226,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP /
 #define FN divide_t
 
-  // mp_arithmetic_divide)
+  TEST_CASE(mp_arithmetic_divide)
   {
     // all (including bool)
     TEST_ALL_TYPES(0, 0, 1);
@@ -242,7 +249,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP %
 #define FN modulus_t
 
-  // mp_arithmetic_modulus)
+  TEST_CASE(mp_arithmetic_modulus)
   {
     TEST_ALL_TYPES(0, 0, 1);
     TEST_ALL_TYPES(0, 1, 1);
@@ -264,7 +271,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP ~
 #define FN bitnegate_
 
-  // mp_bitwise_negate)
+  TEST_CASE(mp_bitwise_negate)
   {
     TEST_OP(int, ~0, false_);
     TEST_OP(int, ~1, true_);
@@ -281,7 +288,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP &
 #define FN bitand_
   
-  // mp_bitwise_and)
+  TEST_CASE(mp_bitwise_and)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(0, 1, 0);
@@ -298,7 +305,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP |
 #define FN bitor_
 
-  // mp_bitwise_or)
+  TEST_CASE(mp_bitwise_or)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(1, 1, 0);
@@ -315,7 +322,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP ^
 #define FN bitxor_
 
-  // mp_bitwise_xor)
+  TEST_CASE(mp_bitwise_xor)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(1, 1, 0);
@@ -333,7 +340,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP << 
 #define FN shift_left
   
-  // mp_bitwise_shift_left)
+  TEST_CASE(mp_bitwise_shift_left)
   {
     // all (w. bool)
     TEST_ALL_TYPES(0, 0, 0);
@@ -350,7 +357,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #define OP >>
 #define FN shift_right
   
-  // mp_bitwise_shift_right)
+  TEST_CASE(mp_bitwise_shift_right)
   {
     TEST_ALL_TYPES(0, 0, 0);
     TEST_ALL_TYPES(0, 0, 1);
@@ -368,7 +375,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 
 #define SAME_INTC(v, ...) TEST_CHECK((v() == __VA_ARGS__()));
 
-  // mp_logical_not)
+  TEST_CASE(mp_logical_not)
   {
     SAME_INTC(false_, not_<true_>);
     SAME_INTC(true_, not_<false_>);
@@ -387,7 +394,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
     SAME_INTC(false_, not_c<static_cast<unsigned>(-1)>);
   }                                                         // mp_logical_not
   
-  // mp_logical_and)
+  TEST_CASE(mp_logical_and)
   {
     SAME_INTC(true_, and_<true_, true_>);
     SAME_INTC(true_, and_<true_, true_, true_>);
@@ -407,7 +414,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
   }                                                         // mp_logical_and
 
 
-  // mp_logical_or)
+  TEST_CASE(mp_logical_or)
   {
     SAME_INTC(true_, or_<true_, true_>);
     SAME_INTC(true_, or_<true_, true_, true_>);
@@ -485,7 +492,7 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
 #
   
   
- // mp_comparision_test)
+ TEST_CASE(mp_comparision_test)
   {
     // LHS == RHS
     EQUAL_TO(true_, true_);
@@ -518,4 +525,4 @@ TEST_CASE(mp_integral_metafunctions_test_suite)
     GREATER_EQUAL(char_<10>, uint_<10>);
   }                                                  // mp_comparision_equality
   
-}
+TEST_SUITE_END()

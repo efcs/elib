@@ -5,11 +5,11 @@
 # include <cstddef>
 # 
 # if defined(_LIBCPP_VERSION)
-#   include <elib/config/library/libcxx.hpp>
+#   include <elib/config/library/libcxx.ipp>
 # elif defined(__GLIBCXX__)
-#   include <elib/config/library/libstdcxx.hpp>
+#   include <elib/config/library/libstdcxx.ipp>
 # elif defined(_CPPLIB_VER)
-#   include <elib/config/library/dinkumware.hpp>
+#   include <elib/config/library/dinkumware.ipp>
 # elif defined(ELIB_ASSERT_CONFIG)
 #   error "Unknown standard library"
 # endif

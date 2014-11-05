@@ -1,10 +1,7 @@
-// REQUIRES: ELIB_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Main
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_CORE
 #include <elib/optional.hpp>
 #include <string>
+#include "rapid-cxx-test.hpp"
 
 // instantiation tests
 namespace elib
@@ -16,11 +13,11 @@ namespace elib
 }
 
 
-BOOST_AUTO_TEST_SUITE(elib_optional_instantiate_test_test_suite)
+TEST_SUITE(elib_optional_instantiate_test_test_suite)
 
-BOOST_AUTO_TEST_CASE(dummy)
+TEST_CASE(dummy)
 {
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

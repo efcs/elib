@@ -1,12 +1,15 @@
-// REQUIRES: ELIB_MP_SOURCE
+// REQUIRES: ELIB_MP
 #include <elib/mp/vector.hpp>
 #include <elib/mp/arg.hpp>
 #include <elib/mp/iterator.hpp>
 #include <elib/mp/sequence.hpp>
 #include <elib/mp/sequence_traits.hpp>
+#include <elib/aux/integral_constant.hpp>
 #include <cstddef>
-#include "mp_test_helper.hpp"
-#include "test/helper.hpp"
+#include "rapid-cxx-test.hpp"
+
+using namespace elib;
+using namespace elib::mp;
 
 
 template <class T, class V>
@@ -25,9 +28,9 @@ template <class Vector, std::size_t N>
 using v_iter = vector_iterator<Vector, N>;
 
 
-TEST_CASE(mp_vector_test_suite)
-{
-  // mp_vector_construction)
+TEST_SUITE(mp_vector_test_suite)
+
+  TEST_CASE(mp_vector_construction)
   {
     using T0 = vector<>;
     using C0 = vector_c<int>;
@@ -45,7 +48,7 @@ TEST_CASE(mp_vector_test_suite)
     TEST_SAME_TYPE(typename T2::type, T2);
   }                                                   // mp_vector_construction
 
-  // mp_vector_intrinsics)
+  TEST_CASE(mp_vector_intrinsics)
   {
     // empty
     {
@@ -164,7 +167,7 @@ TEST_CASE(mp_vector_test_suite)
   }                                                     // mp_vector_intrinsics
   
   
-  // mp_vector_iterator_intrinsics)
+  TEST_CASE(mp_vector_iterator_intrinsics)
   {
     // model_type
     {
@@ -243,7 +246,7 @@ TEST_CASE(mp_vector_test_suite)
   }                                            // mp_vector_iterator_intrinsics
   
   
-# define TEST_CHECK_TRAITS(...)                           \
+# define CHECK_TRAITS(...)                           \
   do {                                               \
     using T = __VA_ARGS__;                           \
     TEST_SAME_TYPE(typename T::class_type, vector_tag);   \
@@ -251,16 +254,16 @@ TEST_CASE(mp_vector_test_suite)
   } while (false)
 #
  
-  // mp_vector_sequence_traits)
+  TEST_CASE(mp_vector_sequence_traits)
   {
     // empty
-    TEST_CHECK_TRAITS(vector<>);
+    CHECK_TRAITS(vector<>);
     // 1 elem
-    TEST_CHECK_TRAITS(vector<void>);
+    CHECK_TRAITS(vector<void>);
     // vector_item
-    TEST_CHECK_TRAITS(push_front_t<vector<>, void>);
+    CHECK_TRAITS(push_front_t<vector<>, void>);
     // vector_mask
-    TEST_CHECK_TRAITS(pop_front_t<vector<void, int>>);
+    CHECK_TRAITS(pop_front_t<vector<void, int>>);
     // all 
     {
       using T = vector<>;
@@ -278,6 +281,6 @@ TEST_CASE(mp_vector_test_suite)
     }
   }
   
-# undef TEST_CHECK_TRAITS
+# undef CHECK_TRAITS
   
-}
+TEST_SUITE_END()

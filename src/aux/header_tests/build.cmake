@@ -1,2 +1,0 @@
-add_header_test_src()
-add_header_test_src(traits)

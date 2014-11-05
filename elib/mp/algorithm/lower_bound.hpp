@@ -5,6 +5,7 @@
 # include <elib/mp/algorithm/detail/deref_lambda.hpp>
 # include <elib/mp/apply_wrap.hpp>
 # include <elib/mp/arg.hpp>
+# include <elib/mp/comparison.hpp>
 # include <elib/mp/sequence.hpp>
 # include <elib/aux.hpp>
 

@@ -1,9 +1,6 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux.hpp>
+#include "rapid-cxx-test.hpp"
 
 using namespace elib;
 
@@ -30,9 +27,9 @@ struct except_move
 
 struct dummy_t {};
 
-BOOST_AUTO_TEST_SUITE(aux_move_test_suite)
+TEST_SUITE(aux_move_test_suite)
 
-BOOST_AUTO_TEST_CASE(aux_move_test)
+TEST_CASE(aux_move_test)
 {
     dummy_t d;
     elib::move(d);
@@ -48,10 +45,10 @@ BOOST_AUTO_TEST_CASE(aux_move_test)
       );
     
     // DUMMY
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(aux_move_move_type)
+TEST_CASE(aux_move_move_type)
 {
     move_type t;
     elib::move_if_noexcept(t);
@@ -61,10 +58,10 @@ BOOST_AUTO_TEST_CASE(aux_move_move_type)
       );
     
     // DUMMY
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(aux_move_copy_type)
+TEST_CASE(aux_move_copy_type)
 {
     copy_type t;
     elib::move_if_noexcept(t);
@@ -74,10 +71,10 @@ BOOST_AUTO_TEST_CASE(aux_move_copy_type)
       );
     
     // DUMMY
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(aux_move_except_move)
+TEST_CASE(aux_move_except_move)
 {
     except_move t;
     elib::move_if_noexcept(t);
@@ -87,8 +84,8 @@ BOOST_AUTO_TEST_CASE(aux_move_except_move)
       );
     
     // DUMMY
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

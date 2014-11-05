@@ -1,11 +1,8 @@
-// REQUIRES: ELIB_AUX_SOURCE, ELIB_BOOST_TEST
-#define BOOST_TEST_MODULE Main
-#define BOOST_TEST_DYN_LINK
-#include <boost/test/unit_test.hpp>
-
+// REQUIRES: ELIB_AUX
 #include <elib/aux/demangle.hpp>
 #include <string>
 #include <typeinfo>
+#include "rapid-cxx-test.hpp"
 
 struct plain_struct 
 {
@@ -27,32 +24,32 @@ void test_function()
     std::string ret;
     
     std::string ret1 = elib::aux::demangle(typeid(T).name());
-    BOOST_CHECK(not ret1.empty());
+    TEST_CHECK(not ret1.empty());
     
     std::string ret2 = elib::aux::demangle(std::string(typeid(T).name()));
-    BOOST_CHECK(not ret2.empty());
+    TEST_CHECK(not ret2.empty());
     
     std::string ret3 = elib::aux::demangle(typeid(T));
-    BOOST_CHECK(not ret3.empty());
+    TEST_CHECK(not ret3.empty());
     
     std::string ret4 = elib::aux::demangle<T>();
-    BOOST_CHECK(not ret4.empty());
+    TEST_CHECK(not ret4.empty());
     
-    BOOST_REQUIRE(ret1 == ret2);
-    BOOST_REQUIRE(ret1 == ret3);
-    BOOST_REQUIRE(ret1 == ret4);
+    TEST_REQUIRE(ret1 == ret2);
+    TEST_REQUIRE(ret1 == ret3);
+    TEST_REQUIRE(ret1 == ret4);
 }
 
-BOOST_AUTO_TEST_SUITE(elib_aux_demangle_test_suite)
+TEST_SUITE(elib_aux_demangle_test_suite)
 
-BOOST_AUTO_TEST_CASE(plain_struct_test)
+TEST_CASE(plain_struct_test)
 {
     using T = plain_struct;
     test_function<T>();
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(template_struct_test)
+TEST_CASE(template_struct_test)
 {
     // simple
     {
@@ -67,43 +64,43 @@ BOOST_AUTO_TEST_CASE(template_struct_test)
           , void>;
         test_function<T>();
     }
-    BOOST_CHECK(true);
+    TEST_CHECK(true);
 }
 
-BOOST_AUTO_TEST_CASE(plain_function_test)
+TEST_CASE(plain_function_test)
 {
     using T = int(plain_struct, long, template_struct<long, long, int()>);
     test_function<T>();
 }
 
-BOOST_AUTO_TEST_CASE(function_pointer_test)
+TEST_CASE(function_pointer_test)
 {
     using T = void(*)(plain_struct, long);
     test_function<T>();
 }
 
-BOOST_AUTO_TEST_CASE(member_function_pointer_test)
+TEST_CASE(member_function_pointer_test)
 {
     using T = int(plain_struct::*)(long, plain_struct);
     test_function<T>();
 }
 
-BOOST_AUTO_TEST_CASE(plain_alias_test)
+TEST_CASE(plain_alias_test)
 {
     using T = plain_alias;
     test_function<T>();
 }
 
-BOOST_AUTO_TEST_CASE(template_alias_test)
+TEST_CASE(template_alias_test)
 {
     using T = alias_template<plain_struct, void>;
     test_function<T>();
 }
 
-BOOST_AUTO_TEST_CASE(pointer_type_test)
+TEST_CASE(pointer_type_test)
 {
     using T = template_struct<void, long, int> const*;
     test_function<T>();
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+TEST_SUITE_END()

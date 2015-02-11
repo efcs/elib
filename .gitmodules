@@ -1,6 +1,6 @@
 [submodule "packages/lit"]
 	path = packages/lit
-	url = https://github.com/efcs/llvm-lit.git
+	url = https://github.com/delcypher/llvm-lit.git
 [submodule "packages/rapid-cxx-test"]
 	path = packages/rapid-cxx-test
 	url = https://github.com/efcs/rapid-cxx-test.git

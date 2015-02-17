@@ -1,6 +1,7 @@
 
 import sys
 import os
+import stat
 import subprocess
 import shutil
 import socket
@@ -129,8 +130,8 @@ def create_fifo(source, mode=0o666):
 
 def create_socket(source):
     source = sanitize_env_path(source)
-    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    s.bind(source)
+    mode = 0600|stat.S_IFSOCK
+    os.mknod(source, mode)
 
 
 if __name__ == '__main__':

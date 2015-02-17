@@ -9,6 +9,7 @@
 # pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #elif defined(__clang__)
 # pragma clang diagnostic ignored "-Wunused-macros"
+# pragma clang diagnostic ignored "-Wunused-local-typedef"
 #endif
 
 #define TEST_1(x)                                                  \

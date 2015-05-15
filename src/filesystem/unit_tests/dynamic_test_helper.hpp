@@ -33,7 +33,10 @@ inline elib::fs::path test_env_path()
 
 inline elib::fs::path random_env_path()
 {
-    return test_env_path() / elib::fs::unique_path();
+    char* s = tempnam(".", "test.");
+    elib::fs::path p(s);
+    std::free(s);
+    return test_env_path() / p.filename();
 }
 
 inline void python_run(const std::string& cmd)

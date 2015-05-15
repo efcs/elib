@@ -78,6 +78,7 @@ TEST_CASE(assign_test)
         p.assign(expect);
         TEST_CHECK(p == expect);
     }
+#if 0
     // assign source type test
     {
         std::string expect("my_path");
@@ -94,6 +95,7 @@ TEST_CASE(assign_test)
         p = source;
         TEST_CHECK(p == expect);
     }
+#endif
     // assign iterator
     {
         std::string expect("my_path");
@@ -185,6 +187,7 @@ TEST_CASE(concat_test)
         p1 += s2.c_str();
         TEST_CHECK(p1 == expect);
     }
+#if 0
     // concat source type
     {
         path p1(s1);
@@ -192,6 +195,7 @@ TEST_CASE(concat_test)
         p1 += p2;
         TEST_CHECK(p1 == expect);
     }
+#endif
     // concat char
     {
         path p1(s1);
@@ -204,6 +208,7 @@ TEST_CASE(concat_test)
         p += L'p';
         TEST_CHECK(p == path("p1/p"));
     }
+#if 0
     // concat source member type
     {
         path p1(s1);
@@ -218,6 +223,7 @@ TEST_CASE(concat_test)
         p1.concat(p2.begin(), p2.end());
         TEST_CHECK(p1 == expect);
     }
+#endif
 }
 
 TEST_CASE(clear_test)
